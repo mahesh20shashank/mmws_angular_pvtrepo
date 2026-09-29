@@ -1,0 +1,595 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card lf-panel">
+  <div class="lf-panel__header">
+    <div>
+      <h3>Leave Forecast</h3>
+      <p class="lf-panel__sub">
+        {{ activeTab() === "dashboard" ? "Dashboard" : activeTab() === "history" ? "History" : isProposed() ? "Proposed
+        Leave Forecast" : "Approved Leave Forecast" }}
+      </p>
+    </div>
+    <div class="lf-filters">
+      <span class="lf-filters__label"><app-icon name="filter" [size]="14" variant="inherit" /> Filters:</span>
+      <div class="lf-filters__dept">
+        <app-select-input placeholder="All departments" [options]="departmentOptions()" [ngModel]="deptFilter()"
+          (ngModelChange)="onDeptChange($event)" />
+      </div>
+      <div class="lf-filters__category">
+        <app-select-input placeholder="Officer &amp; Sailor" [options]="categoryOptions" [ngModel]="categoryFilter()"
+          (ngModelChange)="onCategoryChange($event)" />
+      </div>
+      <app-button type="button" class="btn-secondary lf-filters__reset" (click)="resetFilters()">
+        <span aria-hidden="true">×</span> Reset
+      </app-button>
+    </div>
+  </div>
+
+  <div class="lf-tabs-row">
+    <app-button type="button" class="lf-tab-btn" [class.lf-tab-btn--active]="activeTab() === 'dashboard'"
+      (click)="selectTab('dashboard')">
+      Dashboard
+    </app-button>
+    <app-button type="button" class="lf-tab-btn" [class.lf-tab-btn--active]="activeTab() === 'forecast'"
+      (click)="selectTab('forecast')">
+      Forecast
+    </app-button>
+    <app-button type="button" class="lf-tab-btn" [class.lf-tab-btn--active]="activeTab() === 'history'"
+      (click)="selectTab('history')">
+      History
+    </app-button>
+  </div>
+
+  <!-- ══════════════════════ DASHBOARD ══════════════════════ -->
+  @if (activeTab() === "dashboard") {
+  <div class="kpi-row">
+    <app-kpi-card cardHeight="auto" title="Total Personnel Borne" [count]="totalPersonnel()" iconName="users"
+      iconColor="#3b7ddd" iconBg="rgba(59,125,221,0.12)" accentColor="#3b7ddd" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="Jan–Jun Forecast" [count]="janJunCount()" iconName="calendar"
+      iconColor="#28a745" iconBg="rgba(40,167,69,0.12)" accentColor="#28a745" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="Jul–Dec Forecast" [count]="julDecCount()" iconName="calendar"
+      iconColor="#ffc107" iconBg="rgba(255,193,7,0.12)" accentColor="#ffc107" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="% Personnel on Leave" [count]="percentOnLeave()"
+      [displayValue]="percentOnLeave() + '%'" iconName="circle-x" iconColor="#dc3545" iconBg="rgba(220,53,69,0.12)"
+      accentColor="#dc3545" iconPosition="right" [showTimelineTab]="false" [showTrends]="false"
+      [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="Applications" [count]="scopedForecast().length" iconName="file-text"
+      iconColor="#6f42c1" iconBg="rgba(111,66,193,0.12)" accentColor="#6f42c1" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="Pending Approval" [count]="pendingCount()" iconName="clock"
+      iconColor="#d97706" iconBg="rgba(217,119,6,0.12)" accentColor="#d97706" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+  </div>
+
+  <div class="lf-trend glass-card">
+    <h4 class="lf-trend__heading">
+      <app-icon name="chart-bar" [size]="16" variant="accent" /> Monthly Trend &amp; Distribution
+    </h4>
+    <div class="lf-trend__grid">
+      <div class="lf-trend__cell">
+        <h5 class="lf-trend__title">Leave &amp; Ty Duty — month by month</h5>
+        <app-bar-chart [categories]="monthLabels" [stackedSeries]="monthlyTrendSeries()" [heightPx]="220" />
+      </div>
+      <div class="lf-trend__cell lf-trend__cell--center">
+        <h5 class="lf-trend__title">Type breakdown</h5>
+        <app-donut-chart [segments]="typeBreakdownSegments()" [showLegend]="true" [width]="150" [height]="150" />
+      </div>
+      <div class="lf-trend__cell">
+        <h5 class="lf-trend__title">Department-wise absence</h5>
+        <app-bar-chart [data]="deptWiseAbsence()" orientation="horizontal" [heightPx]="220" />
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- ══════════════════════ FORECAST (calendar) ══════════════════════ -->
+  @if (activeTab() === "forecast") {
+  <div class="lf-forecast">
+    <div class="lf-forecast__mode-row">
+      @if (canApproveLeave()) {
+      <div class="lf-mode-toggle">
+        <app-button type="button" class="lf-mode-btn" [class.lf-mode-btn--active]="forecastMode() === 'proposed'"
+          (click)="selectForecastMode('proposed')">
+          <app-icon name="pencil" [size]="13" variant="inherit" /> Proposed
+        </app-button>
+        <app-button type="button" class="lf-mode-btn" [class.lf-mode-btn--active]="forecastMode() === 'approved'"
+          (click)="selectForecastMode('approved')">
+          <app-icon name="calendar-check" [size]="13" variant="inherit" /> Approved
+        </app-button>
+      </div>
+      }
+
+      @if (isProposed()) {
+      <div class="lf-forecast__info lf-forecast__info--pending">
+        <app-icon name="filter" [size]="13" variant="inherit" />
+        <span>Pending leaves shown with a dashed border. P = Prefix, S = Suffix (colour follows the leave type).</span>
+      </div>
+      @if (canApproveLeave()) {
+      <app-button type="button" class="btn-approve-all" [disabled]="!pendingForecastCount" (click)="approveAll()">
+        <app-icon name="check-check" [size]="14" variant="inherit" /> Approve All ({{ pendingForecastCount }})
+      </app-button>
+      }
+      } @else {
+      <div class="lf-forecast__info lf-forecast__info--approved">
+        <app-icon name="calendar-check" [size]="13" variant="inherit" />
+        <span>Only approved leaves shown. Click any cell for details.</span>
+      </div>
+      <app-button type="button" class="btn-secondary" (click)="openPrintModal()">
+        <app-icon name="printer" [size]="14" variant="inherit" /> Print Forecast
+      </app-button>
+      }
+    </div>
+
+    <div class="lf-half-tabs">
+      <app-button type="button" class="lf-half-btn" [class.lf-half-btn--active]="currentHalf() === 'janjun'"
+        (click)="selectHalf('janjun')">
+        Jan – Jun
+      </app-button>
+      <app-button type="button" class="lf-half-btn" [class.lf-half-btn--active]="currentHalf() === 'juldec'"
+        (click)="selectHalf('juldec')">
+        Jul – Dec
+      </app-button>
+    </div>
+
+    <div class="lf-month-tabs">
+      @for (m of monthTabs(); track m.index) {
+      <app-button type="button" class="lf-month-btn" [class.lf-month-btn--active]="currentMonthIdx() === m.index"
+        (click)="selectMonth(m.index)">
+        {{ m.label }}
+      </app-button>
+      }
+    </div>
+
+    <div class="cal-outer">
+      <div class="cal-grid-wrap">
+        <table class="cal-month-grid">
+          <thead>
+            <tr class="month-hdr-row">
+              <th class="name-col">Personnel</th>
+              @for (m of activeCalendar().months; track m.label) {
+              <th [attr.colspan]="m.days.length">{{ m.label }}</th>
+              }
+            </tr>
+            <tr class="dow-row">
+              <th class="name-col"></th>
+              @for (m of activeCalendar().months; track m.label; let mi = $index) {
+              @for (d of m.days; track d.iso; let di = $index) {
+              <th [class.wknd-h]="d.isWeekend" [class.msep]="mi > 0 && di === 0">{{ dowLetter(d.dow) }}</th>
+              }
+              }
+            </tr>
+            <tr class="date-row">
+              <th class="name-col"></th>
+              @for (m of activeCalendar().months; track m.label; let mi = $index) {
+              @for (d of m.days; track d.iso; let di = $index) {
+              <th [class.today-d]="d.isToday" [class.wknd-d]="d.isWeekend && !d.isToday"
+                [class.msep]="mi > 0 && di === 0">{{ d.num }}</th>
+              }
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (!activeCalendar().groups.length) {
+            <tr>
+              <td [attr.colspan]="activeCalendar().totalCols + 1" class="cal-empty">No personnel found.</td>
+            </tr>
+            }
+            @for (g of activeCalendar().groups; track g.department) {
+            <tr class="dept-sep">
+              <td [attr.colspan]="activeCalendar().totalCols + 1">
+                <app-icon name="anchor" [size]="12" variant="inherit" /> {{ g.department }}
+                <span class="dept-sep__count">{{ g.count }} personnel</span>
+              </td>
+            </tr>
+            @for (row of g.rows; track row.pno) {
+            <tr>
+              <td class="name-td name-col">
+                <div class="name-td__row">
+                  <div>
+                    <div>{{ row.displayName }}</div>
+                    <div class="rank-sub">{{ row.rankDesig }}</div>
+                  </div>
+                  @if (isProposed() && (row.canApply || row.showEdit)) {
+                  <div class="name-actions">
+                    @if (row.showEdit) {
+                    <app-button type="button" class="btn-edit-leave" (click)="openEditFromRow(row.pno)">Edit</app-button>
+                    }
+                    @if (row.canApply) {
+                    <app-button type="button" class="btn-apply-leave"
+                      (click)="openApplyModal(row.pno, row.displayName)">Apply</app-button>
+                    }
+                  </div>
+                  }
+                </div>
+              </td>
+              @for (monthCells of row.cellsByMonth; track $index; let mi = $index) {
+              @for (cell of monthCells; track cell.iso; let di = $index) {
+              <td class="day-cell" [ngClass]="cell.infoClass" [class.wknd]="cell.isWeekend"
+                [class.today-c]="cell.isToday" [class.msep]="mi > 0 && di === 0" [class.clickable]="cell.clickable"
+                [title]="cell.title" (click)="cell.clickable && onCellClick(row.pno, cell.iso)">
+                @if (cell.crossed) {
+                <span class="crossed-l">{{ cell.letter }}</span>
+                } @else {
+                {{ cell.letter }}
+                }
+              </td>
+              }
+              }
+            </tr>
+            }
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cal-legend">
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--leave">L</div>On Leave
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--ty">T</div>TY Duty
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--leave leg-sw--ring">P</div>Prefix (Leave)
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--ty leg-sw--ring">P</div>Prefix (TY)
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--leave leg-sw--ring">S</div>Suffix (Leave)
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--ty leg-sw--ring">S</div>Suffix (TY)
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--today">•</div>Today
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--wknd">–</div>Weekend
+        </div>
+        @if (isProposed()) {
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--pending-leave">L</div>Pending Leave
+        </div>
+        <div class="leg-item">
+          <div class="leg-sw leg-sw--pending-ty">T</div>Pending TY
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- ══════════════════════ HISTORY ══════════════════════ -->
+  @if (activeTab() === "history") {
+  <div class="lf-toolbar lf-toolbar--history">
+    <div class="lf-toolbar__field">
+      <app-select-input label="Year" [options]="historyYearOptions" [ngModel]="historyYearFilter()"
+        (ngModelChange)="onHistoryYearChange($event)" />
+    </div>
+    <div class="lf-toolbar__field">
+      <app-select-input label="Type" [options]="historyTypeOptions" [ngModel]="historyTypeFilter()"
+        (ngModelChange)="onHistoryTypeChange($event)" />
+    </div>
+    <app-toolbar-search [value]="historySearch()" (valueChange)="historySearch.set($event)" />
+    <div class="lf-toolbar__spacer"></div>
+    <app-button type="button" class="btn-secondary" (click)="exportHistoryCsv()">
+      <app-icon name="download" [size]="14" variant="inherit" /> Export CSV
+    </app-button>
+  </div>
+
+  <div class="kpi-row kpi-row--history">
+    <app-kpi-card cardHeight="auto" title="Total Records" [count]="historyStats().total" iconName="list"
+      iconColor="#3b7ddd" iconBg="rgba(59,125,221,0.12)" accentColor="#3b7ddd" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="On Leave" [count]="historyStats().onLeave" iconName="circle-x"
+      iconColor="#dc3545" iconBg="rgba(220,53,69,0.12)" accentColor="#dc3545" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="TY Duty" [count]="historyStats().tyDuty" iconName="clock" iconColor="#d97706"
+      iconBg="rgba(217,119,6,0.12)" accentColor="#d97706" iconPosition="right" [showTimelineTab]="false"
+      [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="Approved" [count]="historyStats().approved" iconName="circle-check-big"
+      iconColor="#28a745" iconBg="rgba(40,167,69,0.12)" accentColor="#28a745" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+    <app-kpi-card cardHeight="auto" title="Total Days" [count]="historyStats().totalDays" iconName="calendar"
+      iconColor="#6f42c1" iconBg="rgba(111,66,193,0.12)" accentColor="#6f42c1" iconPosition="right"
+      [showTimelineTab]="false" [showTrends]="false" [showViewMore]="false" />
+  </div>
+
+  <app-data-grid [rowData]="filteredHistory()" [columnDefs]="historyColumns" height="440px" />
+  }
+</div>
+
+<!-- ══════════════════════ CELL DETAIL MODAL ══════════════════════ -->
+@if (cellModal(); as ctx) {
+<app-modal size="sm" (closeModal)="closeCellModal()">
+  <h3 class="lf-modal__title">{{ ctx.name }} — {{ fmtDate(ctx.dateIso) }}</h3>
+
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Personnel No.</span><span>{{ ctx.pno || "—" }}</span></div>
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Rank</span><span>{{ ctx.rank || "—" }}</span></div>
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Department</span><span>{{ ctx.department || "—" }}</span>
+  </div>
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Cell Type</span><span class="lf-pill">{{ ctx.info.status
+      }}</span></div>
+  <div class="lf-cell-row">
+    <span class="lf-cell-row__label">Application Status</span>
+    <span class="lf-status" [class]="'lf-status--' + ctx.info.appStatus.toLowerCase()">{{ ctx.info.appStatus }}</span>
+  </div>
+
+  @if (ctx.app; as app) {
+  @if (app.hasPrefix && app.prefixStartDate) {
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Prefix Start</span><span>{{ fmtDate(app.prefixStartDate)
+      }}</span></div>
+  }
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Commencement</span><span>{{ fmtDate(app.startDate) }}</span>
+  </div>
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Completion</span><span>{{ fmtDate(app.endDate) }}</span>
+  </div>
+  @if (app.suffixCompletionDate) {
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Suffix Till</span><span>{{ fmtDate(app.suffixCompletionDate)
+      }}</span></div>
+  }
+  @if (app.reportingDate) {
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Reporting Date</span><span>{{ fmtDate(app.reportingDate)
+      }}</span></div>
+  }
+  <div class="lf-cell-row"><span class="lf-cell-row__label">No. of Days</span><span>{{ app.noOfDays || "—" }}</span>
+  </div>
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Station</span><span>{{ app.station || "—" }}</span></div>
+  <div class="lf-cell-row"><span class="lf-cell-row__label">Applied At</span><span>{{ app.appliedAt || "—" }}</span>
+  </div>
+  }
+
+  @if (cellModalStats(); as stats) {
+  <div class="lf-cell-heading">Leaves applied for {{ fmtDate(ctx.dateIso) }}</div>
+  <div class="pct-strip">
+    <span class="pct-badge pct-badge--ship">{{ stats.pctShip }}% of ship on leave</span>
+    <span class="pct-badge pct-badge--dept">{{ stats.pctDept }}% of {{ ctx.department || "dept" }} on leave</span>
+    <span class="pct-badge pct-badge--count">{{ stats.shipAbsent }}/{{ stats.totalShip }} on leave</span>
+  </div>
+  }
+
+  <div class="lf-modal__actions">
+    @if (canEditFromCell) {
+    <app-button type="button" class="btn-secondary" (click)="editFromCell()">Edit</app-button>
+    }
+    @if (canActionFromCell) {
+    <app-button variant="success" customClass="btn-approve" (click)="approveFromCell()">Approve</app-button>
+    <app-button variant="danger" customClass="btn-reject" (click)="rejectFromCell()">Reject</app-button>
+    }
+    <app-button type="button" class="btn-secondary" (click)="closeCellModal()">Close</app-button>
+  </div>
+</app-modal>
+}
+
+<!-- ══════════════════════ REJECT REASON MODAL ══════════════════════ -->
+@if (rejectCtx()) {
+  <app-modal size="sm" (closeModal)="closeRejectModal()">
+    <h3 class="lf-modal__title">Reject Application</h3>
+    <div class="form-field">
+      <label class="form-field-label" for="lfRejectReason">Reason (optional)</label>
+      <textarea id="lfRejectReason" class="form-field-input" rows="3" [(ngModel)]="rejectReason"></textarea>
+    </div>
+    <div class="lf-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeRejectModal()">Cancel</app-button>
+      <app-button variant="danger" customClass="btn-reject" (click)="confirmRejectFromCell()">Reject</app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- ══════════════════════ GENERIC CONFIRM MODAL ══════════════════════ -->
+@if (pendingConfirm(); as pending) {
+  <app-modal size="sm" (closeModal)="cancelPending()">
+    <h3 class="lf-modal__title">Confirm</h3>
+    <p class="lf-note">{{ pending.message }}</p>
+    <div class="lf-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelPending()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" (click)="confirmPending()">Confirm</app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- ══════════════════════ APPLY MODAL ══════════════════════ -->
+@if (showApplyModal()) {
+<app-modal size="lg" (closeModal)="closeApplyModal()">
+  <h3 class="lf-modal__title">Apply Leave / TY Duty — {{ applyPersonnelName }}</h3>
+
+  <div class="lf-radio-row">
+    <label><input type="radio" name="lfLeaveType" value="On Leave" [(ngModel)]="applyLeaveType" /> Leave</label>
+    <label><input type="radio" name="lfLeaveType" value="Ty Duty" [(ngModel)]="applyLeaveType" /> TY Duty</label>
+  </div>
+
+  <div class="lf-form-grid">
+    <label class="lf-checkbox">
+      <input type="checkbox" [(ngModel)]="applyHasPrefix" /> {{ applyLeaveType === "On Leave" ? "Leave" : "TY Duty" }}
+      Prefix Applicable?
+    </label>
+    @if (applyHasPrefix) {
+    <div class="form-field">
+      <label class="form-field-label" for="lfPrefixDate">Prefix Start Date</label>
+      <input id="lfPrefixDate" type="date" class="form-field-input" [(ngModel)]="applyPrefixStartDate" />
+    </div>
+    }
+
+    <div class="form-field">
+      <label class="form-field-label" for="lfStartDate">Commencement Date *</label>
+      <input id="lfStartDate" type="date" class="form-field-input" [class.lf-field--invalid]="applyStartDateInvalid"
+        [(ngModel)]="applyStartDate" />
+      @if (applyStartDateInvalid) {
+      <span class="lf-error">Commencement Date is required.</span>
+      }
+    </div>
+    <div class="form-field">
+      <label class="form-field-label" for="lfEndDate">Completion Date *</label>
+      <input id="lfEndDate" type="date" class="form-field-input" [class.lf-field--invalid]="applyEndDateInvalid"
+        [(ngModel)]="applyEndDate" />
+      @if (applyEndDateInvalid) {
+      <span class="lf-error">{{ applyEndDate ? "Completion Date cannot be before Commencement Date." : "Completion Date
+        is required." }}</span>
+      }
+    </div>
+
+    <label class="lf-checkbox">
+      <input type="checkbox" [(ngModel)]="applyHasSuffix" /> {{ applyLeaveType === "On Leave" ? "Leave" : "TY Duty" }}
+      Suffix Applicable?
+    </label>
+    @if (applyHasSuffix) {
+    <div class="form-field">
+      <label class="form-field-label" for="lfSuffixDate">Suffix Till Date</label>
+      <input id="lfSuffixDate" type="date" class="form-field-input" [(ngModel)]="applySuffixCompletionDate" />
+    </div>
+    <div class="form-field">
+      <label class="form-field-label" for="lfReportDate">Reporting Date</label>
+      <input id="lfReportDate" type="date" class="form-field-input" [(ngModel)]="applyReportingDate" />
+    </div>
+    }
+
+    <div class="form-field">
+      <label class="form-field-label" for="lfNoOfDays">No. of Days</label>
+      <input id="lfNoOfDays" class="form-field-input" [value]="applyNoOfDays" readonly placeholder="Auto calculated" />
+    </div>
+    <div class="form-field">
+      <label class="form-field-label" for="lfStation">Station</label>
+      <input id="lfStation" class="form-field-input" [(ngModel)]="applyStation" placeholder="Enter station" />
+    </div>
+    <div class="form-field">
+      <label class="form-field-label" for="lfReason">Reason (Optional)</label>
+      <input id="lfReason" class="form-field-input" [(ngModel)]="applyReason" placeholder="Enter reason" />
+    </div>
+  </div>
+
+  <div class="lf-modal__actions">
+    <app-button type="button" class="btn-secondary" (click)="closeApplyModal()">Cancel</app-button>
+    <app-button type="button" class="btn-primary" (click)="submitApply()">Submit</app-button>
+  </div>
+</app-modal>
+}
+
+<!-- ══════════════════════ EDIT (TRUNCATE) MODAL ══════════════════════ -->
+@if (showEditModal()) {
+<app-modal size="sm" (closeModal)="closeEditModal()">
+  <h3 class="lf-modal__title">Edit Leave — {{ editName }}</h3>
+  <p class="lf-note">Only the completion date can be shortened here — the start date and other details can't be changed
+    after submission.</p>
+  <div class="form-field">
+    <label class="form-field-label">Commencement Date</label>
+    <input class="form-field-input" [value]="fmtDate(editStartDate)" readonly />
+  </div>
+  <div class="form-field">
+    <label class="form-field-label" for="lfEditEndDate">New Completion Date</label>
+    <input id="lfEditEndDate" type="date" class="form-field-input" [min]="editStartDate" [max]="editOriginalEndDate"
+      [(ngModel)]="editNewEndDate" />
+  </div>
+  <div class="lf-modal__actions">
+    <app-button type="button" class="btn-secondary" (click)="closeEditModal()">Cancel</app-button>
+    <app-button type="button" class="btn-primary" (click)="submitEdit()">Save</app-button>
+  </div>
+</app-modal>
+}
+
+<!-- ══════════════════════ PRINT MODAL ══════════════════════ -->
+@if (showPrintModal()) {
+<app-modal size="md" (closeModal)="closePrintModal()">
+  <h3 class="lf-modal__title"><app-icon name="printer" [size]="16" variant="inherit" /> Print Approved Leave Forecast
+  </h3>
+
+  <div class="form-field">
+    <label class="form-field-label" for="lfPrintDept">Department *</label>
+    <select id="lfPrintDept" class="form-field-select" [(ngModel)]="printDept">
+      <option value="">— Select a department —</option>
+      @for (d of departments(); track d) {
+      <option [value]="d">{{ d }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="lf-print-months">
+    <label class="form-field-label">
+      Select Months <span class="lf-pill">{{ printMonths().size }} selected</span>
+    </label>
+    <div class="lf-print-quick">
+      <app-button type="button" class="btn-secondary" (click)="selectPrintRange(0, 5)">Jan – Jun</app-button>
+      <app-button type="button" class="btn-secondary" (click)="selectPrintRange(6, 11)">Jul – Dec</app-button>
+      <app-button type="button" class="btn-secondary" (click)="selectPrintRange(0, 11)">Full Year</app-button>
+      <app-button type="button" class="btn-secondary" (click)="clearPrintMonths()">Clear</app-button>
+    </div>
+    <div class="lf-print-grid">
+      @for (m of monthShortLabels; track m; let i = $index) {
+      <app-button type="button" class="lf-print-month" [class.lf-print-month--active]="printMonths().has(i)"
+        (click)="togglePrintMonth(i)">
+        {{ m }}
+      </app-button>
+      }
+    </div>
+  </div>
+
+  <p class="lf-note">Each month will print on a separate page.</p>
+
+  <div class="lf-modal__actions">
+    <app-button type="button" class="btn-secondary" (click)="closePrintModal()">Cancel</app-button>
+    <app-button type="button" class="btn-primary" [disabled]="!printReady" (click)="doPrint()">
+      <app-icon name="printer" [size]="14" variant="inherit" /> Generate PDF
+    </app-button>
+  </div>
+</app-modal>
+}
+
+<!-- ══════════════════════ PERSON YEARLY HISTORY MODAL ══════════════════════ -->
+@if (personHistory(); as ctx) {
+<app-modal size="md" (closeModal)="closePersonHistory()">
+  <h3 class="lf-modal__title">{{ ctx.name }} — {{ ctx.year }}</h3>
+
+  @if (personHistorySummary(); as sum) {
+  <div class="phist-summary-row">
+    <div class="phist-sum-card">
+      <div class="v">{{ sum.count }}</div>
+      <div class="l">Applications</div>
+    </div>
+    <div class="phist-sum-card">
+      <div class="v">{{ sum.leaveCount }}</div>
+      <div class="l">On Leave</div>
+    </div>
+    <div class="phist-sum-card">
+      <div class="v">{{ sum.tyCount }}</div>
+      <div class="l">TY Duty</div>
+    </div>
+    <div class="phist-sum-card">
+      <div class="v">{{ sum.totalDays }}</div>
+      <div class="l">Total Days (Appr.)</div>
+    </div>
+  </div>
+  }
+
+  @for (a of personHistoryRecords(); track a.id) {
+  <div class="phist-entry">
+    <div class="phist-entry-hdr">
+      <span class="phist-entry-dates">{{ fmtDate(a.startDate) }} – {{ fmtDate(a.endDate) }}</span>
+      <span class="lf-status" [class]="'lf-status--' + a.applicationStatus.toLowerCase()">{{ a.applicationStatus
+        }}</span>
+    </div>
+    <div class="phist-entry-meta">
+      <div>Type: <b>{{ a.leaveType }}</b></div>
+      <div>Days: <b>{{ a.noOfDays }}</b></div>
+      @if (a.hasPrefix && a.prefixStartDate) {
+      <div>Prefix from: <b>{{ fmtDate(a.prefixStartDate) }}</b></div>
+      }
+      @if (a.suffixCompletionDate) {
+      <div>Suffix till: <b>{{ fmtDate(a.suffixCompletionDate) }}</b></div>
+      }
+      @if (a.station) {
+      <div>Station: <b>{{ a.station }}</b></div>
+      }
+    </div>
+  </div>
+  } @empty {
+  <p class="lf-empty">No records found for {{ ctx.year }}.</p>
+  }
+
+  <div class="lf-modal__actions">
+    <app-button type="button" class="btn-secondary" (click)="closePersonHistory()">Close</app-button>
+  </div>
+</app-modal>
+}

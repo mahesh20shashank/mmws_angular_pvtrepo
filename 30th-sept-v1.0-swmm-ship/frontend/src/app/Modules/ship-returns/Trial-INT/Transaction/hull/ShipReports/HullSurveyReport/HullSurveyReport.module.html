@@ -1,0 +1,179 @@
+<div class="report-container" id="hull-survey-report">
+
+  <!-- TOP BAR -->
+  <div class="flex justify-end mb-4">
+    <button
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      (click)="downloadReport()"
+    >
+      Download Report
+    </button>
+  </div>
+
+  <!-- TITLE -->
+  <h2 class="report-title">QUARTERLY HULL SURVEY REPORT</h2>
+  <h3 class="report-sub-title">
+    SHIP STAFF REPORT OF HULL INSPECTION - {{ shipName || '-' }}
+  </h3>
+
+  <!-- DETAILS -->
+  <div class="details-section">
+
+    <div class="detail-item">
+      <span class="detail-key"> Date of Return :</span>
+      <span class="detail-value">
+        {{ returnDate ? (returnDate | date : 'dd/MM/yyyy') : '-' }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key"> Year :</span>
+      <span class="detail-value">{{ year || '-' }}</span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key"> Quarter Ending :</span>
+      <span class="detail-value">{{ quarterEnding || '-' }}</span>
+    </div>
+
+    <div class="detail-item" *ngIf="documentUrl">
+      <span class="detail-key"> Document :</span>
+      <span class="detail-value">
+        <a [href]="documentUrl" target="_blank" class="doc-url-link">{{ documentUrl }}</a>
+      </span>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-scroll-wrapper">
+    <table class="report-table">
+
+      <thead>
+
+        <!-- ROW 1: Group headers -->
+        <tr>
+          <th rowspan="3" class="report-table-header">Sr No</th>
+
+          <!-- Location of Survey -->
+          <th colspan="6" class="report-table-header group-header">Location of Survey</th>
+
+          <!-- Grading of Hull Structure -->
+          <th colspan="6" class="report-table-header group-header">Grading of Hull Structure</th>
+          <!-- Defect Description -->
+          <th colspan="6" class="report-table-header group-header">Defect Description</th>
+
+          <!-- Repair Undertaken -->
+          <th colspan="7" class="report-table-header group-header">Repair Undertaken</th>
+        </tr>
+
+        <!-- ROW 2: Sub-group headers -->
+        <tr>
+          <!-- Location of Survey sub-headers -->
+          <th rowspan="2" class="report-table-header">Strake / Deck No</th>
+          <th rowspan="2" class="report-table-header">Compartment Name</th>
+          <th rowspan="2" class="report-table-header">Port / Stbd / CL</th>
+          <th colspan="2" class="report-table-header group-header">Frame Station</th>
+          <th rowspan="2" class="report-table-header">OT (mm)</th>
+
+          <!-- Grading sub-headers -->
+           <th rowspan="3" class="report-table-header">Extent of Corrosion / Pitting / Thinning</th>
+          <th rowspan="2" class="report-table-header">Avg Residual Thickness Outside Pitted Area (T1)</th>
+          <th rowspan="2" class="report-table-header">Avg Residual Thickness of Pitted Area (T2)</th>
+          <th rowspan="2" class="report-table-header">Mean Thickness</th>
+          <th rowspan="2" class="report-table-header">% Reduction in Thickness</th>
+          <th rowspan="3" class="report-table-header">Grading</th>
+          <!-- <th rowspan="3" class="report-table-header">Defect (Yes/No)</th> -->
+
+          <!-- Defect Description sub-headers -->
+          <th rowspan="2" class="report-table-header">Defect(Yes/No)</th>
+
+          <th rowspan="2" class="report-table-header">Type of Defect</th>
+          <th rowspan="2" class="report-table-header">Location of Defect</th>
+          <th colspan="2" class="report-table-header group-header">Frame Stn</th>
+          <th rowspan="2" class="report-table-header">Height from Deck (mm)</th>
+
+          <!-- Repair Undertaken sub-headers -->
+          <th colspan="2" class="report-table-header group-header">Structural Members</th>
+          <th rowspan="2" class="report-table-header">Action Taken</th>
+          <th colspan="2" class="report-table-header group-header">Frame</th>
+          <th colspan="3" class="report-table-header group-header">Size (mm)</th>
+        </tr>
+
+        <!-- ROW 3: Leaf headers -->
+        <tr>
+          <!-- Frame Station -->
+          <th class="report-table-header">From</th>
+          <th class="report-table-header">To</th>
+
+          <!-- Defect Frame Stn -->
+          <th class="report-table-header">From</th>
+          <th class="report-table-header">To</th>
+
+          <!-- Structural Members -->
+          <th class="report-table-header">Name</th>
+          <th class="report-table-header">Desc</th>
+
+          <!-- Frame -->
+          <th class="report-table-header">From</th>
+          <th class="report-table-header">To</th>
+
+          <!-- Size -->
+          <th class="report-table-header">L</th>
+          <th class="report-table-header">B</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let row of reportTableData; let i = index"
+        >
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.strake_deck_no || '-' }}</td>
+          <td>{{ row.compartment_name || '-' }}</td>
+          <td>{{ row.port_stbd_cl || '-' }}</td>
+          <td>{{ row.frame_station_from || '-' }}</td>
+          <td>{{ row.frame_station_to || '-' }}</td>
+          <td>{{ row.ot_mm || '-' }}</td>
+          <td>{{ row.extent_corrosion_pitting_thinning || '-' }}</td>
+          <td>{{ row.avg_residual_t1 || '-' }}</td>
+          <td>{{ row.avg_residual_t2 || '-' }}</td>
+          <td>{{ row.mean_thickness || '-' }}</td>
+          <td>{{ row.reduction_thickness || '-' }}</td>
+          <td>{{ row.grading || '-' }}</td>
+          <td>{{ row.defect_yes_no || '-' }}</td>
+          <td>{{ row.type_of_defect || '-' }}</td>
+          <td>{{ row.location_of_defect || '-' }}</td>
+          <td>{{ row.frame_stn_from || '-' }}</td>
+          <td>{{ row.frame_stn_to || '-' }}</td>
+          <td>{{ row.height_from_deck || '-' }}</td>
+          <td>{{ row.structural_member_name || '-' }}</td>
+          <td>{{ row.structural_member_description || '-' }}</td>
+          <td>{{ row.action_taken || '-' }}</td>
+          <td>{{ row.frame_from || '-' }}</td>
+          <td>{{ row.frame_to || '-' }}</td>
+          <td>{{ row.size_l || '-' }}</td>
+          <td>{{ row.size_b || '-' }}</td>
+          <td>{{ row.size_t || '-' }}</td>
+        </tr>
+
+        <!-- No Data Row -->
+        <tr *ngIf="!reportTableData.length">
+          <td colspan="27" style="text-align: center; padding: 20px;">
+            No Data Found
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+  </div>
+
+  <!-- STATUS BELOW TABLE -->
+  <div class="report-status-footer">
+    Status : <span class="report-status-badge">{{ reportStatus }}</span>
+  </div>
+
+</div>

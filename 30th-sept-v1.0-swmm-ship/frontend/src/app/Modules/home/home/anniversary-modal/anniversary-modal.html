@@ -1,0 +1,123 @@
+<div class="home-modal flex flex-col text-slate-300 w-[700px] max-w-full min-h-[500px]">
+  <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+    <h2 class="text-sm font-semibold text-white">Marriage Anniversary Details</h2>
+    <app-button (click)="closeModal.emit()" class="text-slate-400 hover:text-white transition-colors">
+      <app-icon name="x" [size]="20" [strokeWidth]="2" />
+    </app-button>
+  </div>
+
+  <form class="flex flex-col gap-6" [formGroup]="anniversaryForm" (ngSubmit)="submit()">
+    <fieldset>
+      <legend class="block text-xs font-medium text-slate-400 mb-2">Select Type</legend>
+      <div class="flex items-center gap-6">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input
+            id="anniversary-type-personal"
+            type="radio"
+            formControlName="selectType"
+            value="personal"
+            (change)="onSelectTypeChange()"
+            class="w-4 h-4 bg-slate-700/50 border-slate-700 focus:ring-blue-600 focus:ring-2"
+          >
+          <span class="text-sm text-slate-300">Personal</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input
+            id="anniversary-type-other"
+            type="radio"
+            formControlName="selectType"
+            value="other"
+            (change)="onSelectTypeChange()"
+            class="w-4 h-4 bg-slate-700/50 border-slate-700 focus:ring-blue-600 focus:ring-2"
+          >
+          <span class="text-sm text-slate-300">Other</span>
+        </label>
+      </div>
+    </fieldset>
+
+    @if(isOtherType){
+    <div>
+      <label for="anniversary-personnel" class="block text-xs font-medium text-slate-400 mb-1.5">Select Personnel <span class="text-red-500">*</span></label>
+      <select
+        id="anniversary-personnel"
+        formControlName="personnelId"
+        (change)="onPersonnelChange()"
+        class="w-full px-3 py-2 border border-slate-700 rounded-md text-sm bg-slate-700/50 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+        [disabled]="isLoadingPersonnel()"
+      >
+        <option value="">{{ isLoadingPersonnel() ? 'Loading...' : '-- Select --' }}</option>
+        @for (person of personnelOptions(); track person.id) {
+        <option [value]="person.id">{{ person.name }} | {{ person.personalNo }}</option>
+        }
+      </select>
+      @if(!isLoadingPersonnel() && !personnelOptions().length){
+      <p class="mt-1 text-xs text-slate-400">No personnel found.</p>
+      }
+      @if(anniversaryForm.controls.personnelId.touched && anniversaryForm.controls.personnelId.invalid){
+      <p class="mt-1 errorClass">Personnel is required.</p>
+      }
+    </div>
+    }
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label for="anniversary-name" class="block text-xs font-medium text-slate-200 mb-1.5">Name</label>
+        <input
+          id="anniversary-name"
+          type="text"
+          formControlName="name"
+          readonly
+          class="w-full px-3 py-2 border border-slate-700 rounded-md text-sm bg-slate-800/70 text-slate-300
+          focus:outline-none focus:border-blue-500 transition-colors resize-none"
+        >
+      </div>
+      <div>
+        <label for="anniversary-personal-no" class="block text-xs font-medium text-slate-200 mb-1.5">Personal No</label>
+        <input
+          id="anniversary-personal-no"
+          type="text"
+          formControlName="personalNo"
+          readonly
+          class="w-full px-3 py-2 border border-slate-700 rounded-md text-sm bg-slate-800/70 text-slate-300
+          focus:outline-none focus:border-blue-500 transition-colors resize-none"
+        >
+      </div>
+    </div>
+
+    <div>
+      <label for="anniversary-date" class="block text-xs font-medium text-slate-200 mb-1.5">Date of Marriage <span class="text-red-500">*</span></label>
+      <input
+        id="anniversary-date"
+        type="date"
+        formControlName="dateOfMarriage"
+        class="w-full px-3 py-2 border border-slate-700 rounded-md text-sm bg-slate-700/50
+        focus:outline-none focus:border-blue-500 transition-colors resize-none"
+      >
+      @if(anniversaryForm.controls.dateOfMarriage.touched && anniversaryForm.controls.dateOfMarriage.invalid){
+      <p class="mt-1 errorClass">Date of marriage is required.</p>
+      }
+    </div>
+
+    <div class="mt-1 flex justify-end gap-3">
+      <app-button
+        type="button"
+        (click)="closeModal.emit()"
+        variant="outline"
+        [disabled]="isSaving()"
+      >
+        Cancel
+      </app-button>
+      <app-button
+        type="submit"
+        variant="primary"
+        [disabled]="isSaving()"
+      >
+        {{ isSaving() ? 'Saving...' : 'Save Marriage Date' }}
+      </app-button>
+    </div>
+
+    @if(saveError()){
+    <p class="text-sm text-red-300">{{ saveError() }}</p>
+    }
+  </form>
+</div>

@@ -1,0 +1,142 @@
+<app-master-card cardTitle="FUSS Trigger List - Close FUSS Routine" cardHeight="auto">
+
+  <form
+    [formGroup]="closeRoutineFuss"
+    class="p-4 text-white space-y-6"
+  >
+
+    <!-- Top Section -->
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <div>
+        <label for="routine-dart-no" class="text-white/60 text-xs mb-1 block">Routine DART No.</label>
+        <input id="routine-dart-no" type="text" readonly formControlName="routineDartNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="maintop-routine-no" class="text-white/60 text-xs mb-1 block">Maintop / Routine No.</label>
+        <input id="maintop-routine-no" type="text" readonly formControlName="maintopRoutineNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+    </div>
+
+    <!-- Routine Description -->
+
+    <label for="routine-description" class="text-white/60 text-xs mb-1 block">Routine Description</label>
+    <textarea id="routine-description" rows="3" formControlName="routineDescription"
+      class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+
+    <h3 class="text-lg font-semibold">
+      Completion Details
+    </h3>
+
+    <!-- Completion Details -->
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <app-input-field
+        label="Routine Completion Date"
+        type="date"
+        formControlName="routineCompletionDate">
+      </app-input-field>
+
+      <div>
+        <label for="running-hours" class="text-white/60 text-xs mb-1 block">Running Hours</label>
+        <input id="running-hours" type="text" formControlName="runningHours" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      <div>
+        <label for="due-running-hours" class="text-white/60 text-xs mb-1 block">Due Running Hours</label>
+        <input id="due-running-hours" type="text" formControlName="dueRunningHours" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      <app-select-input
+        label="Time Consumed (Hours)"
+        [options]="hoursOptions"
+        formControlName="timeConsumedHours">
+      </app-select-input>
+
+      <app-select-input
+        label="Time Consumed (Minutes)"
+        [options]="minutesOptions"
+        formControlName="timeConsumedMinutes">
+      </app-select-input>
+
+      <div>
+        <label for="completed-by-pno" class="text-white/60 text-xs mb-1 block">Routine Completed By (PNO)</label>
+        <input id="completed-by-pno" type="text" formControlName="completedByPno" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      <div>
+        <label for="fuss-name" class="text-white/60 text-xs mb-1 block">Name</label>
+        <input id="fuss-name" type="text" formControlName="name" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      <app-select-input
+        label="Rank"
+        [options]="rankOptions"
+        formControlName="rank">
+      </app-select-input>
+
+      <app-select-input
+        label="Total Manpower Used"
+        [options]="manpowerOptions"
+        formControlName="totalManpower">
+      </app-select-input>
+
+      <div class="col-span-3">
+        <label for="fuss-remarks" class="text-white/60 text-xs mb-1 block">Remarks</label>
+        <textarea id="fuss-remarks" rows="3" formControlName="remarks"
+          class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+      </div>
+
+    </div>
+
+    <!-- Flags -->
+
+    <div class="flex flex-wrap gap-6">
+      <label class="flex items-center gap-2 text-sm text-white/80">
+        <input type="checkbox" formControlName="trialTeamNeeded" class="h-4 w-4" />
+        Trial By Trial Team Needed
+      </label>
+
+      <label class="flex items-center gap-2 text-sm text-white/80">
+        <input type="checkbox" formControlName="recForDeletion" class="h-4 w-4" />
+        Recommended For Deletion
+      </label>
+
+      <label class="flex items-center gap-2 text-sm text-white/80">
+        <input type="checkbox" formControlName="notApplicable" class="h-4 w-4" />
+        Not Applicable
+      </label>
+
+      <label class="flex items-center gap-2 text-sm text-white/80">
+        <input type="checkbox" formControlName="recDeletion" class="h-4 w-4" />
+        Recommended Deletion
+      </label>
+    </div>
+
+    <!-- Footer -->
+
+    <div class="flex justify-end gap-3">
+
+      <app-button
+        type="button"
+        (click)="backToList()"
+        class="h-9 px-5 rounded-lg bg-white/15 border border-white/15">
+        Back to List
+      </app-button>
+
+      <app-button
+        type="button"
+        (click)="closeRoutine()"
+        class="h-9 px-5 rounded-lg bg-[#5E748A] border border-[#6E8398]">
+        Close Routine
+      </app-button>
+
+    </div>
+
+  </form>
+
+</app-master-card>

@@ -1,0 +1,57 @@
+<div class="space-y-6">
+  <!-- Header Banner -->
+  <div class="glass-card p-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="head2 flex items-center gap-3">
+          <app-icon name="send" [size]="28" variant="accent"></app-icon>
+          Dispatched Trial Returns Outbox
+        </h1>
+        <p class="subHeading_of_kpis mt-1">
+          Tracking dispatches, agency acknowledgments, and trial return submittals
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="glass-card p-6">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-white/10 text-xs uppercase text-white/60 font-semibold bg-white/5">
+            <th class="p-3">Dispatch No</th>
+            <th class="p-3">Recipient Agency</th>
+            <th class="p-3">Vessel</th>
+            <th class="p-3">Trial Type</th>
+            <th class="p-3">Dispatched Date</th>
+            <th class="p-3">Delivery Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5 text-sm">
+          @for (item of dispatches(); track item.id) {
+            <tr class="hover:bg-white/5 transition-colors">
+              <td class="p-3 font-mono text-xs font-bold text-sky-400">{{ item.dispatchNo }}</td>
+              <td class="p-3 font-medium text-white">{{ item.recipientAgency }}</td>
+              <td class="p-3 text-white/90">{{ item.vessel }}</td>
+              <td class="p-3 text-xs text-white/80">{{ item.trialType }}</td>
+              <td class="p-3 text-xs text-white/60">{{ item.dispatchDate }}</td>
+              <td class="p-3">
+                <span
+                  class="table-pill"
+                  [ngClass]="{
+                    'badge-status-closed': item.deliveryStatus === 'Delivered & Acknowledged',
+                    'badge-status-in-progress': item.deliveryStatus === 'Under Review at Agency',
+                    'badge-status-draft': item.deliveryStatus === 'Dispatched'
+                  }"
+                >
+                  {{ item.deliveryStatus }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

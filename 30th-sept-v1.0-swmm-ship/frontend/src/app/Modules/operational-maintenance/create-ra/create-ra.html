@@ -1,0 +1,91 @@
+<app-master-card cardTitle="Create RA" cardHeight="auto">
+  <div class="grid grid-cols-5 gap-4 m-4">
+    <div>
+      <app-select-input
+        label="Select Yard Name"
+        [options]="yardOptions"
+        [error]="yardMissing"
+        [(ngModel)]="yardName"
+        name="yardName"
+      >
+      </app-select-input>
+      @if (yardMissing) {
+        <span class="text-[#f82c36] text-xs">Yard is required.</span>
+      }
+    </div>
+    <!-- DTG — commented out for now; not required/shown until re-enabled.
+    <div>
+      <app-input-field
+        label="DTG *"
+        type="date"
+        [(ngModel)]="dtgDate"
+        name="dtgDate"
+        [invalid]="submitted && !dtgDate"
+      >
+      </app-input-field>
+      @if (submitted && !dtgDate) {
+        <span class="text-[#f82c36] text-xs">DTG is required.</span>
+      }
+    </div>
+    -->
+    <div>
+      <app-select-input label="HH" [options]="hourOptions" [(ngModel)]="dtgHours" name="dtgHours">
+      </app-select-input>
+    </div>
+    <div>
+      <app-select-input label="MM" [options]="minuteOptions" [(ngModel)]="dtgMinutes" name="dtgMinutes">
+      </app-select-input>
+    </div>
+    <div>
+      <app-select-input
+        label="Select Export File Format"
+        [options]="exportFormats"
+        [error]="exportFormatMissing"
+        [(ngModel)]="exportFormat"
+        name="exportFormat"
+      >
+      </app-select-input>
+      @if (exportFormatMissing) {
+        <span class="text-[#f82c36] text-xs">Export format is required.</span>
+      }
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mb-3">
+    <span class="text-white/50 text-xs">{{ selectedCount }} selected</span>
+    <div class="flex gap-2">
+      <app-button type="button" [disabled]="exporting" (click)="exportToNavYojana()" class="cr-solid-btn px-4 h-9 rounded-lg bg-[#1D96E9] text-sm disabled:opacity-60">
+        {{ exporting ? 'Exporting…' : 'Export to NavYojana / SDRS' }}
+      </app-button>
+    </div>
+  </div>
+
+  <div class="fuss-grid-wrapper w-full m-4">
+    @if (rows.length) {
+      <app-data-grid
+        [columnDefs]="columnDefs"
+        [rowData]="rows"
+        [pageSize]="10"
+        [autoHeight]="true"
+        [showCheckboxes]="true"
+        [getRowId]="rowId"
+        (gridReady)="onGridReady($event)"
+        (selectionChanged)="onSelectionChanged($event)"
+      >
+      </app-data-grid>
+    } @else {
+      <div class="py-6 text-center text-white/40 text-sm">
+        No defects selected — go back to Open Defects and select at least one.
+      </div>
+    }
+  </div>
+
+  <div class="flex gap-2 m-4">
+    <!-- <app-button type="button" [disabled]="saving" (click)="save()" class="px-4 h-10 rounded-lg bg-[#1D96E9] text-white text-sm disabled:opacity-60">
+      {{ saving ? 'Saving…' : 'Save' }}
+    </app-button> -->
+    <app-button type="button" (click)="cancel()" class="cr-cancel-btn px-4 h-10 rounded-lg text-sm">
+      Cancel
+    </app-button>
+  </div>
+</app-master-card>

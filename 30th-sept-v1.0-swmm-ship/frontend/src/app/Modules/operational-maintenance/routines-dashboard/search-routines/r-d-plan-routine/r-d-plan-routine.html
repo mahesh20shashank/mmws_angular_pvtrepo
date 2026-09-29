@@ -1,0 +1,190 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card cardTitle="Plan Routine">
+  <div class="p-4 text-white">
+    <!-- Top Fields -->
+    <form [formGroup]="planRoutineForm" (ngSubmit)="save()">
+      <div class="grid grid-cols-4 gap-6">
+        <div>
+          <label for="plan-routine-sub-dept" class="text-white/60 text-xs mb-1 block">Sub-Dept</label>
+          <input id="plan-routine-sub-dept" type="text" readonly formControlName="subDept" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+
+        <div>
+          <label for="plan-routine-equipment" class="text-white/60 text-xs mb-1 block">Equipment Nomenclature</label>
+          <input id="plan-routine-equipment" type="text" readonly formControlName="equipment" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+
+        <div>
+          <label for="plan-routine-rhsi" class="text-white/60 text-xs mb-1 block">RHSI</label>
+          <input id="plan-routine-rhsi" type="text" readonly formControlName="rhsi" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+
+        <div>
+          <label for="plan-routine-maintop-no" class="text-white/60 text-xs mb-1 block">Maintop No.</label>
+          <input id="plan-routine-maintop-no" type="text" readonly formControlName="maintopNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+
+      <div class="grid grid-cols-4 gap-6 mt-5">
+        <div>
+          <label for="plan-routine-routine-no" class="text-white/60 text-xs mb-1 block">Routine No.</label>
+          <input id="plan-routine-routine-no" type="text" readonly formControlName="routineNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+
+        <div>
+          <label for="plan-routine-dart-no" class="text-white/60 text-xs mb-1 block">DART No.</label>
+          <input id="plan-routine-dart-no" type="text" readonly formControlName="dartNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+
+        <div>
+          <label for="plan-routine-routine-name" class="text-white/60 text-xs mb-1 block">Routine Name</label>
+          <input id="plan-routine-routine-name" type="text" readonly formControlName="routineName" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+
+        <div>
+          <label for="plan-routine-due-date" class="text-white/60 text-xs mb-1 block">Routine Due Date</label>
+          <input id="plan-routine-due-date" type="text" readonly formControlName="routineDueDate" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+
+      <div class="grid grid-cols-4 gap-6 mt-5">
+        <div>
+          <label for="plan-routine-due-rh" class="text-white/60 text-xs mb-1 block">Routine Due R/H</label>
+          <input id="plan-routine-due-rh" type="text" readonly formControlName="routineDueRH" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+        </div>
+      </div>
+
+      <!-- Description -->
+
+      <div class="mt-6">
+        <label for="plan-routine-description" class="text-white/60 text-xs mb-1 block">Routine Description</label>
+        <textarea id="plan-routine-description" rows="3" readonly formControlName="routineDescription"
+          class="w-full rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 py-2 text-white/60 text-sm"></textarea>
+      </div>
+
+      <!-- Bottom Row -->
+
+      <div class="grid grid-cols-2 gap-8 mt-6">
+        <app-input-field
+          label="Planned Routines Commencement Date"
+          type="date"
+          formControlName="plannedCommencementDate"
+        >
+        </app-input-field>
+
+        <div class="flex items-center">
+          <app-radio-input
+            label="Spares Required?"
+            formControlName="sparesRequired"
+            [options]="[
+              { label: 'No', value: false },
+              { label: 'Yes', value: true },
+            ]"
+          >
+          </app-radio-input>
+        </div>
+      </div>
+
+      @if (planRoutineForm.get("sparesRequired")?.value) {
+        <div class="mt-6">
+          <div class="flex justify-end mb-3">
+            <app-button
+              type="button"
+              (click)="openSpareModal()"
+              class="h-9 px-4 rounded-lg bg-[#0B5E8E] border border-[#1473A8] text-white text-sm"
+            >
+              Select Spares
+            </app-button>
+          </div>
+
+          <div class="fuss-grid-wrapper w-full mt-4">
+            <app-data-grid
+              [columnDefs]="columnDefs"
+              [rowData]="sparesData"
+              [pageSize]="5"
+              height="440px"
+              [loading]="isLoading()"
+            >
+            </app-data-grid>
+          </div>
+        </div>
+      }
+
+      <!-- Buttons -->
+
+      <div class="flex justify-end gap-3 mt-8">
+        <app-button
+          type="button"
+          (click)="goBack()"
+          class="h-10 px-5 rounded-lg bg-white/15 border border-white/15 text-white"
+        >
+          Back To List
+        </app-button>
+
+        <app-button
+          type="submit"
+          class="h-10 px-5 rounded-lg bg-[#0B5E8E] border border-[#1473A8]"
+          style="color: #fff"
+        >
+          Save to Planned Routine List
+        </app-button>
+      </div>
+    </form>
+  </div>
+</app-master-card>
+
+@if (showSpareModal()) {
+  <app-modal size="lg" title="Select Spares" (closeModal)="closeSpareModal()">
+    <div class="max-h-[420px] overflow-y-auto" style="color: var(--text-primary)">
+      <table class="w-full text-sm">
+        <thead class="text-xs sticky top-0" style="color: var(--text-muted); background: var(--bg-sfd-modal)">
+          <tr>
+            <th class="text-left py-2 px-2">Code</th>
+            <th class="text-left py-2 px-2">Name</th>
+            <th class="text-left py-2 px-2">Inventory Type</th>
+            <th class="text-left py-2 px-2 w-24">Qty</th>
+            <th class="text-left py-2 px-2 w-24">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (option of spareOptions(); track option.code) {
+            <tr class="border-t" style="border-color: var(--border-primary)">
+              <td class="py-2 px-2">{{ option.code }}</td>
+              <td class="py-2 px-2">{{ option.name }}</td>
+              <td class="py-2 px-2">{{ option.inventoryType }}</td>
+              <td class="py-2 px-2">
+                <input
+                  type="number"
+                  min="1"
+                  [value]="spareQtyByCode[option.code] || 1"
+                  (input)="spareQtyByCode[option.code] = +($any($event.target).value) || 1"
+                  class="w-16 h-8 rounded border px-2 text-sm"
+                  style="background: var(--bg-sfd-modal); border-color: var(--border-primary); color: var(--text-primary)"
+                />
+              </td>
+              <td class="py-2 px-2">
+                <app-button
+                  type="button"
+                  (click)="addSpare(option)"
+                  class="h-8 px-3 rounded-lg bg-[#1D96E9] text-white text-xs"
+                >
+                  Add
+                </app-button>
+              </td>
+            </tr>
+          }
+          @if (!spareOptions().length) {
+            <tr>
+              <td colspan="5" class="text-center py-6" style="color: var(--text-muted-2)">No spares available.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </app-modal>
+}

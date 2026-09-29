@@ -1,0 +1,142 @@
+<app-help-guidance />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>Masters</h3>
+  </div>
+
+  <div class="wed-tabs-row">
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'mapping'" (click)="selectTab('mapping')">
+      Ship Inventory to WED Inventory Mapping
+    </app-button>
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'get-data'" (click)="selectTab('get-data')">
+      Get Data
+    </app-button>
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'import'" (click)="selectTab('import')">
+      Import Data
+    </app-button>
+  </div>
+
+  @if (activeTab() === "mapping") {
+    <form [formGroup]="mapForm" class="wed-form-grid" (ngSubmit)="submitMap()">
+      <div class="form-field">
+        <app-select-input
+          label="INSMA Equipment Name *"
+          formControlName="equipmentName"
+          [options]="insmaEquipmentOptions()"
+        />
+        @if (mapForm.controls.equipmentName.invalid && mapForm.controls.equipmentName.touched) {
+          <span class="form-error">INSMA Equipment Name is required.</span>
+        }
+      </div>
+      <div class="form-field">
+        <app-select-input
+          label="WED Equipment Name *"
+          formControlName="equipmentClass"
+          [options]="wedEquipmentOptions()"
+        />
+        @if (mapForm.controls.equipmentClass.invalid && mapForm.controls.equipmentClass.touched) {
+          <span class="form-error">WED Equipment Name is required.</span>
+        }
+      </div>
+      <div class="wed-form-grid__actions">
+        <app-button type="submit" class="btn-primary" [disabled]="submittingMap()">
+          {{ submittingMap() ? "Saving..." : "Submit" }}
+        </app-button>
+      </div>
+    </form>
+
+    <h4 class="wed-subheading">Mapped List</h4>
+    <app-data-grid [rowData]="mappedRows()" [columnDefs]="columnDefs" height="320px" />
+  }
+
+  @if (activeTab() === "get-data") {
+    <div class="wed-get-data__actions">
+      <app-button type="button" class="btn-primary" [disabled]="syncingEquipment()" (click)="syncEquipment()">
+        {{ syncingEquipment() ? "Syncing..." : "Equipment Get Data from WED" }}
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="syncingSpares()" (click)="syncSpares()">
+        {{ syncingSpares() ? "Syncing..." : "Spare Get Data from WED" }}
+      </app-button>
+    </div>
+  }
+
+  @if (activeTab() === "import") {
+    <form [formGroup]="importForm" class="wed-form-grid">
+      <app-select-input label="Master" formControlName="kind" [options]="importKindOptions" />
+      <app-file-input
+        label="Excel File (.xlsx)"
+        accept=".xlsx"
+        [outsideLabel]="true"
+        [enablePreview]="false"
+        formControlName="file"
+      />
+    </form>
+
+    <div class="wed-import-actions">
+      <app-button type="button" class="btn-secondary" [disabled]="downloadingTemplate()" (click)="downloadImportTemplate()">
+        {{ downloadingTemplate() ? "Downloading..." : "Download Template" }}
+      </app-button>
+      <app-button
+        type="button"
+        class="btn-secondary"
+        [disabled]="!importFile() || validating() || importing()"
+        (click)="validateImportFile()"
+      >
+        {{ validating() ? "Checking..." : "Validate (Dry Run)" }}
+      </app-button>
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!validatedForImport() || importing() || validating()"
+        (click)="submitImportFile()"
+      >
+        {{ importing() ? "Importing..." : "Import" }}
+      </app-button>
+    </div>
+
+    @if (importResult(); as result) {
+      <div class="wed-import-result">
+        @if (result.status === "column_error") {
+          <p class="wed-import-result__error">{{ result.headerErrors[0] }}</p>
+          @if (result.allowedColumns.length) {
+            <p class="wed-import-result__hint">Allowed columns: {{ result.allowedColumns.join(", ") }}</p>
+          }
+        } @else if (result.status === "row_limit_error") {
+          <p class="wed-import-result__error">{{ result.headerErrors[0] }}</p>
+        } @else {
+          <div class="wed-import-result__stats">
+            @if (result.status === "dry_run") {
+              <span>Valid rows: {{ result.validRows }}</span>
+            } @else {
+              <span>Imported: {{ result.imported }}</span>
+            }
+            <span>Invalid rows: {{ result.invalidRows }}</span>
+          </div>
+          @if (result.errors.length) {
+            <table class="wed-import-result__errors">
+              <thead>
+                <tr>
+                  <th>Row</th>
+                  <th>Errors</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (rowError of result.errors; track rowError.row) {
+                  <tr>
+                    <td>{{ rowError.row }}</td>
+                    <td>
+                      @for (field of errorFields(rowError.errors); track field) {
+                        <div>{{ field }}: {{ rowError.errors[field].join(", ") }}</div>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        }
+      </div>
+    }
+  }
+</div>

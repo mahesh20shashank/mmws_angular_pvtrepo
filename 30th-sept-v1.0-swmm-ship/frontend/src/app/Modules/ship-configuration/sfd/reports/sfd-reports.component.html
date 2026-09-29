@@ -1,0 +1,128 @@
+<div class="reports" [class.reports--collapsed]="navCollapsed()">
+  <!-- Report navigator -->
+  <aside class="reports__nav" aria-label="Reports navigation">
+    <app-collapsible-sidebar
+      title="Reports"
+      [items]="navItems()"
+      [selectedId]="openReportId()"
+      [collapsed]="navCollapsed()"
+      (itemSelected)="select($event)"
+      (collapsedChange)="navCollapsed.set($event)" />
+  </aside>
+
+  <!-- Report detail -->
+  <div class="reports__detail">
+    <!-- Header + inline filters -->
+    <div class="glass-card reports__header">
+      <div class="reports__header-row">
+        <h2 class="reports__title">{{ openReport().name }}</h2>
+        @if (hasAppliedFilters()) {
+          <span class="reports__applied">{{ appliedFilterCount() }} applied</span>
+        }
+        <div class="reports__spacer"></div>
+
+        <app-button type="button" class="reports__toolbtn" (click)="toggleColPicker()" title="Customize Columns">
+          <app-icon name="layout-grid" [size]="16" [strokeWidth]="1.9" variant="accent" />
+          <span class="reports__toolbtn-label">Columns</span>
+          <span class="reports__count">{{ displayColCount() }}</span>
+          <app-icon [name]="colPickerOpen() ? 'chevron-up' : 'chevron-down'" [size]="14"
+            [strokeWidth]="2" class="reports__chev" variant="inherit" />
+        </app-button>
+
+        <app-button type="button" class="reports__toolbtn" (click)="toggleFilters()"
+          [title]="filtersCollapsed() ? 'Show Filters' : 'Hide Filters'">
+          <app-icon name="filter" [size]="16" [strokeWidth]="1.9" variant="accent" />
+          <span class="reports__toolbtn-label">Filters</span>
+          <app-icon [name]="filtersCollapsed() ? 'chevron-down' : 'chevron-up'" [size]="14"
+            [strokeWidth]="2" class="reports__chev" variant="inherit" />
+        </app-button>
+
+        <app-export-toolbar [busy]="exportingKind()" [disabled]="rowData().length === 0" (exportRequested)="export($event)" />
+      </div>
+
+      @if (!filtersCollapsed()) {
+        <div class="reports__filter-grid">
+          @for (f of filterFields(); track f.name) {
+            <label for = "reports__filter" class="reports__filter-field">
+              <span class="reports__filter-label">{{ f.name }}</span>
+              <div class="reports__filter-control">
+                <app-select-input
+                  [placeholder]="f.placeholder"
+                  [options]="f.options"
+                  [ngModel]="f.value"
+                  (ngModelChange)="setFilter(f.name, $event)">
+                </app-select-input>
+              </div>
+            </label>
+          }
+          <div class="reports__filter-field reports__filter-field--actions">
+            <span class="reports__filter-label">&nbsp;</span>
+            <app-button type="button" class="reports__reset" (click)="resetFilters()">
+              <app-icon name="rotate-ccw" [size]="15" [strokeWidth]="1.9" variant="accent" />
+              Reset Filters
+            </app-button>
+          </div>
+        </div>
+      }
+
+      @if (colPickerOpen()) {
+        <div class="reports__colpicker">
+          <div class="reports__colpicker-head">
+            <span class="reports__colpicker-title">Columns</span>
+            <span class="reports__colpicker-hint">
+              Click to add · selected columns are blue · drag headers to reorder · lock = required column
+            </span>
+            <div class="reports__spacer"></div>
+            <app-button type="button" class="reports__colpicker-reset" (click)="resetCols()">
+              <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="1.9" variant="muted" />
+              Reset Columns
+            </app-button>
+          </div>
+          <div class="reports__chips">
+            @for (c of columnChips(); track c.name) {
+              @if (c.selected) {
+                <div class="reports__chip reports__chip--add">
+                  <span class="reports__chip-pos">{{ c.pos }}</span>
+                  <span class="reports__chip-name">{{ c.name }}</span>
+                  @if (c.locked) {
+                    <span class="reports__chip-lock" title="Required dependency">
+                      <app-icon name="lock" [size]="12" [strokeWidth]="2" variant="warning"/>
+                    </span>
+                  } @else {
+                    <app-button type="button" class="reports__chip-remove" title="Remove" (click)="removeCol(c.name)">
+                      <app-icon name="x" [size]="13" [strokeWidth]="2.2" />
+                    </app-button>
+                  }
+                </div>
+              } @else {
+                <app-button type="button" class="reports__chip reports__chip--add" (click)="addCol(c.name)">
+                  <app-icon name="plus" [size]="13" [strokeWidth]="2.2" variant="accent" />
+                  {{ c.name }}
+                </app-button>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Preview -->
+    <div class="glass-card reports__preview">
+      <div class="reports__preview-head">
+        <span class="reports__preview-title">Preview</span>
+        <span class="reports__preview-hint">Sample rows after applying filters</span>
+      </div>
+      <app-data-grid
+        [columnDefs]="columnDefs()"
+        [rowData]="rowData()"
+        [pageSize]="10"
+        [resetKey]="openReportId()"
+        height="360px"
+        [totalRowCount]="gridTotalCount()"
+        [enableColumnReorder]="true"
+        (columnMoved)="onColumnsReordered($event)"
+        (pageRequested)="onPageRequested($event)"
+      />
+    </div>
+  </div>
+</div>

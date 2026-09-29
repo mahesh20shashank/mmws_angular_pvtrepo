@@ -1,0 +1,1588 @@
+{
+  "formId": "sats_sheet_humsa_ng_phase_3",
+  "title": "HUMSA-NG PHASE 3 — SATs SHEET (6400008)",
+  "sourceFile": "SATS_SHEET_HUMSA_NG_PHASE_3.html",
+  "sections": [
+    {
+      "id": "trial_header_information",
+      "title": "Trial Header Information",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "ship",
+          "label": "Name of Ship ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select Ship --",
+              "value": ""
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "equipment",
+          "label": "Equipment",
+          "required": false,
+          "disabled": true,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text",
+          "prefill": true,
+          "prefillSource": "equipment.nomenclature"
+        },
+        {
+          "type": "input",
+          "name": "sno",
+          "label": "S. No.",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "date",
+          "name": "trial_date",
+          "label": "Date ",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": ""
+        },
+        {
+          "type": "select",
+          "name": "department",
+          "label": "Department ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select Department --",
+              "value": ""
+            },
+            {
+              "label": "ND",
+              "value": "ND"
+            },
+            {
+              "label": "Gunnery",
+              "value": "Gunnery"
+            },
+            {
+              "label": "Communication",
+              "value": "Communication"
+            },
+            {
+              "label": "ASW",
+              "value": "ASW"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "select",
+          "name": "nature_of_trials",
+          "label": "Nature of Trials ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select Nature of Trials --",
+              "value": ""
+            },
+            {
+              "label": "lls",
+              "value": "lls"
+            },
+            {
+              "label": "SATs",
+              "value": "SATs"
+            },
+            {
+              "label": "HATs",
+              "value": "HATs"
+            },
+            {
+              "label": "OP Checks",
+              "value": "OP Checks"
+            }
+          ],
+          "isDynamic": false
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "ch_12_bi_static_trials_part_1",
+      "title": "CH 12 — Bi-Static Trials - Part 1",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "input",
+          "name": "tbl49_own_vessel",
+          "label": "Own Vessel (Transmitter Vessel)",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl49_consort_target",
+          "label": "Consort Target",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl49_ddr_file",
+          "label": "DDR File Name",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl50_own_vessel_tx",
+          "label": "Own Vessel (Tx)",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl50_receiver_vessel",
+          "label": "Receiver Vessel",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl50_consort_target",
+          "label": "Consort Target",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl50_ddr_file",
+          "label": "DDR File Name",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "tbl51_radar_name",
+          "label": "Radar Name",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "std_dev_bearing",
+          "label": "Standard Deviation of Bearing Error",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "std_dev_range",
+          "label": "Standard Deviation of Range Error",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "ch_12_bi_static_trials_part_2",
+      "title": "CH 12 — Bi-Static Trials - Part 2",
+      "sectionType": "hybrid",
+      "fields": [],
+      "tables": [
+        {
+          "id": "ch_12_bi_static_trials_table_1",
+          "sectionType": "simpleTable",
+          "title": "CH 12 — Bi-Static Trials",
+          "topHeaders": [],
+          "columns": [
+            {
+              "key": "col_1",
+              "label": "Trial Ser",
+              "type": "label",
+              "align": "center"
+            },
+            {
+              "key": "col_2",
+              "label": "Check Description as per Schedule",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_3",
+              "label": "Result (Sat / Unsat)",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_4",
+              "label": "Presenting Authority Remarks",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "ch_12_bi_static_trials_table_1_row_1",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_table_1_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "CH 12",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_1_row_1_cell_2_static",
+                  "type": "label",
+                  "value": "Bi-Static Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_1_row_1_cell_3_ch12_bistatic_rmk",
+                  "key": "ch12_bistatic_rmk",
+                  "type": "radio",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+
+                    {
+                      "label": "Sat",
+                      "value": "Sat"
+                    },
+                    {
+                      "label": "Unsat",
+                      "value": "Unsat"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left",
+                  "isDynamic": false
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_1_row_1_cell_4_ch12_bistatic_pa",
+                  "key": "ch12_bistatic_pa",
+                  "type": "textarea",
+                  "value": "",
+                  "rows": 2,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        },
+        {
+          "id": "ch_12_bi_static_trials_table_2",
+          "sectionType": "simpleTable",
+          "title": "Table 48. Standard Deviation for range and bearing to be achieved",
+          "topHeaders": [],
+          "columns": [
+            {
+              "key": "col_1",
+              "label": "Parameter",
+              "type": "label",
+              "align": "center"
+            },
+            {
+              "key": "col_2",
+              "label": "Result to be achieved",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_3",
+              "label": "Result Computed",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_4",
+              "label": "Sat / Unsat",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "ch_12_bi_static_trials_table_2_row_1",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "Range (m)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_1_cell_2_static",
+                  "type": "label",
+                  "value": "≤ 1500",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_1_cell_3_tbl48_range_computed",
+                  "key": "tbl48_range_computed",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_1_cell_4_tbl48_range_rmk",
+                  "key": "tbl48_range_rmk",
+                  "type": "radio",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+
+                    {
+                      "label": "Sat",
+                      "value": "Sat"
+                    },
+                    {
+                      "label": "Unsat",
+                      "value": "Unsat"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left",
+                  "isDynamic": false
+                }
+              ]
+            },
+            {
+              "_id": "ch_12_bi_static_trials_table_2_row_2",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_2_cell_1_static",
+                  "type": "serial",
+                  "value": "Bearing (deg)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_2_cell_2_static",
+                  "type": "label",
+                  "value": "≤ 3",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_2_cell_3_tbl48_bearing_computed",
+                  "key": "tbl48_bearing_computed",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_2_row_2_cell_4_tbl48_bearing_rmk",
+                  "key": "tbl48_bearing_rmk",
+                  "type": "radio",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+
+                    {
+                      "label": "Sat",
+                      "value": "Sat"
+                    },
+                    {
+                      "label": "Unsat",
+                      "value": "Unsat"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left",
+                  "isDynamic": false
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        },
+        {
+          "id": "ch_12_bi_static_trials_matrix_3",
+          "sectionType": "matrixTable",
+          "title": "CH 12 — Bi-Static Trials",
+          "topHeaders": [
+            [
+              {
+                "label": "Ser",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Cut No.",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Time",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Sonar Readings",
+                "colspan": 4,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Remarks",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "label": "Own Ship Course (Cs)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Own Ship Speed (Ss)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Target Range (Km) (RS)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Target True Bearing (Bs)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [],
+          "rows": [
+            {
+              "_id": "ch_12_bi_static_trials_matrix_3_row_1",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_2_tbl49_cut_",
+                  "key": "tbl49_cut_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_3_tbl49_time_",
+                  "key": "tbl49_time_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_4_tbl49_cs_",
+                  "key": "tbl49_cs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_5_tbl49_ss_",
+                  "key": "tbl49_ss_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_6_tbl49_rs_",
+                  "key": "tbl49_rs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_7_tbl49_bs_",
+                  "key": "tbl49_bs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_1_cell_8_tbl49_rmk_",
+                  "key": "tbl49_rmk_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "ch_12_bi_static_trials_matrix_3_row_2",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_1_static",
+                  "type": "serial",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_2_tbl49_cut_",
+                  "key": "tbl49_cut_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_3_tbl49_time_",
+                  "key": "tbl49_time_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_4_tbl49_cs_",
+                  "key": "tbl49_cs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_5_tbl49_ss_",
+                  "key": "tbl49_ss_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_6_tbl49_rs_",
+                  "key": "tbl49_rs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_7_tbl49_bs_",
+                  "key": "tbl49_bs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_3_row_2_cell_8_tbl49_rmk_",
+                  "key": "tbl49_rmk_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        }
+      ]
+    },
+    {
+      "id": "ch_12_bi_static_trials_part_3",
+      "title": "CH 12 — Bi-Static Trials - Part 3",
+      "sectionType": "hybrid",
+      "fields": [],
+      "tables": [
+        {
+          "id": "ch_12_bi_static_trials_matrix_4",
+          "sectionType": "matrixTable",
+          "title": "(Mode OMNI, Range Scale: 10Km)",
+          "topHeaders": [
+            [
+              {
+                "label": "Ser",
+                "colspan": 1,
+                "rowspan": 3,
+                "align": "center"
+              },
+              {
+                "label": "Tx Parameters",
+                "colspan": 5,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Sonar Reading",
+                "colspan": 6,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Remarks",
+                "colspan": 1,
+                "rowspan": 3,
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "label": "FRQ",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "WF",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "PL",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "RS",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "SL",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Own Ship",
+                "colspan": 2,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Target",
+                "colspan": 2,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Rx Ship",
+                "colspan": 2,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "label": "Course (SCs)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Speed (SSs)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Range (Km) (RS)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "True Bearing (Bs)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Range (Km) (RS)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "True Bearing (Bs)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [],
+          "rows": [
+            {
+              "_id": "ch_12_bi_static_trials_matrix_4_row_1",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_2_tbl50_frq_",
+                  "key": "tbl50_frq_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_3_tbl50_wf_",
+                  "key": "tbl50_wf_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_4_tbl50_pl_",
+                  "key": "tbl50_pl_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_5_tbl50_rs_",
+                  "key": "tbl50_rs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_6_tbl50_sl_",
+                  "key": "tbl50_sl_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_7_tbl50_own_cs_",
+                  "key": "tbl50_own_cs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_8_tbl50_own_ss_",
+                  "key": "tbl50_own_ss_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_9_tbl50_tgt_rs_",
+                  "key": "tbl50_tgt_rs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_10_tbl50_tgt_bs_",
+                  "key": "tbl50_tgt_bs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_11_tbl50_rx_rs_",
+                  "key": "tbl50_rx_rs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_12_tbl50_rx_bs_",
+                  "key": "tbl50_rx_bs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_4_row_1_cell_13_tbl50_rmk_",
+                  "key": "tbl50_rmk_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        },
+        {
+          "id": "ch_12_bi_static_trials_matrix_5",
+          "sectionType": "matrixTable",
+          "title": "CH 12 — Bi-Static Trials",
+          "topHeaders": [
+            [
+              {
+                "label": "Ser",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Cut No.",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Time",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              },
+              {
+                "label": "Radar Readings",
+                "colspan": 5,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Remarks",
+                "colspan": 1,
+                "rowspan": 2,
+                "align": "center"
+              }
+            ],
+            [
+              {
+                "label": "Own Ship Course (CR)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Target Range (Km) (RX)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Target True Bearing (BRX)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Range (Nm) Other Ship (RTX)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "True Bearing of other ship (BTX)",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [],
+          "rows": [
+            {
+              "_id": "ch_12_bi_static_trials_matrix_5_row_1",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_2_tbl51_cut_",
+                  "key": "tbl51_cut_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_3_tbl51_time_",
+                  "key": "tbl51_time_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_4_tbl51_cr_",
+                  "key": "tbl51_cr_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_5_tbl51_rx_",
+                  "key": "tbl51_rx_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_6_tbl51_brx_",
+                  "key": "tbl51_brx_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_7_tbl51_rtx_",
+                  "key": "tbl51_rtx_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_8_tbl51_btx_",
+                  "key": "tbl51_btx_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_matrix_5_row_1_cell_9_tbl51_rmk_",
+                  "key": "tbl51_rmk_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        },
+        {
+          "id": "ch_12_bi_static_trials_table_6",
+          "sectionType": "simpleTable",
+          "title": "Table 52. Error in Bearing and Range (for offline computation in receiver ship)",
+          "topHeaders": [],
+          "columns": [
+            {
+              "key": "col_1",
+              "label": "Ser",
+              "type": "serial",
+              "align": "center"
+            },
+            {
+              "key": "col_2",
+              "label": "Cut No.",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_3",
+              "label": "Time",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_4",
+              "label": "Sonar True Bearing (BS)",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_5",
+              "label": "Radar True Bearing (BR)",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_6",
+              "label": "Bearing Error (ΔB = BS − BR)",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_7",
+              "label": "Sonar Range (RS) (Km)",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_8",
+              "label": "Radar Range (RR) (Km)",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_9",
+              "label": "Range Error (ΔR = RS − RR)",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "ch_12_bi_static_trials_table_6_row_1",
+              "cells": [
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_2_tbl52_cut_",
+                  "key": "tbl52_cut_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_3_tbl52_time_",
+                  "key": "tbl52_time_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_4_tbl52_sonar_bs_",
+                  "key": "tbl52_sonar_bs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_5_tbl52_radar_br_",
+                  "key": "tbl52_radar_br_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_6_tbl52_bearing_err_",
+                  "key": "tbl52_bearing_err_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_7_tbl52_sonar_rs_",
+                  "key": "tbl52_sonar_rs_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_8_tbl52_radar_rr_",
+                  "key": "tbl52_radar_rr_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "ch_12_bi_static_trials_table_6_row_1_cell_9_tbl52_range_err_",
+                  "key": "tbl52_range_err_",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": " ",
+                  "inputType": "text",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        }
+      ]
+    },
+    {
+      "id": "remarks",
+      "title": "Remarks",
+      "sectionType": "simpleTable",
+      "fields": [],
+      "tables": [
+        {
+          "id": "remarks_table_1",
+          "sectionType": "simpleTable",
+          "title": "Remarks",
+          "topHeaders": [],
+          "columns": [
+            {
+              "key": "col_1",
+              "label": "Sr No",
+              "type": "label",
+              "align": "center"
+            },
+            {
+              "key": "col_2",
+              "label": "Observations",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "col_3",
+              "label": "SS Remarks",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "remarks_table_1_row_1",
+              "cells": [
+                {
+                  "_id": "remarks_table_1_row_1_cell_1_static",
+                  "type": "serial",
+                  "value": "1",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "remarks_table_1_row_1_cell_2_field_2",
+                  "key": "field_2",
+                  "type": "textarea",
+                  "value": "",
+                  "rows": 2,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "remarks_table_1_row_1_cell_3_field_3",
+                  "key": "field_3",
+                  "type": "textarea",
+                  "value": "",
+                  "rows": 2,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": true,
+          "minRows": 1
+        }
+      ]
+    },
+    {
+      "id": "presenting_authority",
+      "title": "Presenting Authority",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "humsa_presenting_authority",
+          "label": "Presenting Authority ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": ""
+            },
+            {
+              "label": "Dockyard",
+              "value": "dockyard"
+            },
+            {
+              "label": "Shipstaff",
+              "value": "shipstaff"
+            },
+            {
+              "label": "OEM",
+              "value": "oem"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "humsa_watt_1",
+          "label": "WATT(1)",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "humsa_watt_2",
+          "label": "WATT(2)",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "humsa_watt_3",
+          "label": "WATT(3)",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        }
+      ],
+      "tables": []
+    }
+  ]
+}

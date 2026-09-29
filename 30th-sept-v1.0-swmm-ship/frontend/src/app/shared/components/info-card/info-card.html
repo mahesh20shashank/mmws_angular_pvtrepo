@@ -1,0 +1,48 @@
+<div
+  class="glass-card info-card"
+  [ngStyle]="{ height: cardHeight }"
+>
+  <!-- Header -->
+  <div class="card-header">
+    <h2 class="box-container-heading">
+      {{ formatTitle(title) }}
+    </h2>
+    @if(actionText){
+        <app-button class="viewall-text">
+          {{ actionText }}
+        </app-button>
+    }
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Body -->
+  <div class="card-body">
+    <div class="scroll-container">
+
+      @for (item of items; track item.label) {
+      <div class="item-row">
+
+        <div class="item-label">
+
+          @if (title === 'RISK INDICATORS') {
+          <app-icon name="triangle-alert" [size]="14" [strokeWidth]="1.2" color="#FF6900" />
+          }
+
+          <span class="subHeading_box">
+            {{ item.label }}
+          </span>
+
+        </div>
+
+        <span class="item-value content">
+          {{ item.value }}
+        </span>
+
+      </div>
+      }
+
+    </div>
+  </div>
+</div>

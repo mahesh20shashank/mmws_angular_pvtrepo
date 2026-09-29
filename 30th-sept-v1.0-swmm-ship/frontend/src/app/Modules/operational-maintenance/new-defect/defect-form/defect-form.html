@@ -1,0 +1,517 @@
+<div class="glass-card daf-form" [formGroup]="form">
+  <div class="daf-form-head">
+    <span class="daf-form-title">Create DART — Defects / Routines</span>
+    <span class="daf-mand-note"
+      >Fields marked <span class="daf-star">*</span> are mandatory</span
+    >
+  </div>
+
+  <!-- Equipment identification -->
+  <div class="daf-form-grid">
+    <div class="daf-field daf-field--span2">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Equipment Name and Description <span class="daf-star">*</span>
+          <span class="daf-field-hint">(SFD-Equipment-linked)</span></span
+        >
+        <span class="daf-field-badge">SFD</span>
+      </div>
+      <app-single-select
+        [config]="equipmentConfig"
+        placeholder="Select equipment — code, name, nomenclature, serial no., running hours"
+        [required]="true"
+        [options]="equipmentOptions"
+        formControlName="equipmentNameDescription"
+        (onSelect)="onSelectEquipment($event)"
+      />
+
+      @if (selectedEquipment; as eq) {
+        <div class="daf-detail-summary">
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Equipment Code</span>
+            <span class="daf-detail-summary-value">{{
+              eq.equipment_code || "-"
+            }}</span>
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Equipment Name</span>
+            <span class="daf-detail-summary-value">{{
+              eq.equipment_name || "-"
+            }}</span>
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Equipment Nomenclature</span>
+            <span
+              class="daf-detail-summary-value daf-detail-summary-value--strong"
+              >{{ eq.nomenclature || "-" }}</span
+            >
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label"
+              >Equipment Serial Number</span
+            >
+            <span class="daf-detail-summary-value">{{
+              eq.equipment_serial_no || "-"
+            }}</span>
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Running Hours</span>
+            <span class="daf-detail-summary-value">{{
+              eq.service_life || "-"
+            }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >System Name <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+      <app-input-field
+        type="text"
+        placeholder="Enter system name"
+        [readonly]="true"
+        formControlName="systemName"
+      />
+    </div>
+
+    <div class="daf-field daf-field--span2">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Location On Board <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+      @if (selectedEquipment?.compartment; as eq) {
+        <div class="daf-detail-summary">
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Deck Number</span>
+            <span class="daf-detail-summary-value">{{
+              eq.deck_no || "-"
+            }}</span>
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Compartment Name</span>
+            <span
+              class="daf-detail-summary-value daf-detail-summary-value--strong"
+              >{{ eq.name || "-" }}</span
+            >
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Frame Station</span>
+            <span class="daf-detail-summary-value">{{
+              eq.frame_station || "-"
+            }}</span>
+          </div>
+          <div class="daf-detail-summary-item">
+            <span class="daf-detail-summary-label">Location</span>
+            <span
+              class="daf-detail-summary-value daf-detail-summary-value--strong"
+              >{{ eq.location || "-" }}</span
+            >
+          </div>
+        </div>
+      } @else {
+        <div class="daf-field-auto">auto-fetch location on board</div>
+      }
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Defect Date Occurrence <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-date-picker
+        [singleDate]="true"
+        placeholder="DD-MMM-YYYY"
+        formControlName="defectDateOccurrence"
+      />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Defective Component / Item <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+
+      <app-input-field
+        type="text"
+        placeholder="Enter Defective Component / Item"
+        formControlName="defectiveComponent"
+      />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Equipment Availability Status <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-single-select
+        [config]="equipmentStatus"
+        placeholder="Select Equipment Availability Status"
+        [required]="true"
+        [options]="equipmentAvailabilityStatusOptions"
+        formControlName="equipmentAvailabilityStatus"
+      />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Past DART Number</span>
+        <span class="daf-field-badge">Auto-fetch (CMMS)</span>
+      </div>
+      <button
+        type="button"
+        class="daf-history-link"
+        (click)="viewPastDartHistory()"
+      >
+        {{ pastDartCount() }} past DARTs — view history
+        <app-icon name="history" [size]="14" variant="inherit" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Description cluster -->
+  <div class="daf-form-grid">
+    <div class="daf-field-column">
+      <div class="daf-field">
+        <div class="daf-field-head">
+          <span class="daf-field-label">SS Remarks</span>
+          <span class="daf-field-badge daf-field-badge--user">User</span>
+        </div>
+        <app-single-select
+          [config]="ssRemarkConfig"
+          placeholder="Select SS Remarks"
+          [options]="ssRemarksOptions"
+          formControlName="ssRemarks"
+        />
+      </div>
+
+      <div class="daf-field">
+        <div class="daf-field-head">
+          <span class="daf-field-label">Attachment</span>
+          <span class="daf-field-badge daf-field-badge--user">User</span>
+        </div>
+        <app-file-input
+          placeholder="Attach Word / PDF / image"
+          formControlName="attachment"
+        />
+      </div>
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Defect Description <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-rich-text-editor
+        placeholder="Enter defect description"
+        minHeight="220px"
+        [collapsible]="true"
+        formControlName="defectDescription"
+      />
+    </div>
+
+    <div class="daf-field-column">
+      <div class="daf-field">
+        <div class="daf-field-head">
+          <span class="daf-field-label"
+            >Symptoms <span class="daf-star">*</span></span
+          >
+          <span class="daf-field-badge daf-field-badge--user">User</span>
+        </div>
+        <app-single-select
+          [config]="symptomsConfig"
+          placeholder="Select Symptoms"
+          [required]="true"
+          [options]="symptomsOptions"
+          formControlName="symptoms"
+        />
+      </div>
+
+      <div class="daf-field">
+        <div class="daf-field-head">
+          <span class="daf-field-label">Trials Required</span>
+          <span class="daf-field-badge">System (ITTTM)</span>
+        </div>
+        <p class="daf-field-note">
+          A trial requisition request initiated in the Trials module of SWMM.
+        </p>
+        <div class="daf-field-radio-group">
+          @for (opt of trialsRequiredOptions; track opt.value) {
+            <label
+              class="daf-field-radio"
+              [class.daf-field-radio--selected]="
+                form.controls.trialsRequired.value === opt.value
+              "
+            >
+              <input
+                type="radio"
+                class="daf-field-radio-input"
+                name="trialsRequired"
+                [value]="opt.value"
+                formControlName="trialsRequired"
+              />
+              <span class="daf-field-radio-outer"
+                ><span class="daf-field-radio-dot"></span
+              ></span>
+              {{ opt.label }}
+            </label>
+          }
+        </div>
+      </div>
+
+      @if (showTrialAgency) {
+        <div class="daf-field">
+          <div class="daf-field-head">
+            <span class="daf-field-label"
+              >Trial Agency <span class="daf-star">*</span></span
+            >
+            <span class="daf-field-badge daf-field-badge--user">User</span>
+          </div>
+          <app-single-select
+            placeholder="Select Trial Agency"
+            [options]="trialAgencyOptions"
+            [config]="trailAgencies"
+            formControlName="trialAgency"
+          />
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Yes/No flags -->
+  <div class="daf-form-grid">
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Spares Used / Spare Required <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <div class="daf-field-radio-group">
+        @for (opt of yesNoOptions; track opt.value) {
+          <label
+            class="daf-field-radio"
+            [class.daf-field-radio--selected]="
+              form.controls.sparesUsedRequired.value === opt.value
+            "
+          >
+            <input
+              type="radio"
+              class="daf-field-radio-input"
+              name="sparesUsedRequired"
+              [value]="opt.value"
+              formControlName="sparesUsedRequired"
+            />
+            <span class="daf-field-radio-outer"
+              ><span class="daf-field-radio-dot"></span
+            ></span>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="daf-field-spacer"></div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Hotworks <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <div class="daf-field-radio-group">
+        @for (opt of yesNoOptions; track opt.value) {
+          <label
+            class="daf-field-radio"
+            [class.daf-field-radio--selected]="
+              form.controls.hotworks.value === opt.value
+            "
+          >
+            <input
+              type="radio"
+              class="daf-field-radio-input"
+              name="hotworks"
+              [value]="opt.value"
+              formControlName="hotworks"
+            />
+            <span class="daf-field-radio-outer"
+              ><span class="daf-field-radio-dot"></span
+            ></span>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          >Standby Available <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <div class="daf-field-radio-group">
+        @for (opt of yesNoOptions; track opt.value) {
+          <label
+            class="daf-field-radio"
+            [class.daf-field-radio--selected]="
+              form.controls.standbyAvailable.value === opt.value
+            "
+          >
+            <input
+              type="radio"
+              class="daf-field-radio-input"
+              name="standbyAvailable"
+              [value]="opt.value"
+              formControlName="standbyAvailable"
+            />
+            <span class="daf-field-radio-outer"
+              ><span class="daf-field-radio-dot"></span
+            ></span>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- DART Trigger / rectification -->
+  <div class="daf-trigger-row">
+    <div class="daf-trigger-block">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          ><span class="daf-section-dot daf-section-dot--trigger"></span>DART
+          Trigger <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <div class="daf-trigger-grid">
+        @for (opt of dartTriggerOptions; track opt) {
+          <label
+            class="daf-field-radio"
+            [class.daf-field-radio--selected]="
+              form.controls.dartTrigger.value === opt
+            "
+          >
+            <input
+              type="radio"
+              class="daf-field-radio-input"
+              name="dartTrigger"
+              [value]="opt"
+              formControlName="dartTrigger"
+            />
+            <span class="daf-field-radio-outer"
+              ><span class="daf-field-radio-dot"></span
+            ></span>
+            {{ opt }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="daf-trigger-block">
+      <div class="daf-field-head">
+        <span class="daf-field-label"
+          ><span class="daf-section-dot daf-section-dot--rectified"></span>Was
+          the defect rectified onboard? <span class="daf-star">*</span></span
+        >
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <p class="daf-field-note">
+        Yes enables closure fields · No reveals the Raise DART fields.
+      </p>
+      <div class="daf-field-radio-group">
+        @for (opt of defectRectifiedOptions; track opt.value) {
+          <label
+            class="daf-field-radio"
+            [class.daf-field-radio--selected]="
+              form.controls.defectRectifiedOnboard.value === opt.value
+            "
+          >
+            <input
+              type="radio"
+              class="daf-field-radio-input"
+              name="defectRectifiedOnboard"
+              [value]="opt.value"
+              formControlName="defectRectifiedOnboard"
+            />
+            <span class="daf-field-radio-outer"
+              ><span class="daf-field-radio-dot"></span
+            ></span>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="daf-form-actions">
+    <app-button type="button" class="daf-btn daf-btn--ghost" (click)="cancel()"
+      >Cancel</app-button
+    >
+    <app-button
+      type="button"
+      class="daf-btn daf-btn--secondary"
+      (click)="saveDraft()"
+      >Save</app-button
+    >
+    <app-button
+      type="button"
+      class="daf-btn daf-btn--primary"
+      (click)="submit()"
+      >Raise DART</app-button
+    >
+  </div>
+</div>
+
+@if (showConfirmationModal()) {
+  <app-modal size="sm" [compact]="true" (closeModal)="dismissLogAnotherModal()">
+    <div class="daf-log-another">
+      <div class="daf-log-another__header">
+        <span class="daf-log-another__icon">
+          <app-icon name="send" [size]="20" variant="success" />
+        </span>
+        <span class="daf-log-another__title"
+          >Do you want to log another defect?</span
+        >
+      </div>
+      <p class="daf-log-another__text">
+        DART raised — it will be routed for approval and listed in the Defect /
+        DART List. Choosing <b>Yes</b> keeps you in the Digital Defect Book with
+        a blank form numbered 2 onwards, and opens the defects already recorded
+        in this session alongside it.
+      </p>
+      <div class="daf-log-another__actions">
+        <app-button
+          type="button"
+          class="daf-btn daf-btn--ghost"
+          (click)="finishAndRaiseRA()"
+        >
+          <app-icon name="check" [size]="14" variant="inherit" />No, raise RA
+        </app-button>
+        <app-button
+          type="button"
+          class="daf-btn daf-btn--primary"
+          (click)="logAnotherDefect()"
+        >
+          <app-icon name="plus" [size]="14" variant="inherit" />Yes, log another
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}

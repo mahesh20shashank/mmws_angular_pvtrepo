@@ -1,0 +1,57 @@
+<div class="rdp-panel">
+  <div class="rdp-header">
+    <span class="rdp-title">Recorded this session</span>
+    <button type="button" class="rdp-close" (click)="closePanel.emit()">
+      <app-icon name="x" [size]="14" variant="inherit" />
+    </button>
+  </div>
+
+  <p class="rdp-subtitle">
+    {{ defects().length }} defect(s) held — currently filling {{ currentlyFillingLabel() }}
+  </p>
+
+  <div class="rdp-list">
+    @for (defect of defects(); track defect.dartNo) {
+      <div class="rdp-card">
+        <div class="rdp-card-head">
+          <span class="rdp-card-title">
+            Defect {{ $index + 1 }} <span class="rdp-dart-no">{{ defect.dartNo }}</span>
+          </span>
+          <span class="rdp-status" [class]="'rdp-status--' + defect.statusTone">{{ defect.statusLabel }}</span>
+        </div>
+
+        <div class="rdp-equipment">{{ defect.equipmentSummary }}</div>
+
+        <div class="rdp-detail-row">
+          <span class="rdp-detail-label">Equipment</span>
+          <span class="rdp-detail-value">{{ defect.equipmentSummary }}</span>
+        </div>
+        <div class="rdp-detail-row">
+          <span class="rdp-detail-label">Reason</span>
+          <span class="rdp-detail-value">{{ defect.reasonLabel }}</span>
+        </div>
+        <div class="rdp-detail-row">
+          <span class="rdp-detail-label">Severity</span>
+          <span class="rdp-detail-value">{{ defect.severityLabel }}</span>
+        </div>
+        <div class="rdp-detail-row">
+          <span class="rdp-detail-label">Spares</span>
+          <span class="rdp-detail-value">{{ defect.sparesLabel }}</span>
+        </div>
+        <div class="rdp-detail-row">
+          <span class="rdp-detail-label">Recorded</span>
+          <span class="rdp-detail-value">{{ defect.recordedAt }}</span>
+        </div>
+
+        <app-button type="button" class="rdp-raise-btn" (click)="raiseRa.emit(defect)">
+          <app-icon name="send" [size]="13" [strokeWidth]="2" variant="inherit" />
+          <span>Raise RA</span>
+        </app-button>
+      </div>
+    }
+  </div>
+
+  <app-button type="button" class="rdp-move-btn" (click)="moveToDartList.emit()">
+    Move to DART List ({{ defects().length }})
+  </app-button>
+</div>

@@ -1,0 +1,55 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>PTS Details</h3>
+  </div>
+
+  @if (!loading()) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <fieldset class="wed-fieldset">
+        <legend>Demand Authority Section</legend>
+        <div class="wed-detail-row"><span>SWMM PTS Demand Ref</span><strong>{{ generatedPtsDemandNo() || "-" }}</strong></div>
+        <div class="wed-detail-row"><span>Demand Qty</span><strong>{{ demandQty() }}</strong></div>
+
+        <app-textarea-input label="Authority / Remarks *" formControlName="authorityRemarks" [rows]="3" />
+        @if (form.controls.authorityRemarks.invalid && form.controls.authorityRemarks.touched) {
+          <span class="form-error">Authority / Remarks are required.</span>
+        }
+      </fieldset>
+
+      @if (entry(); as row) {
+        <fieldset class="wed-fieldset">
+          <legend>Equipment Details</legend>
+          <div class="wed-detail-row"><span>Item Code</span><strong>{{ row.itemCode || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Item Description</span><strong>{{ row.itemDescription || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Denomination</span><strong>{{ row.denomination || "-" }}</strong></div>
+        </fieldset>
+      }
+
+      @if (serialNumbers.length) {
+        <fieldset class="wed-fieldset">
+          <legend>Item Serial Numbers</legend>
+          <table class="wed-serial-table" formArrayName="serialNumbers">
+            <thead><tr><th>Ser</th><th>Serial No.</th></tr></thead>
+            <tbody>
+              @for (control of serialNumbers.controls; track $index) {
+                <tr>
+                  <td>{{ $index + 1 }}</td>
+                  <td><input class="form-field-input" [formControlName]="$index" placeholder="Enter Serial No." /></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </fieldset>
+      }
+
+      <div class="wed-form-actions">
+        <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+        <app-button type="submit" class="btn-primary" [disabled]="saving() || form.invalid">
+          {{ saving() ? "Saving..." : "Save" }}
+        </app-button>
+      </div>
+    </form>
+  }
+</div>

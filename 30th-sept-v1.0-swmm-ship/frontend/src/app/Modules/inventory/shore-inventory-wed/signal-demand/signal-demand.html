@@ -1,0 +1,172 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card wed-panel wed-panel--wide">
+  <div class="wed-panel__header">
+    <h3>Register Signal Demand</h3>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="signal-demand-form">
+    <div class="signal-demand-form__grid">
+      <div class="signal-demand-form__field">
+        <app-select-input label="Demand Type *" formControlName="demandType" [options]="demandTypeOptions" />
+      </div>
+      <div class="signal-demand-form__field">
+        <app-select-input label="Requesting Ship *" formControlName="requestingShip" [options]="shipOptions()" />
+        @if (form.controls.requestingShip.invalid && form.controls.requestingShip.touched) {
+          <span class="form-error">Requesting Ship is required.</span>
+        }
+      </div>
+      @if (isCandem()) {
+        <div class="signal-demand-form__field">
+          <app-select-input label="Receiver Ship *" formControlName="receiverShip" [options]="shipOptions()" />
+        </div>
+      }
+      <div class="signal-demand-form__field">
+        <label class="signal-demand-form__label" for="signalDemandNumber">Demand Number *</label>
+        <input id="signalDemandNumber" class="form-field-input" type="text" formControlName="demandNumber" />
+        @if (form.controls.demandNumber.invalid && form.controls.demandNumber.touched) {
+          <span class="form-error">Demand Number is required.</span>
+        }
+      </div>
+      <div class="signal-demand-form__field">
+        <label class="signal-demand-form__label" for="signalDemandDtg">Date/Time of Origin (DTG) *</label>
+        <input id="signalDemandDtg" class="form-field-input" type="datetime-local" formControlName="dtg" />
+        @if (form.controls.dtg.invalid && form.controls.dtg.touched) {
+          <span class="form-error">DTG is required.</span>
+        }
+      </div>
+      <div class="signal-demand-form__field">
+        <app-select-input label="WED Spare" formControlName="wedSpare" [options]="wedSpareOptions()" />
+      </div>
+      <div class="signal-demand-form__field">
+        <app-select-input label="Onboard (OBS) Spare" formControlName="obsSpare" [options]="obsSpareOptions()" />
+        <span class="signal-demand-form__hint">Select either a WED Spare or an OBS Spare — one is required.</span>
+      </div>
+      <div class="signal-demand-form__field">
+        <app-select-input label="Equipment" formControlName="equipment" [options]="equipmentOptions()" />
+      </div>
+      <div class="signal-demand-form__field">
+        <label class="signal-demand-form__label" for="signalDemandPtsNumber">PTS Number</label>
+        <input id="signalDemandPtsNumber" class="form-field-input" type="text" formControlName="ptsNumber" />
+      </div>
+      <div class="signal-demand-form__field">
+        <label class="signal-demand-form__label" for="signalDemandQuantity">Demand Quantity *</label>
+        <input id="signalDemandQuantity" class="form-field-input" type="number" min="1" formControlName="demandQuantity" />
+        @if (form.controls.demandQuantity.invalid && form.controls.demandQuantity.touched) {
+          <span class="form-error">Demand Quantity must be at least 1.</span>
+        }
+      </div>
+    </div>
+
+    <app-textarea-input label="Remarks" formControlName="remarks" [rows]="2" />
+
+    <div class="wed-form-actions">
+      <app-button type="submit" class="btn-primary" [disabled]="submitting()">
+        {{ submitting() ? "Registering..." : "Register Demand" }}
+      </app-button>
+    </div>
+  </form>
+</div>
+
+<div class="glass-card wed-panel wed-panel--wide">
+  <div class="wed-panel__header">
+    <h3>Signal Demands</h3>
+  </div>
+
+  <form [formGroup]="filterForm" (ngSubmit)="load()" class="signal-demand-filters">
+    <app-select-input label="Type" formControlName="demandType" [options]="demandTypeFilterOptions" />
+    <app-select-input label="Status" formControlName="status" [options]="statusFilterOptions" />
+    <label class="signal-demand-form__label" for="signalDemandSearch">Search</label>
+    <input
+      id="signalDemandSearch"
+      class="form-field-input"
+      type="text"
+      formControlName="q"
+      placeholder="Demand no / item / spare"
+    />
+    <div class="signal-demand-filters__actions">
+      <app-button type="submit" class="btn-secondary" [disabled]="loading()">Search</app-button>
+      <app-button type="button" class="btn-secondary" (click)="resetFilters()">Clear</app-button>
+    </div>
+  </form>
+
+  <div class="signal-demand-table-wrap">
+    <table class="signal-demand-table">
+      <thead>
+        <tr>
+          <th>Demand No</th>
+          <th>Type</th>
+          <th>DTG</th>
+          <th>Requesting Ship</th>
+          <th>Receiver Ship</th>
+          <th>Item</th>
+          <th>PTS No</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          <tr><td colspan="10" class="signal-demand-table__empty">Loading...</td></tr>
+        } @else if (!demands().length) {
+          <tr><td colspan="10" class="signal-demand-table__empty">No signal demands found.</td></tr>
+        } @else {
+          @for (entry of demands(); track entry.id) {
+            <tr>
+              <td>{{ entry.demandNumber }}</td>
+              <td>{{ entry.demandType }}</td>
+              <td>{{ entry.dtg | date: "dd MMM yyyy, HH:mm" }}</td>
+              <td>{{ entry.requestingShipName || "—" }}</td>
+              <td>{{ entry.receiverShipName || "—" }}</td>
+              <td>{{ entry.itemLabel || "—" }}</td>
+              <td>{{ entry.ptsNumber || "—" }}</td>
+              <td>{{ entry.demandQuantity }}</td>
+              <td><span class="signal-demand-status" [class]="'signal-demand-status--' + entry.status.toLowerCase()">{{ entry.status }}</span></td>
+              <td class="signal-demand-table__actions">
+                @if (canForward(entry)) {
+                  <app-button
+                    type="button"
+                    class="btn-link"
+                    [disabled]="transitioningId() === entry.id"
+                    (click)="forward(entry)"
+                  >
+                    Forward
+                  </app-button>
+                }
+                @if (canApproveOrReject(entry)) {
+                  <app-button
+                    type="button"
+                    class="btn-link"
+                    [disabled]="transitioningId() === entry.id"
+                    (click)="approve(entry)"
+                  >
+                    Approve
+                  </app-button>
+                  <app-button
+                    type="button"
+                    class="btn-link btn-link--danger"
+                    [disabled]="transitioningId() === entry.id"
+                    (click)="reject(entry)"
+                  >
+                    Reject
+                  </app-button>
+                }
+                @if (canCancel(entry)) {
+                  <app-button
+                    type="button"
+                    class="btn-link btn-link--danger"
+                    [disabled]="transitioningId() === entry.id"
+                    (click)="cancel(entry)"
+                  >
+                    Cancel
+                  </app-button>
+                }
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

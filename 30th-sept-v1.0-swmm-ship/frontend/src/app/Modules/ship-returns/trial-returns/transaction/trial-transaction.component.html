@@ -1,0 +1,211 @@
+<div class="space-y-6">
+  <!-- Return Initiation Form (Using Shared PanelCard Component) -->
+  <app-panel-card title="Return Initiation Form"
+    subtitle="Prepare, auto-fill mappings, and dispatch trial returns to designated units and satellite authorities"
+    icon="file-text" iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <!-- 1. Return Name -->
+      <div class="space-y-2">
+        <span class="text-xs font-semibold uppercase text-white/70 block">
+          Return Name <span class="text-rose-400">*</span>
+        </span>
+        <select [ngModel]="selectedReturnId()" (ngModelChange)="onReturnNameChange($event)" class="form-select">
+          <option value="">-- Select Return Name --</option>
+          @for (m of returnMappings; track m.id) {
+          <option [value]="m.id">{{ m.name }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- 2. Return Forwarding Unit -->
+      <div class="space-y-2">
+        <span class="text-xs font-semibold uppercase text-white/70 block">
+          Return Forwarding Unit <span class="text-rose-400">*</span>
+        </span>
+        <select [ngModel]="selectedUnit()" (ngModelChange)="selectedUnit.set($event)" class="form-select">
+          <option value="">-- Select Forwarding Unit --</option>
+          @for (u of forwardingUnits; track u) {
+          <option [value]="u">{{ u }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- 3. Return Forwarding Satellite Unit(s) (Multi-Select Checkbox Dropdown) -->
+      <div class="space-y-2 relative">
+        <span class="text-xs font-semibold uppercase text-white/70 block">
+          Return Forwarding Satellite Unit(s) <span class="text-rose-400">*</span>
+        </span>
+        <button type="button" (click)="toggleSatDropdown()"
+          class="form-select text-left flex items-center justify-between cursor-pointer">
+          <span
+            [ngClass]="{ 'text-white/40': selectedSatellites().length === 0, 'text-white font-medium': selectedSatellites().length > 0 }">
+            {{ satelliteLabelText() }}
+          </span>
+          <app-icon name="chevron-down" [size]="16" class="text-white/60"></app-icon>
+        </button>
+
+        @if (isSatDropdownOpen()) {
+        <div
+          class="absolute left-0 right-0 top-full mt-1 bg-slate-900 border border-white/20 rounded-xl shadow-2xl z-30 p-2 space-y-2">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10 text-xs">
+            <button (click)="selectAllSatellites()" type="button"
+              class="text-sky-400 hover:underline cursor-pointer">Select All</button>
+            <button (click)="clearAllSatellites()" type="button"
+              class="text-rose-400 hover:underline cursor-pointer">Clear All</button>
+          </div>
+          <div class="max-h-40 overflow-y-auto space-y-1">
+            @for (sat of allSatellites; track sat) {
+            <label class="flex items-center gap-2 p-1.5 hover:bg-white/5 rounded text-xs text-white/90 cursor-pointer">
+              <input type="checkbox" [checked]="isSatSelected(sat)" (change)="toggleSatCheck(sat)"
+                class="rounded border-white/20 bg-white/10 text-sky-500 cursor-pointer" />
+              <span>{{ sat }}</span>
+            </label>
+            }
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- 4. Frequency Type (Auto-filled & Locked) -->
+      @if (selectedFrequency()) {
+      <div class="space-y-2 relative">
+        <span class="text-xs font-semibold uppercase text-white/70 block">
+          Frequency Type <span class="text-rose-400">*</span>
+        </span>
+        <div class="relative">
+          <input type="text" [value]="selectedFrequency()" readonly
+            class="form-select bg-slate-800/80 border-white/10 text-white/70 cursor-not-allowed pr-9" />
+          <app-icon name="lock" [size]="16" class="absolute right-3 top-1/2 -translate-y-1/2 text-amber-400"
+            title="Locked by Return Mapping"></app-icon>
+        </div>
+      </div>
+      }
+
+      <!-- 5. Select Period -->
+      @if (selectedFrequency() && periodOptions().length > 0) {
+      <div class="space-y-2">
+        <span class="text-xs font-semibold uppercase text-white/70 block">
+          Select Period <span class="text-rose-400">*</span>
+        </span>
+        <select [ngModel]="selectedPeriod()" (ngModelChange)="selectedPeriod.set($event)" class="form-select">
+          @for (p of periodOptions(); track p.value) {
+          <option [value]="p.value" [disabled]="p.disabled">{{ p.label }}</option>
+          }
+        </select>
+      </div>
+      }
+    </div>
+
+    <!-- Submit Action Button Footer -->
+    <div class="flex items-center justify-end pt-4 mt-6 border-t border-white/10">
+      <button (click)="initiateReturn()" type="button"
+        class=" primary-btn flex flex-row items-center gap-2 cursor-pointer">
+        <app-icon name="send" [size]="18" variant="inherit"></app-icon>
+        <span>Initiate Return</span>
+      </button>
+    </div>
+  </app-panel-card>
+
+  <!-- Active Initiations Log Table (Using Shared PanelCard & DataGrid) -->
+  <app-panel-card title="Active Trial Return Initiations"
+    subtitle="List of all initiated returns dispatched for agency evaluation" icon="send" iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)">
+    <div panelActions class="flex flex-wrap items-center gap-3">
+      <!-- Action Icons (Print, PDF, CSV, Copy) -->
+      <div class="flex items-center gap-2">
+        <button (click)="exportPrint()" type="button"
+          class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 transition-colors cursor-pointer"
+          title="Printout Table">
+          <app-icon name="printer" [size]="18" variant="inherit"></app-icon>
+        </button>
+
+        <button (click)="exportPdf()" type="button"
+          class="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 transition-colors cursor-pointer"
+          title="Download PDF">
+          <app-icon name="file-text" [size]="18" variant="inherit"></app-icon>
+        </button>
+
+        <button (click)="exportCsv()" type="button"
+          class="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 transition-colors cursor-pointer"
+          title="Download CSV">
+          <app-icon name="sheet" [size]="18" variant="inherit"></app-icon>
+        </button>
+
+        <button (click)="exportCopy()" type="button"
+          class="p-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 transition-colors cursor-pointer"
+          title="Copy to Clipboard">
+          <app-icon name="copy" [size]="18" variant="inherit"></app-icon>
+        </button>
+      </div>
+
+      <!-- Global Search Input -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold text-white/70">Search:</span>
+        <input type="text" [ngModel]="globalSearch()" (ngModelChange)="onGlobalSearchChange($event)"
+          placeholder="Search all columns..." class="form-search-input min-w-[160px]" />
+      </div>
+    </div>
+
+    <!-- DataGrid Shared Component -->
+    <app-data-grid [rowData]="filteredRecords()" [columnDefs]="columnDefs" [pageSize]="10" [autoHeight]="true"
+      (cellClicked)="onCellClicked($event)"></app-data-grid>
+  </app-panel-card>
+
+  <!-- Progress Tracking Modal -->
+  @if (selectedProgressRecord()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+    <div class="glass-card w-full max-w-2xl border border-white/20 shadow-2xl rounded-2xl p-6 space-y-6">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div>
+          <h3 class="text-lg font-bold text-white">Return Forwarding Progress</h3>
+          <span class="text-xs font-mono text-sky-400">{{ selectedProgressRecord()?.returnNo }}</span>
+        </div>
+        <button (click)="closeProgressModal()" class="text-white/60 hover:text-white cursor-pointer">
+          <app-icon name="x" [size]="20" variant="inherit"></app-icon>
+        </button>
+      </div>
+
+      <!-- Horizontal Step Progress -->
+      <div class="grid grid-cols-4 gap-2 relative text-center py-4">
+        <div class="space-y-2 relative z-10">
+          <div
+            class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center mx-auto text-xs">
+            1</div>
+          <span class="text-xs font-semibold text-white">Initiated</span>
+        </div>
+
+        <div class="space-y-2 relative z-10">
+          <div
+            class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center mx-auto text-xs">
+            2</div>
+          <span class="text-xs font-semibold text-white">Forwarded</span>
+        </div>
+
+        <div class="space-y-2 relative z-10">
+          <div class="w-8 h-8 rounded-full font-bold flex items-center justify-center mx-auto text-xs"
+            [ngClass]="selectedProgressRecord()!.currentStep >= 3 ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-white/40'">
+            3</div>
+          <span class="text-xs font-semibold"
+            [ngClass]="selectedProgressRecord()!.currentStep >= 3 ? 'text-amber-400' : 'text-white/40'">Agency
+            Review</span>
+        </div>
+
+        <div class="space-y-2 relative z-10">
+          <div class="w-8 h-8 rounded-full font-bold flex items-center justify-center mx-auto text-xs"
+            [ngClass]="selectedProgressRecord()!.currentStep >= 4 ? 'bg-emerald-400 text-slate-950' : 'bg-slate-800 text-white/40'">
+            4</div>
+          <span class="text-xs font-semibold"
+            [ngClass]="selectedProgressRecord()!.currentStep >= 4 ? 'text-emerald-400' : 'text-white/40'">Approved</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-4 border-t border-white/10">
+        <button (click)="closeProgressModal()"
+          class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>

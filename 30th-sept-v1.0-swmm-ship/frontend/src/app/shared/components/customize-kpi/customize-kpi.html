@@ -1,0 +1,69 @@
+@if (isOpen) {
+  <app-modal title="Customize KPI Display" size="lg" (closeModal)="closePopup()">
+    <div class="popup-card-inner">
+      <!-- Limit warning -->
+      @if (showLimitWarning) {
+        <div class="popup-warning mb-3 p-2.5 rounded-lg bg-amber-500/10 text-amber-300 flex items-center gap-2 text-xs">
+          <app-icon name="circle-alert" [size]="16" [strokeWidth]="2" variant="inherit" />
+          <span>Maximum {{ maxSelection }} KPIs selected — deselect one to choose another.</span>
+        </div>
+      }
+
+      <!-- KPI List -->
+      <div class="popup-body">
+        @for (kpi of kpis; track kpi.title) {
+          <label
+            class="kpi-item"
+            [class.kpi-item--selected]="isChecked(kpi.title)"
+            [class.kpi-item--disabled]="isDisabled(kpi.title)"
+          >
+            <div class="kpi-left flex items-center gap-3">
+              <input
+                type="checkbox"
+                class="kpi-checkbox"
+                [checked]="isChecked(kpi.title)"
+                (change)="toggleKpi(kpi.title)"
+              />
+
+              <div class="kpi-info flex flex-col">
+                <span class="kpi-title font-medium text-sm">{{ kpi.title }}</span>
+                <span class="kpi-count text-xs text-muted">{{ kpi.count }}</span>
+              </div>
+            </div>
+
+            @if (trendFor(kpi)) {
+              <span
+                class="kpi-trend"
+                [class.kpi-trend--down]="isNegativeTrend(kpi)"
+                [class.kpi-trend--up]="!isNegativeTrend(kpi)"
+              >
+                {{ trendFor(kpi) }}
+              </span>
+            }
+          </label>
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="popup-footer flex items-center justify-between pt-4 mt-4 border-t border-[var(--border-color,rgba(255,255,255,0.1))]">
+        <span class="popup-count text-xs text-muted">
+          Selected <b>{{ selectedTitles.length }}</b> of {{ kpis.length }} KPIs
+        </span>
+
+        <div class="popup-actions flex gap-3">
+          <app-button type="button" class="btn btn-cancel" (click)="closePopup()">
+            Cancel
+          </app-button>
+
+          <app-button
+            type="button"
+            class="btn btn-apply"
+            (click)="applySelection()"
+          >
+            Apply
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </app-modal>
+}

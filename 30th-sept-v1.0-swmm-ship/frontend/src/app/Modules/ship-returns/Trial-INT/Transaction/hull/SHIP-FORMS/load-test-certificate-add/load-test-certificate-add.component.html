@@ -1,0 +1,88 @@
+<app-toast></app-toast>
+<app-form-card title="LOAD TEST CERTIFICATE" headerColor="#0f172a" textColor="#ffffff"
+    (action)="openApprovalWorkflow()">
+    <!-- FORM CONTENT -->
+    <form [formGroup]="form" class="p-0">
+        <!-- ROW 1 -->
+        <div class="grid grid-cols-2 gap-3">
+            <app-select label="Ship Name" [required]="true" formControlName="ship_id" [options]="shipOptions" placeholder="--Select--" class="w-full">
+            </app-select>
+            <app-year-picker label="Year" [required]="true" [min]="2000" [max]="2026" formControlName="year">
+            </app-year-picker>
+            <app-select label="Equipment Name" [required]="true" formControlName="equipment" [options]="equipmentOptions" placeholder="--Select--"
+                class="w-full">
+            </app-select>
+            <app-input label="Patt no." type="text" formControlName="patt_no">
+            </app-input>
+            <div class="flex flex-col gap-1">
+                <app-input label="Location" type="text" formControlName="location">
+                </app-input>
+            </div>
+            <app-calendar label="Manufacturing Date*" formControlName="mfg_date"></app-calendar>
+            <app-calendar label="Installation Date" formControlName="installation_date"></app-calendar>
+
+            <app-select label="Equipment Status" [required]="true" formControlName="eqpt_status" [options]="equipmentStatus" placeholder="--Select--"
+                class="w-full">
+            </app-select>
+            <app-calendar label="Date of load test*" formControlName="load_tested_date"></app-calendar>
+            <app-calendar label="Due Date for load test" formControlName="load_tested_due_date"></app-calendar>
+
+            <app-input label="Static" type="text" formControlName="static">
+            </app-input>
+            <app-input label="Running" type="text" formControlName="running">
+            </app-input>
+            <app-input label="Working" type="text" formControlName="working">
+            </app-input> <app-input label="Proof" type="text" formControlName="proof">
+            </app-input>
+        </div>
+        <div class="col-span-2 mt-2">
+
+            <!-- ROW COUNT INPUT -->
+            <div class="mb-4 flex items-center space-x-4">
+                <label class="form-section-header text-sm font-medium text-gray-700">
+                    Enter Total Number of Rows:
+                </label>
+                <input type="number" [min]="editMode ? initialRowsCountInEditMode : 1" max="99"
+                    class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="totalRows" (input)="onReportRowChanges($event)" (change)="onReportRowChanges($event)" (keyup)="onReportRowChanges($event)" />
+
+            </div>
+            <!-- TABLE -->
+            <div class="overflow-x-auto" [class.overflow-y-auto]="totalRows > 5" [class.max-h-96]="totalRows > 5">
+                <app-reusable-input-table [data]="reportData" [columns]="reportColumns">
+                    <ng-template #inputTpl let-row let-index="index" let-field="field">
+                        <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]"
+                            (input)="handleTableChange(index, field, $any($event.target).value)" />
+                    </ng-template>
+                    <ng-template #calActionTemplate let-row let-index="index">
+                        <div class="flex gap-2">
+                            <div *ngIf="editMode">
+                                <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer"
+                                    (click)="handleTableAction({ type: 'delete', row, index, table: 'firstTable' })">
+                                </lucide-icon>
+                            </div>
+                        </div>
+                    </ng-template>
+                </app-reusable-input-table>
+            </div>
+        </div>
+    </form>
+
+    <!-- FOOTER -->
+    <!-- FOOTER -->
+    <div formFooter class="flex gap-5" [ngClass]="viewMode ? 'justify-start' : 'justify-center'">
+        <app-reusable-button label="Back" variant="back" (clicked)="handleBack()">
+        </app-reusable-button>
+        <app-loading-button *ngIf="!viewMode" label="Clear" [color]="'red'" [icon]="restartIcon"
+            (clicked)="clear()"></app-loading-button>
+        <app-loading-button *ngIf="!viewMode" label="Save draft" [color]="'blue'" [icon]="draftIcon"
+            [loading]="draftLoading" (clicked)="handleSave('draft')"></app-loading-button>
+
+        <app-loading-button *ngIf="!viewMode" label="Submit for approval" [color]="'green'" [icon]="saveIcon"
+            [loading]="saveLoading" (clicked)="handleSave('save')"></app-loading-button>
+    </div>
+
+</app-form-card>
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+    [workflowTrialId]="rowId || form.get('id')?.value || ''" [rowData]="editDataDetails" [context]="editDataDetails"
+    (showUserPopupChange)="onApprovalPopupChange($event)">
+</app-approval-work-flow>

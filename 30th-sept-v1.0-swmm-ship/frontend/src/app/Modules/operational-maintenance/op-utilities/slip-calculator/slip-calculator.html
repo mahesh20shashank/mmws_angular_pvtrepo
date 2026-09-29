@@ -1,0 +1,162 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card cardTitle="Slip Calculator" cardHeight="auto">
+  <div class="flex gap-2 mb-4 border-b border-white/10 pb-2">
+    <app-button type="button" (click)="setTab('calculator')" class="tab-btn px-4 h-9 rounded-lg text-sm" [class.active]="activeTab === 'calculator'">
+      Slip Calculator
+    </app-button>
+    <app-button type="button" (click)="setTab('oem-graph')" class="tab-btn px-4 h-9 rounded-lg text-sm" [class.active]="activeTab === 'oem-graph'">
+      OEM Graph Details – Input For Slip
+    </app-button>
+    <app-button type="button" (click)="setTab('limits')" class="tab-btn px-4 h-9 rounded-lg text-sm" [class.active]="activeTab === 'limits'">
+      Slip Limits
+    </app-button>
+  </div>
+
+  @if (activeTab === 'calculator') {
+    <div class="flex gap-2 mb-4">
+      <app-button type="button" (click)="setInnerTab('gt')" class="inner-tab-btn px-3 h-8 rounded-md text-xs" [class.active]="innerTab === 'gt'">
+        GT Slip
+      </app-button>
+      <app-button type="button" (click)="setInnerTab('gtg')" class="inner-tab-btn px-3 h-8 rounded-md text-xs" [class.active]="innerTab === 'gtg'">
+        GTG Slip
+      </app-button>
+    </div>
+
+    @if (innerTab === 'gt') {
+      <div class="flex justify-end gap-2 mb-3">
+        <app-button type="button" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">Cancel</app-button>
+        <app-button type="button" (click)="calculateGtSlip()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">Slip Calculator</app-button>
+        <app-button type="button" (click)="saveGtSlip()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">Calculate & Save</app-button>
+      </div>
+      <form [formGroup]="gtForm" class="grid grid-cols-3 gap-4">
+        <app-select-input label="GT Name" [options]="gtOptions" formControlName="gt_name" />
+        <div>
+          <label for="gt-at-hpc-rpm" class="text-white/60 text-xs mb-1 block">At HPC RPM</label>
+          <input id="gt-at-hpc-rpm" type="text" formControlName="at_HPC_rpm" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gt-recorded-lpc" class="text-white/60 text-xs mb-1 block">Recorded LPC RPM</label>
+          <input id="gt-recorded-lpc" type="text" formControlName="recorded_LPC" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gt-recorded-air-pr-after-hpc" class="text-white/60 text-xs mb-1 block">Recorded Air Pr. After HPC</label>
+          <input id="gt-recorded-air-pr-after-hpc" type="text" formControlName="recorded_air_pr_after_hpc" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gt-recorded-ext-temp" class="text-white/60 text-xs mb-1 block">Recorded Ext Temp</label>
+          <input id="gt-recorded-ext-temp" type="text" formControlName="recorded_ext_temp" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gt-recorded-amb-pr-gtinlet" class="text-white/60 text-xs mb-1 block">Recorded Amb. Pr. at GT Inlet</label>
+          <input id="gt-recorded-amb-pr-gtinlet" type="text" formControlName="recorded_amb_pr_gtinlet" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gt-current-amb-temp" class="text-white/60 text-xs mb-1 block">Current Ambient Temp</label>
+          <input id="gt-current-amb-temp" type="text" formControlName="current_amb_temp" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+      </form>
+    }
+
+    @if (innerTab === 'gtg') {
+      <div class="flex justify-end gap-2 mb-3">
+        <app-button type="button" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">Cancel</app-button>
+        <app-button type="button" (click)="calculateGtgSlip()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">Slip Calculator</app-button>
+        <app-button type="button" (click)="saveGtgSlip()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">Calculate & Save</app-button>
+      </div>
+      <form [formGroup]="gtgForm" class="grid grid-cols-3 gap-4">
+        <app-select-input label="GT Name" [options]="gtOptions" formControlName="gt_name" />
+        <div>
+          <label for="gtg-recorded-el-load" class="text-white/60 text-xs mb-1 block">Recorded Electrical Load</label>
+          <input id="gtg-recorded-el-load" type="text" formControlName="recorded_el_load" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gtg-recorded-ext-temp" class="text-white/60 text-xs mb-1 block">Recorded Ext Temp (GTG)</label>
+          <input id="gtg-recorded-ext-temp" type="text" formControlName="recorded_ext_temp_gtg" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <div>
+          <label for="gtg-recorded-amb-temp" class="text-white/60 text-xs mb-1 block">Recorded Ambient Temp</label>
+          <input id="gtg-recorded-amb-temp" type="text" formControlName="recorded_amb_temp" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+      </form>
+    }
+
+    @if (result) {
+      <div
+        class="result-panel mt-6 p-4 rounded-xl border"
+        [class.limit-exceeded]="result.limit_exceeded"
+      >
+        @for (msg of result.messages; track msg) {
+          <p class="text-white/80 text-sm">{{ msg }}</p>
+        }
+        @if (result.limit_exceeded) {
+          <p class="text-red-400 text-sm font-semibold mt-2">⚠ Slip exceeds the configured limit.</p>
+        }
+      </div>
+    }
+  }
+
+  @if (activeTab === 'oem-graph') {
+    <div class="flex flex-col gap-4">
+      @for (section of [
+        { title: 'Enter HPC vs LPC Datapoints (Only Five)' },
+        { title: 'Enter HPC vs Air Pressure after HPC Datapoints (Only Five)' },
+        { title: 'Enter HPC vs Exhaust Temperature (Only Five)' },
+        { title: 'Enter Electical Load vs Exhaust Temperature Datapoints (Only Five)' }
+      ]; track section.title) {
+        <div class="p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-white/70 text-sm font-semibold">{{ section.title }}</span>
+            <div class="flex gap-2">
+              <app-button type="button" (click)="generateGraph(section.title)" class="px-3 h-8 rounded-md bg-white/10 border border-white/10 text-white text-xs">Generate Graph</app-button>
+              <app-button type="button" class="px-3 h-8 rounded-md bg-white/10 border border-white/10 text-white text-xs">Cancel</app-button>
+              <app-button type="button" class="px-3 h-8 rounded-md bg-[#1D96E9] text-white text-xs">Save</app-button>
+            </div>
+          </div>
+          <div class="grid grid-cols-5 gap-2 mb-3">
+            @for (i of [1,2,3,4,5]; track i) {
+              <div class="flex gap-1">
+                <input type="text" placeholder="X{{ i }}" class="w-1/2 h-9 rounded-md bg-white/5 border border-white/10 px-2 text-white text-xs" />
+                <input type="text" placeholder="Y{{ i }}" class="w-1/2 h-9 rounded-md bg-white/5 border border-white/10 px-2 text-white text-xs" />
+              </div>
+            }
+          </div>
+          <div class="h-24 rounded-lg border border-dashed border-white/10 flex items-center justify-center text-white/30 text-xs">
+            Graph Output
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (activeTab === 'limits') {
+    <div class="flex justify-end gap-2 mb-3">
+      <app-button type="button" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">Cancel</app-button>
+      <app-button type="button" (click)="saveLimit()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">Save</app-button>
+    </div>
+
+    <form [formGroup]="limitForm" class="grid grid-cols-4 gap-4">
+      <app-select-input label="GT Name" [options]="gtOptions" formControlName="gt_name" />
+      <div>
+        <label for="limit-delta-n-lpc" class="text-white/60 text-xs mb-1 block">Δ LPC RPM Limit</label>
+        <input id="limit-delta-n-lpc" type="text" formControlName="delta_n_lpc" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="limit-delta-t-ext" class="text-white/60 text-xs mb-1 block">Δ Ext Temp Limit (°C)</label>
+        <input id="limit-delta-t-ext" type="text" formControlName="delta_t_ext" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="limit-delta-p-air" class="text-white/60 text-xs mb-1 block">Δ Air Pressure Limit (bar)</label>
+        <input id="limit-delta-p-air" type="text" formControlName="delta_p_air" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+    </form>
+
+    <app-data-grid
+      [rowData]="slipLimits"
+      [columnDefs]="slipLimitColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="360px">
+    </app-data-grid>
+  }
+</app-master-card>

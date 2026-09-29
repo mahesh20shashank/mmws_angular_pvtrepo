@@ -1,0 +1,140 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="kms-page">
+  <app-page-header-bar icon="send" iconVariant="accent" title="Out Mail" badgeText="Correspondence Sent">
+    <app-button type="button" class="kms-btn-primary" (click)="openAddModal()">
+      <app-icon name="plus" [size]="15" color="#ffffff" />
+      Add Out-mail Correspondence
+    </app-button>
+  </app-page-header-bar>
+
+  <div class="kms-layout">
+    <div class="glass-card kms-panel">
+      <div class="kms-panel__heading">Filter by Date</div>
+
+      @if (activeYear() === null) {
+        <div class="kms-list">
+          @for (year of years(); track year) {
+            <app-button type="button" class="kms-list-item" (click)="selectYear(year)">{{ year }}</app-button>
+          } @empty {
+            <p class="kms-empty-hint">
+              Add Out-mail Correspondences to access date's filter here.
+            </p>
+          }
+        </div>
+      } @else {
+        <div class="kms-breadcrumb">
+          <app-button type="button" class="kms-breadcrumb__crumb" (click)="resetToYears()">Years</app-button>
+          <span class="kms-breadcrumb__sep">/</span>
+          <app-button
+            type="button"
+            class="kms-breadcrumb__crumb"
+            [class.kms-breadcrumb__crumb--active]="activeMonth() === null"
+            (click)="resetToYear()"
+          >
+            {{ activeYear() }}
+          </app-button>
+          @if (activeMonth() !== null) {
+            <span class="kms-breadcrumb__sep">/</span>
+            <span class="kms-breadcrumb__crumb kms-breadcrumb__crumb--active">{{ monthLabel(activeMonth()!) }}</span>
+          }
+        </div>
+
+        @if (activeMonth() === null) {
+          <div class="kms-list kms-list--scroll">
+            @for (month of monthsForYear(activeYear()!); track month) {
+              <app-button type="button" [class]="monthClass(month)" (click)="selectMonth(month)">
+                {{ monthLabel(month) }}
+              </app-button>
+            }
+          </div>
+        } @else {
+          <div class="kms-list kms-list--scroll">
+            @for (day of daysForYearMonth(activeYear()!, activeMonth()!); track day) {
+              <app-button type="button" [class]="dayClass(day)" (click)="selectDay(day)">
+                {{ day }}
+              </app-button>
+            }
+          </div>
+        }
+      }
+    </div>
+
+    <div class="glass-card kms-panel">
+      <div class="kms-toolbar">
+        <div class="kms-search kms-search--toolbar">
+          <app-icon name="search" [size]="15" variant="muted" class="kms-search__icon" />
+          <input
+            type="text"
+            placeholder="Search correspondence..."
+            class="kms-search__input"
+            [value]="certificateSearch()"
+            (input)="certificateSearch.set($any($event.target).value)"
+          />
+        </div>
+        <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredCertificates().length === 0" (exportRequested)="onExport($event)" />
+      </div>
+
+      @if (filteredCertificates().length > 0) {
+        <app-data-grid [rowData]="filteredCertificates()" [columnDefs]="columnDefs" height="500px" />
+      } @else {
+        <p class="kms-empty-hint kms-empty-hint--table">No out-mail correspondence found.</p>
+      }
+    </div>
+  </div>
+</div>
+
+@if (showAddModal()) {
+  <app-modal size="md" title="Add Out-mail Correspondence" [compact]="true" (closeModal)="closeAddModal()">
+    <form [formGroup]="form" (ngSubmit)="save()" class="kms-modal-form kms-modal-form--2col">
+      <app-select-input label="Correspondence Category" [options]="outmailCategoryOptions" formControlName="outmailCategory" [required]="true" />
+      @if (isReplyToInMail()) {
+        <app-select-input label="Correspondence File Number" [options]="fileNumberOptions()" formControlName="fileNumber" [required]="true" />
+      }
+      <app-select-input label="Correspondence Addressed To Unit" [options]="unitOptions" formControlName="addressedToUnit" [required]="true" />
+      <app-select-input label="Correspondence Ship" [options]="shipOptions" formControlName="ship" [required]="true" />
+      <app-select-input label="Correspondence Command" [options]="commandOptions" formControlName="command" [required]="true" />
+      <app-input-field label="Correspondence Date" type="date" formControlName="letterDate" [required]="true" />
+      <div class="col-span-2">
+        <app-textarea-input label="Remarks" placeholder="Enter remarks" [rows]="2" formControlName="remarks" />
+      </div>
+      <div class="col-span-2">
+        <app-file-input label="Upload Doc" formControlName="attachment"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        <p class="kms-file-hint">Accepted formats: PDF, DOC, DOCX, XLS, XLSX</p>
+      </div>
+      <div class="kms-modal-actions col-span-2">
+        <app-button type="button" class="kms-btn-secondary" (click)="closeAddModal()">
+          Cancel
+        </app-button>
+        <app-button type="submit" class="kms-btn-primary">
+          Save
+        </app-button>
+      </div>
+    </form>
+  </app-modal>
+}
+
+@if (showDetailModal() && activeCertificate(); as cert) {
+  <app-modal size="sm" [title]="cert.outmailCategory ?? ''" [compact]="true" (closeModal)="closeDetailModal()">
+    <div class="kms-modal-form kms-modal-form--sm">
+      <div class="flex flex-col gap-2">
+        <div class="kms-detail-row"><span>Addressed To</span><span>{{ cert.addressedToUnit }}</span></div>
+        <div class="kms-detail-row"><span>Ship</span><span>{{ cert.ship }}</span></div>
+        <div class="kms-detail-row"><span>Command</span><span>{{ cert.command }}</span></div>
+        <div class="kms-detail-row"><span>Date</span><span>{{ cert.letterDate }}</span></div>
+        <div class="kms-detail-row"><span>File Number</span><span>{{ cert.fileNumber || '—' }}</span></div>
+        <div class="kms-detail-row"><span>Remarks</span><span>{{ cert.remarks || '—' }}</span></div>
+      </div>
+      <div class="kms-modal-actions">
+        <app-button type="button" class="kms-btn-secondary" (click)="closeDetailModal()">
+          Close
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (pendingDelete()) {
+  <app-confirm-delete-modal (confirmed)="confirmDelete()" (cancelled)="cancelDelete()" />
+}

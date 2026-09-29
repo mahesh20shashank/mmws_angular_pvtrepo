@@ -1,0 +1,389 @@
+from django.urls import path
+from rest_framework.routers import DefaultRouter
+
+from . import source_contract, views
+from .views import (
+    AberEquipmentListView,
+    AberHistoryView,
+    AberSubmitView,
+    # Integration Views
+    ConfigurationDashboardAPIView,
+    ConfigurationDashboardKPIAPIView,
+    RHSIEquipmentViewSet,
+    SfdEquipmentListView,
+    SFDEquipmentViewSet,
+    SfdShipsView,
+    SfdSyncPayloadView,
+)
+
+app_name = "sfd"
+
+router = DefaultRouter()
+router.register(
+    r"rhsi-equipment",
+    RHSIEquipmentViewSet,
+    basename="rhsi-equipment",
+)
+router.register(
+    r"transaction-equipment",
+    SFDEquipmentViewSet,
+    basename="sfd-equipment",
+)
+router.register(
+    "compartments", source_contract.CompartmentViewSet, basename="sfd-compartment"
+)
+router.register(
+    "sub-departments",
+    source_contract.SubDepartmentViewSet,
+    basename="sfd-sub-department",
+)
+router.register(
+    "sfd-list",
+    source_contract.SFDTransactionViewSet,
+    basename="sfd-transaction-list",
+)
+router.register(
+    "ship-fit-definitions",
+    source_contract.ShipFitDefinitionViewSet,
+    basename="ship-fit-definition",
+)
+router.register("transaction", source_contract.SFDActionViewSet, basename="sfd-action")
+router.register(
+    "equipment-system-mappings",
+    source_contract.EquipmentSystemMappingViewSet,
+    basename="equipment-system-mapping",
+)
+router.register(
+    "equipment-compartment-mappings",
+    source_contract.EquipmentCompartmentMappingViewSet,
+    basename="equipment-compartment-mapping",
+)
+
+urlpatterns = [
+    path(
+        "configuration-options/",
+        source_contract.ConfigurationOptionsAPIView.as_view(),
+        name="sfd-configuration-options",
+    ),
+    path(
+        "add-sfd-equipement/dropdowns",
+        source_contract.AddSFDEquipementAPIView.as_view(),
+        name="add-sfd-equipement-dropdowns",
+    ),
+    path(
+        "check-serial/",
+        source_contract.CheckEquipmentSerialAPIView.as_view(),
+        name="check-serial",
+    ),
+    path(
+        "reference-standard-department/",
+        source_contract.ReferenceStandardDepartmentListAPIView.as_view(),
+        name="reference-standard-department",
+    ),
+    path(
+        "reference-ship-details/",
+        source_contract.ReferenceShipDetailsAPIView.as_view(),
+        name="reference-ship-details",
+    ),
+    path(
+        "reference-equipment-master/",
+        source_contract.ReferenceEquipmentMasterListAPIView.as_view(),
+        name="reference-equipment-master",
+    ),
+    path(
+        "reference-system-master/",
+        source_contract.ReferenceSystemMasterListAPIView.as_view(),
+        name="reference-system-master",
+    ),
+    path("get_equipment/", source_contract.EquipmentDropdownAPIView.as_view()),
+    path(
+        "reports/filter-options/",
+        source_contract.ReportFilterOptionsAPIView.as_view(),
+        name="report-filter-options",
+    ),
+    path(
+        "sfd-list/filter-options/",
+        source_contract.SFDListFilterOptionsAPIView.as_view(),
+        name="sfd-list-filter-options",
+    ),
+    path(
+        "reports/sfd-transactions/",
+        source_contract.SFDTransactionReportAPIView.as_view(),
+        name="sfd-transaction-report",
+    ),
+    path(
+        "reports/sfd-installations/",
+        source_contract.EquipmentInstallationReportAPIView.as_view(),
+        name="equipment-installation-report",
+    ),
+    path(
+        "reports/sfd-locations/",
+        source_contract.EquipmentLocationReportAPIView.as_view(),
+        name="equipment-location-report",
+    ),
+    path(
+        "reports/removed-equipment/",
+        source_contract.RemovedEquipmentReportAPIView.as_view(),
+        name="removed-equipment-report",
+    ),
+    path(
+        "reports/approval-status/",
+        source_contract.ApprovalStatusReportAPIView.as_view(),
+        name="approval-status-report",
+    ),
+    path(
+        "reports/ship-equipment-configuration/",
+        source_contract.ShipEquipmentConfigurationReportAPIView.as_view(),
+        name="ship-equipment-configuration-report",
+    ),
+    path(
+        "reports/export-jobs/<uuid:job_id>/download/",
+        source_contract.ReportExportJobDownloadAPIView.as_view(),
+        name="report-export-job-download",
+    ),
+    path(
+        "reports/export-jobs/<uuid:job_id>/",
+        source_contract.ReportExportJobStatusAPIView.as_view(),
+        name="report-export-job-status",
+    ),
+    path(
+        "reports/<str:report_key>/export/",
+        source_contract.ReportExportAPIView.as_view(),
+        name="report-export",
+    ),
+    path(
+        "approval-tracking/",
+        source_contract.ApprovalTrackingAPIView.as_view(),
+        name="approval-tracking",
+    ),
+    path(
+        "equipment-system/dropdowns/",
+        source_contract.EquipmentSystemDropdownAPIView.as_view(),
+        name="equipment-system-dropdowns",
+    ),
+    path(
+        "equipment-system/map/",
+        source_contract.EquipmentSystemMapAPIView.as_view(),
+        name="equipment-system-map",
+    ),
+    path(
+        "equipment-compartment/dropdowns/",
+        source_contract.EquipmentCompartmentDropdownAPIView.as_view(),
+        name="equipment-compartment-dropdowns",
+    ),
+    path(
+        "equipment-compartment/map/",
+        source_contract.EquipmentCompartmentMapAPIView.as_view(),
+        name="equipment-compartment-map",
+    ),
+    path(
+        "overview/", source_contract.SFDOverviewAPIView.as_view(), name="sfd-overview"
+    ),
+    path(
+        "overview/activity/",
+        source_contract.SFDOverviewActivityAPIView.as_view(),
+        name="sfd-overview-activity",
+    ),
+    path(
+        "recent-activity/",
+        source_contract.RecentActivityAPIView.as_view(),
+        name="recent-activity",
+    ),
+    path(
+        "equipment/convert-to-system/",
+        source_contract.ConvertEquipmentToSystemAPIView.as_view(),
+        name="equipment-convert-to-system",
+    ),
+    path(
+        "convert-system-to-equipment/",
+        source_contract.ConvertSystemToEquipmentAPIView.as_view(),
+        name="convert-system-to-equipment",
+    ),
+    path(
+        "equipment-system/mapping/",
+        source_contract.EquipmentSystemMappingAPIView.as_view(),
+        name="equipment-system-map",
+    ),
+    path(
+        "equipment-system/mapping-list/",
+        source_contract.EquipmentSystemMappingListAPIView.as_view(),
+        name="equipment-system-mapping-list",
+    ),
+    path(
+        "equipment-system/update-equipment-system/<int:equipment_id>/",
+        source_contract.EquipmentSystemUpdateAPIView.as_view(),
+        name="equipment-system-update",
+    ),
+    path(
+        "equipment-system/unmap-equipment-system/<int:equipment_id>/",
+        source_contract.EquipmentSystemUnmapAPIView.as_view(),
+        name="equipment-system-unmap",
+    ),
+    path(
+        "dashboard/",
+        ConfigurationDashboardAPIView.as_view(),
+        name="configuration-dashboard",
+    ),
+    path(
+        "dashboard/kpis/",
+        ConfigurationDashboardKPIAPIView.as_view(),
+        name="configuration-dashboard-kpis",
+    ),
+    path("list/", views.SfdListAPIView.as_view(), name="sfd-list"),
+    path(
+        "get-equipment-details/",
+        views.GetEquipmentDetailsAPIView.as_view(),
+        name="get-equipment-details",
+    ),
+    path(
+        "get-equipment-data/<int:equipment_id>/<str:type>/",
+        views.GetEquipmentDataAPIView.as_view(),
+        name="get-equipment-data",
+    ),
+    path(
+        "get-change-equipment-data/",
+        views.GetChangeEquipmentDataAPIView.as_view(),
+        name="get-change-equipment-data",
+    ),
+    path(
+        "save-equipment-change/",
+        views.SaveEquipmentChangeAPIView.as_view(),
+        name="save-equipment-change",
+    ),
+    path(
+        "section-create/",
+        views.SectionCreateAPIView.as_view(),
+        name="section-create",
+    ),
+    path("aber-list/", views.AberListAPIView.as_view(), name="aber-list"),
+    path(
+        "import-from-excel/",
+        views.ImportSfdFromExcelAPIView.as_view(),
+        name="import-sfd-from-excel",
+    ),
+    path(
+        "fetch-from-cmms/",
+        views.FetchSfdFromCmmsAPIView.as_view(),
+        name="fetch-from-cmms",
+    ),
+    path(
+        "maintop-sync/",
+        views.MaintopSyncAPIView.as_view(),
+        name="maintop-sync",
+    ),
+    path(
+        "routine-sync/",
+        views.RoutineSyncAPIView.as_view(),
+        name="routine-sync",
+    ),
+    path(
+        "missing-routine-sync/",
+        views.MissingRoutineSyncAPIView.as_view(),
+        name="missing-routine-sync",
+    ),
+    path(
+        "sub-department-readiness/",
+        views.SubDepartmentReadinessAPIView.as_view(),
+        name="sub-department-readiness",
+    ),
+    path(
+        "rhsi-master/",
+        source_contract.RHSIMasterListAPIView.as_view(),
+        name="rhsi-master-list",
+    ),
+    path(
+        "rhsi-master/save/",
+        source_contract.RHSIMasterSaveAPIView.as_view(),
+        name="rhsi-master-save",
+    ),
+    path(
+        "rhsi-master/auto-assign/",
+        source_contract.RHSIMasterAutoAssignAPIView.as_view(),
+        name="rhsi-master-auto-assign",
+    ),
+    path(
+        "srar-pull-from-cmms/",
+        views.SrarPullFromCmmsSqlAPIView.as_view(),
+        name="srar-pull-from-cmms",
+    ),
+    path(
+        "push-darts-to-cmms/",
+        views.PushDartsToCmmsAPIView.as_view(),
+        name="push-darts-to-cmms",
+    ),
+    path(
+        "sync-progress/",
+        views.SyncProgressAPIView.as_view(),
+        name="sync-progress",
+    ),
+    path(
+        "ship-directory/pull/",
+        views.ShipDirectoryPullAPIView.as_view(),
+        name="ship-directory-pull",
+    ),
+    path(
+        "ship-directory/options/",
+        views.ShipDirectoryOptionsAPIView.as_view(),
+        name="ship-directory-options",
+    ),
+    path(
+        "ship-directory/select/",
+        views.SelectActiveShipAPIView.as_view(),
+        name="ship-directory-select",
+    ),
+    path(
+        "pull-requests-from-cmms/",
+        views.SfdRequestPullAPIView.as_view(),
+        name="pull-requests-from-cmms",
+    ),
+]
+
+urlpatterns += router.urls
+
+master_urlpatterns = [
+    path(
+        "supplier/", source_contract.SupplierListAPIView.as_view(), name="supplier-list"
+    ),
+    path(
+        "manufacturer/",
+        source_contract.ManufacturerListAPIView.as_view(),
+        name="manufacturer-list",
+    ),
+    path(
+        "equipment/",
+        source_contract.EquipmentListAPIView.as_view(),
+        name="equipment-list",
+    ),
+    path("systems/", source_contract.SystemListAPIView.as_view(), name="system-list"),
+]
+
+
+integration_urlpatterns = [
+    # CMMS ABER & SFD Paths
+    path(
+        "cmms/aber",
+        AberEquipmentListView.as_view(),
+        name="cmms-aber-equipment",
+    ),
+    path(
+        "cmms/aber/submit",
+        AberSubmitView.as_view(),
+        name="cmms-aber-submit",
+    ),
+    path(
+        "cmms/aber/history",
+        AberHistoryView.as_view(),
+        name="cmms-aber-history",
+    ),
+    path(
+        "cmms/sfd",
+        SfdEquipmentListView.as_view(),
+        name="cmms-sfd-equipment",
+    ),
+    path("cmms/sfd/ships", SfdShipsView.as_view(), name="cmms-sfd-ships"),
+    path(
+        "cmms/sfd/payload",
+        SfdSyncPayloadView.as_view(),
+        name="cmms-sfd-payload",
+    ),
+]

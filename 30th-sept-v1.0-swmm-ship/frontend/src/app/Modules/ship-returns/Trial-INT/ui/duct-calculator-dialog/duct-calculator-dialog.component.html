@@ -1,0 +1,147 @@
+<app-form-card-dialog
+  [open]="open"
+  title="Duct Flow Calculator"
+  submitLabel="Save"
+  cancelLabel="Cancel"
+  (submit)="onSave()"
+  (cancel)="onClose()"
+  (close)="onClose()"
+>
+
+  <form
+    [formGroup]="form"
+    class="flex flex-col gap-4"
+  >
+
+    <!-- NUMBER OF DUCTS -->
+
+    <app-input
+      label="No of Ducts"
+      type="number"
+      formControlName="noOfDucts"
+    >
+    </app-input>
+
+    <!-- DUCTS -->
+
+    <div
+      formArrayName="ducts"
+      class="flex flex-col gap-4"
+    >
+
+     <div
+  *ngFor="
+    let duct of ducts.controls;
+    let i = index
+  "
+  [formGroupName]="i"
+  class="relative border border-gray-100 rounded-lg p-4 grid grid-cols-6 gap-4 items-end bg-gray-50"
+>
+
+<div
+  class="absolute -top-2 left-3 px-2 py-0.5 rounded-full bg-gray-300 text-[11px] font-semibold text-gray-700 shadow-sm"
+>
+  Duct {{ i + 1 }}
+</div>
+
+
+  <app-select
+    label="Duct Type"
+    formControlName="ductType"
+    [options]="ductTypeOptions"
+  >
+  </app-select>
+
+  <!-- SQUARE -->
+
+  <app-input
+    *ngIf="
+      duct.get('ductType')?.value ===
+      'Square'
+    "
+    label="Side"
+    type="number"
+    formControlName="side"
+  >
+  </app-input>
+
+  <!-- CIRCLE -->
+
+  <app-input
+    *ngIf="
+      duct.get('ductType')?.value ===
+      'Circle'
+    "
+    label="Radius"
+    type="number"
+    formControlName="radius"
+  >
+  </app-input>
+
+  <!-- RECTANGLE -->
+
+  <app-input
+    *ngIf="
+      duct.get('ductType')?.value ===
+      'Rectangular'
+    "
+    label="Length"
+    type="number"
+    formControlName="length"
+  >
+  </app-input>
+
+  <app-input
+    *ngIf="
+      duct.get('ductType')?.value ===
+      'Rectangular'
+    "
+    label="Width"
+    type="number"
+    formControlName="width"
+  >
+  </app-input>
+
+  <!-- DUCT AREA -->
+
+  <app-input
+    label="Duct Area"
+    type="number"
+    formControlName="ductArea"
+  >
+  </app-input>
+
+  <!-- AIR FLOW -->
+
+  <app-input
+    label="Air Flow"
+    type="number"
+    formControlName="airFlow"
+    step="0.01"
+  >
+  </app-input>
+
+  <!-- FLOW RATE -->
+
+  <app-input
+    label="Flow Rate"
+    type="number"
+    formControlName="flowRate"
+  >
+  </app-input>
+
+</div>
+    </div>
+
+    <!-- TOTAL -->
+
+    <div class="text-right font-semibold">
+
+      Total Flow Rate :
+      {{ getTotalFlow() }}
+
+    </div>
+
+  </form>
+
+</app-form-card-dialog>

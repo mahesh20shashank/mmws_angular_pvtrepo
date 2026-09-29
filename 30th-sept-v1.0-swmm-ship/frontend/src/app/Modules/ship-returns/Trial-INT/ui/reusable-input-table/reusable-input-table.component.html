@@ -1,0 +1,352 @@
+<div class="w-full overflow-x-auto rounded-xl border border-[var(--border-primary)]">
+  <div *ngIf="!columns.length" class="px-4 py-6 text-center text-sm text-[var(--text-muted)]">
+    No columns configured for this table.
+  </div>
+
+  <table *ngIf="columns.length" class="w-full min-w-[640px] border-collapse text-sm text-[var(--ag-cell-color)]">
+
+    <!-- ================================================================
+         THEAD
+    ================================================================ -->
+    <thead>
+
+      <!-- ── Multi-level header ── -->
+      <ng-container *ngIf="enableChildHeaders">
+        <tr class="bg-[var(--ag-header-bg)]">
+          <ng-container *ngFor="let th of topHeader">
+            <th [attr.colspan]="th.colspan || 1" [attr.rowspan]="th.rowspan || 1"
+              class="border-b border-[var(--border-primary)] px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[var(--ag-header-cell-color)]"
+              [style.text-align]="th.align || 'center'">
+              {{ th.label }}
+            </th>
+          </ng-container>
+
+          <th *ngIf="enableRowActions" rowspan="2"
+            class="sticky right-0 z-10 border-b border-[var(--border-primary)] bg-[var(--bg-card)] text-center text-[11px] font-bold uppercase tracking-wider text-[var(--ag-header-cell-color)]"
+            style="width: 80px; white-space: nowrap;">
+            Action
+          </th>
+        </tr>
+
+        <tr class="bg-[var(--bg-input)]">
+          <ng-container *ngFor="let col of childColumns">
+            <th class="border-b border-[var(--border-primary)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+              [style.text-align]="col.align || 'center'" [style.minWidth]="col.width || '0px'">
+              {{ col.header }}
+            </th>
+          </ng-container>
+        </tr>
+      </ng-container>
+
+      <!-- ── Single-row header ── -->
+      <tr *ngIf="!enableChildHeaders" class="bg-[var(--ag-header-bg)]">
+        <ng-container *ngFor="let col of columns">
+          <th [ngClass]="[
+              'border-b border-[var(--border-primary)] px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[var(--ag-header-cell-color)]',
+              isStickyRight(col.header) ? 'sticky right-0 z-10 bg-[var(--bg-card)]' : ''
+            ]"
+            [style.width]="isFixedWidthColumn(col) ? (col.width || 'auto') : null" [style.minWidth]="col.width || '0px'"
+            [style.maxWidth]="isFixedWidthColumn(col) ? (col.width || 'none') : null"
+            [style.text-align]="col.align || 'left'">
+            <div class="flex items-center gap-2"
+              [style.justify-content]="col.align === 'center' ? 'center' : (col.align === 'right' ? 'flex-end' : 'flex-start')">
+              <span>
+                {{ col.header }}
+                <span *ngIf="col.required" class="text-red-400 ml-1">*</span>
+              </span>
+              <svg *ngIf="col?.sortable" class="w-3.5 h-3.5 opacity-50 hover:opacity-100 cursor-pointer transition"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+              </svg>
+            </div>
+          </th>
+        </ng-container>
+
+        <th *ngIf="enableRowActions"
+          class="sticky right-0 z-10 border-b border-[var(--border-primary)] bg-[var(--bg-card)] text-center text-[11px] font-bold uppercase tracking-wider text-[var(--ag-header-cell-color)]"
+          style="width: 80px; white-space: nowrap;">
+          Action
+        </th>
+      </tr>
+    </thead>
+
+    <!-- ================================================================
+         TBODY
+    ================================================================ -->
+    <tbody>
+      <tr *ngFor="let row of data; let i = index" class="border-t border-[var(--border-primary)] hover:bg-[var(--nav-hover-bg)]">
+
+        <ng-container *ngFor="let col of columns">
+          <td [ngClass]="[
+              'align-middle px-3 py-2',
+              col.sticky === 'right' ? 'sticky right-0 z-10 bg-[var(--bg-card)]' : ''
+            ]"
+            [style.width]="isFixedWidthColumn(col) ? (col.width || 'auto') : null" [style.minWidth]="col.width || '0px'"
+            [style.maxWidth]="isFixedWidthColumn(col) ? (col.width || 'none') : null">
+
+            <ng-container *ngIf="shouldShowField(col, row)">
+              <!-- --------------------------------------------------------------------------------- -->
+              <ng-container *ngIf="!col.template">
+                <ng-container [ngSwitch]="col.fieldType">
+
+                  <!-- SER -->
+                  <div *ngSwitchCase="'ser'" class="text-center font-semibold text-[var(--text-primary)]">
+                    {{ i + 1 || ''}}
+                  </div>
+
+                  <!-- TEXT -->
+                  <app-input *ngSwitchCase="'text'" [label]="''" [placeholder]="
+                      col.placeholder || ''
+                    " type="text" [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-input>
+
+                  <app-input *ngSwitchCase="'number'" [label]="''" [placeholder]="
+                      col.placeholder || ''
+                    " type="number" [min]="col.min ?? null" [max]="col.max ?? null" [step]="col.step ?? null"
+                    [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-input>
+
+
+                  <!-- ========================================= -->
+                  <!-- DATE -->
+                  <!-- ========================================= -->
+
+                  <app-input *ngSwitchCase="'date'" [label]="''" type="date" [placeholder]="
+                      col.placeholder || ''
+                    " [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-input>
+
+
+                  <!-- ========================================= -->
+                  <!-- TIME -->
+                  <!-- ========================================= -->
+
+                  <app-input *ngSwitchCase="'time'" [label]="''" type="text" [placeholder]="
+                      col.placeholder || ''
+                    " [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-input>
+
+
+
+                  <!-- TEXTAREA -->
+                  <app-textarea *ngSwitchCase="'textarea'" [label]="''" [placeholder]="
+                      col.placeholder ||
+                      'Enter details'
+                    " [rows]="2" [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-textarea>
+
+
+                  <app-select *ngSwitchCase="'select'" [label]="''" [options]="col.options || []" [placeholder]="
+                      col.placeholder || '--Select--'
+                    " [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-select>
+
+
+                  <app-select *ngSwitchCase="'drop-down'" [label]="''" [options]="col.options || []" [placeholder]="
+                      col.placeholder || '--Select--'
+                    " [(ngModel)]="row[col.field]" (ngModelChange)="
+                      onTableValueChange(
+                        i,
+                        col.field,
+                        $event
+                      )
+                    " class="w-full">
+                  </app-select>
+
+                  <!-- CHECKBOX -->
+                  <div *ngSwitchCase="'checkbox'" class="flex flex-wrap gap-2">
+                    <label *ngFor="let opt of col.options"
+                      class="flex items-center gap-1 text-sm text-[var(--text-primary)]">
+                      <input type="checkbox" [value]="opt.value" [checked]="row[col.field]?.includes(opt.value)"
+                        (change)="onCheckboxChange($event, row, col.field, opt.value)" />
+                      {{ opt.label }}
+                    </label>
+                  </div>
+                  <!-- ── COMPOSITE (Feature 2 & 3) ── -->
+                  <ng-container *ngSwitchCase="'composite'">
+                    <div class="flex flex-col gap-2">
+                      <ng-container *ngFor="let sub of col.compositeFields">
+
+                        <!-- Feature 3: skip sub-field if showWhen condition not met -->
+                        <ng-container *ngIf="
+                            shouldShowCompositeField(
+                              sub,
+                              row
+                            )
+                          ">
+
+                          <!-- TEXT -->
+                          <app-input *ngIf="
+                              sub.fieldType ===
+                              'text'
+                            " [label]="''" [placeholder]="
+                              sub.placeholder || ''
+                            " type="text" [(ngModel)]="
+                              row[sub.field]
+                            " (ngModelChange)="
+                              onTableValueChange(
+                                i,
+                                sub.field,
+                                $event
+                              )
+                            " class="w-full">
+                          </app-input>
+
+
+                          <!-- NUMBER -->
+                          <app-input *ngIf="
+                              sub.fieldType ===
+                              'number'
+                            " [label]="''" [placeholder]="
+                              sub.placeholder || ''
+                            " type="number" [(ngModel)]="
+                              row[sub.field]
+                            " (ngModelChange)="
+                              onTableValueChange(
+                                i,
+                                sub.field,
+                                $event
+                              )
+                            " class="w-full">
+                          </app-input>
+
+
+                          <!-- DATE -->
+                          <app-input *ngIf="
+                              sub.fieldType ===
+                              'date'
+                            " [label]="''" type="date" [(ngModel)]="
+                              row[sub.field]
+                            " (ngModelChange)="
+                              onTableValueChange(
+                                i,
+                                sub.field,
+                                $event
+                              )
+                            " class="w-full">
+                          </app-input>
+
+
+                          <!-- TEXTAREA -->
+                          <app-textarea *ngIf="
+                              sub.fieldType ===
+                              'textarea'
+                            " [label]="''" [placeholder]="
+                              sub.placeholder ||
+                              'Enter details'
+                            " [rows]="2" [(ngModel)]="
+                              row[sub.field]
+                            " (ngModelChange)="
+                              onTableValueChange(
+                                i,
+                                sub.field,
+                                $event
+                              )
+                            " class="w-full">
+                          </app-textarea>
+
+
+                          <!-- SELECT -->
+                          <app-select *ngIf="
+                              sub.fieldType === 'select' ||
+                              sub.fieldType === 'drop-down'
+                            " [label]="''" [options]="sub.options || []" [placeholder]="
+                              sub.placeholder ||
+                              '--Select--'
+                            " [(ngModel)]="
+                              row[sub.field]
+                            " (ngModelChange)="
+                              onTableValueChange(
+                                i,
+                                sub.field,
+                                $event
+                              )
+                            " class="w-full">
+                          </app-select>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+
+                  <!-- DEFAULT (read-only) -->
+                  <span *ngSwitchDefault class="text-[var(--text-primary)]">{{ row[col.field] }}</span>
+
+                </ng-container>
+              </ng-container>
+
+              <!-- ----------------------------------------------------------------── Custom template override ── -->
+              <ng-container *ngIf="col.template">
+                <ng-container *ngTemplateOutlet="
+                templates[col.template];
+                context: { $implicit: row, index: i, field: col.field }
+              "></ng-container>
+              </ng-container>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- ── Action column ── -->
+        <td *ngIf="enableRowActions" class="sticky right-0 z-10 bg-[var(--bg-card)] align-middle text-center whitespace-nowrap px-2 py-1"
+          style="width: 1%; white-space: nowrap;">
+          <div class="flex items-center justify-center gap-1.5">
+            <button *ngIf="i === data.length - 1" type="button" (click)="addRow()"
+              [disabled]="data.length >= maxRows || !isRowValid(row)"
+              class="grid h-8 w-8 place-items-center rounded-full border border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 transition hover:bg-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-40"
+              title="Add row" aria-label="Add row">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true">
+                <path d="M10 4v12M4 10h12"></path>
+              </svg>
+            </button>
+
+            <button type="button" (click)="requestDeleteRow(i)" [disabled]="data.length === 1"
+              class="grid h-8 w-8 place-items-center rounded-full border border-rose-500/40 bg-rose-500/15 text-rose-600 dark:text-rose-300 transition hover:bg-rose-500/30 disabled:cursor-not-allowed disabled:opacity-40"
+              title="Delete row" aria-label="Delete row">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true">
+                <path d="M3.5 5.5h13M7.5 5.5V4.4A1.4 1.4 0 0 1 8.9 3h2.2a1.4 1.4 0 0 1 1.4 1.4v1.1M6.5 6.5l.7 9.1A1.5 1.5 0 0 0 8.7 17h2.6a1.5 1.5 0 0 0 1.5-1.4l.7-9.1"></path>
+              </svg>
+            </button>
+          </div>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+</div>

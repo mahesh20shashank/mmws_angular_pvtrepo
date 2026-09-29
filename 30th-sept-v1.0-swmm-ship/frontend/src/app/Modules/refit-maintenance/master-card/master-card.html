@@ -1,0 +1,67 @@
+<div class="master-card glass-card" [ngStyle]="{ height: cardHeight }">
+  <div class="master-card-header">
+    @if (cardTitle || showHeaderStats) {
+      <div class="flex items-center justify-between w-full px-3 h-[60px]">
+        <h2>{{ cardTitle }}</h2>
+
+        <div class="flex items-center gap-3">
+          @if (showHeaderStats) {
+            <div
+              class="flex items-center gap-4 px-4 h-9 rounded-full border border-white/10 bg-white/10 text-white text-[12px] font-medium shadow-sm backdrop-blur-md"
+            >
+              <div class="flex items-center gap-1.5 whitespace-nowrap">
+                <span class="text-white/80 font-medium">Due :</span>
+                <span
+                  class="w-5 h-5 rounded-full bg-[#ef4444] flex items-center justify-center text-[11px] font-bold shadow-sm shrink-0"
+                  style="color: #fff"
+                >
+                  {{ headerStats.due }}
+                </span>
+              </div>
+
+              <div class="flex items-center gap-1.5 whitespace-nowrap">
+                <span class="text-white/80 font-medium">Due (&lt;3M / 500H) :</span>
+                <span
+                  class="w-5 h-5 rounded-full bg-[#f59e0b] flex items-center justify-center text-[11px] font-bold shadow-sm shrink-0"
+                  style="color: #fff"
+                >
+                  {{ headerStats.dueLessThan3M }}
+                </span>
+              </div>
+
+              <div class="flex items-center gap-1.5 whitespace-nowrap">
+                <span class="text-white/80 font-medium">Due (3-6M / 1000H) :</span>
+                <span
+                  class="w-5 h-5 rounded-full bg-[#3b82f6] flex items-center justify-center text-[11px] font-bold shadow-sm shrink-0"
+                  style="color: #fff"
+                >
+                  {{ headerStats.due3To6M }}
+                </span>
+              </div>
+
+              <div class="flex items-center gap-1.5 whitespace-nowrap">
+                <span class="text-white/80 font-medium">Other :</span>
+                <span
+                  class="w-5 h-5 rounded-full bg-[#6b7280] flex items-center justify-center text-[11px] font-bold shadow-sm shrink-0"
+                  style="color: #fff"
+                >
+                  {{ headerStats.other }}
+                </span>
+              </div>
+            </div>
+          }
+
+          <ng-content select="[card-header-actions]"></ng-content>
+        </div>
+      </div>
+    }
+
+    <!-- Header Tabs -->
+    <ng-content select="[card-header-tabs]"></ng-content>
+  </div>
+
+  <!-- Body -->
+  <div class="master-card-body">
+    <ng-content></ng-content>
+  </div>
+</div>

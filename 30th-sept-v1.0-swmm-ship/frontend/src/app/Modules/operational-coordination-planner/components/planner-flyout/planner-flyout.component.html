@@ -1,0 +1,19 @@
+<div class="flyout">
+      <div class="flyout-head">
+        Notifications
+        <span class="badge-inline">{{ store.notifications().length }}</span>
+        <app-button class="clear">Mark all read</app-button>
+      </div>
+      <div style="max-height: 380px; overflow-y: auto">
+        @for (n of store.notifications(); track n.id) {
+          <div class="notif" [class]="'notif ' + n.kind">
+            <div class="ic"><app-icon [name]="n.icon" [size]="14" /></div>
+            <div class="body">
+              <b>{{ n.title }}</b>
+              <div style="color: var(--ink-3); margin-top: 2px">{{ n.body }}</div>
+              <div class="when">{{ n.when }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>

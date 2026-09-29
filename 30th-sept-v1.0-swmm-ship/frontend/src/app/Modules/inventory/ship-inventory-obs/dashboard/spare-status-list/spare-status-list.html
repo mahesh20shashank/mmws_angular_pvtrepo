@@ -1,0 +1,36 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>{{ title }}</h3>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredSpares().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <!-- Once the deficiency rule is applied the result set may
+       legitimately be empty, and an empty grid body says nothing about why. Gated on
+       `spares()` (what was loaded) rather than `filteredSpares()`, so a search that
+       matches nothing still falls through to the grid's own "no matching rows" overlay -
+       that is a different situation and needs a different answer. -->
+  @if (isDeficiencyScreen() && !loading() && !spares().length) {
+    <div class="obs-empty-state" aria-live="polite">
+      <p class="obs-empty-state__title">No deficiencies against D787J</p>
+      <p class="obs-empty-state__text">
+        Every spare held on the D787J scale is at or above its authorised quantity, so nothing is
+        short. The D787J Deficiency count on the dashboard reads zero for the same reason.
+      </p>
+    </div>
+  } @else {
+    <app-data-grid
+      [rowData]="filteredSpares()"
+      [columnDefs]="columnDefs()"
+      [loading]="loading()"
+      height="480px"
+    />
+  }
+</div>

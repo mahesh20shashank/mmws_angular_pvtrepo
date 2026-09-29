@@ -1,0 +1,56 @@
+<div class="home-modal flex flex-col text-slate-300 w-[700px] max-w-full min-h-[500px]">
+  <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+    <h2 class="text-sm font-semibold text-white">Add Command Message</h2>
+
+    <app-button (click)="closeModal.emit()" class="text-slate-400 hover:text-white transition-colors">
+      <app-icon name="x" [size]="20" [strokeWidth]="2" />
+    </app-button>
+  </div>
+
+  <form class="flex flex-col gap-6" [formGroup]="commandMessageForm" (ngSubmit)="submit()">
+    <div class="grid gap-4">
+      <div>
+        <label for="command-message" class="block text-xs font-medium text-slate-400 mb-1.5">Command Message <span
+            class="text-red-500">*</span></label>
+        <textarea rows="3" id="command-message" formControlName="message"
+          class="w-full px-3 py-2 rounded-md text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition-colors bg-slate-700/50 border-slate-700 focus:ring-blue-600 focus:ring-2">
+        </textarea>
+        @if(commandMessageForm.controls.message.touched && commandMessageForm.controls.message.invalid){
+        <p class="mt-1 errorClass">Command message is required.</p>
+        }
+      </div>
+    </div>
+
+    <div>
+      <label for="command-valid-till-date" class="block text-xs font-medium text-slate-400 mb-1.5">Valid Till <span
+          class="text-red-500">*</span></label>
+      <input id="command-valid-till-date" type="date" formControlName="validTillDate"
+        [min]="today"
+        class="w-full px-3 py-2 rounded-md text-sm bg-slate-700/50 border-slate-700 focus:ring-blue-600 focus:ring-2 focus:outline-none focus:border-blue-500">
+      @if(commandMessageForm.controls.validTillDate.touched && commandMessageForm.controls.validTillDate.invalid){
+      <p class="mt-1 errorClass">
+        {{ commandMessageForm.controls.validTillDate.errors?.['pastDate'] ? 'Past dates are not allowed.' : 'Valid till date is required.' }}
+      </p>
+      }
+    </div>
+
+    @if(errorMessage){
+    <div class="rounded-md border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-medium text-red-200">
+      {{ errorMessage }}
+    </div>
+    }
+
+    <div class="rounded-md border noteMsg px-4 py-3 text-xs font-medium text-amber-200">
+      Note: This message is valid until 11:59 PM on the valid till date.
+    </div>
+
+    <div class="mt-1 flex justify-end gap-3">
+      <app-button type="button" (click)="closeModal.emit()" variant="outline" [disabled]="saving">
+        Cancel
+      </app-button>
+      <app-button type="submit" [disabled]="saving" variant="primary" >
+        {{ saving ? 'Saving...' : 'Save Command Message' }}
+      </app-button>
+    </div>
+  </form>
+</div>

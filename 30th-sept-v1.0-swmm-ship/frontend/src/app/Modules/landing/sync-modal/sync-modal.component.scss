@@ -1,0 +1,95 @@
+.modal {
+  width: 550px;
+
+  /* Footer jaisa background */
+  background: linear-gradient(180deg,
+      rgba(7, 15, 31, 0.96) 0%,
+      rgba(5, 11, 24, 0.94) 100%,
+      rgba(4, 8, 18, 0.96) 100%);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  margin-bottom: 10px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, .55),
+    inset 0 1px 0 rgba(255, 255, 255, .06);
+}
+
+.sync-header {
+  @apply flex items-center justify-between px-4 py-3;
+
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.title-wrapper {
+  @apply flex items-center gap-2;
+
+  h3 {
+    @apply text-white text-lg;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+
+  }
+}
+
+.header-icon {
+  @apply text-white;
+  font-size: 18px;
+}
+
+.close-btn {
+  @apply flex items-center justify-center;
+  @apply h-7 w-7 rounded-md;
+  @apply text-white/80;
+  @apply transition-all duration-200;
+
+  &:hover {
+    @apply bg-white/10 text-white;
+  }
+}
+
+.sync-grid {
+  @apply relative z-10;
+  @apply grid grid-cols-3 gap-y-2;
+  @apply p-4;
+}
+
+.sync-item {
+  @apply relative pl-5;
+}
+
+.sync-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  border-radius: 10px;
+
+  background: linear-gradient(to bottom,
+      #90D2FF 0%,
+      rgba(144, 210, 255, .75) 45%,
+      rgba(144, 210, 255, .25) 100%);
+
+  box-shadow: 0 0 8px rgba(144, 210, 255, .45);
+}
+
+.sync-name {
+  @apply text-white;
+  @apply text-xl leading-none;
+  @apply text-[12px];
+  font-weight: 300;
+  font-family: 'Poppins', sans-serif;
+}
+
+.sync-time {
+  @apply mt-1;
+  @apply text-[10px];
+  @apply text-white/80;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}

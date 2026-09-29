@@ -1,0 +1,39 @@
+<div class="mo-page">
+  <app-help-guidance />
+
+  <div class="kpi-row">
+    @for (tile of tiles(); track tile.label) {
+      <app-kpi-card
+        cardHeight="auto"
+        [title]="tile.label"
+        [count]="tile.count"
+        [iconName]="tile.icon"
+        [iconColor]="tile.iconColor"
+        [iconBg]="tile.iconBg"
+        [accentColor]="tile.iconColor"
+        iconPosition="right"
+        [showTimelineTab]="false"
+        [showTrends]="false"
+        [showViewMore]="true"
+        viewMoreLabel="View more →"
+        (detailClick)="viewMore(tile.viewMoreRoute)"
+      />
+    }
+  </div>
+
+  <div class="mo-dashboard-charts">
+    <div class="glass-card mo-chart-card">
+      <div class="mo-chart-card__header">
+        <app-icon name="history" [size]="16" variant="accent" /> Demand and Receipt Count
+      </div>
+      <app-line-chart [series]="demandReceiptSeries()" [labels]="months" [heightPx]="260" />
+    </div>
+
+    <div class="glass-card mo-chart-card">
+      <div class="mo-chart-card__header">
+        <app-icon name="chart-pie" [size]="16" variant="accent" /> PTS demands raised by Ship in last 12 months
+      </div>
+      <app-bar-chart [data]="ptsData()" [heightPx]="260" />
+    </div>
+  </div>
+</div>

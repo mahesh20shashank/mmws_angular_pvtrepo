@@ -1,0 +1,40 @@
+
+
+export const HOME_ICON = 'house';
+export const ACTIVITY_PLANNER_ICON = 'calendar';
+export const SHIP_CONFIG_ICON = 'wrench';
+export const OP_MAINT_ICON = 'wrench';
+export const DEFECT_ICON = 'boxes';
+export const ROUTINES_ICON = 'repeat';
+export const OP_UTILITIES_ICON = 'wrench';
+export const INVENTORY_ICON = 'share-2';
+export const SHIP_RETURNS_ICON = 'rotate-ccw';
+export const TRAILS_ICON = 'clipboard-pen-line';
+export const REFIT_MAINTENANCE_ICON = 'file-text';
+export const OTHER_UTILITIES_ICON = 'briefcase';
+export const KMS_ICON = 'book-open';
+export const USER_ICON = 'user';
+export const SHIP_CREW_ICON = 'users';
+export const USERS_ICON = 'users';
+export const BOX_ICON = 'network';
+export const DASHBOARD_GRID_ICON = 'settings';
+export const REPORTS_ICON = 'file-text';
+export const KPI_ICON = 'chart-column';
+export const SRAR_ICON = 'file-text';
+export const TRIAL_RETURNS_ICON = 'iteration-ccw';
+export const HULL_RETURNS_ICON = 'chart-column';
+export const OTHER_RETURNS_ICON = 'box';
+export const ADMIN_ICON = 'shield-check';
+export const ROLE_ICON = 'lock';
+export const AUDIT_ICON = 'clipboard-list';
+export const HELP_ICON = 'circle-help';
+export const SHIP_INVENTORY_OBS_ICON = 'box';
+export const SHORE_INVENTORY_MO_ICON = 'building-2';
+export const SHORE_INVENTORY_WED_ICON = 'factory';
+export const E_LOGBOOKS_ICON = 'book-open';
+export const HOTWORK_ICON = 'flame';
+export const TAG_IN_TAG_OUT_ICON = 'tags';
+export const NAV_VISIBILITY_ICON = 'layout-grid';
+export const HELP_DESK_ICON = 'headset';
+export const HR_CDF_SYNC_ICON = 'refresh-cw';
+

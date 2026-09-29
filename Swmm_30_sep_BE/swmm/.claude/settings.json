@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py makemigrations --check --dry-run wlms)",
+      "Bash(python manage.py test wlms -v 2)",
+      "Bash(python manage.py shell -c ' *)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('wlms/views.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('wlms/urls.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('wlms/utils.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('wlms/serializers.py', encoding='utf-8'\\).read\\(\\)\\)\")",
+      "Bash(python manage.py check wlms)",
+      "Bash(python manage.py check ilms)",
+      "Bash(python manage.py check obs)",
+      "Bash(echo \"---exit code: $?---\")",
+      "Bash(poetry remove *)"
+    ]
+  }
+}

@@ -1,0 +1,259 @@
+<div class="hotwork-container  space-y-6">
+  <!-- ==================== VIEW 1: MANAGE HOTWORK TABLE USING SHARED DATA-GRID ==================== -->
+  @if (activeSubView() === "manage-hotwork") {
+  <!-- Main Section Container using Shared PanelCard Component -->
+  <app-panel-card title="Manage Hotwork" icon="search">
+    <!-- Top Title & Toolbar Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2">
+      <div class="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-bold text-base sm:text-lg">
+        <app-icon name="search" [size]="20" class="text-blue-400" />
+        <span>Manage Hotwork</span>
+      </div>
+
+      <!-- Shared Component Export Toolbar & Global Search Right -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+        <app-export-toolbar [disabled]="filteredRecords().length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-200">
+          <label for="global-manage-search">Search:</label>
+          <input id="global-manage-search" type="text" [ngModel]="globalSearch()"
+            (ngModelChange)="globalSearch.set($event)"
+            placeholder="Search..."
+            class="bg-transparent text-slate-800 dark:text-slate-100 text-xs px-3 py-1.5 rounded-lg border focus:outline-none focus:border-blue-500 w-36 sm:w-44 placeholder:text-[var(--text-muted)]" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared Component AG-Grid DataGrid Component -->
+    <app-data-grid [rowData]="filteredRecords()" [columnDefs]="manageColumnDefs" [pageSize]="pageSize()"
+      [autoHeight]="true" (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+  </app-panel-card>
+  }
+
+  <!-- ==================== VIEW 2: DASHBOARD VIEW EXACT MATCH TO IMAGE ==================== -->
+  @if (activeSubView() === "dashboard") {
+  <!-- Row 1: Top 5 Stat KPI Cards using Shared KpiCard Component -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-stretch">
+    <app-kpi-card title="Hotwork Scheduled for the Day" [count]="scheduledToday()" iconName="repeat" iconColor="#F87171"
+      iconBg="rgba(248, 113, 113, 0.16)" accentColor="#F87171" [showTimelineTab]="false" [showTrends]="false"
+      [showViewMore]="true" viewMoreLabel="View more →"
+      [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" cardHeight="auto">
+    </app-kpi-card>
+
+    <app-kpi-card title="Hotwork In Progress" [count]="inProgress()" iconName="flame" iconColor="#38BDF8"
+      iconBg="rgba(56, 189, 248, 0.16)" accentColor="#38BDF8" [showTimelineTab]="false" [showTrends]="false"
+      [showViewMore]="true" viewMoreLabel="View more →"
+      [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" cardHeight="auto">
+    </app-kpi-card>
+
+    <app-kpi-card title="Hotwork Awaiting for Approval" [count]="awaitingApproval()" iconName="file-text"
+      iconColor="#F59E0B" iconBg="rgba(245, 158, 11, 0.16)" accentColor="#F59E0B" [showTimelineTab]="false"
+      [showTrends]="false" [showViewMore]="true" viewMoreLabel="View more →"
+      [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" cardHeight="auto">
+    </app-kpi-card>
+
+    <app-kpi-card title="Hotwork Completed" [count]="completed()" iconName="check-circle" iconColor="#C084FC"
+      iconBg="rgba(192, 132, 252, 0.16)" accentColor="#C084FC" [showTimelineTab]="false" [showTrends]="false"
+      [showViewMore]="true" viewMoreLabel="View more →"
+      [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" cardHeight="auto">
+    </app-kpi-card>
+
+    <app-kpi-card title="Ready to Start" [count]="readyToStart()" iconName="box" iconColor="#2DD4BF"
+      iconBg="rgba(45, 212, 191, 0.16)" accentColor="#2DD4BF" [showTimelineTab]="false" [showTrends]="false"
+      [showViewMore]="true" viewMoreLabel="View more →"
+      [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" cardHeight="auto">
+    </app-kpi-card>
+  </div>
+
+  <!-- Row 2: Middle Charts (Weekly summary & Present Progress) using PanelCard -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <app-panel-card title="Weekly summary" icon="line-chart">
+      <app-line-chart [series]="weeklySeries()" [labels]="weeklyLabels()" [heightPx]="240"></app-line-chart>
+      <div class="flex items-center justify-center gap-6 text-xs text-slate-600 dark:text-slate-300 font-semibold pt-2">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span><span>Initiated</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span><span>Ready</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span><span>Completed</span>
+        </div>
+      </div>
+    </app-panel-card>
+
+    <app-panel-card title="Present Hotwork Progress (Daily)" icon="pie-chart">
+      <div class="flex items-center justify-between pb-2">
+        <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Total Hotwork: 0</span>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-around gap-6 py-4">
+        <app-donut-chart [segments]="progressSegments()" [width]="180" [height]="180" cutout="0%"></app-donut-chart>
+        <div class="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
+          <div
+            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-300 dark:border-slate-800">
+            <span class="w-3 h-3 rounded bg-amber-500"></span><span>Initiated: 0 (0.0%)</span>
+          </div>
+          <div
+            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-300 dark:border-slate-800">
+            <span class="w-3 h-3 rounded bg-orange-500"></span><span>Ready: 0 (0.0%)</span>
+          </div>
+          <div
+            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-300 dark:border-slate-800">
+            <span class="w-3 h-3 rounded bg-rose-500"></span><span>Paused: 0 (0.0%)</span>
+          </div>
+          <div
+            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-300 dark:border-slate-800">
+            <span class="w-3 h-3 rounded bg-blue-500"></span><span>Completed: 0 (0.0%)</span>
+          </div>
+        </div>
+      </div>
+    </app-panel-card>
+  </div>
+
+  <!-- Row 3: Bottom Section (Hotwork history Bar Chart Card as per Image) -->
+  <app-panel-card title="Hotwork history" icon="chart-bar" class="block relative z-20">
+    <div class="space-y-4">
+      <!-- Date Range Filter Input -->
+      <div class="max-w-xs space-y-1">
+        <span class="block text-xs font-bold text-slate-600 dark:text-slate-300">Date Range</span>
+        <app-date-picker [singleDate]="false" placeholder="Select Date Range..." [ngModel]="historyDateRange()"
+          (ngModelChange)="historyDateRange.set($event)">
+        </app-date-picker>
+      </div>
+
+      <!-- Shared Component Bar Chart -->
+      <div class="pt-2">
+        <app-bar-chart [data]="historyBarData()" [heightPx]="220"></app-bar-chart>
+      </div>
+
+      <!-- Bar Chart Legend -->
+      <div class="flex items-center justify-center gap-6 text-xs text-slate-600 dark:text-slate-300 font-semibold pt-2">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span><span>Ready</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span><span>In progress</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span><span>Completed</span>
+        </div>
+      </div>
+    </div>
+  </app-panel-card>
+  }
+
+  <!-- ==================== VIEW 3: HISTORY VIEW USING SHARED DATE-PICKER, PANEL-CARD & DATA-GRID ==================== -->
+  @if (activeSubView() === "history") {
+  <!-- Breadcrumb Ribbon Navigation Bar -->
+  <div
+    class="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/60 p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 shadow-inner">
+    <span class="text-slate-500 dark:text-slate-400">Other Utilities</span>
+    <span class="text-slate-600">/</span>
+    <span class="text-slate-500 dark:text-slate-400">HotWork</span>
+    <span class="text-slate-600">/</span>
+    <span
+      class="text-slate-800 dark:text-slate-100 font-bold bg-slate-800 px-3 py-1 rounded-lg border border-slate-300 dark:border-slate-700">HISTORY</span>
+  </div>
+
+  <!-- TRACK HOTWORK Filter Card using PanelCard -->
+  <app-panel-card title="TRACK HOTWORK" icon="search" class="block relative z-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 items-end">
+      <!-- Hotwork Code Filter -->
+      <div class="space-y-1.5 flex flex-col justify-end">
+        <label for="history-hotwork-code" class="text-xs font-bold text-slate-600 dark:text-slate-300 block">Hotwork
+          Code</label>
+        <app-select-input
+          id="history-hotwork-code"
+          [options]="formattedHotworkCodeOptions()"
+          [ngModel]="historyHotworkCode()"
+          (ngModelChange)="historyHotworkCode.set($event)"
+        />
+      </div>
+
+      <!-- Date Range Filter using Shared DatePickerComponent -->
+      <div class="space-y-1.5 flex flex-col justify-end">
+        <span class="block text-xs font-bold text-slate-600 dark:text-slate-300">Date Range</span>
+        <app-date-picker [singleDate]="false" placeholder="Select Date Range..." [ngModel]="historyDateRange()"
+          (ngModelChange)="historyDateRange.set($event)">
+        </app-date-picker>
+      </div>
+    </div>
+  </app-panel-card>
+
+  <!-- History Data Table Panel using PanelCard and DataGrid -->
+  <app-panel-card title="Hotwork History Records" icon="history" class="block relative z-10">
+    <!-- Top Title & Toolbar Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2">
+      <div class="flex items-center gap-2 text-slate-800 dark:text-slate-100 font-bold text-base sm:text-lg">
+        <app-icon name="history" [size]="20" class="text-blue-400" />
+        <span>Hotwork History Records</span>
+      </div>
+
+      <!-- Shared Component Export Toolbar & Global Search Right -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+        <app-export-toolbar [disabled]="filteredHistoryRecords().length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-200">
+          <label for="global-history-search">Search:</label>
+          <input id="global-history-search" type="text" [ngModel]="historyGlobalSearch()"
+            (ngModelChange)="historyGlobalSearch.set($event)"
+            placeholder="Search..."
+            class="bg-transparent text-slate-800 dark:text-slate-100 text-xs px-3 py-1.5 rounded-lg border focus:outline-none focus:border-blue-500 w-36 sm:w-44 placeholder:text-[var(--text-muted)]" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared Component AG-Grid DataGrid Component for History Table -->
+    <app-data-grid [rowData]="filteredHistoryRecords()" [columnDefs]="historyColumnDefs" [pageSize]="historyPageSize()"
+      [autoHeight]="true" (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+  </app-panel-card>
+  }
+</div>
+
+<app-detail-drawer [open]="!!selectedRecord()" [titleMode]="true"
+  [label]="selectedRecord()?.hotworkCode ?? 'Hotwork Details'" [subtitle]="selectedRecord()?.descriptionOfHotwork ?? ''"
+  iconName="flame" iconColor="#f87171" (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  <div class="space-y-4 p-2 text-sm text-[var(--text-primary)]">
+    <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)]">
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Hotwork Code</span>
+        <span class="font-medium text-white">{{ item.hotworkCode }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Date of Hotwork</span>
+        <span class="font-medium text-white">{{ item.dateOfHotwork }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Parent Code</span>
+        <span class="font-medium text-white">{{ item.parentCode }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Current Status</span>
+        <span class="font-medium text-white">{{ item.currentStatus }}</span>
+      </div>
+    </div>
+
+    <div class="p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)] space-y-2">
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block font-medium mb-1">Department / Incharge</span>
+        <span class="text-white">{{ item.departmentSection }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block font-medium mb-1">Location / Compartment</span>
+        <span class="text-white">{{ item.locationAdjacent }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block font-medium mb-1">Hotwork Type</span>
+        <span class="text-white">{{ item.hotworkType }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block font-medium mb-1">Safe to Weld Certificate</span>
+        <span class="text-white">{{ item.safeToWeldCert }}</span>
+      </div>
+    </div>
+  </div>
+  }
+</app-detail-drawer>

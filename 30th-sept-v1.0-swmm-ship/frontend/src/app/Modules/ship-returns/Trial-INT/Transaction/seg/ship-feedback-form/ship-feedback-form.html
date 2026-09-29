@@ -1,0 +1,188 @@
+<ng-container *ngIf="popupMode; else fullPageLayout">
+  <ng-container *ngTemplateOutlet="feedbackFormBody"></ng-container>
+</ng-container>
+
+<ng-template #fullPageLayout>
+  <app-form-card
+    #formCard
+    [title]="'SHIP FEEDBACK FORM'"
+    [smallTitle]="'Sub Title'"
+    [showPreviousReport]="true"
+    [showBackButton]="true"
+    [backLabel]="'Go Back'"
+    [showPaginator]="true"
+    [previewMode]="true"
+    [pageScroll]="false"
+  >
+    <ng-container *ngTemplateOutlet="feedbackFormBody"></ng-container>
+
+    <div formFooter class="flex items-center justify-end gap-1.5">
+      <button
+        *ngIf="canShowSaveDraft"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading"
+        (click)="handleSave('draft')"
+      >
+        Save Draft
+      </button>
+      <button
+        *ngIf="canSubmit"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading"
+        (click)="handleSave('save')"
+      >
+        Save
+      </button>
+      <button
+        *ngIf="canSubmit"
+        type="button"
+        class="form-card-footer-btn pt-glass-btn-primary inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading"
+        (click)="handleSubmit()"
+      >
+        Submit
+      </button>
+    </div>
+  </app-form-card>
+</ng-template>
+
+<ng-template #feedbackFormBody>
+  <form
+    [formGroup]="form"
+    class="ship-feedback-form pt-glass-form-shell pt-glass-form-panel w-full py-2"
+    [class.ship-feedback-form--readonly]="isReadOnly"
+  >
+    <p class="pt-glass-form-hint mb-4 px-1">
+      <ng-container *ngIf="!isReadOnly">
+        All fields marked with <span>*</span> are mandatory
+      </ng-container>
+      <ng-container *ngIf="isReadOnly">
+        Feedback has been submitted and cannot be edited.
+      </ng-container>
+    </p>
+
+    <fieldset class="pt-glass-form-fieldset">
+      <legend>Basic Details</legend>
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-3xl">
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="name">
+            Name <span *ngIf="!isReadOnly">*</span>
+          </label>
+          <app-input formControlName="name" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="rank">
+            Rank
+          </label>
+          <app-input formControlName="rank" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="pt-glass-form-fieldset mb-2">
+      <legend>Status Of Images</legend>
+      <div class="space-y-5 max-w-4xl">
+        <div>
+          <label class="form-label mb-2 block">
+            1) After loading image in MMD, is MMD working?
+            <span *ngIf="!isReadOnly">*</span>
+          </label>
+          <div class="flex items-center gap-6">
+            <label
+              class="flex items-center gap-2 text-sm"
+              [class.cursor-pointer]="!isReadOnly"
+              [class.opacity-80]="isReadOnly"
+            >
+              <input
+                type="radio"
+                formControlName="mmd_working"
+                value="yes"
+              />
+              <span>Yes</span>
+            </label>
+            <label
+              class="flex items-center gap-2 text-sm"
+              [class.cursor-pointer]="!isReadOnly"
+              [class.opacity-80]="isReadOnly"
+            >
+              <input
+                type="radio"
+                formControlName="mmd_working"
+                value="no"
+              />
+              <span>No</span>
+            </label>
+          </div>
+          <div *ngIf="showMmdReason" class="mt-3 max-w-xl">
+            <label class="form-label" for="mmd_not_working_reason">
+              If NO, specify reason
+            </label>
+            <app-textarea
+              formControlName="mmd_not_working_reason"
+              placeholder="Enter reason"
+              [rows]="2"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label mb-2 block">
+            2) SEG service rating (1 to 5)
+            <span *ngIf="!isReadOnly">*</span>
+          </label>
+          <div
+            class="flex flex-wrap items-center gap-3"
+            role="radiogroup"
+            aria-label="SEG service rating"
+          >
+            <div class="flex items-center gap-0.5">
+              <button
+                *ngFor="let star of starRatingOptions"
+                type="button"
+                class="sf-star-btn"
+                [class.sf-star-active]="isStarFilled(star.value)"
+                [class.sf-star-btn--readonly]="isReadOnly"
+                [disabled]="isReadOnly"
+                [attr.aria-label]="star.value + ' out of 5 stars'"
+                [attr.aria-pressed]="selectedStar === +star.value"
+                (click)="setStarRating(star.value)"
+                (mouseenter)="!isReadOnly && (hoveredStar = +star.value)"
+                (mouseleave)="hoveredStar = 0"
+              >
+                <lucide-icon [img]="StarIcon" class="sf-star-icon" />
+              </button>
+            </div>
+            <span class="text-sm text-[var(--shell-text-secondary)]">
+              {{ starRatingCaption }}
+            </span>
+          </div>
+        </div>
+
+        <div class="max-w-xl">
+          <label class="form-label" for="other_comments">
+            3) Any other comment
+          </label>
+          <app-textarea
+            formControlName="other_comments"
+            placeholder="Enter comment"
+            [rows]="3"
+          />
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+  <div *ngIf="popupMode" class="flex flex-wrap justify-end gap-3 border-t border-[var(--shell-divider-soft)] pt-4">
+    <button
+      *ngIf="canSubmit"
+      type="button"
+      class="pt-glass-btn-primary inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60"
+      [disabled]="loading || !canSubmit"
+      (click)="handleSubmit()"
+    >
+      {{ loading ? 'Submitting...' : 'Submit' }}
+    </button>
+  </div>
+</ng-template>

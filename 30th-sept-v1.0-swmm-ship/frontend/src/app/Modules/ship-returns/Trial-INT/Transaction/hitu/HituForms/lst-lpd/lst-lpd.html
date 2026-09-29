@@ -1,0 +1,2382 @@
+<app-form-card title="LST-LPD Protocol sheets - Data Feeding" [showBackButton]="true" [showPreviousReport]="true" [showPaginator]="true" [previewMode]="true" [pageScroll]="true">
+
+   <div
+      previewHeader
+      class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+      <button
+          *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+          type="button"
+          (click)="setActiveTab(tab)"
+          class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+          [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+      >
+          <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+              {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+          </span>
+          <span
+              class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+              [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+          >
+              {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+          </span>
+      </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-2 gap-3">
+
+      <!-- <app-select formControlName="classOfShip" [options]="classOfShipOptions" [disabled]="true"
+        [label]="'Class of Ship*'">
+      </app-select> -->
+
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 mt-3">
+            <app-input label="Ship*" formControlName="ship"></app-input>
+
+      <!-- Date of conduct of trials  -->
+      <app-calendar label="Date of conduct of trials*" formControlName="date_of_conduct_trail"></app-calendar>
+
+      <app-select [label]="'Place of conduct of trials*'" formControlName="place_of_conduct_trail"
+        [options]="locationOptions" placeholder="--Select--" class="w-full">
+      </app-select>
+
+      <!-- Document No. -->
+      <app-input label="Document No." formControlName="document_no">
+      </app-input>
+
+      <app-select [label]="'Occasion for conduct of Trials*'" formControlName="occasion_of_conduct_trail"
+        [options]="occasionOptions" placeholder="--Select--" class="w-full">
+      </app-select>
+
+    </div>
+
+       <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input label="Corespondence(fax/letter,etc)*" formControlName="authority">
+        </app-input>
+
+        <app-calendar label="Date*" formControlName="authority_date" [max]="form.get('date_of_conduct_trail')?.value">
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload [label]="'Upload doc*'" formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)">
+        </app-file-upload>
+        <!-- </div> -->
+
+      </div>
+    </app-parameter-card>
+    <!-- --------------------------------------------------- TABLES SELECTION ------------------------------------------------ -->
+    <div class="mt-4 p-3 border border-white/15 rounded ">
+      <label class="form-label block mb-2">Select table(s) to fill</label>
+      <div class="flex flex-wrap gap-4">
+        <label *ngFor="let section of tableSectionOptions" class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" [checked]="isTableSectionVisible(section.id)"
+            (change)="toggleTableSection(section.id, $event)" class="h-4 w-4" />
+          <span>{{ section.label }}</span>
+        </label>
+      </div>
+    </div>
+    <!-- ----------------------------------------TABLE 1 -------------------------------------------- -->
+    <div class="overflow-x-auto border border-white/20 mt-3" *ngIf="selectedTableSections.size > 0">
+      <ng-container *ngIf="isTableSectionVisible('tank_hauling_capstan')">
+        <div class="w-full  p-2 flex flex-wrap items-center gap-3 bg-[#223654]">
+          <span class="font-semibold ">TANK HAULING CAPSTAN</span>
+          <div class="flex items-center gap-2 ml-auto">
+
+            <app-select id="tank_capstan_position" formControlName="tank_capstan_position" [searchable]="false"
+              [options]="capstanPositionOptions" placeholder="--Select--" class="min-w-[140px]"></app-select>
+            <app-input *ngIf="form.get('tank_capstan_position')?.value === 'other'"
+              formControlName="tank_capstan_position_other" placeholder="Specify other"
+              class="min-w-[160px]"></app-input>
+          </div>
+        </div>
+
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-15">Ser</th>
+              <th class="border border-white/15 p-2">Parameter</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">1</td>
+              <td class="border border-white/15 p-2">Make</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <textarea formControlName="make" rows="2" class="input-field" placeholder="Enter make"></textarea>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">2</td>
+              <td class="border border-white/15 p-2">Year of Manufacture</td>
+
+              <td class="border border-white/15 p-2">
+                <app-month-year-calendar formControlName="year_of_manufacture">
+                </app-month-year-calendar>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">3</td>
+
+              <td class="border border-white/15 p-2">
+                Condition of Ferrodo Lining on Brake
+              </td>
+
+              <td class="border border-white/15 p-2">
+                Wear and Tear
+              </td>
+
+              <!-- Dropdown -->
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ferrodo_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleObservation(
+                  'ferrodo_status',
+                  'ferrodo_remark',
+                  'ferrodo_obs'
+                )" placeholder="--Select--">
+                </app-select>
+              </td>
+
+              <!-- SAT / UNSAT -->
+              <td class="border border-white/15 p-2">
+
+                <span *ngIf="form.get('ferrodo_remark')?.value === 'SAT'" class="font-medium">
+                  SAT
+                </span>
+
+                <div *ngIf="form.get('ferrodo_remark')?.value === 'UNSAT'" class="space-y-2">
+
+                  <span class="font-medium">UNSAT</span>
+
+                  <app-input formControlName="ferrodo_obs" placeholder="Enter remarks">
+                  </app-input>
+
+                </div>
+
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">4</td>
+              <td class="border border-white/15 p-2">Condition of Gear Box</td>
+              <td class="border border-white/15 p-2">
+                Excessive noise during operation
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="gearbox_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleObservation(
+                  'gearbox_status',
+                  'gearbox_remark',
+                  'gearbox_obs'
+                )" placeholder="--Select--" class="w-full">
+                </app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+
+                <!-- Nil selected -->
+                <span *ngIf="form.get('gearbox_remark')?.value === 'SAT'">
+                  SAT
+                </span>
+
+                <!-- Observation selected -->
+                <ng-container *ngIf="form.get('gearbox_remark')?.value === 'UNSAT'">
+                  <span class="font-medium">UNSAT</span>
+
+                  <app-input formControlName="gearbox_obs" placeholder="Enter remarks" class="mt-2 block w-full">
+                  </app-input>
+                </ng-container>
+
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">5</td>
+              <td class="border border-white/15 p-2">Condition of Capstan Motor</td>
+
+              <td class="border border-white/15 p-2">Insulation resistance (>10 M ohms)</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="motor_ir_value2" (input)="handleMotorIR()"
+                  placeholder="Enter value (e.g. >10)"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="motor_ir_remark2"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">6</td>
+
+              <td class="border border-white/15 p-2">
+                Condition of Deck Plating under Capstan Foundation
+              </td>
+
+              <td class="border border-white/15 p-2">
+                Corrosion / Pitting / Unpainted / condition of bonding straps
+              </td>
+
+              <!-- Parameter 4 -->
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="deck_obs" [searchable]="false" [options]="obsOptions" (valueChange)="handleObservation(
+                  'deck_obs',
+                  'deck_remark',
+                  'deck_remark_obs'
+                )" placeholder="--Select--">
+                </app-select>
+              </td>
+
+              <!-- Parameter 5 -->
+              <td class="border border-white/15 p-2">
+
+                <!-- Show SAT when No Observation is selected -->
+                <span *ngIf="form.get('deck_remark')?.value === 'SAT'" class="font-medium">
+                  SAT
+                </span>
+
+                <!-- Show inputs when Observation is selected -->
+                <div *ngIf="form.get('deck_obs')?.value === 'obs'" class="space-y-3">
+
+                  <div class="flex items-center gap-3">
+                    <label class="w-32">Corrosion</label>
+                    <app-input formControlName="deck_corrosion" placeholder="Enter Corrosion remarks">
+                    </app-input>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <label class="w-32">Pitting</label>
+                    <app-input formControlName="deck_pitting" placeholder="Enter Pitting remarks">
+                    </app-input>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <label class="w-32">Unpainted</label>
+                    <app-input formControlName="deck_unpainted" placeholder="Enter Unpainted remarks">
+                    </app-input>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <label class="w-32">Others</label>
+                    <app-input formControlName="deck_others" placeholder="Enter Other remarks">
+                    </app-input>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">7</td>
+              <td class="border border-white/15 p-2">Operational Trials</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="operational_trials"></app-input>
+              </td>
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="operational_trials_1"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="operational_trials_remark" [searchable]="false" [options]="remarkOptions"
+                  placeholder="--Select--">
+                </app-select>
+
+                <textarea *ngIf="form.get('operational_trials_remark')?.value === 'SAT_OBS'"
+                  formControlName="operational_obs" class="input-field space-y-2"
+                  placeholder="Enter details"></textarea>
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">8</td>
+              <td class="border border-white/15 p-2">Grease Points</td>
+              <td class="border border-white/15 p-2">
+                Condition of grease nipples – Clean / painted / chocked
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="grease_status" [searchable]="false" [options]="greaseOptions"
+                  (valueChange)="handleGreasingPoint($event)" placeholder="--Select--" class="w-full">
+                </app-select>
+
+                <app-input *ngIf="form.get('grease_status')?.value === 'others'" formControlName="grease_other"
+                  placeholder="Enter alphanumeric details" class="w-full">
+                </app-input>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('grease_remark')?.value === 'SAT'">
+                  SAT
+                </span>
+
+                <ng-container *ngIf="form.get('grease_remark')?.value === 'UNSAT'">
+                  <span class="font-medium">UNSAT</span>
+
+                  <app-input formControlName="grease_remark_obs" placeholder="Enter remarks" class="w-full mt-2">
+                  </app-input>
+                </ng-container>
+              </td>
+            </tr>
+            <tr class="font-semibold">
+              <td colspan="7" class="border border-white/15 p-2">
+                CBPM PARAMETERS
+              </td>
+            </tr>
+
+            <tr class="font-semibold">
+              <td colspan="7" class="border border-white/15 p-2">
+                Lubrication Oil Status
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">9</td>
+              <td class="border border-white/15 p-2">Oil Being used in Gear Box</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="oil_used"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">10</td>
+              <td class="border border-white/15 p-2" rowspan="2">Oil Level of Gear Box</td>
+              <td class="border border-white/15 p-2">
+                Oil level should be maintained upto the center of oil eye
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="oil_level" [searchable]="false" [options]="oilLevelOptions"
+                  (valueChange)="handleOilLevel()" placeholder="--Select--">
+                </app-select>
+
+                <textarea *ngIf="form.get('oil_level_remark')?.value === 'SAT_OBS'" formControlName="oil_level_obs"
+                  rows="2" class="input-field w-full" placeholder="Enter observation"></textarea>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('oil_level_remark')?.value === 'SAT'">SAT</span>
+                <span *ngIf="form.get('oil_level_remark')?.value === 'SAT_OBS'">SAT with observation</span>
+                <span *ngIf="form.get('oil_level_remark')?.value === 'UNSAT'">UNSAT</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">11</td>
+              <td class="border border-white/15 p-2">Date of last LUB oil change + batch no.</td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-calendar formControlName="oil_change_date"></app-calendar>
+                <app-input formControlName="oil_change_batch" placeholder="Batch No"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="oil_change_remark" [searchable]="false" [options]="satUnsatOptions"
+                  placeholder="--Select--">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="10">12</td>
+              <td class="border border-white/15 p-2" rowspan="10">Lub oil analysis parameter</td>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2">Parameters</td>
+              <td class="border border-white/15 p-2">Measured</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="4">(a) Kittiwake</td>
+              <td class="border border-white/15 p-2">Water content</td>
+
+              <td class="border border-white/15 p-2" rowspan="9">
+                <app-input formControlName="kitti_water2"></app-input>
+                <app-file-upload (change)="handleFile($event)" formControlName="kitti_file2"></app-file-upload>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Viscosity (40°C)</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Base Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Acid Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="5">(b) Lab Test</td>
+              <td class="border border-white/15 p-2">Water content</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Viscosity</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Base Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Acid Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Metal traces</td>
+            </tr>
+
+            <tr class="font-semibold">
+              <td colspan="7" class="border border-white/15 p-2">
+                Current Load checks
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2">Reference</td>
+              <td class="border border-white/15 p-2">Measured</td>
+              <td class="border border-white/15 p-2"></td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">13</td>
+              <td class="border border-white/15 p-2">Starting Current</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="start_current_ref"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="start_current_meas"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="start_current_remark" [searchable]="false" [options]="satUnsatOptions"
+                  placeholder="--Select--">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">14</td>
+              <td class="border border-white/15 p-2">Running Current</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="running_current_ref"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="running_current_meas"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="running_current_remark" [searchable]="false" [options]="satUnsatOptions">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">15</td>
+              <td class="border border-white/15 p-2">Log Book Exist</td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="logbook_ref" [searchable]="false" [options]="yesNoOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="logbook_meas" [searchable]="false" [options]="yesNoOptions"></app-select>
+              </td>
+              <td class="border border-white/15 p-2"></td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">16</td>
+              <td class="border border-white/15 p-2">Periodicity of measurement</td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="periodicity_ref" [searchable]="false"
+                  [options]="periodicityOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="periodicity_meas" [searchable]="false"
+                  [options]="periodicityOptions"></app-select>
+              </td>
+              <td class="border border-white/15 p-2">
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">17</td>
+              <td class="border border-white/15 p-2">SPM</td>
+
+              <td class="border border-white/15 p-2 text-xs">
+                0–20 dBM (Green)<br />
+                20–35 dBM (Yellow)<br />
+                &gt;35 dBM (Red)
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="spm_status" [searchable]="false" [options]="spmOptions"
+                  placeholder="--Select--">
+                </app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('spm_remark')?.value === 'NA'">NA</span>
+                <span *ngIf="form.get('spm_remark')?.value === 'SAT'">SAT</span>
+                <ng-container *ngIf="form.get('spm_remark')?.value === 'SAT_OBS'">
+                  <span>SAT with observation</span>
+                  <textarea formControlName="spm_obs" rows="2" class="input-field w-full"
+                    placeholder="Enter observation"></textarea>
+                </ng-container>
+                <span *ngIf="form.get('spm_remark')?.value === 'UNSAT'">UNSAT</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">18</td>
+              <td class="border border-white/15 p-2">Any other observation</td>
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="load_other_obs"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">19</td>
+              <td class="border border-white/15 p-2">Overall Remarks</td>
+
+              <td colspan="3" class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="load_overall_remark" [searchable]="false" [options]="remarkOptions"
+                  placeholder="--Select--">
+                </app-select>
+
+                <!-- <textarea *ngIf="form.get('load_overall_remark')?.value === 'SAT_OBS'"
+                  formControlName="load_overall_obs" rows="2" class="input-field w-full"
+                  placeholder="Enter observation"></textarea> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="isTableSectionVisible('vehicle_ramp')">
+        <div class="w-full p-2 text-center font-semibold bg-[#223654]">
+          VEHICLE RAMP
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-16">Ser</th>
+              <th class="border border-white/15">Parameters</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">1</td>
+              <td class="border border-white/15 p-2">Make</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="ramp_make_vehicle"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">2</td>
+              <td class="border border-white/15 p-2">Year of Manufacture</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-calendar formControlName="ramp_year" view="year"></app-calendar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">3</td>
+
+              <td class="border border-white/15 p-2">
+                Condition of Ramp
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_condition" [searchable]="false" [options]="rampConditionOptions"
+                  placeholder="--Select--" class="w-full">
+                </app-select>
+              </td>
+              <!-- ---------------------------------------------------------------------- -->
+              <td class="border border-white/15 p-2 align-middle" rowspan="10">
+                <app-select formControlName="ramp_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="onVehicleRampSharedRemarkChange()" placeholder="--Select--" class="w-full">
+                </app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 align-middle space-y-2" rowspan="10">
+                <!-- showCargoToOperationalRemarks -->
+                <div *ngIf="showCargoToOperationalRemarks">
+                  <app-input formControlName="ramp_remark_if_sat" placeholder="SAT"></app-input>
+                </div>
+                <div *ngIf="!showCargoToOperationalRemarks">
+                  <app-select formControlName="ramp_remark" [searchable]="false"
+                    [options]="getVehicleRampRemarkOptions()" placeholder="--Select--" class="w-full"></app-select>
+                </div>
+
+                <textarea *ngIf="
+                    form.get('ramp_status')?.value === 'observation' &&
+                    (form.get('ramp_remark')?.value === 'SAT_OBS' ||
+                      form.get('ramp_remark')?.value === 'UNSAT')
+                  " formControlName="ramp_obs" rows="3" class="input-field w-full"
+                  placeholder="Enter alphanumeric details">
+                </textarea>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">4</td>
+              <td class="border border-white/15 p-2">Condition of Hydraulic Locking Cleats</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_hydraulic" [searchable]="false" [options]="emergencyCleatsOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">5</td>
+              <td class="border border-white/15 p-2">Condition of Emergency Operation Cleats</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_cleats" [searchable]="false" [options]="emergencyCleatsOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">6</td>
+              <td class="border border-white/15 p-2">Limit Switches</td>
+              <td class="border border-white/15 p-2">Check Operation</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">7</td>
+              <td class="border border-white/15 p-2">Condition of Hydraulic Lines</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_lines" [searchable]="false" [options]="hydraulicLineOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">8</td>
+              <td class="border border-white/15 p-2">Condition of Hinges</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_hinges" [searchable]="false" [options]="hingesOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">9</td>
+              <td class="border border-white/15 p-2">Condition of Piston and Oil Seal</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_seal" [searchable]="false" [options]="pistonOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">10</td>
+              <td class="border border-white/15 p-2">Condition of Rubber Coaming</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_rubber" [searchable]="false" [options]="rubberOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">11</td>
+              <td class="border border-white/15 p-2">Condition of pumps</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_pumps" [searchable]="false" [options]="pumpOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">12</td>
+              <td class="border border-white/15 p-2">Operational Pressure of Pumps</td>
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="pump_pressure" placeholder="Enter pressure"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="4">13</td>
+              <td class="border border-white/15 p-2" rowspan="4">
+                Modes of Operation
+              </td>
+
+              <td class="border border-white/15 p-2">
+                Manual (Through Solenoid)
+              </td>
+
+              <!-- Modes Dropdown -->
+              <td class="border border-white/15 p-2 space-y-2" rowspan="3">
+                <app-select formControlName="manual_mode1" [searchable]="false" [options]="modeOptions"
+                  placeholder="--Select--" class="w-full">
+                </app-select>
+              </td>
+
+              <!-- Remark -->
+              <td class="border border-white/15 p-2 space-y-2" rowspan="4">
+                <app-select formControlName="manual_remark1" [searchable]="false" [options]="
+        form.get('manual_status1')?.value === 'observation'
+          ? obsRemarkOptions
+          : satUnsatOptions
+      " placeholder="--Select--" class="w-full">
+                </app-select>
+
+                <app-input *ngIf="
+        form.get('manual_status1')?.value === 'observation' &&
+        (form.get('manual_remark1')?.value === 'SAT_OBS' ||
+         form.get('manual_remark1')?.value === 'UNSAT')
+      " formControlName="manual_obs1" placeholder="Enter alphanumeric details" class="w-full">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">PLC</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Emergency</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2 space-y-2">
+                Other Modes
+                <app-dynamic-textarea [form]="form" controlName="extra_modes1" placeholder="Enter mode">
+                </app-dynamic-textarea>
+              </td>
+
+              <!-- Checks -->
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="manual_status1" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleManualStatus1()" placeholder="--Select--" class="w-full">
+                </app-select>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">14</td>
+              <td class="border border-white/15 p-2">Any other observation</td>
+
+              <td class="border border-white/15 p-2" colspan="3">
+                <app-input formControlName="other_obs_mode"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">15</td>
+              <td class="border border-white/15 p-2">Overall Remarks</td>
+
+              <td class="border border-white/15 p-2 space-y-2" colspan="3">
+                <app-select formControlName="overall_mode_remark" [searchable]="false" [options]="remarkOptions">
+                </app-select>
+
+                <!-- <app-input *ngIf="form.get('overall_mode_remark')?.value === 'SAT_OBS'"
+                  formControlName="overall_mode_obs" placeholder="Enter observation">
+                </app-input> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="isTableSectionVisible('cargo_hatch')">
+        <div class="w-full p-2 text-center font-semibold bg-[#223654]">
+          CARGO HATCH
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-16">Ser</th>
+              <th class="border border-white/15">Parameters</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">1</td>
+              <td class="border border-white/15 p-2">Make</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="ramp_make_hatch"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">2</td>
+              <td class="border border-white/15 p-2">Year of Manufacture</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-calendar formControlName="ramp_year_hatch" view="year"></app-calendar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">3</td>
+              <td class="border border-white/15 p-2">Condition of Cargo Hatch Structure</td>
+              <td class="border border-white/15 p-2"><app-select formControlName="ramp_condition" [searchable]="false"
+                  [options]="rampConditionOptions" placeholder="--Select--" class="w-full">
+                </app-select></td>
+              <td class="border border-white/15 p-2 align-middle" rowspan="11">
+                <app-select formControlName="ramp_status_hatch" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleVehicleRampObservation('ramp_status_hatch', 'ramp_remark_hatch', 'ramp_obs_hatch')"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+              <td class="border border-white/15 p-2 align-middle space-y-2" rowspan="11">
+                <app-select formControlName="ramp_remark_hatch" [options]="getCargoHatchRemarkOptions()"
+                  [searchable]="false" (valueChange)="onCargoHatchSharedRemarkChange()" placeholder="--Select--"
+                  class="w-full"></app-select>
+                <textarea *ngIf="
+                  form.get('ramp_status_hatch')?.value === 'observation' &&
+                  (form.get('ramp_remark_hatch')?.value === 'SAT_OBS' ||
+                    form.get('ramp_remark_hatch')?.value === 'UNSAT')
+                " formControlName="ramp_obs_hatch" rows="3" class="input-field w-full"
+                  placeholder="Enter alphanumeric details"></textarea>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">4</td>
+              <td class="border border-white/15 p-2">Condition of Hydraulic Locking Pin</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="cargo_hatch_locking_pin" [searchable]="false"
+                  [options]="emergencyCleatsOptions" placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">5</td>
+              <td class="border border-white/15 p-2">Limit Switches</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_lim" [searchable]="false" [options]="emergencyCleatsOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">6</td>
+              <td class="border border-white/15 p-2">Condition of rollers</td>
+              <td class="border border-white/15 p-2">Check Operation</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">7</td>
+              <td class="border border-white/15 p-2">Condition of Hydraulic Lines</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_rollers" [searchable]="false" [options]="hydraulicLineOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">8</td>
+              <td class="border border-white/15 p-2">Condition of Hinges</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_hinges" [searchable]="false" [options]="hingesOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">9</td>
+              <td class="border border-white/15 p-2">Condition of Piston and Oil Seal</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_piston" [searchable]="false" [options]="pistonOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">10</td>
+              <td class="border border-white/15 p-2">Condition of Rubber Coaming</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_coaming" [searchable]="false" [options]="rubberOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">11</td>
+              <td class="border border-white/15 p-2">Condition of pumps</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_pum" [searchable]="false" [options]="pumpOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">12</td>
+              <td class="border border-white/15 p-2">Condition of emergency operation pulleys</td>
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="pump_pressure11" placeholder="Enter details"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">13</td>
+              <td class="border border-white/15 p-2">Operational Pressure of Pumps</td>
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="pump_pressure1" placeholder="Enter pressure"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="3">14</td>
+              <td class="border border-white/15 p-2" rowspan="3">Modes of Operation</td>
+              <td class="border border-white/15 p-2">Manual (Through Solenoid)</td>
+
+              <td class="border border-white/15 p-2 space-y-2" rowspan="2">
+                <app-select formControlName="manual_mode2" [searchable]="false" [options]="modeOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2" rowspan="3">
+                <app-select formControlName="extra_remark2" [searchable]="false"
+                  [options]="getExtraModesRemarkOptions()" (valueChange)="onCargoHatchExtraModesRemarkChange()"
+                  placeholder="--Select--" class="w-full"></app-select>
+                <textarea *ngIf="
+                  form.get('extra_status2')?.value === 'observation' &&
+                  (form.get('extra_remark2')?.value === 'SAT_OBS' ||
+                    form.get('extra_remark2')?.value === 'UNSAT')
+                " formControlName="extra_obs2" rows="3" class="input-field w-full"
+                  placeholder="Enter alphanumeric details"></textarea>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Emergency</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2 space-y-2">
+                Other Modes
+                <app-dynamic-textarea [form]="form" controlName="extra_modes2"
+                  placeholder="Enter mode"></app-dynamic-textarea>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="extra_status2" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleVehicleRampObservation('extra_status2', 'extra_remark2', 'extra_obs2')"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">15</td>
+              <td class="border border-white/15 p-2">Any other observation</td>
+
+              <td class="border border-white/15 p-2" colspan="3">
+                <app-input formControlName="other_obs_mode"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">16</td>
+              <td class="border border-white/15 p-2">Overall Remarks</td>
+
+              <td class="border border-white/15 p-2 space-y-2" colspan="3">
+                <app-select formControlName="overall_mode_remark" [searchable]="false" [options]="remarkOptions">
+                </app-select>
+
+                <app-input *ngIf="form.get('overall_mode_remark')?.value === 'SAT_OBS'"
+                  formControlName="overall_mode_obs" placeholder="Enter observation">
+                </app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="isTableSectionVisible('bow_door')">
+        <div class="w-full p-2 text-center font-semibold bg-[#223654]">
+          BOW DOOR
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-16">Ser</th>
+              <th class="border border-white/15">Parameters</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">1</td>
+              <td class="border border-white/15 p-2">Make</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="ramp_make_bow"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">2</td>
+              <td class="border border-white/15 p-2">Year of Manufacture</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-calendar formControlName="ramp_year_bow" view="year"></app-calendar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">3</td>
+              <td class="border border-white/15 p-2">Condition of Ramp</td>
+              <td class="border border-white/15 p-2"><app-select formControlName="ramp_condition" [searchable]="false"
+                  [options]="rampConditionOptions" placeholder="--Select--" class="w-full">
+                </app-select></td>
+              <td class="border border-white/15 p-2 align-middle" rowspan="10">
+                <app-select formControlName="bow_door_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleVehicleRampObservation('bow_door_status', 'bow_door_remark', 'bow_door_obs')"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+              <td class="border border-white/15 p-2 align-middle space-y-2" rowspan="10">
+                <app-select formControlName="bow_door_remark" [searchable]="false" [options]="getBowDoorRemarkOptions()"
+                  (valueChange)="onBowDoorSharedRemarkChange()" placeholder="--Select--" class="w-full"></app-select>
+                <textarea *ngIf="
+                  form.get('bow_door_status')?.value === 'observation' &&
+                  (form.get('bow_door_remark')?.value === 'SAT_OBS' ||
+                    form.get('bow_door_remark')?.value === 'UNSAT')
+                " formControlName="bow_door_obs" rows="3" class="input-field w-full"
+                  placeholder="Enter alphanumeric details"></textarea>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">4</td>
+              <td class="border border-white/15 p-2">Condition of Hydraulic Locking Cleats</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_lock" [searchable]="false" [options]="emergencyCleatsOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">5</td>
+              <td class="border border-white/15 p-2">Condition of central Locking mechanism</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_mech" [searchable]="false" [options]="emergencyCleatsOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">6</td>
+              <td class="border border-white/15 p-2">Limit Switches</td>
+              <td class="border border-white/15 p-2">Check Operation</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">7</td>
+              <td class="border border-white/15 p-2">Condition of Hydraulic Lines</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_line" [searchable]="false" [options]="hydraulicLineOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">8</td>
+              <td class="border border-white/15 p-2">Condition of Hinges</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_hin" [searchable]="false" [options]="hingesOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">9</td>
+              <td class="border border-white/15 p-2">Condition of Piston and Oil Seal</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_oil" [searchable]="false" [options]="pistonOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">10</td>
+              <td class="border border-white/15 p-2">Condition of Rubber Coaming</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_coam" [searchable]="false" [options]="rubberOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">11</td>
+              <td class="border border-white/15 p-2">Condition of pumps</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ramp_remark_pump1" [searchable]="false" [options]="pumpOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">12</td>
+              <td class="border border-white/15 p-2">Operational Pressure of Pumps</td>
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="pump_pressure2" placeholder="Enter pressure"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="4">13</td>
+              <td class="border border-white/15 p-2" rowspan="4">Modes of Operation</td>
+              <td class="border border-white/15 p-2">Manual (Through Solenoid)</td>
+
+              <td class="border border-white/15 p-2 space-y-2" rowspan="3">
+                <app-select formControlName="manual_mode" [searchable]="false" [options]="modeOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2" rowspan="4">
+                <app-select formControlName="manual_remark" [searchable]="false" [options]="getModesRemarkOptions()"
+                  placeholder="--Select--" class="w-full"></app-select>
+                <textarea *ngIf="
+                  form.get('manual_remark')?.value === 'SAT_OBS' ||
+                  form.get('manual_remark')?.value === 'UNSAT'
+                " formControlName="manual_obs" rows="3" class="input-field w-full"
+                  placeholder="Enter alphanumeric details"></textarea>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">PLC</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Emergency (DD pump)</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2 space-y-2">
+                Other Modes
+                <app-dynamic-textarea [form]="form" controlName="extra_modes"
+                  placeholder="Enter mode"></app-dynamic-textarea>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="manual_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleVehicleRampObservation('manual_status', 'manual_remark', 'manual_obs')"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+
+
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">14</td>
+              <td class="border border-white/15 p-2">Any other observation</td>
+
+              <td class="border border-white/15 p-2" colspan="3">
+                <app-input formControlName="other_obs_mode"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">15</td>
+              <td class="border border-white/15 p-2">Overall Remarks</td>
+
+              <td class="border border-white/15 p-2 space-y-2" colspan="3">
+                <app-select formControlName="overall_mode_remark" [searchable]="false" [options]="remarkOptions">
+                </app-select>
+
+                <app-input *ngIf="form.get('overall_mode_remark')?.value === 'SAT_OBS'"
+                  formControlName="overall_mode_obs" placeholder="Enter observation">
+                </app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="isTableSectionVisible('aft_winch')">
+        <div class="w-full p-2 text-center font-semibold bg-[#223654]">
+          AFT General Purpose Winch
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-16">Ser</th>
+              <th class="border border-white/15">Parameters</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">1</td>
+              <td class="border border-white/15 p-2">Make</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="ramp_make_aft"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">2</td>
+              <td class="border border-white/15 p-2">Type</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="type_AFT"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">3</td>
+              <td class="border border-white/15 p-2">Year of Manufacture</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-calendar formControlName="ramp_year_aft" view="year"></app-calendar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">4</td>
+              <td class="border border-white/15 p-2">Load Testing of Derrick</td>
+
+              <td class="border border-white/15 p-2">Date of last load test period of test not to exceed 27 months</td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-calendar formControlName="derrick_date" (change)="handle27Month('derrick_date','derrick_remark')">
+                </app-calendar>
+              </td>
+
+              <!-- <td class="border border-white/15 p-2 space-y-2">
+              <app-select
+                formControlName="derrick_na"
+                [searchable]="false" [options]="calenderOptions"
+                (change)="handle27Month('derrick_date','derrick_na','derrick_remark')"
+              >
+              </app-select>
+            </td> -->
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="derrick_remark" [readonly]="true">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">5</td>
+              <td class="border border-white/15 p-2">Load Testing of Wire Rope</td>
+              <td class="border border-white/15 p-2">Date of last load test period of test not to exceed 27 months</td>
+
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-calendar formControlName="rope_test_date"
+                  (change)="handle27Month('rope_test_date','rope_test_remark')">
+                </app-calendar>
+              </td>
+
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="rope_test_remark"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">6</td>
+              <td class="border border-white/15 p-2">
+                Serviceability Checks / Visual Survey of Rope
+              </td>
+              <td class="border border-white/15 p-2">
+                Date of Last visual survey - To be examined by refitting agencies
+                at intermediate intervals not exceeding 2 years. Check wire rope
+                for signs of excessive wear, corrosion or other defects.
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+
+
+                <app-calendar formControlName="rope_fitment_date"
+                  (change)="handle27Month('rope_fitment_date','rope_fitment_remark')">
+                </app-calendar>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="rope_fitment_remark"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">7</td>
+              <td class="border border-white/15 p-2">Wire Rope</td>
+              <td class="border border-white/15 p-2">
+                Date of fitment.(To be maintained iaw NHQ /DNA Policy letter
+                NC/Policy/H-104/Equipment dated 09 May 16)
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+
+                <app-calendar formControlName="jb_status" (change)="handle60Month('jb_status','jb_obs','jb_remark')">
+                </app-calendar>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-input formControlName="jb_remark"></app-input>
+              </td>
+            </tr>
+
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="3">8</td>
+
+              <td class="border border-white/15 p-2" rowspan="3">
+                Condition of JB / Control
+              </td>
+
+              <td class="border border-white/15 p-2">
+                Electrical hygiene, condition of connector lugs. Check tightness
+                of electrical cable connections and fasteners
+              </td>
+
+              <!-- Nil / Observation Dropdown -->
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="switches_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  placeholder="--Select--">
+                </app-select>
+              </td>
+
+              <!-- SAT / SAT with Observation / UNSAT -->
+              <td class="border border-white/15 p-2">
+
+                <!-- When Nil is selected -->
+                <span *ngIf="form.get('switches_status')?.value === 'nil'">
+                  SAT
+                </span>
+
+                <!-- When Observation is selected -->
+                <ng-container *ngIf="form.get('switches_status')?.value === 'observation'">
+
+                  <app-select formControlName="switches_remark" [searchable]="false"
+                    [options]="getSwitchesRemarkOptions()" placeholder="--Select--">
+                  </app-select>
+
+                  <app-input *ngIf="
+          form.get('switches_remark')?.value === 'SAT_OBS' ||
+          form.get('switches_remark')?.value === 'UNSAT'
+        " formControlName="switches_obs" placeholder="Enter Observation" class="mt-2">
+                  </app-input>
+
+                </ng-container>
+
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">Status of Switches</td>
+
+              <!-- Dialogue Box -->
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="switches_status" placeholder="Enter Status"></app-input>
+              </td>
+
+              <!-- Remark -->
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="switches_remark1" [searchable]="false"
+                  [options]="remarkOptions"></app-select>
+
+                <app-input *ngIf="
+        form.get('switches_remark1')?.value === 'SAT_OBS' ||
+        form.get('switches_remark1')?.value === 'UNSAT'
+      " formControlName="switches_obs1" placeholder="Enter Observation">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Status of Indicators</td>
+
+              <!-- Dialogue Box -->
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="indicator_status" placeholder="Enter Status"></app-input>
+              </td>
+
+              <!-- Remark -->
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="indicator_remark" [searchable]="false"
+                  [options]="remarkOptions"></app-select>
+
+                <app-input *ngIf="
+        form.get('indicator_remark')?.value === 'SAT_OBS' ||
+        form.get('indicator_remark')?.value === 'UNSAT'
+      " formControlName="indicate_obs" placeholder="Enter Observation">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">9</td>
+              <td class="border border-white/15 p-2">Condition of Foundations</td>
+              <td class="border border-white/15 p-2">
+                Corrosion / Pitting / Unpainted / Condition of Bond Strap
+              </td>
+
+              <!-- Nil / Observation -->
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="indicators_remark" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleFoundationObservation()">
+                </app-select>
+              </td>
+
+              <!-- Remark -->
+              <td class="border border-white/15 p-2">
+
+                <!-- Nil -->
+                <span *ngIf="form.get('indicators_remark')?.value === 'nil'">
+                  SAT
+                </span>
+
+                <!-- Observation -->
+                <div *ngIf="form.get('indicators_remark')?.value === 'observation'">
+
+                  <app-select formControlName="foundation_remark" [searchable]="false" [options]="obsRemarkOptions">
+                  </app-select>
+
+                  <app-input formControlName="foundation_obs" placeholder="Enter Observation">
+                  </app-input>
+
+                </div>
+
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">10</td>
+              <td class="border border-white/15 p-2">
+                Greasing of Mechanical Part
+              </td>
+              <td class="border border-white/15 p-2">
+                Check application of grease on mechanical / moving parts
+              </td>
+
+              <!-- Nil / Observation -->
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="foundation_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleFoundationStatus()">
+                </app-select>
+              </td>
+
+              <!-- Remark -->
+              <td class="border border-white/15 p-2">
+
+                <!-- Nil -->
+                <span *ngIf="form.get('foundation_status')?.value === 'nil'">
+                  SAT
+                </span>
+
+                <!-- Observation -->
+                <div *ngIf="form.get('foundation_status')?.value === 'observation'">
+
+                  <app-select formControlName="foundation_remark" [searchable]="false" [options]="obsRemarkOptions">
+                  </app-select>
+
+                  <app-input formControlName="foundation_obs" placeholder="Enter observation details">
+                  </app-input>
+
+                </div>
+
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">11</td>
+              <td class="border border-white/15 p-2">Greasing Points</td>
+              <td class="border border-white/15 p-2">Condition of greasing points, nipples – clean / painted/ chocked
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="mech_grease_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (change)="handleObsWithChoice('mech_grease_status','mech_grease_remark','mech_grease_obs')">
+                </app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2 " mt-2>
+                <span *ngIf="form.get('mech_grease_status')?.value === 'nil'">SAT</span>
+
+                <div *ngIf="form.get('mech_grease_status')?.value === 'observation'">
+                  <app-select formControlName="mech_grease_remark" [searchable]="false"
+                    [options]="obsRemarkOptions"></app-select>
+                  <app-input formControlName="mech_grease_obs"></app-input>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="2">12</td>
+
+              <td class="border border-white/15 p-2" rowspan="2">
+                Operational Trials at SWL
+              </td>
+
+              <td class="border border-white/15 p-2">
+                Hoisting
+                <app-input formControlName="hoisting"></app-input>
+              </td>
+
+              <!-- Nil / Observation -->
+              <td class="border border-white/15 p-2" rowspan="2">
+                <app-select formControlName="grease_points_status" [searchable]="false"
+                  [options]="ObservationsNilOptions">
+                </app-select>
+              </td>
+
+              <!-- Remark -->
+              <td class="border border-white/15 p-2" rowspan="2">
+
+                <!-- Nil -->
+                <span *ngIf="form.get('grease_points_status')?.value === 'nil'">
+                  SAT
+                </span>
+
+                <!-- Observation -->
+                <div *ngIf="form.get('grease_points_status')?.value === 'observation'">
+
+                  <app-select formControlName="grease_points_remark" [searchable]="false" [options]="obsRemarkOptions">
+                  </app-select>
+
+                  <app-input *ngIf="
+    form.get('grease_points_remark')?.value === 'SAT_OBS' ||
+    form.get('grease_points_remark')?.value === 'UNSAT'
+  " formControlName="grease_points_other" placeholder="Enter observation details">
+                  </app-input>
+
+                </div>
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">
+                Lowering
+                <app-input formControlName="lowering"></app-input>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">13</td>
+              <td class="border border-white/15 p-2">Drive</td>
+              <td class="border border-white/15 p-2">Check for excessive noise during operation</td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="drive_status" [searchable]="false" [options]="ObservationsNilOptions"
+                  (change)="handleObsWithChoice('drive_status','drive_remark','drive_obs')">
+                </app-select>
+
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('drive_status')?.value === 'nil'">SAT</span>
+
+                <div *ngIf="form.get('drive_status')?.value === 'observation'">
+                  <app-select formControlName="drive_remark" [searchable]="false"
+                    [options]="obsRemarkOptions"></app-select>
+
+                  <app-input formControlName="drive_obs" placeholder="Enter observation">
+                  </app-input>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">14</td>
+              <td class="border border-white/15 p-2">Limit Switch</td>
+              <td class="border border-white/15 p-2">Functioning of limit switches</td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="limit_switch_remark" [searchable]="false" [options]="limitSwitchOptions"
+                  (change)="handleLimitSwitch()">
+                </app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-input *ngIf="form.get('limit_switch_remark')?.value === 'SAT_OBS'
+          || form.get('limit_switch_remark')?.value === 'UNSAT'" formControlName="limit_switch_obs"
+                  placeholder="Enter observation">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">15</td>
+              <td class="border border-white/15 p-2">Insulation Motor (MΩ)</td>
+              <td class="border border-white/15 p-2">(Numerical value along with symbols eg. >10) M ohms</td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-input formControlName="motor_ir_value" placeholder="Enter value (e.g. >10)"
+                  (input)="handleMotorIR()">
+                </app-input>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-input formControlName="motor_ir_remark"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="w-full p-2 text-center font-semibold">
+          CBPM PARAMETERS
+        </div>
+        <div class="w-full p-2 font-semibold">
+          Lubrication Oil Status
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-16">Ser</th>
+              <th class="border border-white/15">Parameters</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+
+
+            <tr>
+              <td class="border border-white/15 p-2">16</td>
+              <td class="border border-white/15 p-2">Oil Being used in Gear Box</td>
+              <td class="border border-white/15 p-2" colspan="3">
+                <app-input formControlName="ramp_make_cbpm"></app-input>
+              </td>
+            </tr>
+
+
+
+
+
+
+
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="2">17</td>
+              <td class="border border-white/15 p-2" rowspan="2">Oil Level of Gear Box</td>
+              <td class="border border-white/15 p-2">
+                Oil level should be maintained upto the center of oil eye
+              </td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="oil_level_status" [searchable]="false" [options]="oilLevelOptions"
+                  (change)="handleOilLevel()">
+                </app-select>
+              </td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="oil_level_remark_cbpm" [searchable]="false" [options]="satUnsatOptions">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">
+                Date of last LUB oil changed along with batch no. of Drum
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-calendar formControlName="oil_level_obs_cbpm">
+                </app-calendar>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="oil_change_remark_cbpm" [searchable]="false" [options]="satUnsatOptions">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="10">18</td>
+              <td class="border border-white/15 p-2" rowspan="10">Lub oil analysis parameter</td>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2">Parameters</td>
+              <td class="border border-white/15 p-2">Measured</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="4">(a) Kittiwake</td>
+              <td class="border border-white/15 p-2">Water content</td>
+
+              <td class="border border-white/15 p-2" rowspan="9">
+                <app-input formControlName="kitti_water"></app-input>
+                <app-file-upload (change)="handleFile($event)" formControlName="kitti_file2"></app-file-upload>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Viscosity (40°C)</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Base Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Acid Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="5">(b) Lab Test</td>
+              <td class="border border-white/15 p-2">Water content</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Viscosity</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Base Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Acid Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Metal traces</td>
+            </tr>
+
+            <div class="w-full p-2 text-center font-semibold">
+              Current Load Checks
+            </div>
+            <tr>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2">Reference value</td>
+              <td class="border border-white/15 p-2">Measured value</td>
+              <td class="border border-white/15 p-2"></td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">19</td>
+              <td class="border border-white/15 p-2">Starting Current</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="start_current_design"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="start_current_measured"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="start_current_remark2" [searchable]="false" [options]="satUnsatOptions1">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">20</td>
+              <td class="border border-white/15 p-2">Running Current</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="run_current_design"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="run_current_measured"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="run_current_remark" [searchable]="false" [options]="satUnsatOptions1">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">21</td>
+              <td class="border border-white/15 p-2">Log Book Exist</td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="log_design" [searchable]="false" [options]="yesNoOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="log_measured" [searchable]="false" [options]="yesNoOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">22</td>
+              <td class="border border-white/15 p-2">Periodicity of measurement</td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="periodicity_design" [searchable]="false"
+                  [options]="periodicityOptions1"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="periodicity_measured" [searchable]="false"
+                  [options]="periodicityOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">23</td>
+              <td class="border border-white/15 p-2">SPM</td>
+
+              <td class="border border-white/15 p-2 text-xs">
+                0–20 dBM (Green)<br />
+                20–35 dBM (Yellow)<br />
+                &gt;35 dBM (Red)
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="spm_status" [searchable]="false" [options]="spmOptions">
+                </app-select>
+
+                <app-input *ngIf="form.get('spm_status')?.value === 'yellow'" formControlName="spm_obs"
+                  placeholder="Enter observation">
+                </app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="spm_remark"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">24</td>
+              <td class="border border-white/15 p-2">Any other observation</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="other_obs_current"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">25</td>
+              <td class="border border-white/15 p-2">Overall Remarks</td>
+
+              <td class="border border-white/15 p-2 space-y-2" colspan="3">
+                <app-select formControlName="overall_current_remark" [searchable]="false" [options]="remarkOptions">
+                </app-select>
+
+                <app-input *ngIf="form.get('overall_current_remark')?.value === 'SAT_OBS'"
+                  formControlName="overall_current_obs" placeholder="Enter observation">
+                </app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="isTableSectionVisible('derrick_winch')">
+        <div class="w-full p-2 flex flex-wrap items-center gap-3 font-semibold bg-[#223654]">
+          <span>DERRICK WINCH</span>
+          <div class="flex items-center gap-2 ml-auto">
+            <label class="text-sm font-medium" for="derrick_winch_position">Position</label>
+            <app-select id="derrick_winch_position" formControlName="derrick_winch_position" [searchable]="false"
+              [options]="derrickWinchPositionOptions" placeholder="--Select--" class="min-w-[140px]"></app-select>
+            <app-input *ngIf="form.get('derrick_winch_position')?.value === 'other'"
+              formControlName="derrick_winch_position_other" placeholder="Specify other"
+              class="min-w-[160px]"></app-input>
+          </div>
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <thead class="bg-[#223654] text-sm">
+            <tr>
+              <th class="border border-white/15 p-2 w-16">Ser</th>
+              <th class="border border-white/15">Parameters</th>
+              <th class="border border-white/15 p-2">Checks</th>
+              <th class="border border-white/15 p-2">Observations</th>
+              <th class="border border-white/15 p-2">Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">1</td>
+              <td class="border border-white/15 p-2">Make</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="ramp_make_winch"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">2</td>
+              <td class="border border-white/15 p-2">Year of Manufacture</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-calendar formControlName="ramp_year_winch" view="year"></app-calendar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">3</td>
+              <td class="border border-white/15 p-2">Condition of Ferrodo Lining on Brake</td>
+              <td class="border border-white/15 p-2">Wear and Tear</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="ferrodo_status1" [searchable]="false" [options]="ObservationsNilOptions"
+                  (valueChange)="handleDerrickNilUnsat('ferrodo_status1', 'ferrodo_remark1', 'ferrodo_obs1')"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('ferrodo_remark1')?.value === 'SAT'">SAT</span>
+                <ng-container *ngIf="form.get('ferrodo_status1')?.value === 'observation'">
+                  <span class="font-medium">UNSAT</span>
+                  <textarea formControlName="ferrodo_obs1" rows="2" class="input-field w-full"
+                    placeholder="Enter alphanumeric details"></textarea>
+                </ng-container>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">4</td>
+              <td class="border border-white/15 p-2">Condition of Gear Box</td>
+              <td class="border border-white/15 p-2">Excessive noise during operation</td>
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="gearbox_status1" [searchable]="false" [options]="noiseObserved"
+                  (valueChange)="handleDerrickNilUnsat('gearbox_status1', 'gearbox_remark1', 'gearbox_obs1')"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('gearbox_remark1')?.value === 'SAT'">SAT</span>
+                <ng-container *ngIf="form.get('gearbox_status1')?.value === 'observation'">
+                  <span class="font-medium">UNSAT</span>
+                  <textarea formControlName="gearbox_obs1" rows="2" class="input-field w-full"
+                    placeholder="Enter alphanumeric details"></textarea>
+                </ng-container>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">5</td>
+              <td class="border border-white/15 p-2">Condition of Motor</td>
+              <td class="border border-white/15 p-2">Insulation resistance of the winding (Numerical value along with
+                symbols eg. >10) M ohms using an Insulator teste</td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-input formControlName="motor_ir_value1" (input)="handleMotorIR()">
+                </app-input>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-input formControlName="motor_ir_remark1"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">6</td>
+              <td class="border border-white/15 p-2">Condition of Deck Plating Foundation</td>
+              <td class="border border-white/15 p-2">
+                Corrosion / Pitting / Unpainted / condition of bonding straps
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="deck_status1" [searchable]="false" [options]="obsOptions"
+                  (valueChange)="handleDerrickDeckFoundation()" placeholder="--Select--">
+                </app-select>
+
+                <div *ngIf="form.get('deck_status1')?.value === 'obs'">
+                  <app-select formControlName="deck_obs_corrosion1" [searchable]="false"
+                    [options]="derrickDeckTypeOptions" placeholder="--Select observation type--">
+                  </app-select>
+
+                  <textarea formControlName="deck_detail1" rows="2" class="input-field w-full"
+                    placeholder="Enter alphanumeric details"></textarea>
+                </div>
+
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('deck_remark1')?.value === 'SAT'">SAT</span>
+                <span *ngIf="form.get('deck_remark1')?.value === 'UNSAT'">UNSAT</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="3">7</td>
+              <td class="border border-white/15 p-2" rowspan="3">
+                Operational Trials
+              </td>
+
+              <td class="border border-white/15 p-2">
+                Speed 1
+                <app-input formControlName="speed1_obs" placeholder="Enter Speed 1 value"></app-input>
+              </td>
+              <td class="border border-white/15 p-2" rowspan="3">
+                <app-input formControlName="ramp_make_winch"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2" rowspan="3">
+                <app-select formControlName="speed_remark" [searchable]="false" [options]="remarkOptions">
+                </app-select>
+
+                <app-input *ngIf="
+        form.get('speed_remark')?.value === 'SAT_OBS' ||
+        form.get('speed_remark')?.value === 'UNSAT'
+      " formControlName="speed_remark_obs" placeholder="Enter observation">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">
+                Speed 2
+                <app-input formControlName="speed2_obs" placeholder="Enter Speed 2 value">
+                </app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">
+                Speed 3
+                <app-input formControlName="speed3_obs" placeholder="Enter Speed 3 value">
+                </app-input>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">8</td>
+              <td class="border border-white/15 p-2">Grease Points</td>
+              <td class="border border-white/15 p-2">
+                Condition of grease nipples – Clean / painted / chocked
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="grease_status1" [searchable]="false" [options]="greaseOptions"
+                  (valueChange)="handleDerrickGreasePoint($event)" placeholder="--Select--" class="w-full"></app-select>
+                <textarea *ngIf="form.get('grease_status1')?.value === 'others'" formControlName="grease_other1"
+                  rows="2" class="input-field w-full" placeholder="Enter alphanumeric details"></textarea>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('grease_remark1')?.value === 'SAT'">SAT</span>
+                <span *ngIf="form.get('grease_remark1')?.value === 'UNSAT'">UNSAT</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="w-full p-2 text-center font-semibold">
+          CBPM PARAMETERS
+        </div>
+        <div class="w-full p-2 font-semibold">
+          Lubrication Oil Status
+        </div>
+        <table class="w-full text-sm border border-white/15 border-collapse">
+          <!-- HEADER -->
+
+          <tbody>
+            <tr>
+              <td class="border border-white/15 p-2">9</td>
+              <td class="border border-white/15 p-2">Oil Being used in Gear Box</td>
+              <td class="border border-white/15 p-2" colspan="3">
+                <app-input formControlName="ramp_make_winch"></app-input>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 p-2">10</td>
+              <td class="border border-white/15 p-2" rowspan="2">Oil Level of Gear Box</td>
+              <td class="border border-white/15 p-2">
+                Oil level should be maintained upto the center of oil eye
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="oil_level_status1" [searchable]="false" [options]="oilLevelOptions"
+                  (valueChange)="handleDerrickOilLevel()" placeholder="--Select--" class="w-full"></app-select>
+                <textarea *ngIf="form.get('oil_level_remark1')?.value === 'SAT_OBS'" formControlName="oil_level_obs1"
+                  rows="2" class="input-field w-full" placeholder="Enter observation"></textarea>
+              </td>
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('oil_level_remark1')?.value === 'SAT'">SAT</span>
+                <span *ngIf="form.get('oil_level_remark1')?.value === 'SAT_OBS'">SAT with observation</span>
+                <span *ngIf="form.get('oil_level_remark1')?.value === 'UNSAT'">UNSAT</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">11</td>
+              <td class="border border-white/15 p-2">
+                Date of last LUB oil changed along with batch no. of Drum
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-calendar formControlName="oil_level_obs1"> </app-calendar>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="oil_level_remark1" [searchable]="false" [options]="satUnsatOptions1">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="10">12</td>
+              <td class="border border-white/15 p-2" rowspan="10">Lub oil analysis parameter</td>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2">Parameters</td>
+              <td class="border border-white/15 p-2">Measured</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="4">(a) Kittiwake</td>
+              <td class="border border-white/15 p-2">Water content</td>
+
+              <td class="border border-white/15 p-2" rowspan="9">
+                <app-input formControlName="kitti_water1"></app-input>
+                <app-file-upload (change)="handleFile($event)" formControlName="kitti_file1"></app-file-upload>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Viscosity (40°C)</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Base Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Acid Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2" rowspan="5">(b) Lab Test</td>
+              <td class="border border-white/15 p-2">Water content</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Viscosity</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Base Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Acid Number</td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">Metal traces</td>
+            </tr>
+
+            <div class="w-full p-2 text-center font-semibold">
+              Current Load Checks
+            </div>
+            <tr>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2"></td>
+              <td class="border border-white/15 p-2">Reference value</td>
+              <td class="border border-white/15 p-2">Measured value</td>
+              <td class="border border-white/15 p-2"></td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">13</td>
+              <td class="border border-white/15 p-2">Starting Current</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="start_current_design1"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="start_current_measured1"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="start_current_remark1" [searchable]="false" [options]="satUnsatOptions1">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">14</td>
+              <td class="border border-white/15 p-2">Running Current</td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="run_current_design1"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-input formControlName="run_current_measured1"></app-input>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="run_current_remark1" [searchable]="false" [options]="satUnsatOptions1">
+                </app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">15</td>
+              <td class="border border-white/15 p-2">Log Book Exist</td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="log_design1" [searchable]="false" [options]="yesNoOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="log_measured1" [searchable]="false" [options]="yesNoOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">16</td>
+              <td class="border border-white/15 p-2">Periodicity of measurement</td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="periodicity_design1" [searchable]="false"
+                  [options]="periodicityOptions1"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+                <app-select formControlName="periodicity_measured1" [searchable]="false"
+                  [options]="periodicityOptions"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2">
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">17</td>
+              <td class="border border-white/15 p-2">SPM</td>
+
+              <td class="border border-white/15 p-2 text-xs">
+                0–20 dBM (Green)<br />
+                20–35 dBM (Yellow)<br />
+                &gt;35 dBM (Red)
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <app-select formControlName="spm_status1" [searchable]="false" [options]="spmOptions"
+                  placeholder="--Select--" class="w-full"></app-select>
+              </td>
+
+              <td class="border border-white/15 p-2 space-y-2">
+                <span *ngIf="form.get('spm_remark1')?.value === 'NA'">NA</span>
+                <span *ngIf="form.get('spm_remark1')?.value === 'SAT'">SAT</span>
+                <ng-container *ngIf="form.get('spm_remark1')?.value === 'SAT_OBS'">
+                  <span>SAT with observation</span>
+                  <textarea formControlName="spm_obs1" rows="2" class="input-field w-full"
+                    placeholder="Enter observation"></textarea>
+                </ng-container>
+                <span *ngIf="form.get('spm_remark1')?.value === 'UNSAT'">UNSAT</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">18</td>
+              <td class="border border-white/15 p-2">Any other observation</td>
+
+              <td colspan="3" class="border border-white/15 p-2">
+                <app-input formControlName="other_obs_current1"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="border border-white/15 p-2">19</td>
+              <td class="border border-white/15 p-2">Overall Remarks</td>
+
+              <td class="border border-white/15 p-2 space-y-2" colspan="3">
+                <app-select formControlName="overall_current_remark1" [searchable]="false" [options]="remarkOptions">
+                </app-select>
+
+                <app-input *ngIf="form.get('overall_current_remark1')?.value === 'SAT_OBS'"
+                  formControlName="overall_current_obs1" placeholder="Enter observation">
+                </app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+    </div>
+  </form>
+
+ <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

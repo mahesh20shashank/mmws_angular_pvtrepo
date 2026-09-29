@@ -1,0 +1,101 @@
+.section-block {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background: #0d2438;
+  padding: 14px;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.iccp-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+}
+
+.iccp-table th,
+.iccp-table td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  min-width: 88px;
+  padding: 6px;
+  vertical-align: middle;
+}
+
+.iccp-table th {
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 700;
+}
+
+.table-title-row th,
+.instruction {
+  background: rgba(97, 194, 255, 0.12) !important;
+  font-weight: 700;
+}
+
+.check-cell {
+  width: 118px;
+  min-width: 118px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  text-align: left;
+}
+
+.iccp-table tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.iccp-table tbody tr:nth-child(even) td .custom-input,
+.iccp-table tbody tr:nth-child(even) td app-select {
+  background: transparent;
+}
+
+.check-note {
+  margin-top: 8px;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.inline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.mini-field,
+.cell-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+:host ::ng-deep .iccp-table .custom-input {
+  min-height: 34px;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+
+@media (max-width: 768px) {
+  .section-block {
+    padding: 10px;
+  }
+
+  .inline-grid {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}

@@ -1,0 +1,41 @@
+/* Developed with Understanding: only what Tailwind utilities and the theme tokens cannot express
+   on their own. Layout, spacing, type, colour and the log's size and scroll are Tailwind classes
+   in the template. Every colour here is a theme token, defined in both theme blocks of styles.css. */
+
+/* Developed with Understanding: the page host is a block so the column layout fills the outlet. */
+:host {
+  display: block;
+}
+
+/* Developed with Understanding: a visible keyboard focus ring on the scrollable process log. It is
+   focusable (tabindex 0) so it can be scrolled from the keyboard, and Tailwind 3 has no outline
+   colour utility that reads a CSS variable without an arbitrary type hint on every state. */
+.hrcdf-log:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* Developed with Understanding: the black console's line colours, in the --console-* tokens only
+   (both theme blocks of styles.css, all AA on black). Written here with two classes rather than
+   as Tailwind utilities because the global light-theme rule "main p, main span { color:
+   inherit }" in styles.css outranks a single utility class and would drop the level colours.
+   The line text inherits --console-text from the log box. */
+.hrcdf-log .hrcdf-log__line {
+  color: var(--console-text);
+}
+
+.hrcdf-log .hrcdf-log__word {
+  color: var(--console-accent);
+}
+
+.hrcdf-log .hrcdf-log__word.hrcdf-log__word--warn {
+  color: var(--console-warn);
+}
+
+.hrcdf-log .hrcdf-log__word.hrcdf-log__word--error {
+  color: var(--console-error);
+}
+
+.hrcdf-log .hrcdf-log__time {
+  color: var(--console-muted);
+}

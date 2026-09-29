@@ -1,0 +1,1240 @@
+<app-form-card
+  title="SEWAGE TREATMENT PLANT/ VACUUM TOILET SYSTEM"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0 pb-12">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-2 gap-3">
+      <!-- <div class="flex flex-col gap-1">
+        <app-select [label]="'Class of Ship*'" formControlName="classOfShip" [searchable]="false"
+          [options]="classOfShipOptions" [disabled]="true">
+        </app-select>
+      </div> -->
+
+      <!-- SHIP STATUS -->
+      <!-- <div class="flex flex-col gap-1">
+        <app-input [label]="'Ship*'" formControlName="ship"
+          class="w-full">
+        </app-input>
+      </div> -->
+    </div>
+
+    <div class="grid grid-cols-3 gap-3">
+      <div class="flex flex-col gap-1">
+        <app-input [label]="'Ship*'" formControlName="ship" class="w-full">
+        </app-input>
+      </div>
+      <!-- Date of conduct of trials  -->
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+      <!--Place of conduct of trials  -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Place of conduct of trials*'"
+          formControlName="place_of_conduct_trail"
+          [options]="locationOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+      <!-- Document No. -->
+      <app-input label="Document No.*" formControlName="document_no">
+      </app-input>
+      <!-- Occasion for conduct of Trials -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Occasion for conduct of Trials*'"
+          formControlName="occasion_of_conduct_trail"
+          [options]="occasionOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input label="Remarks*" formControlName="authority"> </app-input>
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+        ></app-calendar>
+        <div class="file-upload-field gap-1">
+          <app-file-upload
+            [label]="'Upload doc*'"
+            (fileSelected)="handleFile($event)"
+            formControlName="authority_doc"
+          >
+          </app-file-upload>
+        </div>
+      </div>
+    </app-parameter-card>
+
+    <div class="overflow-x-auto border border-white/20 mt-5">
+      <table>
+        <!-- HEADER -->
+        <thead>
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85 w-10">Ser</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Parameter</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Checks</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Observations</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- SECTION -->
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Plant Definition
+            </td>
+          </tr>
+
+          <!-- 1 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Make</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-input
+                formControlName="manufacturer_name"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- 2 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Model</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-input formControlName="model" class="input-field">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Operational Status
+            </td>
+          </tr>
+
+          <!-- 3 MAIN -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" rowspan="3">3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-medium" rowspan="3">
+              Remote Indicator Panel (DCHQ) (Fixed H2S Sensors)
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Electrical Hygiene (Carbon deposit on connectors, pitted lugs.
+              Check tightness of electrical cable connections and fasteners)
+            </td>
+            <td class="p-2 flex gap-4">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="remote_eh"
+                      (change)="onRadioChange(option.value, 'remote_eh_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="remote_eh_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT WITH OBSERVATION' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Functioning of Switches</td>
+            <td class="border flex gap-4 p-2">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="remote_switch"
+                      (change)="onRadioChange(option.value, 'remote_switch_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="remote_switch_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">
+              Functioning of Indicators
+            </td>
+            <td class="flex gap-4 border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="remote_indicator"
+                      (change)="onRadioChange(option.value, 'remote_indicator_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="remote_indicator_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 4 MAIN -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" rowspan="5">4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-medium" rowspan="5">
+              Local Control Panel
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Electrical Hygiene</td>
+            <td class="p-2 flex gap-4">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="local_eh"
+                      (change)="onRadioChange(option.value, 'local_eh_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="local_eh_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT WITH OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- SUB ROWS -->
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Watertight Integrity</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 flex gap-4">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="watertight"
+                      (change)="onRadioChange(option.value, 'watertight_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="watertight_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT WITH OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Locking Arrangement</td>
+            <td class="p-2 flex gap-4">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="locking"
+                      (change)="onRadioChange(option.value, 'locking_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="locking_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT WITH OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Functioning of Switches</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 flex gap-4">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="local_switch"
+                      (change)="onRadioChange(option.value, 'local_switch_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="local_switch_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT WITH OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">
+              Functioning of Indicators
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 flex gap-4">
+              <div class="p-2">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="local_indicator"
+                      (change)="onRadioChange(option.value, 'local_indicator_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="local_indicator_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 1 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">5</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Level Sensors Collection Tank
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Functioning of sensors</td>
+
+            <td class="p-2">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="level_sensor_ops"
+                      (change)="onRadioChange(option.value, 'level_sensor_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="level_sensor_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 2 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">6</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check Level Sensors from ONEGA Panel
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Functioning of Alarm</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="onega_alarm_ops"
+                      (change)="onRadioChange(option.value, 'onega_alarm_remark')"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="onega_alarm_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 3 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">7</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Calibration of Fixed H2S Sensors
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Last calibration undertaken on
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="date"
+                formControlName="fixed_h2s_date"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="fixed_h2s_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 4 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">8</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Calibration of Portable H2S Sensors
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Last calibration undertaken on
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="date"
+                formControlName="portable_h2s_date"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- + Add Option -->
+              <!-- <textarea formControlName="portable_h2s_extra" placeholder="+ Add option"
+                class="input-field mt-2"></textarea> -->
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="portable_h2s_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 5 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">9</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Inspection Glass Cover / level tube
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Check transparency</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="glass_check"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="glass_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 6 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">10</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Log Book</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Updation of log book</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="logbook"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="logbook_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 1 Motor Insulation -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">11</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check for Motor (Macerator, Mixing & Draining, OBD & Chlorine
+              Pumps)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Value to be greater than <b>2 M Ohms</b>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="motor_value"
+                  class="input-field"
+                  (input)="onNumberChange('motor_value', 'macerator_value', 2)"
+                ></app-input>
+                <span class="text-xs">M Ohms</span>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-xs">
+              <app-select
+                formControlName="macerator_value"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 2 SPM -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">12</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              SPM Check of Motor (For Motor Vibration)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-xs">
+              0–20 (Green) <br />
+              20–35 (Yellow) <br />
+              &gt;35 (Red)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="spm_value"
+                [searchable]="false"
+                [options]="[
+                    { label: 'NA', value: 'NA' },
+                    { label: 'Green', value: 'Green' },
+                    { label: 'Yellow', value: 'Yellow' },
+                    { label: 'Red', value: 'Red' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="onSpmChange($event)"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-xs">
+              <app-select
+                formControlName="spm_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'NA', value: 'NA' },
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT_WITH_OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 3 Tank Level Alarm -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">13</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Condition of Tank Level Alarm
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Ops status</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="tank_alarm"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="tank_alarm_remark"
+                [searchable]="false"
+                [options]="[
+                { label: 'SAT', value: 'SAT' },
+                { label: 'UNSAT', value: 'UNSAT' }
+              ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 4 Pressure Gauge -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">14</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Status of Pressure gauge in Priming Line and OBD Pump
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Ops status</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="pressure_gauge"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="pressure_gauge_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Ventilation Arrangement
+            </td>
+          </tr>
+
+          <!-- 5 Ventilation -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">15</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Natural Ventilation Arrangement for Tanks
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check for ventilation arrangement
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="ventilation"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="ventilation_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 16 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">16</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Forced Ventilation of the Tank
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check for ventilation arrangement
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="forced_ventilation"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="forced_ventilation_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 17 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">17</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check for Forced Exhaust Ventilation trunking for Compartment
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Ventilation trunking to reach upto 150 mm above deck
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="exhaust_ventilation"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="exhaust_ventilation_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Structural Assessment
+            </td>
+          </tr>
+
+          <!-- 18 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">18</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Condition of Foundations</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Corrosion / Pitting / Unpainted
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <input
+                type="text"
+                formControlName="foundation_condition"
+                class="input-field"
+              />
+
+              <!-- + Add option -->
+              <app-input
+                formControlName="foundation_extra"
+                placeholder="Enter details"
+                class="input-field mt-2"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="foundation_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with Observation', value: 'SAT_OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 19 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">19</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Date of Last Pressure Test conducted
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of last pressure test</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="date"
+                formControlName="pressure_test_date"
+                class="input-field"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="pressure_test_remark"
+                [searchable]="false"
+                [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 20 -->
+          <!-- 20 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">20</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Pressure Test Certificate / QC Checks Certificate [RKMHI1.1]
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Certificate to be attached by SS
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-file-upload
+                formControlName="pressure_test_certificate"
+                (filesUploaded)="handleFilesUploaded($event)"
+              ></app-file-upload>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Effluent Discharge Test
+            </td>
+          </tr>
+
+          <!-- 21 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">21</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Bio-Oxygen Demand (BOD)</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Less than 50 mg/l</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="bod_value"
+                  class="input-field"
+                  (input)="checkCombinedWaterQuality()"
+                ></app-input>
+                <span class="text-xs">mg/l</span>
+              </div>
+            </td>
+            <td rowspan="3">
+              <app-select
+                formControlName="BOD_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 22 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">22</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Total Suspended Solids</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Less than 100 mg/l</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="tss_value"
+                  class="input-field"
+                  (input)="checkCombinedWaterQuality()"
+                >
+                </app-input>
+                <span class="text-xs">mg/l</span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 23 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">23</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Fecal Coliform Count</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Less than 250 fecal coliform counts/ 100 ml
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="number"
+                formControlName="fecal_value"
+                class="input-field"
+                (input)="checkCombinedWaterQuality()"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- 24 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">24</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check for Effluent Certificate
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of last effluent test</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <!-- MM/YYYY -->
+              <input
+                type="month"
+                formControlName="effluent_date"
+                class="input-field"
+              />
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="effluent_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 25 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">25</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Check for ISPPC</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of last ISPPC test</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="date"
+                formControlName="isppc_date"
+                class="input-field"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="isppc_remark"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <!-- 26 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">26</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Any other observations</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <!-- + Add option -->
+              <app-input
+                formControlName="other_obs_extra"
+                placeholder="Enter details"
+                class="input-field mt-2"
+              ></app-input>
+            </td>
+          </tr>
+
+          <!-- 27 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">27</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">
+              Overall Remarks
+            </td>
+
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="overall"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'SAT with Observation', value: 'SAT_OBS' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

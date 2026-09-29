@@ -1,0 +1,355 @@
+<app-form-card title="TOW WORTHINESS - SUBMARINE" [showPreviousReport]="true" [showBackButton]="true"
+  [showPaginator]="true" [previewMode]="true" [pageScroll]="true">
+
+  <div previewHeader class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]">
+    <button *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment" type="button" (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)">
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+      </span>
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'">
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-'
+        }}
+      </span>
+    </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-3 gap-3">
+      <app-input label="Submarine*" formControlName="submarine">
+      </app-input>
+
+      <app-calendar label="Date of conduct of trials*" formControlName="date_of_conduct_trail">
+      </app-calendar>
+      <!--Place of conduct of trials  -->
+      <div class="flex flex-col gap-1">
+
+
+        <app-select [label]="'Place of conduct of trials *'" formControlName="place_of_conduct_trail"
+          [options]="placesOptions" placeholder="--Select--" class="w-full">
+        </app-select>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <app-input label="Corespondence(fax/letter,etc)*" formControlName="authority">
+        </app-input>
+        <app-calendar label="Date*" formControlName="authority_date" [max]="form.get('date_of_conduct_trail')?.value">
+        </app-calendar>
+
+        <div class="file-upload-field gap-1">
+          <app-file-upload [label]="'Upload doc*'" formControlName="auth_doc"
+            (filesUploaded)="handleFilesUploaded($event)">
+          </app-file-upload>
+        </div>
+      </div>
+    </app-parameter-card>
+
+    <div class="overflow-x-auto border border-white/20 mt-5">
+      <table class="w-full text-sm border border-white/15 border-collapse">
+        <!-- HEADER -->
+
+        <thead>
+          <tr>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2 w-16">Ser</th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2">Checks</th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="2">Observations</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- SECTION -->
+          <tr>
+            <td colspan="5" class="border border-white/15 p-2">
+              Operational Status
+            </td>
+          </tr>
+        </tbody>
+        <tr>
+          <td class="border border-white/15 p-2">1</td>
+          <td class="border border-white/15 p-2">
+            Visual Inspection of Internal U/W Compartments
+          </td>
+
+          <td colspan="3" class="border border-white/15 p-2">
+            <app-input formControlName="visual_inspection"></app-input>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">2</td>
+          <td class="border border-white/15 p-2">Chalk Test WT/ GT Doors, Hatches, Port Holes/ Scuttles</td>
+
+          <td class="border border-white/15 p-2">
+            <app-select formControlName="chalk_test_type" [options]="chalkOptions" placeholder="--Select--"
+              [searchable]="false">
+            </app-select>
+          </td>
+
+          <td class="border border-white/15 p-2">
+            <app-input formControlName="chalk_test_obs" placeholder="Enter observation">
+            </app-input>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">3</td>
+          <td class="border border-white/15 p-2">Towing Arrangements</td>
+
+          <td class="border border-white/15 p-2">
+            <app-dynamic-textarea [form]="form" controlName="towing_arrangements" placeholder="Enter quanity">
+            </app-dynamic-textarea>
+          </td>
+
+          <td class="border border-white/15 p-2">
+            <app-input formControlName="towing_qty" placeholder="Enter Details"></app-input>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">4</td>
+          <td class="border border-white/15 p-2">Weather Deck Fittings</td>
+
+          <td class="border border-white/15 p-2">
+            <app-dynamic-textarea [form]="form" controlName="weather_deck" placeholder="Enter quanity">
+            </app-dynamic-textarea>
+          </td>
+
+          <td class="border border-white/15 p-2">
+            <app-input formControlName="weather_qty" placeholder="Enter Details"></app-input>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">5</td>
+          <td class="border border-white/15 p-2">Vacuum Test Conducted on</td>
+
+          <td colspan="3" class="border border-white/15 p-2">
+            <app-calendar formControlName="vacuum_test_date"></app-calendar>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">6</td>
+          <td class="border border-white/15 p-2">Loose Items on Weather Deck and Internal Compartments</td>
+
+          <td colspan="3" class="border border-white/15 p-2">
+            <app-dynamic-textarea [form]="form" controlName="loose_items" placeholder="Enter details">
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">7</td>
+          <td class="border border-white/15 p-2">Securing of Tank Manhole Covers</td>
+
+          <td colspan="3" class="border border-white/15 p-2">
+            <app-dynamic-textarea [form]="form" controlName="tank_manhole" placeholder="Enter details">
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">8</td>
+          <td class="border border-white/15 p-2">Casing Area (Fwd/Aft/Pressure Hull)</td>
+
+          <td colspan="3" class="border border-white/15 p-2">
+            <app-input formControlName="casing_area"></app-input>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 p-2">9</td>
+          <td class="border border-white/15 p-2">Stability Data</td>
+
+          <td colspan="3" class="border border-white/15 p-2">
+            <app-dynamic-textarea [form]="form" controlName="stability_data" placeholder="Enter details">
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+      </table>
+
+      <table class="w-full text-sm border border-white/15 border-collapse">
+        <!-- HEADER -->
+
+        <thead>
+          <tr>
+            <th class="border border-white/15 p-2 w-16">Ser</th>
+            <th class="border border-white/15">Compartment/ Location/ Equipment</th>
+            <th class="border border-white/15 p-2">Checks</th>
+            <th class="border border-white/15 p-2" colspan="2">Observations</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- SECTION -->
+          <!-- <tr >
+            <td colspan="4" class="border border-white/15 p-2">
+              Visual Inspection of Casing
+            </td>
+          </tr> -->
+
+          <tr>
+            <td colspan="4" class="border border-white/15 p-2 font-semibold">
+              Enclosure to Oi/C HITU(Mbi)
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 p-2">Fax</td>
+            <td class="border border-white/15 p-2">
+              <app-input formControlName="fax_no"></app-input>
+            </td>
+
+            <td class="border border-white/15 p-2">Date</td>
+            <td class="border border-white/15 p-2">
+              <app-calendar formControlName="fax_date"></app-calendar>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="5" class="border border-white/15 p-2 font-semibold text-center">
+              TOW WORTHINESS – SUBMARINE
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 p-2">Submarine</td>
+            <td colspan="4" class="border border-white/15 p-2">
+              <app-input formControlName="submarine_name"></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 p-2">1</td>
+            <!-- <td class="border border-white/15 p-2">Visual Inspection of Casing</td> -->
+
+            <!-- Location -->
+            <td class="border border-white/15 p-2">
+              <app-select formControlName="casing_location" [searchable]="false" [options]="locationOption"
+                placeholder="Select location">
+              </app-select>
+            </td>
+
+            <!-- Nil / Observation -->
+            <td class="border border-white/15 p-2 space-y-2">
+
+              <app-select formControlName="casing_status" [options]="nilObservationOptions" placeholder="--Select--"
+                [searchable]="false">
+              </app-select>
+
+              <!-- Only for Observation -->
+
+
+            </td>
+            <td class="border border-white/15 p-2">
+
+              <app-input *ngIf="form.get('casing_status')?.value === 'observation'" formControlName="casing_obs"
+                placeholder="Enter observation">
+              </app-input>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              Internal Underwater Compartment
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 p-2">2</td>
+            <!-- <td class="border border-white/15 p-2">Compartment</td> -->
+
+            <!-- Dynamic compartments -->
+            <td class="border border-white/15 p-2">
+              <app-dynamic-textarea [form]="form" controlName="internal_compartments"
+                placeholder="Enter compartment names">
+              </app-dynamic-textarea>
+            </td>
+            <td class="border border-white/15 p-2 space-y-2">
+
+              <app-select formControlName="internal_status" [options]="nilObservationOptions" [searchable]="false">
+              </app-select>
+              <div class="mt-2"></div>
+
+            </td>
+            <td class="border border-white/15 p-2">
+              <app-input *ngIf="form.get('internal_status')?.value === 'observation'" formControlName="internal_obs"
+                placeholder="Enter observation">
+              </app-input>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              External Underwater Compartment
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 p-2">3</td>
+            <!-- <td class="border border-white/15 p-2">Compartment</td> -->
+
+            <!-- Dynamic compartments -->
+            <td class="border border-white/15 p-2">
+              <app-dynamic-textarea [form]="form" controlName="external_compartments"
+                placeholder="Enter compartment names">
+              </app-dynamic-textarea>
+            </td>
+
+            <td class="border border-white/15 p-2 space-y-2">
+
+              <app-select formControlName="external_status" [options]="nilObservationOptions" [searchable]="false">
+              </app-select>
+              <div class="mt-2"></div>
+
+            </td>
+            <td class="border border-white/15 p-2">
+              <app-input *ngIf="form.get('external_status')?.value === 'observation'" formControlName="external_obs"
+                placeholder="Enter observation">
+              </app-input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''" [context]="formApiService.context" [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

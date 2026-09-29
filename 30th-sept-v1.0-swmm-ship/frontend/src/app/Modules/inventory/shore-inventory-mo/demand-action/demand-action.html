@@ -1,0 +1,45 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>Demand Action</h3>
+  </div>
+
+  <app-data-grid [rowData]="entries()" [columnDefs]="columnDefs" height="420px" />
+</div>
+
+@if (detailEntry()) {
+  <app-modal size="md" title="Demand Details" (closeModal)="closeDetail()">
+    <div class="da-detail">
+      @for (row of detailRows(); track row.label) {
+        <div class="da-detail-row"><span>{{ row.label }}</span><strong>{{ row.value }}</strong></div>
+      }
+    </div>
+  </app-modal>
+}
+
+@if (approveEntry(); as entry) {
+  <app-modal size="sm" title="Approve Demand" (closeModal)="closeApprove()">
+    <p class="da-modal-text">
+      Are you sure you want to approve demand <strong>{{ entry.ilmsDemandNo || entry.id }}</strong>?
+    </p>
+    <div class="da-modal-actions">
+      <app-button type="button" class="btn-secondary" (click)="closeApprove()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" [disabled]="approving()" (click)="confirmApprove()">
+        {{ approving() ? "Approving..." : "Approve" }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (writeEntry(); as entry) {
+  <app-modal size="sm" title="Write/Edit Demand" (closeModal)="closeWrite()">
+    <p class="da-modal-text">
+      Do you want to write or edit demand <strong>{{ entry.ilmsDemandNo || entry.id }}</strong>?
+    </p>
+    <div class="da-modal-actions">
+      <app-button type="button" class="btn-secondary" (click)="closeWrite()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" (click)="confirmWrite()">Write/Edit</app-button>
+    </div>
+  </app-modal>
+}

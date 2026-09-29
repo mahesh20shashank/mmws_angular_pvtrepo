@@ -1,0 +1,220 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+.obs-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.obs-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.obs-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 260px)) auto;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 700px) {
+  .obs-filters {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+.obs-filters__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Matches <app-select-input>'s fixed 45px trigger height so the two text fields
+   (Pattern Number, Description) line up exactly with the three dropdowns beside them. */
+.form-field-input {
+  height: 45px;
+  box-sizing: border-box;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0 0.65rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  background: var(--bg-input);
+}
+
+.obs-drawer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.obs-drawer-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.obs-drawer-badge {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+}
+
+.obs-drawer-edit {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+}
+
+.obs-drawer-photo {
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+}
+
+.obs-drawer-photo img {
+  max-width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+}
+
+.obs-drawer-photo__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.obs-drawer-fieldset {
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.9rem 0.9rem 0.6rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.obs-drawer-fieldset legend {
+  padding: 0 0.5rem;
+  margin-left: -0.5rem;
+  color: var(--accent-blue, #1d96e9);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.obs-drawer-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.obs-drawer-row strong {
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.obs-modal__title {
+  margin: 0 0 0.25rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.obs-modal__subtitle {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.obs-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+/* The photograph filter's count line. `margin: 0` matters — the element is
+   always in the DOM so it can act as a live region, and without this a browser's default
+   paragraph margin would push the filter row apart even while the line is empty.
+   `--text-muted` is the token this screen already uses for secondary text, and it is the right
+   weight here: the checkbox is the control and this is its readout, so the readout must not
+   compete with it. Contrast measured against --bg-card in both themes — roughly 4.9:1 dark and
+   8.6:1 light, against the 4.5:1 that text needs. */
+.obs-filter-row__note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}

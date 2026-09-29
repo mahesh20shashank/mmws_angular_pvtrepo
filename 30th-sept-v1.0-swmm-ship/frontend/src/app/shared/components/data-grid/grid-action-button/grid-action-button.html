@@ -1,0 +1,11 @@
+<div class="button">
+  @if (params?.onEdit) {
+    <app-button [style.backgroundColor]="backgroundColor" [disabled]="disabled" (click)="$event.stopPropagation(); onEdit()">{{ label }}</app-button>
+  }
+  @if (params?.onDelete && !params?.onEdit) {
+    <app-button [style.backgroundColor]="backgroundColor" [disabled]="disabled" (click)="$event.stopPropagation(); onDelete()">{{ label }}</app-button>
+  }
+  @if (params?.onSecondary) {
+    <app-button [style.backgroundColor]="secondaryBackgroundColor" (click)="$event.stopPropagation(); onSecondary()">{{ secondaryLabel }}</app-button>
+  }
+</div>

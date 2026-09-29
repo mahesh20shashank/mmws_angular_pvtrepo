@@ -1,0 +1,194 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Search Spare</h3>
+    <app-button type="button" class="btn-primary" (click)="addSpare()">+ Add Spare</app-button>
+  </div>
+
+  <form [formGroup]="filtersForm" class="obs-filters" (ngSubmit)="search()">
+    <app-select-input
+      label="Spare Class"
+      placeholder="All"
+      formControlName="spareClass"
+      [options]="spareClasses()"
+    />
+    <app-select-input
+      label="Equipment Class"
+      placeholder="All"
+      formControlName="equipmentClass"
+      [options]="equipmentClasses()"
+    />
+    <!-- THE SUB-DEPARTMENT FILTER - requirement 3.1.
+         Rendered only when there is more than one sub-department to choose between, which means
+         the EXECUTIVE Head of Department and nobody else. Every other department has none, and a
+         Dy HOD confined to one is already scoped to it server-side - a control whose only option
+         is the restriction you are already under is a control that does nothing.
+         "All" is the placeholder and the default, so the Executive HOD's first view is every
+         sub-department together, which is what the requirement asks for. -->
+    @if (showSubDepartmentFilter()) {
+      <app-select-input
+        label="Sub Department"
+        placeholder="All"
+        formControlName="subDepartment"
+        [options]="subDepartmentOptions()"
+      />
+    }
+    <div class="obs-filters__actions">
+      <app-button type="submit" class="btn-primary">Search</app-button>
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">Clear</app-button>
+    </div>
+  </form>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search
+      [value]="filtersForm.controls.q.value"
+      (valueChange)="onGlobalSearchChange($event)"
+    />
+    <div class="grid-toolbar__end">
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!selectedRows().length"
+        (click)="issueMultiple()"
+      >
+        Issue Multiple Spares ({{ selectedRows().length }})
+      </app-button>
+      <app-button type="button" class="btn-icon" title="Print" (click)="printGrid()">
+        <app-icon name="printer" [size]="18" variant="inherit" />
+      </app-button>
+      <app-button type="button" class="btn-icon" title="Export to Excel" (click)="exportExcel()">
+        <app-icon name="sheet" [size]="18" variant="inherit" />
+      </app-button>
+    </div>
+  </div>
+
+  <!-- THE "PHOTOGRAPH NOT UPLOADED" FILTER.
+       Host markup, because the shared grid has no content projection slot and nothing can be put
+       above it from the inside. It reuses `.obs-filter-row` and `.obs-checkbox`, the two global
+       classes the Return, Survey, Demand and IIF screens already use for exactly this — a checkbox
+       filter row sitting between the toolbar and the grid — so this screen gains no bespoke
+       control and no new style beyond the note's own text colour.
+       The label wraps its own input, so the control is named without a `for`/`id` pair to keep in
+       step, and the whole label is a click target rather than the 15px box alone. -->
+  <div class="obs-filter-row">
+    <label class="obs-checkbox">
+      <input
+        type="checkbox"
+        [checked]="photoMissingOnly()"
+        (change)="togglePhotoMissingOnly()"
+      />
+      Photograph not uploaded
+    </label>
+    <!-- The count, and what to do about it. Always in the DOM and empty when
+         the filter is off, rather than being created when it is ticked — a live region has to
+         exist before its content changes for a screen reader to announce the change, so creating
+         it and filling it in the same breath would announce nothing. `role="status"` is polite, so
+         it waits its turn rather than interrupting.
+         The zero case is the empty state this screen never had: it says what the operator is
+         looking at and how to get back, instead of an unexplained blank grid. -->
+    <p class="obs-filter-row__note" role="status">
+      @if (photoMissingOnly()) {
+        @if (visibleSpares().length) {
+          Showing {{ visibleSpares().length }} of {{ spares().length }} spares with no photograph.
+          Open one and use Edit to add its photograph.
+        } @else {
+          All {{ spares().length }} spares in this result already have a photograph. Untick to see
+          them all again.
+        }
+      }
+    </p>
+  </div>
+
+  <app-data-grid
+    [rowData]="visibleSpares()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    [isRowSelectable]="isSpareIssuable"
+    [loading]="searching()"
+    height="480px"
+    (selectionChanged)="onSelectionChanged($event)"
+    (cellClicked)="onCellClicked($event)"
+  />
+</div>
+
+<app-detail-drawer
+  [open]="!!drawerSpare()"
+  [titleMode]="true"
+  [label]="drawerSpare()?.patternNumber ?? ''"
+  [subtitle]="drawerSpare()?.description ?? ''"
+  iconName="wrench"
+  (closed)="closeDrawer()"
+>
+  @if (drawerSpare(); as spare) {
+    <div class="obs-drawer-body">
+      <div class="obs-drawer-topline">
+        <span class="obs-drawer-badge" [style.background]="categoryBadgeColor(spare.category)">
+          {{ spare.category }}
+        </span>
+        <app-button type="button" class="btn-secondary obs-drawer-edit" (click)="editSpare(spare)">
+          <app-icon name="pencil" [size]="13" variant="inherit" /> Edit
+        </app-button>
+      </div>
+
+      <div class="obs-drawer-photo">
+        @if (spare.imageUrl) {
+          <img [src]="spare.imageUrl" [alt]="spare.description || spare.patternNumber" />
+        } @else {
+          <div class="obs-drawer-photo__placeholder">
+            <app-icon name="image" [size]="28" variant="muted" />
+            <span>No photo uploaded</span>
+          </div>
+        }
+      </div>
+
+      <fieldset class="obs-drawer-fieldset">
+        <legend>Stock Details</legend>
+        <div class="obs-drawer-row"><span>Authorized Qty</span><strong>{{ spare.quantityAuthorised }}</strong></div>
+        <div class="obs-drawer-row"><span>Held Qty</span><strong>{{ spare.quantityAvailable }}</strong></div>
+      </fieldset>
+
+      <fieldset class="obs-drawer-fieldset">
+        <legend>Onboard Location</legend>
+        <div class="obs-drawer-row"><span>Compartment</span><strong>{{ spare.compartment || "—" }}</strong></div>
+        <div class="obs-drawer-row"><span>Rack Position</span><strong>{{ spare.rackPosition || "—" }}</strong></div>
+        <div class="obs-drawer-row"><span>Rack Number</span><strong>{{ spare.rackNumber || "—" }}</strong></div>
+        <div class="obs-drawer-row"><span>Box No.</span><strong>{{ spare.location || "—" }}</strong></div>
+      </fieldset>
+
+      <fieldset class="obs-drawer-fieldset">
+        <legend>About Spare</legend>
+        <div class="obs-drawer-row"><span>Equipment Class</span><strong>{{ spare.equipmentClass || "—" }}</strong></div>
+        <div class="obs-drawer-row"><span>Denomination</span><strong>{{ spare.denomination || "—" }}</strong></div>
+        <div class="obs-drawer-row"><span>Authority</span><strong>{{ spare.authority || "—" }}</strong></div>
+        <div class="obs-drawer-row">
+          <span>Criticality</span>
+          <strong>{{ CRITICALITY_STRENGTH_LABEL[spare.criticalityStrength] }}</strong>
+        </div>
+      </fieldset>
+    </div>
+  }
+</app-detail-drawer>
+
+@if (addSpareChoiceOpen()) {
+  <app-modal size="sm" (closeModal)="closeAddSpareChoice()">
+    <h3 class="obs-modal__title">Add Spare</h3>
+    <p class="obs-modal__subtitle">
+      Is this spare already catalogued in your department's inventory?
+    </p>
+    <form [formGroup]="addSpareChoiceForm">
+      <app-radio-input label="" formControlName="choice" [options]="addSpareChoiceOptions" />
+    </form>
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeAddSpareChoice()">Close</app-button>
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!addSpareChoiceValue()"
+        (click)="proceedAddSpare()"
+      >
+        Proceed
+      </app-button>
+    </div>
+  </app-modal>
+}

@@ -1,0 +1,252 @@
+.srar-masters-container {
+  padding: 1.5rem;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.breadcrumb-item.active {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 6px 12px;
+  min-width: 220px;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  width: 100%;
+}
+
+/* Custom Select & Form Input */
+.custom-select,
+.form-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-select option {
+  background: var(--bg-select-option);
+  color: var(--text-primary);
+}
+
+.custom-select:focus,
+.form-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(29, 150, 233, 0.2);
+}
+
+/* Master Tabs Navigation */
+.master-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-nav-child-hover, rgba(255, 255, 255, 0.05));
+}
+
+.tab-btn.active {
+  color: var(--text-primary);
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  font-weight: 600;
+}
+
+/* SRAR Master Table */
+.srar-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.srar-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-input);
+}
+
+.srar-table td {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.srar-table tr:hover td {
+  background: var(--bg-nav-child-hover);
+}
+
+/* Badges & Pills */
+.type-pill {
+  background: var(--bg-icon-btn);
+  border: 1px solid var(--border-primary);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  color: var(--text-primary);
+}
+
+.source-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.badge-info {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38BDF8;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ADE80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-secondary {
+  background: var(--bg-icon-btn);
+  color: var(--text-muted);
+  border: 1px solid var(--border-primary);
+}
+
+/* Action Buttons */
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-icon-btn);
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #FFFFFF;
+}
+
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondary-btn {
+  background: var(--bg-comm-btn, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--border-card, rgba(255, 255, 255, 0.15));
+  color: var(--text-primary);
+}
+
+.secondary-btn:hover {
+  background: var(--bg-comm-btn-hover, rgba(255, 255, 255, 0.12));
+}
+
+/* Form Groups & Modal Styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #2563EB;
+  cursor: pointer;
+}
+
+.modal-dialog-custom {
+  min-width: 380px;
+  max-width: 520px;
+  width: 100%;
+}
+
+
+/* Enhanced Modal Dropdown Alignment */
+.modal-dialog-custom {
+  min-width: 420px;
+  max-width: 560px;
+  width: 100%;
+  overflow: visible !important;
+}
+
+.modal-body-custom {
+  overflow: visible !important;
+  min-height: 240px;
+}

@@ -1,0 +1,141 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* ================= VKT CRANE TABLE STYLING ================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-primary);
+}
+
+th,
+td {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+th {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 10px 14px;
+}
+
+td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+/* Light theme */
+:host-context([data-theme="light"]) th {
+  background-color: rgba(15, 28, 46, 0.04) !important;
+  color: #0f1c2e !important;
+  border-color: rgba(15, 28, 46, 0.14) !important;
+}
+
+:host-context([data-theme="light"]) td {
+  color: #0f1c2e !important;
+  border-color: rgba(15, 28, 46, 0.12) !important;
+}
+
+:host-context([data-theme="light"]) tbody tr:hover td {
+  background-color: rgba(15, 28, 46, 0.02);
+}
+
+/* Dark theme */
+:host-context([data-theme="dark"]) th,
+:host-context(.dark) th {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+:host-context([data-theme="dark"]) td,
+:host-context(.dark) td {
+  color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+:host-context([data-theme="dark"]) tbody tr:hover td,
+:host-context(.dark) tbody tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ================= FOOTER BUTTONS ================= */
+:host ::ng-deep .form-card-footer-btn,
+:host ::ng-deep [formFooter] button {
+  height: 2.25rem;
+  padding-inline: 1.25rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .form-card-footer-btn:disabled,
+:host ::ng-deep [formFooter] button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Light theme footer buttons */
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-table__control {
+  border: 1px solid rgba(15, 28, 46, 0.18) !important;
+  background-color: rgba(15, 28, 46, 0.05) !important;
+  color: #0f1c2e !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-table__control:hover:not(:disabled) {
+  background-color: rgba(15, 28, 46, 0.1) !important;
+  border-color: #1069AB !important;
+  color: #1069AB !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-btn-primary {
+  border: 1px solid #16a34a !important;
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-btn-primary:hover:not(:disabled) {
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+}
+
+/* Dark theme footer buttons */
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-table__control,
+:host-context(.dark) ::ng-deep .pt-glass-table__control {
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-table__control:hover:not(:disabled),
+:host-context(.dark) ::ng-deep .pt-glass-table__control:hover:not(:disabled) {
+  border-color: #61C2FF !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-btn-primary,
+:host-context(.dark) ::ng-deep .pt-glass-btn-primary {
+  border: 1px solid rgba(34, 197, 94, 0.6) !important;
+  background-color: #15803d !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-btn-primary:hover:not(:disabled),
+:host-context(.dark) ::ng-deep .pt-glass-btn-primary:hover:not(:disabled) {
+  background-color: #16a34a !important;
+  border-color: #22c55e !important;
+}
+

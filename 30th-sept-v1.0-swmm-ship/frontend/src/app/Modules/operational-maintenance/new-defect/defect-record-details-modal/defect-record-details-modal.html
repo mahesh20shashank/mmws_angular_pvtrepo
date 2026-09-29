@@ -1,0 +1,46 @@
+<app-modal size="lg" [compact]="true" (closeModal)="onClose()">
+  <div class="drd-modal">
+    <div class="drd-header">
+      <div class="drd-header-main">
+        <span class="drd-header-icon">
+          <app-icon name="file-text" [size]="18" variant="inherit" />
+        </span>
+        <span class="drd-header-title">{{ title }}</span>
+      </div>
+      <button type="button" class="drd-close" (click)="onClose()" aria-label="Close">
+        <app-icon name="x" [size]="18" variant="inherit" />
+      </button>
+    </div>
+
+    <div class="drd-subheader">
+      <span class="drd-dart-no">{{ dartNumber }}</span>
+      <app-status-chip [text]="status" [tone]="statusTone"></app-status-chip>
+    </div>
+
+    <div class="drd-section-label">Digital Defect Book — Record Details</div>
+
+    <div class="drd-grid">
+      @for (field of fields; track field.label) {
+        <div class="drd-field">
+          <div class="drd-field-head">
+            <span class="drd-field-label">{{ field.label }}</span>
+            <span [class]="badgeClass(field.source)">{{ field.source }}</span>
+          </div>
+          <div class="drd-field-value">{{ field.value }}</div>
+        </div>
+      }
+
+      <div class="drd-field drd-field--full">
+        <div class="drd-field-head">
+          <span class="drd-field-label">Defect Description</span>
+          <span class="drd-badge drd-badge--user">User</span>
+        </div>
+        <div class="drd-field-value drd-field-value--multiline">{{ description }}</div>
+      </div>
+    </div>
+
+    <div class="drd-actions">
+      <app-button type="button" class="drd-close-btn" (click)="onClose()">Close</app-button>
+    </div>
+  </div>
+</app-modal>

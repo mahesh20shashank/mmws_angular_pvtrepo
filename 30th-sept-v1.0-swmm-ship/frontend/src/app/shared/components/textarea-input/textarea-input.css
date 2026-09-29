@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.textarea-wrapper {
+  width: 100%;
+}
+
+.textarea-container.active {
+  border-color: var(--text-muted);
+}
+
+.floating-label {
+  position: absolute;
+  left: 16px;
+  top: 6px;
+
+  font-size: 11px;
+  color: var(--text-muted);
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-label.visible {
+
+  top: 6px;
+
+  transform: none;
+
+  font-size: 11px;
+
+  color: var(--text-muted);
+}
+
+.textarea-container {
+  position: relative;
+  width: 100%;
+  padding-top: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+
+  transition: .25s;
+}
+
+textarea {
+  width: 100%;
+  min-height: 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: vertical;
+  overflow-y: auto;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 20px;
+  box-sizing: border-box;
+  padding-left: 16px;
+}
+
+/* Same red as .required in input-field / select-input. */
+.required {
+  color: var(--error-color, #de1f1f);
+}

@@ -1,0 +1,37 @@
+<!-- <div class="mx-auto w-full px-2 py-1">
+  <div class="overflow-hidden border border-blue-950 bg-slate-100 shadow-[0_10px_24px_rgba(15,23,42,0.12)]">
+    <div class="bg-[#1a2b48] px-4 py-2.5 text-sm font-semibold flex items-center justify-between">
+      <div>Return</div>
+      <button type="button" (click)="openInitiateForm()"
+        class="px-4 py-1 rounded-lg bg-blue-700 font-bold shadow-[4px_5px_10px_1.5px_rgba(45,45,45,0.25)] transition-all duration-75 hover:bg-blue-700 active:translate-y-[2px] active:shadow-none"
+        style="box-shadow: 4px 5px 10px 1.5px rgba(45,45,45,0.25)">Initiate</button>
+    </div>
+    <div class="pt-3">
+    </div>
+  </div>
+</div> -->
+<app-paginate-table #paginateTable [title]="'Returns'" [description]="'Manage returns'" [url]="'api/data/returns/'"
+  [addButtons]="addButtons" (addButtonClick)="openInitiateForm()" [showHeaderSection]="true" [showSearch]="true"
+  [columnDefs]="columnDefs" [showPagination]="true">
+</app-paginate-table>
+<app-add-form *ngIf="showCreateLayout" (onTabChange)="onTabChange($event)" [width]="'40vw'" [position]="'top'"
+  [open]="showCreateLayout" [formData]="fromEditData" [fromTitle]="initiateTitle"
+  [formConfig]="formConfigForInitiateTrial" [submitLabel]="'Initiate'" (onSubmit)="handleInitiateSubmit($event)"
+  (onOpenChange)="showCreateLayout = $event" (onFieldChange)="onInitiateFieldChange($event)"></app-add-form>
+
+
+<app-approval-work-flow *ngIf="statusOpen" [showUserPopuphead]="statusOpen" [workflowTrialId]="selectRowData?.uuid"
+  [type]="'returns'" (showUserPopupChange)="statusOpen = $event">
+</app-approval-work-flow>
+
+<!-- Delete Dialog -->
+<app-reusable-delete-dialog [open]="isDeleteDialogOpen" [name]="'Trial #' + deleteItem?.id" entityType="Trial"
+  [loading]="isDeleteLoading" (confirm)="confirmDelete()" (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>
+
+<!-- <app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="selectedWorkflowTrialId"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event">
+</app-approval-work-flow> -->

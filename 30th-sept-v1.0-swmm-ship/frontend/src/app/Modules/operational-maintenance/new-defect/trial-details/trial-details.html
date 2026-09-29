@@ -1,0 +1,70 @@
+@if (show()) {
+  <div class="daf-trial-panel">
+    <div class="daf-trial-panel-head">
+      <span class="daf-trial-panel-dot"></span>
+      <span class="daf-trial-panel-title">Trial Details</span>
+      <span class="daf-trial-panel-sub">— submit equipment &amp; routine to the Trials Module</span>
+    </div>
+
+    @if (savedTrial(); as trial) {
+      <div class="daf-trial-saved">
+        <app-icon name="circle-check-big" [size]="16" variant="success" />
+        <span>Submitted to Trials Module</span>
+        <span class="daf-trial-saved-agency">Trial Agency: <b>{{ trial.agency }}</b></span>
+        <div class="daf-trial-spacer"></div>
+        <app-button type="button" class="daf-icon-btn" title="Remove — withdraw the trial submission" (click)="removeTrial()">
+          <app-icon name="trash-2" [size]="14" variant="danger" />
+        </app-button>
+      </div>
+    }
+
+    <div>
+      <app-button type="button" class="daf-btn daf-btn--primary" (click)="openTrialModal()">
+        <app-icon name="plus" [size]="14" variant="inherit" />{{ savedTrial() ? "Edit Trial" : "Add Trials" }}
+      </app-button>
+    </div>
+  </div>
+}
+
+@if (isTrialModalOpen()) {
+  <app-modal size="lg" (closeModal)="closeTrialModal()">
+    <div class="daf-modal">
+      <div class="daf-modal-head">
+        <span class="daf-modal-title">Add Trials</span>
+        <app-button type="button" class="daf-icon-btn daf-modal-close" (click)="closeTrialModal()">
+          <app-icon name="x" [size]="17" variant="inherit" />
+        </app-button>
+      </div>
+
+      <div class="daf-trial-grid">
+        @for (f of trialAutoFields; track f.label) {
+          <div class="daf-field">
+            <div class="daf-field-head">
+              <span class="daf-field-label">{{ f.label }}</span>
+              <span class="daf-field-badge">{{ f.source }}</span>
+            </div>
+            <app-input-field type="text" [readonly]="true" [ngModel]="f.value" [ngModelOptions]="{ standalone: true }" />
+          </div>
+        }
+      </div>
+
+      <div class="daf-field" [formGroup]="trialForm">
+        <div class="daf-field-head">
+          <span class="daf-field-label">Trial Agency <span class="daf-star">*</span></span>
+        </div>
+        <app-select-input
+          placeholder="Select Trial Agency"
+          [required]="true"
+          [options]="trialAgencyOptions"
+          [error]="trialSubmitAttempted() && trialForm.controls.trialAgency.invalid"
+          formControlName="trialAgency"
+        />
+      </div>
+
+      <div class="daf-form-actions">
+        <app-button type="button" class="daf-btn daf-btn--ghost" (click)="closeTrialModal()">Cancel</app-button>
+        <app-button type="button" class="daf-btn daf-btn--warning" (click)="submitTrial()">Submit for Trials</app-button>
+      </div>
+    </div>
+  </app-modal>
+}

@@ -1,0 +1,487 @@
+<app-help-guidance [bodyHtml]="helpHtml"></app-help-guidance>
+<app-master-card cardTitle="Department-Regulator Hierarchy">
+  <div card-header-actions class="kyr-header-actions">
+    <app-button class="kyr-zoom-btn" type="button" (click)="zoomOut()" title="Zoom out">
+      <app-icon name="minus" [size]="16" variant="inherit" />
+    </app-button>
+    <span class="kyr-zoom-label">{{ (zoomLevel() * 100) | number: '1.0-0' }}%</span>
+    <app-button class="kyr-zoom-btn" type="button" (click)="zoomIn()" title="Zoom in">
+      <app-icon name="plus" [size]="16" variant="inherit" />
+    </app-button>
+    <app-button class="kyr-zoom-btn" type="button" (click)="resetZoom()" title="Reset zoom">
+      <app-icon name="refresh-cw" [size]="16" variant="inherit" />
+    </app-button>
+
+    @if (showEditToggle()) {
+      <app-button class="kyr-mode-btn" type="button" [class.kyr-mode-btn-active]="isEditMode()" (click)="toggleMode()">
+        {{ isEditMode() ? 'View Mode' : 'Edit Mode' }}
+      </app-button>
+    }
+  </div>
+
+  <div
+    #kyrCanvas
+    class="kyr-canvas"
+    [class.kyr-canvas-panning]="isPanning()"
+    (mousedown)="onCanvasMouseDown($event)"
+    (mousemove)="onCanvasMouseMove($event)"
+    (mouseup)="onCanvasMouseUp()"
+    (mouseleave)="onCanvasMouseUp()"
+    (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)"
+    (touchend)="onTouchEnd()"
+  >
+    @if (loading()) {
+      <div class="kyr-empty-state">Loading regulators...</div>
+    } @else if (!departments().length) {
+      <div class="kyr-empty-state">
+        No departments found.
+      </div>
+    } @else {
+      <div
+        class="kyr-tree-wrapper"
+        [style.transform]="'translate(' + panX() + 'px, ' + panY() + 'px) scale(' + zoomLevel() + ')'"
+      >
+        <div class="hierarchy-tree">
+          <div class="root-node">
+            <div class="node-card root-card">
+              <div class="node-content">
+                <span class="node-label">Departments</span>
+              </div>
+              <app-button class="node-toggle" (click)="toggleRootDepartments()"
+                [title]="rootExpanded() ? 'Collapse' : 'Expand'">
+                <app-icon [name]="rootExpanded() ? 'chevron-down' : 'chevron-up'" [size]="12" variant="inherit" style="margin-right: 4px;" />
+                {{ rootExpanded() ? 'COLLAPSE' : 'EXPAND' }}
+              </app-button>
+            </div>
+
+            @if (rootExpanded()) {
+              <div class="root-connector"></div>
+
+              <div class="departments-wrapper">
+                @for (department of departments(); track department.id; let i = $index) {
+                  <div class="department-wrapper">
+                    @if (departments().length > 1) {
+                      <div class="dept-top-connector"></div>
+                    }
+                    <div class="node-card department-card" #deptCard [attr.data-department-id]="department.id">
+                      <div class="node-content">
+                        <span class="node-label">{{ getDepartmentName(department) }}</span>
+                        <span class="regulator-count">
+                          {{ getDepartmentRegulatorsCount(department) }} {{ getDepartmentRegulatorsCount(department) === 1 ? 'Regulator' : 'Regulators' }}
+                        </span>
+                      </div>
+                      <app-button class="node-toggle" (click)="toggleDepartment(department)"
+                        [title]="department.expanded ? 'Collapse' : 'Expand'">
+                        <app-icon [name]="department.expanded ? 'chevron-down' : 'chevron-up'" [size]="12" variant="inherit" style="margin-right: 4px;" />
+                        {{ department.expanded ? 'COLLAPSE' : 'EXPAND' }}
+                      </app-button>
+                      @if (isEditMode()) {
+                        <app-button class="kyr-dept-add-btn" (click)="addRegulator(department)">
+                          <app-icon name="plus" [size]="12" variant="inherit" style="margin-right: 2px;" /> Regulator
+                        </app-button>
+                      }
+                    </div>
+
+                    @if (department.expanded) {
+                      <div class="dept-connector"></div>
+
+                      @if (department.subdepartments && department.subdepartments.length > 0) {
+                        <div class="subdepartments-wrapper">
+                          @for (sub of department.subdepartments; track sub.id) {
+                            <div class="subdepartment-wrapper">
+                              <div class="subdept-top-connector"></div>
+                              <div class="node-card subdepartment-card">
+                                <div class="node-content">
+                                  <span class="node-label">{{ getSubDepartmentName(sub) }}</span>
+                                  <span class="regulator-count">
+                                    {{ getSubDepartmentRegulatorsCount(sub) }} {{ getSubDepartmentRegulatorsCount(sub) === 1 ? 'Regulator' : 'Regulators' }}
+                                  </span>
+                                </div>
+                                <app-button class="node-toggle" (click)="toggleSubDepartment(sub)"
+                                  [title]="sub.expanded ? 'Collapse' : 'Expand'">
+                                  <app-icon [name]="sub.expanded ? 'chevron-down' : 'chevron-up'" [size]="12" variant="inherit" style="margin-right: 4px;" />
+                                  {{ sub.expanded ? 'COLLAPSE' : 'EXPAND' }}
+                                </app-button>
+                                @if (isEditMode()) {
+                                  <app-button class="kyr-dept-add-btn" (click)="addRegulator(department, sub)">
+                                    <app-icon name="plus" [size]="12" variant="inherit" style="margin-right: 2px;" /> Regulator
+                                  </app-button>
+                                }
+                              </div>
+
+                              @if (sub.expanded) {
+                                <div class="subdept-connector"></div>
+
+                                <div class="regulators-wrapper">
+                                  @if (sub.regulators.length === 0) {
+                                    <div class="regulator-wrapper">
+                                      <div class="node-card untagged-card">
+                                        <div class="card-header-bar">{{ getSubDepartmentName(sub) }}</div>
+                                        <div class="card-body-content">
+                                          <div class="kyr-avatar-wrap" title="Regulator Not Tagged">
+                                            <img src="assets/images/regulator.jpg" class="kyr-avatar-img" alt="Regulator" (error)="$event.target.src='assets/images/regulator.jpg'" />
+                                          </div>
+                                          <div class="untagged-info">
+                                            <span class="untagged-title">REGULATOR NOT TAGGED</span>
+                                            <span class="untagged-subtext">TAG A SAILOR AS REGULATOR IN DIVISIONAL ORGANISATION</span>
+                                          </div>
+                                        </div>
+                                        @if (isEditMode()) {
+                                          <app-button class="kyr-add-reg-btn" (click)="addRegulator(department, sub)">
+                                            <app-icon name="plus" [size]="12" variant="inherit" style="margin-right: 2px;" /> Regulator
+                                          </app-button>
+                                        }
+                                      </div>
+                                    </div>
+                                  } @else {
+                                    @for (regulator of sub.regulators; track regulator.id) {
+                                      <div class="regulator-wrapper">
+                                        @if (sub.regulators.length > 1) {
+                                          <div class="reg-connector"></div>
+                                        }
+
+                                        <div class="node-card regulator-card" [attr.data-regulator-card]="true" #regCard>
+                                          <div class="card-header-bar">{{ getSubDepartmentName(sub) }}</div>
+                                          <div class="card-body-content">
+                                            <div class="kyr-avatar-wrap">
+                                              <img src="assets/images/regulator.jpg" class="kyr-avatar-img" alt="Regulator" (error)="$event.target.src='assets/images/regulator.jpg'" />
+                                            </div>
+                                            <div class="regulator-info">
+                                              <span class="regulator-name">{{ regulator.name }}</span>
+                                              @if (regulator.rank || regulator.designation) {
+                                                <span class="regulator-rank-desig">{{ regulator.rank }} {{ regulator.designation }}</span>
+                                              }
+                                              <!-- <app-button class="assign-sailors-btn" type="button" (click)="openRegulator(regulator)">
+                                                <app-icon name="user-check" [size]="12" variant="inherit" /> ASSIGN SAILORS - {{ regulator.assignedCount }}
+                                              </app-button> -->
+                                            </div>
+                                          </div>
+
+                                          @if (isEditMode()) {
+                                            <div class="regulator-actions-row">
+                                              <app-button class="kyr-action-btn kyr-btn-white" type="button" (click)="uploadPhoto($event, regulator)">
+                                                <app-icon name="camera" [size]="10" color="#1e293b" class="mr-1" /> Photo
+                                              </app-button>
+                                              <app-button class="kyr-action-btn kyr-btn-white" type="button" (click)="editRegulatorDetails($event, regulator, department, sub)">
+                                                <app-icon name="pencil" [size]="10" color="#1e293b" class="mr-1" /> Details
+                                              </app-button>
+                                              <app-button class="kyr-action-btn kyr-btn-red" type="button" (click)="unmarkRegulator($event, regulator)">
+                                                <app-icon name="x" [size]="10" color="#ffffff" class="mr-1" /> Unmark
+                                              </app-button>
+                                              <app-button class="kyr-action-btn kyr-btn-red" type="button" (click)="deleteRegulator($event, regulator)">
+                                                <app-icon name="trash-2" [size]="10" color="#ffffff" class="mr-1" /> Delete
+                                              </app-button>
+                                            </div>
+                                          }
+                                        </div>
+                                      </div>
+                                    }
+                                  }
+                                </div>
+                              }
+                            </div>
+                          }
+                        </div>
+                      } @else {
+                        <div class="regulators-wrapper">
+                          @if (department.regulators.length === 0) {
+                            <!-- Untagged Regulator Placeholder Node -->
+                            <div class="regulator-wrapper">
+                              <div class="node-card untagged-card">
+                                <div class="card-header-bar">{{ getDepartmentName(department) }}</div>
+                                <div class="card-body-content">
+                                  <div class="kyr-avatar-wrap" title="Regulator Not Tagged">
+                                    <img src="assets/images/regulator.jpg" class="kyr-avatar-img" alt="Regulator" (error)="$event.target.src='assets/images/regulator.jpg'" />
+                                  </div>
+                                  <div class="untagged-info">
+                                    <span class="untagged-title">REGULATOR NOT TAGGED</span>
+                                    <span class="untagged-subtext">TAG A SAILOR AS REGULATOR IN DIVISIONAL ORGANISATION</span>
+                                  </div>
+                                </div>
+                                @if (isEditMode()) {
+                                  <app-button class="kyr-add-reg-btn" (click)="addRegulator(department)">
+                                    <app-icon name="plus" [size]="12" variant="inherit" style="margin-right: 2px;" /> Regulator
+                                  </app-button>
+                                }
+                              </div>
+                            </div>
+                          } @else {
+                            @for (regulator of department.regulators; track regulator.id) {
+                              <div class="regulator-wrapper">
+                                @if (department.regulators.length > 1) {
+                                  <div class="reg-connector"></div>
+                                }
+
+                                <div class="node-card regulator-card" [attr.data-regulator-card]="true" #regCard>
+                                  <div class="card-header-bar">{{ getDepartmentName(department) }}</div>
+                                  <div class="card-body-content">
+                                    <div class="kyr-avatar-wrap">
+                                      <img src="assets/images/regulator.jpg" class="kyr-avatar-img" alt="Regulator" (error)="$event.target.src='assets/images/regulator.jpg'" />
+                                    </div>
+                                    <div class="regulator-info">
+                                      <span class="regulator-name">{{ regulator.name }}</span>
+                                      @if (regulator.rank || regulator.designation) {
+                                        <span class="regulator-rank-desig">{{ regulator.rank }} {{ regulator.designation }}</span>
+                                      }
+                                      <app-button class="assign-sailors-btn" type="button" (click)="openRegulator(regulator)">
+                                        <app-icon name="user-check" [size]="12" variant="inherit" /> ASSIGN SAILORS - {{ regulator.assignedCount }}
+                                      </app-button>
+                                    </div>
+                                  </div>
+
+                                  @if (isEditMode()) {
+                                    <div class="regulator-actions-row">
+                                      <app-button class="kyr-action-btn kyr-btn-white" type="button" (click)="uploadPhoto($event, regulator)">
+                                        <app-icon name="camera" [size]="10" color="#1e293b" class="mr-1" /> Photo
+                                      </app-button>
+                                      <app-button class="kyr-action-btn kyr-btn-white" type="button" (click)="editRegulatorDetails($event, regulator, department)">
+                                        <app-icon name="pencil" [size]="10" color="#1e293b" class="mr-1" /> Details
+                                      </app-button>
+                                      <app-button class="kyr-action-btn kyr-btn-red" type="button" (click)="unmarkRegulator($event, regulator)">
+                                        <app-icon name="x" [size]="10" color="#ffffff" class="mr-1" /> Unmark
+                                      </app-button>
+                                      <app-button class="kyr-action-btn kyr-btn-red" type="button" (click)="deleteRegulator($event, regulator)">
+                                        <app-icon name="trash-2" [size]="10" color="#ffffff" class="mr-1" /> Delete
+                                      </app-button>
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                            }
+                          }
+                        </div>
+                      }
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</app-master-card>
+
+@if (showSailorModal() && activeRegulator(); as regulator) {
+<app-modal size="lg" (closeModal)="closeSailorModal()">
+  <h3 class="kyr-modal-title">{{ isEditMode() ? 'Assign Sailors' : 'Sailors' }} — {{ regulator.name }}</h3>
+
+  <div class="kyr-modal-body">
+    @if (modalLoading()) {
+    <div class="kyr-empty-state">Loading...</div>
+    } @else if (isEditMode()) {
+    <p class="kyr-modal-hint">Select sailors from the same department to assign to this regulator.</p>
+    @if (allEligibleSailors().length) {
+    <div class="kyr-sailor-checklist">
+      @for (sailor of allEligibleSailors(); track sailor.id) {
+      <label class="kyr-sailor-checkitem">
+                <input
+                  type="checkbox"
+                  [checked]="selectedSailorIds().has(sailor.id)"
+                  (change)="toggleSailorSelection(sailor.id)"
+                />
+        <span>
+          {{ sailor.name }}
+          <span class="kyr-sub-text">({{ sailor.rank }} {{ sailor.designation }} | {{ sailor.personalNumber }})</span>
+        </span>
+      </label>
+      }
+    </div>
+    } @else {
+    <div class="kyr-empty-state">No sailors available in this department.</div>
+    }
+    } @else {
+    @if (assignedSailors().length) {
+    <app-data-grid
+      [rowData]="assignedSailors()"
+      [columnDefs]="sailorColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="280px">
+    </app-data-grid>
+    } @else {
+    <div class="kyr-empty-state">No sailors assigned yet.</div>
+    }
+    }
+  </div>
+
+  <div class="kyr-modal-actions">
+    <app-button class="kyr-btn-secondary" type="button" (click)="closeSailorModal()">
+      {{ isEditMode() ? 'Cancel' : 'Close' }}
+    </app-button>
+    @if (isEditMode()) {
+    <app-button class="kyr-btn-primary" type="button" [disabled]="saving()" (click)="saveAssignments()">
+      {{ saving() ? 'Saving…' : 'Save Assignments' }}
+    </app-button>
+    }
+  </div>
+</app-modal>
+}
+
+<!-- Add Regulator Modal -->
+@if (showAddRegulatorModal() && selectedAddDepartment(); as dept) {
+  <app-add-regulator-modal
+    [department]="dept"
+    [sailorsList]="addRegSailorsList()"
+    [saving]="saving()"
+    [error]="addRegError()"
+    [rankOptions]="rankOptions"
+    (closeModal)="closeAddRegulatorModal()"
+    (markAsRegulators)="confirmMarkAsRegulators($event)"
+    (createManualRegulator)="confirmCreateManualRegulator($event)"
+  ></app-add-regulator-modal>
+}
+
+<!-- Regulator Photo Modal -->
+@if (showPhotoModal() && activePhotoRegulator(); as reg) {
+<app-modal size="md" title="REGULATOR PHOTO" (closeModal)="closePhotoModal()">
+  <div class="ar-modal-body">
+    <h3 class="rp-name">{{ reg.name }}</h3>
+    <p class="ar-section-subtitle">Upload a photo for this regulator. If none is set, the default regulator picture is shown.</p>
+
+    <div class="rp-upload-row">
+      <div class="kyr-avatar-wrap rp-avatar">
+        <img [src]="photoPreview() || 'assets/images/regulator.jpg'" class="kyr-avatar-img" alt="Regulator" (error)="$event.target.src='assests/images/regulator.jpg'" />
+      </div>
+      <div class="rp-file-input">
+        <input type="file" accept="image/*" (change)="onPhotoSelected($event)" />
+      </div>
+    </div>
+  </div>
+
+  <div class="ar-modal-footer">
+    <app-button type="button" variant="outline" (click)="closePhotoModal()">CANCEL</app-button>
+    <app-button type="button" variant="outline" (click)="confirmRemovePhoto()">
+      <app-icon name="trash-2" [size]="14" color="#ef4444" class="mr-1" /> REMOVE PHOTO
+    </app-button>
+    <app-button type="button" variant="primary" [disabled]="saving() || !photoFile()" (click)="confirmSavePhoto()">
+      <app-icon name="camera" [size]="14" color="#ffffff" class="mr-1" />
+      {{ saving() ? 'SAVING…' : 'SAVE PHOTO' }}
+    </app-button>
+  </div>
+</app-modal>
+}
+
+<!-- Edit Regulator Details Modal -->
+@if (showDetailsModal() && activeDetailsRegulator(); as reg) {
+<app-modal size="lg" title="EDIT REGULATOR DETAILS" (closeModal)="closeDetailsModal()">
+  <div class="ar-modal-body">
+    <h3 class="rp-name">{{ reg.name }}</h3>
+
+    <div class="ed-warning-box">
+      <app-icon name="alert-triangle" [size]="16" color="#b45309" />
+      <span>
+        Name, rank, personal number, designation, department and sub-department are stored on this person's profile. Changing them here updates them everywhere in the application, not just on this page. Changing the department or sub-department moves this card to a different branch of the chart.
+      </span>
+    </div>
+
+    <div class="ar-form-grid">
+      <div class="ar-form-group">
+        <label class="ar-form-label" for="edFirstName">FIRST NAME <span class="ar-required">*</span></label>
+        <input
+          id="edFirstName"
+          type="text"
+          class="ar-form-input"
+          [ngModel]="detailsFirstName()"
+          (ngModelChange)="detailsFirstName.set($event)"
+        />
+      </div>
+
+      <div class="ar-form-group">
+        <label class="ar-form-label" for="edLastName">LAST NAME</label>
+        <input
+          id="edLastName"
+          type="text"
+          class="ar-form-input"
+          [ngModel]="detailsLastName()"
+          (ngModelChange)="detailsLastName.set($event)"
+        />
+      </div>
+
+      <div class="ar-form-group">
+        <label class="ar-form-label" for="edDesignation">DESIGNATION</label>
+        <input
+          id="edDesignation"
+          type="text"
+          class="ar-form-input"
+          placeholder="e.g. ME Regulator"
+          [ngModel]="detailsDesignation()"
+          (ngModelChange)="detailsDesignation.set($event)"
+        />
+      </div>
+
+      <div class="ar-form-group">
+        <label class="ar-form-label" for="edRank">RANK</label>
+        <select
+          id="edRank"
+          class="ar-form-input ar-form-select"
+          [ngModel]="detailsRank()"
+          (ngModelChange)="detailsRank.set($event)"
+        >
+          @for (rk of rankOptions; track rk) {
+            <option [value]="rk === '-- No rank --' ? '' : rk" [disabled]="rk === '-- No rank --'">{{ rk }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="ar-form-group ar-form-group-full">
+        <label class="ar-form-label" for="edPersonalNo">PERSONAL NUMBER</label>
+        <input
+          id="edPersonalNo"
+          type="text"
+          class="ar-form-input"
+          [ngModel]="detailsPersonalNumber()"
+          (ngModelChange)="detailsPersonalNumber.set($event)"
+        />
+      </div>
+
+      <div class="ar-form-group">
+        <label class="ar-form-label" for="edDept">DEPARTMENT</label>
+        <select
+          id="edDept"
+          class="ar-form-input ar-form-select"
+          [ngModel]="detailsDepartment()"
+          (ngModelChange)="detailsDepartment.set($event)"
+        >
+          @for (dept of departmentOptions; track dept) {
+            <option [value]="dept">{{ dept }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="ar-form-group">
+        <label class="ar-form-label" for="edSubDept">{{ (detailsDepartment() || 'DEPARTMENT') }} SUB-DEPARTMENT</label>
+        <select
+          id="edSubDept"
+          class="ar-form-input ar-form-select"
+          [ngModel]="detailsSubDepartment()"
+          (ngModelChange)="detailsSubDepartment.set($event)"
+        >
+          @for (sub of getSubDeptOptions(detailsDepartment()); track sub) {
+            <option [value]="sub">{{ sub }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @if (detailsError()) {
+      <div class="ar-form-error">{{ detailsError() }}</div>
+    }
+  </div>
+
+  <div class="ar-modal-footer">
+    <app-button type="button" variant="outline" (click)="closeDetailsModal()">CANCEL</app-button>
+    <app-button
+      type="button"
+      variant="primary"
+      [disabled]="saving()"
+      (click)="confirmSaveDetails()"
+    >
+      <app-icon name="check" [size]="14" color="#ffffff" style="margin-right: 4px;" />
+      {{ saving() ? 'SAVING…' : 'SAVE DETAILS' }}
+    </app-button>
+  </div>
+</app-modal>
+}

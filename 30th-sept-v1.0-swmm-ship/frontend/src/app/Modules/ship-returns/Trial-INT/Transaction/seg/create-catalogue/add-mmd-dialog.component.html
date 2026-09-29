@@ -1,0 +1,244 @@
+<div
+  *ngIf="open"
+  class="pt-glass-dialog-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
+  (click)="onBackdropClick()">
+  <div
+    class="pt-glass-dialog flex max-h-[min(90vh,880px)] w-full max-w-4xl flex-col overflow-hidden rounded-xl"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="add-mmd-dialog-title"
+    (click)="$event.stopPropagation()">
+    <div class="pt-glass-dialog__header shrink-0 px-5 py-3.5">
+      <h2 id="add-mmd-dialog-title" class="text-[1.05rem] font-semibold leading-snug tracking-tight">
+        Add MMD
+      </h2>
+      <p class="pt-glass-text-muted mt-1 text-[13px] leading-relaxed">
+        Select master values and enter application details.
+      </p>
+    </div>
+
+    <div class="pt-glass-dialog__body min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-5 py-4">
+      <form [formGroup]="form" class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="flex flex-col gap-1 md:col-span-2">
+          <label class="form-label" for="ship_id">
+            Ship <span>*</span>
+          </label>
+          <input
+            *ngIf="shipFieldLocked; else shipSelect"
+            type="text"
+            class="custom-input opacity-60"
+            [value]="lockedShipLabel"
+            disabled
+            readonly
+          />
+          <ng-template #shipSelect>
+            <app-select
+              formControlName="ship_id"
+              [options]="shipOptions"
+              placeholder="-- Select Ship --"
+              class="w-full"
+            />
+          </ng-template>
+        </div>
+
+        <div
+          class="add-mmd-dialog__section-heading md:col-span-2"
+          role="heading"
+          aria-level="3"
+        >
+          <span class="add-mmd-dialog__section-bar" aria-hidden="true"></span>
+          <h3 class="add-mmd-dialog__section-title">
+            System Hierarchy
+          </h3>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="department_id">
+            Department <span>*</span>
+          </label>
+          <app-select
+            formControlName="department_id"
+            [options]="departmentOptions"
+            placeholder="-- Select Department --"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="system_id">
+            System <span>*</span>
+          </label>
+          <app-select
+            formControlName="system_id"
+            [options]="systemOptions"
+            placeholder="-- Select System --"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="subsystem_id">
+            Sub System
+          </label>
+          <app-select
+            formControlName="subsystem_id"
+            [options]="subsystemOptions"
+            placeholder="-- Select Sub System --"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="sub_sub_system_id">
+            Sub Sub System
+          </label>
+          <app-select
+            formControlName="sub_sub_system_id"
+            [options]="subSubSystemOptions"
+            placeholder="-- Select Sub Sub System --"
+            class="w-full"
+          />
+        </div>
+
+        <div
+          class="add-mmd-dialog__section-heading md:col-span-2"
+          role="heading"
+          aria-level="3"
+        >
+          <span class="add-mmd-dialog__section-bar" aria-hidden="true"></span>
+          <h3 class="add-mmd-dialog__section-title">
+            MMD Details
+          </h3>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="mmd_type">
+            MMD Type <span>*</span>
+          </label>
+          <app-select
+            formControlName="mmd_type"
+            [options]="mmdTypeOptions"
+            placeholder="-- Select MMD Type --"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="mmd_size">
+            MMD Size <span>*</span>
+          </label>
+          <app-select
+            formControlName="mmd_size"
+            [options]="mmdSizeOptions"
+            placeholder="-- Select MMD Size --"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="mmd_os">
+            MMD OS <span>*</span>
+          </label>
+          <app-select
+            formControlName="mmd_os"
+            [options]="mmdOsOptions"
+            placeholder="-- Select MMD OS --"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="interface">
+            Interface <span>*</span>
+          </label>
+          <app-select
+            formControlName="interface"
+            [options]="interfaceOptions"
+            placeholder="-- Select Interface --"
+            class="w-full"
+          />
+        </div>
+
+        <div
+          class="add-mmd-dialog__section-heading md:col-span-2"
+          role="heading"
+          aria-level="3"
+        >
+          <span class="add-mmd-dialog__section-bar" aria-hidden="true"></span>
+          <h3 class="add-mmd-dialog__section-title">
+            Processing Element Details Section
+          </h3>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="application_name">Application Name</label>
+          <app-input
+            formControlName="application_name"
+            [placeholder]="textPlaceholder"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="application_version">Application Version</label>
+          <app-input
+            formControlName="application_version"
+            [placeholder]="textPlaceholder"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="serial_no">Serial Number</label>
+          <app-input
+            formControlName="serial_no"
+            [placeholder]="textPlaceholder"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="oem_of_module">Make/OEM of Module</label>
+          <app-input
+            formControlName="oem_of_module"
+            [placeholder]="textPlaceholder"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="pattern_number">
+            Pattern Number of Module
+          </label>
+          <app-input
+            formControlName="pattern_number"
+            [placeholder]="textPlaceholder"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="oem_part">
+            OEM Part No of Motherboard
+          </label>
+          <app-input
+            formControlName="oem_part"
+            [placeholder]="textPlaceholder"
+          />
+        </div>
+      </form>
+    </div>
+
+    <div class="pt-glass-dialog__footer flex shrink-0 justify-end gap-3 px-5 py-4">
+      <button
+        type="button"
+        class="pt-glass-table__control rounded-lg px-4 py-2 text-sm font-semibold"
+        [disabled]="saving"
+        (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="rounded-lg border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-[var(--shell-glass-inset)] transition hover:border-emerald-700 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+        [disabled]="saving || masterOptionsLoading || hierarchyLoading"
+        (click)="onSave()">
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  </div>
+</div>

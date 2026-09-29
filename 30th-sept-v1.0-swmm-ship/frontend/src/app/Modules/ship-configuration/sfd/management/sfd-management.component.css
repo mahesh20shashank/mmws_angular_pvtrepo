@@ -1,0 +1,1641 @@
+.mgmt {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mgmt__spacer {
+  flex-grow: 1;
+}
+
+/* Header bar */
+.mgmt__header {
+  padding: 14px;
+}
+
+.mgmt__header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mgmt__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mgmt__title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.mgmt__subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Buttons */
+.mgmt__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s;
+}
+
+.mgmt__btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mgmt__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mgmt__btn--primary {
+  border-color: transparent;
+  background: linear-gradient(180deg, #0e78ba, #0b6bb5);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.mgmt__btn--primary:hover {
+  background: linear-gradient(180deg, #0e78ba, #0b6bb5);
+  filter: brightness(1.05);
+}
+
+.mgmt__back {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* List card */
+.mgmt__list,
+.mgmt__view {
+  padding: 14px;
+}
+
+.mgmt__list-head,
+.mgmt__view-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+/* Unlike .mgmt__list-head (search/filter controls that DO need pushing to the far right),
+   .mgmt__view-head's content (Back button, title, optional status chip) should always cluster
+   together on the left — a trailing .mgmt__spacer still pushes anything after it (e.g. a close
+   button) to the right, since a flex-grow child absorbs free space before justify-content applies. */
+.mgmt__view-head {
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.mgmt__list-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mgmt__list-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mgmt__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 8px 14px;
+  width: 250px;
+}
+
+.mgmt__search input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  width: 100%;
+}
+
+.mgmt__search input::placeholder {
+  color: var(--text-muted);
+}
+
+.mgmt__filters {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.mgmt__filter-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.mgmt__filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mgmt__filter-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-left: 14px;
+}
+
+.mgmt__filter-select {
+  margin-left: 12px;
+}
+
+.mgmt__filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.mgmt__list-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-left: 13px;
+}
+
+.mgmt__type-toggle {
+  display: flex;
+  background: var(--bg-input);
+  border-radius: 9px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.mgmt__type {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.mgmt__type--active {
+  background: rgba(0, 136, 255, 0.25);
+  color: var(--text-primary);
+}
+
+/* Sections (add flow) */
+.mgmt__section {
+  padding: 14px;
+}
+
+.mgmt__section-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+/* The active category's own title inside the dynamic form's head reads one size up from the
+   "Transaction Type"/"Select SFD Category" section headers that share this same base class. */
+.mgmt__form-head .mgmt__section-title {
+  font-size: 16px;
+}
+
+.mgmt__section-desc {
+  margin: 4px 0 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.mgmt__section--row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Transaction Type banner until the user has actually picked Equipment/System — matches the
+   reference design exactly: normal card background, just a bright, clearly-visible red border
+   (no red gradient wash over the card). */
+.mgmt__section--danger {
+  border-color: rgba(255, 86, 94, 0.85);
+}
+
+/* "Select SFD Category" preview shown before a Transaction Type is picked — visible but inert */
+.mgmt__section--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mgmt__section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+  min-width: 220px;
+}
+
+.mgmt__section-heading .mgmt__section-desc {
+  margin: 0;
+}
+
+/* Category picker: inline radio list (not cards) */
+.mgmt__cat-list {
+  display: flex;
+  gap: 16px;
+  row-gap: 12px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+@media (max-width: 1100px) {
+  .mgmt__cat-list {
+    flex-wrap: wrap;
+  }
+}
+
+.mgmt__cat-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  flex: 1 1 0;
+  min-width: 0;
+  /* Reset native <button> chrome — this was a <div role="button">, now a real <button> for a11y. */
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+}
+
+/* Once the active category's form has actually been filled in, switching to a different one
+   would silently discard that data — so every other category locks. */
+.mgmt__cat-option--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mgmt__cat-radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--text-muted);
+  transition: border-color 0.15s;
+}
+
+.mgmt__cat-radio-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.mgmt__cat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mgmt__cat-code {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.mgmt__cat-desc {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 13px;
+  color: var(--text-muted);
+  white-space: normal;
+}
+
+/* Radio cards */
+.mgmt__radios {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.mgmt__radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  /* Reset native <button> chrome — this was a <div role="button">, now a real <button> for a11y. */
+  appearance: none;
+  text-align: left;
+}
+
+.mgmt__radio:disabled {
+  cursor: not-allowed;
+}
+
+.mgmt__radio--active {
+  border-color: rgba(0, 136, 255, 0.6);
+  background: rgba(0, 136, 255, 0.12);
+}
+
+/* Locked while editing an existing record — its Equipment/System type can't change. */
+.mgmt__radio--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mgmt__radio-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+}
+
+.mgmt__radio--active .mgmt__radio-dot {
+  border-color: var(--icon-accent);
+  background:
+    radial-gradient(circle at center, var(--icon-accent) 0 4px, transparent 5px);
+}
+
+/* Form */
+.mgmt__form-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mgmt__form-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+}
+
+/* Survey & Demand/Local Purchase's "Old Equipment Info" / "New Equipment Info" section headings
+   (see displayFieldGroups, sfd-management.component.ts) — a dashed divider similar to
+   .mgmt__form-head's own border-top, so each group reads as its own sub-section without a full
+   card/heading treatment that would compete with the category header above it. */
+.mgmt__group-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 22px 0 14px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border-primary);
+}
+
+.mgmt__group-heading--first {
+  margin-top: 2px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.mgmt__group-heading-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--icon-accent);
+  flex-shrink: 0;
+}
+
+.mgmt__group-heading-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--icon-accent);
+}
+
+.mgmt__hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mgmt__hint-star {
+  color: #dc2626;
+}
+
+.mgmt__form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+}
+
+/* Grid items default to min-width: auto, so a long unbroken mapped value (e.g. a CMMS equipment
+   label) forces its track — and the whole grid/card — wider than the container instead of eliding
+   inside app-select-input's own overflow:hidden. */
+.mgmt__form-grid > .mgmt__field {
+  min-width: 0;
+}
+
+/* Update mode: Compartment Name / Sub Department are the only two fields still editable — an
+   accent border makes that unmistakable next to every other, now-locked field (which only gets a
+   dashed border, easy to miss at a glance). Pierces app-select-input / app-input-field's own view
+   encapsulation since the highlight has to land on their internal box, not this wrapper div. */
+.mgmt__field--editable-highlight ::ng-deep .dropdown-trigger,
+.mgmt__field--editable-highlight ::ng-deep .input-container {
+  border-color: #1d96e9;
+  box-shadow: 0 0 0 2px rgba(29, 150, 233, 0.18);
+}
+
+/* Submit failed on a blank Compartment Name / Sub Department: the accent-highlight border above
+   would otherwise mask that the field is actually invalid, since it applies unconditionally.
+   Higher specificity (3 classes vs. 2) so this wins over both the highlight rule above and
+   app-select-input's own .dropdown-trigger.error, regardless of stylesheet load order. */
+.mgmt__field--editable-highlight ::ng-deep .dropdown-trigger.error,
+.mgmt__field--editable-highlight ::ng-deep .input-container.input-container--invalid {
+  border-color: #f82c36;
+  box-shadow: 0 0 0 2px rgba(248, 44, 54, 0.18);
+}
+
+.mgmt__field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.mgmt__field-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mgmt__req {
+  color: #dc2626;
+}
+
+.mgmt__field-source {
+  font-size: 9px;
+  background: var(--bg-input);
+  border-radius: 5px;
+  padding: 1px 6px;
+}
+
+.mgmt__field-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 42px;
+  padding: 0 13px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+}
+
+.mgmt__field-placeholder {
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.mgmt__form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 16px;
+}
+
+@media (max-width: 1100px) {
+  .mgmt__form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mgmt__field--full {
+  grid-column: 1 / -1;
+}
+
+.mgmt__field-hint {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+/* "Not in the list? Type it in" hint (sfd-management.component.html's "select" case) — the plain
+   .mgmt__field-hint above reads as a barely-visible aside (it's meant to, for the uniqueness-check
+   caption it was built for), but this one is telling the operator about a real capability
+   (free-typing past the dropdown) they'd otherwise have no way to discover — needs to actually be
+   noticed, not blend into the background. Accent blue, not muted grey; same "helpful tip" tone as
+   the icon system's `--icon-accent` token rather than an error/warning color. */
+.mgmt__field-hint--emphasis {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #4AA8FF;
+}
+
+/* "+ Add New Compartment" (same hint styling as .mgmt__field-hint--emphasis above, just on
+   app-button instead of a plain <span> since this one is clickable). app-button's own default
+   (no variant) inner button already resets to `all: unset`, so this mostly just adds the
+   underline-on-hover affordance signalling it's interactive; the rest is a defensive reset in
+   case that default ever changes. */
+.mgmt__field-hint--btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.mgmt__field-hint--btn:hover {
+  text-decoration: underline;
+}
+
+.mgmt__field-error {
+  display: block;
+  margin-top: 5px;
+  font-size: 10.5px;
+  color: #dc2626;
+}
+
+/* Filter button badge + chevron */
+.mgmt__filter-badge {
+  font-size: 10px;
+  color: #4aa8ff;
+  /* Opaque, not the previous low-opacity tint — SonarQube (css:S7924) flags light text on a
+     translucent background since it can't resolve the real (dark) backdrop it composites over. A
+     solid, near-black background pins the actual contrast ratio well above 4.5:1 regardless. */
+  background: #0a2540;
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  border-radius: 100px;
+  padding: 1px 7px;
+}
+
+.mgmt__chevron--up {
+  transform: rotate(180deg);
+}
+
+/* Editing / info banners */
+.mgmt__editing-banner {
+  border-radius: 12px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.1);
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mgmt__editing-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mgmt__editing-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mgmt__editing-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--icon-warning);
+}
+
+.mgmt__editing-sub {
+  font-size: 12px;
+  color: #8a6d3b;
+}
+
+/* Record Edit modal reuses this icon+title+sub head, but its title is a plain modal heading
+   (not an amber "editing in progress" warning) — one size up, default text color. */
+.mgmt__modal-head .mgmt__editing-title {
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.mgmt__modal-head .mgmt__editing-sub {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+/* Edit details section — shows current record info when editing */
+.mgmt__edit-details {
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.mgmt__edit-details-title {
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.mgmt__edit-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.mgmt__edit-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mgmt__edit-detail-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.mgmt__edit-detail-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.mgmt__warning-banner {
+  border-radius: 12px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.08);
+  padding: 13px 16px;
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--text-primary);
+  margin: 12px 0 16px;
+}
+
+.mgmt__offline-banner {
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(248, 44, 54, 0.08);
+  border: 1px solid rgba(248, 44, 54, 0.28);
+}
+
+.mgmt__offline-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mgmt__offline-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.mgmt__offline-sub {
+  font-size: 12px;
+  line-height: 17px;
+  color: #9c4b52;
+}
+
+/* Plain informational popups (e.g. "System Name Auto-Selected") — same tinted-banner shape as
+   .mgmt__offline-banner/.mgmt__warning-banner, in the app-modal title bar's own blue so it reads
+   as "info" rather than "warning"/"error". Body text is a normal readable size/contrast, unlike
+   .mgmt__field-hint (10.5px, muted) which is sized for a small caption under an input, not a
+   modal's main message. */
+.mgmt__info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(29, 150, 233, 0.1);
+  border: 1px solid rgba(29, 150, 233, 0.3);
+}
+
+.mgmt__info-banner-text {
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--text-primary);
+}
+
+/* Light theme's own modal background (--bg-sfd-modal: #f0f7ff) is already a very pale blue, so the
+   dark-theme tint above (rgba(29,150,233,0.1)) barely reads against it — stronger tint here, built
+   from the light theme's own --icon-accent blue (#1069AB) instead of the dark theme's, so it stays
+   visibly a "blue info box" rather than blending into the card. */
+[data-theme="light"] .mgmt__info-banner {
+  background: rgba(16, 105, 171, 0.1);
+  border-color: rgba(16, 105, 171, 0.35);
+}
+
+/* Auto-fetch read-only field display */
+.mgmt__field-control--auto {
+  opacity: 0.65;
+}
+
+.mgmt__readonly-value {
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+  height: 42px;
+  display: flex;
+  align-items: center;
+  padding: 0 13px;
+  border-radius: 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: var(--bg-input);
+}
+
+.mgmt__form-grid--readonly {
+  margin-bottom: 4px;
+}
+
+/* Plain-text detail fields (Approval Detail view) — label above a bold value, no boxed border */
+.mgmt__plain-grid {
+  display: grid;
+  gap: 18px 24px;
+  margin-bottom: 20px;
+}
+
+/* Single 5-column grid — row 2 (INSMA Officer / Approval Date / Last Updated Date) is meant to
+   wrap onto a new row while staying aligned under the first 3 columns of row 1, not spread out
+   across its own independently-sized row. */
+.mgmt__plain-grid--5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 1100px) {
+  .mgmt__plain-grid--5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .mgmt__plain-grid--5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .mgmt__plain-grid--5 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mgmt__plain-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.mgmt__plain-field .mgmt__field-label {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mgmt__plain-value {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+}
+
+/* Yes/No checkbox pill pair */
+.mgmt__check-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 42px;
+  padding: 0 2px;
+}
+
+/* Update mode: only Compartment Name/Sub Department are editable — this Yes/No toggle is locked. */
+.mgmt__check-row--locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mgmt__check-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+  /* Reset native <button> chrome — this was a <div role="button">, now a real <button> for a11y. */
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.mgmt__check-option:disabled {
+  cursor: not-allowed;
+}
+
+.mgmt__check-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgmt__check-dot--active {
+  border-color: var(--icon-accent);
+}
+
+.mgmt__check-dot-inner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.mgmt__check-dot--active .mgmt__check-dot-inner {
+  background: var(--icon-accent);
+}
+
+/* Serial history availability hints */
+.mgmt__hist-link,
+.mgmt__hist-unavail {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 7px;
+  font-size: 11.5px;
+}
+
+.mgmt__hist-link {
+  color: #15803d;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  /* Reset native <button> chrome — this was a <div role="button">, now a real <button> for a11y. */
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+}
+
+.mgmt__hist-unavail {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Remove-flow: maintenance resolution choice */
+.mgmt__remove-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mgmt__remove-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  /* Reset native <button> chrome — this was a <div role="button">, now a real <button> for a11y. */
+  appearance: none;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.mgmt__remove-option--active {
+  border-color: rgba(0, 136, 255, 0.6);
+  background: rgba(0, 136, 255, 0.12);
+}
+
+.mgmt__remove-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mgmt__remove-dot--active {
+  border-color: #0088ff;
+}
+
+.mgmt__remove-dot-inner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.mgmt__remove-dot--active .mgmt__remove-dot-inner {
+  background: #0088ff;
+}
+
+/* Plain table (Remove-flow defects list) */
+.mgmt__plain-table-wrap {
+  overflow-x: auto;
+  margin: 14px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mgmt__plain-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 780px;
+}
+
+.mgmt__plain-table thead tr {
+  background: var(--bg-input);
+}
+
+.mgmt__plain-table th {
+  text-align: left;
+  padding: 11px 14px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.mgmt__plain-table td {
+  padding: 11px 14px;
+  color: var(--text-primary);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.mgmt__link-btn {
+  border: none;
+  background: none;
+  color: #2563eb;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mgmt__link-btn:hover {
+  text-decoration: underline;
+}
+
+/* Record Edit modal */
+.mgmt__modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(560px, 88vw);
+}
+
+/* Read-only Ship Fit Details record view — wide enough for a comfortable 3-column layout,
+   but capped and scrollable so it never overflows the viewport. */
+.mgmt__modal--wide {
+  width: min(920px, 94vw);
+  max-height: 78vh;
+  overflow-y: auto;
+  /* The modal card wrapping this (app-modal) has its own p-6/p-8 padding, which otherwise leaves
+     the scrollbar sitting ~24-32px in from the popup's true right edge. Push it out into that
+     padding and add the same amount back as inner padding, so only the scrollbar moves — the
+     field content stays exactly where it was. */
+  margin-right: -20px;
+  padding-right: 20px;
+}
+
+/* Thin, rounded scrollbar instead of the browser's default bar — same treatment as the grids. */
+.mgmt__modal--wide::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mgmt__modal--wide::-webkit-scrollbar-thumb {
+  background: var(--bg-scrollbar-thumb);
+  border-radius: 20px;
+}
+
+.mgmt__modal--wide::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 560px) {
+  .mgmt__modal--wide .mgmt__form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Recent Activity popup. No width/max-width of its own — <app-modal size="lg"> already sets
+   the modal-card itself to min(720px, 100vw-2rem) and pads its body (p-6/p-8) around whatever
+   is projected into it. This used to also claim min(90vw,700px) on top of that, which on
+   narrower viewports could exceed the padded body's actual available width and get clipped by
+   modal-card's overflow-hidden — the clipped edge sat flush against the card's true right edge
+   while the left edge stayed wherever the body's own left padding put it, i.e. exactly the
+   "line touches the right side but not the left" look. Filling 100% of the body's own width
+   keeps everything (including mgmt__modal-head's border-bottom) symmetric inside it instead. */
+.mgmt__modal--activity {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.mgmt__modal-head {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-primary);
+  flex-shrink: 0;
+}
+
+.mgmt__activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(90vh - 120px);
+  overflow-y: auto;
+  padding: 16px;
+  flex-grow: 1;
+  padding-right: 12px;
+}
+
+.mgmt__activity-row {
+  display: flex;
+  /* Was flex-start — pinned the icon and the date/by meta block to the row's top edge instead
+     of balancing them against the (often taller, 2-line) main content next to them, which read
+     as everything huddling into the row's top corners rather than sitting centered in it. */
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+}
+
+.mgmt__activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Opaque, near-black tinted backgrounds below (not the previous low-opacity rgba tints) — same
+   SonarQube css:S7924 fix as .mgmt__filter-badge above: a solid dark backdrop gives each icon's
+   bright color a verifiable, well-above-4.5:1 contrast ratio instead of an ambiguous translucent one. */
+.mgmt__activity-icon--added {
+  color: #22c55e;
+  background: #0b2818;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.mgmt__activity-icon--removed {
+  color: #f82c36;
+  background: #1c0406;
+  border: 1px solid rgba(248, 44, 54, 0.35);
+}
+
+.mgmt__activity-icon--serialChanged {
+  color: #f59e0b;
+  background: #3a2705;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.mgmt__activity-icon--submitted {
+  color: #4aa8ff;
+  background: #0a2540;
+  border: 1px solid rgba(0, 136, 255, 0.35);
+}
+
+.mgmt__activity-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.mgmt__activity-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mgmt__activity-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.mgmt__activity-detail {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.mgmt__activity-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.mgmt__activity-date {
+  font-size: 11.5px;
+  color: var(--text-primary);
+}
+
+.mgmt__activity-by {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mgmt__modal-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Read-only "view" header variant (Ship Fit Details) — blue/info themed, distinct from the
+   amber "editing" header reused by the Record Edit modal and the Remove wizard. */
+.mgmt__view-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: rgba(0, 136, 255, 0.14);
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mgmt__view-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mgmt__view-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+/* Ship Fit Details (Record View) modal's title reads a size up from the other view-title modals. */
+.mgmt__modal--wide .mgmt__view-title {
+  font-size: 21px;
+  line-height: 1;
+}
+
+.mgmt__view-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mgmt__view-code {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: #2563eb;
+}
+
+.mgmt__modal-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 2px 0 14px;
+}
+
+.mgmt__modal-section-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* "Returned for Correction — Edit & Resubmit" banner (Approval Detail, Returned status only) —
+   also reused by sfdFormTemplate's own "Returned by INSMA" remarks banner (View Full Form,
+   opened from the Approval Tracking grid's eye icon on a Returned/Rejected request). */
+.mgmt__correction-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.mgmt__correction-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mgmt__correction-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #b45309;
+}
+
+.mgmt__correction-desc {
+  margin: 4px 0 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.mgmt__modal-close {
+  margin-left: auto;
+  border: none;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.mgmt__modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mgmt__modal-summary {
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mgmt__modal-summary-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mgmt__modal-summary-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.mgmt__modal-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Equipment History drawer sections */
+.mgmt__hist-sections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.mgmt__hist-section {
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mgmt__hist-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.mgmt__hist-section-icon {
+  flex-shrink: 0;
+}
+
+.mgmt__hist-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mgmt__hist-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mgmt__hist-row-a {
+  font-size: 12px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mgmt__hist-row-b {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+  .mgmt__hist-sections,
+  .mgmt__modal-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Frame Station From/To range */
+.mgmt__frame-range {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mgmt__frame-range-dash {
+  color: #5a7289;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Remove flow: modal overlay */
+.mgmt__remove-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.mgmt__remove-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  /* Reset native <button> chrome — this was a <div role="button">, now a real <button> for a11y. */
+  appearance: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+}
+
+.mgmt__remove-card {
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.mgmt__remove-card--choose {
+  width: min(600px, 94vw);
+}
+
+.mgmt__remove-card--defects {
+  width: min(980px, 96vw);
+  padding: 0;
+}
+
+.mgmt__remove-card--defects .mgmt__view-head {
+  padding: 16px 20px;
+  margin-bottom: 0;
+}
+
+.mgmt__remove-card--defects .mgmt__plain-table-wrap,
+.mgmt__remove-card--defects .mgmt__form-actions {
+  margin: 14px 20px;
+}
+
+.mgmt__remove-card--form {
+  width: min(660px, 94vw);
+}
+
+.mgmt__remove-card--loading {
+  width: min(420px, 90vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.mgmt__remove-loading-text {
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.mgmt__remove-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mgmt__remove-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(248, 44, 54, 0.14);
+  border: 1px solid rgba(248, 44, 54, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mgmt__remove-card-head .mgmt__editing-title {
+  color: var(--text-primary);
+  font-size: 17px;
+}
+
+.mgmt__remove-card-head .mgmt__editing-sub {
+  color: #9c4b52;
+.mgmt__confirm-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.mgmt__confirm-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  width: 100%;
+}
+
+.mgmt__confirm-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.mgmt__confirm-details {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.mgmt__confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.mgmt__confirm-row:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.mgmt__confirm-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.mgmt__confirm-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.mgmt__confirm-warning {
+  font-size: 12px;
+  color: #f59e0b;
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid #f59e0b;
+}
+
+.mgmt__btn--danger {
+  border-color: transparent;
+  background: #dc2626;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.mgmt__btn--danger:hover {
+  background: #b91c1c;
+  filter: brightness(1.05);
+}
+}

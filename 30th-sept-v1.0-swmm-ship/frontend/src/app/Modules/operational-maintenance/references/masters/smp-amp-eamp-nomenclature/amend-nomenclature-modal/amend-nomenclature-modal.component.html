@@ -1,0 +1,66 @@
+<div
+  class="modal-backdrop"
+   tabindex="0" role="button" (keyup.enter)="closeAmendModal()" >
+
+  <div
+    class="modal glass-card"
+     tabindex="0" role="button" (keyup.enter)="$event.stopPropagation()" >
+
+    <div class="modal-header">
+
+      <span>Amend Nomenclature Dates</span>
+
+      <app-button
+        type="button"
+        class="close-btn"
+        (click)="closeAmendModal()">
+        X
+      </app-button>
+
+    </div>
+
+    <form [formGroup]="form">
+
+      <div class="modal-body">
+
+
+        <div>
+          <label for="nomenclature-name" class="readonly-field-label">Nomenclature Name</label>
+          <input id="nomenclature-name" type="text" readonly formControlName="name" class="readonly-field-input" />
+        </div>
+
+        <div>
+          <label for="planned-start-date" class="readonly-field-label">Planned Start Date</label>
+          <input id="planned-start-date" type="date" formControlName="plannedStartDate" class="date-field-input" />
+        </div>
+
+        <div>
+          <label for="planned-end-date" class="readonly-field-label">Planned End Date</label>
+          <input id="planned-end-date" type="date" formControlName="plannedEndDate" class="date-field-input" />
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <app-button
+          type="button"
+          class="secondary-btn"
+          (click)="closeAmendModal()">
+          Close
+        </app-button>
+
+        <app-button
+          type="button"
+          class="submit-button"
+          (click)="saveChanges()">
+          Save
+        </app-button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

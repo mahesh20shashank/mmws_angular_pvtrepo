@@ -1,0 +1,41 @@
+pre_commit_check:
+  extends:
+    - .dev_job
+    - .default_mr_rules
+
+  stage: precheck
+
+  allow_failure: true
+
+  before_script:
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install \
+        --index-url http://172.16.50.12:8081/repository/pypi-group-prod/simple/ \
+        pre-commit
+
+  script:
+    - pre-commit run --all-files
+
+
+# pre-commit-check:
+#   extends:
+#     - .dev_job
+#     - .default_mr_rules
+
+#   stage: precheck
+
+#   allow_failure: true
+
+#   before_script:
+#     - python3 -m venv venv
+#     - source venv/bin/activate
+#     - pip install \
+#       --index-url http://172.16.50.12:8081/repository/pypi-group-prod/simple/ \
+#       pre-commit
+#     - cd frontend
+#     - npm ci
+#     - cd ..
+
+#   script:
+#     - pre-commit run --all-files

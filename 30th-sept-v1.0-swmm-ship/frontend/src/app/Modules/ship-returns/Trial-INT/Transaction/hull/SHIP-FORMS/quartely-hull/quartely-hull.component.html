@@ -1,0 +1,173 @@
+<app-toast></app-toast>
+<app-form-card title="QUARTERLY HULL POTENTIAL DATA OF SHIPS FITTED WITH SACRIFICIAL ANODES" headerColor="#0f172a"
+  textColor="#ffffff" (action)="openApprovalWorkflow()">
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <div class="w-full mt-2">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-4">
+        <!-- Ship Name -->
+        <app-select [label]="'Ship'" formControlName="ship_id" [options]="shipOptions" placeholder="--Select--"
+          [required]="true">
+        </app-select>
+        <!-- Ship Last Undocked -->
+
+        <div class="flex flex-col gap-1">
+          <app-calendar label="Ship Last Undocked" formControlName="ship_last_undocked"></app-calendar>
+        </div>
+
+        <div class="col-span-2">
+          <app-input label="Brief Details of Paint Applied During Last Calibrated Docking"
+            formControlName="brief_details">
+          </app-input>
+        </div>
+
+        <div class="col-span-2">
+          <app-calendar label=" Complete Anti-Corrosive Paint Last Renewed"
+            formControlName="anti_corrosive_paint_renewed"></app-calendar>
+        </div>
+
+        <!-- Type of sacrificial anode -->
+
+        <app-select label="Type of Sacrificial Anode" [required]="true" formControlName="type_of_sacrificial_anode" [options]="anodeOptions" placeholder="--Select--"
+          class="w-full">
+        </app-select>
+
+        <app-select label="Type Reference Electrode Used" [required]="true" formControlName="reference_electrode_used" [options]="referenceElectrodeOptions"
+          placeholder="--Select--" class="w-full">
+        </app-select>
+
+        <app-calendar label="Date of Return" formControlName="date_of_return"></app-calendar>
+
+        <app-select label="Quarterly Ending" [required]="true" formControlName="quarterly_ending" [options]="quarterlyEndingOptions" placeholder="--Select--"
+          class="w-full">
+        </app-select>
+
+        <div class="flex flex-col gap-1 col-span-2">
+          <app-calendar label="Reference Electrode Last Calibrated on*"
+            formControlName="reference_electrode_last_calibrated"></app-calendar>
+        </div>
+      </div>
+
+      <div class="form-section-header">TABLE 1- SACRIFICIAL ANODES</div>
+
+      <!-- SECTION 1: SACRIFICIAL ANODES REPLACED DURING LAST DOCKING -->
+      <div class="my-5">
+        <!-- ROW COUNT INPUT -->
+        <div class="mb-4 flex items-center space-x-4">
+          <label class="form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-1 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="anodesRows"
+            (input)="onAnodesRowChange($event)" (change)="onAnodesRowChange($event)" (keyup)="onAnodesRowChange($event)" />
+        </div>
+
+        <!-- Anodes Table -->
+        <div class="overflow-x-auto w-full">
+          <app-form-input-table-with-headers [data]="anodesData" [columns]="anodesColumns" [headerRows]="anodeHeaderRow"
+            (valueChanged)="updateAnodeActionColumnVisibility()">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handleAnodeTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'firstTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+
+      <!-- SECTION 2: PORTABLE REFERENCE ELECTRODE READINGS -->
+      <div class="mb-6">
+        <div class="form-section-header">
+          PORTABLE REFERENCE ELECTRODE READINGS
+        </div>
+
+        <!-- ROW COUNT INPUT -->
+        <div class="my-4 flex items-center space-x-4">
+          <label class="form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="potentialRows"
+            (input)="onPotentialRowChange($event)" (change)="onPotentialRowChange($event)" (keyup)="onPotentialRowChange($event)" />
+        </div>
+
+        <div class="overflow-x-auto w-full">
+          <app-form-input-table-with-headers [data]="potentialData" [columns]="potentialColumns"
+            [headerRows]="potentialHeaderRow" (valueChanged)="updateHullPotentialColumnVisibility()">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handlePotentialTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'forthTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-5 justify-center">
+    <app-reusable-button label="Back" variant="back" (clicked)="handleBack()">
+    </app-reusable-button>
+    <app-loading-button label="Clear" [color]="'red'" [icon]="restartIcon" (clicked)="clear()"></app-loading-button>
+
+    <app-loading-button label="Save draft" [color]="'blue'" [icon]="draftIcon" [loading]="draftLoading"
+      (clicked)="handleSave('draft')"></app-loading-button>
+
+    <app-loading-button label="Submit for approval" [color]="'green'" [icon]="saveIcon" [loading]="saveLoading"
+      (clicked)="handleSave('save')"></app-loading-button>
+  </div>
+</app-form-card>
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="rowId || form.get('id')?.value || ''" [rowData]="editDataDetails" [context]="editDataDetails"
+  (showUserPopupChange)="onApprovalPopupChange($event)">
+</app-approval-work-flow>
+
+<!-- DELETE DIALOG FOR THE EXISTING ROWS DATA  -->
+<app-reusable-delete-dialog-dynamic-content [open]="tableRowDeleteDialogOpen" title="Delete Row"
+  (close)="closeDeleteDialog()" (confirm)="confirmDelete()">
+  <p>Are you sure you want to delete this row?</p>
+  <p class="text-sm text-red-500">This action cannot be undone.</p>
+</app-reusable-delete-dialog-dynamic-content>

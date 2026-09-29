@@ -1,0 +1,182 @@
+<div class="glass-card p-5 pb-6 flex flex-col min-h-[350px]">
+
+  <!-- ── Header ── -->
+  <div class="mb-4 flex items-center justify-between w-full flex-wrap gap-1">
+
+    <!-- Left: title + chart-type toggle -->
+    <div class="flex items-center gap-1">
+
+      <span class="flex items-center gap-2 text-white text-base font-semibold">
+        <!-- list icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6H20M4 12H20M4 18H20" stroke="white" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        {{ title }}
+      </span>
+
+      <!-- Toggle: Bar / Pie / Line -->
+      <div class="flex items-center gap-[3px] px-[5px] py-[4px] border border-white/30 rounded-[6px]">
+        <!-- BAR -->
+        <app-button (click)="changeChartType('bar')" [ngClass]="
+            chartType === 'bar'
+              ? 'bg-white/20 border border-white/30'
+              : 'hover:bg-white/10'
+          " class="flex items-center justify-center w-[22px] h-[15px] rounded-[4px] transition-all duration-200"
+          title="Bar chart">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <rect x="0" y="4" width="2" height="6" rx="0.5" fill="white" fill-opacity="0.8" />
+            <rect x="3" y="2" width="2" height="8" rx="0.5" fill="white" fill-opacity="0.8" />
+            <rect x="6" y="0" width="2" height="10" rx="0.5" fill="white" fill-opacity="0.8" />
+          </svg>
+        </app-button>
+
+        <!-- PIE -->
+        <app-button (click)="changeChartType('pie')" [ngClass]="
+            chartType === 'pie'
+              ? 'bg-white/20 border border-white/30'
+              : 'hover:bg-white/10'
+          " class="flex items-center justify-center w-[22px] h-[15px] rounded-[4px] transition-all duration-200"
+          title="Pie chart">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <circle cx="5" cy="5" r="4.5" stroke="white" stroke-opacity="0.8" stroke-width="1" />
+            <path d="M5 5 L5 0.5 A4.5 4.5 0 0 1 9.5 5 Z" fill="white" fill-opacity="0.8" />
+          </svg>
+        </app-button>
+
+        <!-- LINE -->
+        <app-button (click)="changeChartType('line')" [ngClass]="
+            chartType === 'line'
+              ? 'bg-white/20 border border-white/30'
+              : 'hover:bg-white/10'
+          " class="flex items-center justify-center w-[22px] h-[15px] rounded-[4px] transition-all duration-200"
+          title="Line chart">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+            <polyline points="0,7 3,3 6,5 10,1" stroke="white" stroke-opacity="0.8" stroke-width="1.2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </app-button>
+      </div>
+    </div>
+
+    <!-- Right: time filter -->
+    <div class="border border-white/30 rounded-[10px] flex items-center px-2 h-[31px]">
+      <div class="relative flex gap-2 items-center">
+
+        <!-- Last 6 Months -->
+        <app-button (click)="selectFilter('6m')" [ngClass]="
+            activeFilter === '6m'
+              ? 'bg-white/10 text-white'
+              : 'text-white/60 hover:bg-white/10'
+          " class="px-2 py-[3px] rounded-[7px] text-[10px] font-medium transition-colors">
+          Last 6 Months
+        </app-button>
+
+        <!-- Last 1 year -->
+        <app-button (click)="selectFilter('1y')" [ngClass]="
+            activeFilter === '1y'
+              ? 'bg-white/10 text-white'
+              : 'text-white/60 hover:bg-white/10'
+          " class="px-2 py-[3px] rounded-[7px] text-[10px] font-medium transition-colors">
+          Last 1 year
+        </app-button>
+
+        <!-- Custom Date -->
+        <app-button (click)="selectFilter('custom')" [ngClass]="
+            activeFilter === 'custom'
+              ? 'bg-white/10 text-white'
+              : 'text-white/60 hover:bg-white/10'
+          " class="px-2 py-[3px] rounded-[7px] text-[10px] font-medium transition-colors">
+          {{ customDateLabel }}
+        </app-button>
+
+        <!-- Popup -->
+        @if (showDatePicker) {
+        <div class="absolute top-[40px] right-0 z-50">
+          <app-date-wheel-picker (dateRangeSelected)="onDateRangeSelected($event)"
+            (closePicker)="showDatePicker = false">
+          </app-date-wheel-picker>
+        </div>
+        }
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Pie Layout ── -->
+  @if (chartType === 'pie') {
+
+  <div class="flex flex-1 items-center gap-4 min-h-[220px]">
+    <div class="relative flex-1 h-[220px]">
+      <canvas baseChart [data]="activeChartData" [options]="activeChartOptions" [type]="chartType">
+      </canvas>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-[6px] text-[11px] min-w-[130px]">
+    @for (item of pieLegendItems; track item.label) {
+    <div class="flex items-center gap-1">
+      <span class="text-white/90 font-semibold w-[36px] text-right tabular-nums">
+        {{ item.value }}
+      </span>
+
+      <span [style.color]="item.color" class="font-semibold w-[42px] tabular-nums">
+        {{ item.pct }}
+      </span>
+
+      <span class="text-white/60 truncate">
+        {{ item.label }}
+      </span>
+    </div>
+    }
+  </div>
+
+  <!-- Pie Legend -->
+  <div class="flex items-center justify-center gap-5 mt-4">
+    @for (item of pieLegendItems; track item.label) {
+    <div class="flex items-center gap-1.5">
+      <span class="w-2 h-2 rounded-full inline-block flex-shrink-0" [style.background-color]="item.color"></span>
+
+      <span class="text-white/60 text-[10px]">
+        {{ item.label }}
+      </span>
+    </div>
+    }
+  </div>
+
+  } @else {
+
+  <!-- Bar / Line -->
+  <div class="relative flex-1 min-h-[220px]">
+    <canvas baseChart [data]="activeChartData" [options]="activeChartOptions" [type]="chartType">
+    </canvas>
+  </div>
+
+  <!-- Legend -->
+  <div class="flex items-center justify-center gap-5 mt-4">
+    <div class="flex items-center gap-1.5">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#1D74D3]"></span>
+      <span class="text-white/60 text-xs">
+        FWD Engine Room
+      </span>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#82C3FF]"></span>
+      <span class="text-white/60 text-xs">
+        AFT Engine Room
+      </span>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#E5F1FF]"></span>
+      <span class="text-white/60 text-xs">
+        OMS
+      </span>
+    </div>
+  </div>
+
+  }
+
+</div>

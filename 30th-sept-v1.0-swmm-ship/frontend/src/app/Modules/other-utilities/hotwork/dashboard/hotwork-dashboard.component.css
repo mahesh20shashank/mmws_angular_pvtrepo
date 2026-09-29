@@ -1,0 +1,203 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.kpi-card-slot {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure select and date picker trigger share identical height and alignment */
+:host ::ng-deep .dp-trigger {
+  height: 42px !important;
+  border-radius: 12px !important;
+  font-size: 12px !important;
+}
+
+/* Force equal height and bottom alignment for app-kpi-card inside hotwork dashboard */
+:host ::ng-deep app-kpi-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  flex: 1 !important;
+}
+
+:host ::ng-deep app-kpi-card .kpi-card {
+  height: 100% !important;
+  min-height: 130px !important;
+  display: flex !important;
+  flex-direction: flex-row !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+
+:host ::ng-deep app-kpi-card .kpi-card > div:first-child {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+:host ::ng-deep app-kpi-card .kpi-bottom-row {
+  margin-top: auto !important;
+  padding-top: 8px !important;
+}
+
+/* View More button — clean link at bottom of card, matches reference image */
+.oc-kpi-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  margin: auto 10px 0;
+  /* Auto margin-top pushes it to the bottom */
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.oc-kpi-card__link:hover {
+  color: var(--text-primary);
+}
+
+/* Top-right drill button — same pattern as .back-btn from login-modal */
+.drill-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  z-index: 20;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.drill-btn:hover {
+  background: var(--bg-comm-btn-hover, rgba(255, 255, 255, 0.05));
+  color: var(--text-primary);
+}
+
+/* Donut chart center label */
+.donut-center-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.donut-total {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  font-family: "Inter", "Poppins", sans-serif;
+}
+
+/* Legend dot squares matching reference image */
+.legend-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* Light mode adaptation for date picker inside hotwork module */
+:host-context([data-theme="light"]) ::ng-deep .dp-calander-wrapper,
+[data-theme="light"] :host ::ng-deep .dp-calander-wrapper {
+  background: var(--bg-dropdown, #ffffff) !important;
+  box-shadow: 0 10px 30px rgba(15, 28, 46, 0.12) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-calendar,
+[data-theme="light"] :host ::ng-deep .dp-calendar {
+  background: var(--bg-dropdown, #ffffff) !important;
+  border: 1px solid var(--border-card, rgba(15, 28, 46, 0.12)) !important;
+  box-shadow: 0 10px 30px rgba(15, 28, 46, 0.12) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-nav__btn,
+[data-theme="light"] :host ::ng-deep .dp-nav__btn {
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-nav__btn:hover,
+[data-theme="light"] :host ::ng-deep .dp-nav__btn:hover {
+  background: rgba(15, 28, 46, 0.08) !important;
+  color: #1D96E9 !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-select,
+[data-theme="light"] :host ::ng-deep .dp-select {
+  background: var(--bg-input, rgba(15, 28, 46, 0.04)) !important;
+  border: 1px solid var(--border-input, rgba(15, 28, 46, 0.15)) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-option,
+[data-theme="light"] :host ::ng-deep .dp-option {
+  background-color: var(--bg-dropdown, #ffffff) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-weekdays span,
+[data-theme="light"] :host ::ng-deep .dp-weekdays span {
+  color: var(--text-muted, #3d5166) !important;
+  font-weight: 600;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day,
+[data-theme="light"] :host ::ng-deep .dp-day {
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day--other-month,
+[data-theme="light"] :host ::ng-deep .dp-day--other-month {
+  color: var(--text-muted, #3d5166) !important;
+  opacity: 0.45;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range),
+[data-theme="light"] :host ::ng-deep .dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range) {
+  background: rgba(26, 163, 242, 0.12) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day--in-range,
+[data-theme="light"] :host ::ng-deep .dp-day--in-range {
+  background: rgba(26, 163, 242, 0.15) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day--range-start,
+:host-context([data-theme="light"]) ::ng-deep .dp-day--range-end,
+[data-theme="light"] :host ::ng-deep .dp-day--range-start,
+[data-theme="light"] :host ::ng-deep .dp-day--range-end {
+  background: #1070ca !important;
+  color: #ffffff !important;
+}
+

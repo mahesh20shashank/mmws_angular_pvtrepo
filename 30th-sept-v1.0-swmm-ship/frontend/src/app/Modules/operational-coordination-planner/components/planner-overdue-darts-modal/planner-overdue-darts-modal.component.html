@@ -1,0 +1,32 @@
+<app-modal size="xl" (closeModal)="close()">
+  <div class="overdue-darts">
+    <div class="overdue-darts__header">
+      <h3>Pending DARTs (Closing Date Passed)</h3>
+      <app-button type="button" class="overdue-darts__close" (click)="close()" title="Close">
+        <app-icon name="x" [size]="18" />
+      </app-button>
+    </div>
+
+    @if (store.overdueDartsLoading()) {
+      <p class="overdue-darts__empty">Loading...</p>
+    } @else if (!store.overdueDarts().length) {
+      <p class="overdue-darts__empty">No overdue pending DARTs found.</p>
+    } @else {
+      <div class="overdue-darts__table-wrap">
+        <app-data-grid
+          [rowData]="store.overdueDarts()"
+          [columnDefs]="overdueDartsColumnDefs"
+          [pagination]="true"
+          [pageSize]="10"
+          height="320px">
+        </app-data-grid>
+      </div>
+    }
+
+    <div class="overdue-darts__footer">
+      <app-button type="button" class="overdue-darts__btn" (click)="close()">
+        Close
+      </app-button>
+    </div>
+  </div>
+</app-modal>

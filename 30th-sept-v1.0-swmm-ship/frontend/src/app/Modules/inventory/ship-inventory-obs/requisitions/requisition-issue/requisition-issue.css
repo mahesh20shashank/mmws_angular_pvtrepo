@@ -1,0 +1,121 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+.obs-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.obs-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.obs-issue-form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.obs-issue-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.obs-multi-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+}
+
+.obs-multi-table th,
+.obs-multi-table td {
+  border: 1px solid var(--border-primary);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  color: var(--text-primary);
+}
+
+.obs-multi-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Row hover, brought to this hand-rolled table so that no ship inventory screen behaves
+   differently under the operator's mouse. Same emphasis, same tokens and the same reasoning as
+   the shared app-data-grid's `.ag-row-hover` rule in data-grid.css - a --row-hover-bg wash for
+   the sweep, plus a 2px --accent-blue rule under the row which is the part that actually
+   carries WCAG 1.4.11's 3:1. A wash strong enough to clear 3:1 on its own would swamp the body
+   text sitting on it. The cue is therefore not colour alone: the row's ordinary base line is
+   1px of --border-primary and the hovered one gains 2px of the accent.
+
+   Applied to the cells rather than to the row because this table sets border-collapse: collapse,
+   under which a <tr> is not a reliable box-shadow box. Each <td> paints its own segment of the
+   rule and the segments meet, so the line reads unbroken across the row. Drawn as an INSET
+   shadow so it costs no layout - no row grows and no cell re-flows on hover.
+
+   tbody only, so the header row is not treated as data. No cursor change and no transition is
+   added - this table has no row-click surface, and the shared grid's hover carries no transition
+   either. */
+.obs-multi-table tbody tr:hover > td {
+  background-color: var(--row-hover-bg);
+  box-shadow: inset 0 -2px 0 0 var(--accent-blue);
+}
+
+.obs-multi-table__qty {
+  width: 90px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  color: var(--text-primary);
+}
+
+.obs-multi-table__qty--invalid {
+  border-color: var(--error-color, #dc3545);
+}
+
+.obs-multi-table__error {
+  display: block;
+  margin-top: 4px;
+  white-space: normal;
+  max-width: 220px;
+}
+
+.obs-issue-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}

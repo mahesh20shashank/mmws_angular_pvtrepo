@@ -1,0 +1,21 @@
+<div [formGroup]="form" class="flex flex-col gap-2">
+  <select
+    [formControlName]="selectControl"
+    class="w-full rounded-md border border-white/20 bg-white/[0.08] px-3 py-2 text-sm text-white outline-none transition focus:border-[#61C2FF] [color-scheme:dark]"
+  >
+    <option value="">Select</option>
+    <option *ngFor="let opt of options" [value]="opt.value">{{ opt.label }}</option>
+  </select>
+
+  <div
+    *ngIf="form.get(selectControl)?.value === triggerValue"
+    class="rounded-lg border border-white/15 bg-white/[0.05] p-2"
+  >
+    <textarea
+      [formControlName]="textareaControl"
+      rows="3"
+      placeholder="Enter observations..."
+      class="w-full resize-none rounded-md border border-white/20 bg-white/[0.08] px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none transition focus:border-[#61C2FF]"
+    ></textarea>
+  </div>
+</div>

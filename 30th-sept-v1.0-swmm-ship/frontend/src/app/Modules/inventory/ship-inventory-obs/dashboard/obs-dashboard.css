@@ -1,0 +1,63 @@
+/* `app-kpi-card`'s root element belongs to that component's own template, not this page's — a
+   scoped selector needs ::ng-deep to reach across that boundary. Cards default to `cardHeight:
+   auto`, so each one's height is only as tall as its own title/description; when tile labels wrap
+   to different numbers of lines, the "View more" links land at different vertical positions
+   despite `.kpi-row`'s grid stretch alignment. Forcing every card to fill the grid cell's height
+   (which grid stretch already sizes to the row's tallest card) re-aligns every "View more" link
+   onto one shared baseline regardless of label length. */
+:host ::ng-deep .kpi-row .kpi-card {
+  height: 100% !important;
+}
+
+/* Page-level rhythm to match the density pass elsewhere (Home's .home-page,
+   KMS's .kms-page): one flex-column gap for inter-section spacing instead of
+   each section carrying its own (larger, inconsistent) margin-bottom. */
+.obs-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.obs-page > app-help-guidance {
+  margin-bottom: 0;
+}
+
+.obs-page > .kpi-row {
+  margin-bottom: 0;
+}
+
+.obs-dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.obs-chart-card {
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.obs-chart-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.obs-chart-card__header span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.obs-chart-card__filter {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}

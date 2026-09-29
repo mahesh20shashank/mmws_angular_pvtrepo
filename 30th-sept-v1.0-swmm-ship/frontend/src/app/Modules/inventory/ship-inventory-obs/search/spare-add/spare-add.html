@@ -1,0 +1,72 @@
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3><app-icon name="settings" [size]="18" variant="success" /> Add Spare</h3>
+    <div class="obs-panel__header-actions">
+      <app-button type="button" class="btn-secondary" (click)="formRef.cancel()">Cancel</app-button>
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="saving() || formRef.formStatus() === 'PENDING' || formRef.form.invalid"
+        (click)="formRef.submit()"
+      >
+        {{ saving() ? "Saving..." : formRef.formStatus() === "PENDING" ? "Checking..." : "Save" }}
+      </app-button>
+    </div>
+  </div>
+
+  @if (patternConflict(); as conflict) {
+    <div class="obs-conflict-banner">
+      <p class="obs-conflict-banner__message">{{ conflict.message }}</p>
+      <p class="obs-conflict-banner__detail">
+        Existing spare: <strong>{{ conflict.existing.patternNumber }}</strong> —
+        {{ conflict.existing.description }}
+        (Qty held {{ conflict.existing.quantityAvailable }} / authorised
+        {{ conflict.existing.quantityAuthorised }})
+      </p>
+      @if (conflict.existing.inUserDepartment) {
+        <a
+          class="obs-conflict-banner__link"
+          [routerLink]="['/afterAuth/inventory/ship-inventory-obs/search', conflict.existing.id, 'edit']"
+        >
+          Open this spare's record instead →
+        </a>
+      } @else {
+        <p class="obs-conflict-banner__note">
+          This pattern number belongs to a spare held by another department — use a
+          different pattern number, or leave the field blank to auto-generate one.
+        </p>
+      }
+    </div>
+  }
+
+  <app-obs-spare-form
+    #formRef
+    [saving]="saving()"
+    [hideActions]="true"
+    (submitted)="onSubmit($event)"
+    (cancelled)="goBack()"
+  />
+</div>
+
+@if (descriptionConflict(); as conflict) {
+  <app-modal size="sm" (closeModal)="dismissDescriptionConflict()">
+    <h3 class="obs-modal__title">Similar Spare Found</h3>
+    <p class="obs-modal__subtitle">{{ conflict.message }}</p>
+    <ul class="obs-conflict-list">
+      @for (existing of conflict.existing; track existing.id) {
+        <li>
+          {{ existing.patternNumber }} — {{ existing.description }}
+          (Held {{ existing.quantityAvailable }})
+        </li>
+      }
+    </ul>
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="dismissDescriptionConflict()">
+        Close
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="saving()" (click)="confirmAddAnyway()">
+        {{ saving() ? "Saving..." : "Add Anyway" }}
+      </app-button>
+    </div>
+  </app-modal>
+}

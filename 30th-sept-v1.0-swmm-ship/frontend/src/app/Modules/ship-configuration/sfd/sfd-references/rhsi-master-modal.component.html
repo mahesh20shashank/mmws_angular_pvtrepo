@@ -1,0 +1,181 @@
+<ng-template #rhsiContent>
+  <div class="rhsi-master" [class.rhsi-master--inline]="inline()">
+    @if (loading()) {
+      <div class="rhsi-master__loading">Loading equipment masters…</div>
+    } @else {
+      @if (inline()) {
+        <div class="rhsi-master__head">
+          <div class="rhsi-master__head-title">
+            <div>
+              <span class="rhsi-master__title">RHSI Master</span>
+              <span class="rhsi-master__summary-chip rhsi-master__summary-chip--ok">Editable</span>
+            </div>
+            <p class="rhsi-master__subheading">Sub Department / Vendor Code / RHSI assignment.</p>
+          </div>
+
+          <div class="rhsi-master__head-actions">
+            @if (dirtyCount() > 0) {
+              <span class="rhsi-master__dirty">{{ dirtyCount() }} row(s) changed</span>
+            }
+            <app-button type="button" class="filter__btn" (click)="showFilters.set(!showFilters())">
+              <app-icon name="funnel" [size]="14" [strokeWidth]="2" />
+              Filters
+              <app-icon [name]="showFilters() ? 'chevron-up' : 'chevron-down'" [size]="12" [strokeWidth]="2" />
+            </app-button>
+            @if (canAutoAssign()) {
+              <app-button
+                type="button"
+                class="filter__btn filter__btn--primary"
+                [disabled]="autoAssigning() || summaryUnassigned() === 0"
+                title="Load-balances every unassigned equipment across its department's existing Sub Departments in one shot — never touches an already-assigned row."
+                (click)="autoAssign()"
+              >
+                <app-icon name="wand-2" variant="inherit" [size]="14" [spin]="autoAssigning()" />
+                {{ autoAssigning() ? "Auto-Assigning…" : "Assign Sub Departments" }}
+              </app-button>
+            }
+            <app-button
+              type="button"
+              class="filter__btn filter__btn--primary"
+              [disabled]="saving() || dirtyCount() === 0"
+              (click)="saveAll()"
+            >
+              {{ saving() ? "Saving…" : "Save (" + dirtyCount() + ")" }}
+            </app-button>
+          </div>
+        </div>
+      }
+
+      <div class="rhsi-master__summary-row">
+        <div class="rhsi-master__summary">
+          <span class="rhsi-master__summary-chip">Total: {{ summaryTotal() }}</span>
+          <span class="rhsi-master__summary-chip rhsi-master__summary-chip--ok">Assigned: {{ summaryAssigned() }}</span>
+          <span class="rhsi-master__summary-chip rhsi-master__summary-chip--warn">Not assigned: {{ summaryUnassigned() }}</span>
+          @for (d of byDepartment(); track d.id) {
+            <span
+              class="rhsi-master__summary-chip"
+              [class.rhsi-master__summary-chip--ok]="d.sub_department_count > 0"
+              [class.rhsi-master__summary-chip--danger]="d.sub_department_count === 0"
+            >
+              {{ d.name }} - {{ d.assigned }}/{{ d.total }} assigned{{ d.unassigned > 0 ? ", " + d.unassigned + " pending" : "" }}{{ d.sub_department_count === 0 ? " - no sub department in masters" : "" }}
+            </span>
+          }
+        </div>
+        @if (!inline()) {
+        <div class="rhsi-master__summary-action">
+          @if (summaryUnassigned() === 0) {
+            <span class="rhsi-master__all-assigned">Every equipment on this page carries a sub department.</span>
+          } @else {
+            <span class="rhsi-master__not-assigned">Assign every equipment before starting STEP 2.</span>
+          }
+          @if (canAutoAssign()) {
+            <app-button
+              type="button"
+              class="rhsi-master__btn rhsi-master__btn--primary rhsi-master__btn--assign"
+              [disabled]="autoAssigning() || summaryUnassigned() === 0"
+              title="Load-balances every unassigned equipment across its department's existing Sub Departments in one shot — never touches an already-assigned row."
+              (click)="autoAssign()"
+            >
+              <app-icon name="wand-2" variant="inherit" [size]="14" [spin]="autoAssigning()" />
+              {{ autoAssigning() ? "Auto-Assigning…" : "Assign Sub Departments" }}
+            </app-button>
+          }
+        </div>
+        }
+      </div>
+
+      @if (canAutoAssign()) {
+        <div class="rhsi-master__hint">
+          <app-icon name="info" variant="accent" [size]="16" />
+          <p>
+            Initialisation is best done from the ADMIN or SHIPADMIN role, which sees every department here. Assign
+            Sub Departments spreads only the unassigned equipment of each department evenly across that department's
+            sub departments, keeping equipment of one section together. It never changes an equipment that already
+            has one. Ship Staff correct any placement from this page afterwards.
+          </p>
+        </div>
+      }
+
+      @if (!inline() || showFilters()) {
+      <div class="rhsi-master__toolbar">
+        <app-select-input
+          label="Department"
+          [options]="departmentFilterOptions()"
+          [ngModel]="selectedDepartment()"
+          (ngModelChange)="onDepartmentFilterChange($event)"
+        />
+        <app-select-input
+          label="Sub Department"
+          [options]="subDepartmentFilterOptions()"
+          [ngModel]="selectedSubDepartment()"
+          (ngModelChange)="selectedSubDepartment.set($event)"
+        />
+        <app-select-input
+          label="Assignment"
+          [options]="assignmentFilterOptions"
+          [ngModel]="assignmentFilter()"
+          (ngModelChange)="assignmentFilter.set($event)"
+        />
+        <div class="form-field rhsi-master__global-search">
+          <label for="rhsiSearch" class="form-label">Search</label>
+          <div class="input-with-icon">
+            <app-icon name="search" class="input-icon"></app-icon>
+            <input
+              class="form-control has-icon"
+              id="rhsiSearch"
+              type="text"
+              placeholder="Search by INS code, name, nomenclature, department…"
+              [ngModel]="globalSearch()"
+              (ngModelChange)="globalSearch.set($event)"
+            />
+          </div>
+        </div>
+        <app-button
+          type="button"
+          class="rhsi-master__btn rhsi-master__btn--secondary rhsi-master__clear-btn"
+          [disabled]="!hasActiveFilters()"
+          (click)="clearFilters()"
+        >
+          <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" />
+          Reset Filters
+        </app-button>
+        @if (!inline()) {
+        <span class="rhsi-master__dirty">{{ dirtyCount() }} row(s) changed</span>
+        <app-button
+          type="button"
+          class="rhsi-master__btn rhsi-master__btn--primary"
+          [disabled]="saving() || dirtyCount() === 0"
+          (click)="saveAll()"
+        >
+          {{ saving() ? "Saving…" : "Save (" + dirtyCount() + ")" }}
+        </app-button>
+        }
+      </div>
+      }
+
+      <app-data-grid
+        [columnDefs]="columnDefs()"
+        [rowData]="filteredRows()"
+        [pageSize]="10"
+        [getRowId]="rowId"
+        [height]="inline() ? '580px' : '55vh'"
+        (gridReady)="onGridReady($event)"
+        (cellClicked)="onGridCellClicked($event)"
+      />
+
+      @if (!inline()) {
+        <div class="rhsi-master__footer">
+          <app-button type="button" class="rhsi-master__btn rhsi-master__btn--secondary" (click)="close()">Close</app-button>
+        </div>
+      }
+    }
+  </div>
+</ng-template>
+
+@if (inline()) {
+  <ng-container [ngTemplateOutlet]="rhsiContent"></ng-container>
+} @else {
+  <app-modal size="xl" title="RHSI Master — Sub Department / Vendor Code / RHSI" (closeModal)="close()">
+    <ng-container [ngTemplateOutlet]="rhsiContent"></ng-container>
+  </app-modal>
+}

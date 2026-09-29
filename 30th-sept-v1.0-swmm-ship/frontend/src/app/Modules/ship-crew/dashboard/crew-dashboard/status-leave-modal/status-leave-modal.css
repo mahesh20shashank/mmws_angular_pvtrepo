@@ -1,0 +1,88 @@
+.slm-title {
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.slm-section-heading {
+  margin: 0.25rem 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: 0.4rem;
+}
+
+.slm-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.slm-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  grid-column: 1 / -1;
+}
+
+.slm-error {
+  display: block;
+  margin-top: 0.3rem;
+  color: #ff6b72;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.slm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+/* `app-file-input`'s own label reads inconsistently next to this modal's plain
+   `.form-field-label` fields — scoped fix, matches `leave-ty-duty.css`'s identical rule. */
+:host ::ng-deep .form-field .input-label,
+:host ::ng-deep .form-field .external-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

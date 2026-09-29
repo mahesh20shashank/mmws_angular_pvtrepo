@@ -1,0 +1,377 @@
+<app-toast></app-toast>
+<app-form-card title="QUARTERLY HULL POTENTIAL DATA OF SHIPS FITTED WITH CONVENTIONAL ICCP SYSTEM" headerColor="#0f172a"
+  textColor="#ffffff" (action)="openApprovalWorkflow()">
+  <!-- FORM CONTENT -->
+
+  <form [formGroup]="form" class="p-0">
+    <div class="w-full">
+      <div class="mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-4">
+          <app-select label="Select Ship" formControlName="ship_id" [options]="shipOptions" placeholder="--Select--"
+            class="w-full">
+          </app-select>
+
+          <app-year-picker label="Year" formControlName="year" [required]="true"></app-year-picker>
+
+          <app-calendar label="Ship Last Undocked" formControlName="ship_last_undocked_date"></app-calendar>
+
+          <app-calendar label="Date of Return" formControlName="date_of_return"></app-calendar>
+          <div class="col-span-2">
+            <app-input label="Brief Details of Paint Applied During Last Docking"
+              formControlName="brief_paint_details_during_last_docking">
+            </app-input>
+          </div>
+          <div class="col-span-2">
+            <app-calendar label="Complete Anti-Corrosive Paint Last Renewed"
+              formControlName="complete_anti_corrosive_last_renewed_date"></app-calendar>
+          </div>
+
+          <app-select label="Type of Reference Electrode Used" formControlName="type_reference_electrode_used" [options]="referenceElectrodeOptions"
+            placeholder="--Select--" class="w-full col-span-2">
+          </app-select>
+
+          <div class="col-span-2">
+            <app-input label="Hull material" formControlName="hull_material">
+            </app-input>
+          </div>
+          <div class="col-span-2">
+            <app-input label="ICCP Anode Material " formControlName="iccp_anode_material">
+            </app-input>
+          </div>
+          <app-select label="Quarter ending" formControlName="quarter_ending" [options]="quarterEndingOptions" placeholder="--Select--"
+            class="w-full col-span-2">
+          </app-select>
+
+          <div class="col-span-2">
+            <app-calendar label="Date of Last Calibration of Portable RE"
+              formControlName="last_calibration_portable_re_date"></app-calendar>
+          </div>
+
+          <div class="col-span-2">
+            <app-input label="Preset Potential in ICCP ACU" formControlName="preset_potential_iccp_acu">
+            </app-input>
+          </div>
+          <div class="col-span-2">
+            <app-input label="OEM of ICCP System" formControlName="oem_iccp_system">
+            </app-input>
+          </div>
+        </div>
+      </div>
+      <!-- //------------------------------------------------------------------------- -->
+
+      <div class="form-section-header">FOR CONVENTIONAL ICCP SYSTEM</div>
+
+      <div class="my-5">
+        <!-- ROW COUNT INPUT -->
+        <div *ngIf="!viewMode" class="mb-4 flex items-center space-x-4">
+          <label class="form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-1 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="iccp_system_rows"
+            (input)="onIccpSystemRowChange($event)" (change)="onIccpSystemRowChange($event)" (keyup)="onIccpSystemRowChange($event)" />
+        </div>
+
+        <!-- Anodes Table -->
+        <div class="overflow-x-auto w-full">
+          <app-form-input-table-with-headers [data]="iccp_system_data" [columns]="iccp_system_columns"
+            [headerRows]="iccp_system_header_Row" (valueChanged)="updateIccpSystemActionColumnVisibility()">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handleIccpSystemTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'firstTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+      <!-- ---------------------------------TABLE 2 SACRIFICAL ANODE -------------------------------------- -->
+
+      <div class="mb-5">
+        <div class="form-section-header mb-3">SACRIFICIAL ANODE</div>
+        <div *ngIf="!viewMode" class="my-4 flex items-center space-x-4">
+          <label class=" form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="sacrificialAnodeRows"
+            (input)="onSacrificialAnodeRowsChange($event)" (change)="onSacrificialAnodeRowsChange($event)" (keyup)="onSacrificialAnodeRowsChange($event)" />
+        </div>
+        <!-- sacrificialAnodeColumns -->
+        <div class="overflow-x-auto w-full">
+          <app-form-input-table-with-headers [data]="sacrificialAnodeData" [columns]="sacrificialAnodeColumns"
+            [headerRows]="sacrificialAnodeHeaderRow" (valueChanged)="updateSacrificialAnodeColumnVisibility()">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handleSacrificialAnodeTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'secondTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <div class="form-section-header">MANUAL OPERATION CHECKS</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 py-4">
+          <app-input label="Total No. of Anodes " formControlName="total_no_of_anodes" type="number">
+          </app-input>
+          <app-input label="No. of REs" formControlName="no_of_res" type="number">
+          </app-input>
+        </div>
+      </div>
+      <!-- ---------------------------------TABLE 3 -------------------------------------- -->
+      <div class="form-section-header-part-two">
+        PART-II HULL POTENTIAL READING AS RECORDED WITH PORTABLE ZINC/ AG/ AGCL
+        REFERENCE ELECTRODE
+      </div>
+      <div class="mb-5">
+        <div class="form-section-header mb-3">ACU Status : OFF</div>
+
+        <!-- ROW COUNT INPUT -->
+        <div *ngIf="!viewMode" class="my-4 flex items-center space-x-4">
+          <label class="form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="potentialRows"
+            (input)="onPotentialRowChange($event)" (change)="onPotentialRowChange($event)" (keyup)="onPotentialRowChange($event)" />
+        </div>
+
+        <div class="overflow-x-auto w-full">
+          <app-form-input-table-with-headers [data]="potentialData" [columns]="potentialColumns"
+            [headerRows]="potentialHeaderRow" (valueChanged)="updateHullPotentialColumnVisibility()">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handlePotentialTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'thirdTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+      <!-- --------------------------------------- FORTH TABLE CONFIGURATION-------------------------------- -->
+      <div class="mb-5">
+        <div class="form-section-header mb-3">ACU Status : ON</div>
+
+        <!-- ROW COUNT INPUT -->
+        <div *ngIf="!viewMode" class="my-4 flex items-center space-x-4">
+          <label class="form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="forthTableRows"
+            (input)="onForthTableRowChange($event)" (change)="onForthTableRowChange($event)" (keyup)="onForthTableRowChange($event)" />
+        </div>
+
+        <div class="overflow-x-auto w-full">
+          <app-form-input-table-with-headers [data]="forthTableData" [columns]="forthTableColumns"
+            [headerRows]="forthTableHeaderRow" (valueChanged)="updateForthTableColumnVisibility()">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handleForthTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'forthTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+
+      <!-- ---------------------------------------PART-III VISUAL INSPECTION-------------------------------- -->
+
+      <div class="form-section-header-part-two">PART-III VISUAL INSPECTION</div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-4 mt-5">
+        <div class="flex flex-col gap-1">
+          <app-calendar label="Date" formControlName="visual_inspection_date"></app-calendar>
+        </div>
+        <div class="col-span-2">
+          <app-input label="Inspection Carried Out By" formControlName="inspection_carried_by">
+          </app-input>
+        </div>
+      </div>
+
+      <div class="form-section-header">INSPECTION REPORT</div>
+      <div class="mb-8 mt-4">
+        <div class="w-full relative overflow-x-auto rounded-lg border border-[var(--border-primary)] bg-[var(--bg-card)]">
+          <table class="w-full min-w-max border-collapse text-sm text-[var(--ag-cell-color)]">
+            <thead>
+              <tr>
+                <th class="border border-[var(--border-primary)] bg-[var(--ag-header-bg)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)] w-16">Sr No.</th>
+                <th class="border border-[var(--border-primary)] bg-[var(--ag-header-bg)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)]">Header</th>
+                <th class="border border-[var(--border-primary)] bg-[var(--ag-header-bg)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)]">Observation</th>
+                <th class="border border-[var(--border-primary)] bg-[var(--ag-header-bg)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)]">Remarks</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--border-primary)] bg-[var(--bg-card)]">
+              <tr class="hover:bg-slate-700/30 transition-colors">
+                <td class="border border-[var(--border-primary)] px-4 py-3 text-center text-sm font-medium text-[var(--ag-cell-color)]">
+                  (a)
+                </td>
+                <td class="border border-[var(--border-primary)] px-4 py-3 text-sm text-[var(--ag-cell-color)]">
+                  Cables
+                </td>
+                <td class="border border-[var(--border-primary)] p-2">
+                  <select formControlName="cables_observation" class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light">
+                    <option value="">--Select--</option>
+                    <option *ngFor="let option of satUnsatOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </td>
+                <td class="border border-[var(--border-primary)] p-2">
+                  <input formControlName="cables_remarks" type="text" class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" />
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30 transition-colors">
+                <td class="border border-[var(--border-primary)] px-4 py-3 text-center text-sm font-medium text-[var(--ag-cell-color)]">
+                  (b)
+                </td>
+                <td class="border border-[var(--border-primary)] px-4 py-3 text-sm text-[var(--ag-cell-color)]">
+                  Conduits
+                </td>
+                <td class="border border-[var(--border-primary)] p-2">
+                  <select formControlName="conduits_observation" class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light">
+                    <option value="">--Select--</option>
+                    <option *ngFor="let option of satUnsatOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </td>
+                <td class="border border-[var(--border-primary)] p-2">
+                  <input formControlName="conduits_remarks" type="text" class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" />
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30 transition-colors">
+                <td class="border border-[var(--border-primary)] px-4 py-3 text-center text-sm font-medium text-[var(--ag-cell-color)]">
+                  (c)
+                </td>
+                <td class="border border-[var(--border-primary)] px-4 py-3 text-sm text-[var(--ag-cell-color)] max-w-xs">
+                  Cofferdams (In case cofferdams are located in the bilges the
+                  same to be offered for inspection to HITU's at every
+                  opportunity of internal underwater inspections)
+                </td>
+                <td class="border border-[var(--border-primary)] p-2">
+                  <select formControlName="cofferdams_observation" class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light">
+                    <option value="">--Select--</option>
+                    <option *ngFor="let option of satUnsatOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </td>
+                <td class="border border-[var(--border-primary)] p-2">
+                  <input formControlName="cofferdams_remarks" type="text" class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-5" [ngClass]="viewMode ? 'justify-start' : 'justify-center'">
+    <app-reusable-button label="Back" variant="back" (clicked)="handleBack()">
+    </app-reusable-button>
+    <app-loading-button *ngIf="!viewMode" label="Clear" [color]="'red'" [icon]="restartIcon"
+      (clicked)="clear()"></app-loading-button>
+    <app-loading-button *ngIf="!viewMode" label="Save draft" [color]="'blue'" [icon]="draftIcon"
+      [loading]="draftLoading" (clicked)="handleSave('draft')"></app-loading-button>
+
+    <app-loading-button *ngIf="!viewMode" label="Submit for approval" [color]="'green'" [icon]="saveIcon"
+      [loading]="saveLoading" (clicked)="handleSave('save')"></app-loading-button>
+  </div>
+</app-form-card>
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="rowId || form.get('id')?.value || ''" [rowData]="editDataDetails" [context]="editDataDetails"
+  (showUserPopupChange)="onApprovalPopupChange($event)">
+</app-approval-work-flow>
+
+<!-- DELETE DIALOG FOR THE EXISTING ROWS DATA  -->
+<app-reusable-delete-dialog-dynamic-content [open]="tableRowDeleteDialogOpen" title="Delete Row"
+  (close)="closeDeleteDialog()" (confirm)="confirmDelete()">
+  <p>Are you sure you want to delete this row?</p>
+  <p class="text-sm text-red-500">This action cannot be undone.</p>
+</app-reusable-delete-dialog-dynamic-content>

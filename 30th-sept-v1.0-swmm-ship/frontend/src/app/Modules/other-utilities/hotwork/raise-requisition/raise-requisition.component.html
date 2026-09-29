@@ -1,0 +1,346 @@
+<div class="hotwork-container  space-y-5">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Header Bar -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <app-button type="button" (click)="goBack()" (keydown.enter)="goBack()"
+        class="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors" title="Go Back">
+        <app-icon name="arrow-left" [size]="20"></app-icon>
+      </app-button>
+      <div class="flex items-center gap-2">
+        <app-icon name="search" [size]="20" class="text-sky-400"></app-icon>
+        <h1 class="text-base sm:text-lg font-bold tracking-wide uppercase text-[var(--text-primary)]">
+          RAISE HOTWORK REQUISITION
+        </h1>
+      </div>
+    </div>
+
+    <!-- Create Draft / DART Action Link Top Right -->
+    <a routerLink="/afterAuth/op-maintenance/defect/actions" (click)="openCreateDraft()"
+      class="flex items-center gap-1 text-xs text-sky-400 hover:text-sky-300 transition-colors font-medium cursor-pointer"
+      title="Create Draft">
+      <app-icon name="plus" [size]="14"></app-icon>
+      <span>Create DART</span>
+    </a>
+  </div>
+
+  <!-- Error Alert -->
+  @if (errorMessage()) {
+  <div
+    class="bg-red-500/20 border border-red-500/50 text-red-300 p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+    <app-icon name="alert-triangle" [size]="16" class="text-red-400"></app-icon>
+    <span>{{ errorMessage() }}</span>
+  </div>
+  }
+
+  <!-- Success Alert -->
+  @if (successMessage()) {
+  <div
+    class="bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+    <app-icon name="check-circle" [size]="16" class="text-emerald-400"></app-icon>
+    <span>{{ successMessage() }}</span>
+  </div>
+  }
+
+  <!-- Main Form Card (3-Column Layout Matching Screenshot) -->
+  <form (ngSubmit)="onSubmit()" class="glass-card p-6 rounded-[12px] space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 items-start">
+
+      <!-- ==================== ROW 1 ==================== -->
+      <!-- Col 1: Requisition Type * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Requisition Type" [required]="true" placeholder="Select Requisition Type"
+          [options]="formattedRequisitionTypeOptions()" [ngModel]="requisitionType()"
+          (ngModelChange)="requisitionType.set($event)" name="requisitionType"
+          [error]="isFieldInvalid('requisitionType')" />
+        @if (isFieldInvalid('requisitionType')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('requisitionType') }}</span>
+        }
+      </div>
+
+      <!-- Col 2: Occasion Nomenclature * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Occasion Nomenclature" [required]="true" placeholder="Select Occasion"
+          [options]="formattedOccasionOptions()" [ngModel]="occasionNomenclature()"
+          (ngModelChange)="occasionNomenclature.set($event)" name="occasionNomenclature"
+          [error]="isFieldInvalid('occasionNomenclature')" />
+        @if (isFieldInvalid('occasionNomenclature')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('occasionNomenclature')
+          }}</span>
+        }
+      </div>
+
+      <!-- Col 3: Empty Cell for Row 1 alignment -->
+      <div class="hidden md:block"></div>
+
+      <!-- ==================== ROW 2 ==================== -->
+      <!-- Col 1: DART No * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="DART No" [required]="true" placeholder="Select DART No"
+          [options]="formattedDartOptions()" [ngModel]="dartNo()" (ngModelChange)="onDartChange($event)" name="dartNo"
+          [error]="isFieldInvalid('dartNo')" />
+        @if (isFieldInvalid('dartNo')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('dartNo') }}</span>
+        }
+      </div>
+
+      <!-- Col 2: Maintenance Period * (Darkened read-only field) -->
+      <div class="flex flex-col gap-1.5">
+        <label for="maint-period" class="text-xs font-semibold tag-label">
+          Maintenance Period <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="maint-period" type="text" [ngModel]="maintenancePeriod()"
+          (ngModelChange)="maintenancePeriod.set($event)" name="maintenancePeriod" placeholder="Auto-filled from DART"
+          class="w-full dart-dark-input py-1.5 px-2.5 rounded text-xs focus:outline-none focus:border-sky-400"
+          readonly />
+      </div>
+
+      <!-- Col 3: Description (from DART) (Darkened read-only textarea) -->
+      <div class="flex flex-col gap-1.5">
+        <label for="dart-desc" class="text-xs font-semibold tag-label">
+          Description (from DART)
+        </label>
+        <textarea id="dart-desc" [ngModel]="dartDescription()" (ngModelChange)="dartDescription.set($event)"
+          name="dartDescription" rows="2" placeholder="Auto-filled from DART"
+          class="w-full dart-dark-input p-2 rounded text-xs focus:outline-none focus:border-sky-400 resize-none"
+          readonly></textarea>
+      </div>
+
+      <!-- ==================== ROW 3 ==================== -->
+      <!-- Col 1: Requisition received from * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Requisition received from" [required]="true" placeholder="Select Received From"
+          [options]="formattedReceivedFromOptions()" [ngModel]="requisitionReceivedFrom()"
+          (ngModelChange)="requisitionReceivedFrom.set($event)" name="requisitionReceivedFrom"
+          [error]="isFieldInvalid('requisitionReceivedFrom')" />
+        @if (isFieldInvalid('requisitionReceivedFrom')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('requisitionReceivedFrom')
+          }}</span>
+        }
+      </div>
+
+      <!-- Col 2: Source Details (Dynamic Label matching Requisition Received From selection) -->
+      <div class="flex flex-col gap-1.5">
+        <label for="source-details" class="text-xs font-semibold tag-label">
+          {{ sourceDetailsLabel() }}
+        </label>
+        <input id="source-details" type="text" [ngModel]="sourceDetails()" (ngModelChange)="sourceDetails.set($event)"
+          name="sourceDetails" [placeholder]="sourceDetailsPlaceholder()" maxlength="20"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500" />
+      </div>
+
+      <!-- Col 3: Hotwork Date * -->
+      <div class="flex flex-col gap-1.5">
+        <label for="hw-date" class="text-xs font-semibold tag-label">
+          Hotwork Date <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="hw-date" type="date" [ngModel]="hotworkDate()" (ngModelChange)="hotworkDate.set($event)"
+          [min]="minHotworkDate()" [max]="maxHotworkDate()" name="hotworkDate"
+          [class.input-invalid]="isFieldInvalid('hotworkDate')"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium"
+          required />
+        @if (isFieldInvalid('hotworkDate')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('hotworkDate') }}</span>
+        }
+      </div>
+
+      <!-- ==================== ROW 4 ==================== -->
+      <!-- Col 1: Type of Hotwork * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Type of Hotwork" [required]="true" placeholder="Select Type of Hotwork"
+          [options]="formattedTypeOfHotworkOptions()" [ngModel]="typeOfHotwork()"
+          (ngModelChange)="typeOfHotwork.set($event)" name="typeOfHotwork" [error]="isFieldInvalid('typeOfHotwork')" />
+        @if (isFieldInvalid('typeOfHotwork')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('typeOfHotwork') }}</span>
+        }
+      </div>
+
+      <!-- Col 2: Hotwork Location * -->
+      <div class="flex flex-col gap-1.5">
+        <label for="hw-location" class="text-xs font-semibold tag-label">
+          Hotwork Location <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="hw-location" type="text" [ngModel]="hotworkLocation()" (ngModelChange)="hotworkLocation.set($event)"
+          name="hotworkLocation" placeholder="Enter Hotwork Location" maxlength="20"
+          [class.input-invalid]="isFieldInvalid('hotworkLocation')"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500"
+          required />
+        @if (isFieldInvalid('hotworkLocation')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('hotworkLocation') }}</span>
+        }
+      </div>
+
+      <!-- Col 3: Sub Department * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Sub Department" [required]="true" placeholder="Select Sub Department"
+          [options]="formattedSubDepartmentOptions()" [ngModel]="subDepartment()"
+          (ngModelChange)="subDepartment.set($event)" name="subDepartment" [error]="isFieldInvalid('subDepartment')" />
+        @if (isFieldInvalid('subDepartment')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('subDepartment') }}</span>
+        }
+      </div>
+
+      <!-- ==================== ROW 5 ==================== -->
+      <!-- Col 1: Number of Sentries * -->
+      <div class="flex flex-col gap-1.5">
+        <label for="sentry-count" class="text-xs font-semibold tag-label">
+          Number of Sentries <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="sentry-count" type="number" min="1" max="50" [ngModel]="numberOfSentries()"
+          (ngModelChange)="onSentryCountInput($event)" name="numberOfSentries"
+          [class.input-invalid]="isFieldInvalid('numberOfSentries')"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium"
+          required />
+        @if (isFieldInvalid('numberOfSentries')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('numberOfSentries') }}</span>
+        }
+      </div>
+
+      <!-- Col 2: Hotwork Sentry Names * -->
+      <div class="flex flex-col gap-1.5">
+        <label for="sentry-names" class="text-xs font-semibold tag-label">
+          Hotwork Sentry Names <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="sentry-names" type="text" [ngModel]="sentryNames()" (ngModelChange)="sentryNames.set($event)"
+          name="sentryNames" placeholder="Enter Hotwork Sentry Names" maxlength="30"
+          [class.input-invalid]="isFieldInvalid('sentryNames')"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500"
+          required />
+        @if (isFieldInvalid('sentryNames')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('sentryNames') }}</span>
+        }
+      </div>
+
+      <!-- Col 3: Day of Hotwork * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Day of Hotwork" [required]="true" placeholder="Select Day of Hotwork"
+          [options]="formattedDayOfHotworkOptions()" [ngModel]="dayOfHotwork()"
+          (ngModelChange)="dayOfHotwork.set($event)" name="dayOfHotwork" />
+      </div>
+
+      <!-- ==================== ROW 6 ==================== -->
+      <!-- Col 1: Time of Hotwork * -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Time of Hotwork" [required]="true" placeholder="Select Time of Hotwork"
+          [options]="formattedTimeOfHotworkOptions()" [ngModel]="timeOfHotwork()"
+          (ngModelChange)="timeOfHotwork.set($event)" name="timeOfHotwork" />
+      </div>
+
+      <!-- Col 2: Name of Welding Supervisor * -->
+      <div class="flex flex-col gap-1.5">
+        <label for="welding-sup" class="text-xs font-semibold tag-label">
+          Name of Welding Supervisor <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="welding-sup" type="text" [ngModel]="weldingSupervisorName()"
+          (ngModelChange)="weldingSupervisorName.set($event)" name="weldingSupervisorName"
+          placeholder="Enter Welding Supervisor Name" maxlength="25"
+          [class.input-invalid]="isFieldInvalid('weldingSupervisorName')"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500"
+          required />
+        @if (isFieldInvalid('weldingSupervisorName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('weldingSupervisorName')
+          }}</span>
+        }
+      </div>
+
+      <!-- Col 3: Adjacent Compartment Name * -->
+      <div class="flex flex-col gap-1.5">
+        <label for="adj-comp" class="text-xs font-semibold tag-label">
+          Adjacent Compartment Name <span class="text-[#ff5b5b]">*</span>
+        </label>
+        <input id="adj-comp" type="text" [ngModel]="adjacentCompartmentName()"
+          (ngModelChange)="adjacentCompartmentName.set($event)" name="adjacentCompartmentName"
+          placeholder="Enter Adjacent Compartment Name" maxlength="20"
+          [class.input-invalid]="isFieldInvalid('adjacentCompartmentName')"
+          class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500"
+          required />
+        @if (isFieldInvalid('adjacentCompartmentName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('adjacentCompartmentName')
+          }}</span>
+        }
+      </div>
+
+      <!-- ==================== ROW 7 ==================== -->
+      <!-- Col 1: OOD Name on Hotwork Date * -->
+      @if (showOodField()) {
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="OOD Name on Hotwork Date" [required]="true" placeholder="Select OOD Officer"
+          [options]="formattedOodOptions()" [ngModel]="oodName()" (ngModelChange)="oodName.set($event)" name="oodName"
+          [error]="isFieldInvalid('oodName')" />
+        @if (isFieldInvalid('oodName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('oodName') }}</span>
+        }
+      </div>
+      }
+
+      <!-- Col 2: Select NBCDO Name * -->
+      @if (showNbcdoField()) {
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Select NBCDO Name" [required]="true" placeholder="Select NBCDO Officer"
+          [options]="formattedNbcdoOptions()" [ngModel]="nbcdoName()" (ngModelChange)="nbcdoName.set($event)"
+          name="nbcdoName" [error]="isFieldInvalid('nbcdoName')" />
+        @if (isFieldInvalid('nbcdoName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('nbcdoName') }}</span>
+        }
+      </div>
+      }
+
+      <!-- Col 3: Select Engineering Officer Name * -->
+      @if (showEngineeringField()) {
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Select Engineering Officer Name" [required]="true"
+          placeholder="Select Engineering Officer" [options]="formattedEngineeringOptions()"
+          [ngModel]="engineeringOfficerName()" (ngModelChange)="engineeringOfficerName.set($event)"
+          name="engineeringOfficerName" [error]="isFieldInvalid('engineeringOfficerName')" />
+        @if (isFieldInvalid('engineeringOfficerName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('engineeringOfficerName')
+          }}</span>
+        }
+      </div>
+      }
+
+      <!-- ==================== ROW 8 ==================== -->
+      <!-- Col 1: Select Electrical Officer Name * -->
+      @if (showElectricalField()) {
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Select Electrical Officer Name" [required]="true"
+          placeholder="Select Electrical Officer" [options]="formattedElectricalOptions()"
+          [ngModel]="electricalOfficerName()" (ngModelChange)="electricalOfficerName.set($event)"
+          name="electricalOfficerName" [error]="isFieldInvalid('electricalOfficerName')" />
+        @if (isFieldInvalid('electricalOfficerName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('electricalOfficerName')
+          }}</span>
+        }
+      </div>
+      }
+
+      <!-- Col 2: Department Officer / Dy. HOD Name * -->
+      @if (showDepartmentOfficerField()) {
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Department Officer / Dy. HOD Name" [required]="true"
+          placeholder="Select Department Officer" [options]="formattedDepartmentOfficerOptions()"
+          [ngModel]="departmentOfficerName()" (ngModelChange)="departmentOfficerName.set($event)"
+          name="departmentOfficerName" [error]="isFieldInvalid('departmentOfficerName')" />
+        @if (isFieldInvalid('departmentOfficerName')) {
+        <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('departmentOfficerName')
+          }}</span>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Submit Action Button Centered at Bottom -->
+    <div class="pt-6 flex justify-center">
+      <app-button type="submit" [disabled]="isSubmitting()" style="color: #ffffff !important;"
+        class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-bold py-2.5 px-10 rounded text-sm tracking-wider shadow-lg transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none flex items-center gap-2">
+        @if (isSubmitting()) {
+        <app-icon name="loader" [size]="16" class="animate-spin text-white"></app-icon>
+        <span style="color: #ffffff !important;" class="!text-white">Sending...</span>
+        } @else {
+        <span style="color: #ffffff !important;" class="!text-white">Send</span>
+        }
+      </app-button>
+    </div>
+  </form>
+</div>

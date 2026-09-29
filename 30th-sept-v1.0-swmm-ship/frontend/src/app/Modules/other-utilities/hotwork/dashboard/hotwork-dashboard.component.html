@@ -1,0 +1,135 @@
+<div class="hotwork-dashboard-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Row 1: Top 5 Stat KPI Cards using Shared KpiCard Component -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-stretch">
+    <div class="kpi-card-slot">
+      <app-kpi-card title="Hotwork Scheduled for the Day" [count]="scheduledToday()" iconName="repeat"
+        iconColor="#F87171" iconBg="rgba(248, 113, 113, 0.16)" accentColor="#F87171" [showTimelineTab]="false"
+        [showViewMore]="true" viewMoreLabel="View more →" [iconPosition]="'right'"
+        [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" [showTrends]="false" cardHeight="auto">
+      </app-kpi-card>
+    </div>
+
+    <div class="kpi-card-slot">
+      <app-kpi-card title="Hotwork In Progress" [count]="inProgress()" iconName="flame" iconColor="#38BDF8"
+        iconBg="rgba(56, 189, 248, 0.16)" accentColor="#38BDF8" [showTimelineTab]="false" [showViewMore]="true"
+        viewMoreLabel="View more →" [iconPosition]="'right'"
+        [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" [showTrends]="false" cardHeight="auto">
+      </app-kpi-card>
+    </div>
+
+    <div class="kpi-card-slot">
+      <app-kpi-card title="Hotwork Awaiting for Approval" [count]="awaitingApproval()" iconName="file-text"
+        iconColor="#F59E0B" iconBg="rgba(245, 158, 11, 0.16)" accentColor="#F59E0B" [showTimelineTab]="false"
+        [showViewMore]="true" viewMoreLabel="View more →" [iconPosition]="'right'"
+        [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" [showTrends]="false" cardHeight="auto">
+      </app-kpi-card>
+    </div>
+
+    <div class="kpi-card-slot">
+      <app-kpi-card title="Hotwork Completed" [count]="completed()" iconName="check-circle" iconColor="#C084FC"
+        iconBg="rgba(192, 132, 252, 0.16)" accentColor="#C084FC" [showTimelineTab]="false" [showViewMore]="true"
+        viewMoreLabel="View more →" [iconPosition]="'right'"
+        [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" [showTrends]="false" cardHeight="auto">
+      </app-kpi-card>
+    </div>
+
+    <div class="kpi-card-slot">
+      <app-kpi-card title="Ready to Start" [count]="readyToStart()" iconName="box" iconColor="#2DD4BF"
+        iconBg="rgba(45, 212, 191, 0.16)" accentColor="#2DD4BF" [showTimelineTab]="false" [showViewMore]="true"
+        viewMoreLabel="View more →" [iconPosition]="'right'"
+        [viewMoreRoute]="'/afterAuth/other-utilities/hotwork/monitor-approved-requisitions'" [showTrends]="false" cardHeight="auto">
+      </app-kpi-card>
+    </div>
+  </div>
+
+  <!-- Row 2: Middle Charts (Weekly summary & Present Progress) using PanelCard -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <app-panel-card title="Weekly summary" icon="line-chart" iconColor="#3b82f6" iconBg="rgba(59, 130, 246, 0.16)">
+      <!-- Chart using shared reusable component with inputs from the second image -->
+      <div class="-mx-3 mt-2 flex-1 min-h-[240px]">
+        <app-line-chart [series]="weeklySeries()" [labels]="weeklyLabels()" [heightPx]="260"></app-line-chart>
+      </div>
+
+      <!-- Custom Legend matching the second image's Initiated/Ready/Completed -->
+      <div
+        class="flex items-center justify-center gap-8 text-[12px] text-slate-600 dark:text-slate-300 font-medium mt-4 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="w-[10px] h-[10px] rounded-full border-2 border-[#f59e0b] bg-transparent relative"><span
+              class="absolute inset-[2px] rounded-full bg-[#f59e0b]"></span></span>
+          <span>Initiated</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-[10px] h-[10px] rounded-full border-2 border-[#ef4444] bg-transparent relative"><span
+              class="absolute inset-[2px] rounded-full bg-[#ef4444]"></span></span>
+          <span>Ready</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-[10px] h-[10px] rounded-full border-2 border-[#3b82f6] bg-transparent relative"><span
+              class="absolute inset-[2px] rounded-full bg-[#3b82f6]"></span></span>
+          <span>Completed</span>
+        </div>
+      </div>
+    </app-panel-card>
+
+    <app-panel-card title="Present Hotwork Progress (Daily)" icon="pie-chart">
+      <div class="flex flex-col sm:flex-row items-center justify-around gap-6 py-2">
+        <!-- Donut Chart with center total count -->
+        <div class="relative flex items-center justify-center">
+          <app-donut-chart [segments]="progressSegments()" [width]="180" [height]="180" cutout="65%"></app-donut-chart>
+          <div class="donut-center-label">
+            <span class="donut-total">{{ totalHotwork() }}</span>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div
+          class="flex flex-col gap-2.5 text-xs font-semibold border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-200 min-w-[160px]">
+          <div class="flex items-center gap-2.5">
+            <span class="legend-dot" style="background: #f59e0b"></span>
+            <span>Initiated</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="legend-dot" style="background: #f97316"></span>
+            <span>Ready</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="legend-dot" style="background: #ef4444"></span>
+            <span>Paused</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="legend-dot" style="background: #3b82f6"></span>
+            <span>Completed</span>
+          </div>
+        </div>
+      </div>
+    </app-panel-card>
+  </div>
+
+  <!-- Row 3: Bottom Section (Hotwork history Bar Chart) -->
+  <app-panel-card title="Hotwork history" icon="chart-bar" class="block relative z-20">
+    <div class="space-y-4">
+      <div class="max-w-xs space-y-1">
+        <span class="block text-xs font-bold text-slate-600 dark:text-slate-300">Date Range</span>
+        <app-date-picker [singleDate]="false" placeholder="Select Date Range..." [ngModel]="historyDateRange()"
+          (ngModelChange)="onHistoryDateRangeChange($event)">
+        </app-date-picker>
+      </div>
+      <div class="pt-2">
+        <app-bar-chart [data]="historyBarData()" [heightPx]="220"></app-bar-chart>
+      </div>
+      <div class="flex items-center justify-center gap-6 text-xs text-slate-600 dark:text-slate-300 font-semibold pt-2">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span><span>Ready</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span><span>In progress</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span><span>Completed</span>
+        </div>
+      </div>
+    </div>
+  </app-panel-card>
+</div>

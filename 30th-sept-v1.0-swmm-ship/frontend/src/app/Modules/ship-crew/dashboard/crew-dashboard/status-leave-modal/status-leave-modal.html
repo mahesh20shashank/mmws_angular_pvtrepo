@@ -1,0 +1,97 @@
+<app-modal size="lg" (closeModal)="cancel()">
+  <h3 class="slm-title">Apply {{ typeLabel }} — {{ personnel.firstName }} {{ personnel.lastName }} ({{ personnel.pno }})</h3>
+
+  <h4 class="slm-section-heading">{{ typeLabel.toUpperCase() }} DETAILS</h4>
+
+  <div class="slm-form-grid">
+    <label class="slm-checkbox">
+      <input type="checkbox" [(ngModel)]="hasPrefix" /> {{ typeLabel }} Prefix Applicable?
+    </label>
+    @if (hasPrefix) {
+      <app-input-field
+        label="Prefix Start Date"
+        type="date"
+        [ngModel]="prefixStartDate"
+        (ngModelChange)="prefixStartDate = $event"
+      />
+    }
+
+    <div>
+      <app-input-field
+        label="{{ typeLabel }} Commencement Date"
+        type="date"
+        [required]="true"
+        [invalid]="startDateInvalid"
+        [ngModel]="startDate"
+        (ngModelChange)="startDate = $event"
+      />
+      @if (startDateInvalid) {
+        <span class="slm-error">Commencement Date is required.</span>
+      }
+    </div>
+    <div>
+      <app-input-field
+        label="{{ typeLabel }} Completion Date"
+        type="date"
+        [required]="true"
+        [invalid]="endDateInvalid"
+        [ngModel]="endDate"
+        (ngModelChange)="endDate = $event"
+      />
+      @if (endDateInvalid) {
+        <span class="slm-error">{{ endDate ? "Completion Date cannot be before Commencement Date." : "Completion Date is required." }}</span>
+      }
+    </div>
+
+    <label class="slm-checkbox">
+      <input type="checkbox" [(ngModel)]="hasSuffix" /> {{ typeLabel }} Suffix Applicable?
+    </label>
+    @if (hasSuffix) {
+      <app-input-field
+        label="Suffix Till Date"
+        type="date"
+        [ngModel]="suffixCompletionDate"
+        (ngModelChange)="suffixCompletionDate = $event"
+      />
+      <app-input-field
+        label="Reporting Date"
+        type="date"
+        [ngModel]="reportingDate"
+        (ngModelChange)="reportingDate = $event"
+      />
+    }
+
+    <app-input-field
+      label="No. of Days"
+      placeholder="Auto calculated"
+      [readonly]="true"
+      [ngModel]="noOfDays.toString()"
+    />
+    <app-input-field
+      label="{{ typeLabel }} Station"
+      [placeholder]="'Enter ' + typeLabel.toLowerCase() + ' station'"
+      [ngModel]="station"
+      (ngModelChange)="station = $event"
+    />
+    <app-input-field
+      label="Reason (Optional)"
+      placeholder="Enter reason"
+      [ngModel]="reason"
+      (ngModelChange)="reason = $event"
+    />
+    <app-file-input
+      label="Attachment (Optional)"
+      accept="*/*"
+      [outsideLabel]="true"
+      [ngModel]="attachment"
+      (ngModelChange)="onAttachmentChange($event)"
+    />
+  </div>
+
+  <div class="slm-actions">
+    <app-button type="button" class="btn-secondary" [disabled]="submitting()" (click)="cancel()">Cancel</app-button>
+    <app-button type="button" class="btn-primary" [disabled]="submitting()" (click)="submit()">
+      {{ submitting() ? "Submitting..." : "Submit" }}
+    </app-button>
+  </div>
+</app-modal>

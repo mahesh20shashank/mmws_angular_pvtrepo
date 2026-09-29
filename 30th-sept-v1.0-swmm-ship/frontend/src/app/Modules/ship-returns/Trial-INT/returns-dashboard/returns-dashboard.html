@@ -1,0 +1,55 @@
+<main class="trial-dashboard">
+  <section class="glass-card hero-card">
+    <div>
+      <p class="eyebrow">Trial Returns Overview</p>
+      <h1 class="head2">Readiness at a glance</h1>
+    </div>
+    <div class="hero-actions">
+      <button type="button"
+        class="rounded-lg border border-white/20 bg-white/10 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98]"
+        (click)="openTransactions()">View all returns</button>
+      <button type="button"
+        class="rounded-lg border border-[#4f8fd5] bg-[#1069AB] text-sm font-semibold text-white shadow-lg transition hover:bg-[#195d95] active:scale-[0.98]"
+        (click)="openTransactions(true)">+ Initiate return</button>
+    </div>
+  </section>
+
+  <section class="kpi-container" aria-label="Trial return summary">
+    <app-kpi-card
+      *ngFor="let kpi of kpiCards"
+      [title]="kpi.title"
+      [count]="kpi.count"
+      [iconColor]="kpi.iconColor"
+      [showTrends]="false"
+      [showTimelineTab]="false"
+      cardHeight="9.5rem">
+    </app-kpi-card>
+  </section>
+
+  <section class="glass-card panel recent-panel">
+    <div class="panel-heading recent-heading">
+      <div><p class="eyebrow">Latest Activity</p><h2 class="head3">Recent Ships returns</h2></div>
+      <button type="button" class="viewall-text" (click)="openTransactions()">View all →</button>
+    </div>
+
+    <div *ngIf="loading" class="empty-state">Loading returns…</div>
+    <div *ngIf="!loading && loadFailed" class="empty-state error-state">Dashboard data could not be loaded. You can still open Transactions.</div>
+    <div *ngIf="!loading && !loadFailed && !recentReturns.length" class="empty-state">No returns available yet.</div>
+
+    <div *ngIf="!loading && recentReturns.length" class="table-wrap">
+      <table>
+        <thead><tr><th>Return Number</th><th>Ship</th><th>Return Type</th><th>Trial Unit</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of recentReturns">
+            <td class="return-number">{{ row['return_number'] || row['trial_number'] || '—' }}</td>
+            <td>{{ row['ship_name'] || row['ship']?.name || '—' }}</td>
+            <td>{{ row['return_type_name'] || row['return_type']?.name || '—' }}</td>
+            <td>{{ row['unit_name'] || row['unit']?.name || '—' }}</td>
+            <td>{{ dateOf(row) }}</td>
+            <td><span class="status-pill" [ngClass]="statusClass(row)">{{ statusOf(row) }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>

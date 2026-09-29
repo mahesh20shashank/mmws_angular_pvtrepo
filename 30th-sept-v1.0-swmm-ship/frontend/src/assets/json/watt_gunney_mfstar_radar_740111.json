@@ -1,0 +1,1764 @@
+{
+  "formId": "mfstar_radar_740111",
+  "title": "MFSTAR RADAR 740111",
+  "sourceFile": "mfstar_radar_740111.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "Basic Information",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "ship",
+          "label": "Ship",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [],
+          "isDynamic": true,
+          "lookupKey": "ship_id",
+          "prefill": true,
+          "prefillSource": "context.ship",
+          "tree": false
+        },
+        {
+          "type": "select",
+          "name": "department",
+          "label": "Department",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select --",
+              "value": "-- Select --"
+            },
+            {
+              "label": "ND",
+              "value": "P15A"
+            },
+            {
+              "label": "ASW",
+              "value": "P17"
+            },
+            {
+              "label": "COMM",
+              "value": "P17A"
+            },
+            {
+              "label": "GUNNERY",
+              "value": "P28"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "select",
+          "name": "equipment",
+          "label": "Equipment",
+          "required": false,
+          "disabled": true,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select --",
+              "value": "-- Select --"
+            },
+            {
+              "label": "MFSTAR Radar",
+              "value": "MFSTAR_RADAR"
+            }
+          ],
+          "isDynamic": false,
+          "prefill": true,
+          "prefillSource": "equipment.nomenclature"
+        },
+        {
+          "type": "date",
+          "name": "date",
+          "label": "Date",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": ""
+        },
+        {
+          "type": "select",
+          "name": "nature_of_trials",
+          "label": "Nature of Trial",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": "--Select--"
+            },
+            {
+              "label": "SATs",
+              "value": "SATs"
+            },
+            {
+              "label": "HATs",
+              "value": "HATS"
+            },
+            {
+              "label": "OP CHECKS",
+              "value": "OP_CHECKS"
+            },
+            {
+              "label": "IIs",
+              "value": "IIS"
+            }
+          ],
+          "isDynamic": false
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "checks",
+      "title": "Checks",
+      "sectionType": "matrixTable",
+      "fields": [],
+      "tables": [
+        {
+          "id": "checks_matrix_1",
+          "sectionType": "matrixTable",
+          "title": "Checks",
+          "topHeaders": [
+            [
+              {
+                "label": "Ser No.",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Observation",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Result",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "Remarks",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [
+            {
+              "key": "ser_no",
+              "label": "Ser No.",
+              "type": "serial",
+              "align": "center"
+            },
+            {
+              "key": "observation",
+              "label": "Observation",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "result",
+              "label": "Result",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "remarks",
+              "label": "Remarks",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "checks_matrix_1_row_1",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_1_cell_1_embark_time_part_1",
+                  "key": "embark_time_part_1",
+                  "type": "time",
+                  "label": "Trials team embarked onboard at on for SATs of MFSTAR as per approved schedule, BR 4050 and CNO 07/10. Following observed:-",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 4,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_1_cell_2_embark_date_part_2",
+                  "key": "embark_date_part_2",
+                  "type": "date",
+                  "label": "Trials team embarked onboard at on for SATs of MFSTAR as per approved schedule, BR 4050 and CNO 07/10. Following observed:-",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_2",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_2_cell_1_static",
+                  "type": "serial",
+                  "value": "Check No.",
+                  "colspan": 4,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_3",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_3_cell_1_static",
+                  "type": "serial",
+                  "value": "1",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 3.1 System Environment",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_3_check_no__3_1_remarks",
+                  "key": "check_no__3_1_remarks",
+                  "type": "textarea",
+                  "label": "check no 3 1 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_4_check_no__3_1_result_part_1",
+                  "key": "check_no__3_1_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_5_check_no__3_1_result_part_2",
+                  "key": "check_no__3_1_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_4",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_4_cell_1_static",
+                  "type": "serial",
+                  "value": "2",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 4.1 General Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_3_check_no__4_1_remarks",
+                  "key": "check_no__4_1_remarks",
+                  "type": "textarea",
+                  "label": "check no 4 1 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_4_check_no__4_1_result_part_1",
+                  "key": "check_no__4_1_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_5_check_no__4_1_result_part_2",
+                  "key": "check_no__4_1_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_5",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_5_cell_1_static",
+                  "type": "serial",
+                  "value": "3",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 4.2 Hardware Test- System level",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_3_check_no__4_2_remarks",
+                  "key": "check_no__4_2_remarks",
+                  "type": "textarea",
+                  "label": "check no 4 2 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_4_check_no__4_2_result_part_1",
+                  "key": "check_no__4_2_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_5_check_no__4_2_result_part_2",
+                  "key": "check_no__4_2_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_6",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_6_cell_1_static",
+                  "type": "serial",
+                  "value": "4",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 4.3 Configuration Test",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_3_check_no__4_3_remarks",
+                  "key": "check_no__4_3_remarks",
+                  "type": "textarea",
+                  "label": "check no 4 3 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_4_check_no__4_3_result_part_1",
+                  "key": "check_no__4_3_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_5_check_no__4_3_result_part_2",
+                  "key": "check_no__4_3_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_7",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_7_cell_1_static",
+                  "type": "serial",
+                  "value": "5",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 4.4 System Activation Test",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_3_check_no__4_4_remarks",
+                  "key": "check_no__4_4_remarks",
+                  "type": "textarea",
+                  "label": "check no 4 4 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_4_check_no__4_4_result_part_1",
+                  "key": "check_no__4_4_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_5_check_no__4_4_result_part_2",
+                  "key": "check_no__4_4_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_8",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_8_cell_1_static",
+                  "type": "serial",
+                  "value": "6",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_8_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 4.5 Safety Test",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_8_cell_3_check_no__4_5_remarks",
+                  "key": "check_no__4_5_remarks",
+                  "type": "textarea",
+                  "label": "check no 4 5 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_8_cell_4_check_no__4_5_result_part_1",
+                  "key": "check_no__4_5_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_8_cell_5_check_no__4_5_result_part_2",
+                  "key": "check_no__4_5_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_9",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_9_cell_1_static",
+                  "type": "serial",
+                  "value": "7",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_9_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 6 Hardware List",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_9_cell_3_check_no__6_remarks",
+                  "key": "check_no__6_remarks",
+                  "type": "textarea",
+                  "label": "check no 6 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_9_cell_4_check_no__6_result_part_1",
+                  "key": "check_no__6_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_9_cell_5_check_no__6_result_part_2",
+                  "key": "check_no__6_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_10",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_10_cell_1_static",
+                  "type": "serial",
+                  "value": "8",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_10_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.1 Test S1 MFSTAR Accuracies",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_10_cell_3_check_no__7_1_remarks",
+                  "key": "check_no__7_1_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 1 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_10_cell_4_check_no__7_1_result_part_1",
+                  "key": "check_no__7_1_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_10_cell_5_check_no__7_1_result_part_2",
+                  "key": "check_no__7_1_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_11",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_11_cell_1_static",
+                  "type": "serial",
+                  "value": "9",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_11_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.2 Test S2 MFSTAR ATI Range",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_11_cell_3_check_no__7_2_remarks",
+                  "key": "check_no__7_2_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 2 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_11_cell_4_check_no__7_2_result_part_1",
+                  "key": "check_no__7_2_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_11_cell_5_check_no__7_2_result_part_2",
+                  "key": "check_no__7_2_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_12",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_12_cell_1_static",
+                  "type": "serial",
+                  "value": "10",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_12_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.3 Test S3 MFSTAR Manoeuvring Target",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_12_cell_3_check_no__7_3_remarks",
+                  "key": "check_no__7_3_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 3 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_12_cell_4_check_no__7_3_result_part_1",
+                  "key": "check_no__7_3_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_12_cell_5_check_no__7_3_result_part_2",
+                  "key": "check_no__7_3_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_13",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_13_cell_1_static",
+                  "type": "serial",
+                  "value": "11",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_13_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.4 Test S4 MFSTAR Range Resolution",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_13_cell_3_check_no__7_4_remarks",
+                  "key": "check_no__7_4_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 4 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_13_cell_4_check_no__7_4_result_part_1",
+                  "key": "check_no__7_4_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_13_cell_5_check_no__7_4_result_part_2",
+                  "key": "check_no__7_4_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_14",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_14_cell_1_static",
+                  "type": "serial",
+                  "value": "12",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_14_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.5 Test S5 MFSTAR Surface Target Detection Range",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_14_cell_3_check_no__7_5_remarks",
+                  "key": "check_no__7_5_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 5 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_14_cell_4_check_no__7_5_result_part_1",
+                  "key": "check_no__7_5_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_14_cell_5_check_no__7_5_result_part_2",
+                  "key": "check_no__7_5_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_15",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_15_cell_1_static",
+                  "type": "serial",
+                  "value": "13",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_15_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.6 Test S6 MFSTAR Surface Target Range Resolution",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_15_cell_3_check_no__7_6_remarks",
+                  "key": "check_no__7_6_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 6 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_15_cell_4_check_no__7_6_result_part_1",
+                  "key": "check_no__7_6_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_15_cell_5_check_no__7_6_result_part_2",
+                  "key": "check_no__7_6_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_16",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_16_cell_1_static",
+                  "type": "serial",
+                  "value": "14",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_16_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.7 Test S7 MFSTAR False Track Initiation",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_16_cell_3_check_no__7_7_remarks",
+                  "key": "check_no__7_7_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 7 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_16_cell_4_check_no__7_7_result_part_1",
+                  "key": "check_no__7_7_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_16_cell_5_check_no__7_7_result_part_2",
+                  "key": "check_no__7_7_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_17",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_17_cell_1_static",
+                  "type": "serial",
+                  "value": "15",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_17_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.8 Test S8 MFSTAR Low Altitude Target Tracking",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_17_cell_3_check_no__7_8_remarks",
+                  "key": "check_no__7_8_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 8 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_17_cell_4_check_no__7_8_result_part_1",
+                  "key": "check_no__7_8_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_17_cell_5_check_no__7_8_result_part_2",
+                  "key": "check_no__7_8_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_18",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_18_cell_1_static",
+                  "type": "serial",
+                  "value": "16",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_18_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.9 Test S9 Helicopter Scenario",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_18_cell_3_check_no__7_9_remarks",
+                  "key": "check_no__7_9_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 9 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_18_cell_4_check_no__7_9_result_part_1",
+                  "key": "check_no__7_9_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_18_cell_5_check_no__7_9_result_part_2",
+                  "key": "check_no__7_9_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_19",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_19_cell_1_static",
+                  "type": "serial",
+                  "value": "17",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_19_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.10 Test S10 MFSTAR SLC",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_19_cell_3_check_no__7_10_remarks",
+                  "key": "check_no__7_10_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 10 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_19_cell_4_check_no__7_10_result_part_1",
+                  "key": "check_no__7_10_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_19_cell_5_check_no__7_10_result_part_2",
+                  "key": "check_no__7_10_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_20",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_20_cell_1_static",
+                  "type": "serial",
+                  "value": "18",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_20_cell_2_static",
+                  "type": "label",
+                  "value": "Check No. 7.11 Test S11 MFSTAR TOJ",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_20_cell_3_check_no__7_11_remarks",
+                  "key": "check_no__7_11_remarks",
+                  "type": "textarea",
+                  "label": "check no 7 11 remarks",
+                  "value": "",
+                  "rows": 1,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_20_cell_4_check_no__7_11_result_part_1",
+                  "key": "check_no__7_11_result_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_20_cell_5_check_no__7_11_result_part_2",
+                  "key": "check_no__7_11_result_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        }
+      ]
+    },
+    {
+      "id": "presenting_authority",
+      "title": "Presenting Authority",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "mfstar_radar_presenting_authority",
+          "label": "Presenting Authority ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": "--Select--"
+            },
+            {
+              "label": "Dockyard",
+              "value": "dockyard"
+            },
+            {
+              "label": "Shipstaff",
+              "value": "shipstaff"
+            },
+            {
+              "label": "OEM",
+              "value": "oem"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "mfstar_radar_inspecting_authority",
+          "label": "Inspecting Authority",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "inputType": "text"
+        }
+      ],
+      "tables": []
+    }
+  ]
+}

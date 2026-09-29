@@ -1,0 +1,73 @@
+<div class="daf-main" [class.daf-main--panel-open]="showRecordedPanel()">
+  <div class="glass-card daf-form">
+    <div class="daf-type-head">
+      <app-button type="button" class="daf-back" (click)="cancel()">
+        <app-icon name="arrow-left" [size]="15" variant="inherit" />Back
+      </app-button>
+      <div class="daf-type-head-text">
+        <span class="daf-form-title">Select DART Type</span>
+        <p class="daf-form-desc">It may be for Defect / Routines / Services / OPDEF / OPDEF (STA) / STOREDEM / OPDEM / CANDEF / CANDEM / GD / As&amp;As and ABER</p>
+      </div>
+    </div>
+
+    <div class="daf-type-cards">
+      @for (card of reasonCards; track card.id) {
+        <label
+          class="daf-type-card"
+          [class.daf-type-card--selected]="reason() === card.id"
+          [class.daf-type-card--disabled]="card.disabled"
+        >
+          <input
+            type="radio"
+            class="daf-type-card-input"
+            name="dartType"
+            [checked]="reason() === card.id"
+            [disabled]="card.disabled"
+            (change)="pickReason(card)"
+          />
+          <span class="daf-type-card-radio"></span>
+          <span class="daf-type-card-body">
+            <span class="daf-type-card-title">{{ card.title }}</span>
+            <span class="daf-type-card-desc">{{ card.desc }}</span>
+          </span>
+        </label>
+      }
+    </div>
+  </div>
+
+  @switch (reason()) {
+    @case ('As&As') {
+      <app-as-and-as-form (back)="back.emit()" (raiseDart)="onDartRaised()" />
+    }
+    @case ('ABER') {
+      <app-aber-form (back)="back.emit()" (raiseDart)="onDartRaised()" />
+    }
+    @case ('Services') {
+      <app-services-form (back)="back.emit()" (raiseDart)="onDartRaised()" />
+    }
+    @case ('Guarantee') {
+      <app-guarantee-defect-form (openConfirm)="openGuaranteeConfirm()" (cancelForm)="back.emit()" />
+    }
+    @default {
+      <app-defect-form (back)="back.emit()" (raiseDart)="onDartRaised()" />
+    }
+  }
+
+  @if (showGuaranteeConfirm()) {
+    <app-form-modal
+      [title]="'Confirm Save'"
+      [dartType]="'guarantee'"
+      (save)="onGuaranteeModalSave($event)"
+      (cancel_btn)="closeGuaranteeConfirm()"
+    />
+  }
+</div>
+
+@if (showRecordedPanel()) {
+  <app-recorded-defects-panel
+    [defects]="recordedDefects()"
+    (closePanel)="closeRecordedPanel()"
+    (raiseRa)="raiseRaFor($event)"
+    (moveToDartList)="moveRecordedToDartList()"
+  />
+}

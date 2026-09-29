@@ -1,0 +1,2306 @@
+{
+  "formId": "pqChecks",
+  "title": "POWER QUALITY PARAMETERS -",
+  "sourceFile": "pq-checks-proforma.component.html",
+  "sections": [
+    {
+      "id": "section_1",
+      "title": "<h1 class=\"text-center\">POWER QUALITY PARAMETERS</h1>",
+      "sectionType": "mixed",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type": "input",
+            "name": "shipID",
+            "label": "Ship",
+            "colSpan": 3,
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "value": "",
+            "inputType": "text",
+            "options": null,
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name",
+            "lockAfterPrefill": false,
+            "hiddenKey": null,
+            "displayKey": null
+          },
+          {
+            "type": "input",
+            "name": "trialConvNo",
+            "label": "AT INPUT OF",
+            "colSpan": 3,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "inputType": "text",
+            "options": null,
+            "isDynamic": false,
+            "lookupKey": null,
+            "prefill": false,
+            "prefillSource": null,
+            "lockAfterPrefill": false,
+            "hiddenKey": null,
+            "displayKey": null
+          },
+          {
+            "type": "input",
+            "name": "sYSTEM",
+            "label": "SYSTEM WITH SOURCE",
+            "colSpan": 2,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "inputType": "text",
+            "options": null,
+            "isDynamic": false,
+            "lookupKey": null,
+            "prefill": false,
+            "prefillSource": null,
+            "lockAfterPrefill": false,
+            "hiddenKey": null,
+            "displayKey": null
+          },
+          {
+            "type": "input",
+            "name": "pqLoad",
+            "label": "DA/GTG &",
+            "colSpan": 2,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "inputType": "text",
+            "options": null,
+            "isDynamic": false,
+            "lookupKey": null,
+            "prefill": false,
+            "prefillSource": null,
+            "lockAfterPrefill": false,
+            "hiddenKey": null,
+            "displayKey": null
+          },
+          {
+            "type": "input",
+            "name": "pqLoad",
+            "label": "As Load",
+            "colSpan": 2,
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "value": "",
+            "inputType": "text",
+            "options": null,
+            "isDynamic": false,
+            "lookupKey": null,
+            "prefill": false,
+            "prefillSource": null,
+            "lockAfterPrefill": false,
+            "hiddenKey": null,
+            "displayKey": null
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "section_1_table_1",
+            "sectionType": "matrixTable",
+            "title": "",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "Parameters",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "Acceptable Value",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "Step 1 (PQ parameters at input of heavy motor)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Step 2 (PQ parameters at input of System)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Step 3 (PQ parameters at input of System)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Sat/Unsat",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                }
+              ],
+              [
+                {
+                  "label": "Observed Value (When Load ON)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observed Value (Load Off & System ON)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observed Value (System Off & Load On)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ],
+              [
+                {
+                  "label": "1. Voltage",
+                  "colspan": 8,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "section_1_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_1_cell_1_static",
+                    "key": "a",
+                    "type": "label",
+                    "value": "(a)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_2_static",
+                    "key": "nominal_user_voltage",
+                    "type": "label",
+                    "value": "Nominal User Voltage",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_3_acceptableNominalVolt",
+                    "key": "acceptableNominalVolt",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Select Voltage",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Voltage",
+                        "value": "Select Voltage"
+                      },
+                      {
+                        "label": "380 V",
+                        "value": "380 V"
+                      },
+                      {
+                        "label": "400 V",
+                        "value": "400 V"
+                      },
+                      {
+                        "label": "415 V",
+                        "value": "415 V"
+                      },
+                      {
+                        "label": "440 V",
+                        "value": "440 V"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_4_pqChecks1",
+                    "key": "pqChecks1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_5_pqChecks2",
+                    "key": "pqChecks2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_6_pqChecks3",
+                    "key": "pqChecks3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_7_pqChecks4",
+                    "key": "pqChecks4",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Select an option",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Sat",
+                        "value": "Sat"
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": "Unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null,
+                     "formula": {
+    "expression": "if(num(pqChecks1) == 0 || num(pqChecks2) == 0 || num(pqChecks3) == 0, \"\", if(num(pqChecks1) >= 380 && num(pqChecks1) <= 440 && num(pqChecks2) >= 380 && num(pqChecks2) <= 440 && num(pqChecks3) >= 380 && num(pqChecks3) <= 440, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_2_cell_1_static",
+                    "key": "b",
+                    "type": "label",
+                    "value": "(b)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_2_cell_2_static",
+                    "key": "nominal_user_voltage_tolerance",
+                    "type": "label",
+                    "value": "Nominal User Voltage Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_2_cell_3_static",
+                    "key": "5",
+                    "type": "label",
+                    "value": "± 5%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_2_cell_4_pqChecks5",
+                    "key": "pqChecks5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_2_cell_5_pqChecks6",
+                    "key": "pqChecks6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_2_cell_6_pqChecks7",
+                    "key": "pqChecks7",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                 {
+  "_id": "section_1_table_1_row_2_cell_7_pqChecks8",
+  "key": "pqChecks8",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks5) == 0 || num(pqChecks6) == 0 || num(pqChecks7) == 0, \"\", if(num(pqChecks5) >= -5 && num(pqChecks5) <= 5 && num(pqChecks6) >= -5 && num(pqChecks6) <= 5 && num(pqChecks7) >= -5 && num(pqChecks7) <= 5, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_3_cell_1_static",
+                    "key": "c",
+                    "type": "label",
+                    "value": "(c)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_3_cell_2_static",
+                    "key": "voltage_modulation",
+                    "type": "label",
+                    "value": "Voltage Modulation",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_3_cell_3_static",
+                    "key": "2",
+                    "type": "label",
+                    "value": "2%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_3_cell_4_pqChecks9",
+                    "key": "pqChecks9",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_3_cell_5_pqChecks10",
+                    "key": "pqChecks10",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_3_cell_6_pqChecks11",
+                    "key": "pqChecks11",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_3_cell_7_pqChecks12",
+  "key": "pqChecks12",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks9) == 0 || num(pqChecks10) == 0 || num(pqChecks11) == 0, \"\", if(num(pqChecks9) > 0 && num(pqChecks9) <= 2 && num(pqChecks10) > 0 && num(pqChecks10) <= 2 && num(pqChecks11) > 0 && num(pqChecks11) <= 2, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_4_cell_1_static",
+                    "key": "d",
+                    "type": "label",
+                    "value": "(d)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_4_cell_2_static",
+                    "key": "line_voltage_unbalance_tolerance",
+                    "type": "label",
+                    "value": "Line Voltage Unbalance Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_4_cell_3_static",
+                    "key": "2",
+                    "type": "label",
+                    "value": "2%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_4_cell_4_pqChecks13",
+                    "key": "pqChecks13",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_4_cell_5_pqChecks14",
+                    "key": "pqChecks14",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_4_cell_6_pqChecks15",
+                    "key": "pqChecks15",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_4_cell_7_pqChecks16",
+  "key": "pqChecks16",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks13) == 0 || num(pqChecks14) == 0 || num(pqChecks15) == 0, \"\", if(num(pqChecks13) > 0 && num(pqChecks13) <= 2 && num(pqChecks14) > 0 && num(pqChecks14) <= 2 && num(pqChecks15) > 0 && num(pqChecks15) <= 2, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_5",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_5_cell_1_static",
+                    "key": "e",
+                    "type": "label",
+                    "value": "(e)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_5_cell_2_static",
+                    "key": "voltage_transient_tolerance",
+                    "type": "label",
+                    "value": "Voltage Transient Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_5_cell_3_static",
+                    "key": "16",
+                    "type": "label",
+                    "value": "± 16 %",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_5_cell_4_pqChecks17",
+                    "key": "pqChecks17",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_5_cell_5_pqChecks18",
+                    "key": "pqChecks18",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_5_cell_6_pqChecks19",
+                    "key": "pqChecks19",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_5_cell_7_pqChecks20",
+  "key": "pqChecks20",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks17) == 0 || num(pqChecks18) == 0 || num(pqChecks19) == 0, \"\", if(num(pqChecks17) >= -16 && num(pqChecks17) <= 16 && num(pqChecks18) >= -16 && num(pqChecks18) <= 16 && num(pqChecks19) >= -16 && num(pqChecks19) <= 16, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_6",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_6_cell_1_static",
+                    "key": "f",
+                    "type": "label",
+                    "value": "(f)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_6_cell_2_static",
+                    "key": "voltage_transient_recovery_time",
+                    "type": "label",
+                    "value": "Voltage Transient Recovery Time",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_6_cell_3_static",
+                    "key": "2_sec",
+                    "type": "label",
+                    "value": "2 Sec",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_6_cell_4_pqChecks21",
+                    "key": "pqChecks21",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_6_cell_5_pqChecks22",
+                    "key": "pqChecks22",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_6_cell_6_pqChecks23",
+                    "key": "pqChecks23",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_6_cell_7_pqChecks24",
+  "key": "pqChecks24",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks21) == 0 || num(pqChecks22) == 0 || num(pqChecks23) == 0, \"\", if(num(pqChecks21) > 0 && num(pqChecks21) <= 2 && num(pqChecks22) > 0 && num(pqChecks22) <= 2 && num(pqChecks23) > 0 && num(pqChecks23) <= 2, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_7",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_7_cell_1_static",
+                    "key": "g",
+                    "type": "label",
+                    "value": "(g)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_7_cell_2_static",
+                    "key": "voltage_spike_peak_value",
+                    "type": "label",
+                    "value": "Voltage Spike (Peak Value)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_7_cell_3_static",
+                    "key": "2_5_kv",
+                    "type": "label",
+                    "value": "2.5 kV",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"   
+                  },
+                  {
+                    "_id": "section_1_table_1_row_7_cell_4_pqChecks25",
+                    "key": "pqChecks25",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_7_cell_5_pqChecks26",
+                    "key": "pqChecks26",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_7_cell_6_pqChecks27",
+                    "key": "pqChecks27",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_7_cell_7_pqChecks28",
+  "key": "pqChecks28",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks25) == 0 || num(pqChecks26) == 0 || num(pqChecks27) == 0, \"\", if(num(pqChecks25) > 0 && num(pqChecks25) <= 2.5 && num(pqChecks26) > 0 && num(pqChecks26) <= 2.5 && num(pqChecks27) > 0 && num(pqChecks27) <= 2.5, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_7",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_7_cell_1_static",
+                    "key": "g",
+                    "type": "label",
+                    "value": "2. Waveform",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_8",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_8_cell_1_static",
+                    "key": "a",
+                    "type": "label",
+                    "value": "(a)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_8_cell_2_static",
+                    "key": "total_harmonic_distoration_tolerance",
+                    "type": "label",
+                    "value": "Total Harmonic Distoration Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_8_cell_3_static",
+                    "key": "5",
+                    "type": "label",
+                    "value": "5%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_8_cell_4_pqChecks29",
+                    "key": "pqChecks29",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_8_cell_5_pqChecks30",
+                    "key": "pqChecks30",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_8_cell_6_pqChecks31",
+                    "key": "pqChecks31",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_8_cell_7_pqChecks32",
+  "key": "pqChecks32",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks29) == 0 || num(pqChecks30) == 0 || num(pqChecks31) == 0, \"\", if(num(pqChecks29) > 0 && num(pqChecks29) <= 5 && num(pqChecks30) > 0 && num(pqChecks30) <= 5 && num(pqChecks31) > 0 && num(pqChecks31) <= 5, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_9",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_9_cell_1_static",
+                    "key": "b",
+                    "type": "label",
+                    "value": "(b)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_9_cell_2_static",
+                    "key": "total_harmonic_transient_tolerance",
+                    "type": "label",
+                    "value": "Total Harmonic Transient Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_9_cell_3_static",
+                    "key": "15",
+                    "type": "label",
+                    "value": "15%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_9_cell_4_pqChecks33",
+                    "key": "pqChecks33",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_9_cell_5_pqChecks34",
+                    "key": "pqChecks34",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_9_cell_6_pqChecks35",
+                    "key": "pqChecks35",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_9_cell_7_pqChecks36",
+  "key": "pqChecks36",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks33) == 0 || num(pqChecks34) == 0 || num(pqChecks35) == 0, \"\", if(num(pqChecks33) > 0 && num(pqChecks33) <= 15 && num(pqChecks34) > 0 && num(pqChecks34) <= 15 && num(pqChecks35) > 0 && num(pqChecks35) <= 15, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_10",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_10_cell_1_static",
+                    "key": "c",
+                    "type": "label",
+                    "value": "(c)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_10_cell_2_static",
+                    "key": "individual_harmonic",
+                    "type": "label",
+                    "value": "Individual Harmonic",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_10_cell_3_static",
+                    "key": "3",
+                    "type": "label",
+                    "value": "3%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_10_cell_4_pqChecks37",
+                    "key": "pqChecks37",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_10_cell_5_pqChecks38",
+                    "key": "pqChecks38",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_10_cell_6_pqChecks39",
+                    "key": "pqChecks39",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                 {
+  "_id": "section_1_table_1_row_10_cell_7_pqChecks40",
+  "key": "pqChecks40",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks37) == 0 || num(pqChecks38) == 0 || num(pqChecks39) == 0, \"\", if(num(pqChecks37) > 0 && num(pqChecks37) <= 3 && num(pqChecks38) > 0 && num(pqChecks38) <= 3 && num(pqChecks39) > 0 && num(pqChecks39) <= 3, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+                {
+                "_id": "section_1_table_1_row_7",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_7_cell_1_static",
+                    "key": "g",
+                    "type": "label",
+                    "value": "3. Frequency",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_11",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_11_cell_1_static",
+                    "key": "a",
+                    "type": "label",
+                    "value": "(a)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_11_cell_2_static",
+                    "key": "nominal_frequency",
+                    "type": "label",
+                    "value": "Nominal Frequency",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_11_cell_3_acceptableNominalFrq",
+                    "key": "acceptableNominalFrq",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Select Friquency",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "50Hz",
+                        "value": "50Hz"
+                      },
+                      {
+                        "label": "60Hz",
+                        "value": "60Hz"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_11_cell_4_pqChecks41",
+                    "key": "pqChecks41",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_11_cell_5_pqChecks42",
+                    "key": "pqChecks42",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_11_cell_6_pqChecks43",
+                    "key": "pqChecks43",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                 {
+  "_id": "section_1_table_1_row_11_cell_7_pqChecks44",
+  "key": "pqChecks44",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks41) == 0 || num(pqChecks42) == 0 || num(pqChecks43) == 0, \"\", if(num(pqChecks41) >= 50 && num(pqChecks41) <= 60 && num(pqChecks42) >= 50 && num(pqChecks42) <= 60 && num(pqChecks43) >= 50 && num(pqChecks43) <= 60, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_12",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_12_cell_1_static",
+                    "key": "b",
+                    "type": "label",
+                    "value": "(b)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_12_cell_2_static",
+                    "key": "frequency_tolerance",
+                    "type": "label",
+                    "value": "Frequency Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_12_cell_3_static",
+                    "key": "3",
+                    "type": "label",
+                    "value": "± 3%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_12_cell_4_pqChecks45",
+                    "key": "pqChecks45",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_12_cell_5_pqChecks46",
+                    "key": "pqChecks46",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_12_cell_6_pqChecks47",
+                    "key": "pqChecks47",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                 {
+  "_id": "section_1_table_1_row_12_cell_7_pqChecks48",
+  "key": "pqChecks48",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks45) == 0 || num(pqChecks46) == 0 || num(pqChecks47) == 0, \"\", if(num(pqChecks45) >= -3 && num(pqChecks45) <= 3 && num(pqChecks46) >= -3 && num(pqChecks46) <= 3 && num(pqChecks47) >= -3 && num(pqChecks47) <= 3, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_13",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_13_cell_1_static",
+                    "key": "c",
+                    "type": "label",
+                    "value": "(c)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_13_cell_2_static",
+                    "key": "frequency_modulation",
+                    "type": "label",
+                    "value": "Frequency Modulation",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_13_cell_3_static",
+                    "key": "0_5",
+                    "type": "label",
+                    "value": "0.5%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_13_cell_4_pqChecks49",
+                    "key": "pqChecks49",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_13_cell_5_pqChecks50",
+                    "key": "pqChecks50",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_13_cell_6_pqChecks51",
+                    "key": "pqChecks51",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+  "_id": "section_1_table_1_row_13_cell_7_pqChecks52",
+  "key": "pqChecks52",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks49) == 0 || num(pqChecks50) == 0 || num(pqChecks51) == 0, \"\", if(num(pqChecks49) > 0 && num(pqChecks49) <= 0.5 && num(pqChecks50) > 0 && num(pqChecks50) <= 0.5 && num(pqChecks51) > 0 && num(pqChecks51) <= 0.5, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_14",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_14_cell_1_static",
+                    "key": "d",
+                    "type": "label",
+                    "value": "(d)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_14_cell_2_static",
+                    "key": "frequency_transient_tolerance",
+                    "type": "label",
+                    "value": "Frequency Transient Tolerance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_14_cell_3_static",
+                    "key": "4",
+                    "type": "label",
+                    "value": "±4%",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_14_cell_4_pqChecks53",
+                    "key": "pqChecks53",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_14_cell_5_pqChecks54",
+                    "key": "pqChecks54",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_14_cell_6_pqChecks55",
+                    "key": "pqChecks55",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                 {
+  "_id": "section_1_table_1_row_14_cell_7_pqChecks56",
+  "key": "pqChecks56",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks53) == 0 || num(pqChecks54) == 0 || num(pqChecks55) == 0, \"\", if(num(pqChecks53) >= -4 && num(pqChecks53) <= 4 && num(pqChecks54) >= -4 && num(pqChecks54) <= 4 && num(pqChecks55) >= -4 && num(pqChecks55) <= 4, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_15",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_15_cell_1_static",
+                    "key": "e",
+                    "type": "label",
+                    "value": "(e)",
+                    "width": "20px",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_15_cell_2_static",
+                    "key": "frequency_transient_recovery_time",
+                    "type": "label",
+                    "value": "Frequency Transient Recovery Time",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_15_cell_3_static",
+                    "key": "2_sec",
+                    "type": "label",
+                    "value": "2 Sec",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_15_cell_4_pqChecks57",
+                    "key": "pqChecks57",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_15_cell_5_pqChecks58",
+                    "key": "pqChecks58",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_1_row_15_cell_6_pqChecks59",
+                    "key": "pqChecks59",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                 {
+  "_id": "section_1_table_1_row_15_cell_7_pqChecks60",
+  "key": "pqChecks60",
+  "type": "radio",
+  "value": "",
+  "rows": null,
+  "required": false,
+  "disabled": true,
+  "placeholder": "Select an option",
+  "inputType": null,
+  "options": [
+    {
+      "label": "Sat",
+      "value": "Sat"
+    },
+    {
+      "label": "Unsat",
+      "value": "Unsat"
+    }
+  ],
+  "colspan": 1,
+  "rowspan": 1,
+  "align": "left",
+  "isDynamic": false,
+  "lookupKey": null,
+  "prefill": null,
+  "prefillSource": null,
+  "lockAfterPrefill": null,
+  "hiddenKey": null,
+  "displayKey": null,
+  "formula": {
+    "expression": "if(num(pqChecks57) == 0 || num(pqChecks58) == 0 || num(pqChecks59) == 0, \"\", if(num(pqChecks57) > 0 && num(pqChecks57) <= 2 && num(pqChecks58) > 0 && num(pqChecks58) <= 2 && num(pqChecks59) > 0 && num(pqChecks59) <= 2, \"Sat\", \"Unsat\"))",
+    "decimals": 0,
+    "emptyAsZero": true
+  }
+}
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ]
+      }
+    }
+  ]
+}

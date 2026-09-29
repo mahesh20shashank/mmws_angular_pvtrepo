@@ -1,0 +1,874 @@
+<div class="act">
+  @switch (view()) {
+    <!-- ============ LIST ============ -->
+    @case ("list") {
+      <div class="act-head">
+        <div class="act-heading">
+          <span class="act-title">Defect / DART Management</span>
+          <span class="act-sub">All DARTs raised by HMS Daring D32 — open, closed and hidden</span>
+        </div>
+        <div class="act-head-btns">
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="openActivity()" title="Recent Activity — your latest defect, service &amp; RA transactions; resume an interrupted entry">
+            <app-icon name="history" [size]="15" variant="inherit" />Recent Activity
+          </app-button>
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="openHistory()" title="History — view closed DART / RA / DL history">
+            <app-icon name="clipboard-list" [size]="15" variant="inherit" />History
+          </app-button>
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="openGuarantee()" title="Guarantee Defect — raise a defect covered under equipment guarantee">
+            <app-icon name="shield-check" [size]="15" variant="inherit" />Add / Extend Guarantee
+          </app-button>
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="viewApproval()" title="Approval / RA Status — track approvals and Repair Authorisations">
+            <app-icon name="square-check-big" [size]="15" variant="inherit" />View Approval / RA Status
+          </app-button>
+          <app-button type="button" class="act-btn act-btn--primary" (click)="openAdd()" title="Add Defect / DART — log a new defect and generate its DART">
+            <app-icon name="plus" [size]="15" variant="inherit" />Add Defect / DART
+          </app-button>
+        </div>
+      </div>
+
+      <div class="glass-card act-toolbar">
+        <div class="act-toolbar-left">
+          <span class="act-list-title">Defect / DART List</span>
+          <span class="act-pill act-pill--success">{{ orderedDarts().length }} records</span>
+          @if (selectedDarts().length) {
+            <span class="act-pill act-pill--info">{{ selectedDarts().length }} DART{{ selectedDarts().length > 1 ? "s" : "" }} selected</span>
+          }
+        </div>
+        <div class="act-toolbar-right">
+          <div class="act-search">
+            <app-icon name="search" [size]="15" variant="muted" />
+            <input id="" type="text" placeholder="Search records" [value]="search()" (input)="search.set($any($event.target).value)" />
+          </div>
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="toggleFilters()">
+            <app-icon name="filter" [size]="15" variant="inherit" />Filters
+            @if (hasFilters()) {
+              <span class="act-badge">{{ appliedFilterCount() }}</span>
+            }
+            <app-icon [name]="filtersOpen() ? 'chevron-up' : 'chevron-down'" [size]="13" variant="muted" />
+          </app-button>
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="resetFilters()">
+            <app-icon name="rotate-ccw" [size]="14" variant="inherit" />Reset Filters
+          </app-button>
+          <app-button
+            type="button"
+            class="act-btn"
+            [class.act-btn--primary]="selectedDarts().length > 0"
+            [class.act-btn--ghost]="!selectedDarts().length"
+            (click)="openRaiseRA()"
+          >
+            <app-icon name="send" [size]="14" variant="inherit" />Raise RA
+          </app-button>
+        </div>
+      </div>
+
+      @if (filtersOpen()) {
+        <div class="glass-card act-filters">
+          <label class="act-filter-field">
+            <span>Current Status</span>
+            <select [value]="statusFilter()" (change)="statusFilter.set($any($event.target).value)">
+              <option value="">All statuses</option>
+              @for (s of statusFilterOptions; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </label>
+          <label class="act-filter-field">
+            <span>Severity</span>
+            <select [value]="severityFilter()" (change)="severityFilter.set($any($event.target).value)">
+              <option value="">All severities</option>
+              @for (s of severityFilterOptions; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </label>
+          <label class="act-filter-field">
+            <span>Reason</span>
+            <select [value]="reasonFilter()" (change)="reasonFilter.set($any($event.target).value)">
+              <option value="">All reasons</option>
+              @for (s of reasonFilterOptions; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </label>
+          <label class="act-filter-field">
+            <span>Date Range</span>
+            <select [value]="dateRangeFilter()" (change)="dateRangeFilter.set($any($event.target).value)">
+              <option value="">Any time</option>
+              @for (s of dateRangeFilterOptions; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </label>
+        </div>
+      }
+
+      <div class="glass-card act-grid-wrap">
+        <app-data-grid
+          [columnDefs]="dartColumnDefs"
+          [rowData]="orderedDarts()"
+          [pageSize]="10"
+          height="520px"
+          [showCheckboxes]="true"
+          [isRowSelectable]="isDartSelectable"
+          [suppressRowClickSelection]="true"
+          (selectionChanged)="onDartSelectionChanged($event)"
+          (rowClicked)="onDartRowClicked($event)"
+        />
+      </div>
+    }
+
+    <!-- ============ ADD DEFECT / DART ============ -->
+    @case ("add") {
+      <div class="act-head">
+        <app-button type="button" class="act-back" (click)="backList()">
+          <app-icon name="arrow-left" [size]="15" variant="inherit" />Back to Defect / DART List
+        </app-button>
+      </div>
+
+      <div class="glass-card act-form">
+        <span class="act-form-title">Select Reason</span>
+        <p class="act-form-desc">The selected reason drives the fields, validation and downstream workflow — the Digital Defect Book form is fully dynamic.</p>
+        <app-select-cards [cards]="reasonCards" [value]="reason()" (valueChange)="pickReason($event)" />
+      </div>
+
+      <div class="glass-card act-form">
+        <div class="act-form-head">
+          <span class="act-form-title">Digital Defect Book — {{ reason() }}</span>
+          <span class="act-mand-note">Fields marked <span class="act-star">*</span> are mandatory</span>
+        </div>
+
+        <div class="act-form-grid">
+          @for (field of baseFieldSpecs(); track field.key) {
+            <app-dynamic-field [spec]="field" [control]="$any(baseForm.get(field.key))" [submitAttempted]="submitAttempted()" />
+          }
+        </div>
+
+        @if (showRectified()) {
+          <div class="act-branch-prompt">
+            <div class="act-branch-copy">
+              <span class="act-branch-title">Was the defect rectified onboard? <span class="act-star">*</span></span>
+              <span class="act-branch-sub">Yes enables closure fields · No reveals the Raise DART fields.</span>
+            </div>
+            <label class="act-radio-inline">
+              <input type="radio" class="act-radio-input" name="rectified" value="Yes" [checked]="rectified() === 'Yes'" (change)="setRectified('Yes')" />
+              <span class="act-radio-outer" [class.act-radio-outer--on]="rectified() === 'Yes'"><span class="act-radio-dot" [class.act-radio-dot--on]="rectified() === 'Yes'"></span></span>
+              Yes — rectified
+            </label>
+            <label class="act-radio-inline">
+              <input type="radio" class="act-radio-input" name="rectified" value="No" [checked]="rectified() === 'No'" (change)="setRectified('No')" />
+              <span class="act-radio-outer" [class.act-radio-outer--on]="rectified() === 'No'"><span class="act-radio-dot" [class.act-radio-dot--on]="rectified() === 'No'"></span></span>
+              No — raise DART
+            </label>
+          </div>
+        }
+
+        @if (showClosure()) {
+          <div class="act-section act-section--success">
+            <div class="act-section-head">
+              <span class="act-dot act-dot--success"></span>
+              <span class="act-section-title act-section-title--success">Closure Details</span>
+              <span class="act-section-hint">— case closes in this form; hidden DART retained for trace</span>
+            </div>
+            <div class="act-form-grid">
+              @for (field of closureFieldSpecs; track field.key) {
+                <app-dynamic-field [spec]="field" [control]="$any(closureForm.get(field.key))" [submitAttempted]="submitAttempted()" />
+              }
+            </div>
+          </div>
+        }
+
+        @if (showRaiseDart()) {
+          <div class="act-section act-section--warning">
+            <div class="act-section-head">
+              <span class="act-dot act-dot--warning"></span>
+              <span class="act-section-title act-section-title--warning">Raise DART</span>
+              <span class="act-section-hint">— DART number is now visible and the concerned authority is notified</span>
+            </div>
+            <div class="act-form-grid">
+              @for (field of raiseDartFieldSpecs; track field.key) {
+                <app-dynamic-field [spec]="field" [control]="$any(raiseDartForm.get(field.key))" [submitAttempted]="submitAttempted()" />
+              }
+            </div>
+
+            <div class="act-branch-prompt">
+              <div class="act-branch-copy">
+                <span class="act-branch-title">Guarantee Defect? <span class="act-star">*</span></span>
+                <span class="act-branch-sub">Flags this equipment as under an active guarantee window — reveals the guarantee claim fields (reused data is not re-entered).</span>
+              </div>
+              <label class="act-radio-inline">
+                <input type="radio" class="act-radio-input" name="guaranteeDefect" value="Yes" [checked]="guaranteeDefect() === 'Yes'" (change)="setGuaranteeDefect('Yes')" />
+                <span class="act-radio-outer" [class.act-radio-outer--on]="guaranteeDefect() === 'Yes'"><span class="act-radio-dot" [class.act-radio-dot--on]="guaranteeDefect() === 'Yes'"></span></span>
+                Yes
+              </label>
+              <label class="act-radio-inline">
+                <input type="radio" class="act-radio-input" name="guaranteeDefect" value="No" [checked]="guaranteeDefect() === 'No'" (change)="setGuaranteeDefect('No')" />
+                <span class="act-radio-outer" [class.act-radio-outer--on]="guaranteeDefect() === 'No'"><span class="act-radio-dot" [class.act-radio-dot--on]="guaranteeDefect() === 'No'"></span></span>
+                No
+              </label>
+            </div>
+
+            @if (showGD()) {
+              <div class="act-gd-panel">
+                <div class="act-section-head">
+                  <span class="act-dot act-dot--info"></span>
+                  <span class="act-section-title act-section-title--info">Guarantee Defect Details</span>
+                  <div class="act-spacer"></div>
+                  <app-button type="button" class="act-btn act-btn--ghost" (click)="printGD()"><app-icon name="printer" [size]="14" variant="inherit" />Print GD Output</app-button>
+                </div>
+
+                <div class="act-gd-progress" [style.border-color]="guaranteePercent().border">
+                  <div class="act-gd-progress-head">
+                    <app-icon name="shield-check" [size]="15" [color]="guaranteePercent().color" />
+                    <span>Guarantee Period</span>
+                    <div class="act-spacer"></div>
+                    <span class="act-gd-badge" [style.color]="guaranteePercent().color" [style.background]="guaranteePercent().badgeBg" [style.border-color]="guaranteePercent().border">
+                      {{ guaranteePercent().pctLabel }} elapsed
+                    </span>
+                  </div>
+                  <div class="act-gd-bar"><div class="act-gd-bar-fill" [style.width]="guaranteePercent().pctWidth" [style.background]="guaranteePercent().color"></div></div>
+                  <div class="act-gd-progress-foot">
+                    <span>Commissioned <b>{{ guaranteePercent().commissionLabel }}</b></span>
+                    <span [style.color]="guaranteePercent().color">{{ guaranteePercent().remainLabel }}</span>
+                    <span>GD ends <b>{{ guaranteePercent().endLabel }}</b></span>
+                  </div>
+                </div>
+
+                <span class="act-uppercase-label">Auto-populated · reused</span>
+                <div class="act-form-grid">
+                  @for (g of gdReused; track g.name) {
+                    <div class="act-readonly-field">
+                      <div class="act-readonly-field-head"><span>{{ g.name }}</span><span class="act-readonly-badge">{{ g.source }}</span></div>
+                      <input id="" type="text" [value]="g.value" disabled />
+                    </div>
+                  }
+                </div>
+
+                <span class="act-uppercase-label">New — guarantee-specific</span>
+                <div class="act-form-grid">
+                  @for (field of gdFieldSpecs; track field.key) {
+                    <app-dynamic-field [spec]="field" [control]="$any(gdForm.get(field.key))" [submitAttempted]="submitAttempted()" />
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        @if (showSpareDetails()) {
+          <div class="act-section act-section--info">
+            <div class="act-section-head">
+              <span class="act-dot act-dot--info"></span>
+              <span class="act-section-title act-section-title--info">Spare Details</span>
+              <span class="act-section-hint">— map issued spares to this defect / routine</span>
+            </div>
+            @if (savedSpares().length) {
+              <div class="act-table-wrap">
+                <table class="act-table">
+                  <thead>
+                    <tr>
+                      <th>Pattern Number</th>
+                      <th>Item Description</th>
+                      <th>Qty Issued</th>
+                      <th>Issued To</th>
+                      <th>Authority</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (sp of savedSpares(); track sp.pattern) {
+                      <tr>
+                        <td class="act-cell-accent">{{ sp.pattern }}</td>
+                        <td>{{ sp.desc }}</td>
+                        <td>{{ sp.qtyIssued }}</td>
+                        <td>{{ sp.issuedTo }}</td>
+                        <td>{{ sp.authority }}</td>
+                        <td>
+                          <app-button type="button" class="act-icon-btn" title="Remove — unmap this spare" (click)="removeSavedSpare(sp.pattern)">
+                            <app-icon name="trash-2" [size]="14" variant="danger" />
+                          </app-button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+            <div>
+              <app-button type="button" class="act-btn act-btn--primary" (click)="openSpareModal()">
+                <app-icon name="plus" [size]="14" variant="inherit" />{{ savedSpares().length ? "Edit Spares" : "Add Spares" }}
+              </app-button>
+            </div>
+          </div>
+        }
+
+        @if (showTrialDetails()) {
+          <div class="act-section act-section--warning">
+            <div class="act-section-head">
+              <span class="act-dot act-dot--warning"></span>
+              <span class="act-section-title act-section-title--warning">Trial Details</span>
+              <span class="act-section-hint">— submit equipment &amp; routine to the Trials Module</span>
+            </div>
+            @if (savedTrial(); as trial) {
+              <div class="act-trial-saved">
+                <app-icon name="circle-check-big" [size]="16" variant="success" />
+                <span>Submitted to Trials Module</span>
+                <span class="act-muted">Trial Agency: <b class="act-trial-agency">{{ trial.agency }}</b></span>
+                <div class="act-spacer"></div>
+                <app-button type="button" class="act-icon-btn" title="Remove — withdraw the trial submission" (click)="removeTrial()">
+                  <app-icon name="trash-2" [size]="14" variant="danger" />
+                </app-button>
+              </div>
+            }
+            <div>
+              <app-button type="button" class="act-btn act-btn--primary" (click)="openTrialModal()">
+                <app-icon name="plus" [size]="14" variant="inherit" />{{ savedTrial() ? "Edit Trial" : "Add Trials" }}
+              </app-button>
+            </div>
+          </div>
+        }
+
+        <div class="act-form-actions">
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="backList()">Cancel</app-button>
+          <app-button type="button" class="act-btn act-btn--primary" (click)="submitDdb()">{{ isEditing() ? "Update" : "Save" }}</app-button>
+        </div>
+      </div>
+    }
+
+    <!-- ============ RAISE RA ============ -->
+    @case ("raiseRA") {
+      <div class="act-head">
+        <app-button type="button" class="act-back" (click)="backList()">
+          <app-icon name="arrow-left" [size]="15" variant="inherit" />Back to Defect / DART List
+        </app-button>
+      </div>
+
+      <div class="glass-card act-form">
+        <span class="act-form-title">Selected DARTs for this RA</span>
+        <div class="act-chip-row">
+          @for (d of selectedDartChips(); track d.dart) {
+            <div class="act-chip">
+              <span class="act-chip-dart">{{ d.dart }}</span>
+              <span>{{ d.item }}</span>
+              <span class="act-chip-sev">{{ d.sev }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="glass-card act-form">
+        <span class="act-form-title">Select RA Type</span>
+        <p class="act-form-desc">The RA type determines the form content and the routing that follows.</p>
+        <app-select-cards [cards]="raTypeCards" [value]="raType()" (valueChange)="pickRaType($event)" />
+
+        <span class="act-form-title act-form-title--divider">RA Details</span>
+        <div class="act-form-grid">
+          @for (field of raFieldSpecs(); track field.key) {
+            <app-dynamic-field [spec]="field" [control]="$any(raForm.get(field.key))" [submitAttempted]="submitAttempted()" />
+          }
+        </div>
+
+        <div class="act-form-actions">
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="backList()">Cancel</app-button>
+          <app-button type="button" class="act-btn act-btn--primary" (click)="submitRA()" title="Raise RA &amp; Route to FMU">Raise RA</app-button>
+        </div>
+      </div>
+    }
+
+    <!-- ============ APPROVAL / RA STATUS ============ -->
+    @case ("approval") {
+      <div class="act-head">
+        <app-button type="button" class="act-back" (click)="backList()">
+          <app-icon name="arrow-left" [size]="15" variant="inherit" />Back to Defect / DART List
+        </app-button>
+        <div class="act-heading">
+          <span class="act-title">Approval / RA Status</span>
+          <span class="act-sub">Track RA progress by type and routing status</span>
+        </div>
+      </div>
+
+      <div class="glass-card act-grid-wrap">
+        <app-data-grid [columnDefs]="approvalColumnDefs" [rowData]="approvalRows()" [pageSize]="10" height="520px" (rowClicked)="onApprovalRowClicked($event)" />
+      </div>
+    }
+
+    <!-- ============ APPROVAL DETAIL ============ -->
+    @case ("approvalDetail") {
+      @if (approvalDetailRow(); as row) {
+        <div class="act-head">
+          <app-button type="button" class="act-back" (click)="approvalDetailBack()"><app-icon name="arrow-left" [size]="14" variant="inherit" />Back</app-button>
+          <span class="act-title">Request {{ row.id }}</span>
+          <span class="act-chip-sev">{{ row.status }}</span>
+        </div>
+
+        <div class="glass-card act-form">
+          <div class="act-form-grid">
+            <div class="act-readonly-field">
+              <div class="act-readonly-field-head"><span>DART / RA No.</span></div>
+              <input id="" type="text" [value]="row.id" disabled />
+            </div>
+
+            @if (approvalEditable()) {
+              <label class="act-inline-input"><span>Equipment / Service</span><input type="text" [formControl]="approvalEditForm.controls.eqp" /></label>
+              <label class="act-inline-input"><span>Reason / RA Type</span><input type="text" [formControl]="approvalEditForm.controls.type" /></label>
+              <label class="act-inline-input"><span>Submitted By</span><input type="text" [formControl]="approvalEditForm.controls.submittedBy" /></label>
+              <label class="act-inline-input"><span>Date</span><input type="text" [formControl]="approvalEditForm.controls.date" /></label>
+            } @else {
+              <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Equipment / Service</span></div><input type="text" [value]="row.item" disabled /></div>
+              <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Reason / RA Type</span></div><input type="text" [value]="row.type" disabled /></div>
+              <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Submitted By</span></div><input type="text" [value]="row.submittedBy" disabled /></div>
+              <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Date</span></div><input type="text" [value]="row.date" disabled /></div>
+            }
+
+            <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Status / Routing</span></div><input type="text" [value]="row.status" disabled /></div>
+            <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Reviewing Authority</span></div><input type="text" [value]="row.authority" disabled /></div>
+          </div>
+
+          <div class="act-remarks-block">
+            <span class="act-uppercase-label">Reviewing Authority Remarks</span>
+            <p>{{ row.remarks }}</p>
+          </div>
+
+          @if (approvalIsVerify()) {
+            <div class="act-section act-section--info">
+              <p class="act-section-hint">
+                Repair reported complete by {{ row.agency }}. Confirm SAT to close the DART, or record UNSAT to fast-track it directly to the Yard for rework
+                (FMU re-assessment is bypassed).
+              </p>
+              <div class="act-radio-row">
+                <label class="act-radio-inline">
+                  <input type="radio" class="act-radio-input" name="verify" value="SAT" [checked]="verify() === 'SAT'" (change)="setVerify('SAT')" />
+                  <span class="act-radio-outer" [class.act-radio-outer--on]="verify() === 'SAT'"><span class="act-radio-dot" [class.act-radio-dot--on]="verify() === 'SAT'"></span></span>
+                  SAT — satisfactory, close DART
+                </label>
+                <label class="act-radio-inline">
+                  <input type="radio" class="act-radio-input" name="verify" value="UNSAT" [checked]="verify() === 'UNSAT'" (change)="setVerify('UNSAT')" />
+                  <span class="act-radio-outer" [class.act-radio-outer--on]="verify() === 'UNSAT'"><span class="act-radio-dot" [class.act-radio-dot--on]="verify() === 'UNSAT'"></span></span>
+                  UNSAT — fast-track to Yard
+                </label>
+              </div>
+
+              @if (verify() === "SAT") {
+                <div class="act-section act-section--success">
+                  <span class="act-section-title act-section-title--success">Closure — SAT confirmed</span>
+                  <div class="act-radio-row">
+                    @for (opt of ["Dockyard", "FMU", "Ship Staff"]; track opt) {
+                      <label class="act-radio-inline">
+                        <input type="radio" class="act-radio-input" name="closedBy" [value]="opt" [checked]="closedBy() === opt" (change)="setClosedBy($any(opt))" />
+                        <span class="act-radio-outer" [class.act-radio-outer--on]="closedBy() === opt"><span class="act-radio-dot" [class.act-radio-dot--on]="closedBy() === opt"></span></span>
+                        {{ opt }}
+                      </label>
+                    }
+                  </div>
+                  @if (closedBy() === "Ship Staff") {
+                    <div class="act-form-grid">
+                      <label class="act-inline-input">
+                        <span>Personnel Number</span>
+                        <input type="text" placeholder="Enter personnel number" [value]="personnelNo()" (input)="setPersonnelNo($any($event.target).value)" />
+                      </label>
+                      <div class="act-readonly-field">
+                        <div class="act-readonly-field-head"><span>Personnel Name</span></div>
+                        @if (personnelName()) {
+                          <span class="act-personnel-name">{{ personnelName() }}</span>
+                        } @else {
+                          <span class="act-muted">Auto-fetched on entry</span>
+                        }
+                      </div>
+                    </div>
+                  }
+                  <span class="act-field-label">Closure Remarks <span class="act-star">*</span></span>
+                  <app-rich-text-editor placeholder="Describe the closure…" [formControl]="closureRemarksControl" />
+                  <div class="act-form-actions">
+                    <app-button type="button" class="act-btn act-btn--primary" [disabled]="!satCanSubmit()" (click)="submitVerifySat()">
+                      <app-icon name="check" [size]="14" variant="inherit" />Confirm SAT &amp; Close DART
+                    </app-button>
+                  </div>
+                </div>
+              }
+
+              @if (verify() === "UNSAT") {
+                <div class="act-section act-section--danger">
+                  <span class="act-section-title act-section-title--danger">UNSAT Remarks <span class="act-star">*</span></span>
+                  <p class="act-section-hint">
+                    The case will not return to FMU re-assessment — it routes directly to the Yard for rework, regardless of which agency performed the original
+                    work.
+                  </p>
+                  <app-rich-text-editor placeholder="Describe why the repair is unsatisfactory…" [formControl]="verifyRemarksControl" />
+                  <div class="act-form-actions">
+                    <app-button type="button" class="act-btn act-btn--danger" [disabled]="!unsatCanSubmit()" (click)="submitVerifyUnsat()">
+                      <app-icon name="send" [size]="14" variant="inherit" />Record UNSAT &amp; Fast-track to Yard
+                    </app-button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          @if (approvalIsCertificate()) {
+            <div class="act-section act-section--info">
+              <p class="act-section-hint">
+                The defect could not be rectified by the repair agency — the case is resolved via certificate, not verification. No SAT / UNSAT choice is
+                presented.
+              </p>
+              <div class="act-form-grid">
+                <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Certificate Type</span></div><span>{{ row.certType }} — {{ row.certMeaning }}</span></div>
+                <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Issued Date</span></div><span>{{ row.certDate }}</span></div>
+                <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Issuing Authority</span></div><span>{{ row.certAuth }}</span></div>
+              </div>
+              <app-button type="button" class="act-btn act-btn--ghost" (click)="downloadCert()"><app-icon name="download" [size]="14" variant="inherit" />Download Certificate</app-button>
+            </div>
+          }
+
+          @if (approvalIsDtnr()) {
+            <div class="act-section act-section--info">
+              <p class="act-section-hint">DTNR is the final outcome for this RA — a deferral decision, not a certificate. No SAT / UNSAT choice is presented.</p>
+              <div class="act-form-grid">
+                <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Deferral Outcome</span></div><span>{{ row.deferOutcome }}</span></div>
+                <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Deferral Date</span></div><span>{{ row.deferDate }}</span></div>
+                <div class="act-readonly-field"><div class="act-readonly-field-head"><span>Refit Reference</span></div><span>{{ row.refitRef }}</span></div>
+              </div>
+            </div>
+          }
+
+          @if (approvalEditable()) {
+            <div class="act-section">
+              <label class="act-field-label" for="correctionNote">Correction / Amendment Note</label>
+              <textarea id="correctionNote" class="act-plain-textarea" [formControl]="correctionNoteControl" placeholder="Describe the correction made before re-submitting…"></textarea>
+              <div class="act-form-actions">
+                <app-button type="button" class="act-btn act-btn--ghost" (click)="approvalDetailBack()">Cancel</app-button>
+                <app-button type="button" class="act-btn act-btn--primary" (click)="approvalResubmit()">Re-submit for Assessment</app-button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    <!-- ============ ADD / EXTEND GUARANTEE ============ -->
+    @case ("guarantee") {
+      <div class="act-head">
+        <app-button type="button" class="act-back" (click)="backList()">
+          <app-icon name="arrow-left" [size]="15" variant="inherit" />Back to Defect / DART List
+        </app-button>
+      </div>
+
+      <div class="act-guar-grid">
+        <div class="glass-card act-form">
+          <span class="act-form-title">Add / Extend Equipment Guarantee</span>
+          <span class="act-form-desc">Per-equipment coverage · CO approval required</span>
+          <div class="act-warning-banner">
+            <app-icon name="triangle-alert" [size]="16" variant="warning" />
+            <span
+              >Guarantee is tracked per equipment, not as a ship-wide clock. The base 2-year period (from ship commission) is not extendable ship-wide — this
+              action manages coverage for a single equipment (e.g. items fitted or replaced after commissioning).</span
+            >
+          </div>
+          <div class="act-form-grid act-form-grid--2col">
+            @for (field of guarFieldSpecs; track field.key) {
+              <app-dynamic-field [spec]="field" [control]="$any(guarForm.get(field.key))" [submitAttempted]="submitAttempted()" />
+            }
+          </div>
+          <div class="act-form-actions">
+            <app-button type="button" class="act-btn act-btn--ghost" (click)="backList()">Cancel</app-button>
+            <app-button type="button" class="act-btn act-btn--primary" (click)="submitGuarantee()">Submit</app-button>
+          </div>
+        </div>
+
+        <div class="glass-card act-form">
+          <span class="act-form-title">Approval Chain</span>
+          <p class="act-form-desc">CO is the sole approving authority; HOD review is a recommendation only, and the Ship Administrator executes once approval is recorded.</p>
+          <div class="act-guar-steps">
+            @for (step of guarSteps; track step.role; let i = $index) {
+              <app-button
+                type="button"
+                class="act-guar-step"
+                [class.act-guar-step--done]="i < guarActiveStep()"
+                [class.act-guar-step--active]="i === guarActiveStep()"
+                (click)="setGuarStep(i)"
+              >
+                <app-icon [name]="i < guarActiveStep() ? 'circle-check-big' : step.icon" [size]="16" [variant]="i < guarActiveStep() ? 'success' : i === guarActiveStep() ? 'accent' : 'muted'" />
+                <div class="act-guar-step-body">
+                  <span class="act-guar-step-role">{{ step.role }}</span>
+                  <span class="act-guar-step-act">{{ step.act }}</span>
+                </div>
+                <span class="act-guar-step-badge">{{ i < guarActiveStep() ? guarDoneLabels[i] : guarDefaultBadges[i] }}</span>
+              </app-button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card act-guar-legend">
+        <span class="act-form-title">Guarantee Exposure Threshold</span>
+        <div class="act-legend-row"><span class="act-legend-dot" style="background: #22c55e"></span>0–50% Green — within guarantee, low exposure</div>
+        <div class="act-legend-row"><span class="act-legend-dot" style="background: #f5b94b"></span>51–75% Amber — approaching guarantee end</div>
+        <div class="act-legend-row"><span class="act-legend-dot" style="background: #f82c36"></span>76%+ Red — guarantee expiring or expired</div>
+      </div>
+    }
+  }
+
+  <!-- ============ DART read-only detail drawer ============ -->
+  @if (selectedDartDetail(); as d) {
+    <app-detail-drawer
+      [open]="true"
+      [titleMode]="true"
+      [label]="d.item"
+      [subtitle]="d.dart + ' · ' + d.status"
+      iconName="file-text"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      sectionTitle="Digital Defect Book — Record Details"
+      [wide]="true"
+      (closed)="closeView()"
+    >
+      <div class="act-dart-detail-grid">
+        @for (field of dartDetailFields(); track field.label) {
+          <div class="act-dart-detail-field" [class.act-dart-detail-field--wide]="field.wide">
+            <div class="act-dart-detail-head">
+              <span>{{ field.label }}</span>
+              <span class="act-dart-detail-badge" [class.act-dart-detail-badge--user]="field.badge === 'User'">{{ field.badge }}</span>
+            </div>
+            <div class="act-dart-detail-value">{{ field.value }}</div>
+          </div>
+        }
+      </div>
+    </app-detail-drawer>
+  }
+
+  <!-- ============ Recent Activity ============ -->
+  @if (activityOpen()) {
+    <app-modal size="lg">
+      <div class="act-modal">
+        <div class="act-modal-head">
+          <span class="act-modal-title">Recent Activity</span>
+          <span class="act-sub">Your latest defect, service and RA transactions — resume an interrupted entry</span>
+          <app-button type="button" class="act-icon-btn act-modal-close" (click)="closeActivity()"><app-icon name="x" [size]="17" variant="inherit" /></app-button>
+        </div>
+        <app-pill-toggle [options]="activityFilterChips" [value]="activityFilter()" (valueChange)="setActivityFilter($any($event))" />
+        <div class="act-activity-list">
+          @for (a of filteredActivity(); track a.code) {
+            <div class="act-activity-row">
+              <app-icon [name]="a.kind === 'Defect' ? 'triangle-alert' : a.kind === 'Service' ? 'wrench' : 'send'" [size]="16" [variant]="a.kind === 'Defect' ? 'danger' : a.kind === 'Service' ? 'success' : 'accent'" />
+              <div class="act-activity-body">
+                <span class="act-activity-title">{{ a.title }}</span>
+                <span class="act-muted">{{ a.code }} · {{ a.when }} · {{ a.by }}</span>
+                @if (a.resumable && a.note) {
+                  <span class="act-activity-note">{{ a.note }}</span>
+                }
+              </div>
+              <span class="act-chip-sev" [class.act-chip-sev--draft]="a.status === 'Draft'" [class.act-chip-sev--closed]="a.status === 'Closed'">{{ a.status }}</span>
+              @if (a.resumable) {
+                <app-button type="button" class="act-btn act-btn--primary act-btn--sm" (click)="resumeActivity(a)"><app-icon name="send" [size]="13" variant="inherit" />Resume</app-button>
+              } @else {
+                <app-button type="button" class="act-btn act-btn--ghost act-btn--sm" (click)="openActivityRecord(a)"><app-icon name="arrow-right" [size]="13" variant="inherit" />Open</app-button>
+              }
+            </div>
+          }
+          @if (!filteredActivity().length) {
+            <div class="act-empty">No matching activity in your recent transactions.</div>
+          }
+        </div>
+      </div>
+    </app-modal>
+  }
+
+  <!-- ============ Add Spares modal ============ -->
+  @if (spareModalOpen()) {
+    <app-modal size="lg">
+      <div class="act-modal">
+        <div class="act-modal-head">
+          <span class="act-modal-title">Add Spares</span>
+          <span class="act-sub">Unmapped Spares List — issued, not yet mapped · OBS / Issue Transaction</span>
+          <app-button type="button" class="act-icon-btn act-modal-close" (click)="closeSpareModal()"><app-icon name="x" [size]="17" variant="inherit" /></app-button>
+        </div>
+        <label class="act-filter-field">
+          <span>Issued To</span>
+          <select [value]="spareIssuedFilter()" (change)="spareIssuedFilter.set($any($event.target).value)">
+            <option value="">All</option>
+            @for (o of spareIssuedOptions(); track o) {
+              <option [value]="o">{{ o }}</option>
+            }
+          </select>
+        </label>
+        <div class="act-table-wrap">
+          <table class="act-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Pattern Number</th>
+                <th>Item Description</th>
+                <th>Qty Issued</th>
+                <th>Qty Held</th>
+                <th>Denom.</th>
+                <th>Issue Date</th>
+                <th>Issued To</th>
+                <th>Inventory Type</th>
+                <th>CRP Category</th>
+                <th>Authority</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (sp of filteredSpareRows(); track sp.pattern) {
+                <tr (click)="toggleSpare(sp.pattern)" class="act-table-row--clickable">
+                  <td><span class="act-checkbox" [class.act-checkbox--on]="spareSelection().includes(sp.pattern)"><app-icon name="check" [size]="11" variant="inherit" /></span></td>
+                  <td class="act-cell-accent">{{ sp.pattern }}</td>
+                  <td>{{ sp.desc }}</td>
+                  <td>{{ sp.qtyIssued }}</td>
+                  <td>{{ sp.qtyHeld }}</td>
+                  <td>{{ sp.denom }}</td>
+                  <td>{{ sp.issueDate }}</td>
+                  <td>{{ sp.issuedTo }}</td>
+                  <td>{{ sp.invType }}</td>
+                  <td>{{ sp.crp }}</td>
+                  <td>{{ sp.authority }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="act-form-actions">
+          <span class="act-muted">{{ spareSelection().length }} selected</span>
+          <div class="act-spacer"></div>
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="closeSpareModal()">Cancel</app-button>
+          <app-button type="button" class="act-btn act-btn--primary" [class.act-btn--disabled]="!spareSelection().length" (click)="saveSpares()">Save Selected Spares</app-button>
+        </div>
+      </div>
+    </app-modal>
+  }
+
+  <!-- ============ Add Trials modal ============ -->
+  @if (trialModalOpen()) {
+    <app-modal size="lg">
+      <div class="act-modal">
+        <div class="act-modal-head">
+          <span class="act-modal-title">Add Trials</span>
+          <app-button type="button" class="act-icon-btn act-modal-close" (click)="closeTrialModal()"><app-icon name="x" [size]="17" variant="inherit" /></app-button>
+        </div>
+        <div class="act-form-grid act-form-grid--2col act-trial-grid">
+          <div class="act-trial-field">
+            <div class="act-trial-field-head"><span>Equipment Name</span><span class="act-readonly-badge">SFD</span></div>
+            <app-input-field [readonly]="true" [ngModel]="equipmentName() || editItem() || 'LO Pump - ME No.1'" [ngModelOptions]="{ standalone: true }" />
+          </div>
+          <div class="act-trial-field">
+            <div class="act-trial-field-head"><span>Equipment Code</span><span class="act-readonly-badge">SFD</span></div>
+            <app-input-field [readonly]="true" ngModel="ME-LO-0142" [ngModelOptions]="{ standalone: true }" />
+          </div>
+          <div class="act-trial-field">
+            <div class="act-trial-field-head"><span>Equipment Nomenclature</span><span class="act-readonly-badge">SFD</span></div>
+            <app-input-field [readonly]="true" ngModel="LO Circulating Pump" [ngModelOptions]="{ standalone: true }" />
+          </div>
+          <div class="act-trial-field">
+            <div class="act-trial-field-head"><span>Equipment Serial Number</span><span class="act-readonly-badge">SFD</span></div>
+            <app-input-field [readonly]="true" ngModel="KSB-2291-A" [ngModelOptions]="{ standalone: true }" />
+          </div>
+          <div class="act-trial-field">
+            <div class="act-trial-field-head"><span>Routine Name</span><span class="act-readonly-badge">SFD / Routine Master</span></div>
+            <app-input-field [readonly]="true" ngModel="Quarterly Trial — LO System" [ngModelOptions]="{ standalone: true }" />
+          </div>
+          <div class="act-trial-field">
+            <div class="act-trial-field-head"><span>Routine Description</span><span class="act-readonly-badge">SFD / Routine Master</span></div>
+            <app-input-field [readonly]="true" ngModel="Post-repair performance &amp; pressure trial" [ngModelOptions]="{ standalone: true }" />
+          </div>
+        </div>
+        <app-select-input
+          label="Trial Agency"
+          placeholder="Select Trial Agency"
+          [required]="true"
+          [options]="trialAgencyOptions"
+          [ngModel]="trialAgency()"
+          (ngModelChange)="trialAgency.set($event)"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <div class="act-form-actions">
+          <app-button type="button" class="act-btn act-btn--ghost" (click)="closeTrialModal()">Cancel</app-button>
+          <app-button type="button" class="act-btn act-btn--warning" [class.act-btn--disabled]="!trialAgency()" (click)="submitTrials()">Submit for Trials</app-button>
+        </div>
+      </div>
+    </app-modal>
+  }
+
+  <!-- ============ AI-Assisted Guidance drawer ============ -->
+  @if (guidanceOpen()) {
+    <app-detail-drawer
+      [open]="true"
+      [titleMode]="true"
+      label="AI-Assisted Guidance"
+      subtitle="Auto-triggered as you enter the defect · duplicate avoidance"
+      iconName="brain"
+      iconColor="#8FD0FF"
+      iconBg="rgba(0,136,255,0.18)"
+      (closed)="closeGuidance()"
+    >
+      @if (netOnline()) {
+        <div class="act-guidance-body">
+          <app-button type="button" class="act-guidance-banner" (click)="openEqHistory()">
+            <app-icon name="check" [size]="15" variant="success" />
+            <span class="act-guidance-link">Equipment history is available</span>
+            <div class="act-spacer"></div>
+            <app-icon name="arrow-right" [size]="14" variant="success" />
+          </app-button>
+
+          <div class="act-guidance-group">
+            <span class="act-uppercase-label">Personal History · Have I seen this before</span>
+            @for (g of guidancePersonal(); track g.label) {
+              <div class="act-guidance-item">
+                <app-icon [name]="g.icon" [size]="15" [color]="g.color" />
+                <div class="act-guidance-item-body"><span class="act-muted">{{ g.label }}</span><span class="act-guidance-value">{{ g.value }}</span></div>
+              </div>
+            }
+          </div>
+
+          <div class="act-guidance-group">
+            <span class="act-uppercase-label">Fleet-Level Analysis</span>
+            @for (g of guidanceFleet(); track g.label) {
+              <div class="act-guidance-item">
+                <app-icon [name]="g.icon" [size]="15" [color]="g.color" />
+                <div class="act-guidance-item-body"><span class="act-muted">{{ g.label }}</span><span class="act-guidance-value">{{ g.value }}</span></div>
+              </div>
+            }
+          </div>
+
+          <div class="act-guidance-group">
+            <span class="act-uppercase-label">Supporting Insights</span>
+            @for (g of guidanceSupport(); track g.label) {
+              <div class="act-guidance-item">
+                <app-icon [name]="g.icon" [size]="15" [color]="g.color" />
+                <div class="act-guidance-item-body"><span class="act-muted">{{ g.label }}</span><span class="act-guidance-value">{{ g.value }}</span></div>
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="act-guidance-offline">
+          <app-icon name="wifi-off" [size]="17" variant="danger" />
+          <span>Guidance data is unavailable offline. It will be retrieved automatically when network connectivity is restored — you may continue and submit the transaction.</span>
+        </div>
+      }
+    </app-detail-drawer>
+  }
+
+  <!-- ============ Equipment History drawer ============ -->
+  @if (historyOpen() && historyData(); as history) {
+    <app-detail-drawer
+      [open]="true"
+      [titleMode]="true"
+      label="Equipment History"
+      [wide]="true"
+      iconName="clipboard-list"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      [stats]="history.stats"
+      (closed)="closeEqHistory()"
+    >
+      <div class="act-history-body">
+        @for (section of history.sections; track section.title) {
+          <div class="act-history-section">
+            <span class="act-uppercase-label">{{ section.title }}</span>
+            @for (row of section.rows; track row.label) {
+              <div class="act-detail-row"><span>{{ row.label }}</span><b>{{ row.value }}</b></div>
+            }
+          </div>
+        }
+      </div>
+    </app-detail-drawer>
+  }
+</div>

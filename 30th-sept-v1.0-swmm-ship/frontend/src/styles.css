@@ -1,0 +1,3137 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+
+/* ============================================================
+   THEME TOKENS — dark (default) and light
+   Applied via [data-theme] attribute on <html>
+   ============================================================ */
+
+:root,
+[data-theme="dark"] {
+  --native-color-scheme: dark;
+  /* Backgrounds */
+  --bg-primary: radial-gradient(130% 110% at 12% -5%, #1d4d78 0%, rgba(29, 77, 120, 0) 45%), radial-gradient(120% 120% at 100% 100%, #10344f 0%, rgba(16, 52, 79, 0) 50%), #131C23;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-sidebar: transparent;
+  --bg-sidebar-profile: rgba(255, 255, 255, 0.06);
+  --bg-comm-btn: rgba(255, 255, 255, 0.08);
+  --bg-comm-btn-hover: rgba(255, 255, 255, 0.13);
+  --bg-header: rgba(255, 255, 255, 0.05);
+  --bg-input: rgba(255, 255, 255, 0.05);
+  --bg-input-disabled: rgba(255, 255, 255, 0.08);
+  --bg-icon-btn: rgba(255, 255, 255, 0.10);
+  --bg-nav-child-hover: rgba(255, 255, 255, 0.06);
+  --bg-dropdown: #1b2431;
+  --bg-scrollbar-track: #000;
+  --bg-scrollbar-thumb: rgba(255, 255, 255, 0.28);
+  --bg-select-option: #0a1929;
+  --bg-sfd-modal: #18222C;
+  --error-color: #de1f1f;
+  --model-border: #ffffff36;
+
+  /* Text */
+  --text-primary: #ffffff;
+  --text-orange: orange;
+  --text-muted: rgba(255, 255, 255, 0.50);
+  --text-muted-2: rgba(255, 255, 255, 0.40);
+  --text-nav-label: rgba(255, 255, 255, 0.70);
+  --text-nav-child: rgba(255, 255, 255, 0.80);
+  --text-nav-tab: #94a3b8;
+  --text-nav-tab-hover: #e2e8f0;
+  --text-profile-role: rgba(255, 255, 255, 0.65);
+  --text-profile-arrow: rgba(255, 255, 255, 0.60);
+  --text-section-label: rgba(255, 255, 255, 0.40);
+  --text-form-label: rgba(255, 255, 255, 0.563);
+  --bg-ship-data: rgba(0, 0, 0, 0.597);
+
+  /* Borders */
+  --border-primary: rgba(255, 255, 255, 0.12);
+  --border-logo: rgba(255, 255, 255, 0.50);
+  --border-profile: rgba(255, 255, 255, 0.20);
+  --border-comm-hover: rgba(255, 255, 255, 0.20);
+  --border-input: rgba(255, 255, 255, 0.14);
+  --border-card: rgba(255, 255, 255, 0.20);
+  --border-dropdown: rgba(255, 255, 255, 0.10);
+  --border-nav-child: rgba(29, 150, 233, 0.50);
+
+  /* Nav active gradient */
+  --nav-active-bg: linear-gradient(90deg, rgba(0, 0, 0, 0.01) 0.09%, rgba(26, 163, 242, 0.24) 99.92%);
+  --nav-active-border: rgba(255, 255, 255, 0.00);
+
+  /* Nav hover — deliberately more muted than active so the two are never
+     confused (plain surface tint, no accent border). */
+  --nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --nav-hover-border: rgba(255, 255, 255, 0.00);
+
+  /* Nav left accent bar + active shadow — no-op defaults so dark theme's
+     existing look (already fine, per explicit request not to touch it) stays
+     exactly as it is; only light theme below gives these real values. */
+  --nav-active-bar: transparent;
+  --nav-active-shadow: none;
+  --nav-hover-bar-opacity: 0;
+
+  /* Child connector line — identical to the plain solid --border-nav-child
+     rule this replaces, so dark theme is pixel-for-pixel unchanged. */
+  --nav-connector-border: 1px solid var(--border-nav-child);
+
+  /* Misc */
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --indicator-bg: rgba(255, 255, 255, 0.10);
+  --subheading-color: #61c2ff;
+  /* Referenced by about-page.css via var(--accent-light, #61c2ff) but never
+     actually defined anywhere until now — that var() always fell through to
+     its hardcoded fallback regardless of theme. Defining it properly here
+     makes it a real, working per-theme token (dark keeps the fallback's exact
+     value, so this changes nothing there). */
+  --accent-light: #61c2ff;
+  /* home.css's "Message from Command" hero tab, badge, latest-message pill/card/
+     icon, and "View more" button all read var(--accent-blue, #1d96e9) — same
+     never-defined-anywhere situation as --accent-light above, so they were
+     always rendering the literal #1d96e9 fallback regardless of theme. Dark
+     keeps that exact value (matches the Tailwind config's accent-blue brand
+     color, #1D96E9 — zero visual change there); light gets the reference blue. */
+  --accent-blue: #1D96E9;
+  /* Developed with Understanding: the black process console of the Sync HRCDF page. It stays
+     black in BOTH themes because the operator asked for a terminal-style log, so the light block
+     repeats these same values. Contrast on #000000 (WCAG AA needs 4.5:1 for text):
+       --console-text   #E5E7EB  ~17.0:1
+       --console-muted  #A1A1AA   ~8.2:1
+       --console-accent #4ADE80  ~12.4:1
+       --console-warn   #FBBF24  ~13.0:1
+       --console-error  #F87171   ~7.2:1
+     --console-border is a quiet frame only; the black box against the card is the boundary. */
+  --console-bg: #000000;
+  --console-text: #E5E7EB;
+  --console-muted: #A1A1AA;
+  --console-border: #3F3F46;
+  --console-accent: #4ADE80;
+  --console-warn: #FBBF24;
+  --console-error: #F87171;
+  --toggle-icon-color: #ffffff;
+  --ag-foreground: white;
+  --ag-header-bg: rgba(255, 255, 255, 0.12);
+  --ag-border: rgba(255, 255, 255, 0.15);
+  --ag-cell-color: white;
+  --ag-header-cell-color: white;
+  --header-cell-border: rgba(255, 255, 255, 0.15);
+  /* The one OPAQUE surface in this grid. Every other --ag-* background here is transparent so
+     the table reads as part of the glass card behind it — which is right for cells that scroll
+     together, and wrong for a PINNED column, whose whole job is to stay put while the rest
+     scrolls underneath it. Transparent, the scrolling cells showed straight through the pinned
+     ones. Same value as --bg-dropdown, the colour this application already uses for a panel
+     floating over other content. */
+  --ag-pinned-bg: #1b2431;
+
+  --icon-size: 20px;
+  --icon-stroke: 2;
+  --icon-color: var(--text-primary);
+  --icon-muted: var(--text-muted);
+  --icon-accent: #4AA8FF;
+  --icon-success: #22C55E;
+
+  /* Native form controls */
+  --native-color-scheme: dark;
+  /* `color-scheme: dark` (below) already makes Chrome/Edge render the native calendar-picker
+   * icon in a light colour suited for a dark UI — stacking `invert(1)` on top of that flips it
+   * back to dark, making it nearly invisible against a dark panel. No filter needed here. */
+  --calendar-icon-filter: none;
+  --icon-warning: #F59E0B;
+  --icon-danger: #F82C36;
+
+  /* ROW STATUS AND CELL MARKING
+     The design system had --icon-success, --icon-warning and --icon-danger but no surface,
+     border or marking colour for a data row, which is why the OBS import screen had six raw
+     colour values hand-rolled in its own stylesheet and no light theme at all. These are the
+     row-level and cell-level equivalents, defined in BOTH theme blocks.
+
+     Deliberately far lighter than a chip ground - a chip's fill sits behind two words, a row's
+     fill sits behind a whole line of body text, and a 14% tint is where body text still reads
+     at better than 8:1 in this theme.
+
+     Measured against this theme's card ground (--bg-card over --bg-primary, ~#1F272E) and
+     against the tinted row surfaces themselves:
+       --text-primary #ffffff on the valid row      ~8.2:1   (needs 4.5)
+       --text-primary #ffffff on the invalid row   ~13.6:1
+       --cell-corrected-text on the valid row       ~4.9:1
+       --cell-corrected-text on the card            ~9.1:1
+       --cell-unmatched-text on the invalid row     ~7.8:1
+       --cell-unmatched-text on the card            ~8.7:1
+     The border tokens are used as a 1px row rule, not as a control edge. */
+  --row-status-valid-bg: rgba(34, 197, 94, 0.14);
+  --row-status-valid-border: rgba(34, 197, 94, 0.45);
+  --row-status-invalid-bg: rgba(248, 44, 54, 0.14);
+  --row-status-invalid-border: rgba(248, 44, 54, 0.50);
+  --row-status-duplicate-bg: rgba(245, 158, 11, 0.14);
+  --row-status-duplicate-border: rgba(245, 158, 11, 0.50);
+  /* The two rows that are not committable and did not break a rule - a pattern number no source
+     of truth recognises, and a master value awaiting confirmation. Both are BLUE and not a
+     third shade of amber, deliberately: amber already means "duplicate" on this table, and a
+     reader who has to tell two ambers apart is being asked to read a colour rather than a word.
+       --text-primary #ffffff on the pattern row    ~12.9:1  (needs 4.5)
+       --cell-unmatched-text on the pattern row      ~7.4:1 */
+  --row-status-pattern-bg: rgba(56, 139, 253, 0.14);
+  --row-status-pattern-border: rgba(56, 139, 253, 0.50);
+  --row-status-confirm-bg: rgba(139, 92, 246, 0.16);
+  --row-status-confirm-border: rgba(139, 92, 246, 0.52);
+  /* The two ways a spare can be out on issue, on Transactions > Return. GREEN is an internal
+     issue - the item is still on this ship, with one of our own people. ORANGE is a Ty Loan -
+     the item has physically left the unit. The distinction is the whole point of that screen,
+     so it is a colour AND the word beside it, never colour alone. Deliberately the same green
+     and amber the import table's valid/duplicate rows already use, so one hue means one thing
+     across the application. */
+  --obs-issue-flag-internal: #22c55e;
+  --obs-issue-flag-ty-loan: #f59e0b;
+  --cell-corrected-text: #F7BE7A;
+  --cell-unmatched-text: #FFAFAF;
+  /* A pattern number a source of truth CONFIRMED. Paired with --cell-unmatched-text above:
+       --cell-matched-text on the valid row       ~7.1:1   (needs 4.5)
+       --cell-matched-text on the card            ~8.0:1
+     Deliberately a colder green than --row-status-valid-*: that one is a row-wide 14% wash and
+     this is 600-weight text sitting on top of it, so the two must not be the same hue at the
+     same lightness or the text would disappear into its own row. */
+  --cell-matched-text: #6EE7A8;
+
+  /* ROW HOVER — THE SHARED DATA GRID
+     The grid's hovered-row and selected-and-hovered-row surfaces had no token at all. Both were
+     raw rgba values written straight into data-grid.css, identical in both themes, so a 12%
+     blue tint painted over a near-white light-theme card and over a dark card alike, and a
+     selected row hovered showed no change whatsoever. These are the two surfaces, defined in
+     BOTH theme blocks.
+
+     The hue is rgb(52, 152, 219) - the same hue the grid's own selected-row surface already
+     uses. Holding one hue across hover, selected and selected-hovered keeps the three states
+     reading as one family rather than as three unrelated blues.
+
+     The tint is the sweep, not the indicator. WCAG 1.4.11's 3:1 is carried by the 2px accent
+     rule data-grid.css draws under the hovered row, not by the wash - a wash strong enough to
+     clear 3:1 on its own would swamp the body text sitting on it. */
+  --row-hover-bg: rgba(52, 152, 219, 0.22);
+  --row-selected-hover-bg: rgba(52, 152, 219, 0.30);
+}
+
+[data-theme="light"] {
+  --native-color-scheme: light;
+  /* Backgrounds */
+  --bg-primary: linear-gradient(135deg, #E7ECF3 0%, #F0F3F7 50%, #E3E8EF 100%);
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --bg-sidebar-profile: rgba(26, 163, 242, 0.08);
+  --bg-comm-btn: rgba(26, 163, 242, 0.07);
+  --bg-comm-btn-hover: rgba(26, 163, 242, 0.14);
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --bg-input: rgba(15, 28, 46, 0.04);
+  --bg-input-disabled: rgba(15, 28, 46, 0.06);
+  --bg-icon-btn: rgba(15, 28, 46, 0.08);
+  /* Was rgba(217, 242, 26, 0.08) — a lime/yellow tint that doesn't match the
+     rest of light theme's blue accent family, showing as a yellowish hover on
+     both sidebar sub-nav rows and header dropdown items (both read this same
+     token). Corrected to the same accent blue used everywhere else here. */
+  --bg-nav-child-hover: rgba(26, 163, 242, 0.08);
+  --bg-dropdown: #ffffff;
+  --bg-scrollbar-track: #ddeeff;
+  --bg-scrollbar-thumb: rgba(26, 163, 242, 0.45);
+  --bg-select-option: #f0f7ff;
+  --bg-sfd-modal: #f0f7ff;
+  --bg-ship-data: rgb(255, 255, 255);
+  --error-color: #de1f1f;
+  --model-border: #d1d8e7d9;
+
+  /* Text */
+  --text-primary: #0f1c2e;
+  --text-muted: #3d5166;
+  --text-muted-2: #5a7289;
+  --text-nav-label: #2c445a;
+  --text-nav-child: #2c445a;
+  --text-nav-tab: #3d5166;
+  --text-nav-tab-hover: #0f1c2e;
+  --text-profile-role: #5a7289;
+  --text-profile-arrow: #5a7289;
+  --text-section-label: #5a7289;
+  --text-form-label: #3d5166;
+
+  /* Borders */
+  --border-primary: rgba(15, 28, 46, 0.10);
+  --border-logo: rgba(15, 28, 46, 0.20);
+  --border-profile: rgba(15, 28, 46, 0.15);
+  --border-comm-hover: rgba(26, 163, 242, 0.30);
+  --border-input: rgba(15, 28, 46, 0.15);
+  /* 0.12 read as too faint against --bg-primary's near-white canvas (#E7ECF3..#E3E8EF
+     is close in luminance to --bg-card's #FFFFFF) — cards had almost no visible edge to
+     separate them from the page, reading as "washed out" rather than crisply defined. */
+  --border-card: rgba(15, 28, 46, 0.18);
+  --border-dropdown: rgba(15, 28, 46, 0.10);
+  /* 0.40 read as too faint against the white sidebar; 0.60 (paired with a 2px
+     dotted line + ringed dots) then read as too heavy the other way. Settled
+     on a plain, moderate line — see --nav-connector-border below. */
+  --border-nav-child: rgba(26, 163, 242, 0.45);
+
+  /* Native form controls */
+  --native-color-scheme: light;
+  --calendar-icon-filter: none;
+
+  /* Nav active state — soft directional tint (subtle gradient, not flat) plus
+     a left accent bar + gentle lift shadow below, replacing the old plain
+     single-tone fill for a more deliberate, less "basic" selected look. */
+  --nav-active-bg: linear-gradient(90deg, rgba(11, 87, 184, 0.14) 0%, rgba(11, 87, 184, 0.04) 100%);
+  /* Also the inactive node-dot ring border (.nav-child::before) — 0.35 was too
+     faint against white to read as a marker on the connector line. */
+  --nav-active-border: rgba(26, 163, 242, 0.55);
+  --nav-active-bar: #0B57B8;
+  --nav-active-shadow: 0 2px 8px rgba(11, 87, 184, 0.12);
+  --nav-hover-bar-opacity: 0.35;
+
+  /* Child connector line — plain solid rule, same mechanism dark theme has
+     always used (was dotted, paired with ringed dot markers on .nav-child;
+     both read as heavier than dark theme's plain line, so light theme now
+     matches that same simple treatment instead of inventing its own). */
+  --nav-connector-border: 1.5px solid var(--border-nav-child);
+
+  /* Nav hover — deliberately more muted than active so the two are never
+     confused (plain surface tint, no accent border). */
+  --nav-hover-bg: rgba(15, 28, 46, 0.05);
+  --nav-hover-border: rgba(15, 28, 46, 0.00);
+
+  /* Misc */
+  /* Same reasoning as --border-card just above: too faint (.04/.06) to read as
+     a lifted, separated surface against the near-white canvas — nudged up so
+     cards visibly sit above the page instead of blending into it. */
+  --shadow-card: 0 1px 3px rgba(15, 28, 46, 0.06), 0 6px 20px rgba(15, 28, 46, 0.08);
+  --indicator-bg: rgba(26, 163, 242, 0.10);
+  --subheading-color: #0B57B8;
+  --accent-light: #0B57B8;
+  --accent-blue: #0B57B8;
+  /* Developed with Understanding: the Sync HRCDF console stays black in the light theme too, on
+     the operator's request - the same values and contrast as the dark block above. */
+  --console-bg: #000000;
+  --console-text: #E5E7EB;
+  --console-muted: #A1A1AA;
+  --console-border: #3F3F46;
+  --console-accent: #4ADE80;
+  --console-warn: #FBBF24;
+  --console-error: #F87171;
+  --toggle-icon-color: #0f1c2e;
+  --ag-foreground: #0f1c2e;
+  --ag-header-bg: rgba(26, 163, 242, 0.10);
+  --ag-border: rgba(15, 28, 46, 0.12);
+  --ag-cell-color: #0f1c2e;
+  --ag-header-cell-color: #0f1c2e;
+  --header-cell-border: rgba(15, 28, 46, 0.12);
+  /* The light-theme pair — see the dark block above. */
+  --ag-pinned-bg: #ffffff;
+
+  /* #1069AB -> #0B57B8: the exact deeper blue from the reference design,
+     replacing this session's earlier close-but-not-exact choice. Dark theme's
+     --icon-accent (#4AA8FF) is untouched. */
+  --icon-accent: #0B57B8;
+  --icon-success: #16A34A;
+  --icon-warning: #D97706;
+  --icon-danger: #DC2626;
+
+  /* ROW STATUS AND CELL MARKING — the light-theme half.
+     A 10% tint, not 14%: on a white card the same 14% reads as a saturated band behind body
+     text rather than a subtle one. The two marking colours are their own values and not the
+     dark theme's - a light orange and a light red on white are the exact pair that fails 1.4.3,
+     which is the defect this token set exists to stop repeating.
+
+     Measured against this theme's --bg-card (#FFFFFF) and the tinted row surfaces:
+       --text-primary #0f1c2e on the valid row     ~15.5:1  (needs 4.5)
+       --text-primary #0f1c2e on the invalid row   ~15.3:1
+       --cell-corrected-text on the valid row       ~5.2:1
+       --cell-corrected-text on white               ~5.8:1
+       --cell-unmatched-text on the invalid row     ~6.4:1
+       --cell-unmatched-text on white               ~7.4:1 */
+  --row-status-valid-bg: rgba(22, 163, 74, 0.10);
+  --row-status-valid-border: rgba(22, 163, 74, 0.42);
+  --row-status-invalid-bg: rgba(220, 38, 38, 0.10);
+  --row-status-invalid-border: rgba(220, 38, 38, 0.42);
+  --row-status-duplicate-bg: rgba(180, 83, 9, 0.10);
+  --row-status-duplicate-border: rgba(180, 83, 9, 0.42);
+  /* The light-theme pair of the two "needs an answer" tints - see the dark block above.
+       --text-primary #0f1c2e on the pattern row   ~15.1:1  (needs 4.5)
+       --cell-unmatched-text on the pattern row     ~6.2:1 */
+  --row-status-pattern-bg: rgba(29, 78, 216, 0.09);
+  --row-status-pattern-border: rgba(29, 78, 216, 0.40);
+  --row-status-confirm-bg: rgba(109, 40, 217, 0.10);
+  --row-status-confirm-border: rgba(109, 40, 217, 0.42);
+  /* The light-theme pair - see the dark block above. Both are darkened until the flag's own
+     label (which is painted in this colour) clears 4.5:1 on the near-white grid row, which the
+     dark theme's brighter #22c55e / #f59e0b do not. */
+  --obs-issue-flag-internal: #15803d;
+  --obs-issue-flag-ty-loan: #b45309;
+  --cell-corrected-text: #9A5400;
+  --cell-unmatched-text: #B00020;
+  /* The light-theme pair - see the dark block above.
+       --cell-matched-text on the valid row       ~5.1:1   (needs 4.5)
+       --cell-matched-text on white               ~5.4:1 */
+  --cell-matched-text: #0F7B4F;
+
+  /* ROW HOVER — the light-theme half. See the dark block above.
+     Lighter alphas than dark, for the same reason the row-status block immediately above
+     gives - the same tint that reads as a subtle wash on a dark card reads as a saturated band
+     on a white one. Measured against this theme's --bg-card (#FFFFFF) and against the odd-row
+     surface (--ag-odd-row-background-color, ~#F5FBFE):
+       --text-primary #0f1c2e on the hovered row           ~15.0:1  (needs 4.5)
+       --text-primary #0f1c2e on the selected-hovered row  ~13.4:1
+       hovered row against the unhovered white row          ~1.15:1  (a visible sweep)
+       var(--accent-blue) #0B57B8 rule against the row      ~6.8:1  (needs 3) */
+  --row-hover-bg: rgba(52, 152, 219, 0.12);
+  --row-selected-hover-bg: rgba(52, 152, 219, 0.24);
+
+  /* Global inherit for any remaining element */
+  color: var(--text-primary);
+}
+
+:where(svg[lucideIcon]) {
+  color: var(--icon-color);
+  flex-shrink: 0;
+}
+
+.icon {
+  color: var(--icon-color);
+  flex-shrink: 0;
+}
+
+.icon--inherit {
+  color: inherit;
+}
+
+.icon--muted {
+  color: var(--icon-muted);
+}
+
+.icon--accent {
+  color: var(--icon-accent);
+}
+
+.icon--success {
+  color: var(--icon-success);
+}
+
+.icon--warning {
+  color: var(--icon-warning);
+}
+
+.icon--danger {
+  color: var(--icon-danger);
+}
+
+.icon--xs {
+  width: 14px;
+  height: 14px;
+}
+
+.icon--sm {
+  width: 16px;
+  height: 16px;
+}
+
+.icon--md {
+  width: 20px;
+  height: 20px;
+}
+
+.icon--lg {
+  width: 24px;
+  height: 24px;
+}
+
+.icon--xl {
+  width: 32px;
+  height: 32px;
+}
+
+.icon--spin {
+  animation: icon-spin 1s linear infinite;
+}
+
+@keyframes icon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family:
+      "Poppins",
+      -apple-system,
+      BlinkMacSystemFont,
+      Roboto,
+      Helvetica,
+      sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Hide default browser spinners on number inputs */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/assests/fonts/Inter.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* `Poppins.ttf` is a single static outline (no fvar/gvar tables — unlike `Inter.ttf` below,
+   which is a real variable font) — it only ever contained one real weight. Registering just
+   that one weight (500) meant every request for 600/700/800 (used constantly across headings,
+   KPI values and uppercase labels app-wide) had no matching face, so the browser synthesized a
+   fake bold on top of it — and synthetic bold is characteristically soft/blurry, especially at
+   small sizes with letter-spacing. Registering the same file again under each weight actually
+   used in the app gives every one of those requests a "real" (if visually identical) face
+   instead, which stops the synthesis and reads as crisp, consistent text everywhere. */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assests/fonts/Poppins.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assests/fonts/Poppins.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assests/fonts/Poppins.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assests/fonts/Poppins.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assests/fonts/Poppins.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Same file as the 'Inter' face above, registered under a separate family name
+   instead of widening that one's declared weight. Inter.ttf is a real variable
+   font (confirmed via its font tables — it has fvar/gvar/HVAR/MVAR axes, not
+   just a static 500-weight outline), so it already contains genuine glyph data
+   across this whole range; the existing 'Inter' face just pins it to 500 only.
+   Widening that shared declaration would change font-matching for every
+   existing 'Inter' user app-wide, including dark theme — this alias exists so
+   the light-theme-only active-tab fix (styles.css, .nav-tab-active) can reach
+   a real weight-600 render without touching anything else. */
+@font-face {
+  font-family: 'Inter Variable';
+  src: url('/assests/fonts/Inter.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@layer components {
+  .form-field-label {
+    @apply text-white text-sm font-semibold leading-6 py-2.5;
+  }
+
+  .form-field-input {
+    @apply w-full h-12 px-3 flex items-center rounded-[10px] border border-white bg-transparent text-white/50 text-xs font-semibold outline-none focus:border-[#61C2FF] focus:text-white transition-colors;
+  }
+
+  .form-field-select {
+    @apply w-full h-12 px-3 rounded-[10px] border border-white bg-transparent text-white/50 text-xs outline-none appearance-none focus:border-[#61C2FF] focus:text-white cursor-pointer transition-colors;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-xl text-white text-sm font-normal leading-5 hover:bg-white/10 transition-colors cursor-pointer;
+  }
+
+  .nav-item-active {
+    @apply rounded-xl border border-white/0;
+    background: linear-gradient(90deg,
+        rgba(0, 0, 0, 0.01) 0.09%,
+        rgba(26, 163, 242, 0.24) 99.92%);
+  }
+
+  .nav-sub-item {
+    @apply flex items-center gap-2.5 px-3 py-2 rounded-2xl text-sm cursor-pointer transition-colors;
+  }
+
+  .glass-card {
+    border-radius: 1rem;
+    padding: .062rem;
+    border-radius: 15px;
+    background-color: var(--bg-card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-card), inset 0 1px #ffffff4d, inset 0 -1px #ffffff0d, inset 0 0 #fff0;
+    outline: 1px solid rgba(255, 255, 255, .03);
+    box-sizing: border-box;
+    transition: background-color .35s ease, border-color .35s ease, box-shadow .35s ease;
+  }
+
+  /* icon styling */
+  .icon-btn {
+    @apply flex items-center justify-center w-8 h-8 rounded-full;
+    background: var(--bg-icon-btn);
+    transition: background 0.35s ease;
+  }
+
+  /* Reusable grid toolbar row: global search box + copy/print/excel actions. Shared across every
+     list page that wires up <app-export-toolbar> + ReportExportService (Inventory OBS/MO/WED and
+     beyond) so the row doesn't need to be redefined per component's (view-encapsulated) CSS. */
+  .grid-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .grid-toolbar__end {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .grid-toolbar__search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .grid-toolbar__search .form-field-input {
+    width: 220px;
+    height: 36px;
+    padding-left: 2rem;
+  }
+
+  .grid-toolbar__search-icon {
+    position: absolute;
+    left: 0.65rem;
+    pointer-events: none;
+  }
+
+  /* Reusable "KPI row" — keeps every dashboard's KPI/stat cards in a single row regardless of
+     count (4, 5, 6…): each card takes an equal share of the row and shrinks together with the
+     others, so the row never wraps and never needs a horizontal scrollbar. Shared across Ship
+     Crew, Watch & Station Bill, and Inventory OBS/MO/WED dashboards so the layout only needs to
+     be defined once. */
+  .kpi-row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Reusable "Critical / Category" checkbox filter row shown above several Inventory OBS grids
+     (Return Spares, Survey, Demand, IIF). `justify-content: flex-start` (not `space-between`)
+     keeps the Critical/INcatting checkboxes grouped together on the left with a consistent gap —
+     `space-between` was spreading them plus the Category group evenly across the full row width,
+     reading as misaligned since each ended up pinned to an extreme edge instead of grouped. The
+     Category group still sits at the row's right edge via `margin-left: auto` below. */
+  .obs-filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .obs-filter-row__categories {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+  }
+
+  .obs-filter-row__label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .obs-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .obs-checkbox input[type="checkbox"] {
+    accent-color: var(--accent-blue, #1d96e9);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+}
+
+/* Custom scrollbar — one consistent style app-wide (matches the sidebar nav).
+   Any element-specific override should mirror these values rather than
+   inventing a new scrollbar look. */
+/* * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-primary) transparent;
+} */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  background-color: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(64, 64, 79);
+  border-radius: 99px;
+}
+
+/* Select options styling */
+select option {
+  background: var(--bg-select-option);
+  color: var(--text-primary);
+}
+
+
+app-header {
+  position: relative;
+  z-index: 3;
+}
+
+/* heading-of-swmm */
+.head1 {
+  font-size: 1.875rem;
+  font-family: Poppins;
+  color: var(--text-primary);
+}
+
+/* heading-of-page */
+.head2 {
+  font-size: 1.625rem;
+  font-family: Poppins;
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+/* heading-of-boxcontainercompo */
+.head3 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-family: Poppins;
+  color: var(--text-primary);
+}
+
+/* heading-of-kpi */
+.head4 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-family: Poppins;
+  color: var(--text-primary);
+}
+
+/* heading-of-side */
+.head5 {
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: Poppins;
+  color: var(--text-primary);
+}
+
+/* sub-heading-of-boxcontainercompo */
+.sub1 {
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: Poppins;
+  color: var(--text-primary);
+}
+
+/* Sub-heading-of-side */
+.sub2 {
+  font-size: 0.625rem;
+  font-family: Inter;
+  color: var(--text-primary);
+}
+
+
+.glass-card {
+  @apply rounded-2xl;
+  border-radius: 15px;
+  background-color: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-card);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0px 0px rgba(255, 255, 255, 0);
+  outline: 1px solid rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
+  color: var(--text-primary);
+  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Reusable modal-content primitives — title/subtitle/grid/form/actions building blocks shared by
+   every popup rendered inside the base <app-modal> across Inventory OBS/MO/WED (detail views,
+   cart-selection forms, confirm prompts). Each grid row reuses the same --bg-card/backdrop-filter
+   recipe as .glass-card so it stays on-theme (glassy in dark mode, a plain card in light mode
+   where --bg-card is opaque) instead of a one-off effect. Consolidated from near-duplicate
+   per-module rules (`obs-modal__*` / `wed-modal__*` / `mo-modal__*`) so every Inventory popup
+   looks and behaves the same. */
+.detail-modal__title {
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.detail-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  min-width: 320px;
+}
+
+.detail-modal__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-card);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.detail-modal__row:hover {
+  border-color: var(--accent-blue, #1d96e9);
+}
+
+.detail-modal__row--wide {
+  grid-column: 1 / -1;
+}
+
+.detail-modal__row span {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.detail-modal__row strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.detail-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+/* Muted helper line under .detail-modal__title (e.g. "Sending X to cart", a spare's
+   pattern number + description) — the second most common piece of modal-content boilerplate
+   after the title itself. */
+.detail-modal__subtitle {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Layout for a reactive form living inside a modal body (cart-type pickers, edit/return forms) —
+   pairs with .detail-modal__field to group a single control with its inline validation message. */
+.detail-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 320px;
+}
+
+.detail-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Empty-state line for a modal tab/section with nothing to show yet (e.g. a "Photo" detail tab
+   before an image is uploaded). */
+.detail-modal__placeholder {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.button {
+  border-radius: 10px;
+  background: var(--bg-card);
+  width: auto;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.937rem;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  font-family: Poppins;
+  align-self: stretch;
+  position: relative;
+  text-transform: capitalize;
+  font-weight: 500;
+  border: 1px solid var(--border-card);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0px 0px rgba(255, 255, 255, 0);
+  outline: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Canonical Button Utility Classes */
+.btn-primary {
+  background: var(--accent-blue);
+  color: #ffffff !important;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: filter 0.2s ease, background 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-nav-child-hover);
+  border-color: var(--border-input);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Canonical Status Badges */
+.badge-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--icon-success, #22C55E);
+  border: 1px solid var(--icon-success, #22C55E);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--icon-warning, #D97706);
+  border: 1px solid var(--icon-warning, #D97706);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-danger,
+.badge-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--error-color, #de1f1f);
+  border: 1px solid var(--error-color, #de1f1f);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-info {
+  background: rgba(29, 150, 233, 0.15);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+
+/* style for no of kpis  */
+/* Number of KPI */
+.no_kpi {
+  color: var(--text-primary);
+  font-family: Poppins;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Heading of KPI */
+.kpi_heading {
+  color: var(--text-primary);
+  font-family: Poppins;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 0.9375rem;
+}
+
+.subHeading_of_kpis {
+  color: var(--text-muted);
+  /* Sub-Heading of KPI */
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+
+/* Heading of box/Container/Component */
+
+.box-container-heading {
+  color: var(--text-primary);
+  font-family: Poppins;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+
+/* Sub-Heading of box/Container/Component */
+.subHeading_box {
+  color: var(--text-primary);
+
+  font-family: Poppins;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+
+.logo_heading_sidebar {
+  color: var(--text-primary);
+  /* Heading of SWMM side bar */
+  font-family: Poppins;
+  font-size: 1.875rem;
+  font-style: normal;
+  line-height: 2.125rem;
+  /* 113.333% */
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+/* Content of box/Container/Component */
+.content {
+  color: var(--text-primary);
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* view all button  style in cards  */
+.viewall-text {
+  color: #51A2FF;
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+
+}
+
+body.modal-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
+.ag-theme-quartz-dark {
+
+  --ag-background-color: transparent;
+
+  --ag-foreground-color: var(--ag-foreground);
+
+  --ag-border-color: var(--ag-border);
+
+  --ag-header-background-color: var(--ag-header-bg);
+
+  --ag-header-height: 34px;
+
+  --ag-row-height: 38px;
+
+  --ag-font-family: Poppins;
+
+  --ag-font-size: 11px;
+}
+
+.ag-theme-quartz-dark .ag-root-wrapper {
+
+  border: none !important;
+
+  background: transparent !important;
+}
+
+.ag-checkbox-input {
+  transform: scale(3) !important;
+  outline: 3px solid red !important;
+}
+
+.ag-theme-quartz-dark .ag-header {
+
+  background: var(--ag-header-bg) !important;
+}
+
+.ag-theme-quartz-dark .ag-header-cell {
+
+  padding-left: 10px !important;
+}
+
+.ag-theme-quartz-dark .ag-header-cell-text {
+
+  color: var(--ag-header-cell-color) !important;
+
+  font-size: 11px !important;
+
+  font-weight: 500 !important;
+}
+
+.ag-theme-quartz-dark .ag-cell {
+
+  color: var(--ag-cell-color) !important;
+
+  padding-left: 10px !important;
+}
+
+.ag-theme-quartz-dark .ag-row {
+
+  background: transparent !important;
+}
+
+.ag-theme-quartz-dark .ag-icon {
+
+  color: var(--ag-cell-color) !important;
+}
+
+
+::ng-deep .ag-theme-custom .ag-checkbox-input {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(255, 255, 255, .6);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+::ng-deep .ag-theme-custom .ag-checkbox-input:checked {
+  background: #3498db;
+  border-color: #3498db;
+}
+
+
+.node {
+  width: 160px !important;
+  height: max-content !important;
+}
+
+.node foreignObject {
+  overflow: visible !important;
+}
+
+.node .label {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.org-card {
+  width: 160px;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  margin: 0 !important;
+}
+
+.org-img {
+  width: 100% !important;
+  height: 160px !important;
+  flex-shrink: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.org-content {
+  font-family: 'Inter', sans-serif;
+  flex: 1;
+  padding: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.org-info {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.org-info svg {
+  width: 16px !important;
+  height: 16px !important;
+  stroke: rgba(255, 255, 255, 0.7) !important;
+  fill: none !important;
+  display: block;
+}
+
+.org-info svg circle,
+.org-info svg path {
+  stroke: rgba(255, 255, 255, 0.7) !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+
+.org-name {
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.org-rank {
+  color: #94a3b8;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.basic,
+.label-container {
+  fill: transparent !important;
+  stroke-width: 0 !important;
+  stroke: none !important;
+  background: transparent !important;
+  width: 160px !important;
+  height: max-content !important;
+}
+
+.marker {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+
+/*
+for border right to datagrid header */
+
+.ag-header-cell {
+  border-right: 1px solid var(--header-cell-border);
+}
+
+
+.grid-inline-select,
+.grid-inline-input {
+  width: 100%;
+  height: 30px;
+  padding: 2px 6px;
+  border: 1px solid #d0d5dd;
+  border-radius: 4px;
+  font-size: 13px;
+  background: #fff;
+}
+
+
+.ag-center-cell {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* Angular-CLI boilerplate — `font-family` deliberately removed (see the note near the
+   `[data-theme]`-scoped `body` font rule below): being an *unlayered* rule, it always won over
+   the app's real `@layer base { body { font-family: Poppins, ... } }` regardless of specificity,
+   which meant every element that never sets its own explicit font-family (most headings/labels)
+   silently rendered in Roboto/Helvetica Neue — neither installed on Windows — falling through
+   to generic Arial. `margin: 0` is harmless/still wanted, so only the font-family goes. */
+body {
+  margin: 0;
+}
+
+
+
+/* For smaller viewport caused by browser zoom */
+@media screen and (max-width: 1440px) {
+
+  .head1,
+  .logo_heading_sidebar {
+    font-size: 1.7rem;
+  }
+
+  .head2 {
+    font-size: 1.35rem;
+  }
+
+  .head3,
+  .head4,
+  .box-container-heading {
+    font-size: 1rem;
+  }
+
+  .head5,
+  .kpi_heading,
+  .content {
+    font-size: 0.8rem;
+  }
+
+  .sub1,
+  .subHeading_box {
+    font-size: 0.9rem;
+  }
+
+  .sub2,
+  .subHeading_of_kpis {
+    font-size: 0.58rem;
+  }
+
+  .no_kpi {
+    font-size: 1.75rem;
+  }
+
+  .button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .viewall-text {
+    font-size: 13px;
+  }
+}
+
+.mermaidTooltip {
+  padding: 0 !important;
+}
+
+.box-container-heading-duplicate {
+  color: var(--text-primary);
+  font-family: Poppins;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+
+
+
+/* ===========================
+   Global Form Theme
+=========================== */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.form-label .required {
+  color: #ff5b5b;
+}
+
+.form-control {
+  width: 100%;
+  height: 44px;
+
+  padding: 0 16px;
+
+  border-radius: 8px;
+  border: 1px solid var(--border-input);
+
+  background: var(--bg-input);
+
+  color: var(--text-primary);
+  font-size: 14px;
+
+  outline: none;
+
+  transition: all .2s ease;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control:hover {
+  border-color: var(--border-profile);
+}
+
+.form-control:focus {
+  border-color: #5f9cff;
+  box-shadow: 0 0 0 3px rgba(95, 156, 255, .15);
+}
+
+.form-control:disabled,
+.form-control.readonly {
+  background: var(--bg-input-disabled);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+
+.checkobox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.checkobox-container input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+
+  background: transparent;
+  border: 2px solid #64748b;
+  /* slate-500 */
+  border-radius: 4px;
+
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkobox-container input[type="checkbox"]:hover {
+  border-color: #94a3b8;
+  /* slate-400 */
+}
+
+.checkobox-container input[type="checkbox"]:checked {
+  background: #2563eb;
+  /* blue */
+  border-color: #2563eb;
+}
+
+.checkobox-container input[type="checkbox"]::before {
+  content: "";
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease;
+}
+
+.checkobox-container input[type="checkbox"]:checked::before {
+  transform: rotate(45deg) scale(1);
+}
+
+.checkobox-container input[type="checkbox"]:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* sfd config modal bg  */
+
+.sfd-modal-bg {
+  background: var(--bg-sfd-modal);
+  color: var(--text-primary);
+}
+
+.filter__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s;
+}
+
+
+.submit-btn {
+  border-color: transparent;
+  background: linear-gradient(180deg, #1aa3f2, #0b6bb5);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.delete-btn {
+
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: linear-gradient(rgb(245, 85, 94), rgb(194, 31, 39));
+  color: rgb(255, 255, 255);
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+
+.filter__btn:hover {
+  background: var(--bg-comm-btn-hover);
+}
+
+.filter__btn--primary {
+  border-color: transparent;
+  background: linear-gradient(180deg, #1aa3f2, #0b6bb5);
+  color: #fff;
+}
+
+.filter__btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.form-error {
+  margin-top: 4px;
+  color: var(--error-color) !important;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+[data-sonner-toaster] {
+  --ngx-sonner-toast-success-background: #2e9e5b;
+  --ngx-sonner-toast-success-border: #2e9e5b;
+  --ngx-sonner-toast-success-color: #ffffff;
+  --ngx-sonner-toast-dark-success-background: #2e9e5b;
+  --ngx-sonner-toast-dark-success-border: #2e9e5b;
+  --ngx-sonner-toast-dark-success-color: #ffffff;
+
+  --ngx-sonner-toast-error-background: #c0392b;
+  --ngx-sonner-toast-error-border: #c0392b;
+  --ngx-sonner-toast-error-color: #ffffff;
+  --ngx-sonner-toast-dark-error-background: #c0392b;
+  --ngx-sonner-toast-dark-error-border: #c0392b;
+  --ngx-sonner-toast-dark-error-color: #ffffff;
+
+  --ngx-sonner-toast-warning-background: #ef8f1c;
+  --ngx-sonner-toast-warning-border: #ef8f1c;
+  --ngx-sonner-toast-warning-color: #ffffff;
+  --ngx-sonner-toast-dark-warning-background: #ef8f1c;
+  --ngx-sonner-toast-dark-warning-border: #ef8f1c;
+  --ngx-sonner-toast-dark-warning-color: #ffffff;
+
+  --ngx-sonner-toast-info-background: #2f8fb3;
+  --ngx-sonner-toast-info-border: #2f8fb3;
+  --ngx-sonner-toast-info-color: #ffffff;
+  --ngx-sonner-toast-dark-info-background: #2f8fb3;
+  --ngx-sonner-toast-dark-info-border: #2f8fb3;
+  --ngx-sonner-toast-dark-info-color: #ffffff;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled="true"] {
+  padding: 14px 16px;
+  gap: 12px;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  font-family: "Poppins", sans-serif;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-title] {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-description] {
+  font-weight: 400;
+  font-size: 12.5px;
+  line-height: 1.4;
+  opacity: 0.92;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-icon] {
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-icon]>*,
+[data-sonner-toaster] [data-sonner-toast] [data-icon] svg {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-icon] {
+  color: #2e9e5b;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="error"] [data-icon] {
+  color: #c0392b;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="warning"] [data-icon] {
+  color: #ef8f1c;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] [data-icon] {
+  color: #2f8fb3;
+}
+
+/* ============================================================
+   LIGHT THEME — global overrides (FLAT selectors, no nesting)
+   ============================================================ */
+
+/* ── Tailwind text-white override ── */
+[data-theme="light"] .text-white {
+  color: var(--text-primary) !important;
+}
+
+/* ── Tailwind text-white opacity variants override ── */
+[data-theme="light"] [class*="text-white"] {
+  color: var(--text-primary) !important;
+}
+
+/* ── Keep white text/icons on solid #1D96E9 blue buttons ── */
+[data-theme="light"] [class*="bg-[#1D96E9]"].text-white,
+[data-theme="light"] [class*="bg-[#1D96E9]"] [class*="text-white"] {
+  color: #fff !important;
+}
+
+[data-theme="light"] [class*="bg-[#1D96E9]"] svg[lucideIcon],
+[data-theme="light"] [class*="bg-[#1D96E9]"] .icon {
+  color: #fff !important;
+}
+
+/* ── Breadcrumb SVG icon ── */
+[data-theme="light"] .breadcrumb-icon svg path {
+  stroke: var(--text-primary) !important;
+}
+
+/* ── .form-field-label/.form-field-input/.form-field-select (styles.css `@layer components`
+   above) hardcode white text/border via `@apply text-white…`, which the generic
+   `[class*="text-white"]` override above can never catch — `@apply` inlines the resulting
+   `color:` property directly into these classes' own rules rather than leaving a literal
+   `text-white` class on the element. Left unfixed, every plain form input/select/label built on
+   these (the app's most common form primitives — Ship Crew's modals, Inventory OBS/MO/WED
+   filters) renders illegibly light-on-light in light theme, including text the user actually
+   types, not just placeholders. */
+[data-theme="light"] .form-field-label {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .form-field-input,
+[data-theme="light"] .form-field-select {
+  color: var(--text-primary) !important;
+  border-color: var(--border-input) !important;
+  background: var(--bg-input) !important;
+}
+
+[data-theme="light"] .form-field-input:focus,
+[data-theme="light"] .form-field-select:focus {
+  color: var(--text-primary) !important;
+  border-color: var(--accent-blue, #1d96e9) !important;
+}
+
+[data-theme="light"] .form-field-input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
+}
+
+/* ── SVG attributes that are hardcoded white ── */
+[data-theme="light"] svg path[stroke="white"],
+[data-theme="light"] svg line[stroke="white"],
+[data-theme="light"] svg circle[stroke="white"],
+[data-theme="light"] svg polyline[stroke="white"] {
+  stroke: var(--text-primary) !important;
+}
+
+[data-theme="light"] svg path[fill="white"] {
+  fill: var(--text-primary) !important;
+}
+
+/* ── Header icon buttons SVG strokes ── */
+[data-theme="light"] .icon-btn svg path,
+[data-theme="light"] .icon-btn svg line,
+[data-theme="light"] .icon-btn svg polyline,
+[data-theme="light"] .icon-btn svg circle {
+  stroke: var(--text-primary) !important;
+}
+
+[data-theme="light"] .icon-btn svg path[fill="white"] {
+  fill: var(--text-primary) !important;
+}
+
+/* ── Org chart card name ── */
+[data-theme="light"] .org-name {
+  color: var(--text-primary);
+}
+
+/* ── AG Grid light theme overrides ── */
+[data-theme="light"] .ag-theme-quartz-dark,
+[data-theme="light"] .ag-theme-custom {
+  --ag-background-color: rgba(255, 255, 255, 0.6);
+  --ag-foreground-color: var(--text-primary) !important;
+  --ag-data-color: var(--text-primary) !important;
+  --ag-header-foreground-color: var(--text-primary) !important;
+  --ag-header-background-color: var(--ag-header-bg) !important;
+  --ag-border-color: var(--border-primary) !important;
+  --ag-row-border-color: var(--border-primary) !important;
+  --ag-odd-row-background-color: rgba(26, 163, 242, 0.04);
+}
+
+[data-theme="light"] .ag-theme-custom .ag-header-cell,
+[data-theme="light"] .ag-theme-custom .ag-header-cell-text,
+[data-theme="light"] .ag-theme-custom .ag-cell,
+[data-theme="light"] .ag-theme-custom .ag-row,
+[data-theme="light"] .ag-theme-custom .ag-icon {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .ag-theme-custom .ag-root-wrapper {
+  border-color: var(--border-primary) !important;
+  background: var(--bg-card) !important;
+}
+
+[data-theme="light"] .ag-theme-custom .ag-header {
+  border-bottom-color: var(--border-primary) !important;
+  background-color: transparent !important;
+}
+
+[data-theme="light"] .ag-theme-custom .ag-header-row {
+  background-color: var(--ag-header-bg) !important;
+}
+
+/* ── Mermaid marker ── */
+[data-theme="light"] .marker {
+  fill: var(--text-primary) !important;
+  stroke: var(--text-primary) !important;
+}
+
+/* ── Tailwind bg-white/border-white opacity utilities ──
+   Op. Maintenance (and other newer feature) pages build cards/inputs directly
+   with `bg-white/5`, `bg-white/10`, `border-white/10` etc. assuming a dark
+   backdrop. On a light background these near-transparent whites read as
+   washed-out/invisible, so redirect them through the theme's surface tokens. */
+[data-theme="light"] [class*="bg-white/"] {
+  background-color: var(--bg-input) !important;
+}
+
+[data-theme="light"] [class*="border-white/"] {
+  border-color: var(--border-input) !important;
+}
+
+[data-theme="light"] [class*="hover:bg-white/"]:hover {
+  background-color: var(--bg-nav-child-hover) !important;
+}
+
+[data-theme="light"] [class*="placeholder:text-white/"]::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* ── .form-field-input / .form-field-select are compiled via @apply with
+   hardcoded white border/text, so the generic [class*="border-white"] /
+   [class*="text-white"] overrides above never match their DOM class
+   attribute ("form-field-input" only). Override them explicitly per theme
+   so they follow the theme tokens instead of staying stuck white-on-white. ── */
+[data-theme="light"] .form-field-input,
+[data-theme="light"] .form-field-select {
+  border-color: var(--border-input) !important;
+  color: var(--text-primary) !important;
+  color-scheme: light;
+}
+
+[data-theme="light"] .form-field-input:focus,
+[data-theme="light"] .form-field-select:focus {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .form-field-input,
+[data-theme="dark"] .form-field-select {
+  color-scheme: dark;
+}
+
+/* ============================================================
+   TEXT CLARITY FIXES (both themes)
+   ============================================================ */
+
+/* `body`'s font-family used to be decided by two competing rules: the app's real one
+   (`@layer base { body { font-family: Poppins, ... } }`) and a leftover Angular-CLI-boilerplate
+   `body { font-family: Roboto, "Helvetica Neue", sans-serif }` elsewhere in this file. CSS
+   cascade layers always lose to unlayered rules regardless of source order or specificity, so
+   the boilerplate one silently won — meaning any element without its OWN explicit font-family
+   (e.g. the header's .nav-tab) was never actually rendering in Poppins at all. On Windows,
+   Roboto and "Helvetica Neue" aren't installed, so it fell all the way through to the generic
+   `sans-serif` keyword (Arial), which is part of why bold text looked soft/blurry — Arial only
+   ships real 400/700 weight files, so a requested weight like .nav-tab-active's 600 still had to
+   be synthesized. The boilerplate rule's conflicting font-family has since been deleted at its
+   source, so the `@layer base` Poppins stack now applies correctly on its own in both themes —
+   this rule just re-states the same stack explicitly (defensive, in case another unlayered rule
+   is added later) and adds the antialiasing tweak below, which used to be light-theme-only for
+   no real reason: thinner, less-antialiased strokes than the browser default read as measurably
+   crisper text in both themes, same technique used by the reference design this was compared
+   against. */
+body {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tailwind opacity variants on text — keep readable in light */
+[data-theme="light"] .opacity-90,
+[data-theme="light"] .opacity-80,
+[data-theme="light"] .opacity-70,
+[data-theme="light"] .opacity-60,
+[data-theme="light"] .opacity-50 {
+  opacity: 1 !important;
+}
+
+/* Sub-heading classes — force readable color */
+[data-theme="light"] .sub1,
+[data-theme="light"] .sub2,
+[data-theme="light"] .subHeading_of_kpis,
+[data-theme="light"] .subHeading_box,
+[data-theme="light"] .box-container-heading-duplicate {
+  color: var(--text-muted) !important;
+}
+
+/* home.css: .home-hero-tab / .home-latest-message — the 12%-opacity tint
+   background paired with var(--accent-blue) text/icon color is hardcoded as
+   the literal rgba() of the old #1D96E9 (29,150,233), not derived from the
+   token, so fixing --accent-blue above doesn't touch it. Same relocation
+   reason as everywhere else in this section (component-scoped CSS). */
+[data-theme="light"] .home-hero-tab,
+[data-theme="light"] .home-latest-message {
+  background: rgba(11, 87, 184, 0.12);
+}
+
+/* ── #4AA8FF written as decimal rgb(74, 168, 255) instead of hex ──
+   None of the earlier #4AA8FF/--icon-accent/--accent-blue passes caught these:
+   they were searched for as the literal hex string, which doesn't match this
+   decimal form of the exact same color. Same fix, same reasoning as before —
+   text color reads through var(--accent-blue) once defined, so only needs
+   fixing here where it's still a literal value (background tints, borders,
+   selected-state chips that were never routed through any variable). */
+
+/* header.css: .sub — the "- powered by Mat-CDF" subtitle next to EVERY page
+   title app-wide (Header component, used everywhere — this is very likely
+   the actual "still faded" element being seen, since it's the highest-traffic
+   spot of all of these).
+   Scoped as .sub.whitespace-nowrap (both classes header.html actually puts on
+   this span), NOT bare .sub — planner-detail-panel.component.scss has its own
+   unrelated ".detail-head .sub" (a muted var(--text-muted) label, no
+   whitespace-nowrap), which a bare-.sub + !important override would have
+   incorrectly forced blue too since !important beats normal specificity
+   regardless of which selector "should" win. */
+[data-theme="light"] .sub.whitespace-nowrap {
+  color: #0B57B8 !important;
+}
+
+/* inventory-tab-nav.css: .inv-header__title-row .sub — a second, separate
+   implementation of the exact same "- powered by ..." subtitle pattern,
+   scoped to the Inventory module's own header instead of the shared one. */
+[data-theme="light"] .inv-header__title-row .sub {
+  color: #0B57B8;
+}
+
+/* styles.css (global): .compartment-name — ship compartment name labels. */
+[data-theme="light"] .compartment-name {
+  color: #0B57B8;
+}
+
+/* equipment-status.component.css (oc-planner): open panel header background —
+   its text color already reads through var(--accent-blue), fixed already;
+   only the hardcoded background tint needed a separate override. */
+[data-theme="light"] .oc-equip-panel--open .oc-equip-panel__head {
+  background: rgba(11, 87, 184, 0.12);
+}
+
+/* dashboard.component.css (oc-planner): .oc-search-card__icon — both "search"
+   and "settings" card icons use this same single blue (unlike the KPI tiles
+   above them in the same file, which are a genuine 6-color categorical set
+   and stay untouched). */
+[data-theme="light"] .oc-search-card__icon {
+  background: rgba(11, 87, 184, 0.15);
+}
+
+/* planner-filter-panel.component.scss: .filter-row__count — an active-filter
+   count badge. Text already reads through var(--accent-blue); background tint
+   needed its own override. */
+[data-theme="light"] .filter-row__count {
+  background: rgba(11, 87, 184, 0.15);
+}
+
+/* sfd-reports.component.css: .reports__count (the selected-column count next
+   to the "Columns" toolbar button) and .reports__applied (the "N applied"
+   filter-count pill) — both hardcode the same literal #0a2540 dark-navy fill
+   with #4aa8ff text (neither routed through any variable), same "count
+   badge" pattern as .filter-row__count above — but unlike that one, the text
+   here is ALSO a literal, not var(--accent-blue), so it doesn't pick up
+   --accent-blue's own light-theme value (#0B57B8) automatically; left as the
+   same light #4aa8ff against this lighter fill, it'd have the same "washed
+   out, barely visible" problem this whole audit is fixing, just moved from
+   the background to the text. Both need overriding together. !important
+   because the component's own scoped rule ties on specificity and can load
+   after this global stylesheet, winning the cascade otherwise. */
+[data-theme="light"] .reports__count,
+[data-theme="light"] .reports__applied {
+  color: #0B57B8 !important;
+  background: rgba(11, 87, 184, 0.15) !important;
+}
+
+/* sfd-config.component.css: .master-radio-card--active (selected state) and
+   .mapping-subrow__system (matches the child-row label fixed directly in
+   sfd-config.component.ts). */
+[data-theme="light"] .master-radio-card--active {
+  border-color: #0B57B8;
+  background: rgba(11, 87, 184, 0.12);
+}
+
+[data-theme="light"] .mapping-subrow__system {
+  color: rgba(11, 87, 184, 0.5);
+}
+
+/* All text inside glass cards must be readable. background is !important:
+   trials-dashboard.css / returns-dashboard.css (Trial-INT) each redeclare
+   their own component-scoped .glass-card with a dark-tuned translucent fill,
+   which — being component-scoped — can tie with a plain override here on
+   specificity; !important guarantees this wins over that local redeclaration. */
+[data-theme="light"] .glass-card {
+  color: var(--text-primary);
+  background: var(--bg-card) !important;
+}
+
+/* ── Light-theme typography audit ──
+   panel-card.css: .pc-title (card/panel heading — "Daily Orders",
+   "Birthday/Anniversary", "Upcoming Event Updates" on Home, plus every other
+   app-panel-card usage app-wide — 23 templates) has NO font-weight declared
+   anywhere in its cascade, in EITHER theme — a genuine missing-weight bug, not
+   a light-theme color/contrast issue (its color: var(--text-primary) is
+   already correctly tokenized and high-contrast in both themes). Since the
+   root cause is shared/theme-agnostic but the instruction is light-theme-only,
+   this only corrects the light-theme render — dark theme keeps the exact same
+   unweighted title it already had. */
+[data-theme="light"] .pc-title {
+  font-weight: 600;
+}
+
+/* Repeated (not shared-file) .obs-panel__header h3 pattern, duplicated
+   verbatim across ~38 ship-inventory-obs component .css files — same missing-
+   weight bug as .pc-title above, same reasoning for light-theme-only scope.
+   One override here covers all ~38 since they share the exact selector text. */
+[data-theme="light"] .obs-panel__header h3 {
+  font-weight: 600;
+}
+
+/* ── Component light-theme overrides relocated from component-scoped CSS ──
+   These must live here, not in the owning component's .css file: Angular's
+   emulated view encapsulation appends the component's _ngcontent attribute
+   to every simple selector, including [data-theme="light"] — which targets
+   <html>, an element no component's content attribute can ever match. Global
+   styles.css isn't view-encapsulated, so the selectors work correctly here. */
+
+/* header.css: .nav-tab-active (active module tab) — pale-blue bordered chip,
+   matching the requested reference look, instead of a solid fill.
+   font-family swaps to 'Inter Variable' (see the @font-face above) so the
+   inherited font-weight: 600 (from header.css) resolves to a real glyph
+   outline instead of the browser synthesizing ("faux") bold on top of
+   Poppins's single 500-weight file — that synthesis is what read as blurry.
+   Scoped to the active tab only; every other light-theme element (including
+   the inactive .nav-tab beside it) still renders in Poppins, untouched. */
+[data-theme="light"] .nav-tab-active {
+  color: #0b57b8 !important;
+  background: #e4effc !important;
+  border-radius: 8px 8px 0 0;
+  box-shadow: inset 0 0 0 1px rgba(11, 87, 184, 0.25), inset 0 -2px 0 0 #0B57B8;
+  font-family: "Inter Variable", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, sans-serif;
+}
+
+/* header.css: .nav-tab (inactive tabs) — smooth center-out underline on
+   hover, drawn via an absolutely-positioned ::after so it never affects the
+   tab's box size/layout, plus a subtle text color transition to the accent. */
+[data-theme="light"] .nav-tab {
+  transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* sidebar.css: .nav-child--active's icon/label — dark theme's #1069AB (icon)
+   and var(--text-primary) (label, near-white there) both read fine against
+   dark theme's --nav-active-bg. In light theme those same values (icon still
+   #1069AB, label var(--text-primary) resolving to near-black) sit too close
+   in hue/luminance to --nav-active-bg's own light-blue tint to read as a
+   selected state. --accent-blue's light-theme value (#0B57B8, deeper than
+   #1069AB) gives real contrast instead. Dark theme is untouched — this block
+   only ever applies under [data-theme="light"]. !important is required here:
+   sidebar.css's own component-scoped rule compiles with Angular's _ngcontent
+   attribute on every simple selector (raising its specificity), which beats
+   this plain global override on specificity alone — same reason
+   [data-theme="light"] .nav-tab-active above needs it too. */
+[data-theme="light"] .nav-child--active .nav-child__icon,
+[data-theme="light"] .nav-child--active .nav-child__label {
+  color: var(--accent-blue) !important;
+}
+
+/* sidebar.css: .nav-child--active — dark theme's selected state is just the
+   --nav-active-bg tint: no border, no shadow, no dot, nothing else (its
+   border/shadow tokens are transparent/none by design, and its dot is a
+   no-op — see the comment on .nav-child::before in sidebar.css). Light
+   theme's border+shadow values turned that same tint into a boxed/bordered
+   pill, and an earlier attempt here to replace the dot with a bar added a
+   decoration dark theme doesn't have either. Matching dark theme's actual
+   recipe exactly instead: keep the tint (still real, still visible), drop
+   border/shadow, and hide the dot outright — same "nothing there" result
+   dark theme already gets for free from its own no-op tokens. */
+[data-theme="light"] .nav-child--active {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+[data-theme="light"] .nav-child::before {
+  display: none !important;
+}
+
+/* ── Global card/panel hover polish (light theme only) ──
+   .glass-card is the shared surface behind every card/panel app-wide (KPI
+   cards, panel-card, and dozens of page-specific containers) — a subtle
+   border/glow lift on hover reads as "alive" without implying every card is
+   clickable (no cursor change, no transform/scale, existing 350ms transition
+   on .glass-card already covers border-color/box-shadow so this animates
+   smoothly for free). Excludes .sidebar (stays permanently dark-styled) and
+   .header-container (structural chrome, not a content card). */
+[data-theme="light"] .glass-card:not(.sidebar):not(.header-container):hover {
+  border-color: rgba(11, 87, 184, 0.18);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 6px 20px rgba(11, 87, 184, 0.08);
+}
+
+/* Generic .button — same idea: a soft accent-tinted background/border on
+   hover, no transform. Excludes buttons that already carry their own
+   Tailwind bg-* utility (e.g. destructive/danger buttons using
+   bg-red-600 hover:bg-red-700) or component primary/sync styles —
+   [data-theme="light"] gives this rule higher specificity than a plain
+   utility or class, so without this guard it would incorrectly override
+   their intended hover colors and turn primary button text unreadable. */
+[data-theme="light"] .button:not(:disabled):not([class*="bg-"]):not(.primary-btn):not(.sync-btn):not(.btn-primary):not([class*="primary"]):hover {
+  background: #F1F6FD;
+  border-color: rgba(11, 87, 184, 0.35);
+}
+
+[data-theme="light"] .nav-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: #0B57B8;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+[data-theme="light"] .nav-tab:not(.nav-tab-active):hover {
+  color: #0B57B8;
+}
+
+[data-theme="light"] .nav-tab:not(.nav-tab-active):hover::after {
+  transform: scaleX(1);
+}
+
+/* kms-panel.css: #61c2ff accents (search-input focus ring, breadcrumb chip,
+   .kms-link, detail-row labels) — same relocation reason as above: kms-panel.css
+   is @import'd into each KMS page's own component stylesheet, so it inherits
+   that page's _ngcontent attribute and [data-theme="light"] can't match there. */
+[data-theme="light"] .kms-search__input:focus {
+  border-color: #0B57B8;
+}
+
+[data-theme="light"] .kms-breadcrumb__crumb {
+  color: #0B57B8;
+  background: rgba(11, 87, 184, 0.1);
+  border-color: rgba(11, 87, 184, 0.4);
+}
+
+[data-theme="light"] .kms-link,
+[data-theme="light"] .kms-detail-row--divided span:first-child {
+  color: #0B57B8;
+}
+
+/* ── Trial-INT / inventory / op-maintenance: #61C2FF accents ──
+   These ~20 files hardcode #61C2FF straight into Tailwind arbitrary-value
+   classes (e.g. hover:border-[#61C2FF]) with no light/dark branching of their
+   own at all — the templates render identically regardless of theme. Rather
+   than edit each template, this overrides the exact selectors Tailwind
+   generates for those classes (verified against the actual compiled output,
+   including its pre-resolved opacity hex suffixes — e.g. #61c2ff4d is
+   Tailwind's own baked-in 30%-alpha encoding of #61c2ff, so the light
+   equivalent is #0B57B8's own hex at that same suffix) so only light theme's
+   *color* changes; every dark-hardcoded utility around it (bg-white/10 etc.)
+   is untouched, and so is dark theme. !important matches these rules'
+   necessity: Tailwind's own utility-class specificity is exactly what they're
+   overriding. */
+[data-theme="light"] .text-\[\#61C2FF\],
+[data-theme="light"] .hover\:text-\[\#61C2FF\]:hover {
+  color: rgb(11 87 184 / var(--tw-text-opacity, 1)) !important;
+}
+
+[data-theme="light"] .border-\[\#61C2FF\],
+[data-theme="light"] .hover\:border-\[\#61C2FF\]:hover,
+[data-theme="light"] .focus\:border-\[\#61C2FF\]:focus {
+  border-color: rgb(11 87 184 / var(--tw-border-opacity, 1)) !important;
+}
+
+[data-theme="light"] .border-\[\#61C2FF\]\/30,
+[data-theme="light"] .hover\:border-\[\#61C2FF\]\/30:hover {
+  border-color: #0B57B84d !important;
+}
+
+[data-theme="light"] .hover\:border-\[\#61C2FF\]\/50:hover {
+  border-color: #0B57B880 !important;
+}
+
+[data-theme="light"] .hover\:border-\[\#61C2FF\]\/60:hover {
+  border-color: #0B57B899 !important;
+}
+
+[data-theme="light"] .bg-\[\#61C2FF\] {
+  background-color: rgb(11 87 184 / var(--tw-bg-opacity, 1)) !important;
+}
+
+[data-theme="light"] .bg-\[rgba\(97\,194\,255\,0\.15\)\] {
+  background-color: #0B57B826 !important;
+}
+
+[data-theme="light"] .accent-\[\#61C2FF\] {
+  accent-color: #0B57B8 !important;
+}
+
+[data-theme="light"] .focus\:ring-\[\#61C2FF\]:focus {
+  --tw-ring-color: rgb(11 87 184 / var(--tw-ring-opacity, 1)) !important;
+}
+
+/* masters.component.scss: .tab.active::after (op-maintenance references tab
+   underline) — relocated for the same ViewEncapsulation reason as the KMS/nav
+   overrides above. */
+[data-theme="light"] .tab.active::after {
+  background: #0B57B8;
+  box-shadow: 0 0 12px #0B57B8;
+}
+
+/* inventory-tab-nav.css: .inv-icon-btn:hover */
+[data-theme="light"] .inv-icon-btn:hover {
+  background: rgba(11, 87, 184, 0.18);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   LIGHT-THEME CLARITY PASS — ~40 page/component .css files hardcode the
+   codebase's dark-glass convention (rgba(255,255,255,0.0X) fills/borders,
+   meant to catch light on a DARK card) with no theme branching of their own.
+   On light theme's near-white canvas that convention reads backwards — a few
+   percent of white on white is invisible, so these elements had almost no
+   visible edge/fill at all ("washed out"). The fix mirrors the SAME technique
+   the project's own tokens already use for light theme (e.g. --nav-hover-bg:
+   rgba(15,28,46,0.05)): swap the white tint for a dark tint at a comparable
+   (sometimes slightly higher, learned from the card-border fix above) alpha.
+   Deliberately NOT touched: elements that are dark-styled on purpose regardless
+   of theme (e.g. sfd-references' .log-console — an actual console/log panel —
+   home.css's .daily-order-tooltip, and date-wheel-picker.css's picker sheet)
+   — flipping those isn't a "clarity fix", it's a redesign of an intentional
+   dark accent, which the request explicitly asked NOT to do. Also skipped:
+   bare element selectors like `table tbody tr` in ship-returns/Trial-INT's
+   dashboards — Angular scopes the ORIGINAL rule to its own component via
+   _ngcontent, but an override written here would NOT be similarly scoped and
+   would hit every table app-wide, which is a real regression risk for a
+   handful of 3-5%-opacity row dividers not worth that blast radius.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* home.css: .home-page's own local tokens (dividers, empty-state bg, scroll
+   track/thumb, image bg, etc.) already have a complete, better-tuned
+   :host-context([data-theme="light"]) .home-page block further down in that
+   file itself (higher specificity than anything written here, so it always
+   wins) — no override needed. .home-latest-message-card's own background
+   isn't covered by that block though, so it still needs one. */
+[data-theme="light"] .home-latest-message-card {
+  background: rgba(15, 28, 46, 0.03);
+}
+
+/* daily-orders-history.css (reached from Home, but its own routed component —
+   .home-page's tokens above don't cascade to it, so it needs its own values) */
+[data-theme="light"] .doh-table tbody tr:hover {
+  background: rgba(15, 28, 46, 0.04);
+}
+
+[data-theme="light"] .doh-view--disabled {
+  background: rgba(15, 28, 46, 0.05);
+}
+
+/* trials-dashboard.css / returns-dashboard.css (Trial-INT): each redeclares
+   its own local .glass-card — already handled by the !important on the
+   .glass-card rule near the top of this "Component light-theme overrides"
+   section. */
+[data-theme="light"] app-trials-dashboard table tbody tr,
+[data-theme="light"] app-returns-dashboard table tbody tr {
+  border-bottom-color: rgba(15, 28, 46, 0.08);
+}
+
+/* sfd-references.component.css (SFD step wizard) — .log-console and its
+   .log-badge/.tone-* children are a deliberate dark console panel, left as-is.
+   .step0-btn / .step0-divider / .progress-track / .summary-block are regular
+   chrome around it and get the standard treatment. */
+[data-theme="light"] .step0-btn {
+  border-color: rgba(15, 28, 46, 0.16);
+  background: rgba(15, 28, 46, 0.03);
+}
+
+[data-theme="light"] .step0-btn:hover:not(:disabled) {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+[data-theme="light"] .step0-divider,
+[data-theme="light"] .progress-track {
+  background: rgba(15, 28, 46, 0.08);
+}
+
+[data-theme="light"] .summary-block {
+  background: rgba(15, 28, 46, 0.03);
+  border-color: rgba(15, 28, 46, 0.10);
+}
+
+/* collapsible-sidebar.css (used by opm-configuration, sfd-config, opm-reports,
+   sfd-reports — a secondary in-page sidebar, distinct from the main app rail) */
+[data-theme="light"] .sidebar__item:hover {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+[data-theme="light"] .sidebar__badge {
+  background: rgba(15, 28, 46, 0.08);
+}
+
+/* sfd-management.component.css (Ship Configuration → Management) */
+[data-theme="light"] .mgmt__plain-table td {
+  border-top-color: rgba(15, 28, 46, 0.08);
+}
+
+[data-theme="light"] .mgmt__modal-divider {
+  border-top-color: rgba(15, 28, 46, 0.10);
+}
+
+/* sfd-insights.component.css (Ship Configuration → Insights) */
+[data-theme="light"] .insight__meta {
+  border-top-color: rgba(15, 28, 46, 0.10);
+}
+
+/* sfd-config.component.css (Ship Configuration → Configuration) */
+[data-theme="light"] .map-toggle {
+  border-color: rgba(15, 28, 46, 0.14);
+  background: rgba(15, 28, 46, 0.04);
+}
+
+[data-theme="light"] .map-toggle__btn:hover:not(.map-toggle__btn--active) {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+/* sfd-overview.component.css + opm-overview.component.css share these exact
+   class names (.alert, .qa-btn, .dlist-row) — one override covers both. */
+[data-theme="light"] .alert:hover,
+[data-theme="light"] .qa-btn:hover,
+[data-theme="light"] .alert-item-row--clickable:hover,
+[data-theme="light"] .aitem:hover {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+[data-theme="light"] .dlist-row,
+[data-theme="light"] .adetail-row,
+[data-theme="light"] .aitem {
+  border-bottom-color: rgba(15, 28, 46, 0.10);
+}
+
+[data-theme="light"] .act-gd-bar {
+  background: rgba(15, 28, 46, 0.08);
+}
+
+[data-theme="light"] .act-table td,
+[data-theme="light"] .act-detail-row {
+  border-top-color: rgba(15, 28, 46, 0.10);
+  border-bottom-color: rgba(15, 28, 46, 0.10);
+}
+
+[data-theme="light"] .act-guar-step-badge {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+/* defact-form.css */
+[data-theme="light"] .cancel-btn:hover {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+/* create-ra.css */
+[data-theme="light"] .cr-cancel-btn:hover {
+  background: rgba(15, 28, 46, 0.06);
+}
+
+/* kpi-card.css: .kpi-trend-popup is a floating popup (like a dropdown), so it
+   gets the same treatment as other floating panels (--bg-dropdown) rather than
+   staying hardcoded dark gray, which would look like a stray dark rectangle
+   popping out of an otherwise light page. */
+[data-theme="light"] .kpi-trend-popup {
+  border-color: rgba(15, 28, 46, 0.12);
+  background-color: var(--bg-dropdown);
+  box-shadow:
+    0 10px 30px rgba(15, 28, 46, 0.18),
+    inset 0 1px 0 rgba(15, 28, 46, 0.04);
+}
+
+[data-theme="light"] .kpi-trend-popup .popup-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .popup-row {
+  border-bottom-color: rgba(15, 28, 46, 0.08);
+}
+
+/* slip-calculator.css / ra-signal.css share .tab-btn */
+[data-theme="light"] .tab-btn {
+  background: rgba(15, 28, 46, 0.04);
+}
+
+[data-theme="light"] .inner-tab-btn {
+  background: rgba(15, 28, 46, 0.04);
+}
+
+[data-theme="light"] .result-panel {
+  background: rgba(15, 28, 46, 0.03);
+}
+
+/* tank-management.css */
+[data-theme="light"] .sounding-result {
+  background: rgba(15, 28, 46, 0.03);
+}
+
+/* op-maintenance-dashboard.css */
+[data-theme="light"] .subdept-card {
+  background: rgba(15, 28, 46, 0.03);
+}
+
+/* srar-history.component.css + srar-dashboard.component.css share .srar-table */
+[data-theme="light"] .srar-table th {
+  background: rgba(15, 28, 46, 0.03);
+}
+
+[data-theme="light"] .srar-table td {
+  border-bottom-color: rgba(15, 28, 46, 0.08);
+}
+
+[data-theme="light"] .srar-table tr:hover td {
+  background: rgba(15, 28, 46, 0.04);
+}
+
+/* ship-returns list pages (overview / other-returns / hull-returns /
+   trial-returns) all repeat the same table-header/row/pill pattern under
+   different class prefixes. */
+[data-theme="light"] .returns-table th,
+[data-theme="light"] .other-table th,
+[data-theme="light"] .hull-table th,
+[data-theme="light"] .trial-table th {
+  background: rgba(15, 28, 46, 0.02);
+}
+
+[data-theme="light"] .returns-table td,
+[data-theme="light"] .other-table td,
+[data-theme="light"] .hull-table td,
+[data-theme="light"] .trial-table td {
+  border-bottom-color: rgba(15, 28, 46, 0.08);
+}
+
+[data-theme="light"] .returns-table tr:hover td,
+[data-theme="light"] .other-table tr:hover td,
+[data-theme="light"] .hull-table tr:hover td,
+[data-theme="light"] .trial-table tr:hover td {
+  background: rgba(15, 28, 46, 0.05);
+}
+
+[data-theme="light"] .category-pill,
+[data-theme="light"] .dept-pill,
+[data-theme="light"] .type-pill {
+  background: rgba(15, 28, 46, 0.06);
+  border-color: rgba(15, 28, 46, 0.14);
+}
+
+/* trial-transaction.component.css + trial-outbox.component.css share
+   .badge-status-draft */
+[data-theme="light"] .badge-status-draft {
+  background: rgba(15, 28, 46, 0.08);
+}
+
+/* trial-aboutus.component.css's .hero-banner is a deliberate, self-contained
+   dark navy gradient banner (not tied to app theme) with its own white text —
+   left untouched, same as the other intentional dark accents noted above. */
+
+/* srar-transaction.component.css's .grid-action-pill/.grid-action-btn (with
+   its hardcoded color: #FFFFFF) is already covered by the more complete
+   [data-theme="light"] .grid-action-pill/.grid-action-btn rules further down
+   this file (background/border/color/hover/svg) — no separate override needed. */
+
+/* mail-noti-center.css: the bell/mail dropdown's own Mail/Notifications tabs —
+   .tab-btn.active's white-tinted gradient was invisible against the (already
+   light, token-driven) --bg-dropdown, so the active tab wasn't distinguishable
+   from the inactive one at all. */
+[data-theme="light"] .tab-btn:hover:not(.active) {
+  background: rgba(15, 28, 46, 0.05);
+}
+
+[data-theme="light"] .tab-btn.active {
+  background: linear-gradient(160deg, rgba(11, 87, 184, 0.14) 0%, rgba(11, 87, 184, 0.06) 100%);
+}
+
+/* sfd-overview.component.css: .qa-btn--primary (Add / Update SFD CTA) */
+[data-theme="light"] .qa-btn--primary {
+  border-color: #1069AB;
+  background: #1069AB;
+  color: #ffffff;
+}
+
+[data-theme="light"] .qa-btn--primary:hover {
+  background: #0D5A8F;
+}
+
+[data-theme="light"] .qa-btn--primary .icon--accent {
+  color: #ffffff;
+}
+
+[data-theme="light"] .qa-btn--primary .qa-plus-icon .icon--accent {
+  color: #000000;
+}
+
+/* kpi-card.css: .kpi-arrow-detail / .kpi-label / .kpi-time-tab* */
+[data-theme="light"] .kpi-arrow-detail {
+  border-color: var(--border-primary);
+  background: var(--bg-input);
+}
+
+[data-theme="light"] .kpi-arrow-detail:hover {
+  background: var(--bg-icon-btn);
+}
+
+[data-theme="light"] .kpi-label {
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .kpi-time-tab:hover {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .kpi-time-tab-active {
+  background: var(--bg-icon-btn);
+  border-color: var(--border-primary);
+}
+
+[data-theme="light"] .accent-pills .kpi-time-tab-active {
+  background: #1069AB;
+  border-color: #1069AB;
+  color: #ffffff;
+}
+
+/* Specific overrides that might use opacity-based visibility */
+[data-theme="light"] [class*="text-slate"],
+[data-theme="light"] [class*="text-gray"] {
+  color: var(--text-muted) !important;
+}
+
+/* ── KPI number and heading visibility ── */
+[data-theme="light"] .no_kpi,
+[data-theme="light"] .kpi_heading {
+  color: var(--text-primary) !important;
+}
+
+/* ── Tailwind/utility span text that may use white/opacity ── */
+[data-theme="light"] span.opacity-90 {
+  color: var(--text-primary) !important;
+  opacity: 1 !important;
+}
+
+/* ── All p, span, div inside main content area ── */
+[data-theme="light"] main p,
+[data-theme="light"] main span:not(.badge):not(.status) {
+  color: inherit;
+}
+
+/* ============================================================
+   GLOBAL TOOLTIP — styled replacement for the native `title`.
+   Driven by TooltipService (event delegation, see
+   shared/directives/tooltip.service.ts). The bubble is appended
+   to <body>, so these rules must be global. Shaped like the
+   landing sidebar `.nav-tooltip`, but coloured from the app's
+   theme tokens so it matches light + dark automatically.
+   ============================================================ */
+.app-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  padding: 6px 12px;
+  border-radius: 8px;
+  /* Theme tokens → matches the app's dropdowns/menus in both light and dark. */
+  background: var(--bg-dropdown);
+  border: 1px solid var(--border-dropdown);
+  box-shadow: var(--shadow-card);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  line-height: 1.25;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.app-tooltip--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-tooltip__label {
+  display: block;
+  max-width: 320px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Arrow — a rotated square (same surface + border) that points at the element. */
+.app-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--bg-dropdown);
+  border: 1px solid var(--border-dropdown);
+  transform: rotate(45deg);
+}
+
+.app-tooltip[data-side="top"] .app-tooltip__arrow {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-top: 0;
+  border-left: 0;
+}
+
+.app-tooltip[data-side="bottom"] .app-tooltip__arrow {
+  top: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-bottom: 0;
+  border-right: 0;
+}
+
+.app-tooltip[data-side="right"] .app-tooltip__arrow {
+  left: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-top: 0;
+  border-right: 0;
+}
+
+.app-tooltip[data-side="left"] .app-tooltip__arrow {
+  right: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+
+.dropdown-trigger {
+  border: 1px solid var(--border-color);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dropdown-trigger.error {
+  border-color: #ef4444 !important;
+}
+
+.dropdown-trigger.error:focus-within,
+.dropdown-trigger.error.active {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+.form-control.error {
+  border-color: #ef4444;
+}
+
+.form-control.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+/* model header bg  */
+
+.model-border-header {
+  border-bottom: 1px solid var(--model-border);
+  ;
+}
+
+.model-border {
+  border: 0.5px solid var(--model-border);
+}
+
+
+.readonly-checkbox {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.readonly-checkbox+span {
+  cursor: not-allowed;
+}
+
+
+.required-placeholder::placeholder {
+  color: #e5877f;
+  opacity: 1
+}
+
+
+.submit-btn button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 20px rgba(47, 140, 255, 0.25);
+}
+
+/* Disabled State */
+.submit-btn button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+.location-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.location-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.location-dot.port {
+  background-color: #ff4d4f;
+}
+
+.location-dot.starboard {
+  background-color: #22c55e;
+}
+
+.location-text {
+  color: inherit;
+}
+
+.source-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.source-badge--cmms {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+}
+
+.source-badge--swmm {
+  background: rgba(240, 165, 0, 0.15);
+  color: #f0a500;
+}
+
+
+.compartment-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: rgb(74, 168, 255);
+}
+
+/* ================= LIGHT MODE GLOBAL BADGES & GRID ACTIONS ================= */
+[data-theme="light"] .status-pill,
+[data-theme="light"] .table-pill,
+[data-theme="light"] .badge-secondary,
+[data-theme="light"] .badge-status-draft,
+[data-theme="light"] .badge-success,
+[data-theme="light"] .badge-status-closed,
+[data-theme="light"] .badge-warning,
+[data-theme="light"] .badge-status-in-progress,
+[data-theme="light"] .badge-info,
+[data-theme="light"] .badge-status-open {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 3px 12px !important;
+  border-radius: 9999px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  height: 24px !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+[data-theme="light"] .status-pill.badge-secondary,
+[data-theme="light"] .table-pill.badge-secondary,
+[data-theme="light"] .status-pill.badge-status-draft,
+[data-theme="light"] .table-pill.badge-status-draft,
+[data-theme="light"] .badge-secondary,
+[data-theme="light"] .badge-status-draft {
+  background: #F3F4F6 !important;
+  border: 1px solid #D1D5DB !important;
+  color: #374151 !important;
+}
+
+[data-theme="light"] .status-pill.badge-success,
+[data-theme="light"] .table-pill.badge-success,
+[data-theme="light"] .status-pill.badge-status-closed,
+[data-theme="light"] .table-pill.badge-status-closed,
+[data-theme="light"] .badge-success,
+[data-theme="light"] .badge-status-closed {
+  background: #DCFCE7 !important;
+  border: 1px solid #86EFAC !important;
+  color: #166534 !important;
+}
+
+[data-theme="light"] .status-pill.badge-warning,
+[data-theme="light"] .table-pill.badge-warning,
+[data-theme="light"] .status-pill.badge-status-in-progress,
+[data-theme="light"] .table-pill.badge-status-in-progress,
+[data-theme="light"] .badge-warning,
+[data-theme="light"] .badge-status-in-progress {
+  background: #FEF3C7 !important;
+  border: 1px solid #FDE68A !important;
+  color: #92400E !important;
+}
+
+[data-theme="light"] .status-pill.badge-info,
+[data-theme="light"] .table-pill.badge-info,
+[data-theme="light"] .status-pill.badge-status-open,
+[data-theme="light"] .table-pill.badge-status-open,
+[data-theme="light"] .badge-info,
+[data-theme="light"] .badge-status-open {
+  background: #E0F2FE !important;
+  border: 1px solid #7DD3FC !important;
+  color: #075985 !important;
+}
+
+[data-theme="light"] .grid-action-pill,
+[data-theme="light"] .grid-action-btn {
+  background: #F0F2F5 !important;
+  border: 1px solid #D1D5DB !important;
+  color: #0F1C2E !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .grid-action-pill:hover,
+[data-theme="light"] .grid-action-btn:hover {
+  background: #E2E4E6 !important;
+  border-color: #9CA3AF !important;
+  color: #0F1C2E !important;
+}
+
+[data-theme="light"] .grid-action-pill svg,
+[data-theme="light"] .grid-action-btn svg {
+  color: #374151 !important;
+}
+
+[data-theme="light"] .grid-action-pill:hover svg,
+[data-theme="light"] .grid-action-btn:hover svg {
+  color: #0F1C2E !important;
+}
+
+[data-theme="light"] .dart-no-code {
+  color: #0284C7 !important;
+}
+
+[data-theme="light"] .dart-no-code:hover {
+  color: #0369A1 !important;
+}
+
+/* ============================================================
+   MIGRATED BUTTON STYLES FOR APP-BUTTON
+   ============================================================ */
+
+/* Footer Sync All */
+.admin-sync-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  background: var(--bg-sidebar-profile);
+  border: 0.5px solid var(--border-profile);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0.3rem 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.admin-sync-all-btn:hover:not(:disabled) {
+  border-color: var(--nav-hover-border);
+  background: var(--nav-hover-bg);
+}
+
+/* Leave Forecast Approve/Reject */
+.btn-approve {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reject {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Gallery Filter Pills */
+.gal-filter-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid var(--accent-blue, #1d96e9);
+  background: transparent;
+  color: var(--accent-blue, #1d96e9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gal-filter-pill:hover {
+  opacity: 0.8;
+}
+
+.gal-filter-pill-active {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+}
+
+/* Admin Dashboard Filter Pills */
+.filter-pill {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-pill:hover {
+  color: var(--text-primary, #ffffff);
+}
+
+.filter-pill--active {
+  background: var(--bg-comm-btn, rgba(255, 255, 255, 0.15));
+  color: var(--text-primary, #ffffff);
+}
+
+.filter-pill--pending.filter-pill--active {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+}
+
+.filter-pill--approved.filter-pill--active {
+  background: rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+}
+
+.filter-pill--rejected.filter-pill--active {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+/* Design Tokens and Baseline Styles */
+:root {
+  /* Rely directly on the app's standard variables */
+  --btn-border-radius: 8px;
+  --btn-pill-radius: 9999px;
+  --btn-transition: all 0.2s ease;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.45rem 1.15rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border-radius: var(--btn-border-radius);
+  transition: var(--btn-transition);
+  cursor: pointer;
+}
+
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Primary Variant (Mimics original Submit / Blue primary buttons) */
+.btn-primary {
+  color: #ffffff;
+  background-color: #1069AB;
+  border-color: #4f8fd5;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #195d95;
+}
+
+/* Success Variant (Mimics original Approve / Green success buttons) */
+.btn-success {
+  color: #ffffff;
+  background-color: #28a745;
+  border-color: #28a745;
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+/* Danger Variant (Mimics original Reject / Red danger buttons) */
+.btn-danger {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+/* Outline Variant (Mimics original Sync All outline button) */
+.btn-outline {
+  color: var(--text-primary);
+  background-color: var(--bg-sidebar-profile);
+  border-color: var(--border-profile);
+  border-width: 0.5px;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--nav-hover-bg);
+  border-color: var(--nav-hover-border);
+}
+
+/* Ghost Variant */
+.btn-ghost {
+  color: var(--text-muted);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Pill Variant (Mimics original Filter Pills) */
+.btn-pill {
+  color: var(--text-muted, #94a3b8);
+  background-color: transparent;
+  border: none;
+  border-radius: 14px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+}
+
+.btn-pill:hover:not(:disabled) {
+  color: var(--text-primary, #ffffff);
+}
+
+.btn-pill.active {
+  background-color: var(--bg-comm-btn, rgba(255, 255, 255, 0.15));
+  color: var(--text-primary, #ffffff);
+}
+
+/* ============================================================
+   OBS Transactions > Return — issue-type status flag
+   ============================================================
+   The accent bar has to live here rather than in return-list.css: the cell it paints is
+   rendered by `app-data-grid`'s ag-grid instance, not by the Return component's own template,
+   so a component-scoped rule never reaches it. */
+.ag-theme-custom .obs-issue-flag-cell {
+  box-shadow: inset 4px 0 0 var(--obs-issue-flag-color, transparent);
+}
+
+.ag-theme-custom .obs-issue-flag-cell--internal {
+  --obs-issue-flag-color: var(--obs-issue-flag-internal);
+}
+
+.ag-theme-custom .obs-issue-flag-cell--ty-loan {
+  --obs-issue-flag-color: var(--obs-issue-flag-ty-loan);
+}

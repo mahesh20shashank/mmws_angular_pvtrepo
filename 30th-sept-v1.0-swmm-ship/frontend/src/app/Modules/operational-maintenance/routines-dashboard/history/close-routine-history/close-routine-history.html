@@ -1,0 +1,46 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="page-container glass-card">
+
+  <div class="page-header">
+    <h1 class="page-title">Close Routine History</h1>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Grid Card -->
+  <div class="grid-card">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <i class="ti ti-search search-icon" aria-hidden="true"></i>
+        <input
+          type="text"
+          [ngModel]="searchText()"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="Search">
+      </div>
+
+      <app-button
+        type="button"
+        (click)="syncWithCmms()"
+        [disabled]="syncingCmms()"
+        class="h-10 px-4 rounded-xl bg-yellow-400 border border-white/10 text-white whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60">
+
+        {{ syncingCmms() ? 'Syncing…' : 'Sync With CMMS' }}
+
+      </app-button>
+    </div>
+
+    <!-- Data Grid -->
+    <app-data-grid
+      [rowData]="filteredRows()"
+      [columnDefs]="columnDefs"
+      [pagination]="true"
+      [height]="'440px'"
+      [loading]="isLoading()">
+    </app-data-grid>
+
+  </div>
+
+</div>

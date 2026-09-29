@@ -1,0 +1,226 @@
+<div class="mb-4 flex w-full max-w-[700px] gap-1 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-card)] p-1 shadow-inner">
+  <button
+    *ngFor="let tab of tabs"
+    (click)="setActiveTab(tab)"
+    [ngClass]="activeTab.id === tab.id
+      ? 'border-[#4f8fd5] bg-[#1069AB] text-white shadow-sm'
+      : 'border-transparent bg-transparent text-[var(--text-muted)] hover:bg-[var(--bg-nav-child-hover)] hover:text-[var(--text-primary)]'"
+    class="flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2 text-[11px] font-bold transition-all">
+    <i [class]="tab.icon"></i>
+    {{ tab.label }}
+  </button>
+</div>
+
+<div class="flex flex-col gap-4">
+  <app-paginate-table
+    title=""
+    [showHeaderSection]="true"
+    [showSearch]="true"
+    (addButtonClick)="triggerOilModal($event.key)"
+    [addButtons]="addButtons"
+    [rowData]="rowData"
+    [url]="activeTab.url"
+    [columnDefs]="activeTab.columnDefs"
+    [showPagination]="true">
+  </app-paginate-table>
+</div>
+<div class="oil-mapping-dialog fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md" *ngIf="showCreateLayout">
+  <div class="w-[80vw] max-w-[1530px] transform transition-all">
+
+    <app-form-card [title]="headerTitle || getMappingPopupTitle()">
+      <ng-container *ngIf="modalType === 'oil-data'">
+        <div class="oil-data-form grid gap-5">
+          <div class="oil-data-fields grid grid-cols-1 gap-5 lg:grid-cols-3">
+            <div>
+              <label class="custom-label uppercase tracking-[1.4px]">Oil Short Name <span class="required-mark">*</span></label>
+              <input type="text" [(ngModel)]="selectedOilShortName" class="custom-input w-full" placeholder="Oil Short Name" />
+            </div>
+            <div>
+              <label class="custom-label uppercase tracking-[1.4px]">Oil Full Name <span class="required-mark">*</span></label>
+              <input type="text" [(ngModel)]="selectedOilFullName" class="custom-input w-full" placeholder="Oil Full Name" />
+            </div>
+            <div>
+              <label class="custom-label mb-1 block text-[11px] font-semibold uppercase tracking-[1.4px]">Select Oil Type <span class="required-mark">*</span></label>
+              <div class="flex items-center gap-4 mt-2">
+                <label class="inline-flex items-center gap-2 text-sm text-[var(--text-primary)]"><input type="radio" name="oilType" value="lub-oil" [(ngModel)]="selectedOilType" /> LUB OIL</label>
+                <label class="inline-flex items-center gap-2 text-sm text-[var(--text-primary)]"><input type="radio" name="oilType" value="hydraulic-oil" [(ngModel)]="selectedOilType" /> HYDRAULIC OIL</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="oil-data-panel rounded-2xl border border-[var(--border-primary)] bg-[var(--bg-input)] p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold uppercase tracking-[1.4px] text-[var(--text-primary)]">Basic Properties</h3>
+            </div>
+            <app-reusable-input-table [data]="basicOilProperties"
+                                      [columns]="basicOilPropertiesColumns"
+                                      [enableRowActions]="true">
+            </app-reusable-input-table>
+          </div>
+
+          <div class="oil-data-panel rounded-2xl border border-[var(--border-primary)] bg-[var(--bg-input)] p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold uppercase tracking-[1.4px] text-[var(--text-primary)]">Advance Properties</h3>
+            </div>
+            <app-reusable-input-table [data]="advanceOilProperties"        [columns]="advanceOilPropertiesColumns"
+                                      [enableRowActions]="true">
+            </app-reusable-input-table>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="modalType === 'oil-mapping'">
+        <div class="oil-mapping-form grid grid-cols-1 gap-3 lg:grid-cols-2">
+          <div class="min-h-[440px] rounded-2xl border border-[var(--border-primary)] bg-[var(--bg-card)] p-5">
+            <h3 class="mb-5 border-b border-[var(--border-primary)] pb-3 text-[13px] font-bold uppercase tracking-[1.4px] text-[var(--text-primary)]">Equipment Details</h3>
+            <div class="flex flex-col gap-4">
+              <app-multiselect
+                [label]="'Class of Ship'"
+                [options]="shipClassOptions"
+                [required]="true"
+                [searchable]="true"
+                [selectAllEnabled]="true"
+                [(ngModel)]="selectedShipClasses"
+                (ngModelChange)="onShipClassChange()">
+              </app-multiselect>
+
+              <app-multiselect
+                [label]="'Select Ship'"
+                [options]="shipOptions"
+                [required]="true"
+                [searchable]="true"
+                [selectAllEnabled]="true"
+                [(ngModel)]="selectedShips"
+                (ngModelChange)="onShipChange()">
+              </app-multiselect>
+
+              <app-multiselect
+                [label]="'Select Equipment'"
+                [options]="equipmentOptions"
+                [required]="true"
+                [maxVisibleTags]="1"
+                [searchable]="true"
+                [selectAllEnabled]="true"
+                [(ngModel)]="selectedEquipments">
+              </app-multiselect>
+            </div>
+            <div class="mt-7 overflow-hidden rounded-xl border border-[var(--border-primary)] bg-[var(--bg-input)]">
+              <div class="max-h-[170px] min-h-[96px] overflow-y-auto custom-scrollbar">
+                <table class="w-full text-xs">
+                  <thead class="sticky top-0 z-10 bg-[var(--ag-header-bg)]">
+                    <tr>
+                      <th class="w-20 border-r border-[var(--border-primary)] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--text-primary)]">Sr.</th>
+                      <th class="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--text-primary)]">Equipment Selected</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[var(--border-primary)] text-[var(--text-primary)]">
+                    <tr *ngFor="let equipment of selectedEquipmentOptions; let i = index" class="hover:bg-[var(--bg-nav-child-hover)]">
+                      <td class="px-4 py-2">{{ i + 1 }}</td>
+                      <td class="px-4 py-2" [innerHTML]="equipment.htmlTag"></td>
+                    </tr>
+                    <tr *ngIf="selectedEquipmentOptions.length === 0">
+                      <td colspan="2" class="px-4 py-5 text-center text-[var(--text-muted)]">
+                        No equipment selected
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="min-h-[440px] overflow-y-auto rounded-2xl border border-[var(--border-primary)] bg-[var(--bg-card)] p-5 custom-scrollbar">
+            <h3 class="mb-5 border-b border-[var(--border-primary)] pb-3 text-[13px] font-bold uppercase tracking-[1.4px] text-[var(--text-primary)]">Oil Data</h3>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <app-select
+                [label]="'Available Oil Data'"
+                [options]="availableOilDataOptions"
+                [required]="true"
+                [placeholder]="'Select Oil Data'"
+                [(ngModel)]="selectedOilDataId"
+                (valueChange)="onOilDataChange()">
+              </app-select>
+              <app-input
+                [label]="'Oil Type'"
+                [required]="true"
+                [disabled]="true"
+                [ngModel]="selectedOilTypeLabel">
+              </app-input>
+            </div>
+
+            <h4 class="mb-3 mt-7 text-[11px] font-bold uppercase tracking-[1.4px] text-[var(--text-primary)]">Basic Oil Properties</h4>
+            <div class="min-h-[64px] overflow-hidden rounded-xl border border-[var(--border-primary)] bg-[var(--bg-input)]">
+              <table class="w-full text-sm">
+                <thead class="bg-[var(--ag-header-bg)] text-[var(--text-primary)]">
+                  <tr>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Test</th>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Method</th>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Unit</th>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Acceptable Range</th>
+                  </tr>
+                </thead>
+                <tbody class="text-[var(--text-primary)]">
+                  <tr *ngFor="let row of basicOilProperties" class="border-b border-[var(--border-primary)]">
+                    <td class="px-3 py-1.5">{{ row.test }}</td>
+                    <td class="px-3 py-1.5">{{ row.method }}</td>
+                    <td class="px-3 py-1.5">{{ row.unit }}</td>
+                    <td class="px-3 py-1.5">{{ row.range }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 class="mb-3 mt-7 text-[11px] font-bold uppercase tracking-[1.4px] text-[var(--text-primary)]">Advance Oil Properties</h4>
+            <div class="min-h-[64px] overflow-hidden rounded-xl border border-[var(--border-primary)] bg-[var(--bg-input)]">
+              <table class="w-full text-sm">
+                <thead class="bg-[var(--ag-header-bg)] text-[var(--text-primary)]">
+                  <tr>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Test</th>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Method</th>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Unit</th>
+                    <th class="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[1.2px]">Acceptable Range</th>
+                  </tr>
+                </thead>
+                <tbody class="text-[var(--text-primary)]">
+                  <tr *ngFor="let row of advanceOilProperties" class="border-b border-[var(--border-primary)]">
+                    <td class="px-3 py-1.5">{{ row.test }}</td>
+                    <td class="px-3 py-1.5">{{ row.method }}</td>
+                    <td class="px-3 py-1.5">{{ row.unit }}</td>
+                    <td class="px-3 py-1.5">{{ row.range }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div formFooter class="-mx-5 -mb-5 mt-5 flex min-h-[80px] items-center justify-end gap-3 border-t border-[var(--border-primary)] bg-[var(--bg-card)] px-6 sm:gap-4">
+        <button
+          type="button"
+          (click)="showCreateLayout = false"
+          class="min-w-[110px] rounded-xl border border-[var(--border-input)] bg-[var(--bg-input)] px-5 py-3 text-sm font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-nav-child-hover)] active:scale-[0.98]"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          (click)="handleSubmit($event)"
+          class="inline-flex min-w-[180px] items-center justify-center gap-2 rounded-xl border border-sky-400/50 bg-[#1069AB] px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#195d95] active:scale-[0.98]"
+        >
+          <span>{{ submitButtonText }}</span>
+        </button>
+      </div>
+
+    </app-form-card>
+  </div>
+</div>
+
+
+
+
+<!-- <app-add-form *ngIf="showCreateLayout" [open]="showCreateLayout" [formConfig]="formConfigForNewDetails"
+  [fromTitle]="title" (onSubmit)="handleSubmit($event)" (onOpenChange)="showCreateLayout = $event" ></app-add-form> -->
+
+  <!-- <app-auto-form ></app-auto-form> -->

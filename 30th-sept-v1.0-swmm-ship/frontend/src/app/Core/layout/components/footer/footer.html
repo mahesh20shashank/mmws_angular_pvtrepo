@@ -1,0 +1,63 @@
+<footer
+  class="w-[99%] min-h-[48px] py-2 mt-2 mb-3 flex flex-col sm:flex-row items-center justify-between gap-3 rounded-lg px-3 text-[11px]"
+  style="border-top: 1px solid var(--border-primary); background: var(--bg-card); color: var(--text-primary); backdrop-filter: blur(12px);">
+  <!-- Left Section -->
+  <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-5 text-center sm:text-left">
+    <!-- Last Sync + date/time — authenticated pages only. The pre-login landing
+         page (guarded by guestGuard, shares this same Footer) shows Version only. -->
+    @if (authService.isAuthenticated()) {
+    <div class="flex items-center gap-2 px-3 py-1 rounded-lg" style="border: 1px solid var(--border-primary);">
+      <app-icon class="footer-icon" name="clock" [size]="16" [strokeWidth]="1.8" variant="inherit" />
+
+      <span class="footer-text">Last Sync</span>
+    </div>
+    }
+
+    <div class="flex items-center gap-4 footer-text">
+      @if (authService.isAuthenticated() && lastSyncDisplay()) {
+      <span>{{ lastSyncDisplay() }}</span>
+      }
+      <span>Version : {{ appInfo()?.version ?? '-' }}</span>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="flex items-center gap-3">
+    @if (authService.isAuthenticated()) {
+    <app-button variant="outline" customClass="admin-sync-all-btn" [disabled]="syncingItttm()"
+      title="Run ITTTM sync API" (click)="runSyncItttm()" (keydown.enter)="runSyncAll()" (keydown.space)="runSyncAll()">
+      <app-icon name="refresh-cw" [size]="14" [strokeWidth]="2" variant="accent" [spin]="syncingItttm()" />
+      <span>{{ syncingItttm() ? 'Syncing...' : 'Sync All (ITTTM)' }}</span>
+    </app-button>
+
+    <app-button variant="outline" customClass="admin-sync-all-btn" [disabled]="syncingAll()"
+      title="Run every transaction module's manual CMMS sync (SFD, Defect/DART, Fuss, SRAR) in one click"
+      (click)="runSyncAll()">
+      <app-icon name="refresh-cw" [size]="14" [strokeWidth]="2" variant="accent" [spin]="syncingAll()" />
+      <span>{{ syncingAll() ? 'Syncing...' : 'Sync All (CMMS)' }}</span>
+    </app-button>
+    }
+
+    <span class="footer-text">{{ appInfo()?.copyright_text ?? '-' }}</span>
+  </div>
+</footer>
+
+<!-- Modal: Sync All (CMMS) Results -->
+@if (syncAllResults()) {
+<app-modal (closeModal)="syncAllResults.set(null)" size="md" title="Sync All — CMMS Results">
+  <div class="admin-sync-all-results">
+    @for (result of syncAllResults()!.modules; track result.module) {
+    <div class="admin-sync-all-result-row">
+      <div>
+        <div class="admin-sync-all-result-row__label">{{ result.module }}</div>
+        <div class="admin-sync-all-result-row__message">{{ result.message }}</div>
+      </div>
+      <span class="admin-sync-all-result-row__badge" [class.admin-sync-all-result-row__badge--ok]="result.status"
+        [class.admin-sync-all-result-row__badge--fail]="!result.status">
+        {{ result.status ? 'Synced' : 'Failed' }}
+      </span>
+    </div>
+    }
+  </div>
+</app-modal>
+}

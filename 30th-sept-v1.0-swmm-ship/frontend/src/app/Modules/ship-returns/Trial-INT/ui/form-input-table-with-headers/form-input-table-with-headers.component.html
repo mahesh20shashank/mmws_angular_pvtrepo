@@ -1,0 +1,367 @@
+<div class="w-full relative overflow-x-auto rounded-lg border border-[var(--border-primary)] bg-[var(--bg-card)]">
+  <table class="w-full min-w-max border-collapse text-sm text-[var(--ag-cell-color)]">
+    <!-- ===================================================== -->
+    <!-- HEADER -->
+    <!-- ===================================================== -->
+
+    <thead>
+      <!-- MULTI HEADER -->
+      <ng-container *ngIf="headerRows?.length; else normalHeader">
+        <tr *ngFor="let headerRow of headerRows; let rowIndex = index">
+          <th
+            *ngFor="let col of headerRow"
+            class="border border-[var(--border-primary)] bg-[var(--ag-header-bg)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)] whitespace-normal break-words align-middle"
+            [attr.colspan]="col.colspan || null"
+            [attr.rowspan]="col.rowspan || null"
+            [style.width]="col.width || 'auto'"
+            [style.minWidth]="col.width || 'auto'"
+          >
+            <span>
+              {{ col.header }}
+
+              <span
+                *ngIf="isHeaderRequired(col.field, col)"
+                class="text-red-400 ml-1"
+                >*</span
+              >
+            </span>
+          </th>
+
+          <th
+            *ngIf="enableRowActions && rowIndex === 0"
+            [attr.rowspan]="headerRows.length"
+            class="sticky right-0 z-10 border border-[var(--border-primary)] bg-[var(--bg-card)] px-3 py-2 text-center align-middle text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)]"
+            style="min-width: 140px"
+          >
+            Actions
+          </th>
+        </tr>
+      </ng-container>
+
+      <!-- NORMAL HEADER -->
+      <ng-template #normalHeader>
+        <tr>
+          <th
+            *ngFor="let col of visibleColumns"
+            class="border border-[var(--border-primary)] bg-[var(--ag-header-bg)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)] whitespace-normal break-words align-middle"
+            [style.width]="col.width || 'auto'"
+            [style.minWidth]="col.width || 'auto'"
+            [style.maxWidth]="col.width || 'auto'"
+          >
+            <span>
+              {{ col.header }}
+
+              <span
+                *ngIf="isHeaderRequired(col.field)"
+                class="text-red-400 ml-1"
+                >*</span
+              >
+            </span>
+          </th>
+
+          <th
+            *ngIf="enableRowActions"
+            class="sticky right-0 z-10 border border-[var(--border-primary)] bg-[var(--bg-card)] px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-[var(--ag-header-cell-color)]"
+            style="min-width: 140px"
+          >
+            Actions
+          </th>
+        </tr>
+      </ng-template>
+    </thead>
+
+    <!-- ===================================================== -->
+    <!-- BODY -->
+    <!-- ===================================================== -->
+
+    <tbody>
+      <tr *ngFor="let row of data; let i = index" class="even:bg-[var(--nav-hover-bg)]">
+        <!-- COLUMNS -->
+        <td
+          *ngFor="let col of visibleColumns"
+          class="border border-[var(--border-primary)] px-2 py-2 align-middle"
+          [style.width]="isFixedWidthColumn(col) ? col.width || 'auto' : null"
+          [style.minWidth]="col.width || 'auto'"
+          [style.maxWidth]="
+            isFixedWidthColumn(col) ? col.width || 'auto' : null
+          "
+        >
+          <!-- NO TEMPLATE -->
+          <ng-container *ngIf="!col.template">
+            <ng-container [ngSwitch]="col.fieldType">
+              <!-- S NO -->
+              <!-- <div
+                *ngIf="col.field === 's_no'"
+                class="flex items-center justify-center font-medium"
+              >
+                {{ row[col.field] }}
+              </div> -->
+
+              <div
+                *ngSwitchCase="'serial'"
+                class="text-center font-semibold text-[var(--ag-cell-color)]"
+              >
+                {{ row[col.field] }}
+              </div>
+
+              <!-- TEXT -->
+              <input
+                *ngSwitchCase="'text'"
+                type="text"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                (ngModelChange)="emitValueChange(i, col.field, $event)"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              />
+
+              <!-- NUMBER -->
+              <input
+                *ngSwitchCase="'number'"
+                type="number"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                [step]="col.step || '1'"
+                (input)="handleDecimalInput($event, col, row)"
+                (ngModelChange)="emitValueChange(i, col.field, $event)"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              />
+
+              <!-- DATE -->
+              <input
+                *ngSwitchCase="'date'"
+                type="date"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              />
+
+              <!-- TIME -->
+              <input
+                *ngSwitchCase="'time'"
+                type="time"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              />
+
+              <!-- TEXTAREA -->
+              <textarea
+                *ngSwitchCase="'textarea'"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                rows="1"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              ></textarea>
+
+              <!-- DROP DOWN -->
+              <select
+                *ngSwitchCase="'drop-down'"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                (ngModelChange)="emitValueChange(i, col.field, $event)"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              >
+                <option [ngValue]="null" disabled>Please select</option>
+
+                <option *ngFor="let opt of col.options" [ngValue]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+
+              <!-- SELECT -->
+              <select
+                *ngSwitchCase="'select'"
+                [(ngModel)]="row[col.field]"
+                [disabled]="isFieldDisabled(col, row)"
+                (ngModelChange)="emitValueChange(i, col.field, $event)"
+                class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+              >
+                <option *ngFor="let opt of col.options" [ngValue]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+
+              <!-- CHECKBOX -->
+              <div *ngSwitchCase="'checkbox'" class="flex flex-wrap gap-2">
+                <label
+                  *ngFor="let opt of col.options"
+                  class="flex items-center gap-1 text-sm text-[var(--text-primary)]"
+                >
+                  <input
+                    type="checkbox"
+                    [value]="opt.value"
+                    [checked]="row[col.field]?.includes(opt.value)"
+                    (change)="
+                      onCheckboxChange($event, row, col.field, opt.value)
+                    "
+                  />
+
+                  {{ opt.label }}
+                </label>
+              </div>
+
+              <!-- COMPOSITE -->
+              <ng-container *ngSwitchCase="'composite'">
+                <div class="flex flex-col gap-2">
+                  <ng-container *ngFor="let sub of col.compositeFields">
+                    <ng-container *ngIf="shouldShowSubField(sub, row)">
+                      <!-- TEXT -->
+                      <input
+                        *ngIf="sub.fieldType === 'text'"
+                        type="text"
+                        [(ngModel)]="row[sub.field]"
+                        [placeholder]="sub.placeholder || ''"
+                        [style.width]="sub.width || '100%'"
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                        (ngModelChange)="emitValueChange(i, sub.field, $event)"
+                      />
+
+                      <!-- NUMBER -->
+                      <input
+                        *ngIf="sub.fieldType === 'number'"
+                        type="number"
+                        [(ngModel)]="row[sub.field]"
+                        [placeholder]="sub.placeholder || ''"
+                        [step]="sub.step || '1'"
+                        [style.width]="sub.width || '100%'"
+                        (input)="
+                          handleDecimalInput($event, sub, row, sub.field)
+                        "
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                        (ngModelChange)="emitValueChange(i, sub.field, $event)"
+                      />
+
+                      <!-- DATE -->
+                      <input
+                        *ngIf="sub.fieldType === 'date'"
+                        type="date"
+                        [(ngModel)]="row[sub.field]"
+                        [style.width]="sub.width || '100%'"
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                        (ngModelChange)="emitValueChange(i, sub.field, $event)"
+                      />
+
+                      <!-- TIME -->
+                      <input
+                        *ngIf="sub.fieldType === 'time'"
+                        type="time"
+                        [(ngModel)]="row[sub.field]"
+                        [style.width]="sub.width || '100%'"
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                        (ngModelChange)="emitValueChange(i, sub.field, $event)"
+                      />
+
+                      <!-- TEXTAREA -->
+                      <textarea
+                        *ngIf="sub.fieldType === 'textarea'"
+                        [(ngModel)]="row[sub.field]"
+                        [placeholder]="sub.placeholder || ''"
+                        [style.width]="sub.width || '100%'"
+                        rows="2"
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                        (ngModelChange)="emitValueChange(i, sub.field, $event)"
+                      ></textarea>
+
+                      <!-- DROP DOWN -->
+                      <select
+                        *ngIf="sub.fieldType === 'drop-down'"
+                        [(ngModel)]="row[sub.field]"
+                        [style.width]="sub.width || '100%'"
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                      >
+                        <option [ngValue]="null" disabled>--Select--</option>
+
+                        <option
+                          *ngFor="let opt of sub.options"
+                          [ngValue]="opt.value"
+                        >
+                          {{ opt.label }}
+                        </option>
+                      </select>
+
+                      <!-- SELECT -->
+                      <select
+                        *ngIf="sub.fieldType === 'select'"
+                        [(ngModel)]="row[sub.field]"
+                        [style.width]="sub.width || '100%'"
+                        class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] placeholder:text-[var(--text-muted-2)] outline-none transition focus:border-accent-light disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:var(--native-color-scheme)]"
+                      >
+                        <option
+                          *ngFor="let opt of sub.options"
+                          [ngValue]="opt.value"
+                        >
+                          {{ opt.label }}
+                        </option>
+                      </select>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </ng-container>
+
+              <!-- DEFAULT -->
+              <span *ngSwitchDefault>
+                {{ row[col.field] }}
+              </span>
+            </ng-container>
+          </ng-container>
+
+          <!-- CUSTOM TEMPLATE -->
+          <ng-container *ngIf="col.template">
+            <ng-container
+              *ngTemplateOutlet="
+                templates[col.template];
+                context: {
+                  $implicit: row,
+                  index: i,
+                  field: col.field,
+                }
+              "
+            ></ng-container>
+          </ng-container>
+        </td>
+
+        <!-- ACTIONS -->
+        <td
+          *ngIf="enableRowActions"
+          class="sticky right-0 z-10 border border-[var(--border-primary)] bg-[var(--bg-card)] align-middle"
+          style="min-width: 140px"
+        >
+          <div class="flex items-center justify-center gap-2">
+            <!-- ADD -->
+            <button
+              *ngIf="i === data.length - 1"
+              type="button"
+              (click)="addRow()"
+              [disabled]="data.length >= maxRows || !isRowValid(row)"
+              class="w-8 h-8 rounded-full bg-green-500/15 text-green-300 hover:bg-green-500/30 transition-colors disabled:bg-[var(--bg-input-disabled)] disabled:text-[var(--text-muted-2)] disabled:cursor-not-allowed"
+            >
+              +
+            </button>
+
+            <!-- DELETE -->
+            <button
+              type="button"
+              (click)="deleteRow(i)"
+              [disabled]="data.length === 1"
+              class="w-8 h-8 rounded-full bg-red-500/15 text-red-300 hover:bg-red-500/30 transition-colors disabled:bg-[var(--bg-input-disabled)] disabled:text-[var(--text-muted-2)] disabled:cursor-not-allowed"
+            >
+              -
+            </button>
+
+            <!-- EXTRA ACTIONS -->
+            <ng-container *ngFor="let btn of extraActionButtons">
+              <button
+                *ngIf="checkButtonVisibility(btn, row, i)"
+                type="button"
+                (click)="onAction(btn.type, row, i)"
+                class="w-8 h-8 rounded-full bg-accent-light/15 text-accent-light hover:bg-accent-light/30 flex items-center justify-center transition-colors"
+              >
+                <span class="text-xs font-bold" aria-hidden="true">+</span>
+              </button>
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

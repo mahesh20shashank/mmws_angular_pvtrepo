@@ -1,0 +1,485 @@
+{
+  "formId": "nec_item_and_survery",
+  "title": "ITEM AND SURVEY",
+  "sourceFile": "nec_item_and_survery.html",
+  "sections": [
+    {
+      "id": "survey",
+      "title": "Survey",
+      "sectionType": "fields",
+      "sectionGroup": {
+        "fields_1": [
+ {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship ",
+            "type": "input",
+            "inputType": "text",
+            "value": "",
+            "required": true,
+            "colSpan": 6,
+            "disabled": true,
+            "placeholder": "",
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource":"context.ship_name"
+
+          },
+          {
+            "type": "date",
+            "name": "sea_anchorage_trials_date",
+            "label": "(b) Sea/ Anchorage Trials ",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "colSpan": 6
+          },
+          {
+            "_id": "1_gt_inspection_matrix_2_row_1_cell_2_static",
+            "type": "label",
+            "value": "<small>1. It is confirmed that all electrical/ electronic equipment fitted onboard is operational. The list of non-operational equipment is as follows : </small>",
+            "colspan": 12,
+            "align": "center"
+          },
+          {
+            "type": "select",
+            "name": "non_operational_equipment",
+            "label": "Equipment",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "value": "",
+            "options": [
+              {
+                "label": "-- Select Equipment --",
+                "value": ""
+              },
+              {
+                "label": "Equipment 1",
+                "value": "equipment_1"
+              },
+              {
+                "label": "Equipment 2",
+                "value": "equipment_2"
+              }
+            ],
+            "isDynamic": false,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "1_gt_inspection_matrix_2_row_1_cell_2_static",
+            "type": "label",
+            "value": "<small>2. It is confirmed that STW and HATS of all equipment fitted onboard has been completed and cleared. List of equipment for which HATS have not been successfully cleared is as below : </small>",
+            "colspan": 12,
+            "align": "center"
+          },
+          {
+            "type": "select",
+            "name": "hats_not_cleared_equipment",
+            "label": "Equipment",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "value": "",
+            "options": [
+              {
+                "label": "-- Select Equipment --",
+                "value": ""
+              },
+              {
+                "label": "Equipment 1",
+                "value": "equipment_1"
+              },
+              {
+                "label": "Equipment 2",
+                "value": "equipment_2"
+              }
+            ],
+            "isDynamic": false,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "3_portable_mobile_transmitter_units_table_1",
+            "sectionType": "simpleTable",
+            "title": "3. Portable / Mobile Transmitter Units",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Portable / Mobile Transmitter Unit",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Locations/ Areas of ship where used",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Max Power O/P",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_5",
+                "label": "Frequency",
+                "type": "label",
+                "align": "left"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "3_portable_mobile_transmitter_units_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "3_portable_mobile_transmitter_units_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_portable_mobile_transmitter_units_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_portable_mobile_transmitter_units_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_portable_mobile_transmitter_units_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_portable_mobile_transmitter_units_table_1_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "4_blanking_interference_suppression_units_table_1",
+            "sectionType": "simpleTable",
+            "title": "4. Blanking / Interference Suppression Units <br/> <small>The following blanking/ interference suppression units are installed onboard and it is confirmed that they are operational and interfaced with the concerned TXs / RXs as per design (give names of blanking units). Further give scheme / matrix of blanking i.e. receiver blanked & names of transmitters whose pulses have been used to blank that receiver in the table below.</small>",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Receiver Blanked",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Transmitter",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "4_blanking_interference_suppression_units_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "4_blanking_interference_suppression_units_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_blanking_interference_suppression_units_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "-- Select Receiver --",
+                        "value": ""
+                      },
+                      {
+                        "label": "Equipment",
+                        "value": "equipment_"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  },
+                  {
+                    "_id": "4_blanking_interference_suppression_units_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "select",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "-- Select Transmitter --",
+                        "value": ""
+                      },
+                      {
+                        "label": "Equipment",
+                        "value": "equipment_"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [
+          {
+            "_id": "1_gt_inspection_matrix_2_row_1_cell_2_static",
+            "type": "textarea",
+            "label": "5. List of known EMI problems (if any)",
+            "value": "",
+            "colspan": 12,
+            "align": "center"
+          }
+        ],
+        "tables_3": [
+          {
+            "id": "6_results_of_hats_on_rf_txs_rxs_table_1",
+            "sectionType": "simpleTable",
+            "title": "6. Results of HATS on RF TXs & RXs",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Name of RF Tx or Rx (All communication, EW, radar, DF equipment)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "If Rx, then Sensitivity (dBm or \u00b5V) If Tx, then Max Power Output (dBm or Watts) (as measured during HATS)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "6_results_of_hats_on_rf_txs_rxs_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "_results_of_hats_on_rf_txs_rxs_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "6_results_of_hats_on_rf_txs_rxs_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "-- Select Equipment --",
+                        "value": ""
+                      },
+                      {
+                        "label": "Equipment",
+                        "value": "equipment_"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  },
+                  {
+                    "_id": "6_results_of_hats_on_rf_txs_rxs_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_4": [],
+        "tables_4": [
+          {
+            "id": "7_rf_receiver_if_frequencies_table_1",
+            "sectionType": "simpleTable",
+            "title": "7. RF Receiver IF Frequencies",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Name of RF Receiver (All communication, EW, radar, DF equipment)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "IF Frequency (MHz) [if more than one IF stages used pls list all IFs]",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "7_rf_receiver_if_frequencies_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "7_rf_receiver_if_frequencies_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "7_rf_receiver_if_frequencies_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "-- Select Receiver --",
+                        "value": ""
+                      },
+                      {
+                        "label": "Equipment",
+                        "value": "equipment_"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  },
+                  {
+                    "_id": "7_rf_receiver_if_frequencies_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ]
+      },
+      "fields": [],
+      "tables": []
+    }
+  ]
+}

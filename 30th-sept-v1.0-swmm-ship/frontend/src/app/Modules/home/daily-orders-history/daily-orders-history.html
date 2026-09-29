@@ -1,0 +1,52 @@
+<div class="doh-page">
+  <app-panel-card title="Daily Orders History" subtitle="" icon="file-text">
+    <div class="doh-filter-row">
+      <div class="doh-filter-field">
+        <label for="doh-from-date" class="doh-filter-label">
+          <app-icon name="calendar" [size]="14" variant="inherit" />
+          From Date
+        </label>
+        <input id="doh-from-date" type="date" class="doh-date-input" [ngModel]="fromDate()"
+          (ngModelChange)="onFromDateChange($event)" />
+      </div>
+
+      <div class="doh-filter-field">
+        <label for="doh-to-date" class="doh-filter-label">
+          <app-icon name="calendar" [size]="14" variant="inherit" />
+          To Date
+        </label>
+        <input id="doh-to-date" type="date" class="doh-date-input" [min]="fromDate() || null" [ngModel]="toDate()"
+          (ngModelChange)="toDate.set($event)" />
+      </div>
+
+      <app-button type="button" class="doh-clear-btn" (click)="clearFilters()">
+        <app-icon name="x-circle" [size]="14" variant="inherit" />
+        Clear
+      </app-button>
+    </div>
+
+    <div class="doh-toolbar">
+
+      <div class="doh-toolbar__right">
+        <input id="doh-global-search" type="text" class="doh-search-input" [ngModel]="globalSearch()"
+          (ngModelChange)="globalSearch.set($event)" placeholder="Search records...">
+        <app-export-toolbar [disabled]="filteredRecords().length === 0" (exportRequested)="onExport($event)" />
+
+        <app-button type="button" title="Copy to clipboard"
+          (click)="copyData()">
+          <app-icon name="copy" [size]="16" variant="inherit" />
+        </app-button>
+
+
+      </div>
+    </div>
+
+    <app-data-grid
+      [rowData]="filteredRecords()"
+      [columnDefs]="columnDefs"
+      [pagination]="true"
+      [pageSize]="pageSize()"
+      height="440px">
+    </app-data-grid>
+  </app-panel-card>
+</div>

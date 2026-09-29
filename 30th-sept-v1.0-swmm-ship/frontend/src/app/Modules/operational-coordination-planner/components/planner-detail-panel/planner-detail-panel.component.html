@@ -1,0 +1,258 @@
+@if (!a()) {
+  <div class="detail glass">
+    <div class="detail-empty">
+      <div class="glyph"><app-icon name="eye" [size]="22" /></div>
+      <div>
+        <div class="title">Select an event</div>
+        <div>
+          Click any card on the planner to view its details, linked records,
+          isolation requirements and approval status.
+        </div>
+      </div>
+      <app-button class="close" (click)="closePanel()">
+        <app-icon name="x" [size]="16" />
+      </app-button>
+    </div>
+  </div>
+} @else {
+  <div class="detail glass">
+    <div class="detail-head" [class]="'detail-head cat-' + a()!.cat">
+      <div class="cat-bar"></div>
+      <div style="flex: 1; min-width: 0">
+        <div class="title">{{ a()!.title }}</div>
+        <div class="sub">{{ catLabel() }}</div>
+        <span class="tag" [class]="tagCls()">{{ statusLabel() }}</span>
+      </div>
+      <app-button class="close" (click)="closePanel()">
+        <app-icon name="x" [size]="16" />
+      </app-button>
+    </div>
+
+    @if (hasMultipleDayActivities()) {
+      <div class="day-switcher">
+        <app-button class="icon-btn" type="button" (click)="showPreviousActivity()">
+          <app-icon name="chev-l" [size]="14" />
+        </app-button>
+        <div class="day-switcher-label">
+          {{ selectedDayLabel() }}
+          <span class="day-switcher-count">
+            {{ selectedActivityIndex() + 1 }} / {{ selectedDayActivities().length }}
+          </span>
+        </div>
+        <app-button class="icon-btn" type="button" (click)="showNextActivity()">
+          <app-icon name="chev-r" [size]="14" />
+        </app-button>
+      </div>
+    }
+
+    <div class="detail-body">
+      <div class="section">
+        <h4>Basic Details</h4>
+        <div class="kv">
+          <div class="k">Date</div>
+          <div class="v">{{ dayLabel() }}</div>
+          @if (a()!.t) {
+            <div class="k">Time</div>
+            <div class="v mono">{{ a()!.t }}</div>
+          }
+          <div class="k">Category</div>
+          <div class="v dim">{{ catLabel() }}</div>
+          @if (a()!.loc) {
+            <div class="k">Location</div>
+            <div class="v dim">{{ a()!.loc }}</div>
+          }
+          @if (a()!.ref) {
+            <div class="k">Ref. No.</div>
+            <div class="v mono dim">{{ a()!.ref }}</div>
+          }
+          @if (a()!.priority) {
+            <div class="k">Priority</div>
+            <div class="v">
+              <span
+                class="dot-impact"
+                [style.background]="priorityColor()"
+                [style.color]="priorityColor()"
+              ></span>
+              {{ a()!.priority }}
+            </div>
+          }
+          @if (a()!.status && !a()!.dart_state && !a()!.plan_state && !a()!.rh_state) {
+            <div class="k">Status</div>
+            <div class="v">{{ a()!.status }}</div>
+          }
+          @if (a()!.description) {
+            <div class="k">Description</div>
+            <div class="v dim">{{ a()!.description }}</div>
+          }
+          @if (a()!.section) {
+            <div class="k">Section</div>
+            <div class="v dim">{{ a()!.section }}</div>
+          }
+          @if (a()!.maintop_no) {
+            <div class="k">Maintop No.</div>
+            <div class="v mono dim">{{ a()!.maintop_no }}</div>
+          }
+        </div>
+      </div>
+
+      <div class="section">
+        <h4>Linked Information</h4>
+        @if (a()!.equipment) {
+          <div class="linked-row">
+            <div class="icon-box"><app-icon name="wrench" [size]="14" /></div>
+            <div class="grow">
+              <div class="ttl">{{ a()!.equipment }}</div>
+              <div class="ttl-sub">Equipment · CMMS</div>
+            </div>
+          </div>
+        }
+        @if (a()!.type === 'routine' || a()!.type === 'routine_dart') {
+          <app-button class="linked-row btn-link" (click)="navigateToRoutine()">
+            <div class="icon-box"><app-icon name="alert" [size]="14" /></div>
+            <div class="grow">
+              <div class="ttl">{{ a()!.ref || a()!.routine_name || "Routine" }}</div>
+              <div class="ttl-sub">Routine · {{ a()!.routine_id }}</div>
+            </div>
+            <span class="ext"><app-icon name="extlink" [size]="12" /></span>
+          </app-button>
+        } @else if (a()!.type === 'planned_routine') {
+          <app-button class="linked-row btn-link" (click)="navigateToPlannedRoutine()">
+            <div class="icon-box"><app-icon name="alert" [size]="14" /></div>
+            <div class="grow">
+              <div class="ttl">{{ a()!.ref || a()!.routine_name || "Planned Routine" }}</div>
+              <div class="ttl-sub">Planned Routine · {{ a()!.routine_id }}</div>
+            </div>
+            <span class="ext"><app-icon name="extlink" [size]="12" /></span>
+          </app-button>
+        } @else if (a()!.type === 'db_defect' || a()!.type === 'dart_raised' || a()!.defect_id) {
+          <app-button class="linked-row btn-link" (click)="navigateToDefect()">
+            <div class="icon-box"><app-icon name="alert" [size]="14" /></div>
+            <div class="grow">
+              <div class="ttl">{{ a()!.ref || a()!.dart_number || "Defect" }}</div>
+              <div class="ttl-sub">Defect · {{ a()!.defect_id }}</div>
+            </div>
+            <span class="ext"><app-icon name="extlink" [size]="12" /></span>
+          </app-button>
+        }
+      </div>
+
+      @if (a()!.routine_name || a()!.frequency || a()!.last_completion || a()!.dart_state || a()!.plan_state || a()!.rh_state || a()!.trial_type || a()!.created_by) {
+        <div class="section">
+          <h4>Details & State</h4>
+          <div class="kv">
+            @if (a()!.routine_name) {
+              <div class="k">Routine</div>
+              <div class="v">{{ a()!.routine_name }}</div>
+            }
+            @if (a()!.frequency) {
+              <div class="k">Frequency</div>
+              <div class="v">{{ a()!.frequency }}</div>
+            }
+            @if (a()!.last_completion) {
+              <div class="k">Last Completion</div>
+              <div class="v">{{ a()!.last_completion }}</div>
+            }
+            @if (a()!.dart_state) {
+              <div class="k">Defect State</div>
+              <div class="v">{{ a()!.dart_state }}</div>
+            }
+            @if (a()!.plan_state) {
+              <div class="k">Plan State</div>
+              <div class="v">{{ a()!.plan_state }}</div>
+            }
+            @if (a()!.rh_state) {
+              <div class="k">RH State</div>
+              <div class="v">{{ a()!.rh_state }}</div>
+            }
+            @if (a()!.trial_type) {
+              <div class="k">Trial Type</div>
+              <div class="v">{{ a()!.trial_type }}</div>
+            }
+            @if (a()!.created_by) {
+              <div class="k">Created By</div>
+              <div class="v">{{ a()!.created_by }}</div>
+            }
+            @if (a()!.spares_required) {
+              <div class="k">Spares Required</div>
+              <div class="v">Yes</div>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="section">
+        <h4>Coordination</h4>
+        <div class="kv">
+          @if (a()!.isolation) {
+            <div class="k">Isolation Req.</div>
+            <div class="v">Yes — Permit issued</div>
+          }
+          @if (a()!.conflict) {
+            <div class="k">Conflicts</div>
+            <div class="v dim">1 detected</div>
+          }
+        </div>
+      </div>
+
+      <div class="section">
+        <h4>Status & Approval</h4>
+        <div class="kv">
+          @if (a()!.conflict) {
+            <div class="k">Approval</div>
+            <div class="v" style="color: #fca5a5">Pending CME</div>
+          } @else {
+            <div class="k">Approval</div>
+            <div class="v" style="color: #86efac">Approved</div>
+          }
+        </div>
+        @if (a()!.prog && a()!.prog > 0) {
+          <div class="progress-row">
+            <span>Progress</span>
+            <div class="progress-bar">
+              <div
+                class="fill"
+                [style.width.%]="a()!.prog"
+                [style.background]="progressColor()"
+              ></div>
+            </div>
+            <span class="mono" style="color: #fff; font-weight: 500"
+              >{{ a()!.prog }}%</span
+            >
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="detail-foot">
+      @if (isManual()) {
+        @if (canEdit()) {
+          <app-button class="btn btn-block" (click)="editSelected()">Reschedule</app-button>
+        }
+        @if (canCancel()) {
+          <app-button class="btn primary btn-block" (click)="deleteSelected()">{{ isEvent() ? 'Cancel Event' : 'Delete Event' }}</app-button>
+        }
+        @if (isEvent() && !canEdit() && !canCancel()) {
+          <div class="v dim" style="text-align: center; width: 100%;">
+            Only HOD, DY HOD, and HOD Writer can edit or cancel events.
+          </div>
+        }
+      } @else {
+        <div class="v dim" style="text-align: center; width: 100%;">
+          Read-only — sourced from {{ catLabel() }} records, not editable here.
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@if (confirmDeleteOpen() && a()) {
+  <app-confirm-dialog
+    [title]="isEvent() ? 'Cancel Event' : 'Delete Activity'"
+    [message]="confirmDeleteMessage()"
+    [confirmLabel]="isEvent() ? 'Yes, Cancel Event' : 'Yes, Delete'"
+    cancelLabel="No, Keep It"
+    [danger]="true"
+    (confirmed)="confirmDelete()"
+    (cancelled)="confirmDeleteOpen.set(false)"
+  />
+}

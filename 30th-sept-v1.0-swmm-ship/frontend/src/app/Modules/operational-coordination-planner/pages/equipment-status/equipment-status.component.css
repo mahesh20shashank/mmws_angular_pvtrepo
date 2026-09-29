@@ -1,0 +1,90 @@
+.oc-equip-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.oc-equip-page__banner {
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.oc-equip-page__accordion {
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.oc-equip-panel {
+  border-bottom: 1px solid var(--border-card);
+}
+
+.oc-equip-panel:last-child {
+  border-bottom: none;
+}
+
+.oc-equip-panel__head {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.oc-equip-panel--open .oc-equip-panel__head {
+  background: rgba(74, 168, 255, 0.12);
+  color: var(--accent-blue, #1d96e9);
+}
+
+.oc-equip-panel__body {
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.oc-equip-table {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-card);
+}
+
+.oc-equip-table__head,
+.oc-equip-table__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0.75rem 1rem;
+}
+
+.oc-equip-table__head {
+  background: var(--bg-input);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.oc-equip-table__row {
+  border-top: 1px solid var(--border-card);
+  color: var(--text-primary);
+}
+
+.oc-equip-status {
+  font-weight: 500;
+}
+
+.oc-equip-status--ok {
+  color: var(--icon-success, #22C55E);
+}
+
+.oc-equip-status--bad {
+  color: var(--error-color, #de1f1f);
+}

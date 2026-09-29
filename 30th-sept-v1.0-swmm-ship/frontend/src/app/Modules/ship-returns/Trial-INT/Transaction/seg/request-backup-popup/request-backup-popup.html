@@ -1,0 +1,395 @@
+<div [formGroup]="form" class="flex min-h-0 flex-1 flex-col overflow-hidden">
+  <div class="pt-glass-form-bar shrink-0 px-4 py-3 flex flex-wrap items-center gap-3 sm:gap-4">
+    <span class="form-label mb-0">Backup Type</span>
+    <div class="pt-glass-radio-group !mt-0">
+      <label
+        class="pt-glass-radio-option"
+        [class.pt-glass-radio-option--selected]="form.get('backup_type')?.value === 'restoration'"
+        [class.cursor-not-allowed]="editMode"
+        [class.opacity-50]="editMode && form.get('backup_type')?.value !== 'restoration'"
+      >
+        <input
+          type="radio"
+          formControlName="backup_type"
+          value="restoration"
+          class="sr-only"
+        />
+        <span>Restoration</span>
+      </label>
+      <label
+        class="pt-glass-radio-option"
+        [class.pt-glass-radio-option--selected]="form.get('backup_type')?.value === 'backup'"
+        [class.cursor-not-allowed]="editMode"
+        [class.opacity-50]="editMode && form.get('backup_type')?.value !== 'backup'"
+      >
+        <input
+          type="radio"
+          formControlName="backup_type"
+          value="backup"
+          class="sr-only"
+        />
+        <span>Back Up</span>
+      </label>
+      <label
+        class="pt-glass-radio-option"
+        [class.pt-glass-radio-option--selected]="form.get('backup_type')?.value === 'hardware_popup'"
+        [class.cursor-not-allowed]="editMode"
+        [class.opacity-50]="editMode && form.get('backup_type')?.value !== 'hardware_popup'"
+      >
+        <input
+          type="radio"
+          formControlName="backup_type"
+          value="hardware_popup"
+          class="sr-only"
+        />
+        <span>Repair Form</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+    <app-form-card
+      #formCard
+      class="flex min-h-0 flex-1 flex-col overflow-hidden"
+      [title]="'REQUEST BACKUP POP UP'"
+      [smallTitle]="'Sub Title'"
+      [showPreviousReport]="true"
+      [showBackButton]="true"
+      [backLabel]="'Go Back'"
+      [showPaginator]="true"
+      [previewMode]="true"
+      [pageScroll]="false"
+    >
+    <app-hardware-popup-form
+      *ngIf="isHardwarePopupType"
+      [embedded]="true"
+      [useTrialQueryPrefill]="true"
+    ></app-hardware-popup-form>
+
+    <div *ngIf="!isHardwarePopupType" class="min-h-0 p-0 py-4 pb-8">
+      <div class="mb-4 px-1">
+        <p class="pt-glass-form-hint">
+          All fields marked with <span>*</span> are mandatory
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-xl mb-4 px-1">
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="ship_proposed_date">
+            Ship Proposed Date <span>*</span>
+          </label>
+          <app-calendar formControlName="ship_proposed_date" />
+        </div>
+      </div>
+
+      <fieldset class="pt-glass-form-fieldset">
+        <legend>Details of selected catalogue</legend>
+
+        <div class="grid grid-cols-5 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="system">
+              System <span class="">*</span>
+            </label>
+            <app-select
+              formControlName="system"
+              [options]="systemOptions"
+              placeholder="-- Select --"
+              class="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="subsystem">
+              Subsystem
+            </label>
+            <app-select
+              formControlName="subsystem"
+              [options]="subsystemOptions"
+              placeholder="-- Select --"
+              class="w-full"
+              [disabled]="!form.get('system')?.value"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="mmd_typeos">
+              MMD TypeOS <span class="">*</span>
+            </label>
+            <app-select
+              formControlName="mmd_typeos"
+              [options]="osOptions"
+              placeholder="-- Select --"
+              class="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="interface">
+              Interface <span class="">*</span>
+            </label>
+            <app-select
+              formControlName="interface"
+              [options]="interfaceOptions"
+              placeholder="-- Select --"
+              class="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="size">
+              Size <span class="">*</span>
+            </label>
+            <app-select
+              formControlName="size"
+              [options]="sizeOptions"
+              placeholder="-- Select --"
+              class="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="application">
+              Application <span class="">*</span>
+            </label>
+            <app-input formControlName="application" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="name">
+              Name <span class="">*</span>
+            </label>
+            <app-input formControlName="name" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="application_version">
+              Application Version <span class="">*</span>
+            </label>
+            <app-input formControlName="application_version" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="part_no_mother_board">
+              Part No of Mother Board <span class="">*</span>
+            </label>
+            <app-input formControlName="part_no_mother_board" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="pattern_no_selected_mmd">
+              Pattern No of Selected MMD <span class="">*</span>
+            </label>
+            <app-input formControlName="pattern_no_selected_mmd" />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="location">
+              Mode<span class="">*</span>
+            </label>
+            <app-select
+              formControlName="location"
+              [options]="locationOptions"
+              placeholder="Select mode"
+              class="w-full"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="landing_date">
+              Date for Landing <span class="">*</span>
+            </label>
+            <app-calendar formControlName="landing_date" />
+          </div>
+
+          <div class="flex flex-col gap-1 col-span-2">
+            <label class="form-label" for="reason_for_request">
+              Reason For Request <span class="">*</span>
+            </label>
+            <app-textarea
+              formControlName="reason_for_request"
+              placeholder="Enter reason for request"
+              [rows]="4"
+            />
+          </div>
+        </div>
+      </fieldset>
+
+      <div *ngIf="isRestorationType" class="mb-4 px-1 mt-4">
+        <p class="mb-3 text-sm font-semibold">Request Details Section</p>
+        <div class="pt-glass-matrix-wrap w-full">
+          <table class="pt-glass-matrix w-full text-sm">
+            <thead>
+              <tr>
+                <th class="px-3 py-2 text-left font-semibold">Preference</th>
+                <th class="px-3 py-2 text-left font-semibold">Select Ship</th>
+                <th class="px-3 py-2 text-left font-semibold">Select System</th>
+                <th class="px-3 py-2 text-left font-semibold">Select Subsystem</th>
+                <th class="px-3 py-2 text-left font-semibold">Select MMD</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="restoration_preferences">
+              <tr
+                *ngFor="let pref of restorationPreferences.controls; let i = index"
+                [formGroupName]="i"
+              >
+                <td class="px-3 py-2 pt-glass-matrix__label font-semibold">
+                  {{ preferenceLabels[i] }}
+                </td>
+                <td class="px-3 py-2 align-middle">
+                  <app-select
+                    formControlName="ship"
+                    [options]="shipOptions"
+                    placeholder="-- Select --"
+                    class="w-full"
+                  />
+                </td>
+                <td class="px-3 py-2 align-middle">
+                  <app-select
+                    formControlName="system"
+                    [options]="preferenceCascadeState[i].systemOptions"
+                    placeholder="-- Select --"
+                    class="w-full"
+                    [disabled]="!pref.get('ship')?.value"
+                  />
+                </td>
+                <td class="px-3 py-2 align-middle">
+                  <app-select
+                    formControlName="subsystem"
+                    [options]="preferenceCascadeState[i].subsystemOptions"
+                    placeholder="-- Select --"
+                    class="w-full"
+                    [disabled]="!pref.get('system')?.value"
+                  />
+                </td>
+                <td class="px-3 py-2 align-middle">
+                  <app-select
+                    formControlName="mmd_type"
+                    [options]="preferenceCascadeState[i].mmdOptions"
+                    placeholder="-- Select --"
+                    class="w-full"
+                    [disabled]="!pref.get('subsystem')?.value"
+                  />
+                </td>
+              </tr>
+              <tr *ngIf="catalogueLoading">
+                <td colspan="5" class="pt-glass-matrix__empty px-3 py-3">
+                  Loading catalogue details...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <fieldset class="pt-glass-form-fieldset mt-4">
+          <legend>LAST WORKING BACKUP</legend>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
+            <div class="space-y-3">
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">System <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['system'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Subsystem <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['subsystem'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">MMD TypeOS <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['mmd_typeos'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Interface <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['interface'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Size <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['size'] || '' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Application <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['application'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Name <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['name'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Application Version <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['application_version'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Part No of Mother Board <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['part_no_mother_board'] || '' }}
+                </div>
+              </div>
+              <div class="pb-2 border-b border-[var(--shell-divider-soft)]">
+                <label class="form-label">Pattern No of Selected MMD <span>*</span></label>
+                <div class="pt-glass-text-secondary text-sm mt-1 min-h-[20px]">
+                  {{ lastWorkingBackupDisplay['pattern_no_selected_mmd'] || '' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <div formFooter class="flex items-center justify-end gap-1.5">
+      <button
+        *ngIf="canShowSaveDraft"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading"
+        (click)="handleSave('draft')"
+      >
+        Save Draft
+      </button>
+      <button
+        *ngIf="canEditForm"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading"
+        (click)="handleSave('save')"
+      >
+        Save
+      </button>
+      <button
+        *ngIf="canEditForm"
+        type="button"
+        class="form-card-footer-btn pt-glass-btn-primary inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading"
+        (click)="handleSubmit()"
+      >
+        Submit
+      </button>
+    </div>
+    </app-form-card>
+  </div>
+</div>
+
+<app-approval-work-flow
+  [showUserPopuphead]="shouldShowUserPopup"
+  [isSubmitTime]="isSubmitTime"
+  [context]="formApiService.context"
+  (showUserPopupChange)="shouldShowUserPopup = $event; isSubmitTime = $event"
+></app-approval-work-flow>

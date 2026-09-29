@@ -1,0 +1,26 @@
+from django.contrib import admin
+
+from . import models
+
+admin.site.register(models.MOItemEquipment)
+admin.site.register(models.Item)
+admin.site.register(models.Vendor)
+admin.site.register(models.MoMappingTable)
+admin.site.register(models.MOPlannedSparesDescription)
+admin.site.register(models.PlannedMOSpareList)
+admin.site.register(models.SurveyDetails)
+admin.site.register(models.PTSDetails)
+admin.site.register(models.DemandDetails)
+admin.site.register(models.Customer)
+admin.site.register(models.ItemLine)
+admin.site.register(models.CustomerEquipment)
+admin.site.register(models.CustomerEquipmentLine)
+admin.site.register(models.Price)
+admin.site.register(models.ItemIssued)
+admin.site.register(models.IssuedDetails)
+admin.site.register(models.ItemVendor)
+admin.site.register(models.ItemExtra)
+admin.site.register(models.VendorList)
+admin.site.register(models.VendorPil)
+admin.site.register(models.DartMOSpare)
+admin.site.register(models.IIF)

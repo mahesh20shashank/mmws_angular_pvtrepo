@@ -1,0 +1,49 @@
+<app-master-card cardTitle="RA / DL Defect List" cardHeight="auto">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-white/60 text-sm">Select defects to build a Repair Authority / Defect List signal.</span>
+    <div class="flex gap-2">
+      <app-button type="button" (click)="createRaDl()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">
+        Create RA / DL
+      </app-button>
+      <app-button type="button" (click)="sendToNavYojana()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+        Send to NavYojana
+      </app-button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4 p-4 rounded-xl border border-white/10 bg-white/[0.02] mb-4">
+    <div>
+      <label for="ra-dl-yard-name" class="text-white/60 text-xs mb-1 block">Select Yard Name</label>
+      <select id="ra-dl-yard-name" [(ngModel)]="yardName" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+        <option value="">-- Select Yard --</option>
+        @for (yard of yardNames; track yard) {
+          <option [value]="yard">{{ yard }}</option>
+        }
+      </select>
+    </div>
+    <div>
+      <label for="ra-dl-export-format" class="text-white/60 text-xs mb-1 block">Select Export File Format</label>
+      <select id="ra-dl-export-format" [(ngModel)]="exportFormat" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+        @for (format of exportFormats; track format) {
+          <option [value]="format">{{ format }}</option>
+        }
+      </select>
+    </div>
+    <div class="flex items-end">
+      <app-button type="button" (click)="sendToNavYojana()" class="h-10 px-4 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+        Export to NavYojana / SDRS
+      </app-button>
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="rows"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    [getRowId]="getRowId"
+    (selectionChanged)="onSelectionChanged($event)"
+    [pagination]="true"
+    [pageSize]="10"
+    height="460px">
+  </app-data-grid>
+</app-master-card>

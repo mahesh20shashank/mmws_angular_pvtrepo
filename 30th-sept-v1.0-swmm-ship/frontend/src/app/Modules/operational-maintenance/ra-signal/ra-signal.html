@@ -1,0 +1,149 @@
+<app-master-card cardTitle="Repair Authority (RA) / DL Signal" cardHeight="auto">
+  <div class="flex gap-2 mb-4 border-b border-white/10 pb-2">
+    <app-button type="button" (click)="setTab('open-defects')" class="tab-btn px-4 h-9 rounded-lg text-sm" [class.active]="activeTab === 'open-defects'">
+      Open Defects
+    </app-button>
+    <app-button type="button" (click)="setTab('draft')" class="tab-btn px-4 h-9 rounded-lg text-sm" [class.active]="activeTab === 'draft'">
+      Draft RA / DL ({{ draftRows.length }})
+    </app-button>
+    <app-button type="button" (click)="setTab('history')" class="tab-btn px-4 h-9 rounded-lg text-sm" [class.active]="activeTab === 'history'">
+      Signal History
+    </app-button>
+  </div>
+
+  @if (activeTab === 'open-defects') {
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-white text-base font-semibold">RA / DL Defect List</h3>
+      <div class="flex gap-2">
+        <app-button type="button" (click)="mergeAndInitiate()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">
+          Create RA / DL
+        </app-button>
+        <app-button type="button" (click)="exportToNavYojana()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+          Send to NavYojana
+        </app-button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 p-4 rounded-xl border border-white/10 bg-white/[0.02] mb-4">
+      <div>
+        <label for="ra-signal-yard-name" class="text-white/60 text-xs mb-1 block">Select Yard Name</label>
+        <select id="ra-signal-yard-name" [(ngModel)]="yardName" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option value="">-- Select Yard --</option>
+          @for (yard of yardNames; track yard) {
+            <option [value]="yard">{{ yard }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="ra-signal-export-format" class="text-white/60 text-xs mb-1 block">Select Export File Format</label>
+        <select id="ra-signal-export-format" [(ngModel)]="exportFormat" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          @for (format of exportFormats; track format) {
+            <option [value]="format">{{ format }}</option>
+          }
+        </select>
+      </div>
+      <div class="flex items-end">
+        <app-button type="button" (click)="exportToNavYojana()" class="h-10 px-4 rounded-lg bg-white/10 border border-white/10 text-white text-sm flex items-center gap-2">
+          <app-icon name="download" [size]="14" />
+          Export to NavYojana / SDRS
+        </app-button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead class="text-white/50 border-b border-white/10">
+          <tr>
+            <th class="py-2 pr-3"></th>
+            <th class="py-2 pr-3">Sr No</th>
+            <th class="py-2 pr-3">Dart Number</th>
+            <th class="py-2 pr-3">Defect Date</th>
+            <th class="py-2 pr-3">Equipment Name</th>
+            <th class="py-2 pr-3">Equipment Nomenclature</th>
+            <th class="py-2 pr-3">Defect Description</th>
+            <th class="py-2 pr-3">Dart Status</th>
+            <th class="py-2 pr-3">Additional Remarks</th>
+            <th class="py-2 pr-3">SS Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of openDefects; track row.id; let i = $index) {
+            <tr class="border-b border-white/5">
+              <td class="py-2 pr-3">
+                <input type="checkbox" [checked]="isSelected(row.id)" (change)="toggleSelect(row.id)" />
+              </td>
+              <td class="py-2 pr-3">{{ i + 1 }}</td>
+              <td class="py-2 pr-3">{{ row.dart_number }}</td>
+              <td class="py-2 pr-3">{{ row.defect_date }}</td>
+              <td class="py-2 pr-3">{{ row.equipment_name }}</td>
+              <td class="py-2 pr-3">{{ row.equipment_nomenclature }}</td>
+              <td class="py-2 pr-3">{{ row.description }}</td>
+              <td class="py-2 pr-3">
+                <span class="px-2 py-0.5 rounded-full text-xs status-badge-danger">{{ row.status }}</span>
+              </td>
+              <td class="py-2 pr-3">
+                <input
+                  type="text"
+                  [(ngModel)]="row.remarks"
+                  class="w-full h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white text-xs"
+                />
+              </td>
+              <td class="py-2 pr-3">
+                <select
+                  [(ngModel)]="row.ss_remark"
+                  class="h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white text-xs"
+                >
+                  <option value="">-- Select --</option>
+                  @for (opt of ssRemarkOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                  }
+                </select>
+              </td>
+            </tr>
+          }
+          @if (!openDefects.length) {
+            <tr>
+              <td colspan="10" class="py-6 text-center text-white/40">No open defects awaiting an RA/DL signal.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (activeTab === 'draft') {
+    <div class="flex justify-between items-center mb-3">
+      <span class="text-white/60 text-sm">Assign a DL No. to each row, then finalize as an RA signal.</span>
+      <div class="flex gap-2">
+        <app-button type="button" (click)="exportToNavYojana()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+          Export to NavYojana
+        </app-button>
+        <app-button type="button" (click)="finalizeRa()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">
+          Finalize RA
+        </app-button>
+      </div>
+    </div>
+
+    <app-data-grid
+      [rowData]="draftRows"
+      [columnDefs]="draftColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="440px">
+    </app-data-grid>
+  }
+
+  @if (activeTab === 'history') {
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-white text-base font-semibold">RA Signal List Details</h3>
+    </div>
+
+    <app-data-grid
+      [rowData]="signalHistory"
+      [columnDefs]="historyColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="440px">
+    </app-data-grid>
+  }
+</app-master-card>

@@ -1,0 +1,33 @@
+<div class="sel-cards">
+  @for (card of cards; track card.id) {
+    <label
+      class="sel-card"
+      [class.sel-card--selected]="value === card.id"
+      [class.sel-card--disabled]="isDisabled(card)"
+    >
+      <input
+        type="radio"
+        class="sel-card-input"
+        [name]="groupName"
+        [value]="card.id"
+        [checked]="value === card.id"
+        [disabled]="isDisabled(card)"
+        (change)="pick(card)"
+      />
+      <span class="sel-card-radio" [style.border-color]="value === card.id ? (card.color ?? '#0088ff') : ''">
+        <span class="sel-card-radio-dot" [style.background]="value === card.id ? (card.color ?? '#0088ff') : 'transparent'"></span>
+      </span>
+      <span class="sel-card-body">
+        <span class="sel-card-title">
+          {{ card.title }}
+          @if (card.count !== undefined) {
+            <span class="sel-card-count">{{ card.count }}</span>
+          }
+        </span>
+        @if (card.desc) {
+          <span class="sel-card-desc">{{ card.desc }}</span>
+        }
+      </span>
+    </label>
+  }
+</div>

@@ -1,0 +1,193 @@
+<app-master-card
+  cardTitle="FUSS Triger List - Raise FUSS Routine"
+  cardHeight="auto"
+>
+  <form
+    [formGroup]="raiseFussForm"
+    class="p-4 space-y-6 text-white"
+  >
+
+    <!-- ===================== Top Details ===================== -->
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <div>
+        <label for="ship" class="text-white/60 text-xs mb-1 block">Ship</label>
+        <input id="ship" type="text" readonly formControlName="ship" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="department" class="text-white/60 text-xs mb-1 block">Department</label>
+        <input id="department" type="text" readonly formControlName="department" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="serial-no" class="text-white/60 text-xs mb-1 block">Serial No.</label>
+        <input id="serial-no" type="text" readonly formControlName="serialNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="location-on-board" class="text-white/60 text-xs mb-1 block">Location On Board</label>
+        <input id="location-on-board" type="text" readonly formControlName="locationOnBoard" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="equipment" class="text-white/60 text-xs mb-1 block">Equipment</label>
+        <input id="equipment" type="text" readonly formControlName="equipment" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="location-code" class="text-white/60 text-xs mb-1 block">Location Code</label>
+        <input id="location-code" type="text" readonly formControlName="locationCode" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div>
+        <label for="equipment-sr-no" class="text-white/60 text-xs mb-1 block">Equipment Sr. No.</label>
+        <input id="equipment-sr-no" type="text" readonly formControlName="equipmentSrNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+    </div>
+
+    <!-- ===================== Routine Details ===================== -->
+
+    <div class="rounded-xl border border-white/15 overflow-hidden">
+
+      <div
+        class="h-12 flex items-center px-4 bg-white/10 border-b border-white/15 font-semibold">
+
+        Routine / Deferment Description / Non Digitized
+
+      </div>
+
+      <div class="p-4 space-y-4">
+
+        <div class="grid grid-cols-4 gap-4">
+
+          <div>
+            <label for="maintenance-no" class="text-white/60 text-xs mb-1 block">Maintenance No.</label>
+            <input id="maintenance-no" type="text" readonly formControlName="maintenanceNo" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+          </div>
+
+          <div>
+            <label for="frequency" class="text-white/60 text-xs mb-1 block">Frequency</label>
+            <input id="frequency" type="text" readonly formControlName="frequency" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+          </div>
+
+        </div>
+
+        <!-- Reusable Grid -->
+
+        <div class="fuss-grid-wrapper w-full mt-4">
+
+          <app-data-grid
+            [columnDefs]="columnDefs"
+            [rowData]="routines()"
+            [pageSize]="10"
+            [loading]="isLoading()"
+            height="440px">
+          </app-data-grid>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ===================== Dates ===================== -->
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <div>
+        <label for="amendment-no" class="text-white/60 text-xs mb-1 block">Amendment No.</label>
+        <input id="amendment-no" type="text" formControlName="amendmentNo" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      <app-input-field
+        label="FUSS Date"
+        type="date"
+        formControlName="fussDate">
+      </app-input-field>
+
+      <app-input-field
+        label="Last Undertaken"
+        type="date"
+        formControlName="lastUndertaken">
+      </app-input-field>
+
+      <app-input-field
+        label="Due Date"
+        type="date"
+        formControlName="dueDate">
+      </app-input-field>
+
+      <app-input-field
+        label="Schedule Date"
+        type="date"
+        formControlName="scheduleDate">
+      </app-input-field>
+
+      <div class="col-span-2 flex items-center gap-3 mt-8">
+
+        <input
+          id="ds"
+          type="checkbox"
+          class="h-4 w-4 rounded"
+          formControlName="newEquipment"
+        />
+
+        <label for="ds" class="text-sm">
+          New Equipment / No Routines Undertaken
+        </label>
+
+      </div>
+
+    </div>
+
+    <!-- ===================== Dropdowns ===================== -->
+
+    <div class="grid grid-cols-3 gap-4">
+
+      <app-select-input
+        label="Recommended Deferment"
+        formControlName="option1"
+        [options]="option1">
+      </app-select-input>
+
+      <app-select-input
+        label="Inability"
+        formControlName="option2"
+        [options]="option2">
+      </app-select-input>
+
+      <app-select-input
+        label="Reason"
+        formControlName="option3"
+        [options]="option3">
+      </app-select-input>
+
+    </div>
+
+    <!-- ===================== Remarks ===================== -->
+
+    <label for="fuss-remarks" class="text-white/60 text-xs mb-1 block">Remarks</label>
+    <textarea id="fuss-remarks" rows="3" formControlName="remarks"
+      class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+
+    <!-- ===================== Buttons ===================== -->
+
+    <div class="flex justify-end">
+
+      <app-button
+        type="button"
+        (click)="saveFUSS()"
+        class="px-6 py-2 rounded-lg bg-green-600 hover:bg-green-700 transition">
+
+        Save FUSS
+
+      </app-button>
+
+    </div>
+
+  </form>
+
+</app-master-card>

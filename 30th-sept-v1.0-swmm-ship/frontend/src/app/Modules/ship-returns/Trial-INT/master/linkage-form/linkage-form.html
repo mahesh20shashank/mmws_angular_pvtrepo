@@ -1,0 +1,18 @@
+<div class="mx-auto w-full max-w-[1800px] p-2 sm:p-3">
+  <app-paginate-table
+        [showHeaderSection]="true"
+        [title]="activeTab.label"
+        [showSearch]="true"
+        [rowData]="rowData"
+        (addButtonClick)="triggerOilModal($event.key, $event?.rowData, 'Linkage')"
+        [addButtons]="addButtons"
+        [url]="'/master/linkage/'"
+        [columnDefs]="columnOilData"
+        [showPagination]="true"
+      >
+      </app-paginate-table>
+</div>
+
+
+
+<app-add-form *ngIf="showCreateLayout" [open]="showCreateLayout" [formConfig]="formConfigForNewDetails" [formData]="editFormData" [isEditMode]="isEditMode" (onSubmit)="handleSubmit($event)" (onFieldChange)="onFieldChange($event)" (onOpenChange)="showCreateLayout = $event" [fromTitle]="title" [width]="'70vw'"></app-add-form>

@@ -1,0 +1,395 @@
+<div
+  *ngIf="open"
+  class="pt-glass-dialog-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
+  [class.p-0]="isFullscreen"
+  (click)="onBackdropClick()">
+  <div
+    class="pt-glass-dialog flex w-full flex-col overflow-hidden rounded-xl border border-[var(--shell-glass-border)] shadow-2xl transition-all duration-300 ease-in-out"
+    [class.max-h-[min(92vh,920px)]]="!isFullscreen"
+    [class.max-w-5xl]="!isFullscreen"
+    [class.h-screen]="isFullscreen"
+    [class.max-h-none]="isFullscreen"
+    [class.max-w-none]="isFullscreen"
+    [class.rounded-none]="isFullscreen"
+    [class.w-screen]="isFullscreen"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ship-request-dialog-title"
+    (click)="$event.stopPropagation()">
+    <div class="pt-glass-dialog__header flex shrink-0 items-center justify-between gap-3 px-5 py-3.5">
+      <h2
+        id="ship-request-dialog-title"
+        class="text-[1.05rem] font-semibold leading-snug tracking-tight text-[var(--shell-text-primary)]">
+        Raise Request
+      </h2>
+      <div class="flex shrink-0 items-center gap-2">
+        <button
+          type="button"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--shell-glass-border)] bg-[var(--shell-table-control-bg)] text-[var(--shell-text-primary)] transition hover:opacity-90"
+          [attr.title]="isFullscreen ? 'Exit full screen' : 'Full screen'"
+          [attr.aria-label]="isFullscreen ? 'Exit full screen' : 'Full screen'"
+          (click)="toggleFullscreen()">
+          <i
+            class="text-sm"
+            [class.fa-solid]="true"
+            [class.fa-compress]="isFullscreen"
+            [class.fa-expand]="!isFullscreen"
+            aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 rounded-lg bg-blue-900 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-600"
+          (click)="openAddMmdDialog()">
+          <i class="fa-solid fa-plus text-[10px]" aria-hidden="true"></i>
+          <span>Add MMD</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="pt-glass-dialog__body min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-5 py-4">
+      <div class="space-y-5">
+        <p class="pt-glass-form-hint px-1">
+          All fields marked with <span class="required-mark">*</span> are mandatory
+        </p>
+        <div
+          [formGroup]="form"
+          class="pt-glass-form-bar flex flex-wrap items-center gap-4 rounded-lg px-4 py-3">
+          <span class="form-label mb-0">Select One <span class="required-mark">*</span></span>
+          <label class="flex cursor-pointer items-center gap-2">
+            <input type="radio" formControlName="request_type" value="restoration" />
+            <span class="form-label">Restoration</span>
+          </label>
+          <label class="flex cursor-pointer items-center gap-2">
+            <input type="radio" formControlName="request_type" value="backup" />
+            <span class="form-label">Back up</span>
+          </label>
+          <label class="flex cursor-pointer items-center gap-2">
+            <input type="radio" formControlName="request_type" value="hardware_popup" />
+            <span class="form-label">Repair</span>
+          </label>
+        </div>
+
+        <div [formGroup]="form" class="flex flex-wrap gap-4">
+          <div class="max-w-xs">
+            <app-calendar
+              label="Ship Proposed Date"
+              formControlName="ship_proposed_date"
+              [required]="true"
+            />
+          </div>
+          <div *ngIf="!isRepairType" class="max-w-xs">
+            <app-calendar
+              label="Date for Landing"
+              formControlName="landing_date"
+              [required]="true"
+            />
+          </div>
+        </div>
+
+        <!-- Select MMD only for Restoration / Back up -->
+        <div *ngIf="!isRepairType" [formGroup]="form">
+          <fieldset
+            class="pt-glass-form-fieldset"
+            formGroupName="mmd_selection">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <app-select
+                label="Department"
+                formControlName="department"
+                [options]="mmdDepartmentOptions"
+                placeholder="Select Department"
+              />
+              <app-select
+                label="System"
+                formControlName="system"
+                [options]="mmdSystemOptions"
+                placeholder="Select System"
+                [required]="true"
+              />
+              <app-select
+                label="Sub System"
+                formControlName="subsystem"
+                [options]="mmdSubsystemOptions"
+                placeholder="Select Sub System"
+                [disabled]="!form.get('mmd_selection.system')?.value"
+              />
+              <app-select
+                label="Sub Sub System"
+                formControlName="sub_sub_system"
+                [options]="mmdSubSubSystemOptions"
+                placeholder="Select Sub Sub System"
+                [disabled]="!form.get('mmd_selection.subsystem')?.value"
+              />
+              <app-select
+                label="MMD"
+                formControlName="mmd"
+                [options]="mmdSelectOptions"
+                placeholder="Select MMD"
+                [required]="true"
+                [disabled]="!form.get('mmd_selection.system')?.value || mmdSelectionLoading"
+              />
+            </div>
+            <p *ngIf="mmdSelectionLoading" class="mt-3 text-xs pt-glass-text-muted">
+              Loading MMD options...
+            </p>
+          </fieldset>
+        </div>
+
+        <!-- Keep mounted so ship can prefill from parent options before tab switch. -->
+        <div [hidden]="!isRepairType">
+          <app-hardware-popup-form
+            [embedded]="true"
+            [embeddedPrefillEnabled]="isRepairType"
+            [lockShipToPrefill]="true"
+            [prefillShipOptions]="shipOptions"
+            [prefillContext]="repairPrefillContext"
+          />
+        </div>
+        <form *ngIf="!isRepairType" [formGroup]="form" class="space-y-5">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <app-input
+            label="MMD Identification Number"
+            formControlName="mmd_identification_number"
+            placeholder=""
+            [readonly]="true"
+          />
+          <app-select
+            label="Mode"
+            formControlName="mode"
+            [options]="modeOptions"
+            placeholder="Select mode"
+            [required]="true"
+          />
+          <app-input
+            *ngIf="showDartNo"
+            label="DART No"
+            formControlName="dart_no"
+            placeholder="Enter DART no"
+          />
+            <!-- <label class="form-label" for="reason_for_request">
+              Reason for Request
+            </label> -->
+            
+        
+        </div>
+        <div class="mb-2">
+        <app-textarea
+              label="Reason for Request"
+              formControlName="reason_for_request"
+              placeholder="Enter reason for request"
+              [rows]="2"
+              [required]="true"
+            />
+            </div>
+
+        <fieldset
+          *ngIf="isRestorationType"
+          class="pt-glass-form-fieldset">
+          <legend>Select Available Backup</legend>
+
+          <div class="relative mb-4 min-h-[72px]">
+            <div
+              *ngIf="!lastWorkingBackupLoading && hasAvailableBackups"
+              class="pt-glass-matrix-wrap overflow-x-auto">
+              <table class="pt-glass-matrix w-full min-w-[720px] text-sm">
+                <thead>
+                  <tr>
+                    <th class="px-3 py-2 font-semibold">Ship</th>
+                    <th class="px-3 py-2 font-semibold">System</th>
+                    <th class="px-3 py-2 font-semibold">Sub System</th>
+                    <th class="px-3 py-2 font-semibold">Sub Sub System</th>
+                    <th class="px-3 py-2 font-semibold">MMD</th>
+                    <th class="px-3 py-2 font-semibold">Date</th>
+                    <th class="px-3 py-2 font-semibold">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let backup of availableBackupDisplays; let i = index"
+                    class="border-t border-[var(--shell-glass-border)]"
+                    [class.font-semibold]="selectedAvailableBackupIndex === i">
+                    <td class="px-3 py-2">{{ backup['ship'] }}</td>
+                    <td class="px-3 py-2">{{ backup['system'] }}</td>
+                    <td class="px-3 py-2">{{ backup['subsystem'] }}</td>
+                    <td class="px-3 py-2">{{ backup['sub_sub_system'] }}</td>
+                    <td class="px-3 py-2">{{ backup['mmd_type'] }}</td>
+                    <td class="px-3 py-2">{{ backup['date_of_backup'] }}</td>
+                    <td class="px-3 py-2">
+                      <button
+                        type="button"
+                        class="pt-glass-table__control rounded-md px-2.5 py-1 text-xs font-semibold transition"
+                        [class.pt-glass-btn-primary]="selectedAvailableBackupIndex === i"
+                        [disabled]="selectedAvailableBackupIndex === i"
+                        (click)="selectAvailableBackup(i)">
+                        {{ selectedAvailableBackupIndex === i ? 'Marked' : 'Select' }}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              *ngIf="!lastWorkingBackupLoading && !hasAvailableBackups && canQueryAvailableBackups"
+              class="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-300/70 bg-gradient-to-br from-slate-50 via-white to-slate-100/80 px-6 py-9 text-center shadow-inner dark:border-slate-600/60 dark:from-slate-900/80 dark:via-slate-900/50 dark:to-slate-800/60">
+              <div
+                class="flex h-14 w-14 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 shadow-sm ring-4 ring-slate-100/80 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:ring-slate-700/50">
+                <i class="fa-solid fa-box-archive text-xl" aria-hidden="true"></i>
+              </div>
+              <p class="text-sm font-semibold tracking-wide pt-glass-text-secondary">
+                No backup held
+              </p>
+            </div>
+
+            <p
+              *ngIf="!lastWorkingBackupLoading && !hasAvailableBackups && !canQueryAvailableBackups"
+              class="text-xs pt-glass-text-muted">
+              Select Ship and System to load available backups.
+            </p>
+          </div>
+
+          <div class="pt-glass-matrix-wrap w-full overflow-x-auto">
+            <table class="pt-glass-matrix w-full min-w-[960px] text-sm">
+              <thead>
+                <tr>
+                  <th class="px-3 py-2 text-left font-semibold">Preference</th>
+                  <th class="px-3 py-2 text-left font-semibold">Select Ship</th>
+                  <th class="px-3 py-2 text-left font-semibold">Select System</th>
+                  <th class="px-3 py-2 text-left font-semibold">Select Sub System</th>
+                  <th class="px-3 py-2 text-left font-semibold">Select Sub Sub System</th>
+                  <th class="px-3 py-2 text-left font-semibold">Select MMD</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="restoration_preferences">
+                <tr
+                  *ngFor="let pref of restorationPreferences.controls; let i = index"
+                  [formGroupName]="i">
+                  <td class="px-3 py-2 pt-glass-matrix__label font-semibold">
+                    {{ preferenceLabels[i] }}
+                  </td>
+                  <td class="px-3 py-2 align-middle">
+                    <app-select
+                      formControlName="ship"
+                      [options]="shipOptions"
+                      placeholder="Select Ship"
+                      class="w-full"
+                      (valueChange)="onPreferenceSelectionChanged(i)"
+                    />
+                  </td>
+                  <td class="px-3 py-2 align-middle">
+                    <app-select
+                      formControlName="system"
+                      [options]="preferenceCascadeState[i].systemOptions"
+                      placeholder="Select System"
+                      class="w-full"
+                      [disabled]="!pref.get('ship')?.value"
+                      (valueChange)="onPreferenceSelectionChanged(i)"
+                    />
+                  </td>
+                  <td class="px-3 py-2 align-middle">
+                    <app-select
+                      formControlName="subsystem"
+                      [options]="preferenceCascadeState[i].subsystemOptions"
+                      placeholder="Select Sub System"
+                      class="w-full"
+                      [disabled]="!pref.get('system')?.value"
+                      (valueChange)="onPreferenceSelectionChanged(i)"
+                    />
+                  </td>
+                  <td class="px-3 py-2 align-middle">
+                    <app-select
+                      formControlName="sub_sub_system"
+                      [options]="preferenceCascadeState[i].subSubSystemOptions"
+                      placeholder="Select Sub Sub System"
+                      class="w-full"
+                      [disabled]="!pref.get('subsystem')?.value"
+                      (valueChange)="onPreferenceSelectionChanged(i)"
+                    />
+                  </td>
+                  <td class="px-3 py-2 align-middle">
+                    <app-select
+                      formControlName="mmd_type"
+                      [options]="preferenceCascadeState[i].mmdOptions"
+                      placeholder="Select MMD"
+                      class="w-full"
+                      [disabled]="!pref.get('ship')?.value || !pref.get('system')?.value"
+                      (valueChange)="onPreferenceMmdChange(i, $event)"
+                    />
+                  </td>
+                </tr>
+                <tr *ngIf="catalogueLoading">
+                  <td colspan="6" class="pt-glass-matrix__empty px-3 py-3">
+                    Loading catalogue details...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <fieldset
+            class="pt-glass-form-fieldset mt-4">
+            <legend>Last Working Backup</legend>
+            <p class="mb-3 text-xs pt-glass-text-muted">
+              Show details of last working backup for the MMD selected in the form
+            </p>
+            <div
+              *ngIf="hasLastWorkingBackup; else noLastWorkingBackup"
+              class="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <div class="space-y-2 text-sm text-[var(--shell-text-primary)]">
+                <div><span class="font-semibold">Date of Backup:</span> {{ lastWorkingBackup['date_of_backup'] || '-' }}</div>
+                <div><span class="font-semibold">System:</span> {{ lastWorkingBackup['system'] || '-' }}</div>
+                <div><span class="font-semibold">Sub System:</span> {{ lastWorkingBackup['subsystem'] || '-' }}</div>
+                <div><span class="font-semibold">Sub-Sub-System:</span> {{ lastWorkingBackup['sub_sub_system'] || '-' }}</div>
+              </div>
+              <div class="space-y-2 text-sm text-[var(--shell-text-primary)]">
+                <div><span class="font-semibold">Ship:</span> {{ lastWorkingBackup['ship'] || '-' }}</div>
+                <div><span class="font-semibold">MMD Type:</span> {{ lastWorkingBackup['mmd_type'] || '-' }}</div>
+                <div><span class="font-semibold">Size:</span> {{ lastWorkingBackup['size'] || '-' }}</div>
+                <div><span class="font-semibold">Application Version:</span> {{ lastWorkingBackup['application_version'] || '-' }}</div>
+              </div>
+            </div>
+            <ng-template #noLastWorkingBackup>
+              <p class="text-xs pt-glass-text-muted">
+                No last working backup yet. Select System/MMD in the form above to load backup details.
+              </p>
+            </ng-template>
+            <div class="mt-4">
+              <button
+                type="button"
+                class="pt-glass-table__control rounded-lg px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60"
+                [class.pt-glass-btn-primary]="preferredBackupMarked"
+                [disabled]="!hasLastWorkingBackup"
+                (click)="selectAsPreferred()">
+                {{ preferredBackupMarked ? 'Marked as Preferred' : 'Select as Preferred' }}
+              </button>
+            </div>
+          </fieldset>
+        </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <div class="pt-glass-dialog__footer flex shrink-0 justify-end gap-3 px-5 py-4">
+      <button
+        type="button"
+        class="pt-glass-table__control rounded-lg px-4 py-2 text-sm font-semibold"
+        [disabled]="saving"
+        (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="pt-glass-btn-primary rounded-lg px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+        [disabled]="saving"
+        (click)="onSubmit()">
+        {{ saving ? 'Submitting...' : 'Submit' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-add-mmd-dialog
+  [open]="showAddMmdDialog"
+  [filterContext]="addMmdFilterContext"
+  (openChange)="onAddMmdDialogOpenChange($event)"
+  (saved)="onMmdSaved()"
+/>

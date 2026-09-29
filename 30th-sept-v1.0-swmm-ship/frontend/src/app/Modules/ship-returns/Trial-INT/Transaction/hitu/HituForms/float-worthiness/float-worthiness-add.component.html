@@ -1,0 +1,223 @@
+<app-form-card
+  title="FLOAT WORTHINESS - SHIP"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+>
+<div
+      previewHeader
+      class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+      <button
+          *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+          type="button"
+          (click)="setActiveTab(tab)"
+          class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+          [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+      >
+          <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+              {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+          </span>
+
+          <span
+              class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+              [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+          >
+              {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+          </span>
+      </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-3 gap-3">
+
+      <!-- SHIP -->
+      <div class="flex flex-col gap-1">
+
+        <app-input
+          [label]="'Ship *'" formControlName="ship"
+          
+          class="w-full"
+        >
+        </app-input>
+      </div>
+
+      <!-- DATE -->
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+
+      <!-- PLACE -->
+      <div class="flex flex-col gap-1">
+
+        <app-select
+          [label]="'Place of conduct of trials *'" formControlName="place_of_conduct_trail"
+          [options]="placesOptions" 
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <!-- AUTHORITY -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+
+      <div class="grid grid-cols-3 gap-3 mt-3">
+
+        <app-input
+          label="Remarks *"
+          formControlName="authority"
+        >
+        </app-input>
+
+          <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value">
+          </app-calendar>
+
+        <div class="file-upload-field gap-1">
+          
+          <app-file-upload [label]="'Upload doc*'" formControlName="authority_doc">
+          </app-file-upload>
+        </div>
+
+      </div>
+
+    </app-parameter-card>
+    <br/>
+
+    <!-- TABS -->
+    <app-tabs
+      [labels]="[
+        'TABLE 1 - VISUAL INSPECTION OF  WEATHER DECK',
+        'TABLE 2 - Internal Underwater Tanks',
+        'TABLE 3 - Internal Underwater Compartments'
+      ]"
+    >
+
+      <!-- ========================================================= -->
+      <!-- TABLE 1 -->
+      <!-- ========================================================= -->
+        <ng-template>
+            <div class="form-section-header-wo-top-margin">
+                TABLE 1 - Visual Inspection of Weather Deck
+            </div>
+
+            <div class="col-span-2 mt-2">
+                <div class="overflow-x-auto w-full">
+
+                <app-reusable-input-table
+                    [data]="visualInspectionDetails"
+                    [columns]="visualInspectionColumns"
+                    [enableRowActions]="true"
+                >
+                    <ng-template #serialNumberTpl let-index="index">
+                    {{ index + 1 }}
+                    </ng-template>
+                </app-reusable-input-table>
+
+                </div>
+            </div>
+        </ng-template>
+      <!-- ========================================================= -->
+      <!-- TABLE 2 -->
+      <!-- ========================================================= -->
+
+       <ng-template>
+            <div class="form-section-header-wo-top-margin">
+                TABLE 2 - Internal Underwater Tanks
+            </div>
+
+            <div class="col-span-2 mt-2">
+                <div class="overflow-x-auto w-full">
+
+                <app-reusable-input-table
+                    [data]="internalUnderwaterTankDetails"
+                    [columns]="internalUnderwaterTankColumns"
+                    [enableRowActions]="true"
+                >
+                    <ng-template #serialNumberTpl let-index="index">
+                    {{ index + 1 }}
+                    </ng-template>
+                </app-reusable-input-table>
+
+                </div>
+            </div>
+        </ng-template>
+
+      <!-- ========================================================= -->
+      <!-- TABLE 3 -->
+      <!-- ========================================================= -->
+
+      <ng-template>
+        <div class="form-section-header-wo-top-margin">
+            TABLE 3 - Internal Underwater Compartments
+        </div>
+
+        <div class="col-span-2 mt-2">
+            <div class="overflow-x-auto w-full">
+
+            <app-reusable-input-table
+                [data]="internalUnderwaterCompartmentDetails"
+                [columns]="internalUnderwaterCompartmentColumns"
+                [enableRowActions]="true"
+            >
+                <ng-template #serialNumberTpl let-index="index">
+                {{ index + 1 }}
+                </ng-template>
+            </app-reusable-input-table>
+
+            </div>
+        </div>
+      </ng-template>
+
+    </app-tabs>
+  </form>
+  <!-- <button type="button" (click)="handleSave('draft')">
+    Submit
+  </button> -->
+
+  <!-- FOOTER -->
+    <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+
+
+</app-form-card>
+
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''" [context]="formApiService.context" [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

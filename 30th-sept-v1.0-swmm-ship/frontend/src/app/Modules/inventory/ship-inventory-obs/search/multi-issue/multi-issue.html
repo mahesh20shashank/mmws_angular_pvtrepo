@@ -1,0 +1,206 @@
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Issue Spare</h3>
+    <app-button type="button" class="btn-secondary" (click)="goBack()">Back</app-button>
+  </div>
+
+  <form [formGroup]="form" class="obs-issue-form">
+    <div class="obs-issue-form__grid">
+      <div class="obs-issue-form__field">
+        <app-select-input label="Reason of Issue *" formControlName="reason" [options]="reasonOptions" />
+        @if (form.controls.reason.invalid && form.controls.reason.touched) {
+          <span class="form-error">Reason of Issue is required.</span>
+        }
+      </div>
+    </div>
+
+    @if (isDefect()) {
+      <div class="obs-issue-form__grid">
+        <div class="obs-issue-form__field">
+          <app-select-input label="Issued To *" formControlName="username" [options]="usernameOptions()" />
+          @if (form.controls.username.invalid && form.controls.username.touched) {
+            <span class="form-error">Issued To is required.</span>
+          }
+          <!-- Developed with Understanding: the server's own reason for rejecting this person, shown at the field (CP-G contract section 5). -->
+          @if (serverFieldErrors().username; as message) {
+            <span class="form-error">{{ message }}</span>
+          }
+        </div>
+        <app-select-input label="Sub-Department" formControlName="section" [options]="sectionOptions()" />
+        <app-select-input
+          label="Defect on Equipment Nomenclature"
+          formControlName="equipmentName"
+          [options]="equipmentOptions()"
+        />
+      </div>
+    } @else {
+      <!-- Developed with Understanding: Ty Loan branch (D11) - Command, Unit Name, Issued To, in that order, all over other-unit personnel. Replaces the free-text Command, Issued to Ship and Enter Ship Name boxes. Each list shows its loading, error, empty and populated state under the control. -->
+      <div class="obs-issue-form__grid">
+        <div class="obs-issue-form__field">
+          <app-select-input
+            label="Command *"
+            formControlName="command"
+            placeholder="Pick a Command"
+            [options]="commandOptions()"
+          />
+          @if (form.controls.command.invalid && form.controls.command.touched) {
+            <span class="form-error">Command is required.</span>
+          }
+          @switch (commandsState()) {
+            @case ("loading") {
+              <span class="text-xs text-[var(--text-muted)]">Loading commands...</span>
+            }
+            @case ("error") {
+              <span class="form-error">Commands could not be loaded.</span>
+              <app-button type="button" variant="ghost" size="xs" (click)="loadCommandFilters()">Retry</app-button>
+            }
+          }
+        </div>
+
+        <div class="obs-issue-form__field">
+          <app-select-input
+            label="Unit Name"
+            formControlName="unit"
+            placeholder="Any unit"
+            [options]="unitOptions()"
+          />
+          @switch (unitsState()) {
+            @case ("loading") {
+              <span class="text-xs text-[var(--text-muted)]">Loading unit names...</span>
+            }
+            @case ("error") {
+              <span class="form-error">Unit names could not be loaded.</span>
+              <app-button type="button" variant="ghost" size="xs" (click)="retryUnitOptions()">Retry</app-button>
+            }
+            @case ("ready") {
+              @if (!unitOptions().length && !otherUnitDirectoryEmpty()) {
+                <span class="text-xs text-[var(--text-muted)]">No unit names under this Command. Leave Unit Name blank.</span>
+              }
+            }
+          }
+        </div>
+
+        <div class="obs-issue-form__field">
+          <app-select-input
+            label="Issued To *"
+            formControlName="issuedToOtherProfile"
+            placeholder="Type a name or personal number"
+            [serverSearch]="true"
+            [options]="otherUserOptions()"
+            (searchChange)="onOtherUserSearch($event)"
+          />
+          @if (form.controls.issuedToOtherProfile.invalid && form.controls.issuedToOtherProfile.touched) {
+            <span class="form-error">Issued To is required.</span>
+          }
+          <!-- Developed with Understanding: the server's own reason for rejecting this person, shown at the field (CP-G contract section 5). -->
+          @if (serverFieldErrors().issued_to_other_profile; as message) {
+            <span class="form-error">{{ message }}</span>
+          }
+          @if (otherUnitDirectoryEmpty()) {
+            <span class="text-xs text-[var(--text-muted)]">No other-unit personnel found. Ask the ship administrator to run HR CDF Step 3.</span>
+          } @else {
+            @switch (otherUsersState()) {
+              @case ("idle") {
+                <span class="text-xs text-[var(--text-muted)]">Pick a Command or Unit Name, or type at least {{ otherSearchMinLength }} characters of a name or personal number.</span>
+              }
+              @case ("loading") {
+                <span class="text-xs text-[var(--text-muted)]">Searching other-unit personnel...</span>
+              }
+              @case ("error") {
+                <span class="form-error">Other-unit personnel could not be loaded.</span>
+                <app-button type="button" variant="ghost" size="xs" (click)="retryOtherUsers()">Retry</app-button>
+              }
+              @case ("ready") {
+                @if (!otherUsers().length) {
+                  <span class="text-xs text-[var(--text-muted)]">No other-unit personnel match. Change the Command, the Unit Name or the search.</span>
+                }
+                @if (hasMoreOtherUsers()) {
+                  <span class="text-xs text-[var(--text-muted)]">Showing the first {{ otherUsers().length }} of {{ otherUsersCount() }}. More matches exist - refine the search.</span>
+                }
+              }
+            }
+          }
+          @if (pickedOtherUser(); as person) {
+            <span class="text-sm text-[var(--text-primary)]">Unit: {{ person.unitName || "Not recorded" }}</span>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="obs-issue-form__field">
+      <app-textarea-input label="Remarks *" [rows]="2" formControlName="remarks" />
+      @if (form.controls.remarks.invalid && form.controls.remarks.touched) {
+        <span class="form-error">Remarks is required.</span>
+      }
+    </div>
+  </form>
+
+  <table class="obs-multi-table">
+    <thead>
+      <tr>
+        <th>Pattern No</th>
+        <th>Spare Description</th>
+        <th>Qty Auth</th>
+        <th>Qty Held</th>
+        <th>Quantity Issued</th>
+        <th>Reason for High Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (spare of spares(); track spare.id) {
+        <tr>
+          <td>{{ spare.patternNumber }}</td>
+          <td>{{ spare.description }}</td>
+          <td>{{ spare.quantityAuthorised }}</td>
+          <td>{{ spare.quantityAvailable }}</td>
+          <td>
+            <input
+              type="number"
+              min="1"
+              [max]="spare.quantityAvailable"
+              class="obs-multi-table__qty"
+              [class.obs-multi-table__qty--invalid]="quantityInvalid(spare)"
+              [attr.aria-label]="'Quantity issued for ' + spare.patternNumber"
+              [value]="quantityFor(spare.id)"
+              (input)="updateQuantity(spare.id, $any($event.target).value)"
+            />
+            @if (quantityInvalid(spare)) {
+              <span class="form-error obs-multi-table__error">
+                @if (quantityFor(spare.id) < 1) {
+                  Must be at least 1.
+                } @else {
+                  Cannot exceed Qty Held ({{ spare.quantityAvailable }}).
+                }
+              </span>
+            }
+          </td>
+          <td>
+            <input
+              type="text"
+              class="obs-multi-table__reason"
+              [class.obs-multi-table__reason--invalid]="needsReasonFor(spare.id)"
+              [attr.aria-label]="'Reason for high quantity for ' + spare.patternNumber"
+              placeholder="Reason for issuing a high quantity (more than {{ highIssueThreshold }})"
+              [value]="reasonFor(spare.id)"
+              (input)="updateReason(spare.id, $any($event.target).value)"
+            />
+            @if (needsReasonFor(spare.id)) {
+              <span class="form-error obs-multi-table__error">Reason is required for quantities over {{ highIssueThreshold }}.</span>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="obs-issue-form__actions">
+    <app-button
+      type="button"
+      class="btn-primary"
+      [disabled]="saving() || form.invalid || hasRowErrors()"
+      (click)="submit()"
+    >
+      {{ saving() ? "Submitting..." : "Submit" }}
+    </app-button>
+  </div>
+</div>

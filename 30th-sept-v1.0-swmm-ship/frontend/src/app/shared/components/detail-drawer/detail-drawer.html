@@ -1,0 +1,96 @@
+<div class="drawer" [class.drawer--open]="open">
+  <app-button
+  type="button"
+  class="drawer__backdrop"
+  (click)="close()"
+  aria-label="Close drawer">
+</app-button>
+  <aside class="drawer__panel" [class.drawer__panel--wide]="wide">
+    <!-- Header -->
+    <div class="drawer__header">
+      @if (iconName) {
+        <div class="drawer__icon" [style.background]="iconBg">
+          <app-icon [name]="iconName" [size]="22" [strokeWidth]="2" [color]="iconColor" />
+        </div>
+      } @else if (iconPath) {
+        <div class="drawer__icon" [style.background]="iconBg">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            [attr.stroke]="iconColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path [attr.d]="iconPath"></path>
+          </svg>
+        </div>
+      }
+      <div class="drawer__heading">
+        @if (badgeText && badgePosition === "above-title") {
+          <span
+            class="drawer__badge drawer__badge--above-title"
+            [style.color]="badgeColor || 'var(--text-primary)'"
+            [style.background]="(badgeColor || 'var(--text-primary)') + '22'"
+          >
+            {{ badgeText }}
+          </span>
+        }
+        @if (titleMode) {
+          <div class="drawer__title">{{ label }}</div>
+          @if (subtitle) {
+            <div class="drawer__subtitle">{{ subtitle }}</div>
+          }
+        } @else {
+          <div class="drawer__label">{{ label }}</div>
+          <div class="drawer__value-row">
+            <span class="drawer__value" [appCountUp]="value"></span>
+            @if (subtitle) {
+              <span class="drawer__subtitle">{{ subtitle }}</span>
+            }
+          </div>
+        }
+      </div>
+      @if (badgeText && badgePosition === "top-right") {
+        <span class="drawer__badge">
+          <app-icon name="lock" [size]="12" [strokeWidth]="2" variant="inherit" />
+          {{ badgeText }}
+        </span>
+      }
+      <app-button type="button" class="drawer__close" (click)="close()" aria-label="Close">
+        <app-icon name="x" [size]="16" [strokeWidth]="2" variant="inherit" />
+      </app-button>
+    </div>
+
+    <!-- Body -->
+    <div class="drawer__body">
+      @if (stats.length) {
+        <div class="drawer__stats" [class.drawer__stats--wide]="wide">
+          @for (s of stats; track s.label) {
+            <div class="drawer__stat">
+              <div
+                class="drawer__stat-value"
+                [style.color]="s.color || 'var(--text-primary)'"
+                [appCountUp]="s.value"
+              ></div>
+              <div class="drawer__stat-label">{{ s.label }}</div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (sectionTitle) {
+        <div class="drawer__section">
+          <span class="drawer__section-title">{{ sectionTitle }}</span>
+          @if (sectionHint) {
+            <span class="drawer__section-hint">{{ sectionHint }}</span>
+          }
+        </div>
+      }
+
+      <ng-content></ng-content>
+    </div>
+  </aside>
+</div>

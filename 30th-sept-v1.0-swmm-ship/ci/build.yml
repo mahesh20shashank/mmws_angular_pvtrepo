@@ -1,0 +1,46 @@
+build_frontend:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: build
+
+  before_script:
+    - |
+      echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+        --username "$HARBOR_USERNAME" \
+        --password-stdin
+
+  script:
+    - |
+      docker buildx build \
+      -f frontend/Dockerfile \
+      --no-cache \
+      --pull \
+      --load \
+      -t swmm-frontend:${CI_COMMIT_SHORT_SHA} \
+      .
+
+push_harbor:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: push
+
+  needs:
+    - build_frontend
+    # - syft_frontend_image
+
+  before_script:
+    - |
+      echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+        --username "$HARBOR_USERNAME" \
+        --password-stdin
+
+  script:
+    - docker tag swmm-frontend:${CI_COMMIT_SHORT_SHA} $HARBOR_URL/$HARBOR_PROJECT/frontend:${CI_COMMIT_SHORT_SHA}
+    - docker tag swmm-frontend:${CI_COMMIT_SHORT_SHA} $HARBOR_URL/$HARBOR_PROJECT/frontend:dev
+
+    - docker push $HARBOR_URL/$HARBOR_PROJECT/frontend:${CI_COMMIT_SHORT_SHA}
+    - docker push $HARBOR_URL/$HARBOR_PROJECT/frontend:dev

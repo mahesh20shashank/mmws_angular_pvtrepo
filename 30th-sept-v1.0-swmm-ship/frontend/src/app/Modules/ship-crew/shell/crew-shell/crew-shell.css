@@ -1,0 +1,13 @@
+/* Every route in this module renders through here, so its padding/gap sits
+   between the breadcrumb and each page's own content on every screen — unlike
+   KMS's screens, which have no such wrapper. The original 1rem padding (all
+   sides) plus a 1rem flex gap against the otherwise-empty <router-outlet>
+   sibling added dead space on every edge of every Ship Crew page, on top of
+   whatever gap each page's own wrapper already provides. Matched to the exact
+   padding KMS's shared .kms-page wrapper uses (3px, all sides) and dropped
+   the gap — there's only ever one visible routed child. */
+.crew-shell {
+  display: flex;
+  flex-direction: column;
+  padding: 3px;
+}

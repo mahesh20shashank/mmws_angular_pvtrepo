@@ -1,0 +1,835 @@
+<app-help-guidance [bodyHtml]="helpHtml"></app-help-guidance>
+<app-master-card cardTitle="Masters">
+  <div class="dm-layout">
+    <nav class="dm-tabs">
+      <div class="dm-tabs-row">
+        <div class="dm-tabs-group">
+          <span class="dm-tabs-group-title">Dashboard</span>
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'quote-of-the-day'"
+            (click)="selectNav('quote-of-the-day')"
+          >
+            <app-icon name="message-square-text" [size]="14" [variant]="activeKey() === 'quote-of-the-day' ? 'inherit' : 'muted'" />
+            <span>Quote of The Day</span>
+          </app-button>
+
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'ship-role'"
+            (click)="selectNav('ship-role')"
+          >
+            <app-icon name="ship" [size]="14" [variant]="activeKey() === 'ship-role' ? 'inherit' : 'muted'" />
+            <span>Ship Role</span>
+          </app-button>
+
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'message-from-command'"
+            (click)="selectNav('message-from-command')"
+          >
+            <app-icon name="send" [size]="14" [variant]="activeKey() === 'message-from-command' ? 'inherit' : 'muted'" />
+            <span>Message From Command</span>
+          </app-button>
+
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'upcoming-event-updates'"
+            (click)="selectNav('upcoming-event-updates')"
+          >
+            <app-icon name="bell" [size]="14" [variant]="activeKey() === 'upcoming-event-updates' ? 'inherit' : 'muted'" />
+            <span>Upcoming Event Updates</span>
+          </app-button>
+
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'crew-details'"
+            (click)="selectNav('crew-details')"
+          >
+            <app-icon name="users" [size]="14" [variant]="activeKey() === 'crew-details' ? 'inherit' : 'muted'" />
+            <span>Crew Details</span>
+          </app-button>
+        </div>
+      </div>
+
+      <div class="dm-tabs-row">
+        <div class="dm-tabs-group">
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'ship-officers-scrollbar'"
+            (click)="selectNav('ship-officers-scrollbar')"
+          >
+            <app-icon name="user-check" [size]="14" [variant]="activeKey() === 'ship-officers-scrollbar' ? 'inherit' : 'muted'" />
+            <span>Ship Officers for Scrollbar</span>
+          </app-button>
+        </div>
+
+        <div class="dm-tabs-group">
+          <span class="dm-tabs-group-title">Landing Page - Admiral pics</span>
+          <app-button
+            type="button"
+            class="dm-nav-item"
+            [class.dm-nav-item-active]="activeKey() === 'login-page-image'"
+            (click)="selectNav('login-page-image')"
+          >
+            <app-icon name="image" [size]="14" [variant]="activeKey() === 'login-page-image' ? 'inherit' : 'muted'" />
+            <span>Admiral Photos</span>
+          </app-button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="dm-main">
+      @if (activeKey() === 'crew-details') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            <app-button class="dm-btn-add-corner" type="button" (click)="openAddModal()">
+              <app-icon name="plus" [size]="14" variant="inherit" />
+              Add Crew Details
+            </app-button>
+
+            <div class="dm-toolbar-export-group">
+              <label class="dm-sr-only" for="dmSearchInput">Search crew</label>
+              <input
+                id="dmSearchInput"
+                type="text"
+                class="dm-search-input"
+                placeholder="Search..."
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+
+              <app-export-toolbar [disabled]="filteredShipRoles().length === 0" (exportRequested)="onExport($event)" />
+
+              <app-button type="button" class="dm-export-btn dm-export-btn--copy" title="Copy to clipboard"
+                (click)="copyData()">
+                <app-icon name="copy" [size]="16" variant="inherit" />
+              </app-button>
+            </div>
+          </div>
+
+          <div class="dm-body">
+            <app-data-grid [rowData]="filteredCrew()" [columnDefs]="crewColumnDefs" [pageSize]="pageSize()" height="440px" />
+          </div>
+        </div>
+      } @else if (activeKey() === 'ship-officers-scrollbar') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            <app-button class="dm-btn-add-corner" type="button" (click)="openAddOfficerModal()">
+              <app-icon name="plus" [size]="14" variant="inherit" />
+              Add Officer
+            </app-button>
+
+            <div class="dm-toolbar-export-group">
+              <label class="dm-sr-only" for="dmOfficerSearchInput">Search officers</label>
+              <input
+                id="dmOfficerSearchInput"
+                type="text"
+                class="dm-search-input"
+                placeholder="Search..."
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+
+              <app-export-toolbar [disabled]="filteredShipRoles().length === 0" (exportRequested)="onExport($event)" />
+
+              <app-button type="button" class="dm-export-btn dm-export-btn--copy" title="Copy to clipboard"
+                (click)="copyData()">
+                <app-icon name="copy" [size]="16" variant="inherit" />
+              </app-button>
+            </div>
+          </div>
+
+          <div class="dm-body">
+            <app-data-grid [rowData]="filteredOfficers()" [columnDefs]="officerColumnDefs" [pageSize]="pageSize()" height="440px" />
+          </div>
+        </div>
+      } @else if (activeKey() === 'quote-of-the-day') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            <app-button class="dm-btn-add-corner" type="button" (click)="openAddQuoteModal()">
+              <app-icon name="plus" [size]="14" variant="inherit" />
+              Add Quote
+            </app-button>
+
+            <div class="dm-toolbar-export-group">
+              <label class="dm-sr-only" for="dmQuoteSearchInput">Search quotes</label>
+              <input
+                id="dmQuoteSearchInput"
+                type="text"
+                class="dm-search-input"
+                placeholder="Search..."
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+
+              <app-export-toolbar [disabled]="filteredShipRoles().length === 0" (exportRequested)="onExport($event)" />
+
+              <app-button type="button" class="dm-export-btn dm-export-btn--copy" title="Copy to clipboard"
+                (click)="copyData()">
+                <app-icon name="copy" [size]="16" variant="inherit" />
+              </app-button>
+            </div>
+          </div>
+
+          <div class="dm-body">
+            <app-data-grid [rowData]="filteredQuotes()" [columnDefs]="quoteColumnDefs" [pageSize]="pageSize()" height="440px" />
+          </div>
+        </div>
+      } @else if (activeKey() === 'ship-role') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            @if (shipRoleList().length > 0) {
+              <app-button class="dm-btn-add-corner" type="button" (click)="openEditShipRoleModal(shipRoleList()[0])">
+                <app-icon name="pencil" [size]="14" variant="inherit" style="margin-right: 4px;" />
+                Update Ship's Role
+              </app-button>
+            } @else {
+              <app-button class="dm-btn-add-corner" type="button" (click)="openAddShipRoleModal()">
+                <app-icon name="plus" [size]="14" variant="inherit" style="margin-right: 4px;" />
+                Add Ship Role
+              </app-button>
+            }
+
+            <div class="dm-toolbar-export-group">
+              <label class="dm-sr-only" for="dmShipRoleSearchInput">Search ship roles</label>
+              <input
+                id="dmShipRoleSearchInput"
+                type="text"
+                class="dm-search-input"
+                placeholder="Search..."
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+
+              <app-export-toolbar [disabled]="filteredCommandMessages().length === 0" (exportRequested)="onExport($event)" />
+
+              <app-button type="button" class="dm-export-btn dm-export-btn--copy" title="Copy to clipboard"
+                (click)="copyData()">
+                <app-icon name="copy" [size]="16" variant="inherit" />
+              </app-button>
+            </div>
+          </div>
+
+          <div class="dm-body">
+            <app-data-grid [rowData]="filteredShipRoles()" [columnDefs]="shipRoleColumnDefs" [pageSize]="pageSize()" height="440px" />
+          </div>
+        </div>
+      } @else if (activeKey() === 'message-from-command') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            <app-button class="dm-btn-add-corner" type="button" (click)="openAddCommandMessageModal()">
+              <app-icon name="plus" [size]="14" variant="inherit" />
+              Add Command Message
+            </app-button>
+
+            <div class="dm-toolbar-export-group">
+              <label class="dm-sr-only" for="dmCommandMessageSearchInput">Search command messages</label>
+              <input
+                id="dmCommandMessageSearchInput"
+                type="text"
+                class="dm-search-input"
+                placeholder="Search..."
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+
+              <app-export-toolbar [disabled]="filteredShipRoles().length === 0" (exportRequested)="onExport($event)" />
+
+              <app-button type="button" class="dm-export-btn dm-export-btn--copy" title="Copy to clipboard"
+                (click)="copyData()">
+                <app-icon name="copy" [size]="16" variant="inherit" />
+              </app-button>
+            </div>
+          </div>
+
+          <div class="dm-body">
+            <app-data-grid [rowData]="filteredCommandMessages()" [columnDefs]="commandMessageColumnDefs" [pageSize]="pageSize()" height="440px" />
+          </div>
+        </div>
+      } @else if (activeKey() === 'upcoming-event-updates') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            <app-button class="dm-btn-add-corner" type="button" (click)="openAddEventModal()">
+              <app-icon name="plus" [size]="14" variant="inherit" />
+              Add Event
+            </app-button>
+
+            <div class="dm-toolbar-export-group">
+              <label class="dm-sr-only" for="dmEventSearchInput">Search upcoming events</label>
+              <input
+                id="dmEventSearchInput"
+                type="text"
+                class="dm-search-input"
+                placeholder="Search..."
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+
+              <app-export-toolbar [disabled]="filteredShipRoles().length === 0" (exportRequested)="onExport($event)"/>
+
+              <app-button type="button" class="dm-export-btn dm-export-btn--copy" title="Copy to clipboard"
+                (click)="copyData()">
+                <app-icon name="copy" [size]="16" variant="inherit" />
+              </app-button>
+            </div>
+          </div>
+
+          <div class="dm-body">
+            <app-data-grid [rowData]="filteredEvents()" [columnDefs]="eventColumnDefs" [pageSize]="pageSize()" height="440px" />
+          </div>
+        </div>
+      } @else if (activeKey() === 'login-page-image') {
+        <div class="dm-table-panel">
+          <div class="dm-toolbar">
+            <app-button class="dm-btn-add-corner" type="button" (click)="openAddLoginImageModal()">
+              <app-icon name="plus" [size]="14" variant="inherit" />
+              Add Admiral Photo
+            </app-button>
+          </div>
+
+          <div class="dm-admiral-grid">
+            @if (loginImageLoading()) {
+              <div class="dm-placeholder">Loading admiral photos...</div>
+            } @else {
+              @for (image of loginImageList(); track image.id) {
+                <div class="dm-admiral-card">
+                  <img [src]="image.image" alt="" class="dm-admiral-photo" />
+                  <div class="dm-admiral-name">{{ image.name }}</div>
+                  @if (image.designation) {
+                    <div class="dm-admiral-designation">{{ image.designation }}</div>
+                  }
+                  <div class="dm-admiral-actions">
+                    <app-button class="dm-admiral-edit-btn" type="button" (click)="openEditLoginImageModal(image)">
+                      <app-icon name="pencil" [size]="13" variant="inherit" />
+                      Edit
+                    </app-button>
+                    <app-button class="dm-admiral-delete-btn" type="button" (click)="deleteLoginImage(image)">
+                      <app-icon name="trash-2" [size]="13" variant="inherit" />
+                      Delete
+                    </app-button>
+                  </div>
+                </div>
+              } @empty {
+                <div class="dm-placeholder">
+                  <app-icon name="image" [size]="28" variant="muted" />
+                  <p>No admiral photos uploaded yet.</p>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="dm-placeholder">
+          <app-icon name="settings" [size]="28" variant="muted" />
+          <p>Manage {{ activeLabel() }} — coming soon.</p>
+        </div>
+      }
+    </section>
+  </div>
+</app-master-card>
+
+@if (showFormModal()) {
+  <app-modal size="lg" (closeModal)="closeFormModal()">
+    <h3 class="dm-modal-title">{{ editingCrew() ? 'Edit' : 'Add' }} Crew Details</h3>
+
+    <div class="dm-modal-body">
+      <div class="dm-form-row">
+        <div class="dm-form-col">
+          <label class="dm-form-label" for="dmFullName">Full Name *</label>
+          <input
+            id="dmFullName"
+            type="text"
+            class="dm-form-input"
+            [ngModel]="formFullName()"
+            (ngModelChange)="formFullName.set($event)"
+          />
+        </div>
+
+        <div class="dm-form-col">
+          <label class="dm-form-label" for="dmDesignation">Designation *</label>
+          <input
+            id="dmDesignation"
+            type="text"
+            class="dm-form-input"
+            [ngModel]="formDesignation()"
+            (ngModelChange)="formDesignation.set($event)"
+          />
+        </div>
+
+        <div class="dm-form-col">
+          <label class="dm-form-label" for="dmRank">Rank *</label>
+          <input
+            id="dmRank"
+            type="text"
+            class="dm-form-input"
+            [ngModel]="formRank()"
+            (ngModelChange)="formRank.set($event)"
+          />
+        </div>
+      </div>
+
+      <label class="dm-form-label" for="dmCrewImage">Upload Image</label>
+      <input
+        id="dmCrewImage"
+        type="file"
+        class="dm-form-input"
+        accept="image/*"
+        (change)="onCrewImageSelected($event)"
+      />
+
+      @if (formError()) {
+        <div class="dm-form-error">{{ formError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeFormModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingCrew()" (click)="saveCrew()">
+        {{ savingCrew() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showQuoteModal()) {
+  <app-modal size="md" (closeModal)="closeQuoteModal()">
+    <h3 class="dm-modal-title">{{ editingQuote() ? 'Edit' : 'Add' }} Quote of the Day</h3>
+
+    <div class="dm-modal-body">
+      <label class="dm-form-label" for="dmQuote">Enter Quote *</label>
+      <input
+        id="dmQuote"
+        type="text"
+        class="dm-form-input"
+        [ngModel]="formQuote()"
+        (ngModelChange)="formQuote.set($event)"
+      />
+
+      @if (quoteFormError()) {
+        <div class="dm-form-error">{{ quoteFormError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeQuoteModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingQuote()" (click)="saveQuote()">
+        {{ savingQuote() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showCommandMessageModal()) {
+  <app-modal size="md" (closeModal)="closeCommandMessageModal()">
+    <h3 class="dm-modal-title">{{ editingCommandMessage() ? 'Edit' : 'Add' }} Command Message</h3>
+
+    <div class="dm-modal-body">
+      <label class="dm-form-label" for="dmCommandMessage">Command Message *</label>
+      <textarea
+        id="dmCommandMessage"
+        class="dm-form-input dm-form-textarea"
+        rows="4"
+        placeholder="Enter message"
+        [ngModel]="formCommandMessage()"
+        (ngModelChange)="formCommandMessage.set($event)"
+      ></textarea>
+
+      <label class="dm-form-label" for="dmCommandMessageValidTill">Valid Till *</label>
+      <input
+        id="dmCommandMessageValidTill"
+        type="date"
+        class="dm-form-input"
+        [ngModel]="formCommandMessageValidTill()"
+        (ngModelChange)="formCommandMessageValidTill.set($event)"
+      />
+
+      <div class="dm-form-note">
+        Note: This message is valid until 11:59 PM on the valid till date.
+      </div>
+
+      @if (commandMessageFormError()) {
+        <div class="dm-form-error">{{ commandMessageFormError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeCommandMessageModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingCommandMessage()" (click)="saveCommandMessage()">
+        {{ savingCommandMessage() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showEventModal()) {
+  <app-modal size="lg" (closeModal)="closeEventModal()">
+    <h3 class="dm-modal-title">{{ editingEvent() ? 'Edit' : 'Add' }} Upcoming Event Updates</h3>
+
+    <div class="dm-modal-body">
+      <span class="dm-form-label">Select Upcoming Event Updates Type</span>
+      <div class="dm-radio-group">
+        <label class="dm-radio-option">
+          <input
+            type="radio"
+            name="eventDayType"
+            [checked]="eventDayType() === 'single'"
+            (change)="setEventDayType('single')"
+          />
+          Single Day
+        </label>
+        <label class="dm-radio-option">
+          <input
+            type="radio"
+            name="eventDayType"
+            [checked]="eventDayType() === 'multiple'"
+            (change)="setEventDayType('multiple')"
+          />
+          Multiple Day
+        </label>
+      </div>
+
+      <div class="dm-form-row">
+        <div class="dm-form-col">
+          @if (eventDayType() === 'single') {
+            <label class="dm-form-label" for="dmEventDate">Date *</label>
+            <input
+              id="dmEventDate"
+              type="date"
+              class="dm-form-input"
+              [ngModel]="formEventDate()"
+              (ngModelChange)="formEventDate.set($event)"
+            />
+          } @else {
+            <span class="dm-form-label">Date Range *</span>
+            <div class="dm-date-range">
+              <input
+                type="date"
+                class="dm-form-input"
+                aria-label="Start date"
+                [ngModel]="formEventStartDate()"
+                (ngModelChange)="formEventStartDate.set($event)"
+              />
+              <input
+                type="date"
+                class="dm-form-input"
+                aria-label="End date"
+                [min]="formEventStartDate()"
+                [ngModel]="formEventEndDate()"
+                (ngModelChange)="formEventEndDate.set($event)"
+              />
+            </div>
+          }
+        </div>
+
+        <div class="dm-form-col">
+          <label class="dm-form-label" for="dmEventDocument">Upload CTM/XTM (if any)</label>
+          <input
+            id="dmEventDocument"
+            type="file"
+            class="dm-form-input"
+            (change)="onEventDocumentSelected($event)"
+          />
+        </div>
+      </div>
+
+      <label class="dm-form-label" for="dmEventName">Enter Event Name *</label>
+      <input
+        id="dmEventName"
+        type="text"
+        class="dm-form-input"
+        placeholder="Enter event name"
+        [ngModel]="formEventName()"
+        (ngModelChange)="formEventName.set($event)"
+      />
+
+      <div class="dm-form-note">
+        Note: Valid until 11:59 PM on the specified date.
+      </div>
+      <div class="dm-form-info">
+        Single-day events appear only on that day. Multi-day events are shown across all event days.
+      </div>
+
+      @if (eventFormError()) {
+        <div class="dm-form-error">{{ eventFormError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeEventModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingEvent()" (click)="saveEvent()">
+        {{ savingEvent() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showEventPreviewModal()) {
+  <app-modal size="lg" (closeModal)="closeEventPreview()">
+    <h3 class="dm-modal-title">{{ previewEvent()?.eventName }}</h3>
+
+    <div class="dm-modal-body">
+      <p>
+        <strong>Event Date:</strong>
+        {{ previewEvent()?.startDate }}
+        @if (previewEvent()?.endDate && previewEvent()?.endDate !== previewEvent()?.startDate) {
+          – {{ previewEvent()?.endDate }}
+        }
+      </p>
+      <p><strong>Uploaded Date:</strong> {{ previewEvent()?.uploadedDate }}</p>
+      @if (previewEvent()?.document) {
+        @if (isImageDocument(previewEvent()?.document ?? null)) {
+          <img [src]="previewEvent()?.document" alt="" class="dm-preview-image-full" />
+        }
+        <p>
+          <a [href]="previewEvent()?.document" target="_blank" rel="noopener">Open attached document</a>
+        </p>
+      } @else {
+        <p class="dm-preview-empty">No document uploaded.</p>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeEventPreview()">Close</app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showImagePreviewModal()) {
+  <app-modal size="lg" (closeModal)="closeImagePreview()">
+    <h3 class="dm-modal-title">{{ previewShipRole()?.title }} — Images</h3>
+
+    <div class="dm-preview-stack">
+      @for (image of previewShipRole()?.images; track image.id) {
+        <img [src]="image.image" alt="" class="dm-preview-image-full" />
+      } @empty {
+        <p class="dm-preview-empty">No images uploaded.</p>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeImagePreview()">Close</app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showShipRoleModal()) {
+  <app-modal size="md" (closeModal)="closeShipRoleModal()">
+    <h3 class="dm-modal-title">{{ editingShipRole() ? 'Update' : 'Add' }} Ship's Role</h3>
+
+    <div class="dm-modal-body">
+      <label class="dm-form-label" for="dmShipRoleTitle">Ship Role Title *</label>
+      <input
+        id="dmShipRoleTitle"
+        type="text"
+        class="dm-form-input"
+        [ngModel]="formShipRoleTitle()"
+        (ngModelChange)="formShipRoleTitle.set($event)"
+      />
+
+      <label class="dm-form-label" for="dmShipRoleDescription">Enter Description *</label>
+      <textarea
+        id="dmShipRoleDescription"
+        class="dm-form-input dm-form-textarea"
+        rows="4"
+        [ngModel]="formShipRoleDescription()"
+        (ngModelChange)="formShipRoleDescription.set($event)"
+      ></textarea>
+
+      <label class="dm-form-label" for="dmShipRoleImages">Upload Images (maximum {{ MAX_SHIP_ROLE_IMAGES }} image)</label>
+      <input
+        id="dmShipRoleImages"
+        type="file"
+        class="dm-form-input"
+        accept="image/*"
+        multiple
+        (change)="onShipRoleImagesSelected($event)"
+      />
+
+      @if (editingShipRole()?.images?.length && !formShipRoleImagePreviews().length) {
+        <div class="dm-image-preview-group">
+          <div class="dm-thumb-list">
+            @for (imgObj of editingShipRole()?.images; track imgObj.id) {
+              <div class="dm-thumb-item">
+                <img [src]="imgObj.image" alt="Uploaded Image" class="dm-image-preview" />
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (formShipRoleImagePreviews().length) {
+        <div class="dm-image-preview-group">
+          <label class="dm-form-label">New Image Previews (Will replace previous images)</label>
+          <div class="dm-thumb-list">
+            @for (preview of formShipRoleImagePreviews(); track $index) {
+              <div class="dm-thumb-item">
+                <img [src]="preview" alt="New Image Preview" class="dm-image-preview" />
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (shipRoleFormError()) {
+        <div class="dm-form-error">{{ shipRoleFormError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeShipRoleModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingShipRole()" (click)="saveShipRole()">
+        {{ savingShipRole() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showLoginImageModal()) {
+  <app-modal size="sm" (closeModal)="closeLoginImageModal()">
+    <h3 class="dm-modal-title">{{ editingLoginImage() ? 'Edit Image' : 'Add New Image' }}</h3>
+
+    <div class="dm-modal-body">
+      <label class="dm-form-label" for="dmLoginImageName">Name <span class="dm-required">*</span></label>
+      <input
+        id="dmLoginImageName"
+        type="text"
+        class="dm-form-input"
+        placeholder="Enter name"
+        [ngModel]="formLoginImageName()"
+        (ngModelChange)="formLoginImageName.set($event)"
+      />
+
+      <label class="dm-form-label" for="dmLoginImageDesignation">Designation</label>
+      <input
+        id="dmLoginImageDesignation"
+        type="text"
+        class="dm-form-input"
+        placeholder="Enter designation"
+        [ngModel]="formLoginImageDesignation()"
+        (ngModelChange)="formLoginImageDesignation.set($event)"
+      />
+
+      <label class="dm-form-label" for="dmLoginImage">Select Image{{ editingLoginImage() ? ' (leave blank to keep current)' : '' }}:</label>
+      <input
+        id="dmLoginImage"
+        type="file"
+        class="dm-form-input"
+        accept="image/*"
+        (change)="onLoginImageSelected($event)"
+      />
+
+      @if (loginImageFormError()) {
+        <div class="dm-form-error">{{ loginImageFormError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeLoginImageModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingLoginImage() || !formLoginImageName().trim()" (click)="saveLoginImage()">
+        {{ savingLoginImage() ? 'Saving…' : (editingLoginImage() ? 'Save' : 'Upload') }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showOfficerModal()) {
+  <app-modal size="lg" (closeModal)="closeOfficerModal()">
+    <h3 class="dm-modal-title">{{ editingOfficer() ? 'Edit' : 'Add' }} Ship Officers for scroller</h3>
+
+    <div class="dm-modal-body">
+      <div class="dm-form-grid-3">
+        <div>
+          <label class="dm-form-label" for="officerFullName">Full Name <span class="dm-required">*</span></label>
+          <input
+            id="officerFullName"
+            type="text"
+            class="dm-form-input"
+            placeholder=""
+            [ngModel]="officerFullName()"
+            (ngModelChange)="officerFullName.set($event)"
+          />
+        </div>
+
+        <div>
+          <label class="dm-form-label" for="officerDesignation">Designation <span class="dm-required">*</span></label>
+          <input
+            id="officerDesignation"
+            type="text"
+            class="dm-form-input"
+            placeholder=""
+            [ngModel]="officerDesignation()"
+            (ngModelChange)="officerDesignation.set($event)"
+          />
+        </div>
+
+        <div>
+          <label class="dm-form-label" for="officerRank">Rank <span class="dm-required">*</span></label>
+          <select
+            id="officerRank"
+            class="dm-form-input dm-form-select"
+            [ngModel]="officerRank()"
+            (ngModelChange)="officerRank.set($event)"
+          >
+            <option value="Select Rank" disabled selected hidden>Select Rank</option>
+            @for (rk of officerRankOptions(); track rk) {
+              <option [value]="rk">{{ rk }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="dm-form-grid-3">
+        <div>
+          <label class="dm-form-label" for="officerDateOfJoining">Date of Joining</label>
+          <input
+            id="officerDateOfJoining"
+            type="date"
+            class="dm-form-input"
+            placeholder="mm/dd/yyyy"
+            [ngModel]="officerDateOfJoining()"
+            (ngModelChange)="officerDateOfJoining.set($event)"
+          />
+        </div>
+      </div>
+
+      <div class="dm-form-group">
+        <label class="dm-form-label" for="officerImage">Upload Image</label>
+        <input
+          id="officerImage"
+          type="file"
+          class="dm-form-input"
+          accept="image/*"
+          (change)="onOfficerFileSelected($event)"
+        />
+        @if (officerImagePreview()) {
+          <div class="dm-image-preview-wrap">
+            <img [src]="officerImagePreview()" alt="Preview" class="dm-image-preview" (error)="$event.target.src='assets/images/demo_pic.jpg'" />
+          </div>
+        }
+      </div>
+
+      @if (officerFormError()) {
+        <div class="dm-form-error">{{ officerFormError() }}</div>
+      }
+    </div>
+
+    <div class="dm-modal-actions">
+      <app-button class="dm-btn-secondary" type="button" (click)="closeOfficerModal()">Cancel</app-button>
+      <app-button class="dm-btn-primary" type="button" [disabled]="savingOfficer()" (click)="saveOfficer()">
+        {{ savingOfficer() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (pendingDelete()) {
+<app-confirm-delete-modal (confirmed)="confirmDelete()" (cancelled)="cancelDelete()">
+</app-confirm-delete-modal>
+}

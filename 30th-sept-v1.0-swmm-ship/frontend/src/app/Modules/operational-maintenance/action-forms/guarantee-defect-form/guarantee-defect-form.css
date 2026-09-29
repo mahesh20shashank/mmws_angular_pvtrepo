@@ -1,0 +1,200 @@
+/* .form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem 2.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.textarea-width {
+  grid-column: span 2;
+}
+
+.error {
+  margin-top: 0.25rem;
+  color: #f82c36;
+  font-size: 0.75rem;
+}
+
+.text-center {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.save-btn {
+  height: 2.625rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.625rem;
+  cursor: pointer;
+  color: var(--text-primary);
+
+  background: rgba(34, 197, 94, 0.3);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+
+  backdrop-filter: blur(12px);
+} */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.required-star {
+  color: #ff5b5b;
+}
+
+.readonly-dotted {
+  border: 1.5px dotted var(--text-primary) !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* -------------------------------
+   ROW 1
+--------------------------------*/
+
+.field-equipmentName {
+  grid-column: span 1;
+}
+
+.field-equipmentNomenclature {
+  grid-column: span 1;
+}
+
+.field-equipmentSerialNo {
+  grid-column: span 1;
+}
+
+.field-onBoardLocation {
+  grid-column: span 1;
+}
+
+/* -------------------------------
+   ROW 2
+--------------------------------*/
+
+.field-defectDate {
+  grid-column: 1 / 2;
+}
+
+/* force next field to new row */
+.field-defectDescription {
+  grid-column: 1 / 3;
+}
+
+.field-causeOfDefect {
+  grid-column: 3 / 5;
+}
+
+/* -------------------------------
+   ROW 4
+--------------------------------*/
+
+.field-affectsOperationalAvailability {
+  grid-column: 1 / 3;
+}
+
+.field-hotWorkInvolved {
+  grid-column: 3 / 5;
+}
+
+/* -------------------------------
+   ROW 5
+--------------------------------*/
+
+.field-repairSlipAvailability {
+  grid-column: 1 / 3;
+}
+
+/* -------------------------------
+   ROW 6
+--------------------------------*/
+
+/* .field-completionDate {
+  grid-column: 1 / 2;
+}
+
+.field-repairDate {
+  grid-column: 2 / 3;
+} */
+
+/* -------------------------------
+   ROW 7
+--------------------------------*/
+
+.field-repairPlace {
+  grid-column: 1 / 4;
+}
+
+/* -------------------------------
+   ROW 8
+--------------------------------*/
+
+/* .field-attachPhotograph {
+  grid-column: 1 / 3;
+} */
+
+/* -------------------------------
+   VALIDATION
+--------------------------------*/
+
+.error {
+  margin-top: 4px;
+  color: #f82c36 !important;
+  font-size: 12px;
+}
+
+/* -------------------------------
+   BUTTON
+--------------------------------*/
+.save-button-container {
+  grid-column: 4 / 5;
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.cancel-btn,
+.save-btn {
+  height: 2.5rem;
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 0.0625rem solid var(--border-input, rgba(255, 255, 255, 0.2));
+  color: var(--text-primary);
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.save-btn {
+  background: #1a73e8;
+  border: 0.0625rem solid #1a73e8;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background: #1765cc;
+}

@@ -1,0 +1,188 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+.obs-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.obs-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+/* Criticality strength pills — same shape as the reference app (rounded pill, small caps
+   label), recoloured to this codebase's own severity palette (the same amber/orange/red ramp
+   already used for KPI tiles elsewhere, e.g. Ship Crew's "On Ty Duty"/"On Leave" tiles) instead
+   of the reference's own CSS-variable palette. `:host ::ng-deep` — the grid's criticality column
+   is rendered via a plain-function ag-grid cellRenderer (raw innerHTML, not Angular template
+   output), which never receives this component's view-encapsulation attribute, so a normally
+   scoped rule would silently never match it. */
+:host ::ng-deep .crit-flag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 11px;
+  border-radius: 20px;
+  white-space: nowrap;
+  color: #1f2a44;
+}
+
+:host ::ng-deep .crit-flag--low {
+  background-color: #f59e0b;
+}
+
+:host ::ng-deep .crit-flag--moderate {
+  background-color: #ffb454;
+}
+
+:host ::ng-deep .crit-flag--high {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.crit-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.crit-legend__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.crit-auto-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-left: 3px solid var(--accent-blue, #1d96e9);
+  background: rgba(29, 150, 233, 0.08);
+  color: var(--text-muted);
+  padding: 0.6rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  margin-bottom: 1rem;
+}
+
+.crit-auto-note--tight {
+  margin-bottom: 0.85rem;
+}
+
+.crit-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.crit-filters__field {
+  width: 200px;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  align-self: end;
+}
+
+.crit-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.crit-modal__title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.crit-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.15rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.crit-modal__close:hover {
+  color: var(--text-primary);
+}
+
+.crit-modal__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.crit-modal__summary strong {
+  color: var(--text-primary);
+}
+
+.crit-modal__table-wrap {
+  max-height: 340px;
+  overflow: auto;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+}
+
+.crit-modal__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.crit-modal__table th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.crit-modal__table td {
+  padding: 0.5rem 0.7rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.crit-modal__empty {
+  text-align: center;
+  color: var(--text-muted);
+}

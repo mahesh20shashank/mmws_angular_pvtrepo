@@ -1,0 +1,25 @@
+<app-help-guidance />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>Received For Approval</h3>
+    @if (canSendToIlms()) {
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!selectedRows().length || sending()"
+        (click)="sendToIlms()"
+      >
+        {{ sending() ? "Sending..." : "Send to ILMS - Multiple" }}
+      </app-button>
+    }
+  </div>
+
+  <app-data-grid
+    [rowData]="entries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+  />
+</div>

@@ -1,0 +1,185 @@
+:host {
+  display: block;
+}
+
+.rdp-panel {
+  position: fixed;
+  /* Falls back to a reasonable header height before the offset is measured (see
+     `trackHeaderOffset` in recorded-defects-panel.ts) — keeps the panel below the app
+     header instead of covering it. */
+  top: var(--rdp-top-offset, 72px);
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
+  border-left: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(11, 18, 32, 0.98);
+  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.45);
+  z-index: 50;
+}
+
+.rdp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rdp-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #ffffff);
+}
+
+.rdp-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.rdp-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.rdp-subtitle {
+  margin: -0.25rem 0 0;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.rdp-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+}
+
+.rdp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.rdp-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.rdp-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary, #ffffff);
+}
+
+.rdp-dart-no {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.rdp-status {
+  flex-shrink: 0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rdp-status--pending {
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  color: #fb923c;
+}
+
+.rdp-status--raised {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+.rdp-status--draft {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rdp-equipment {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary, #ffffff);
+  line-height: 1.4;
+}
+
+.rdp-detail-row {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.rdp-detail-label {
+  flex-shrink: 0;
+  width: 60px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.rdp-detail-value {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rdp-raise-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  border: none;
+  background: #0284c7;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rdp-raise-btn:hover {
+  background: #0369a1;
+}
+
+.rdp-move-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: #0284c7;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rdp-move-btn:hover {
+  background: #0369a1;
+}

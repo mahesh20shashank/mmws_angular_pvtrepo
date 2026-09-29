@@ -1,0 +1,274 @@
+<fieldset class="border border-slate-300 dark:border-slate-700 rounded-md p-4 mb-6 max-w-full">
+  <legend *ngIf="legend" class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-100">{{ legend }}</legend>
+
+  <!-- 3. Equipment Details -->
+  <div *ngIf="variant === 'grouped-key-value'" class="space-y-4">
+    <div
+      *ngFor="let group of keyValueGroups"
+      class="border border-slate-300 overflow-hidden"
+    >
+      <div class="bg-[#284f75] text-white text-center py-1.5 text-sm font-semibold print:[print-color-adjust:exact]">
+        {{ group.title }}
+      </div>
+
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr
+            *ngFor="let row of group.rows; let i = index"
+            
+            [class.border-b]="i < group.rows.length - 1"
+            [class.border-slate-200]="i < group.rows.length - 1"
+          >
+            <td
+              class="px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200"
+              [ngClass]="group.labelWidth || 'w-40'"
+            >
+              {{ row.label }}<span *ngIf="row.required" class="text-red-500"> *</span>
+            </td>
+            <td class="px-3 py-2">
+              <ng-container *ngIf="row.controlType === 'radio'; else keyValueInput">
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <label
+                    *ngFor="let opt of row.radioOptions"
+                    class="inline-flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="radio"
+                      [formControlName]="row.formControlName"
+                      [value]="opt.value"
+                      class="accent-blue-500"
+                    />
+                    <span class="text-sm">{{ opt.label }}</span>
+                  </label>
+                </div>
+              </ng-container>
+              <ng-template #keyValueInput>
+                <app-input
+                  [formControlName]="row.formControlName"
+                  [label]="''"
+                  [type]="row.inputType === 'number' ? 'number' : 'text'"
+                  [required]="row.required ?? false"
+                  [min]="row.min ?? null"
+                  [step]="row.step ?? null"
+                  [placeholder]="row.placeholder || ''"
+                ></app-input>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. Insulation Resistance -->
+  <div *ngIf="variant === 'serial-key-value'" class="border border-slate-300 overflow-hidden">
+    <table class="w-full border-collapse">
+      <tbody>
+        <tr
+          *ngFor="let row of serialRows; let i = index"
+          
+          [class.border-b]="i < serialRows.length - 1"
+          [class.border-slate-200]="i < serialRows.length - 1"
+        >
+          <td class="w-16 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200">{{ row.ser }}</td>
+          <td class="w-72 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200">{{ row.label }}<span *ngIf="row.required" class="text-red-500"> *</span></td>
+          <td class="px-3 py-2">
+            <app-input
+              [formControlName]="row.formControlName"
+              [type]="'number'"
+              [required]="true"
+              [min]="0"
+              [placeholder]="row.placeholder || ''"
+            ></app-input>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5–8. Matrix tables -->
+  <div
+    *ngIf="variant === 'matrix'"
+    class="etma-table-wrap border border-slate-300 overflow-hidden"
+  >
+    <table class="w-full border-collapse text-xs" [style.minWidth]="minWidth">
+      <thead>
+        <tr class="bg-[#284f75] text-white [&>th]:!text-white print:[print-color-adjust:exact]">
+          <th *ngFor="let col of columns" class="px-2 py-2 font-semibold">
+            {{ col.header }}
+            <span *ngIf="col.required" class="text-red-400">*</span>
+          </th>
+        </tr>
+      </thead>
+
+      <ng-container *ngFor="let section of matrixSections">
+        <tbody [formArrayName]="section.formArrayName">
+          <tr *ngIf="section.groupTitle">
+            <td [attr.colspan]="getColumnCount()" class="!bg-[#284f75] !text-white !text-center !font-semibold py-1.5 print:[print-color-adjust:exact]">
+              {{ section.groupTitle }}
+            </td>
+          </tr>
+
+          <tr
+            *ngFor="let row of section.rows; let i = index"
+            [formGroupName]="i"
+           
+          >
+            <td *ngFor="let col of columns" class="px-2 py-2" [ngSwitch]="col.cellType">
+              <span *ngSwitchCase="'static-ser'" class="font-semibold">{{ getStaticCellValue(row, col) }}</span>
+              <span *ngSwitchCase="'static-protection'">{{ getStaticCellValue(row, col) }}</span>
+              <span *ngSwitchCase="'static-meter'">{{ getStaticCellValue(row, col) }}</span>
+              <span *ngSwitchCase="'static-tripping'" class="text-slate-600">{{ getStaticCellValue(row, col) }}</span>
+
+              <span *ngSwitchCase="'static-observation'">
+                {{ getStaticCellValue(row, col) }}
+                <span *ngIf="asObservationRow(row).mark === 1" class="text-red-500"> *</span>
+                <span *ngIf="asObservationRow(row).mark === 2" class="text-red-500"> **</span>
+                <span *ngIf="asObservationRow(row).mark === 3" class="text-red-500"> ***</span>
+                <span *ngIf="!asObservationRow(row).mark" class="text-red-500"> *</span>
+              </span>
+
+              <app-calendar
+                *ngSwitchCase="'calendar'"
+                [formControlName]="col.formControl!"
+                class="w-full"
+              ></app-calendar>
+
+              <div *ngSwitchCase="'radio-yes-no'" class="flex gap-3">
+                <label class="inline-flex items-center gap-1">
+                  <input type="radio" [formControlName]="col.formControl!" value="Yes" class="accent-blue-500" />
+                  <span>Yes</span>
+                </label>
+                <label class="inline-flex items-center gap-1">
+                  <input type="radio" [formControlName]="col.formControl!" value="No" class="accent-blue-500" />
+                  <span>No</span>
+                </label>
+              </div>
+
+              <div *ngSwitchCase="'radio-sat-unsat'" class="flex gap-3">
+                <label class="inline-flex items-center gap-1">
+                  <input type="radio" [formControlName]="col.formControl!" value="Sat" class="accent-blue-500" />
+                  <span>Sat</span>
+                </label>
+                <label class="inline-flex items-center gap-1">
+                  <input type="radio" [formControlName]="col.formControl!" value="Unsat" class="accent-blue-500" />
+                  <span>Unsat</span>
+                </label>
+              </div>
+
+              <div *ngSwitchCase="'radio-ops-non-ops'" class="flex gap-3">
+                <label class="inline-flex items-center gap-1">
+                  <input type="radio" [formControlName]="col.formControl!" value="Ops" class="accent-blue-500" />
+                  <span>Ops</span>
+                </label>
+                <label class="inline-flex items-center gap-1">
+                  <input type="radio" [formControlName]="col.formControl!" value="Non Ops" class="accent-blue-500" />
+                  <span>Non Ops</span>
+                </label>
+              </div>
+
+              <app-input
+                *ngSwitchCase="'input-number'"
+                [formControlName]="col.formControl!"
+                [type]="'number'"
+                [min]="col.min ?? 0"
+                [placeholder]="col.placeholder || ''"
+              ></app-input>
+
+              <app-input
+                *ngSwitchCase="'input-text'"
+                [formControlName]="col.formControl!"
+                [placeholder]="col.placeholder || ''"
+              ></app-input>
+
+              <app-file-upload *ngSwitchCase="'file-upload'" [formControlName]="col.formControl!"></app-file-upload>
+
+              <!-- 7. DA Panel – Sat/Unsat or Yes/No per row -->
+              <ng-container *ngSwitchCase="'dynamic-status'">
+                <div *ngIf="asObservationRow(row).detailsType === 'yes_no'; else satUnsatStatus" class="flex gap-3">
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Yes" class="accent-blue-500" />
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="No" class="accent-blue-500" />
+                    <span>No</span>
+                  </label>
+                </div>
+                <ng-template #satUnsatStatus>
+                  <div class="flex gap-3">
+                    <label class="inline-flex items-center gap-1">
+                      <input type="radio" formControlName="status" value="Sat" class="accent-blue-500" />
+                      <span>Sat</span>
+                    </label>
+                    <label class="inline-flex items-center gap-1">
+                      <input type="radio" formControlName="status" value="Unsat" class="accent-blue-500" />
+                      <span>Unsat</span>
+                    </label>
+                  </div>
+                </ng-template>
+              </ng-container>
+
+              <!-- 8. Miscellaneous – details column variants -->
+              <ng-container *ngSwitchCase="'dynamic-details'">
+                <app-input
+                  *ngIf="asMiscRow(row).detailsType === 'text'"
+                  formControlName="details"
+                  placeholder="Enter details"
+                ></app-input>
+                <app-calendar
+                  *ngIf="asMiscRow(row).detailsType === 'date'"
+                  formControlName="details"
+                  class="w-full"
+                ></app-calendar>
+
+                <div *ngIf="asMiscRow(row).detailsType === 'sat_unsat'" class="flex gap-3">
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Sat" class="accent-blue-500" />
+                    <span>Sat</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Unsat" class="accent-blue-500" />
+                    <span>Unsat</span>
+                  </label>
+                </div>
+                <div *ngIf="asMiscRow(row).detailsType === 'yes_no'" class="flex gap-3">
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Yes" class="accent-blue-500" />
+                    <span>Yes</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="No" class="accent-blue-500" />
+                    <span>No</span>
+                  </label>
+                </div>
+                <div *ngIf="asMiscRow(row).detailsType === 'avl_na'" class="flex gap-3">
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Available" class="accent-blue-500" />
+                    <span>Available</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Not Available" class="accent-blue-500" />
+                    <span>Not Available</span>
+                  </label>
+                </div>
+                <div *ngIf="asMiscRow(row).detailsType === 'ops_non_ops'" class="flex gap-3">
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Ops" class="accent-blue-500" />
+                    <span>Ops</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1">
+                    <input type="radio" formControlName="details" value="Non Ops" class="accent-blue-500" />
+                    <span>Non Ops</span>
+                  </label>
+                </div>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </ng-container>
+    </table>
+  </div>
+
+  <ng-content></ng-content>
+</fieldset>

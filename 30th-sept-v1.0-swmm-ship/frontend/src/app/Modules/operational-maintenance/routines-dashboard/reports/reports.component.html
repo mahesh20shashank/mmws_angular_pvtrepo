@@ -1,0 +1,131 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="page-container glass-card">
+
+  <div class="controls-row">
+    <div class="left-controls">
+      <app-select-input
+        class="dept-select"
+        label="Sub Department"
+        [options]="subDeptOptions"
+        [(ngModel)]="selectedSubDept"
+        (ngModelChange)="onDeptChange()">
+      </app-select-input>
+    </div>
+    <div class="right-controls">
+      <app-button class="btn-outline" (click)="downloadPdf()">
+        
+        Download {{ tabLabels[activeTab] }} PDF
+      </app-button>
+      <app-button class="btn-outline" (click)="print()">
+       
+        Print
+      </app-button>
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <div class="panel panel-pending">
+
+      <div class="panel-header">
+        <div class="panel-title pending">
+          <i class="ti ti-clock-exclamation"></i>
+          @switch (activeTab) {
+          @case ('weekly') {
+          <span>Pending Weekly Sub Routines</span>
+          }
+
+          @case ('fortnightly') {
+          <span>Pending Fortnightly Inspections</span>
+          }
+
+          @case ('monthly') {
+          <span>Pending Monthly Verifications</span>
+          }
+
+          @case ('six-monthly') {
+          <span>Pending Semi-Annual Audits</span>
+          }
+
+          @case ('yearly') {
+          <span>Pending Annual Overhauls</span>
+          }
+
+          @default {
+          <span></span>
+          }
+          }
+        </div>
+        <span class="badge badge-red">{{ pendingCount }}</span>
+      </div>
+
+      <div class="search-row">
+        <div class="search-box">
+          <label for="reports-search-text" class="text-white/60 text-xs mb-1 block">Search</label>
+          <input
+            id="reports-search-text"
+            type="text"
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search matching fields..."
+            class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        <app-button class="btn-search" (click)="onSearchChange()">Search</app-button>
+      </div>
+
+      <div class="grid-wrap">
+        <app-data-grid
+          [rowData]="filteredPendingRows()"
+          [columnDefs]="pendingColumnDefs"
+          [pagination]="true"
+          [pageSize]="10"
+          [height]="'100%'"
+          [loading]="isLoading()"
+          [showCheckboxes]="true" (selectionChanged)="onSelectionChanged($event)">
+        </app-data-grid>
+      </div>
+
+    </div>
+
+    <div class="panel panel-completed">
+
+      <div class="panel-header">
+        <div class="panel-title completed">
+          <i class="ti ti-clock-check"></i>
+          <span>Archived/Completed Updates</span>
+        </div>
+        <span class="badge badge-green">
+          {{ selectedCompletedRows().length }}
+        </span>
+      </div>
+
+      <div class="completed-list">
+        @for(item of selectedCompletedRows(); track $index){
+          <div class="completed-card">
+            <div class="completed-card-left">
+              <div class="completed-check">
+                <i class="ti ti-check"></i>
+              </div>
+              <div class="completed-text">
+                <div class="completed-title">{{ item.routineNo }} - {{ item.subDept }}</div>
+                <div class="completed-desc">{{ item.description }}</div>
+                @if (item.dueDate) { <small class="completion-date">
+                  Due: {{ item.dueDate }}
+                </small> }
+              </div>
+            </div>
+            <span class="completed-badge">Completed</span>
+          </div>
+        }
+
+
+       @if (selectedCompletedRows().length === 0) { <div  class="no-data">
+          Select routines from the table to display here.
+       </div> }
+      </div>
+
+    </div>
+
+  </div>
+</div>

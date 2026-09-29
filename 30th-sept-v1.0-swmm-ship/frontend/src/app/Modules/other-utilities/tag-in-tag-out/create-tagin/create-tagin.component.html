@@ -1,0 +1,271 @@
+<div class="tag-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Header Bar -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <app-button type="button" (click)="goBack()"
+        class="p-1.5 rounded-lg tag-label hover:text-[var(--text-primary)] hover:bg-[var(--bg-icon-btn)] transition-colors cursor-pointer"
+        title="Back to TagIn List">
+        <app-icon name="arrow-left" [size]="20"></app-icon>
+      </app-button>
+      <div class="flex items-center gap-2">
+        <app-icon name="plus" [size]="20" class="text-sky-400"></app-icon>
+        <h1 class="text-lg font-bold tracking-wide uppercase tag-title">
+          ADD TAG IN
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  @if (errorMessage()) {
+  <div class="alert-error p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+    <app-icon name="alert-triangle" [size]="16" class="text-red-500 dark:text-red-400"></app-icon>
+    <span>{{ errorMessage() }}</span>
+  </div>
+  }
+  @if (successMessage()) {
+  <div class="alert-success p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+    <app-icon name="check-circle" [size]="16" class="text-emerald-500 dark:text-emerald-400"></app-icon>
+    <span>{{ successMessage() }}</span>
+  </div>
+  }
+
+  <!-- Main Form Card -->
+  <form (ngSubmit)="onSubmit()" class="glass-card p-6 rounded-[12px] space-y-8">
+
+    <!-- 1. TAG IN INFORMATION -->
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          TAG IN INFORMATION
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Date -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tagin-date" class="text-xs  tag-label">Date <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="tagin-date" type="date" [ngModel]="date()" (ngModelChange)="date.set($event)" name="date"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium"
+            required />
+        </div>
+
+        <!-- Tag Out Equipment Name Dropdown -->
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs tag-label">
+            Tag Out equipment name <span class="text-red-500 font-bold ml-0.5">*</span>
+          </label>
+          <app-select-input placeholder="Select Tag Out Equipment"
+            [options]="formattedTagoutOptions()" [ngModel]="selectedTagoutId()" (ngModelChange)="onTagoutSelect($event)"
+            name="selectedTagoutId" />
+        </div>
+
+        <!-- Tag In Description -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tagin-description" class="text-xs  tag-label">
+            Tag In Description <span class="text-red-500 font-bold ml-0.5">*</span>
+          </label>
+          <input id="tagin-description" type="text" [ngModel]="taginDescription()"
+            (ngModelChange)="taginDescription.set($event)" name="taginDescription" placeholder="Tag In Description"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium"
+            required />
+        </div>
+
+        <!-- Maintainer -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tagin-maintainer" class="text-xs  tag-label">
+            Maintainer <span class="text-red-500 font-bold ml-0.5">*</span>
+          </label>
+          <input id="tagin-maintainer" type="text" [ngModel]="maintainer()" (ngModelChange)="maintainer.set($event)"
+            name="maintainer" placeholder="Maintainer Name / Rank"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium"
+            required readonly />
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. TAGOUT DETAILS - SAFETY ISOLATION RECORD (DYNAMIC PANEL) -->
+    @if (selectedTagout(); as item) {
+    <div class="glass-card p-5 rounded-lg space-y-6 border border-sky-500/30 tag-detail-box">
+      <div class="border-b border-sky-500/20 pb-2 flex items-center justify-between">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-2">
+          <app-icon name="shield-check" [size]="16"></app-icon>
+          TAGOUT DETAILS - SAFETY ISOLATION RECORD ({{ item.tagout_number || 'TAG-' + item.id }})
+        </h2>
+      </div>
+
+      <!-- BASIC INFO -->
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase tag-detail-label tracking-wider">BASIC INFORMATION</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">DATE ISSUED</strong> <span class="tag-detail-value">{{
+              item.date || '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">SHIP</strong> <span class="tag-detail-value">{{
+              item.department_name || item.dept ||
+              'INS TABAR' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">DEPARTMENT</strong> <span class="tag-detail-value">{{
+              item.department || 'ENGINEERING'
+              }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">AFFECTED DEPARTMENTS</strong> <span
+              class="tag-detail-value">{{
+              item.departments_affected?.join(', ') || 'ENGINEERING' }}</span></div>
+        </div>
+      </div>
+
+      <!-- EQUIPMENT DETAILS -->
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase tag-detail-label tracking-wider">EQUIPMENT DETAILS</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">EQUIPMENT NO</strong> <span
+              class="tag-detail-value">{{ item.tagout_equipment_name ||
+              item.id }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">EQUIPMENT NAME</strong> <span
+              class="tag-detail-value">{{ getEquipmentDisplayName(item)
+              }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">NAME OF SUB SYSTEM</strong> <span
+              class="tag-detail-value">{{ item.name_of_subsystem ||
+              '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">NAME OF COMPONENT</strong> <span
+              class="tag-detail-value">{{ item.name_of_component ||
+              '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">SERIAL NO</strong> <span class="tag-detail-value">{{
+              item.serial_number_of_component ||
+              '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">PATTERN NO</strong> <span class="tag-detail-value">{{
+              item.pattern_number_of_component
+              || '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">WEIGHT (KG)</strong> <span class="tag-detail-value">{{
+              item.weight_of_component || '-'
+              }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">CONDITION</strong> <span class="tag-detail-value">{{
+              item.condition || 'Ops' }}</span></div>
+        </div>
+      </div>
+
+      <!-- SPECIAL INSTRUCTION & DESCRIPTION -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-3 tag-sub-box rounded">
+          <strong class="tag-detail-label block text-[10px] uppercase">SPECIAL INSTRUCTION</strong>
+          <p class="mt-1 tag-detail-value">{{ item.special_instructions || 'None' }}</p>
+        </div>
+        <div class="p-3 tag-sub-box rounded">
+          <strong class="tag-detail-label block text-[10px] uppercase">DESCRIPTION</strong>
+          <p class="mt-1 tag-detail-value">{{ item.tagout_description || '-' }}</p>
+        </div>
+      </div>
+
+      <!-- PERSONNEL & TIMELINE -->
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase tag-detail-label tracking-wider">PERSONNEL & TIMELINE</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">EXPECTED TAG IN</strong> <span
+              class="tag-detail-value">{{ item.expected_date_of_tagin
+              || '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">MAINTAINER</strong> <span class="tag-detail-value">{{
+              item.tagout_maintainer_name_rank
+              || '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">TAG OUT REASON</strong> <span
+              class="tag-detail-value">{{ item.tagout_reason || '-' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONDITIONAL REASON DETAILS -->
+      @if (item.tagout_reason === 'ty_loan_rtlapp') {
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase text-sky-400 tracking-wider">TY LOAN / RTLAPP DETAILS</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">TY LOAN SHIP</strong> <span
+              class="tag-detail-value">{{ item.ty_loan_ship || '-' }}</span>
+          </div>
+          <div><strong class="tag-detail-label block text-[10px]">AUTHORITY</strong> <span class="tag-detail-value">{{
+              item.ty_authority || '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">ITEM TAKEN BY</strong> <span
+              class="tag-detail-value">{{ item.ty_item_taken_by || '-'
+              }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">ADDITIONAL ITEMS</strong> <span
+              class="tag-detail-value">{{ item.ty_additional_items ||
+              '-' }}</span></div>
+        </div>
+      </div>
+      }
+      @if (item.tagout_reason === 'survey_and_demand') {
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase text-sky-400 tracking-wider">SURVEY & DEMAND DETAILS</span>
+        <div class="p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">AUTHORITY</strong> <span class="tag-detail-value">{{
+              item.survery_demand_authority ||
+              '-' }}</span></div>
+        </div>
+      </div>
+      }
+      @if (item.tagout_reason === 'repair_or_overhauling') {
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase text-sky-400 tracking-wider">REPAIR / OVERHAULING DETAILS</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">RA NUMBER</strong> <span class="tag-detail-value">{{
+              item.repair_ra_number || '-' }}</span>
+          </div>
+          <div><strong class="tag-detail-label block text-[10px]">ITEM TAKEN BY</strong> <span
+              class="tag-detail-value">{{ item.repair_item_taken_by ||
+              '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">OEM DETAILS</strong> <span class="tag-detail-value">{{
+              item.repair_landed_details ||
+              '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">ADDITIONAL ITEMS</strong> <span
+              class="tag-detail-value">{{
+              item.repair_additional_items || '-' }}</span></div>
+        </div>
+      </div>
+      }
+      @if (item.tagout_reason === 'aber_replacement') {
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase text-sky-400 tracking-wider">ABER REPLACEMENT DETAILS</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">AUTHORITY</strong> <span class="tag-detail-value">{{
+              item.aber_authority || '-' }}</span>
+          </div>
+          <div><strong class="tag-detail-label block text-[10px]">REPLACEMENT ITEM</strong> <span
+              class="tag-detail-value">{{ item.replacement_item ||
+              '-' }}</span></div>
+          <div><strong class="tag-detail-label block text-[10px]">ESTIMATED BOM ARRIVAL</strong> <span
+              class="tag-detail-value">{{
+              item.estimated_bom_arrival_date || '-' }}</span></div>
+        </div>
+      </div>
+      }
+      @if (item.tagout_reason === 'consumable_survey') {
+      <div class="space-y-2">
+        <span class="text-[11px] font-bold uppercase text-sky-400 tracking-wider">CONSUMABLE SURVEY DETAILS</span>
+        <div class="p-3 tag-sub-box rounded text-xs">
+          <div><strong class="tag-detail-label block text-[10px]">TAGOUT DESCRIPTION</strong> <span
+              class="tag-detail-value">{{ item.tagout_description || '-' }}</span></div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+
+
+    <!-- Submit Button Action -->
+    <div class="flex items-center justify-center gap-4 pt-4 border-t border-[var(--border-card)]">
+      <app-button type="submit" [disabled]="isSubmitting()" style="color: #ffffff !important;"
+        class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-bold py-2.5 px-6 rounded text-xs uppercase tracking-wider transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg">
+        @if (isSubmitting()) {
+        <app-icon name="loader" [size]="16" class="animate-spin text-white"></app-icon>
+        <span style="color: #ffffff !important;" class="!text-white">Submitting...</span>
+        } @else {
+        <span style="color: #ffffff !important;" class="!text-white">SUBMIT TAG IN</span>
+        }
+      </app-button>
+      <app-button type="button" (click)="goBack()"
+        class="tag-btn-cancel font-semibold py-2.5 px-5 rounded text-xs uppercase tracking-wider transition-colors cursor-pointer">
+        Cancel
+      </app-button>
+    </div>
+  </form>
+</div>

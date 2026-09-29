@@ -1,0 +1,89 @@
+<div class="dropdown-wrapper">
+  @if (label) {
+  <label for="dropdownSearch" class="input-label">
+    {{ formatLabel(label) }}
+    @if(required()){
+    <span class="required">*</span>
+    }
+  </label>
+  }
+  <div class="dropdown-trigger" [class.active]="isOpen()"  [class.disabled]="disabledState()" tabindex="0" role="combobox"
+    aria-haspopup="listbox" [attr.aria-expanded]="isOpen()" aria-controls="dropdownListbox" (click)="toggleDropdown()"
+    (keydown.enter)="toggleDropdown()" [class.readonly]="readonly()" [class.placeholder-error]="placeholderError()">
+
+    @if (isOpen() && !searchInMenu()) {
+    <input #searchBox id="dropdownSearch" type="text" class="search-input" [value]="searchText()"
+      [placeholder]="placeholder"   [disabled]="disabledState()" (input)="updateSearch($event)" (click)="$event.stopPropagation()" />
+    }
+
+    <!-- Developed with Understanding: with searchInMenu the trigger keeps showing the choice or
+         placeholder while open, and the typing happens in the search box inside the menu. -->
+    @if ((!isOpen() || searchInMenu()) && selectedLabel()) {
+    <span class="selected-value" [title]="selectedLabel()">
+      {{ selectedLabel() }}
+    </span>
+    }
+
+    @if ((!isOpen() || searchInMenu()) && !selectedLabel()) {
+    <span class="placeholder-text"  [class.required-placeholder]="required()">
+      {{ placeholder }}
+    </span>
+    }
+
+    <div class="dropdown-actions">
+
+      @if (!disabledState() &&  !readonly() && selectedLabel() && !isOpen()) {
+      <app-button type="button" class="clear-btn" (click)="clearSelection($event)" title="Clear selection"
+        aria-label="Clear selection">
+        ✕
+      </app-button>
+      }
+
+      <span class="arrow" [class.rotate]="isOpen()">
+        <app-icon name="chevron-down" [size]="18" variant="inherit" />
+      </span>
+
+    </div>
+
+  </div>
+
+  <div #menuRef class="dropdown-menu" [class.open]="isOpen()" id="dropdownListbox"
+    [style.top.px]="menuTop()" [style.left.px]="menuLeft()" [style.width.px]="menuWidth()">
+    <!-- Developed with Understanding: the opt-in visible search box (searchInMenu). It stays at
+         the top while the options scroll, filters through the same updateSearch and
+         filteredOptions as the inline input, and a click in it never closes the menu. -->
+    @if (isOpen() && searchInMenu()) {
+    <div class="menu-search">
+      <app-icon name="search" [size]="14" variant="inherit" />
+      <input #searchBox type="text" class="menu-search-input" [value]="searchText()"
+        [placeholder]="searchPlaceholder()" [attr.aria-label]="(label || 'Options') + ' search'"
+        aria-controls="dropdownListbox" [disabled]="disabledState()" (input)="updateSearch($event)"
+        (click)="$event.stopPropagation()" (keydown.escape)="handleCloseDropdown()" />
+    </div>
+    }
+    <!-- track $index, NOT option.value — several callers build options with `value` set to a
+         plain display NAME (e.g. compartment/equipment options: {label: c.name, value: c.name}),
+         and two genuinely different real-world records can share that same name (two separate
+         pieces of equipment both called "BLOWER MOTOR", two compartments both called "ECHO
+         SOUNDER"). Tracking by value then hands Angular's @for a duplicate key, which throws
+         NG0955 the moment such a list renders — a real, reproducible exception, not just a
+         console warning, that can disrupt change detection enough to trigger a spurious form
+         rebuild wiping out whatever the operator just picked. This list never reorders/animates
+         per item, so plain index tracking is safe here. -->
+    @for (option of filteredOptions(); track $index) {
+    <app-button type="button" class="dropdown-item" (click)="selectOption(option)">
+      {{ option.label }}
+    </app-button>
+    }
+
+    @if (filteredOptions().length === 0) {
+    <div class="empty-state">
+      @if (allowCustomValue() && searchText().trim()) {
+        Not in the list — "{{ searchText() }}" will be used as typed.
+      } @else {
+        No results found
+      }
+    </div>
+    }
+  </div>
+</div>

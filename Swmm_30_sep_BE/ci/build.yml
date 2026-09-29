@@ -1,0 +1,245 @@
+# =========================================================
+# SWMM Backend
+# =========================================================
+
+build_backend:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: build
+
+  before_script:
+    - |
+      echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+        --username "$HARBOR_USERNAME" \
+        --password-stdin
+
+  script:
+    - |
+      docker buildx build \
+        --no-cache \
+        --pull \
+        --load \
+        -t swmm-backend-dev:${CI_COMMIT_SHORT_SHA} \
+        swmm
+
+
+# =========================================================
+# User-Auth
+# =========================================================
+
+build_userauth:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: build
+
+  before_script:
+    - |
+      echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+        --username "$HARBOR_USERNAME" \
+        --password-stdin
+
+  script:
+    - |
+      docker buildx build \
+        --no-cache \
+        --pull \
+        --load \
+        -t swmm-userauth-dev:${CI_COMMIT_SHORT_SHA} \
+        userauth
+
+
+# =========================================================
+# Document Service
+# =========================================================
+
+build_document:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: build
+
+  before_script:
+    - |
+      echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+        --username "$HARBOR_USERNAME" \
+        --password-stdin
+
+  script:
+    - |
+      docker buildx build \
+        --no-cache \
+        --pull \
+        --load \
+        -t swmm-document-dev:${CI_COMMIT_SHORT_SHA} \
+        document
+
+
+# =========================================================
+# Push Images to Harbor
+# =========================================================
+
+push_harbor:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: push
+
+  needs:
+    - build_backend
+    - build_userauth
+    - build_document
+
+  before_script:
+    - |
+      echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+        --username "$HARBOR_USERNAME" \
+        --password-stdin
+
+  script:
+
+    # -------------------------------------------------------
+    # SWMM Backend
+    # Harbor: .../backend
+    # -------------------------------------------------------
+
+    - |
+      docker tag \
+        swmm-backend-dev:${CI_COMMIT_SHORT_SHA} \
+        "$HARBOR_URL/$HARBOR_PROJECT/backend:${CI_COMMIT_SHORT_SHA}"
+
+    - |
+      docker tag \
+        swmm-backend-dev:${CI_COMMIT_SHORT_SHA} \
+        "$HARBOR_URL/$HARBOR_PROJECT/backend:dev"
+
+    - |
+      docker push \
+        "$HARBOR_URL/$HARBOR_PROJECT/backend:${CI_COMMIT_SHORT_SHA}"
+
+    - |
+      docker push \
+        "$HARBOR_URL/$HARBOR_PROJECT/backend:dev"
+
+
+    # -------------------------------------------------------
+    # User-Auth Microservice
+    # Harbor: .../swmm-userauth-dev
+    # -------------------------------------------------------
+
+    - |
+      docker tag \
+        swmm-userauth-dev:${CI_COMMIT_SHORT_SHA} \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-userauth-dev:${CI_COMMIT_SHORT_SHA}"
+
+    - |
+      docker tag \
+        swmm-userauth-dev:${CI_COMMIT_SHORT_SHA} \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-userauth-dev:dev"
+
+    - |
+      docker push \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-userauth-dev:${CI_COMMIT_SHORT_SHA}"
+
+    - |
+      docker push \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-userauth-dev:dev"
+
+
+    # -------------------------------------------------------
+    # Document Service
+    # Harbor: .../swmm-document-dev
+    # -------------------------------------------------------
+
+    - |
+      docker tag \
+        swmm-document-dev:${CI_COMMIT_SHORT_SHA} \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-document-dev:${CI_COMMIT_SHORT_SHA}"
+
+    - |
+      docker tag \
+        swmm-document-dev:${CI_COMMIT_SHORT_SHA} \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-document-dev:dev"
+
+    - |
+      docker push \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-document-dev:${CI_COMMIT_SHORT_SHA}"
+
+    - |
+      docker push \
+        "$HARBOR_URL/$HARBOR_PROJECT/swmm-document-dev:dev"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# build_backend:
+#   extends:
+#     - .offline_deploy_job
+#     - .default_dev_rules
+
+#   stage: build
+
+#   before_script:
+#     - |
+#       echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+#         --username "$HARBOR_USERNAME" \
+#         --password-stdin
+
+#   script:
+#     - |
+#       docker buildx build \
+#       --no-cache \
+#       --pull \
+#       --load \
+#       -t swmm-backend:${CI_COMMIT_SHORT_SHA} \
+#       swmm
+
+# push_harbor:
+#   extends:
+#     - .offline_deploy_job
+#     - .default_dev_rules
+
+#   stage: push
+
+#   needs:
+#     - build_backend
+#     # - syft_backend_image
+
+#   before_script:
+#     - |
+#       echo "$HARBOR_PASSWORD" | docker login "$HARBOR_URL" \
+#         --username "$HARBOR_USERNAME" \
+#         --password-stdin
+
+#   script:
+#     - docker tag swmm-backend:${CI_COMMIT_SHORT_SHA} $HARBOR_URL/$HARBOR_PROJECT/backend:${CI_COMMIT_SHORT_SHA}
+#     - docker tag swmm-backend:${CI_COMMIT_SHORT_SHA} $HARBOR_URL/$HARBOR_PROJECT/backend:dev
+
+#     - docker push $HARBOR_URL/$HARBOR_PROJECT/backend:${CI_COMMIT_SHORT_SHA}
+#     - docker push $HARBOR_URL/$HARBOR_PROJECT/backend:dev

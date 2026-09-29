@@ -1,0 +1,50 @@
+<div class="mx-auto w-full max-w-[1800px] p-2 sm:p-3">
+  <div class="mb-3 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-card)]">
+
+    <!-- ✅ Filter bar sits above the table component -->
+    <div class="flex flex-wrap items-end gap-4 px-4 py-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+          Select Ship <span class="required-mark">*</span>
+        </label>
+        <select [(ngModel)]="selectedShip"
+          class="h-11 min-w-[200px] rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-3 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#61C2FF]">
+          <option value="" disabled>Select Ship</option>
+          <option *ngFor="let ship of shipList" [value]="ship.id">{{ ship.name }}</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+          Select Section <span class="required-mark">*</span>
+        </label>
+        <select [(ngModel)]="selectedSection"
+          class="h-11 min-w-[200px] rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-3 text-[13px] text-[var(--text-primary)] outline-none focus:border-[#61C2FF]">
+          <option value="" disabled>Select Section</option>
+          <option *ngFor="let section of sectionList" [value]="section.id">{{ section.name }}</option>
+        </select>
+      </div>
+
+      <button (click)="onSearch()"
+        class="inline-flex h-11 items-center rounded-lg border border-[#4f8fd5] bg-[#1069AB] px-5 text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#195d95] active:translate-y-px">
+        Search
+      </button>
+    </div>
+  </div>
+
+  <app-paginate-table
+    [showHeaderSection]="true"
+    [title]="activeTab.label"
+    [showSearch]="true"
+    [rowData]="rowData"
+    (addButtonClick)="triggerOilModal($event.key, $event?.rowData, 'Oil Details')"
+    [addButtons]="addButtons"
+    [url]="'/master/equipments/'"
+    [columnDefs]="columnOilData"
+    [showPagination]="true"
+  ></app-paginate-table>
+</div>
+
+
+<app-add-form *ngIf="showCreateLayout" [open]="showCreateLayout" [formConfig]="formConfigForNewDetails"
+  (onSubmit)="handleSubmit($event)" (onOpenChange)="showCreateLayout = $event" [fromTitle]="title"></app-add-form>

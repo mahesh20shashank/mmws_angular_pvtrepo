@@ -1,0 +1,242 @@
+<div class="manage-hotwork-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Main Section Container using Shared PanelCard Component -->
+  <app-panel-card title="Manage Hotwork" icon="search">
+    <!-- Toolbar Header in panelActions slot -->
+    <div panelActions class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+      <app-export-toolbar [disabled]="filteredRecords().length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+
+      <div class="flex items-center gap-2 text-xs font-medium mh-search-label">
+        <label for="global-manage-search">Search:</label>
+        <input id="global-manage-search" type="text" [ngModel]="globalSearch()"
+          (ngModelChange)="globalSearch.set($event)"
+          placeholder="Search..."
+          class="mh-search-input text-xs px-3 py-1.5 rounded-lg border focus:outline-none focus:border-blue-500 w-36 sm:w-44" />
+      </div>
+    </div>
+
+    <!-- Shared Component AG-Grid DataGrid Component -->
+    <app-data-grid [rowData]="filteredRecords()" [columnDefs]="manageColumnDefs" [pageSize]="pageSize()"
+      [autoHeight]="true" (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+  </app-panel-card>
+</div>
+
+<app-detail-drawer [open]="!!selectedRecord()" [wide]="true" [titleMode]="true" label="Hotwork Information"
+  subtitle="Complete Details & Safety Information" iconName="flame" iconColor="#38bdf8" (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  @let api = item.rawApiItem;
+  <div class="space-y-5 p-2 text-sm text-[var(--text-primary)]">
+
+    <!-- Top Section: 2 Columns for GENERAL INFORMATION & SAFETY INFORMATION -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+      <!-- GENERAL INFORMATION -->
+      <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-3">
+        <div
+          class="flex items-center gap-2 text-sky-500 dark:text-sky-400 font-bold text-xs uppercase tracking-wider pb-2 border-b border-[var(--border-primary)]">
+          <app-icon name="info" [size]="16" color="#38bdf8" />
+          <span>General Information</span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Ship:</span><span
+              class="text-[var(--text-primary)] font-semibold">{{ api?.ship_name || '-' }}</span></div>
+          <div class="flex justify-between items-center"><span
+              class="text-[var(--text-muted)] font-medium">Department:</span><span class="text-[var(--text-primary)] font-semibold">{{
+              api?.department_name || 'ENGINEERING' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Section:</span><span
+              class="text-[var(--text-primary)] font-semibold">{{ api?.section_name || 'ASW' }}</span></div>
+          <div class="flex justify-between items-center">
+            <span class="text-[var(--text-muted)] font-medium">Hotwork Code:</span>
+            <span
+              class="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/30 font-bold text-[11px]">{{
+              item.hotworkCode }}</span>
+          </div>
+          <div class="flex justify-between items-start"><span
+              class="text-[var(--text-muted)] font-medium shrink-0">Remarks:</span><span
+              class="text-[var(--text-primary)] text-right max-w-[240px]">{{ api?.remarks || item.descriptionOfHotwork }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Previous
+              Code:</span><span class="text-[var(--text-primary)]">{{ api?.previous_code || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Type:</span><span
+              class="text-[var(--text-primary)] font-semibold uppercase">{{ item.hotworkType }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Date:</span><span
+              class="text-[var(--text-primary)] font-semibold">{{ item.dateOfHotwork }}</span></div>
+          <div class="flex justify-between items-start"><span
+              class="text-[var(--text-muted)] font-medium shrink-0">Location:</span><span
+              class="text-[var(--text-primary)] text-right max-w-[240px]">{{ item.locationAdjacent }}</span></div>
+          <div class="flex justify-between items-start"><span class="text-[var(--text-muted)] font-medium shrink-0">Adjacent
+              Compartments:</span><span class="text-[var(--text-primary)] text-right max-w-[240px]">{{ api?.adjacent_compartments ||
+              item.locationAdjacent }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Sentries
+              Required:</span><span class="text-[var(--text-primary)] font-bold">{{ api?.sentries_required ? 'YES' : 'NO' }}</span>
+          </div>
+          <div class="flex justify-between items-start"><span class="text-[var(--text-muted)] font-medium shrink-0">Sentry
+              Names:</span><span class="text-[var(--text-primary)] text-right max-w-[240px]">{{ api?.sentry_names || 'AB Karan Nair, Ldg
+              Smn Rohan Kapoor' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Departmental
+              Officer:</span><span class="text-[var(--text-primary)]">{{ api?.departmental_officer || 'Lt Cdr Vikram Rao' }}</span>
+          </div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">D.L
+              Number:</span><span class="text-[var(--text-primary)]">{{ api?.dl_number || ('DL/' + item.hotworkCode) }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Name Of Supervision
+              Welder:</span><span class="text-[var(--text-primary)]">{{ api?.welder_name || 'Welder Suresh' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Manager Of Concern
+              Center:</span><span class="text-[var(--text-primary)]">{{ api?.manager_of_concern_center || 'PO Karan Nair' }}</span>
+          </div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Hotwork
+              Incharge:</span><span class="text-[var(--text-primary)]">{{ item.departmentSection }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Officer of the
+              Day:</span><span class="text-[var(--text-primary)]">{{ api?.officer_of_day || item.departmentSection }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Night
+              Work:</span><span class="text-[var(--text-primary)] font-bold">{{ api?.night_work ? 'YES' : 'NO' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)] font-medium">Is
+              Holiday:</span><span class="text-[var(--text-primary)] font-bold">{{ api?.is_holiday ? 'YES' : 'NO' }}</span></div>
+        </div>
+      </div>
+
+      <!-- SAFETY INFORMATION -->
+      <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-lime-500/30 space-y-3">
+        <div
+          class="flex items-center gap-2 text-lime-600 dark:text-lime-400 font-bold text-xs uppercase tracking-wider pb-2 border-b border-[var(--border-primary)]">
+          <app-icon name="shield-check" [size]="16" color="#84cc16" />
+          <span>Safety Information</span>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Fire Sensor
+              Operational:</span><span class="text-[var(--text-primary)] font-medium">{{ api?.fire_sensor || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Flood Sensor
+              Operational:</span><span class="text-[var(--text-primary)] font-medium">{{ api?.flood_sensor || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Correct Supply Point:</span><span
+              class="text-[var(--text-primary)] font-medium">{{ api?.correct_supply_point || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">ICCP Switched Off:</span><span
+              class="text-[var(--text-primary)] font-medium">{{ api?.iccp_switched_off || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">All GTs Earthed:</span><span
+              class="text-[var(--text-primary)] font-medium">{{ api?.all_gts_earthed || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Adequate Fire Extinguisher (CO2 &
+              AFFF):</span><span class="text-[var(--text-primary)] font-medium">{{ api?.adequate_fire_extinguisher || 'N/A' }}</span>
+          </div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Fire Hose & Bucket of Water Rigged
+              Up:</span><span class="text-[var(--text-primary)] font-medium">{{ api?.fire_hose_rigged || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Firemain Pressure > 8
+              Bars:</span><span class="text-[var(--text-primary)] font-medium">{{ api?.firemain_pressure || 'N/A' }}</span></div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Free from lagging & Burning
+              Material:</span><span class="text-[var(--text-primary)] font-medium">{{ api?.free_from_burning_material || 'N/A' }}</span>
+          </div>
+          <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Adequate Knowledge of Hotwork
+              Sentry:</span><span class="text-[var(--text-primary)] font-medium">{{ api?.adequate_knowledge || 'N/A' }}</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CREATED INFORMATION -->
+    <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-2">
+      <div
+        class="flex items-center gap-2 text-sky-500 dark:text-sky-400 font-bold text-xs uppercase tracking-wider pb-2 border-b border-[var(--border-primary)]">
+        <app-icon name="user" [size]="16" color="#38bdf8" />
+        <span>Created Information</span>
+      </div>
+      <div class="flex items-center justify-between text-xs pt-1">
+        <span class="text-[var(--text-muted)] font-medium">Created By:</span>
+        <span class="text-[var(--text-primary)] font-semibold">{{ item.parentCode }}</span>
+      </div>
+    </div>
+
+    <!-- APPROVAL STATUS -->
+    <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border-primary)]">
+        <div class="flex items-center gap-2 text-sky-500 dark:text-sky-400 font-bold text-xs uppercase tracking-wider">
+          <app-icon name="check-circle" [size]="16" color="#38bdf8" />
+          <span>Approval Status</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-[var(--text-muted)]">Progress Status:</span>
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold text-white uppercase bg-rose-500 shadow-sm">
+            {{ item.currentStatus }}
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-3 rounded-lg bg-[var(--bg-comm-btn,#1e2431)] border border-[var(--border-input)] space-y-1">
+          <div class="flex justify-between font-medium">
+            <span class="text-[var(--text-muted)]">Department Officer:</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-bold">Approved</span>
+          </div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved On:</span><span
+              class="text-[var(--text-primary)]">{{ item.dateOfHotwork }} 11:50</span></div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved By:</span><span
+              class="text-[var(--text-primary)]">{{ item.parentCode }}</span></div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-[var(--bg-comm-btn,#1e2431)] border border-[var(--border-input)] space-y-1">
+          <div class="flex justify-between font-medium">
+            <span class="text-[var(--text-muted)]">Electrical Officer:</span>
+            <span class="text-amber-600 dark:text-amber-400 font-bold">Pending</span>
+          </div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved On:</span><span
+              class="text-[var(--text-primary)]">N/A</span></div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved By:</span><span
+              class="text-[var(--text-primary)]">N/A</span></div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-[var(--bg-comm-btn,#1e2431)] border border-[var(--border-input)] space-y-1">
+          <div class="flex justify-between font-medium">
+            <span class="text-[var(--text-muted)]">Engineering Officer:</span>
+            <span class="text-amber-600 dark:text-amber-400 font-bold">Pending</span>
+          </div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved On:</span><span
+              class="text-[var(--text-primary)]">N/A</span></div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved By:</span><span
+              class="text-[var(--text-primary)]">N/A</span></div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-[var(--bg-comm-btn,#1e2431)] border border-[var(--border-input)] space-y-1">
+          <div class="flex justify-between font-medium">
+            <span class="text-[var(--text-muted)]">NBCDO:</span>
+            <span class="text-amber-600 dark:text-amber-400 font-bold">Pending</span>
+          </div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved On:</span><span
+              class="text-[var(--text-primary)]">N/A</span></div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved By:</span><span
+              class="text-[var(--text-primary)]">N/A</span></div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-[var(--bg-comm-btn,#1e2431)] border border-[var(--border-input)] space-y-1">
+          <div class="flex justify-between font-medium">
+            <span class="text-[var(--text-muted)]">Officer of the Day:</span>
+            <span class="text-amber-600 dark:text-amber-400 font-bold">Pending</span>
+          </div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved On:</span><span
+              class="text-[var(--text-primary)]">{{ item.dateOfHotwork }} 11:50</span></div>
+          <div class="flex justify-between text-[11px]"><span class="text-[var(--text-muted)]">Approved By:</span><span
+              class="text-[var(--text-primary)]">{{ item.parentCode }}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS ACTIVITY -->
+    <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-3">
+      <div
+        class="flex items-center gap-2 text-sky-500 dark:text-sky-400 font-bold text-xs uppercase tracking-wider pb-2 border-b border-[var(--border-primary)]">
+        <app-icon name="clock" [size]="16" color="#38bdf8" />
+        <span>Progress Activity</span>
+      </div>
+      <div class="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-comm-btn,#1e2431)] text-xs border border-[var(--border-input)]">
+        <div
+          class="w-7 h-7 rounded-full bg-[var(--bg-input)] flex items-center justify-center shrink-0 border border-[var(--border-input)]">
+          <app-icon name="info" [size]="15" color="#38bdf8" />
+        </div>
+        <div>
+          <div class="font-bold text-[var(--text-primary)]">No Activity Yet</div>
+          <div class="text-[var(--text-muted)] text-[11px]">Hotwork has not been started</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  }
+</app-detail-drawer>

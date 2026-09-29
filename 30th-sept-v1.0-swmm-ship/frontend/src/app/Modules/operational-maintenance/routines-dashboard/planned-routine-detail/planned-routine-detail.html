@@ -1,0 +1,65 @@
+<app-master-card cardTitle="Search Results - Planned Routines to be Undertaken">
+
+  <div class="flex items-center flex-wrap" style="gap: 0.875rem; margin-bottom: 0.875rem;">
+    <app-button
+      type="button"
+      (click)="goBack()"
+      class="h-10 px-4 rounded-xl bg-white/10 border border-white/10 text-white hover:bg-white/20 transition">
+      Back
+    </app-button>
+
+    <app-button
+      type="button"
+      (click)="raiseFuss()"
+      class="h-10 px-4 rounded-xl bg-[#1D96E9] border border-[#1D96E9] text-white hover:opacity-90 transition">
+      Raise FUSS
+    </app-button>
+  </div>
+
+  <div class="flex items-center flex-wrap" style="gap: 0.875rem; margin-bottom: 0.875rem;">
+    <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+      Maintop No - {{ maintopNo() }}
+    </div>
+    <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+      Routine Name - {{ routineName() }}
+    </div>
+    <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+      Equipment Name - {{ equipmentName() }}
+    </div>
+  </div>
+
+  <!-- Status Legend -->
+  <div class="flex items-center flex-wrap" style="gap: 0.875rem; margin-bottom: 0.875rem;">
+    <div class="flex items-center" style="gap: 0.875rem;">
+      <app-icon name="flag" [size]="16" class="text-[#FF4D4F]" />
+      <span class="text-sm text-white/90">Routines Due</span>
+    </div>
+
+    <div class="flex items-center" style="gap: 0.875rem;">
+      <app-icon name="flag" [size]="16" class="text-[#FFB020]" />
+      <span class="text-sm text-white/90">
+        Routines due in less than 500 running hours OR 3 months.
+      </span>
+    </div>
+
+    <div class="flex items-center" style="gap: 0.875rem;">
+      <app-icon name="flag" [size]="16" class="text-[#667085]" />
+      <span class="text-sm text-white/90">
+        Routines due in 500 and 1000 running hours OR 3 to 6 months.
+      </span>
+    </div>
+  </div>
+
+  <div class="fuss-grid-wrapper w-full">
+    <app-data-grid
+      [columnDefs]="columnDefs"
+      [rowData]="rows()"
+      [pageSize]="10"
+      [loading]="isLoading()"
+      [height]="'440px'"
+      [showCheckboxes]="true"
+      (selectionChanged)="onSelectionChanged($event)">
+    </app-data-grid>
+  </div>
+
+</app-master-card>

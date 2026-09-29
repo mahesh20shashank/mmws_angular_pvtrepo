@@ -1,0 +1,81 @@
+<app-button type="button" (click)="closeModal.emit()" aria-label="Close"
+  class="text-slate-400 hover:text-white transition-colors cursor-pointer absolute right-4 top-2.5 sm:right-6 sm:top-3 z-10 flex items-center justify-center">
+            <app-icon name="x" [size]="20" [strokeWidth]="2" />
+
+</app-button>
+<div class="info-modal">
+  <!-- Tab navigation ;-->
+  <div class="tabs-nav">
+    @for(tab of tabs; track $index){
+
+      <app-button  (click)="setTab(tab.id)" class="tab-btn"
+        [class.tab-active]="activeTab() === tab.id"> {{ tab.label }}
+        @if (activeTab() === tab.id) { <span  class="tab-indicator"> </span> }
+      </app-button>
+    }
+  </div>
+
+  <!-- Tab content -->
+  <div class="flex-1 flex flex-col text-[12px] leading-relaxed text-gray-300 pr-2">
+
+    <!-- Tab 1: About SWMM -->
+    @if (activeTab() === 'one') { <div  class="space-y-3.5 animate-fadeIn">
+
+      <p class="about-swmm-text">
+        SWMM is an integrated naval maintenance and workflow management platform that centralizes ship operations,
+        defect tracking, logistics, surveys, and maintenance activities into one unified system. It provides real-time
+        visibility into operational readiness, material status, and maintenance workflows, helping naval teams reduce
+        manual coordination, improve accountability, and make faster operational decisions. By connecting maintenance,
+        logistics, demands, receipts, and workflow processes through a single interface, SWMM enables more efficient and
+        streamlined fleet management.
+      </p>
+      <div class="capability-header">
+        <h3 class="capability-title"> Key Capabilities
+          <span class="capability-divider"></span>
+        </h3>
+      </div>
+      <div class="ship-stats-grid">
+        @for (stat of capabilities; track stat.title) {
+        <div class="stat-card" [ngClass]="'stat-' + stat.theme">
+          <div class="stat-content">
+            <h3 class="stat-value"> <app-icon [name]="stat.icon" class="stat-icon" variant="inherit" /> {{ stat.title }}
+            </h3>
+            <p class="stat-label"> {{ stat.description }}</p>
+          </div>
+        </div>
+        }
+      </div>
+    </div> }
+
+    <!-- Tab 2: System Integration Tree -->
+    @if (activeTab() === 'two') { <div  class="animate-fadeIn flex-1 flex items-center justify-center">
+      <div class="flex items-center justify-center p-2 rounded-xl w-full">
+        <img src="assests/images/info-tree.png" alt="System Integration Tree"
+          class="w-full max-h-[440px] object-contain drop-shadow-[0_15px_40px_rgba(0,0,0,0.6)]" />
+      </div>
+    </div> }
+
+    <!-- Tab 3: Why SWMM is Useful? -->
+    @if (activeTab() === 'three') { <div  class="benefits-section animate-fadeIn">
+      <div class="benefits-header">
+        <p class="benefits-subtitle">
+          SWMM streamlines ship management by integrating all operations into a
+          single, unified system.
+        </p>
+      </div>
+      <div class="benefits-grid">
+        @for(benefit of benefits; track $index){
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <app-icon [name]="benefit.icon" [size]="24" variant="inherit" class="benefit-icon-svg" />
+            </div>
+            <h4 class="benefit-title"> {{ benefit.title }} </h4>
+            <p class="benefit-description"> {{ benefit.description }} </p>
+          </div>
+        }
+
+      </div>
+    </div> }
+
+  </div>
+</div>

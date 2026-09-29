@@ -1,0 +1,20 @@
+<app-form-card-dialog [open]="true" [title]="title" [subtitle]="subtitle" [submitLabel]="editMode ? 'Update' : 'Save'"
+    cancelLabel="Cancel" (close)="closeDialog()" (submit)="handleSave()" (cancel)="closeDialog()"
+    [showFooter]="viewMode ? false : true" [loading]="loading">
+
+    <form [formGroup]="form">
+        <div class="grid grid-cols-2 gap-4">    
+            <app-select formControlName="command_id" [label]="'Command'" [options]="commandOptions" placeholder="--Select--" class="w-full" [required]="true">
+            </app-select>
+            <app-select formControlName="classofship_id" [label]="'Class'" [options]="classOptions" placeholder="--Select--" class="w-full" [required]="true">
+            </app-select>
+            <app-input label="Deck number" formControlName="deck_no" [required]="true">
+            </app-input>
+            <div class="flex items-center gap-2 pt-4">
+                <input type="checkbox" formControlName="active" id="active_deck" class="h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+                <label for="active_deck" class="text-sm font-semibold text-white cursor-pointer select-none">Active</label>
+            </div>
+        </div>
+    </form>
+
+</app-form-card-dialog>

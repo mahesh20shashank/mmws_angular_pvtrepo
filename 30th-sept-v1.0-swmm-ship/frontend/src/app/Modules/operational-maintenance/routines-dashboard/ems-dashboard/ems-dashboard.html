@@ -1,0 +1,228 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="grid grid-cols-5 gap-3 mb-4">
+  @for (tile of tiles; track tile.label) {
+  <app-kpi-card [title]="tile.label" [count]="tile.count" [iconName]="tile.icon" [iconBg]="tile.iconBg"
+    [iconColor]="tile.iconColor" [accentColor]="tile.iconColor" iconPosition="right" cardHeight="10rem"
+    [showTimelineTab]="false" [showTrends]="false" [showViewMore]="true" viewMoreLabel="View more →"
+    (detailClick)="goTo(tile.route)" />
+  }
+</div>
+
+@if (loading) {
+<app-master-card cardTitle="" cardHeight="8rem">
+  <div class="flex items-center justify-center h-full text-white/50 text-sm">Loading routines dashboard…</div>
+</app-master-card>
+}
+
+@for (section of sections; track section.id) {
+<app-master-card [cardTitle]="section.name" cardHeight="auto">
+  <!-- <div card-header-actions class="text-white/40 text-xs italic flex items-center gap-1 whitespace-nowrap">
+      <app-icon name="info" [size]="12" variant="warning" />
+      Click on bar below to update RHSI
+    </div> -->
+
+  <div class="overflow-x-auto">
+    <div class="section-bars" [style.--section-width.px]="section.bars.length * 70">
+      <!-- (barClick) intentionally disabled — the Equipment Management modal it opened
+             isn't needed right now. Re-add `(barClick)="onBarClick(section, $event)"` to
+             bring it back. -->
+      <app-bar-chart [data]="section.bars" [heightPx]="260" [showValues]="true" [mutedColor]="'#7a7a7a'"
+        (barClick)="onBarClick(section, $event)">
+      </app-bar-chart>
+    </div>
+  </div>
+</app-master-card>
+}
+
+@if (selectedBar && selectedSection) {
+<app-modal size="xl" title="Equipment Management" (closeModal)="closeEquipmentModal()">
+  <div class="flex flex-col gap-5 min-w-[560px]">
+    <div class="flex gap-2 border-b border-white/10 pb-1">
+      <app-button type="button" class="px-3 h-9 rounded-t-lg text-sm font-medium"
+        [class]="activeTab === 'status' ? 'bg-[#1D96E9] text-white' : 'bg-white/5 text-white/60'"
+        (click)="setTab('status')">
+        Equipment ON / OFF
+      </app-button>
+      <app-button type="button" class="px-3 h-9 rounded-t-lg text-sm font-medium"
+        [class]="activeTab === 'monthly' ? 'bg-[#1D96E9] text-white' : 'bg-white/5 text-white/60'"
+        (click)="setTab('monthly')">
+        Monthly Book Closing Assistant
+      </app-button>
+      <app-button type="button" class="px-3 h-9 rounded-t-lg text-sm font-medium"
+        [class]="activeTab === 'cumulative' ? 'bg-[#1D96E9] text-white' : 'bg-white/5 text-white/60'"
+        (click)="setTab('cumulative')">
+        Cumulative Entry
+      </app-button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <span class="text-white/60 text-xs block mb-1">Sub Department Name</span>
+        <span class="text-white text-sm font-medium">{{ selectedSection.name }}</span>
+      </div>
+      <div>
+        <span class="text-white/60 text-xs block mb-1">Equipment Name</span>
+        <span class="text-white text-sm font-medium">{{ selectedBar.label }}</span>
+      </div>
+    </div>
+
+    <!-- Tab 1: Equipment ON / OFF -->
+    @if (activeTab === 'status') {
+    <form [formGroup]="statusForm" class="flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <span class="text-white/60 text-xs block mb-1">Change Status To</span>
+          <span class="text-sm font-semibold" [class]="isEquipmentActive ? 'text-red-400' : 'text-green-400'">
+            {{ isEquipmentActive ? 'OFF' : 'ON' }}
+          </span>
+        </div>
+        <app-select-input label="Select EQ Location" [required]="true" [options]="locationOptions"
+          formControlName="started_at_location">
+        </app-select-input>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        @if (!isEquipmentActive) {
+        <app-input-field label="EQ Start Time" type="datetime-local" [required]="true" formControlName="start_timedate">
+        </app-input-field>
+        } @else {
+        <app-input-field label="EQ Stop Time" type="datetime-local" [required]="true" formControlName="stop_timedate">
+        </app-input-field>
+        }
+      </div>
+
+      <div class="flex justify-end gap-3 mt-2">
+        <app-button type="button" (click)="closeEquipmentModal()"
+          customClass="px-4 h-10 rounded-lg bg-white/10 text-white text-sm">
+          Close
+        </app-button>
+        <app-button type="button" (click)="saveStatusChange()" [disabled]="savingStatus"
+          customClass="px-4 h-10 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center justify-center gap-2">
+          @if (savingStatus) {
+          <app-icon name="loader" [spin]="true" [size]="16" variant="inherit" class="text-white"></app-icon>
+          <span>Updating...</span>
+          } @else {
+          <span>Update Status</span>
+          }
+        </app-button>
+      </div>
+    </form>
+    }
+
+    <!-- Tab 2: Monthly Book Closing Assistant -->
+    @if (activeTab === 'monthly') {
+    <div class="flex flex-col gap-4">
+      <div class="text-xs text-[#1D96E9] bg-[#1D96E9]/10 rounded-lg px-3 py-2">
+        Using the "Monthly Book Closing Assistant" makes managing SRAR R/H effortless.
+      </div>
+
+      <form [formGroup]="monthlyRowForm" class="grid grid-cols-4 gap-3 items-end">
+        <app-select-input label="Location" [required]="true" [options]="locationOptions" formControlName="location">
+        </app-select-input>
+        <app-input-field label="Start Time" type="datetime-local" [required]="true" formControlName="start_timedate">
+        </app-input-field>
+        <app-input-field label="Stop Time" type="datetime-local" [required]="true" formControlName="stop_timedate">
+        </app-input-field>
+        <app-button type="button" size="sm" (click)="addMonthlyRow()" (keydown.enter)="addMonthlyRow()"
+          (keydown.space)="addMonthlyRow()"
+          customClass="h-10 rounded-lg bg-[#1D96E9] text-white text-sm justify-center">
+          + Add Row
+        </app-button>
+      </form>
+
+      <app-data-grid [rowData]="monthlyRows" [columnDefs]="monthlyRowsColumnDefs" [pagination]="true" [pageSize]="10"
+        height="280px">
+      </app-data-grid>
+
+
+      <div>
+        <div class="flex items-center justify-between gap-3 mt-2 flex-wrap">
+          <div>
+            @if (monthlyTotalHours) {
+            <div
+              class="inline-flex items-center gap-2 bg-[#1D96E9]/10 text-[#1D96E9] border border-[#1D96E9]/25 rounded-xl px-4 py-2 shadow-sm text-sm">
+              <app-icon name="calculator" [size]="18" class="text-[#1D96E9]"></app-icon>
+              <span class="font-bold text-[#1D96E9]">Total RHSI Calculation: <span class="font-normal">{{
+                  monthlyTotalHours }} Hrs</span></span>
+            </div>
+            }
+          </div>
+
+          <div class="flex items-center gap-3">
+            <app-button type="button" (click)="closeEquipmentModal()"
+              customClass="px-4 h-10 rounded-lg bg-white/10 text-white text-sm">
+              Close
+            </app-button>
+            @if (!monthlyTotalHours) {
+            <app-button type="button" (click)="calculateRhsi()"
+              customClass="px-4 h-10 rounded-lg bg-yellow-500 text-black text-sm font-medium">
+              Calculate RHSI
+            </app-button>
+            }
+            @if (monthlyTotalHours) {
+            <app-button type="button" (click)="saveMonthlyEntries()" [disabled]="savingMonthly"
+              customClass="px-4 h-10 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center justify-center gap-2">
+              @if (savingMonthly) {
+              <app-icon name="loader" [spin]="true" [size]="16" variant="inherit" class="text-white"></app-icon>
+              <span>Saving...</span>
+              } @else {
+              <span>Save All Entries</span>
+              }
+            </app-button>
+            }
+          </div>
+        </div>
+
+        <span class="text-white/60 text-xs block mb-1 mt-3">Recent History (Last 5 Entries)</span>
+        <app-data-grid [rowData]="recentHistory" [columnDefs]="recentHistoryColumnDefs" [pagination]="false"
+          [loading]="loadingHistory" height="240px">
+        </app-data-grid>
+      </div>
+
+
+
+
+
+    </div>
+    }
+
+    <!-- Tab 3: Cumulative Entry -->
+    @if (activeTab === 'cumulative') {
+    <form [formGroup]="cumulativeForm" class="flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-4">
+        <app-input-field label="Cumulative Running Hours" type="text" placeholder="HH:MM" [required]="true"
+          formControlName="rhsi" (blur)="onRhsiBlur()">
+        </app-input-field>
+        <app-input-field label="Updated Upto" type="date" [required]="true" formControlName="rhsi_updated_until">
+        </app-input-field>
+      </div>
+
+      <div class="text-xs bg-yellow-500/10 text-yellow-400 rounded-lg px-3 py-2 flex flex-col gap-1">
+        <span>⚠ Note: Equipment must be OFF to enter cumulative hours.</span>
+        <span>
+          Best Practice: Direct Cumulative Entry is not recommended for routine logging. Utilizing the
+          "Monthly Book Closing Assistant" makes SRAR R/H management effortless and ensures accurate history keeping.
+        </span>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-2">
+        <app-button type="button" (click)="closeEquipmentModal()"
+          customClass="px-4 h-10 rounded-lg bg-white/10 text-white text-sm">
+          Close
+        </app-button>
+        <app-button type="button" (click)="saveCumulativeHours()" [disabled]="savingCumulative"
+          customClass="px-4 h-10 rounded-lg bg-teal-500 text-white text-sm flex items-center justify-center gap-2">
+          @if (savingCumulative) {
+          <app-icon name="loader" [spin]="true" [size]="16" variant="inherit" class="text-white"></app-icon>
+          <span>Saving...</span>
+          } @else {
+          <span>Save Cumulative Hour</span>
+          }
+        </app-button>
+      </div>
+    </form>
+    }
+  </div>
+</app-modal>
+}

@@ -1,0 +1,158 @@
+<div class="parameters-value-page pt-glass-table mx-auto w-full max-w-[1800px] p-2 sm:p-3">
+  <app-paginate-table
+    [showHeaderSection]="true"
+    title="Parameter Values"
+    description="Manage equipment parameter value configurations"
+    [showSearch]="true"
+    [rowData]="rowData"
+    (addButtonClick)="triggerOilModal($event.key, $event?.rowData, 'Parameter Value')"
+    [addButtons]="addButtons"
+    [url]="'/master/parameter-values/'"
+    [columnDefs]="columnOilData"
+    [showPagination]="true"
+  />
+</div>
+
+<app-reusable-delete-dialog
+  *ngIf="showDeleteDialog"
+  [open]="showDeleteDialog"
+  [name]="deleteName"
+  entityType="Parameter Value"
+  [loading]="deleteLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteDialog()"
+/>
+
+<div
+  *ngIf="showCreateLayout"
+  class="parameters-value-modal__backdrop fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
+  (click)="onBackdropClick()"
+>
+  <div class="parameters-value-modal__panel w-full max-w-7xl" (click)="$event.stopPropagation()">
+    <app-form-card
+      class="block max-h-[calc(100dvh-1.5rem)] overflow-hidden"
+      [title]="isEditMode ? 'Edit Parameter Value' : 'Add Parameter Value'"
+      smallTitle="Configure ship, equipment, trial type and parameter tables"
+    >
+      <div class="max-h-[calc(100dvh-10rem)] min-h-0 space-y-4 overflow-auto p-3 sm:p-4">
+        <!-- Configuration -->
+        <section class="parameters-value-section">
+          <header class="parameters-value-section__header">
+            <h3 class="parameters-value-section__title">
+              <span class="parameters-value-section__accent" aria-hidden="true"></span>
+              Configuration
+            </h3>
+          </header>
+          <div class="parameters-value-section__body">
+            <app-add-form
+              #addForm
+              [open]="showCreateLayout"
+              [isShowPopup]="false"
+              [formConfig]="formConfigForNewDetails"
+              [formData]="editFormData"
+              [isEditMode]="isEditMode"
+              [fromTitle]="title"
+              (onFieldChange)="onFormSelectChange($event)"
+              (onSelectChange)="onFormSelectChange($event)"
+            />
+          </div>
+        </section>
+
+        <!-- Parameter tables -->
+        <section class="parameters-value-section">
+          <header class="parameters-value-section__header">
+            <h3 class="parameters-value-section__title">
+              <span class="parameters-value-section__accent" aria-hidden="true"></span>
+              Parameter Tables
+            </h3>
+            <button
+              type="button"
+              class="pt-glass-btn-primary inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wide transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              [disabled]="!parameterTableColumns.length"
+              (click)="addParameterTable()"
+            >
+              <span aria-hidden="true">+</span>
+              Add Table
+            </button>
+          </header>
+
+          <div class="parameters-value-section__body">
+            <div *ngIf="!parameterTableColumns.length" class="parameters-value-empty">
+              <div class="parameters-value-empty__icon" aria-hidden="true">
+                <i class="fa fa-table"></i>
+              </div>
+
+              <ng-container *ngIf="!hasTrialTypeSelected">
+                <p class="parameters-value-empty__title">No parameter table yet</p>
+                <p class="parameters-value-empty__hint">
+                  Select a supported trial type above to load the column structure, then use Add Table to create parameter value rows.
+                </p>
+              </ng-container>
+
+              <ng-container *ngIf="hasTrialTypeSelected && unmappedTrialTypeLabel">
+                <p class="parameters-value-empty__title">No template for "{{ unmappedTrialTypeLabel }}"</p>
+                <p class="parameters-value-empty__hint">
+                  This trial type does not have a parameter table configuration in the system.
+                  Please choose one of the supported trial types:
+                  {{ supportedTrialTypesText }}.
+                </p>
+              </ng-container>
+            </div>
+
+            <ng-container *ngIf="parameterTableColumns.length">
+              <article
+                *ngFor="let table of parameterTables; let i = index"
+                class="parameters-value-table-card"
+              >
+                <div class="mb-3 flex flex-wrap items-center gap-2">
+                  <span class="parameters-value-table-card__badge">{{ i + 1 }}</span>
+                  <span class="text-xs font-semibold uppercase tracking-wider pt-glass-text-muted">
+                    Table {{ i + 1 }}
+                  </span>
+                </div>
+
+                <app-input
+                  label="Table Name"
+                  key="table_name"
+                  [(ngModel)]="table.table_name"
+                />
+
+                <app-reusable-input-table
+                  class="mt-4 block"
+                  [data]="table.data"
+                  [columns]="parameterTableColumns"
+                  [enableRowActions]="true"
+                />
+              </article>
+            </ng-container>
+          </div>
+        </section>
+      </div>
+
+      <div formFooter class="flex items-center justify-end gap-3">
+        <button
+          type="button"
+          class="pt-glass-table__control inline-flex h-9 min-w-[7rem] items-center justify-center gap-2 rounded-lg px-5 text-xs font-semibold uppercase tracking-wide transition active:scale-[0.98]"
+          (click)="closeAddPopup()"
+        >
+          <i class="fa fa-times text-[11px]" aria-hidden="true"></i>
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="pt-glass-btn-primary inline-flex h-9 min-w-[7rem] items-center justify-center gap-2 rounded-lg px-5 text-xs font-semibold uppercase tracking-wide shadow-lg transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          [disabled]="isLoading"
+          (click)="submitFromCard()"
+        >
+          <span
+            *ngIf="isLoading"
+            class="h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-white border-t-transparent"
+            aria-hidden="true"
+          ></span>
+          <i *ngIf="!isLoading" class="fa fa-save text-[11px]" aria-hidden="true"></i>
+          Save
+        </button>
+      </div>
+    </app-form-card>
+  </div>
+</div>

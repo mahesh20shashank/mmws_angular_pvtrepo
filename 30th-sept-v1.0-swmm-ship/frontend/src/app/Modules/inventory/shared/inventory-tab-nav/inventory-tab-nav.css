@@ -1,0 +1,221 @@
+.inv-header {
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  margin-top: 12px;
+  position: relative;
+  z-index: 20;
+}
+
+.inv-header__top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.5rem;
+  flex-wrap: wrap;
+}
+
+.inv-header__title-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.inv-header__title-row .sub {
+  font-weight: 500;
+  font-size: 14px;
+  color: rgb(74, 168, 255);
+}
+
+.inv-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  flex-wrap: wrap;
+  height: 40px;
+}
+
+.inv-tabs__tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  flex-wrap: wrap;
+}
+
+.inv-tabs__item {
+  position: relative;
+}
+
+.inv-tabs__btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.inv-tabs__btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.inv-tabs__btn--active {
+  color: var(--accent-blue, #1d96e9);
+  background: var(--accent-glow, rgba(29, 150, 233, 0.15));
+}
+
+.inv-tabs__btn--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--accent-blue, #1d96e9);
+  box-shadow: 0 0 10px rgba(29, 150, 233, 0.6);
+}
+
+.inv-tabs__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 260px;
+  background: var(--bg-dropdown, #131c23);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 0.35rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.inv-tabs__dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+
+.inv-tabs__dropdown-item:hover {
+  background: var(--bg-card);
+}
+
+.inv-tabs__dropdown-item--active {
+  color: var(--accent-blue, #1d96e9);
+  font-weight: 600;
+}
+
+.inv-tabs__dropdown-item-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inv-tabs__submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  min-width: 220px;
+  background: var(--bg-dropdown, #131c23);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 0.35rem;
+  margin-left: 4px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Right-side icon cluster (moved here from the global app header) ── */
+
+.inv-tabs__icons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.inv-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--indicator-bg, rgba(34, 197, 94, 0.12));
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.inv-indicator__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.inv-icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--bg-icon-btn, rgba(255, 255, 255, 0.06));
+  color: var(--toggle-icon-color, var(--text-primary));
+  transition: background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.inv-icon-btn:hover {
+  background: rgba(97, 194, 255, 0.18);
+  transform: scale(1.08);
+}
+
+.inv-icon-btn--active {
+  background: rgba(29, 150, 233, 0.12);
+  box-shadow: 0 0 12px rgba(29, 150, 233, 0.18);
+}
+
+.inv-icon-btn__badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.inv-theme-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}

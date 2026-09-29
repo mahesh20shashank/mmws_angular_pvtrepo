@@ -1,0 +1,163 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+
+    <div class="w-full max-w-2xl rounded-2xl shadow-2xl sfd-modal-bg glass-card">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-primary px-4 py-2 model-border-header">
+            <div class="flex items-center gap-3">
+             <app-icon name="house"  [size]="22" [strokeWidth]="2"></app-icon>                <h2 class="text-lg font-semibold">
+                    {{ isEditMode() ? 'Edit' : 'Add' }} Compartment
+                </h2>
+            </div>
+
+            <app-button (click)="closeModal()"
+                class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input hover:">
+                ✕
+            </app-button>
+
+        </div>
+
+        <!-- Body -->
+        <form action="" [formGroup]="form" (ngSubmit)="save()">
+            <div class="space-y-5 p-6 model-border-header">
+
+                <!-- Compartment Name -->
+                <div class="form-field">
+                    <label for="compartment" class="form-label">
+                        Compartment Name
+                        <span class="required">*</span>
+                    </label>
+                    <input id="compartment" type="text" formControlName="compartmentName" class="form-control required-placeholder"
+                        placeholder="Enter compartment name" [class.error]="showError('compartmentName')" />
+
+                        @if (showError('compartmentName')) {
+                        <p class="form-error">
+                            @if (f['compartmentName'].errors?.['required']) {
+                            Compartment name is required.
+                            }
+
+                                @if (f['compartmentName'].errors?.['minlength']) {
+                                Compartment name must be at least 2 characters long.
+                                }
+
+                                @if (f['compartmentName'].errors?.['maxlength']) {
+                                Compartment name cannot exceed 32 characters.
+                                }
+
+                            @if (f['compartmentName'].errors?.['pattern']) {
+                            Special characters are not allowed.
+                            }
+                        </p>
+                        }
+
+                </div>
+
+                <!-- Deck -->
+                <div class="form-field">
+                    <app-select-input [required]="true" [error]="showError('deck')" formControlName="deck" [options]="deckOptions()" label="Deck" placeholder="Select Deck">
+                    </app-select-input>
+
+                    @if (showError('deck')) {
+                    <p class="form-error">
+                        Deck is required.
+                    </p>
+                    }
+                </div>
+                <!-- Frame + Location -->
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="form-field">
+                        <label for="station" class="form-label">
+                            Frame Station
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="flex items-center gap-3">
+                            <div>
+                                <input id="station"
+
+                                 placeholder="Frame from"
+                                 min="1"
+                                 step="1"
+                                  type="number"
+                                   formControlName="frameFrom"
+                                    [class.error]="showError('frameFrom')"
+                                      class="form-control required-placeholder" />
+
+                                @if (showError('frameFrom')) {
+                                <p class="form-error">
+                                    @if (f['frameFrom'].errors?.['required']) {
+                                    From is required.
+                                    }
+
+                                    @if (f['frameFrom'].errors?.['min']) {
+                                    0 is not allowed. Value must be greater than 0.
+                                    }
+                                </p>
+                                }
+                            </div>
+                            <span class="text-muted">—</span>
+
+                            <div>
+                                <input id="" placeholder="Frame to"
+                                 [class.error]="showError('frameTo')"
+                                 type="number"
+                                [min]="1"
+                                 step="1"
+                                 formControlName="frameTo"
+                                 class="form-control required-placeholder"
+
+                                  />
+                                @if (showError('frameTo')) {
+
+                                @if (f['frameTo'].errors?.['required']) {
+                                <p class="form-error">To is required.</p>
+                                }
+
+                                @if (f['frameTo'].errors?.['min']) {
+                                <p class="form-error">Value must be greater than 0.</p>
+                                }
+
+
+                                }
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <app-select-input [required]="true" [error]="showError('location')"  formControlName="location" [options]="locations()" label="Location" placeholder="Location">
+
+                        </app-select-input>
+
+                        @if (showError('location')) {
+                        <p class="form-error">
+                            Location is required.
+                        </p>
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-3 px-6 py-4">
+            <app-button (click)="closeModal()"
+                class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input">
+                Cancel
+            </app-button>
+
+            <app-button [disabled]="isLoading()" (click)="save()" class="submit-btn">
+                {{isLoading()? "Saving.." : "Save" }}
+            </app-button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,149 @@
+<div class="nav-visibility-view">
+
+  <app-help-guidance [bodyHtml]="helpHtml" />
+  <!-- Search & Action Toolbar -->
+  <div class="nav-toolbar glass-card">
+    <div class="toolbar-search">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input type="text" placeholder="Filter navbar items or categories..." [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)" class="form-control-custom">
+      </div>
+
+      <div class="filter-dropdown">
+        <select [ngModel]="selectedCategory()" (ngModelChange)="selectedCategory.set($event)"
+          class="form-select-custom">
+          <option value="ALL">All Categories</option>
+          @for (cat of categories(); track cat) {
+          <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="toolbar-actions">
+      <app-button class="btn-secondary-custom" (click)="selectAllVisible()">Select All</app-button>
+      <app-button class="btn-secondary-custom" (click)="clearAllVisible()">Clear All</app-button>
+      <app-button class="btn-secondary-custom" (click)="resetMatrix()">Reset Defaults</app-button>
+      <app-button class="btn-primary-custom" [disabled]="isSaving()" (click)="openSaveConfirm()">
+        @if (isSaving()) {
+        <span class="btn-spinner"></span>
+        }
+        Save Visibility
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Visibility Matrix Data Table -->
+  <div class="table-card glass-card">
+    <div class="table-scroll-wrapper">
+      <table class="nav-matrix-table">
+        <thead>
+          <tr>
+            <th class="sticky-col-header">
+              Navbar Item
+              <span class="col-sub">System Navigation Menu</span>
+            </th>
+            @for (role of visibleRoles(); track role.id) {
+            <th class="role-header-cell clickable-col" (click)="toggleColumn(role.id)"
+              title="Click to toggle all for {{ role.role_name }}">
+              <div class="role-name">{{ role.role_name }}</div>
+              <span class="col-toggle-hint">Toggle All</span>
+            </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @if (isLoading()) {
+          <tr>
+            <td [attr.colspan]="visibleRoles().length + 1" class="empty-cell">
+              <div class="empty-state">
+                <span class="btn-spinner mb-2"></span>
+                <span>Loading navigation visibility matrix...</span>
+              </div>
+            </td>
+          </tr>
+          } @else {
+          @for (item of filteredNavItems(); track item.key) {
+          <tr class="matrix-row">
+            <td class="sticky-col-cell">
+              <div class="item-info">
+                <div class="item-label-row">
+                  <span class="item-label">{{ item.label }}</span>
+                  <app-button class="btn-row-toggle" (click)="toggleRow(item.key)"
+                    title="Toggle all roles for {{ item.label }}">
+                    Toggle Row
+                  </app-button>
+                </div>
+                <span class="item-cat-badge">{{ item.category }} • <code>{{ item.key }}</code></span>
+              </div>
+            </td>
+            @for (role of visibleRoles(); track role.id) {
+            <td class="checkbox-cell" [class.cell-locked]="isLocked(item.key, role.id)">
+              <label class="checkbox-wrapper" [class.cursor-not-allowed]="isLocked(item.key, role.id)">
+                <input type="checkbox"
+                  [checked]="isVisible(item.key, role.id)"
+                  [disabled]="isLocked(item.key, role.id)"
+                  (change)="toggleCell(item.key, role.id)"
+                  class="custom-checkbox"
+                  [class.locked-checkbox]="isLocked(item.key, role.id)"
+                  [title]="isLocked(item.key, role.id) ? 'Locked for ' + role.role_name : (isVisible(item.key, role.id) ? 'Visible for ' + role.role_name : 'Hidden for ' + role.role_name)">
+                @if (isLocked(item.key, role.id)) {
+                <span class="locked-icon-badge" title="Locked for {{ role.role_name }}">🔒</span>
+                }
+              </label>
+            </td>
+            }
+          </tr>
+          } @empty {
+          <tr>
+            <td [attr.colspan]="visibleRoles().length + 1" class="empty-cell">
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m15 9-6 6" />
+                  <path d="m9 9 6 6" />
+                </svg>
+                <span>No navbar items match your search or category filter.</span>
+              </div>
+            </td>
+          </tr>
+          }
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal: Save Navigation Visibility Confirmation -->
+@if(showConfirmModal()){
+<app-modal title="Confirm Save Navigation Visibility" size="md" (closeModal)="closeSaveConfirm()">
+  <div class="space-y-4">
+    <p class="text-[15px] font-medium text-[var(--text-primary)]">
+      Are you sure you want to update navigation visibility rules for all roles?
+    </p>
+    <div class="p-3 text-xs rounded-lg border border-sky-500/20 bg-sky-500/10 text-[var(--text-muted)]">
+      Changes will apply immediately for all affected users when they refresh their page.
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-[var(--border-primary)]">
+    <app-button type="button" variant="outline" (click)="closeSaveConfirm()">
+      Cancel
+    </app-button>
+    <app-button type="button" variant="success" [disabled]="isSaving()" (click)="confirmSaveVisibility()">
+      @if(isSaving()){
+      <span class="btn-spinner me-1"></span>
+      }
+      Yes, Save Visibility
+    </app-button>
+  </div>
+</app-modal>
+}

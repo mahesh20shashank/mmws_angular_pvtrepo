@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  height: 100%;
+}
+.h-screen{
+  background: var(--bg-primary);
+  background-position: center top;
+  transition: background 0.4s ease;
+}
+.scrollablecontent{
+  border-radius: 12px; padding-right: 11px;
+  /* Not overflow-x: auto — pages that are genuinely too wide (e.g. a data grid with many
+     columns) handle their own horizontal scroll internally (see data-grid.css). Letting
+     this outer container scroll horizontally too just surfaces trivial 1-2px sub-pixel
+     overflow as a page-wide scrollbar on pages that have nothing to actually scroll to. */
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-scrollbar-thumb) transparent;
+}
+
+.scrollablecontent::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollablecontent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollablecontent::-webkit-scrollbar-thumb {
+  background: var(--bg-scrollbar-thumb);
+  border-radius: 99px;
+}

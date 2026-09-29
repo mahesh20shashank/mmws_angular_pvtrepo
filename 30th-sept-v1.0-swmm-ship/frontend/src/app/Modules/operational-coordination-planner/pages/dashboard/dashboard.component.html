@@ -1,0 +1,201 @@
+<div class="oc-dashboard">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <div class="oc-dashboard__kpis">
+    <app-kpi-card
+      title="Total No. Of Maintops"
+      [count]="totalMaintops()"
+      iconName="clipboard-list"
+      iconBg="rgba(74, 168, 255, 0.16)"
+      iconColor="#4AA8FF"
+      accentColor="#4AA8FF"
+      iconPosition="right"
+      cardHeight="100%"
+      [showTimelineTab]="false"
+      [showTrends]="false"
+      [showViewMore]="true"
+      viewMoreLabel="View more →"
+      (detailClick)="goToSearchRoutines()"
+    />
+
+    <app-kpi-card
+      title="Total Outstanding DARTs"
+      [count]="totalOutstandingDarts()"
+      iconName="settings"
+      iconBg="rgba(251, 191, 36, 0.16)"
+      iconColor="#fbbf24"
+      accentColor="#fbbf24"
+      iconPosition="right"
+      cardHeight="100%"
+      [showTimelineTab]="false"
+      [showTrends]="false"
+      [showViewMore]="true"
+      viewMoreLabel="View more →"
+      (detailClick)="goToOpenDarts()"
+    />
+
+    <app-kpi-card
+      title="Total Issued Spares"
+      [count]="totalIssuedSpares()"
+      iconName="wrench"
+      iconBg="rgba(248, 113, 113, 0.16)"
+      iconColor="#f87171"
+      accentColor="#f87171"
+      iconPosition="right"
+      cardHeight="100%"
+      [showTimelineTab]="false"
+      [showTrends]="false"
+      [showViewMore]="true"
+      viewMoreLabel="View more →"
+      (detailClick)="goToIssuedSpares()"
+    />
+
+    <app-kpi-card
+      title="Total Planned Routines"
+      [count]="totalPlannedRoutines()"
+      iconName="wrench"
+      iconBg="rgba(148, 163, 184, 0.16)"
+      iconColor="#94a3b8"
+      accentColor="#94a3b8"
+      iconPosition="right"
+      cardHeight="100%"
+      [showTimelineTab]="false"
+      [showTrends]="false"
+      [showViewMore]="true"
+      viewMoreLabel="View more →"
+      (detailClick)="goToPlannedRoutines()"
+    />
+
+    <app-kpi-card
+      title="Due For Receipt"
+      [count]="dueForReceipt()"
+      iconName="file-text"
+      iconBg="rgba(192, 132, 252, 0.16)"
+      iconColor="#c084fc"
+      accentColor="#c084fc"
+      iconPosition="right"
+      cardHeight="100%"
+      [showTimelineTab]="false"
+      [showTrends]="false"
+      [showViewMore]="true"
+      viewMoreLabel="View more →"
+      (detailClick)="goToDueForReceipt()"
+    />
+
+    <app-kpi-card
+      title="PTS Survey Pending"
+      [count]="ptsSurveyPending()"
+      iconName="clipboard-check"
+      iconBg="rgba(20, 184, 166, 0.16)"
+      iconColor="#14b8a6"
+      accentColor="#14b8a6"
+      iconPosition="right"
+      cardHeight="100%"
+      [showTimelineTab]="false"
+      [showTrends]="false"
+      [showViewMore]="true"
+      viewMoreLabel="View more →"
+      (detailClick)="goToPtsSurveyPending()"
+    />
+  </div>
+
+  <div class="oc-dashboard__row">
+    <div class="oc-dashboard__alerts glass-card">
+      <h3 class="oc-dashboard__card-title oc-dashboard__card-title--plain">
+        <app-icon name="bell" [size]="16" variant="inherit" /> System Alerts
+      </h3>
+
+      <div class="oc-alert-tabs">
+        @for (tab of alertTabs; track tab.key) {
+          <app-button
+            type="button"
+            class="oc-alert-tab"
+            [class.oc-alert-tab--active]="activeAlertTab() === tab.key"
+            (click)="setAlertTab(tab.key)"
+          >
+            {{ tab.label }}
+          </app-button>
+        }
+      </div>
+
+      <div class="oc-dashboard__alert-list">
+        @for (a of filteredAlerts(); track a.id) {
+          <div class="oc-dashboard__alert-item" [class]="'oc-dashboard__alert-item--' + a.kind">
+            <div class="oc-dashboard__alert-icon" [class]="'oc-dashboard__alert-icon--' + a.kind">
+              <app-icon [name]="a.icon" [size]="16" variant="inherit" />
+            </div>
+            <div class="oc-dashboard__alert-body">
+              <div class="oc-dashboard__alert-title" [class]="'oc-dashboard__alert-title--' + a.kind">
+                {{ a.title }} <span class="oc-dashboard__alert-when">{{ a.when }}</span>
+              </div>
+              <p class="oc-dashboard__alert-text">{{ a.body }}</p>
+            </div>
+          </div>
+        } @empty {
+          <p class="oc-dashboard__empty">No alerts right now.</p>
+        }
+      </div>
+    </div>
+
+    <div class="oc-dashboard__search-col">
+      <div class="oc-search-card glass-card">
+        <div class="oc-search-card__icon">
+          <app-icon name="settings" [size]="20" color="var(--icon-accent)" />
+        </div>
+        <div class="oc-search-card__title">Search Spare</div>
+        <app-button type="button" class="oc-search-card__link" title="Search Spare" (click)="goToSearchSpare()">
+          View More <app-icon name="arrow-right" [size]="13" variant="inherit" />
+        </app-button>
+        <div class="oc-search-card__wave"></div>
+      </div>
+
+      <div class="oc-search-card glass-card">
+        <div class="oc-search-card__icon">
+          <app-icon name="search" [size]="20" color="var(--icon-accent)" />
+        </div>
+        <div class="oc-search-card__title">Search Routine</div>
+        <app-button type="button" class="oc-search-card__link" title="Search Routine" (click)="goToSearchRoutines()">
+          View More <app-icon name="arrow-right" [size]="13" variant="inherit" />
+        </app-button>
+        <div class="oc-search-card__wave"></div>
+      </div>
+    </div>
+
+    <div class="oc-dashboard__trend glass-card">
+      <h3 class="oc-dashboard__card-title oc-dashboard__card-title--plain">
+        <app-icon name="chart-line" [size]="16" variant="inherit" /> Defect DART Trending
+      </h3>
+      <app-line-chart [series]="dartTrendSeries()" [labels]="dartTrendLabels()" [heightPx]="260" [showLegend]="true" />
+    </div>
+  </div>
+
+  <div class="oc-dashboard__equipment">
+    @for (section of equipmentSections(); track section.label) {
+      <div class="oc-dashboard__equipment-card glass-card">
+        <div class="oc-equip-card__header">
+          <div class="oc-dashboard__card-title oc-dashboard__card-title--equip">Equipment Status - {{ section.label }}</div>
+          <app-button
+            type="button"
+            class="oc-equip-card__arrow"
+            [style.background]="section.color + '1f'"
+            [title]="'Equipment Status - ' + section.label"
+            (click)="goToEquipmentStatus(section)"
+          >
+            <app-icon name="arrow-up-right" [size]="14" [color]="section.color" />
+          </app-button>
+        </div>
+
+        <svg class="oc-equip-arc" viewBox="0 0 120 66" [attr.aria-label]="section.label + ' operational status'">
+          <path [attr.d]="equipmentArcPath(section).operational" stroke="#10b981" stroke-width="10" stroke-linecap="round" fill="none" />
+          <path [attr.d]="equipmentArcPath(section).nonOperational" stroke="#ef4444" stroke-width="10" stroke-linecap="round" fill="none" />
+        </svg>
+
+        <div class="oc-dashboard__equipment-legend">
+          <span><span class="oc-dashboard__dot" style="background:#10b981"></span> Operational ({{ section.operational }})</span>
+          <span><span class="oc-dashboard__dot" style="background:#ef4444"></span> Non-Operational ({{ section.nonOperational }})</span>
+        </div>
+        <div class="oc-dashboard__equipment-total">Total Equipment: {{ equipmentTotal(section) }}</div>
+      </div>
+    }
+  </div>
+</div>

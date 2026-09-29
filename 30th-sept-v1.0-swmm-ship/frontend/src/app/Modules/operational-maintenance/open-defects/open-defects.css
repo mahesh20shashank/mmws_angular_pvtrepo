@@ -1,0 +1,86 @@
+:host {
+  display: block;
+}
+
+/* Solid-background action buttons must keep white text in both themes — the
+   global light-theme override for `.text-white` (styles.css) assumes that
+   class means "text on a dark surface" and flips it to the theme's dark text
+   color, which is wrong here since these buttons carry their own colored
+   background regardless of theme. */
+.od-solid-btn {
+  color: #ffffff !important;
+}
+
+.history-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem 3rem;
+}
+
+.search-btn-wrap {
+  display: flex;
+  align-items: end;
+}
+
+.search-btn {
+  height: 52px;
+  min-width: 130px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(72, 168, 255, 0.4);
+
+  background: rgba(28, 109, 182, 0.6);
+
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+@media (max-width: 1400px) {
+  .history-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .history-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-btn-wrap {
+    justify-content: flex-start;
+  }
+}
+.readonly-box {
+  @apply rounded-xl border border-dashed border-white/30 bg-white/10 px-4 py-3;
+}
+
+.readonly-label {
+  @apply text-[11px] text-white/50 mb-1;
+}
+
+.readonly-value {
+  @apply text-white text-lg leading-5;
+}
+:host ::ng-deep .fuss-grid-wrapper ag-grid-angular {
+  padding: 0 !important;
+}
+
+.header-cotainer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-container-def{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.heading-text{
+  color: var(--text-primary);
+}

@@ -1,0 +1,30 @@
+<aside class="collapsible-sidebar glass-card" [class.collapsible-sidebar--collapsed]="isCollapsed()">
+
+  <!-- Head -->
+  <div class="sidebar__head">
+    @if (!isCollapsed()) {
+      <span class="sidebar__title">{{ title() }}</span>
+    }
+    <app-button type="button" class="sidebar__toggle" (click)="toggle()"
+      [attr.aria-label]="isCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+      [title]="isCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'">
+      <app-icon [name]="isCollapsed() ? 'chevrons-right' : 'chevrons-left'" [size]="16" [strokeWidth]="2" />
+    </app-button>
+  </div>
+
+  <!-- Items -->
+  <div class="items">
+      @for (item of items(); track item.id) {
+      <app-button type="button" class="sidebar__item" [class.sidebar__item--active]="selectedId() === item.id"
+        [disabled]="item.disabled" (click)="select(item.id)" [title]="item.label">
+        <app-icon class="sidebar__item-icon" [name]="item.icon" [class.icon--accent]="selectedId() === item.id" [size]="16"
+          [strokeWidth]="1.8" />
+        @if (!isCollapsed()) {
+        <span class="sidebar__label">{{ item.label }}</span>
+        }
+
+      </app-button>
+      }
+  </div>
+
+</aside>

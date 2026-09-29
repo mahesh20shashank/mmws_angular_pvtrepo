@@ -1,0 +1,348 @@
+.rhsi-master {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 60vh;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Reference Data "RHSI Master" tab — a plain full-width panel instead of a modal's fixed
+   viewport-height box. Fixed to the same height the other master-data tabs' ag-grid boxes use
+   (see dynamicGridHeight()'s "580px" default) with its own scroller, instead of the unbounded
+   table growing the whole page — same contained-scroll feel as the other tabs.
+
+   Padding included here, not on the modal case: `.reference-table-shell` (the card this sits
+   in on the tab) has none of its own — every other tab's content self-pads (the ag-grid's own
+   6px/16px rules, .ship-master-card's 14px) — while the real `<app-modal>` path already gets
+   p-6/p-8 for free from the modal body wrapper, so adding it there too would double it up. */
+.rhsi-master--inline {
+  min-height: 0;
+  padding: 14px 16px;
+}
+
+.rhsi-master__loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary, #9db6cc);
+  font-size: 13px;
+}
+
+.rhsi-master__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rhsi-master__title {
+  font-size: 15px;
+  color: var(--text-primary, #fff);
+  margin-right: 8px;
+}
+
+.rhsi-master__subheading {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary, #9db6cc);
+}
+
+.rhsi-master__head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.rhsi-master__summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rhsi-master__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rhsi-master__summary-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.rhsi-master__all-assigned {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2ecc71;
+  white-space: nowrap;
+}
+
+.rhsi-master__not-assigned {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f82c36;
+  white-space: nowrap;
+}
+
+.rhsi-master__hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(29, 150, 233, 0.25);
+  border-radius: 8px;
+  background: rgba(29, 150, 233, 0.08);
+}
+
+.rhsi-master__hint app-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.rhsi-master__hint p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary, #9db6cc);
+}
+
+.rhsi-master__summary-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary, #9db6cc);
+}
+
+.rhsi-master__summary-chip--ok {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+}
+
+.rhsi-master__summary-chip--warn {
+  background: rgba(240, 165, 0, 0.15);
+  color: #f0a500;
+}
+
+.rhsi-master__summary-chip--danger {
+  background: rgba(248, 44, 54, 0.15);
+  color: #f82c36;
+}
+
+.rhsi-master__toolbar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.rhsi-master__toolbar app-select-input {
+  flex: 1 1 180px;
+  min-width: 160px;
+  max-width: 220px;
+}
+
+.rhsi-master__clear-btn {
+  height: 45px;
+  padding: 0 18px;
+}
+
+.rhsi-master__dirty {
+  font-size: 12px;
+  color: var(--text-secondary, #9db6cc);
+  padding-bottom: 8px;
+  margin-left: auto;
+}
+
+.rhsi-master__global-search {
+  flex: 1 1 220px;
+  min-width: 180px;
+  max-width: 280px;
+}
+
+/* `::ng-deep` (not just `.rhsi-master__global-search .input-with-icon`) because `app-icon` is a
+   child COMPONENT — its host tag carries this parent's content attribute, but relying on that
+   alone has proven fragile here; `::ng-deep` drops the attribute restriction entirely so these
+   rules reach the icon regardless. */
+.rhsi-master__global-search ::ng-deep .input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.rhsi-master__global-search ::ng-deep .input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted, #9db6cc);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rhsi-master__global-search ::ng-deep .form-control.has-icon {
+  width: 100%;
+  padding-left: 44px;
+  box-sizing: border-box;
+}
+
+/* These badge/lock spans are injected by ag-grid cell renderer functions as raw HTML
+   (not written directly in this component's template), so Angular's view-encapsulation
+   attribute never lands on them — `::ng-deep` is required for these rules to reach them.
+   `!important` throughout because they sit inside an ag-grid cell, whose own default cell
+   styling (data-grid.ts's `defaultColDef.cellStyle`) otherwise wins on ties. */
+::ng-deep .rhsi-master__badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: fit-content !important;
+  line-height: 1.4 !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-secondary, #9db6cc) !important;
+}
+
+::ng-deep .rhsi-master__badge--cmms {
+  background: rgba(46, 204, 113, 0.15) !important;
+  color: #2ecc71 !important;
+}
+
+::ng-deep .rhsi-master__badge--swmm {
+  background: rgba(240, 165, 0, 0.15) !important;
+  color: #f0a500 !important;
+}
+
+::ng-deep .rhsi-master__badge--none {
+  background: rgba(248, 44, 54, 0.15) !important;
+  color: #f82c36 !important;
+}
+
+::ng-deep .rhsi-master__rhsi-locked {
+  font-size: 11.5px;
+  color: var(--text-secondary, #9db6cc);
+}
+/* Row Save button (Action column) — plain injected HTML reusing the same `.filter__btn` /
+   `.filter__btn--primary` classes as the header actions above, sized to fit the row. */
+::ng-deep .rhsi-master__row-save-btn {
+  height: 28px !important;
+  min-width: 64px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+}
+
+::ng-deep .rhsi-master__row-save-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.rhsi-master__head-actions .filter__btn:disabled,
+.rhsi-master__head-actions .filter__btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rhsi-master__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.rhsi-master__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.rhsi-master__btn--assign {
+  padding: 9px 20px;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(22, 113, 217, 0.35);
+}
+
+.rhsi-master__btn--secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #fff);
+}
+
+.rhsi-master__btn--primary {
+  background: #1671d9;
+  color: #fff;
+}
+
+.rhsi-master__btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .rhsi-master__summary-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rhsi-master__summary-action {
+    align-items: stretch;
+  }
+
+  .rhsi-master__summary-action .rhsi-master__btn {
+    width: 100%;
+  }
+
+  .rhsi-master__toolbar {
+    align-items: stretch;
+  }
+
+  .rhsi-master__toolbar app-select-input {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .rhsi-master__clear-btn,
+  .rhsi-master__toolbar > .rhsi-master__btn--primary {
+    flex: 1 1 100%;
+  }
+
+  .rhsi-master__dirty {
+    margin-left: 0;
+    flex: 1 1 100%;
+  }
+
+  .rhsi-master__global-search {
+    flex: 1 1 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .rhsi-master__footer {
+    flex-wrap: wrap;
+  }
+
+  .rhsi-master__footer .rhsi-master__btn {
+    flex: 1 1 auto;
+  }
+}

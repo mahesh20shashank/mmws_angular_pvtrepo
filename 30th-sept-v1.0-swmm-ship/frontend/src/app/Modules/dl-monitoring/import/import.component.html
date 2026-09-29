@@ -1,0 +1,51 @@
+<app-help-guidance [bodyHtml]="helpHtml" class="mb-4 block" />
+
+<section class="masters-panel">
+  <header class="masters-header">
+    <app-icon name="table-properties" [size]="18" variant="inherit" />
+    <h1>Masters</h1>
+  </header>
+
+  <div class="masters-tab">
+    <app-icon name="book-open" [size]="18" variant="inherit" />
+    <span>Import Data</span>
+  </div>
+
+  <div class="masters-content">
+    <form class="import-card" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="actions">
+        <app-button class="btn cancel" type="button" (click)="reset()">Cancel</app-button>
+        <app-button class="btn import" type="submit" [class.inactive]="form.invalid" [disabled]="busy">
+          {{ busy ? 'Importing…' : 'Import' }}
+        </app-button>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="dl-type-select" class="field-label">DL Type <span class="required">*</span></label>
+          <select id="dl-type-select" class="dl-type-select" formControlName="dl_type">
+            <option value="">--Select an option--</option>
+            @for (type of types; track type) {
+            <option [value]="type">{{ type }}</option>
+            }
+          </select>
+          @if (form.controls.dl_type.touched && form.controls.dl_type.invalid) {
+          <small class="error">DL type required hai.</small>
+          }
+        </div>
+        <div class="field">
+          <label for="excel-file-input" class="field-label">Select Excel File (*.xlsx)</label>
+          <app-file-input id="excel-file-input" placeholder="Choose file" accept=".xlsx,.xls" [enablePreview]="false"
+            [allowRemove]="true" formControlName="excel" />
+          @if (form.controls.excel.touched && form.controls.excel.invalid) {
+          <small class="error">Excel file required hai.</small>
+          }
+        </div>
+      </div>
+
+      @if (message) {
+      <p class="notice">{{ message }}</p>
+      }
+    </form>
+  </div>
+</section>

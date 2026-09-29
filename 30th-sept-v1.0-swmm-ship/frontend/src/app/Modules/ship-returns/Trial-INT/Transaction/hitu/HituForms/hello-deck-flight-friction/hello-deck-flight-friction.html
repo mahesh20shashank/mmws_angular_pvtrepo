@@ -1,0 +1,784 @@
+<app-form-card
+  title="HELO DECK / FLIGHT DECK FRICTION"
+  headerColor="#0f172a"
+  textColor="#ffffff"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+
+<div
+      previewHeader
+      class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+      <button
+          *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+          type="button"
+          (click)="setActiveTab(tab)"
+          class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+          [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+      >
+          <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+              {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+          </span>
+
+          <span
+              class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+              [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+          >
+              {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+          </span>
+      </button>
+  </div>
+
+  <form [formGroup]="form" class="p-0">
+
+    <!-- HEADER -->
+
+    <div class="grid grid-cols-2 gap-4">
+
+      <!-- SHIP -->
+
+      <div class="flex flex-col gap-1">
+
+
+        <app-select
+          [label]="'Ship *'" formControlName="ship"
+          [options]="shipOptions"
+          placeholder="--Select--"
+          class="w-full">
+        </app-select>
+
+      </div>
+
+      <!-- DATE -->
+
+      <div class="flex flex-col gap-1">
+
+
+        <app-calendar
+          [label]="'Date of conduct of trials*'" formControlName="date_of_conduct_of_trials">
+        </app-calendar>
+
+      </div>
+
+      <!-- PLACE -->
+
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Place of conduct of trials*'"
+          formControlName="place_of_conduct_of_trials"
+          [options]="locationOptions"
+          placeholder="--Select--"
+          class="w-full"
+          [searchable]="false"
+        >
+        </app-select>
+
+      </div>
+
+      <!-- OCCASION -->
+
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Occasion for conduct of trials*'"
+          formControlName="occasion_of_conduct_of_trials"
+          [options]="occasionOptions"
+          placeholder="--Select--"
+          class="w-full"
+          [searchable]="false"
+        >
+        </app-select>
+
+      </div>
+
+
+
+      <app-select [label]="'Reps Present*'" formControlName="reps_present" [options]="reps_present_options" placeholder="--Select--"
+        [searchable]="false" class="w-full">
+      </app-select>
+
+    <div *ngIf="usersList.length > 0 && form.get('reps_present')?.value !== 'Others'">
+      <app-multiselect [label]="'Select User'" formControlName="reps_present_user" [options]="usersList" placeholder="--Select--"></app-multiselect>
+    </div>
+
+      <div *ngIf="form.get('reps_present')?.value === 'Others'">
+        <app-input [label]="'Enter User'" formControlName="reps_present_other_user" placeholder="Enter name"></app-input>
+      </div>
+     
+
+    </div>
+
+    <!-- AUTHORITY -->
+
+    <div class="mt-6">
+
+  
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input label="Corespondence(fax/letter,etc)*" formControlName="authority">
+        </app-input>
+
+        <app-calendar label="Date*" formControlName="authority_date" [max]="form.get('date_of_conduct_trail')?.value">
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload [label]="'Upload doc*'" formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)">
+        </app-file-upload>
+        <!-- </div> -->
+
+      </div>
+    </app-parameter-card>
+
+    </div>
+
+
+
+
+
+
+
+    <div class="mt-8 overflow-x-auto">
+      <div class="table-parameters-header p-1 mb-2">
+        Visual Inspection
+      </div>
+
+
+      <table class="w-full border-collapse border border-white/15 text-sm">
+
+  <!-- Table Header -->
+  <thead>
+    <tr>
+      <th class="table-header">S.No</th>
+      <th class="table-header">Description</th>
+      <th class="table-header">Total affected area(in cm*cm)</th>
+      <th class="table-header">Location affected</th>
+      <th class="table-header">Frame station wise affected area(in cm*cm)</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">1</td>
+      <td class="table-rows-border">Structural defects</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="structural_defects_total_area"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border"><app-input
+        type="number"
+        formControlName="structural_defects_location"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input></td>
+      <td class="table-rows-border"><app-input
+        type="number"
+        formControlName="structural_defects_frame_station"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input></td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">2</td>
+      <td class="table-rows-border">Rust marks (Scattered/Localized)</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="rust_marks"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="rust_marks"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="rust_marks"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">3</td>
+      <td class="table-rows-border">Pitting (Scattered/Localized)</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="pitting"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+         <app-input
+        type="number"
+        formControlName="pitting"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+         <app-input
+        type="number"
+        formControlName="pitting"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">4</td>
+      <td class="table-rows-border">Paint blisters</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_blisters"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_blisters"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_blisters"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">5</td>
+      <td class="table-rows-border">Burn spots</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="burn_spots"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="burn_spots"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="burn_spots"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">6</td>
+      <td class="table-rows-border">Scratch marks / Dent</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="scratch_marks"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="scratch_marks"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="scratch_marks"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">7</td>
+      <td class="table-rows-border">Paint peeling-off / Flaking-off</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_peeling"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_peeling"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_peeling"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">8</td>
+      <td class="table-rows-border">Loose adhesion of paint film</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="loose_adhesion"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="loose_adhesion"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="loose_adhesion"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">9</td>
+      <td class="table-rows-border">Paint cracking</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_cracking"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_cracking"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_cracking"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">10</td>
+      <td class="table-rows-border">Paint chipped off</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_chipped"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_chipped"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="paint_chipped"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">11</td>
+      <td class="table-rows-border">Undulations</td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="undulations"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="undulations"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+      <td class="table-rows-border">
+        <app-input
+        type="number"
+        formControlName="undulations"
+        placeholder="Enter Value"
+        class="w-full">
+      </app-input>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">12</td>
+      <td class="table-rows-border">Patch repairs undertaken by ND(Mbi)/SS</td>
+      <td class="table-rows-border">
+        <app-select
+      formControlName="patch_repairs"
+      [options]="yesNoOptions"
+      [searchable]="false"
+      placeholder="--Select--"
+      class="w-full">
+    </app-select>
+      </td>
+      <td class="table-rows-border">
+        <app-select
+      formControlName="patch_repairs"
+      [options]="yesNoOptions"
+      [searchable]="false"
+      placeholder="--Select--"
+      class="w-full">
+    </app-select>
+      </td>
+      <td class="table-rows-border">
+        <app-select
+      formControlName="patch_repairs"
+      [options]="yesNoOptions"
+      [searchable]="false"
+      placeholder="--Select--"
+      class="w-full">
+    </app-select>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="table-rows-border text-center font-bold">13</td>
+      <td class="table-rows-border">Any Other Observations</td>
+      <td class="table-rows-border">
+        <app-select
+      formControlName="patch_repairs"
+      [options]="yesNoOptions"
+      [searchable]="false"
+      placeholder="--Select--"
+      class="w-full">
+    </app-select>
+      </td>
+      <td class="table-rows-border">
+        <app-select
+      formControlName="patch_repairs"
+      [options]="yesNoOptions"
+      [searchable]="false"
+      placeholder="--Select--"
+      class="w-full">
+    </app-select>
+      </td>
+      <td class="table-rows-border">
+        <app-select
+      formControlName="patch_repairs"
+      [options]="yesNoOptions"
+      [searchable]="false"
+      placeholder="--Select--"
+      class="w-full">
+    </app-select>
+      </td>
+    </tr>
+
+  </tbody>
+
+</table>
+
+    </div>
+
+
+
+
+
+
+
+    
+
+
+
+    <!-- FRICTION TABLE -->
+
+    <div
+      class="mt-8 overflow-x-auto"
+      formGroupName="trials_table">
+
+      <div class="table-parameters-header">
+        Friction Test Readings
+      </div>
+
+      <table class="w-full border-collapse text-sm mt-2">
+
+        <thead>
+
+          <tr >
+
+            <th class="table-header">
+              Condition
+            </th>
+
+            <th class="table-header">
+              209(P)
+            </th>
+
+            <th class="table-header">
+              209(CL)
+            </th>
+
+            <th class="table-header">
+              209(S)
+            </th>
+
+            <th class="table-header">
+              214(P)
+            </th>
+
+            <th class="table-header">
+              214(CL)
+            </th>
+
+            <th class="table-header">
+              214(S)
+            </th>
+
+            <th class="table-header">
+              218(P)
+            </th>
+
+            <th class="table-header">
+              218(CL)
+            </th>
+
+            <th class="table-header">
+              218(S)
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <!-- WET -->
+
+          <tr>
+
+            <td class="table-rows-border text-center font-bold">
+              Wet
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_209_p"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_209_cl"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_209_s"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_214_p"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_214_cl"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_214_s"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_218_p"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_218_cl"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="wet_218_s"></app-input>
+            </td>
+
+          </tr>
+
+          <!-- OILY -->
+
+          <tr>
+
+            <td class="table-rows-border text-center font-bold">
+              Oily
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_209_p"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_209_cl"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_209_s"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_214_p"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_214_cl"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_214_s"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_218_p"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_218_cl"></app-input>
+            </td>
+
+            <td class="table-rows-border">
+              <app-input formControlName="oily_218_s"></app-input>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <!-- OVERALL REMARKS -->
+
+      <div class="mt-6 w-72">
+
+        <label class="form-label">
+          Overall Remarks
+        </label>
+
+        <app-select
+          formControlName="overall_remarks"
+          [searchable]="false"
+          [options]="[
+            { label: 'SAT', value: 'SAT' },
+            { label: 'SAT with observations', value: 'SAT_OBS' },
+            { label: 'UNSAT', value: 'UNSAT' }
+          ]">
+        </app-select>
+
+      </div>
+
+    </div>
+
+  </form>
+
+  <!-- FOOTER -->
+
+     <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

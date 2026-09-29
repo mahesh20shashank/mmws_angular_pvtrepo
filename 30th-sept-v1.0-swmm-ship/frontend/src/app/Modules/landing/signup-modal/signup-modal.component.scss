@@ -1,0 +1,164 @@
+.modal {
+  @apply relative overflow-visible rounded-2xl px-12 pb-14 pt-10;
+  min-width: min(470px, 100vw - 2rem) !important;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% + 4rem);
+  margin: -2rem;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  color: #e6eef8;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 84% 24%, rgba(255, 255, 255, 0.12), transparent 30%),
+    linear-gradient(145deg, rgba(33, 38, 43, 0.96), rgba(17, 20, 25, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 28px 80px rgba(0, 0, 0, 0.55);
+}
+
+
+
+input::placeholder {
+  color: transparent;
+  transition: color 0.2s;
+}
+
+input:focus::placeholder {
+  color: rgba(226, 238, 248, 0.35);
+}
+
+.signup-header {
+  @apply relative flex items-center justify-center mb-4;
+  width: 100%;
+
+  .signup-title {
+    @apply text-3xl font-semibold tracking-wide text-white;
+    text-shadow: 0 10px 24px rgba(0, 0, 0, 0.42);
+  }
+}
+
+.back-btn {
+  @apply absolute left-0 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition-all duration-300;
+  top: 50%;
+  transform: translateY(-50%);
+
+  &:hover {
+    @apply bg-white/5 text-white;
+  }
+}
+
+
+
+.signup-modal {
+    width: 100%;
+      margin-top: 10px;
+      height: auto;
+      color: #e6eef8;
+  @apply relative pt-2 pb-4;
+}
+
+.field-group {
+  @apply relative space-y-1;
+}
+
+/* ---- Floating Label (same as login modal) ---- */
+.floating-field {
+  @apply relative;
+}
+
+.login-input {
+  @apply w-full rounded-lg border border-white/35 px-4 pb-2 pt-6 text-[16px] text-slate-200 outline-none transition-all duration-300;
+  height: 54px;
+  background: rgba(255, 255, 255, 0.11);
+
+  &:focus {
+    @apply border-white/60;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+}
+
+.floating-label {
+  @apply pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[16px] text-slate-400 transition-all duration-200;
+  font-family: 'Poppins', sans-serif;
+}
+
+.floating-field .login-input:focus + .floating-label,
+.floating-field .login-input:not(:placeholder-shown) + .floating-label {
+  @apply top-2 translate-y-0 text-slate-300;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+/* Readonly fields in floating style */
+.field-readonly-float {
+  border-style: dashed;
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  color: #94a3b8;
+}
+
+
+.field-readonly {
+  @apply w-full rounded-lg border border-dashed border-white/5 bg-white/[0.02] text-slate-400 outline-none select-none;
+  padding: 0.7rem 0.937rem 0.2rem 0.937rem;
+}
+
+
+.action-btn {
+  @apply flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 text-white transition-all duration-300;
+
+  padding: 0.5rem 0.937rem;
+}
+
+.submit-btn {
+  @apply flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 font-semibold tracking-wide text-white transition-all duration-300;
+
+  padding: 0.5rem 0.937rem;
+}
+
+.credentials-section {
+  @apply text-center;
+  width: 100%;
+
+}
+
+
+.primary-input {
+  @apply w-full rounded-lg border border-white/10 bg-white/[0.04] text-slate-200 placeholder:text-slate-500 focus:border-white/25 focus:outline-none transition-all duration-300;
+  @apply w-full rounded-lg border border-white/10 bg-white/[0.04] text-[13px] text-slate-200 placeholder:text-slate-500 transition-all duration-300 focus:border-white/25 focus:outline-none disabled:opacity-60;
+
+  padding: 0.5rem 0.937rem;
+}
+
+.request-btn {
+  @apply flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] font-medium tracking-wide text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50;
+
+  padding: 0.5rem 0.937rem;
+
+  &:hover:not(:disabled) {
+    @apply bg-white/[0.08];
+  }
+}
+
+.success-badge {
+  @apply flex items-center justify-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 text-[11px] font-medium text-emerald-300;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.937rem;
+}
+
+.footer-note {
+  @apply text-center text-[10px] text-slate-500 font-light mt-4 leading-normal select-none;
+}
+
+.signup-button {
+  @apply w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/25 text-white rounded-lg py-2.5 font-semibold tracking-wide transition-all duration-300 cursor-pointer shadow-lg hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed;
+}

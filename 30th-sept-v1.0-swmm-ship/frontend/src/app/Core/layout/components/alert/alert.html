@@ -1,0 +1,24 @@
+@if (appService.showAlert()) {
+<div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+
+    <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+
+        <h2 class="text-xl font-semibold">
+            {{ appService.alertTitle() }}
+        </h2>
+
+        <!-- whitespace-pre-line so a multi-line message (e.g. one reason per incomplete
+             SRAR step) renders as separate lines instead of collapsing into one run-on. -->
+        <p class="mt-3 text-gray-600 whitespace-pre-line">
+            {{ appService.alertMessage() }}
+        </p>
+
+        <div class="mt-6 flex justify-end">
+            <app-button (click)="appService.closeAlert()" class="rounded-lg bg-blue-600 px-4 py-2 alertbtn text-white">
+                OK
+            </app-button>
+        </div>
+
+    </div>
+</div>
+}

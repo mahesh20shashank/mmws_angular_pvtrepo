@@ -1,0 +1,66 @@
+<app-master-card cardTitle="Create DL-II" cardHeight="auto">
+  <div class="grid grid-cols-4 gap-4 m-4 items-end">
+    <div>
+      <app-select-input label="Refit Type" [options]="refitTypeOptions" [(ngModel)]="refitType" name="refitType">
+      </app-select-input>
+    </div>
+    <div>
+      <app-select-input label="Select Yard Name" [options]="yardDropdownOptions" [(ngModel)]="yardName" name="yardName">
+      </app-select-input>
+    </div>
+    <div>
+      <app-select-input label="Select Export File Format" [options]="exportFormatOptions" [(ngModel)]="exportFormat" name="exportFormat">
+      </app-select-input>
+    </div>
+    <div>
+      @if (dlNoSet) {
+        <app-button type="button" [disabled]="exporting" (click)="exportToNavyojana()" class="w-full h-[45px] rounded-lg bg-[#008F4C] text-white text-sm disabled:opacity-60">
+          {{ exporting ? 'Exporting…' : 'Export to Navyojana' }}
+        </app-button>
+      }
+    </div>
+  </div>
+
+  <div class="flex items-end gap-2 mb-4 m-4">
+    <div class="flex-1 max-w-xs">
+      <label for="dl-no" class="text-white/60 text-xs mb-1 block">DL No :-</label>
+      <input
+        id="dl-no"
+        type="number"
+        [(ngModel)]="manualDlNo"
+        placeholder="e.g. 144"
+        class="w-full h-[45px] rounded-lg bg-white/5 border border-white/10 px-4 text-white text-sm"
+      />
+    </div>
+    <app-button type="button" (click)="setDlNo()" class="px-4 h-[45px] rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+      OK
+    </app-button>
+  </div>
+
+  <div class="fuss-grid-wrapper w-full m-4">
+    @if (rows.length || isLoading()) {
+      <app-data-grid
+        [columnDefs]="columnDefs"
+        [rowData]="rows"
+        [pageSize]="10"
+        [autoHeight]="true"
+        [getRowId]="rowId"
+        [loading]="isLoading()"
+      >
+      </app-data-grid>
+    } @else {
+      <div class="py-6 text-center text-white/40 text-sm">
+        No drafted DL-II rows found.
+      </div>
+    }
+  </div>
+
+  <div class="flex gap-2 m-4">
+    <app-button type="button" [disabled]="saving" (click)="save()" class="px-4 h-[45px] rounded-lg bg-[#1D96E9] text-white text-sm disabled:opacity-60">
+      {{ saving ? 'Saving…' : 'Save' }}
+    </app-button>
+    <app-button type="button" (click)="cancel()" class="px-4 h-[45px] rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+      Cancel
+    </app-button>
+  </div>
+</app-master-card>

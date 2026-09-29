@@ -1,0 +1,612 @@
+/* Page-level rhythm to match the density pass elsewhere (Home's .home-page,
+   KMS's .kms-page): one flex-column gap for inter-section spacing instead of
+   each section carrying its own (larger, inconsistent) margin-bottom. */
+.wsb-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wsb-page > app-help-guidance {
+  margin-bottom: 0;
+}
+
+.wsb-page > .wsb-tabs-row {
+  margin-bottom: 0;
+}
+
+.wsb-tabs-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: 0.5rem;
+}
+
+.wsb-tabs-row--sub {
+  margin-bottom: 1.25rem;
+}
+
+.wsb-tab-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wsb-tab-btn--active {
+  color: var(--accent-blue, #1d96e9);
+  background: var(--bg-card);
+  font-weight: 600;
+}
+
+.wsb-panel {
+  padding: 1.25rem;
+}
+
+.wsb-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.wsb-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.wsb-subheading {
+  margin: 0.75rem 0 0.6rem;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.wsb-dept-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.wsb-dept-row__label {
+  width: 140px;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+}
+
+.wsb-dept-row__track {
+  flex: 1;
+  background: var(--bg-input);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.wsb-dept-row__fill {
+  height: 100%;
+  border-radius: 999px;
+  min-width: 6px;
+  transition: width 0.25s ease;
+}
+
+.wsb-dept-row__fill--high {
+  background: var(--icon-success, #22C55E);
+}
+
+.wsb-dept-row__fill--medium {
+  background: var(--icon-warning, #D97706);
+}
+
+.wsb-dept-row__fill--low {
+  background: var(--error-color, #de1f1f);
+}
+
+.wsb-dept-row__badge {
+  flex-shrink: 0;
+  min-width: 3.4rem;
+  text-align: center;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Opaque, near-black tinted backgrounds below (not translucent rgba tints) — SonarQube
+   (css:S7924) can't resolve the real dark backdrop behind a translucent background, so it
+   flags the text/background pair even though it renders with plenty of contrast. A solid
+   dark background pins the actual ratio well above 4.5:1 regardless (same fix pattern as
+   `.mgmt__filter-badge` in sfd-management.component.css). */
+.wsb-dept-row__badge--high {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.wsb-dept-row__badge--medium {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.wsb-dept-row__badge--low {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+:host-context([data-theme="dark"]) .wsb-dept-row__badge--high,
+[data-theme="dark"] .wsb-dept-row__badge--high {
+  background: #0a2b16;
+  color: #4ade80;
+}
+
+:host-context([data-theme="dark"]) .wsb-dept-row__badge--medium,
+[data-theme="dark"] .wsb-dept-row__badge--medium {
+  background: #332600;
+  color: #fde047;
+}
+
+:host-context([data-theme="dark"]) .wsb-dept-row__badge--low,
+[data-theme="dark"] .wsb-dept-row__badge--low {
+  background: #330a0d;
+  color: #fca5a5;
+}
+
+.wsb-sailing-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.75rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+/* ag-grid's cellRenderer injects this button as a raw HTML string directly into the DOM,
+   bypassing Angular's template renderer entirely — it never receives this component's
+   view-encapsulation attribute, so a plain scoped selector would never match it. ::ng-deep
+   penetrates that boundary while staying defined only in this component's own stylesheet. */
+:host ::ng-deep .wsb-history-view-btn {
+  border: 1px solid #16a34a;
+  /* Opaque, not a translucent rgba tint — SonarQube (css:S7924) can't resolve the real dark
+     backdrop behind a translucent background, so it flags the pair even though it renders with
+     plenty of contrast. A solid dark-green background pins the actual ratio well above 4.5:1. */
+  background: #0f2a18;
+  color: #16a34a;
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wsb-history-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.wsb-history-stat {
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wsb-history-stat span {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.wsb-history-stat strong {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.wsb-history-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  /* Opaque, not a translucent rgba tint — SonarQube (css:S7924) can't resolve the real dark
+     backdrop behind a translucent background, so it flags the pair even though it renders with
+     plenty of contrast. A solid dark-amber background pins the actual ratio well above 4.5:1. */
+  background: #332600;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  color: #ffc107;
+  font-size: 0.82rem;
+}
+
+.wsb-history-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.wsb-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.wsb-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.wsb-toolbar__count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.wsb-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.wsb-personnel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.wsb-empty-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-blue, #1d96e9);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.wsb-add-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  max-width: 420px;
+}
+
+.wsb-table-scroll {
+  overflow-x: auto;
+}
+
+.wsb-plain-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.wsb-plain-table th {
+  text-align: left;
+  padding: 0.6rem 0.7rem;
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.wsb-plain-table td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.wsb-plain-table tbody tr:nth-child(even) td {
+  background: var(--bg-input);
+}
+
+.wsb-plain-table tbody tr:hover td {
+  background: rgba(29, 150, 233, 0.08);
+}
+
+.wsb-plain-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.wsb-assign-table th,
+.wsb-assign-table td {
+  white-space: nowrap;
+}
+
+.wsb-assign-input {
+  width: 100px;
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.78rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.wsb-assign-input:disabled {
+  background: transparent;
+  border-color: transparent;
+}
+
+.wsb-empty-text {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 1.5rem 0;
+  font-size: 0.85rem;
+}
+
+.wsb-modal__title {
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.wsb-modal__subtitle {
+  margin: -0.5rem 0 1rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  background: rgba(29, 150, 233, 0.08);
+  border: 1px solid rgba(29, 150, 233, 0.3);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.wsb-modal__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.wsb-modal__selected-count {
+  margin-right: auto;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.wsb-personnel-filter {
+  max-width: 260px;
+  margin-bottom: 0.85rem;
+}
+
+.wsb-row-add-btn {
+  border: 1px solid var(--accent-blue, #1d96e9);
+  background: transparent;
+  color: var(--accent-blue, #1d96e9);
+  border-radius: 6px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.wsb-row-add-btn:hover {
+  background: rgba(29, 150, 233, 0.1);
+}
+
+.wsb-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem 1rem;
+  align-items: start;
+}
+
+app-modal[size="lg"] .wsb-form-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 640px) {
+  .wsb-form-grid,
+  app-modal[size="lg"] .wsb-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+:host ::ng-deep .wsb-form-grid .dropdown-wrapper,
+:host ::ng-deep .wsb-form-grid .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+:host ::ng-deep .wsb-form-grid .input-label {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--text-muted) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .wsb-form-grid .dropdown-trigger,
+:host ::ng-deep .wsb-form-grid .input-container {
+  height: 42px !important;
+  border-radius: 10px !important;
+}
+
+.wsb-form-grid__full {
+  grid-column: 1 / -1;
+}
+
+.wsb-type-select-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.wsb-type-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.wsb-type-pill {
+  border: 1px solid var(--border-primary);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wsb-type-pill--active {
+  color: #fff;
+  background: var(--accent-blue, #1d96e9);
+  border-color: var(--accent-blue, #1d96e9);
+}
+
+.wsb-sailing-hint {
+  margin: 1rem 0 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  background: var(--accent-glow, rgba(29, 150, 233, 0.15));
+  color: var(--text-primary);
+  font-size: 0.82rem;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-link {
+  border: none;
+  background: transparent;
+  color: var(--accent-blue, #1d96e9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-icon-danger {
+  /* Theme-aware (was a hardcoded pale-pink chip that only worked on a light background — in
+     dark theme it rendered as a bright pink tile clashing against the dark card). A translucent
+     tint over `--error-color` reads correctly against either theme's card background. */
+  border: 1px solid var(--error-color, #dc3545);
+  background: rgba(222, 31, 31, 0.12);
+  color: var(--error-color, #dc3545);
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+:host ::ng-deep .wsb-history-view-btn,
+:host ::ng-deep .ag-cell .wsb-history-view-btn,
+.wsb-history-view-btn {
+  background: var(--accent-blue, #0095ff) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 0.3rem 0.85rem !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+:host ::ng-deep .wsb-history-view-btn:hover,
+:host ::ng-deep .ag-cell .wsb-history-view-btn:hover,
+.wsb-history-view-btn:hover {
+  opacity: 0.9 !important;
+  box-shadow: 0 2px 6px rgba(0, 149, 255, 0.3) !important;
+}
+
+:host-context([data-theme="dark"]) :host ::ng-deep .wsb-history-view-btn,
+[data-theme="dark"] :host ::ng-deep .wsb-history-view-btn {
+  background: var(--accent-blue, #1d96e9) !important;
+  color: #ffffff !important;
+}
+
+:host-context([data-theme="light"]) :host ::ng-deep .wsb-history-view-btn,
+[data-theme="light"] :host ::ng-deep .wsb-history-view-btn {
+  background: var(--accent-blue, #0095ff) !important;
+  color: #ffffff !important;
+}

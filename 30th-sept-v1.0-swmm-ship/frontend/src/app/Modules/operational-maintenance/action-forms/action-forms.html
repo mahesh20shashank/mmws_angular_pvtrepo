@@ -1,0 +1,123 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="master-container glass-card">
+  <!-- Header -->
+
+
+<div class="pl-3 pt-2">
+
+  <div class="reason-header-row">
+    <div class="reason-header">
+      <h3>Select Reason</h3>
+
+      <p>
+        The selected reason drives the fields, validation and downstream workflow
+        — the Digital Defect Book form is fully dynamic.
+      </p>
+    </div>
+
+    <app-button type="button" class="back-btn" (click)="goBackToList()">
+      <app-icon name="arrow-left" [size]="14" variant="inherit" />
+      Back to Defect / DART List
+    </app-button>
+  </div>
+
+  <div class="reason-options">
+
+    <!-- A&A / ABES -->
+
+    <!-- Defect -->
+    <label class="reason-option" [class.selected]="activeTab === 'defect'">
+      <input type="radio" name="dartOccasion" [checked]="activeTab === 'defect'" (change)="changeTab('defect')" />
+
+      <span class="custom-radio"></span>
+
+      <span class="reason-content">
+        <span class="reason-title">Defect</span>
+        <span class="reason-description">
+          Standard defect lifecycle — rectified onboard or raise DART
+        </span>
+      </span>
+    </label>
+
+    <!-- Guarantee Defect -->
+    <label class="reason-option" [class.selected]="activeTab === 'guarantee-defect'">
+      <input type="radio" name="dartOccasion" [checked]="activeTab === 'guarantee-defect'"
+        (change)="changeTab('guarantee-defect')" />
+
+      <span class="custom-radio"></span>
+
+      <span class="reason-content">
+        <span class="reason-title">Guarantee Defect</span>
+        <span class="reason-description">
+          Defect covered under equipment guarantee
+        </span>
+      </span>
+    </label>
+
+        <label class="reason-option" [class.selected]="activeTab === 'A&A/ABES'">
+          <input type="radio" name="dartOccasion" [checked]="activeTab === 'A&A/ABES'" (change)="changeTab('A&A/ABES')" />
+        
+          <span class="custom-radio"></span>
+        
+          <span class="reason-content">
+            <span class="reason-title">A's & A's / ABER</span>
+            <span class="reason-description">
+              Alteration & Addition — Major or Minor
+            </span>
+          </span>
+        </label>
+
+
+  </div>
+
+</div>
+
+  <!-- Content -->
+  <div class="tab-content">
+    @switch (activeTab) {
+    @case ("defect") {
+    <div class="form-container">
+      <!-- <app-defact-form></app-defact-form> -->
+
+      <!-- `returnRoute` is the queue screen this form was seeded from, or null when it was
+           opened the ordinary way. It travels down the same one-way input path the spares
+           already use, and it is what makes the post-save destination branch. -->
+      <app-defact-form [selectedSpares]="selectedSpares()" [returnRoute]="returnRoute()"
+        (openSpare)="openSpareModal('defect')"
+        (removeSpare)="removeSpare($event)" (openConfirm)="openFormConfirmModal('defect')"
+        (previewRequested)="openPreview($event)" (cancelForm)="goBackToList()">
+      </app-defact-form>
+    </div>
+    }
+    @case ("A&A/ABES") {
+    <div class="form-container">
+      <!-- <app-aa-aber-form></app-aa-aber-form> -->
+      <app-aa-aber-form [selectedSpares]="selectedSpares()" (openSpare)="openSpareModal('aber')"
+        (removeSpare)="removeSpare($event)" (openConfirm)="openFormConfirmModal('aber')" (cancelForm)="goBackToList()">
+      </app-aa-aber-form>
+    </div>
+    }
+
+    @case ("guarantee-defect") {
+    <div class="form-container">
+      <app-guarantee-defect-form (openConfirm)="openFormConfirmModal('guarantee')" (cancelForm)="goBackToList()"></app-guarantee-defect-form>
+    </div>
+    }
+    }
+  </div>
+</div>
+
+@if (showSpareModal()) {
+<app-spare-selection-modal [selectedSpares]="selectedSpares()" [source]="currentSpareSource()"
+  (closeModal)="closeSpareModal()" (save)="onSparesSelected($event)">
+</app-spare-selection-modal>
+}
+
+@if (showFormConfirmModal()) {
+<app-form-modal [title]="'Confirm Save'" [dartType]="currentFormType" (save)="onModalSave($event)" (cancel_btn)="closeFormConfirmModal()">
+</app-form-modal>
+}
+
+<app-image-preview [visible]="showPreview()" [images]="previewImages()" (closed)="closePreview()">
+</app-image-preview>

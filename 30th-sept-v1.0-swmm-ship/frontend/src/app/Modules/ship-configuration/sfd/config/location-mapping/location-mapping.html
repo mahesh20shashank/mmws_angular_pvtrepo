@@ -1,0 +1,155 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+
+    <div class="w-full max-w-2xl rounded-2xl shadow-2xl glass-card sfd-modal-bg">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between model-border-header border-primary px-4 py-2">
+            <div class="flex items-center gap-3">
+                <h2 class="text-lg font-semibold">
+                    {{ isEditMode() ? 'Edit' : 'Add' }} Location Mapping
+                </h2>
+            </div>
+
+            <app-button (click)="closeModal()"
+                class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input hover:">
+                ✕
+            </app-button>
+
+        </div>
+
+        <!-- Body -->
+        <form action="" [formGroup]="form" (ngSubmit)="save()">
+            <div class="space-y-5 p-6 model-border-header">
+
+                <!-- Compartment Name -->
+                <div class="row-container">
+
+                    <div class="form-field">
+                        <app-select-input formControlName="equipmentName"   [error]="showError('equipmentName')"
+                         [options]="equipmentOptions()" [readonly]="isEditMode()"label="Equipment" placeholder="Equipment Name">
+                        </app-select-input>
+
+                        @if (showError('equipmentName')) {
+                        <p class="form-error">
+                            Equipment name is required.
+                        </p>
+                        }
+                    </div>
+                    <div class="form-field">
+                        <app-select-input formControlName="compartmentName"  [error]="showError('compartmentName')"
+                         [options]="compartmentOptions()"  label="Compartment Name" placeholder="Compartment Name">
+                        </app-select-input>
+
+                        @if (showError('compartmentName')) {
+                        <p class="form-error">
+                            Compartment name is required.
+                        </p>
+                        }
+                    </div>
+
+                </div>
+
+                <!-- Deck -->
+
+                <div class="dack-container">
+                    <div class="form-field">
+                        <label for="dack" class="form-label">
+                            Deck
+                        </label>
+                        <div class="checkobox-container form-control">
+                            <input type="checkbox" id="dack" formControlName="mainDeck"  class="readonly-checkbox">
+                            <span>
+                                Main Deck
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <app-select-input formControlName="upperDeck"   [readonly]="true" label="UPPER DECK" [options]="upperDecks()"
+                            placeholder="Select Upper Deck">
+                        </app-select-input>
+                    </div>
+
+                    <div class="form-field">
+                        <app-select-input formControlName="lowerDeck" [readonly]="true" label="LOWER DECK" [options]="lowerDecks()"
+                            placeholder="Select Lower Deck">
+                        </app-select-input>
+                    </div>
+
+                </div>
+
+
+                @if (deckError()) {
+                <p class="form-error">
+                    Please select one deck.
+                </p>
+                }
+                <!-- Frame + Location -->
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="form-field">
+                        <label for="station" class="form-label">
+                            Frame Station
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="flex items-center gap-3">
+                            <div>
+                                <input id="station" placeholder="Frame from" type="number" readonly formControlName="frameFrom"
+                                    class="form-control"  [class.error]="showError('frameFrom')"/>
+
+                                @if (showError('frameFrom')) {
+                                <p class="form-error">
+                                    From is required.
+                                </p>
+                                }
+                            </div>
+                            <span class="text-muted">—</span>
+
+                            <div>
+                                <input id="" placeholder="Frame to" type="number" readonly formControlName="frameTo"
+                                    class="form-control"  [class.error]="showError('frameTo')" />
+                                @if (showError('frameTo')) {
+                                <p class="form-error">
+                                    To is required.
+                                </p>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <app-select-input formControlName="location" [error]="showError('location')" [readonly]="true" [options]="locations()" label="Location"
+                            placeholder="Location">
+
+                        </app-select-input>
+
+                        @if (showError('location')) {
+                        <p class="form-error">
+                            Location is required.
+                        </p>
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-3 px-6 py-4">
+            <app-button (click)="closeModal()"
+                class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input">
+                Cancel
+            </app-button>
+
+            <app-button [disabled]="isLoading()" (click)="save()" class="submit-btn">
+                {{isLoading()? "Saving.." : "Save" }}
+            </app-button>
+
+        </div>
+
+    </div>
+
+</div>

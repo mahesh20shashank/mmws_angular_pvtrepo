@@ -1,0 +1,1527 @@
+{
+  "formId": "mss_tx_rx_mk_i",
+  "title": "MSS TX/RX MK I",
+  "sourceFile": "mss_tx_rx_mk_I.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "MSS TX/RX MK I",
+      "sectionType": "form",
+      "fields": [],
+      "tables": [],
+      "sectionTitle": "Basic Information",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type":"label",
+            "value": "Basic Information",
+            "colSpan": 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Name of Ship",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "INS Alpha",
+                "value": "INS_A"
+              },
+              {
+                "label": "INS Bravo",
+                "value": "INS_B"
+              },
+              {
+                "label": "INS Charlie",
+                "value": "INS_C"
+              },
+              {
+                "label": "INS Delta",
+                "value": "INS_D"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "Department",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "P15A"
+              },
+              {
+                "label": "ASW",
+                "value": "P17"
+              },
+              {
+                "label": "COMM",
+                "value": "P17A"
+              },
+              {
+                "label": "GUNNERY",
+                "value": "P28"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "Equipment",
+            "key": "Equipment",
+            "name": "Equipment",
+            "label": "Equipment",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "",
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature",
+            "colSpan": 4
+          },
+          {
+            "_id": "date",
+            "key": "date_",
+            "name": "date_",
+            "label": "Date",
+            "type": "date",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "Nature of Trial",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATS"
+              },
+              {
+                "label": "OP CHECKS",
+                "value": "OP_CHECKS"
+              },
+              {
+                "label": "IIs",
+                "value": "IIS"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "offered_no",
+            "key": "offered_no",
+            "name": "offered_no",
+            "label": "Serial Number",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "rows": 1,
+            "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.serial_no"
+          }
+        ],
+
+        "tables_1": [
+          {
+            "id": "checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observation",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+               "_id": "checks_matrix_1_row_1_combined",
+              "cells": [
+                    {
+                    "_id": "embarked_time",
+                    "key": "embarked_time",
+                    "name": "embarked_time",
+                    "type": "time",
+                    "value": "",
+                    "lb" : "Trial team reported onboard for Ops Check of MSS MK I at",
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "HH:MM",
+                    "style": "max-width: 90px; min-width: 80px; width: 100%; padding: 4px;",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+
+                  {
+                    "_id": "schedule",
+                    "key": "schedule",
+                    "name": "schedule",
+                    "type": "textarea",
+                    "inputType": "text",
+                    "value": "",
+                    "lb" : "Checks and trials carried out IAW IHQ MoD(N)/ DNSO approved schedule vide are enumerated in succeeding paragraphs :-",
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_1_cell_2_static",
+                    "type": "serial",
+                    "value": "<b>Physical checks/Setup</b>",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 8,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_2_static",
+                    "type": "serial",
+                    "value": "(i)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_3_mss_mk_i_physical_platform_antenna_integrity",
+                    "key": "mss_mk_i_physical_platform_antenna_integrity",
+                    "type": "input",
+                    "lb" :"Integrity of platform /location suitable for Antenna fitted in rough weather and high sea state",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_4_mss_mk_i_platform_antenna",
+                    "key": "mss_mk_i_platform_antenna",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "(ii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Water integrity of the cable/ wiring/ interconnections from Antenna to BDU.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_3_mss_mk_i_cable_water_integrity",
+                    "key": "mss_mk_i_cable_water_integrity",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "(iii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Connections are properly insulated",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_3_mss_mk_i_connections_insulation",
+                    "key": "mss_mk_i_connections_insulation",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "(iv)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Interconnections to sub units PC, Key Board and Mouse.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_3_mss_mk_i_subunit_interconnections",
+                    "key": "mss_mk_i_subunit_interconnections",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "(v)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "Power supply from individual UPS",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_3_mss_mk_i_power_ups",
+                    "key": "mss_mk_i_power_ups",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "(vi)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Grounding of Rack",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_3_mss_mk_i_rack_grounding",
+                    "key": "mss_mk_i_rack_grounding",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "(vii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Securing arrangement of System shock mounts and space sufficient for maintenance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_3_mss_mk_i_shock_mount_securing",
+                    "key": "mss_mk_i_shock_mount_securing",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "(viii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Fixing and locking nuts/screws are tightened.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_3_mss_mk_i_fixing_locking_nuts",
+                    "key": "mss_mk_i_fixing_locking_nuts",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "<b>Electrical Supply Checks</b>",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 3,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "(i)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_3_static",
+                    "type": "label",
+                    "value": "Power Supply 230V/ Requisite AC input is available and measured within tolerance level of\u00b1 10%, 50Hz, 1 Phase.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_4_mss_mk_i_ac_power_supply",
+                    "key": "mss_mk_i_ac_power_supply",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "(ii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "The output of Power Supply Unit measured at 28V DC.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_12_cell_3_mss_mk_i_psu_output_28v",
+                    "key": "mss_mk_i_psu_output_28v",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "(iii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Front panel controls, switches and indication lamps. Fuses are of correct ratings.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_13_cell_3_mss_mk_i_front_panel_controls",
+                    "key": "mss_mk_i_front_panel_controls",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_14_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_14_cell_2_static",
+                    "type": "label",
+                    "value": "<b>Functional checks</b>",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_15",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_1_static",
+                    "type": "serial",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 7,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_2_static",
+                    "type": "label",
+                    "value": "(i)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_3_static",
+                    "type": "label",
+                    "value": "Power ON /self-test",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_4_mss_mk_i_power_on_selftest",
+                    "key": "mss_mk_i_power_on_selftest",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_16",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_16_cell_1_static",
+                    "type": "serial",
+                    "value": "(ii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_16_cell_2_static",
+                    "type": "label",
+                    "value": "Perform the BITE through MSS Tx/Rx client software",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_16_cell_3_mss_mk_i_bite_software",
+                    "key": "mss_mk_i_bite_software",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_17",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_17_cell_1_static",
+                    "type": "serial",
+                    "value": "(iii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_17_cell_2_static",
+                    "type": "label",
+                    "value": "All the modules in the units should pass the BITE",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_17_cell_3_mss_mk_i_modules_bite_pass",
+                    "key": "mss_mk_i_modules_bite_pass",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_18",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_18_cell_1_static",
+                    "type": "serial",
+                    "value": "(iv)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_18_cell_2_static",
+                    "type": "label",
+                    "value": "Configure the parameters through client software",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_18_cell_3_mss_mk_i_parameters_configure",
+                    "key": "mss_mk_i_parameters_configure",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_19",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_19_cell_1_static",
+                    "type": "serial",
+                    "value": "(v)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_19_cell_2_static",
+                    "type": "label",
+                    "value": "Exchange 02 voice calls to assess the system. Establish calls to assess Terminal \u2022 Hub, Hub - terminal and Terminal- Terminal",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_19_cell_3_mss_mk_i_voice_calls_exchange",
+                    "key": "mss_mk_i_voice_calls_exchange",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_20",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_20_cell_1_static",
+                    "type": "serial",
+                    "value": "(vi)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_20_cell_2_static",
+                    "type": "label",
+                    "value": "Transmit 02 messages each to assess the system from terminal-Hub, Hub- terminal and terminal-Terminal",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_20_cell_3_mss_mk_i_messages_transmit",
+                    "key": "mss_mk_i_messages_transmit",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_21",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_21_cell_1_static",
+                    "type": "serial",
+                    "value": "(vii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_21_cell_2_static",
+                    "type": "label",
+                    "value": "Exchange 02 plots to assess Link MSS plot transfer from MOC/Link- MSS Data.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_21_cell_3_mss_mk_i_plots_exchange",
+                    "key": "mss_mk_i_plots_exchange",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_22",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_22_cell_1_static",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_22_cell_2_static",
+                    "type": "label",
+                    "value": "<b>Miscellaneous Checks</b>",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_23",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_23_cell_1_static",
+                    "type": "serial",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_23_cell_2_static",
+                    "type": "label",
+                    "value": "(i)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_23_cell_3_static",
+                    "type": "label",
+                    "value": "System parameters are matching with manuals",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_23_cell_4_mss_mk_i_system_parameters_match",
+                    "key": "mss_mk_i_system_parameters_match",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "remarks_table_1",
+            "sectionType": "simpleTable",
+            "title": "REMARKS",
+            "topHeaders": [
+              [
+                {
+                  "label": "Sr No",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "SS Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "sr_no",
+                "label": "Sr No",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "observations",
+                "label": "Observations",
+                "type": "label",
+                "align": "left"
+              },
+              {
+                "key": "ss_remarks",
+                "label": "SS Remarks",
+                "type": "label",
+                "align": "left"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "remarks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "remarks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 2,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 2,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type":"label",
+            "value": "Presenting Authority",
+            "colSpan": 12
+          },
+          {
+            "_id": "mss_mk_i_presenting_authority",
+            "key": "mss_mk_i_presenting_authority",
+            "name": "mss_mk_i_presenting_authority",
+            "label": "Presenting Authority",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "Dockyard",
+                "value": "dockyard"
+              },
+              {
+                "label": "Shipstaff",
+                "value": "shipstaff"
+              },
+              {
+                "label": "OEM",
+                "value": "oem"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "mss_mk_i_watt",
+            "key": "mss_mk_i_watt",
+            "name": "mss_mk_i_watt",
+            "label": "WATT",
+            "type": "input",
+            "value": "VZG",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text"
+          }
+        ],
+        "tables_2": []
+      }
+    }
+  ]
+}

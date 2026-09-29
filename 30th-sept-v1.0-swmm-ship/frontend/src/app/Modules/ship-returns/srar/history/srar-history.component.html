@@ -1,0 +1,639 @@
+<div class="space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- History Table Panel Card -->
+  <app-panel-card title="Archived Monthly Returns"
+    subtitle="Latest submitted historical returns fetched via SrarService API" icon="history" iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)">
+    <app-data-grid [rowData]="records()" [columnDefs]="columnDefs" [pageSize]="10" [autoHeight]="true"
+      (rowClicked)="onRowClicked($event)"></app-data-grid>
+  </app-panel-card>
+
+  <!-- Contextual Slide-Over Detail Drawer Component (Matching Right-side Drawer System) -->
+  <app-detail-drawer
+    [open]="isModalOpen()"
+    [wide]="true"
+    [titleMode]="true"
+    [label]="modalTitle()"
+    subtitle="Archived Monthly SRAR Return Full Details"
+    iconName="file-text"
+    iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.16)"
+    sectionTitle="SRAR Return Details"
+    (closed)="closeModal()">
+
+    @if (isLoadingDetail()) {
+    <div class="flex flex-col items-center justify-center py-12 gap-3">
+      <div class="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-xs text-white/70">Fetching archived report details from SrarService...</span>
+    </div>
+    } @else if (selectedReport()) {
+    <div class="space-y-5 pb-6 text-sm text-white/90">
+
+      <!-- Header & Running Parameters Section -->
+      @if (selectedReport()?.header; as header) {
+      <div class="mgmt__section-title">
+        <app-icon name="file-text" [size]="16"></app-icon>
+        <span>SRAR Header & Running Details</span>
+      </div>
+
+      <div class="mgmt__form-grid">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">SRAR Reference</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono font-semibold text-cyan-400">
+            {{ formatReportId(header.id, header.srar_month, header.srar_year) }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">SRAR Period</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value">
+            {{ getMonthName(header.srar_month) }} {{ header.srar_year || 2026 }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">CMMS Sync Status</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value">
+            {{ header.cmms_sync_status ? 'Synced with CMMS' : 'CMMS Pending' }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Hours Underway (Month)</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">
+            {{ header.hours_underway_month_hr || 0 }} hrs {{ header.hours_underway_month_min || 0 }} mins
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Distance Run (Month)</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-cyan-300">
+            {{ header.distance_run_month || '0.00' }} NM
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Max Speed</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-emerald-400">
+            {{ header.max_speed || '1.0' }} Knots {{ header.max_speed_date ? '(' + header.max_speed_date + ')' : '' }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Max Shaft RPM</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-amber-300">
+            {{ header.max_shaft_rpm || '—' }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Engineer Officer Name</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value">
+            {{ header.eo_name || '—' }} {{ header.eo_rank ? '(' + header.eo_rank + ')' : '' }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">EO Personal / Writer No</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">
+            {{ header.eo_personal_no || '—' }} / {{ header.eo_writer_contact_no || '—' }}
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">EO Contact No</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">
+            {{ header.eo_contact_no || '—' }}
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Tab 1: Equipment Exploitation -->
+      @if (selectedReport()?.tab_1_equipment_exploitations?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="activity" [size]="16"></app-icon>
+        <span>1. Equipment Exploitation & Running Hours</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_1_equipment_exploitations; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Equipment</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value text-cyan-400">{{ item.eqpt_name || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Nomenclature / Location</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ item.nomenclature || '—' }}{{ item.loc_on_board ? ' · ' + item.loc_on_board : '' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Hours for Month</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">
+            {{ item.hrs_for_month_hrs || 0 }} hrs {{ item.hrs_for_month_min || 0 }} mins
+          </div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">RHSI Till Current Month</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-amber-300">
+            {{ item.rhsi_till_current_month || 0 }} hrs
+          </div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 2: Boiler Steaming Data -->
+      @if (selectedReport()?.tab_2_boiler_data?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="flame" [size]="16"></app-icon>
+        <span>2. Boiler Steaming Details</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_2_boiler_data; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Boiler Name</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-medium text-white">{{ item.name || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Serial No</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.serial_no || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Hrs Steamed in Month</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.hrs_steamed_in_month || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Hrs Steamed Since Comm.</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.hrs_steamed_since_commissioning || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Hrs Above 20%</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-amber-300">{{ item.hrs_above_20_percent || '—' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 3: Ship Activities -->
+      @if (selectedReport()?.tab_3_ship_activities?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="navigation" [size]="16"></app-icon>
+        <span>3. Ship Activities & State</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_3_ship_activities; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Period (From - To)</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.from_date || '—' }} to {{ item.to_date || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Ship State</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value text-cyan-300">{{ item.ship_state || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Location</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ item.ship_location || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Activity Type</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ item.ship_activity_type || item.ship_activity_detail || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field sm:col-span-2">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Remarks</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value italic text-slate-300">{{ item.remarks || '—' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 4: Fuel Consumptions -->
+      @if (selectedReport()?.tab_4_fuel_consumptions?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="droplet" [size]="16"></app-icon>
+        <span>4. Fuel & AVCAT Consumption</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_4_fuel_consumptions; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">B/F Last Month</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.b_f_from_last_month || '0.0' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Received</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-emerald-400">+{{ item.recieved || '0.0' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Consumed in Harbour</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.consumed_in_harbour || '0.0' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Consumed at Sea</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.consumed_at_sea || '0.0' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Total Consumed</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-amber-400">-{{ item.total_consumed || '0.0' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Balance Left Onboard</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-cyan-300 font-semibold">{{ item.balance_left_on_board || '0.0' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 5: ICCP & Gas Detection -->
+      @if (selectedReport()?.tab_5_iccp?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="shield-check" [size]="16"></app-icon>
+        <span>5. ICCP & Gas Detection Systems</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_5_iccp; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Nomenclature</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-medium text-white">{{ item.nomenclature || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Location Onboard</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ item.loc_on_board || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Status</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value text-emerald-400 font-semibold">{{ item.ops_or_non_ops || 'Operational' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 6: Test Kits -->
+      @if (selectedReport()?.tab_6_test_kits?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="droplet" [size]="16"></app-icon>
+        <span>6. Test Kits & Calibration</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_6_test_kits; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field sm:col-span-2">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Description</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-medium text-white">{{ item.description || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Next Calibration Due Date</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-cyan-300">{{ item.next_calibration_due_date || '—' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 7: Safety Device Checks -->
+      @if (selectedReport()?.tab_7_safety_device_checks?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="cpu" [size]="16"></app-icon>
+        <span>7. Safety Device Checks (SDC)</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_7_safety_device_checks; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Equipment Name</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-medium text-white">{{ item.eqpt_name || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Location Onboard</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ item.loc_on_board || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Date of SDC</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.date_of_sdc || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Last SFC Trial Date</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-cyan-300">{{ item.last_sfc_trial_date || '—' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 8: DGUF -->
+      @if (selectedReport()?.tab_8_dguf?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="chart-bar" [size]="16"></app-icon>
+        <span>8. DGUF & Generator Exploitation</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_8_dguf; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Item ID</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-cyan-400">#{{ item.id }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">DA Number</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.da_number || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">RH Sea & Anchorage</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.rh_at_sea_and_anchorage || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">RH Port</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono">{{ item.rh_at_port || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Total RH in Month</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-amber-300">{{ item.total_rh_in_month || '—' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 12: Lubricants -->
+      @if (selectedReport()?.tab_12_lubricants?.length) {
+      <div class="mgmt__section-title">
+        <app-icon name="box" [size]="16"></app-icon>
+        <span>12. Lubricant Consumption</span>
+      </div>
+
+      @for (item of selectedReport()?.tab_12_lubricants; track item.id) {
+      <div class="mgmt__form-grid mb-3">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Lubricant Name</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-medium text-white">{{ item.name || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Quantity</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono text-cyan-300 font-semibold">{{ item.quantity || 0 }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Unit</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ item.unit || 'Litre' }}</div>
+        </div>
+      </div>
+      }
+      }
+
+      <!-- Tab 14: EO Remarks & EEF -->
+      @if (selectedReport()?.tab_14_eef; as eef) {
+      <div class="mgmt__section-title">
+        <app-icon name="file-text" [size]="16"></app-icon>
+        <span>14. EO Remarks & Energy Efficiency Factor (EEF)</span>
+      </div>
+
+      <div class="mgmt__form-grid">
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Designed EEF</span>
+            <span class="mgmt__field-source source-cmms">CMMS</span>
+          </div>
+          <div class="mgmt__readonly-value font-mono font-semibold text-white">{{ eef.designed || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Reason for Exceeding</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value">{{ eef.reason_for_exceeding || '—' }}</div>
+        </div>
+
+        <div class="mgmt__field sm:col-span-2">
+          <div class="mgmt__field-head">
+            <span class="mgmt__field-label">Ship Remarks</span>
+            <span class="mgmt__field-source source-user">User</span>
+          </div>
+          <div class="mgmt__readonly-value italic text-slate-300">{{ eef.ship_remarks || '—' }}</div>
+        </div>
+      </div>
+      }
+
+    </div>
+    }
+  </app-detail-drawer>
+
+  <!-- Confirm Delete Modal -->
+  @if (isDeleteConfirmModalOpen()) {
+  <app-modal size="md" (closeModal)="closeDeleteConfirmModal()">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom flex items-center justify-between pb-4 border-b mb-4" style="border-color: var(--border-primary);">
+        <h3 class="head3 flex items-center gap-2 text-red-400">
+          <app-icon name="alert-triangle" [size]="20" variant="accent"></app-icon>
+          <span>Confirm SRAR Entry Deletion</span>
+        </h3>
+        <app-button (click)="closeDeleteConfirmModal()" class="action-btn">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <div class="modal-body-custom space-y-3 py-2">
+        <p class="text-sm" style="color: var(--text-primary);">
+          Are you sure you want to delete this SRAR return? This will permanently delete the entry
+          and all related data across every tab (equipment exploitation, boilers, ship activities,
+          fuel, DGUF, lubricants, EEF remarks, etc.) for this month.
+        </p>
+        @if (recordToDelete(); as record) {
+        <div class="p-3 rounded-lg border text-xs space-y-1.5" style="background: var(--bg-input); border-color: var(--border-primary);">
+          <div class="font-semibold text-sm" style="color: var(--text-primary);">
+            {{ record.srarNo }}
+          </div>
+          <div style="color: var(--text-muted);">
+            Period: <span style="color: var(--text-primary);">{{ record.month }} {{ record.year }}</span>
+          </div>
+          <div style="color: var(--text-muted);">
+            Engineer Officer: <span style="color: var(--text-primary);">{{ record.engineerOfficer }}</span>
+          </div>
+        </div>
+        }
+        <p class="text-xs text-red-400/80 italic">
+          This action cannot be undone.
+        </p>
+      </div>
+
+      <div class="modal-footer-custom flex items-center justify-end gap-3 pt-4 border-t mt-6" style="border-color: var(--border-primary);">
+        <app-button (click)="closeDeleteConfirmModal()" class="button secondary-btn" [disabled]="isDeleting()">
+          Cancel
+        </app-button>
+        <app-button (click)="confirmDeleteRecord()" class="button bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition-colors flex items-center gap-2" [disabled]="isDeleting()">
+          <app-icon name="trash-2" [size]="16" variant="inherit"></app-icon>
+          <span>{{ isDeleting() ? 'Deleting...' : 'Delete Entry' }}</span>
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+</div>

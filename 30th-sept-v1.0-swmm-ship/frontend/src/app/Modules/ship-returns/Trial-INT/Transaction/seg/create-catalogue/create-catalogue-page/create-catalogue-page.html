@@ -1,0 +1,151 @@
+<div class="mx-auto w-full max-w-[1800px]">
+  <div class="trail-filter" [class.trail-filter--open]="filtersOpen">
+    <button
+      type="button"
+      class="trail-filter__toggle"
+      (click)="filtersOpen = !filtersOpen"
+      [attr.aria-expanded]="filtersOpen"
+    >
+      <span class="trail-filter__toggle-left">
+        <span class="trail-filter__icon" aria-hidden="true"><i class="fas fa-filter"></i></span>
+        <span class="trail-filter__title">Filters</span>
+        <span *ngIf="activeFilterCount" class="trail-filter__count">{{ activeFilterCount }}</span>
+        <span class="trail-filter__chips" *ngIf="!filtersOpen && activeFilterCount">
+          <span class="trail-filter__chip" *ngIf="showShipFilter && shipFilterLabel">{{ shipFilterLabel }}</span>
+          <span class="trail-filter__chip" *ngIf="departmentFilterLabel">{{ departmentFilterLabel }}</span>
+          <span class="trail-filter__chip" *ngIf="systemFilterLabel">{{ systemFilterLabel }}</span>
+          <span class="trail-filter__chip" *ngIf="subsystemFilterLabel">{{ subsystemFilterLabel }}</span>
+          <span class="trail-filter__chip" *ngIf="subSubSystemFilterLabel">{{ subSubSystemFilterLabel }}</span>
+        </span>
+        <span class="trail-filter__hint" *ngIf="!filtersOpen && !activeFilterCount">
+          {{ showShipFilter ? 'Ship, department, system & MMD' : 'Department, system & MMD' }}
+        </span>
+      </span>
+      <i
+        class="fas trail-filter__chevron text-[11px]"
+        [class.fa-chevron-down]="!filtersOpen"
+        [class.fa-chevron-up]="filtersOpen"
+        aria-hidden="true"
+      ></i>
+    </button>
+
+    <div class="trail-filter__body" *ngIf="filtersOpen" (click)="$event.stopPropagation()">
+      <form [formGroup]="filterForm">
+        <div
+          class="trail-filter__fields"
+          [class.trail-filter__fields--with-ship]="showShipFilter"
+        >
+          <div *ngIf="showShipFilter" class="trail-filter__field">
+            <app-multiselect
+              label="Ship"
+              formControlName="ship"
+              [options]="shipOptions"
+              placeholder="All ships"
+              [maxVisibleTags]="1"
+            />
+          </div>
+          <div class="trail-filter__field">
+            <app-multiselect
+              label="Department"
+              formControlName="department"
+              [options]="departmentOptions"
+              placeholder="All departments"
+              [maxVisibleTags]="1"
+            />
+          </div>
+          <div class="trail-filter__field">
+            <app-multiselect
+              label="System"
+              formControlName="system"
+              [options]="systemOptions"
+              placeholder="All systems"
+              [maxVisibleTags]="1"
+            />
+          </div>
+          <div class="trail-filter__field">
+            <app-multiselect
+              label="Sub System"
+              formControlName="subsystem"
+              [options]="subsystemOptions"
+              placeholder="All sub systems"
+              [maxVisibleTags]="1"
+            />
+          </div>
+          <div class="trail-filter__field">
+            <app-multiselect
+              label="Sub Sub System"
+              formControlName="subSubSystem"
+              [options]="subSubSystemOptions"
+              placeholder="All sub sub systems"
+              [maxVisibleTags]="1"
+            />
+          </div>
+          <div class="trail-filter__actions">
+            <div
+              class="catalogue-filter__metric"
+              [title]="activeMmdSummaryLabel"
+              [attr.aria-label]="activeMmdSummaryLabel"
+            >
+              <span class="catalogue-filter__metric-value">
+                {{ totalActiveMmdsInSubsystem }}
+              </span>
+              <div class="catalogue-filter__metric-copy">
+                <span class="catalogue-filter__metric-title">
+                  {{ activeMmdMetricTitle }}
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="sfd-btn-primary trail-filter__apply"
+              (click)="applyFilters(); $event.stopPropagation()"
+            >
+              Apply
+            </button>
+            <button
+              type="button"
+              class="sfd-btn-secondary trail-filter__clear"
+              [disabled]="!activeFilterCount"
+              (click)="resetFilters(); $event.stopPropagation()"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+    <app-paginate-table
+      #createCatalogueTable
+      [showHeaderSection]="true"
+      [title]="'Create MMD'"
+      [description]="'Add and manage MMDs for the selected filters'"
+      [showSearch]="true"
+      [showFilterButton]="false"
+      [url]="tableUrl"
+      [columnDefs]="columnDefs"
+      [showPagination]="true"
+      [addButtons]="addButtons"
+      (addButtonClick)="handleAddButtonClick($event)">
+    </app-paginate-table>
+  </div>
+
+  <app-add-mmd-dialog
+    [open]="showAddMmdDialog"
+    [filterContext]="addMmdFilterContext"
+    (openChange)="onAddMmdDialogOpenChange($event)"
+    (saved)="onMmdSaved()"
+  />
+
+  <app-reusable-delete-dialog
+    [open]="showDeleteDialog"
+    [name]="deleteName"
+    entityType="MMD"
+    [loading]="deleteLoading"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteDialog()"
+  ></app-reusable-delete-dialog>
+</div>

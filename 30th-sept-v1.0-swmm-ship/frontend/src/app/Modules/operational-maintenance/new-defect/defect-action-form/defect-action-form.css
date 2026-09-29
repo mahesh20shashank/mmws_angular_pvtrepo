@@ -1,0 +1,123 @@
+@import '../shared/daf-shared.css';
+
+/* Reserves room for the fixed-position `app-recorded-defects-panel` sidebar so it
+   sits alongside this screen's content instead of covering it — width must match
+   the panel's own `.rdp-panel` width in recorded-defects-panel.css. */
+.daf-main {
+  transition: padding-right 0.2s ease;
+}
+
+.daf-main--panel-open {
+  padding-right: 376px;
+}
+
+@media (max-width: 900px) {
+  /* Too narrow to give up 376px and still show a usable form — let the panel
+     overlay instead of squeezing the form unreadably thin. */
+  .daf-main--panel-open {
+    padding-right: 0;
+  }
+}
+
+/* ---------- DART type picker ----------
+   Local to this screen only — the shared `app-select-cards` component (used on other
+   pickers across the app) is untouched; its no-wrap single-line styling doesn't fit
+   these longer titles/descriptions. */
+.daf-type-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.daf-type-head .daf-back {
+  flex-shrink: 0;
+}
+
+.daf-type-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.daf-type-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  padding-top: 4px;
+  /* border-top: 1px solid var(--border-primary); */
+}
+
+.daf-type-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.daf-type-card--disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.daf-type-card-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.daf-type-card-radio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--border-primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.daf-type-card--selected .daf-type-card-radio {
+  border-color: var(--accent-blue);
+}
+
+.daf-type-card--selected .daf-type-card-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+}
+
+.daf-type-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  max-width: 190px;
+}
+
+.daf-type-card-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  transition: color 0.14s;
+}
+
+.daf-type-card--selected .daf-type-card-title {
+  color: var(--accent-blue);
+}
+
+.daf-type-card-desc {
+  font-size: 10.5px;
+  line-height: 13px;
+  color: var(--text-muted);
+}

@@ -1,0 +1,46 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>History - Issue / Returned Items</h3>
+  </div>
+
+  <div class="obs-tabs-row">
+    <app-button
+      type="button"
+      class="obs-tab-btn"
+      [class.obs-tab-btn--active]="activeTab() === 'issued'"
+      (click)="selectTab('issued')"
+    >
+      Issued History
+    </app-button>
+    <app-button
+      type="button"
+      class="obs-tab-btn"
+      [class.obs-tab-btn--active]="activeTab() === 'returned'"
+      (click)="selectTab('returned')"
+    >
+      Return History
+    </app-button>
+  </div>
+
+  <form [formGroup]="filtersForm" class="obs-filters" (ngSubmit)="search()">
+    <app-select-input label="Spare Class" placeholder="ALL" formControlName="spareClass" [options]="spareClasses()" />
+    <app-select-input label="Equipment Class" placeholder="ALL" formControlName="equipmentClass" [options]="equipmentClasses()" />
+    <app-input-field label="Date From" type="date" formControlName="dateFrom" />
+    <app-input-field label="Date To" type="date" formControlName="dateTo" />
+    <div class="obs-filters__actions">
+      <app-button type="submit" class="btn-primary">Search</app-button>
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">Clear</app-button>
+    </div>
+  </form>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredEntries().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <app-data-grid [rowData]="filteredEntries()" [columnDefs]="columnDefs" height="420px" />
+</div>

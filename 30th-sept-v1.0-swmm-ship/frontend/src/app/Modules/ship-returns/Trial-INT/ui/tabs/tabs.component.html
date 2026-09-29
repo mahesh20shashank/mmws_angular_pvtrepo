@@ -1,0 +1,23 @@
+<div class="w-full overflow-hidden rounded-lg border border-[var(--border-primary)] bg-[var(--bg-card)]">
+  <div class="flex gap-2 overflow-x-auto border-b border-[var(--border-primary)] p-2">
+    <button
+      *ngFor="let label of labels; let i = index"
+      type="button"
+      (click)="setActive(i)"
+      class="whitespace-nowrap rounded-md border border-transparent px-5 py-2 text-sm font-medium text-[var(--text-muted)] transition hover:bg-[var(--bg-nav-child-hover)] hover:text-[var(--text-primary)]"
+      [class.border-[#4da6ff]]="activeTab === i"
+      [class.bg-[#1069AB]]="activeTab === i"
+      [class.text-white]="activeTab === i"
+    >
+      {{ label }}
+    </button>
+  </div>
+
+  <div class="p-4 text-[var(--text-primary)]">
+    <div *ngFor="let tpl of templatesArray; let i = index">
+      <div [hidden]="activeTab !== i">
+        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>

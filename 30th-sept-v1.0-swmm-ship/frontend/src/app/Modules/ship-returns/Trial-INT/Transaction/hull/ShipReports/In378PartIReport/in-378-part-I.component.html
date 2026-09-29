@@ -1,0 +1,149 @@
+<!-- in-378-render-part1-report.component.html -->
+
+<div
+  class="report-container"
+  id="in378-render-report"
+>
+
+  <!-- TOP BAR -->
+
+  <div class="flex justify-end mb-5">
+    <button
+      (click)="downloadReport()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+
+      Download Report
+
+    </button>
+  </div>
+
+  <!-- TITLE -->
+
+  <div class="report-title">
+    IN 378 RENDER PART 1 REPORT - <span class="italic-text">{{shipName}}</span>
+  </div>
+
+  <!-- HEADER DETAILS -->
+
+  <div class="details-section">
+    <div class="detail-item">
+      <span class="detail-key">Initiated by :</span>
+      <span class="detail-value">{{ InitiatedBy || '-' }}</span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key"> Year :</span>
+      <span class="detail-value">{{ year || '-' }}</span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key">Period :</span>
+      <span class="detail-value">Half Yearly (June)</span>
+    </div>
+
+    <div class="detail-item" *ngIf="documentUrl">
+      <span class="detail-key">Document :</span>
+      <span class="detail-value">
+        <a [href]="documentUrl" target="_blank" class="doc-url-link">{{ documentUrl }}</a>
+      </span>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+
+  <div class="table-scroll-wrapper">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th class="report-table-header-s-no">Ser</th>
+          <th class="report-table-header">Status</th>
+          <th class="report-table-header">Type of Door</th>
+          <th class="report-table-header">Compartment</th>
+          <th class="report-table-header">
+            Date of Initiation
+          </th>
+          <th class="report-table-header">
+            Type of Test Undertaken
+          </th>
+          <th class="report-table-header">
+            Date of Chalk
+            Test/ULD/Air Hose Test
+          </th>
+          <th class="report-table-header">
+            Defect Discovered
+          </th>
+          <th class="report-table-header">
+            Action Taken
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="
+            let row of reportTableData;
+            let i = index
+          "
+        >
+          <td>
+            {{ i + 1 }}
+          </td>
+          <td>
+            {{ row.status || '-' }}
+          </td>
+          <td>
+            {{ row.type_of_door || '-' }}
+          </td>
+          <td>
+            {{ row.compartment || '-' }}
+          </td>
+           <td>
+            {{
+              row.date_of_initiation || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.type_of_test_undertaken || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.date_of_test || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.defect_discovered || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.action_taken || '-'
+            }}
+          </td>
+        </tr>
+
+        <!-- NO DATA -->
+
+        <tr *ngIf="!reportTableData.length">
+
+          <td colspan="10">
+            No Data Found
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- STATUS BELOW TABLE -->
+  <div class="report-status-footer">
+    Status : <span class="report-status-badge">{{ reportStatus }}</span>
+  </div>
+
+</div>

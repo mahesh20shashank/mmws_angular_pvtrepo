@@ -1,0 +1,221 @@
+<div class="glass-card daf-form" [formGroup]="form">
+  <div class="daf-form-head">
+    <span class="daf-form-title">Digital Defect Book — As&As</span>
+    <span class="daf-mand-note">Fields marked <span class="daf-star">*</span> are mandatory</span>
+  </div>
+
+  <div class="daf-form-grid">
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">As&As Type <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-select-input placeholder="Select type — Major / Minor" [required]="true" [options]="asAndAsTypeOptions"
+        [error]="submitAttempted() && form.controls.asAndAsType.invalid" formControlName="asAndAsType" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Category <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-select-input placeholder="Select Category" [required]="true" [options]="categoryOptions"
+        [error]="submitAttempted() && form.controls.category.invalid" formControlName="category" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Equipment Name <span class="daf-field-hint">(equipment-linked)</span></span>
+        <span class="daf-field-badge">SFD</span>
+      </div>
+      <app-single-select placeholder="Select equipment name" [required]="true" [options]="equipmentNameOptions"
+        [config]="equipmentNameConfig" [error]="submitAttempted() && form.controls.equipmentName.invalid"
+        formControlName="equipmentName" (onSelect)="onSelectEquipmentName($event)" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Equipment Nomenclature</span>
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+
+      <app-single-select placeholder="Select  equipment Nomenclature" [required]="true"
+        [options]="equipmentNomenclatureOptions" [config]="nomenclatureConfig"
+        [error]="submitAttempted() && form.controls.equipmentNomenclature.invalid"
+        formControlName="equipmentNomenclature" (onSelect)="onSelectEquipmentNomenclature($event)" />
+
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Equipment Serial Number <span class="daf-star">*</span></span>
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+      <app-input-field type="text" placeholder="Enter Serial Number" [readonly]="true"
+        formControlName="equipmentSerialNumber" />
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Equipment code <span class="daf-star">*</span></span>
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+      <app-input-field type="text" placeholder="Enter Serial Number" [readonly]="true"
+        formControlName="equipmentcode" />
+
+      <!-- add formcontrolname later when binding form -->
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Compartment <span class="daf-star">*</span></span>
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+      <app-input-field type="text" placeholder="Enter Serial Number" [readonly]="true" formControlName="compartment" />
+
+      <!-- add formcontrolname later when binding form -->
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Location On Board <span class="daf-star">*</span></span>
+        <span class="daf-field-badge">SFD (auto-fetched)</span>
+      </div>
+      <app-input-field type="text" placeholder="Enter location on board" [readonly]="true"
+        formControlName="locationOnBoard" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Date of Occurrence <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-input-field type="date" [required]="true"
+        [invalid]="submitAttempted() && form.controls.dateOfOccurrence.invalid" formControlName="dateOfOccurrence" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Equipment Status <span class="daf-field-hint">(defect path)</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-single-select placeholder="Select Equipment Status" [required]="true" [options]="equipmentStatusOptions"
+        [error]="submitAttempted() && form.controls.equipmentStatus.invalid" formControlName="equipmentStatus" 
+        [config]="equipmentStatusConfig"
+        />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Operational Severity <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-single-select placeholder="Select Operational Severity" [required]="true" [config]="severtiyConfig"
+        [options]="operationalSeverityOptions" [error]="submitAttempted() && form.controls.operationalSeverity.invalid"
+        formControlName="operationalSeverity" />
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Defect description<span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+
+      </div>
+      <app-input-field type="text" placeholder="Enter defect description" formControlName="defectDescription" />
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Trials Required</span>
+        <span class="daf-field-badge">System (ITTTM)</span>
+      </div>
+      <div class="daf-field-radio-group">
+        @for (opt of yesNoOptions; track opt.value) {
+        <label class="daf-field-radio"
+          [class.daf-field-radio--selected]="form.controls.trialsRequired.value === opt.value">
+          <input type="radio" class="daf-field-radio-input" name="trialsRequired" [value]="opt.value"
+            formControlName="trialsRequired" />
+          <span class="daf-field-radio-outer"><span class="daf-field-radio-dot"></span></span>
+          {{ opt.label }}
+        </label>
+        }
+      </div>
+    </div>
+    @if (showTrialAgency) {
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Trial Agency <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-single-select placeholder="Select Trial Agency" [options]="trialAgencyOptions" [config]=trailAgencies
+        [error]="submitAttempted() && form.controls.trialAgency.invalid" formControlName="trialAgency" />
+    </div>
+    }
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Spares Used / Spare Required <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <div class="daf-field-radio-group">
+        @for (opt of yesNoOptions; track opt.value) {
+        <label class="daf-field-radio"
+          [class.daf-field-radio--selected]="form.controls.sparesUsedRequired.value === opt.value">
+          <input type="radio" class="daf-field-radio-input" name="sparesUsedRequired" [value]="opt.value"
+            formControlName="sparesUsedRequired" />
+          <span class="daf-field-radio-outer"><span class="daf-field-radio-dot"></span></span>
+          {{ opt.label }}
+        </label>
+        }
+      </div>
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Attachment</span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-file-input placeholder="Attach image" accept="image/*" formControlName="attachment" />
+    </div>
+
+    <!-- <app-spare-details [show]="showSpareDetails" /> -->
+  </div>
+  <!-- new heading -->
+  <div class="daf-form-head">
+    <span class="daf-form-title">As&As — Details</span>
+  </div>
+  <div class="daf-form-grid">
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Nature of As&As <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-select-input formControlName="natureOfAsAndAs" placeholder="Select Nature of As&As " [required]="true"
+        [options]="natureOfAsAndAsOptions" />
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">As&As Justification</span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+
+      </div>
+      <app-input-field type="text" placeholder="Enter As&As Justification" formControlName="asAndAsJustification" />
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Target Completion Date<span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-input-field type="date" [required]="true" formControlName="targetCompletionDate" />
+    </div>
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Sanctioning Authority</span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+
+      </div>
+      <app-input-field type="text" placeholder="Enter Sanctioning Authority" formControlName="sanctioningAuthority" />
+    </div>
+
+  </div>
+  <div class="daf-form-actions">
+    <app-button type="button" class="daf-btn daf-btn--ghost" (click)="cancel()">Cancel</app-button>
+    <app-button type="button" class="daf-btn daf-btn--secondary" (click)="saveDraft()">Save</app-button>
+    <app-button type="button" class="daf-btn daf-btn--primary" (click)="submit()">Raise DART</app-button>
+  </div>
+</div>

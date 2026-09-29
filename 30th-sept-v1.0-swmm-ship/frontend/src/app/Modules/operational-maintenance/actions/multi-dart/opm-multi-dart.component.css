@@ -1,0 +1,872 @@
+@import '../opm-actions.component.css';
+
+.act-multi-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 24px;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.88rem;
+}
+
+.act-multi-empty strong {
+  color: var(--text-primary, #e2e8f0);
+}
+
+/* ---- New Multiple DART toolbar ---- */
+.act-multi-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+}
+
+.act-btn--warning {
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  /* #8a5c08 measured under 4.5:1 against white text (SonarQube css:S7924) — same amber
+     hue as the rest of this feature's warning accents, darkened just enough to clear
+     the ratio (mirrors the #0069cc treatment on .act-btn--primary above). */
+}
+
+
+/* ---------- Create Multiple DARTs modal picker row ---------- */
+.act-multi-picker-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+/* ---------- New Multiple DART — editable plain HTML table ---------- */
+.act-new-multi-wrap {
+  padding: 0;
+  overflow: hidden;
+  margin-top: 0.875rem;
+}
+
+.act-new-multi-table-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  height: 440px;
+}
+
+.act-new-multi-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.act-new-multi-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.act-new-multi-table th {
+  background: var(--bg-dropdown);
+  padding: 10px 10px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 11.5px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  text-align: left;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.act-new-multi-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border-primary);
+  vertical-align: middle;
+}
+
+.act-new-multi-row:hover {
+  background: rgba(0, 136, 255, 0.04);
+}
+
+.act-new-multi-idx {
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+  min-width: 30px;
+  white-space: nowrap;
+}
+
+.act-new-multi-input {
+  width: 130px;
+  height: 32px;
+  border-radius: 7px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  padding: 0 9px;
+  font-size: 12px;
+  font-family: "Inter", sans-serif;
+  outline: none;
+  transition: border-color 0.13s;
+  box-sizing: border-box;
+}
+
+.act-new-multi-input:focus {
+  border-color: #0088ff;
+  background: rgba(0, 136, 255, 0.04);
+}
+
+.act-new-multi-input[type="date"] {
+  width: 140px;
+}
+
+/* Fixed width for every select-input column — without this, the column's width tracks
+   whatever label happens to be selected in that row (auto table layout sizes each column
+   to its widest cell), so switching rows/values makes the dropdown visibly resize.
+   Column order: 1 checkbox, 2 DART No, 3 S No, 4 Equipment Name, 5 Eqpt Nomenclature,
+   6 Sub-Department, 7 Defect Date, 8 Scheduled Date, 9 Symptoms, 10 Severity,
+   11 Req. Assistance, 12 Defective Component, 13 Defect Description, 14 SS Remarks,
+   15 Spares Request, 16 Action. */
+.act-new-multi-table th:nth-child(4),
+.act-new-multi-table td:nth-child(4),
+.act-new-multi-table th:nth-child(5),
+.act-new-multi-table td:nth-child(5),
+.act-new-multi-table th:nth-child(9),
+.act-new-multi-table td:nth-child(9),
+.act-new-multi-table th:nth-child(10),
+.act-new-multi-table td:nth-child(10),
+.act-new-multi-table th:nth-child(11),
+.act-new-multi-table td:nth-child(11),
+.act-new-multi-table th:nth-child(14),
+.act-new-multi-table td:nth-child(14),
+.act-new-multi-table th:nth-child(15),
+.act-new-multi-table td:nth-child(15) {
+  width: 180px;
+  min-width: 180px;
+  max-width: 180px;
+  overflow: hidden;
+}
+
+.act-new-multi-table td app-select-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.act-input-error {
+  border-color: #f82c36 !important;
+  background-color: rgba(248, 44, 54, 0.05) !important;
+}
+
+.act-new-multi-empty {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.act-new-multi-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-primary);
+  font-size: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.act-new-multi-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+
+/* ---------- DART No — auto-incremented cell ---------- */
+.act-new-multi-dart-no {
+  color: #f82c36;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+  cursor: pointer;
+}
+
+.act-new-multi-dart-no:hover {
+  color: #1e293b;
+}
+
+/* ---------- Raise DART modal ---------- */
+.act-raise-dart-modal {
+  width: min(520px, 90vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* Light-mode overrides — modal uses white bg */
+  --text-primary: #1a202c;
+  --text-muted: #64748b;
+  --bg-input: #f8fafc;
+  --border-primary: #e2e8f0;
+  color: #1a202c;
+}
+
+
+.act-raise-dart-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.act-raise-dart-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #1a202c;
+  flex: 1;
+}
+
+.act-raise-dart-warn {
+  padding: 11px 14px;
+  border-radius: 9px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  font-size: 13px;
+  color: #78350f;
+  line-height: 1.5;
+}
+
+.act-raise-dart-warn strong {
+  color: #b45309;
+}
+
+.act-raise-dart-hint {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.act-raise-dart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.act-inline-input>span {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.act-filter-field-select {
+  height: 42px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #1a202c;
+  padding: 0 12px;
+  font-size: 12.5px;
+  font-family: "Poppins", sans-serif;
+  outline: none;
+  cursor: pointer;
+}
+
+.act-filter-field-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ---------- Checkbox column ---------- */
+
+.act-new-multi-th-cb {
+  width: 38px;
+  min-width: 38px;
+  text-align: center;
+  padding: 0 6px !important;
+}
+
+.act-cb-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.act-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.act-checkbox--indeterminate {
+  background: rgba(0, 105, 204, 0.55);
+  border-color: #0069cc;
+  color: #fff;
+}
+
+.act-new-multi-row--selected {
+  background: rgba(0, 136, 255, 0.07) !important;
+}
+
+/* ---------- Footer pagination (matches app-data-grid style) ---------- */
+.act-pg-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.act-pg-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-family: "Inter", sans-serif;
+}
+
+.act-pg-size-select {
+  height: 30px;
+  padding: 0 28px 0 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.act-pg-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.act-pg-range {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-family: "Inter", sans-serif;
+}
+
+.act-pg-btns {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.act-pg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.13s, border-color 0.13s, color 0.13s;
+  white-space: nowrap;
+}
+
+.act-pg-btn:hover:not(:disabled) {
+  background: rgba(0, 136, 255, 0.12);
+  border-color: rgba(0, 136, 255, 0.45);
+  color: #4aa8ff;
+}
+
+.act-pg-btn--active {
+  background: #0069cc;
+  border-color: #0069cc;
+  color: #fff;
+}
+
+.act-pg-btn--active:hover {
+  background: #0077e6;
+  border-color: #0077e6;
+  color: #fff;
+}
+
+.act-pg-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+
+/* ---------- Import Excel — replace warning banner ---------- */
+.act-import-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: rgba(245, 185, 75, 0.1);
+  border: 1px solid rgba(245, 185, 75, 0.35);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* ---------- Custom tooltip (data-tooltip) ---------- */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  white-space: normal;
+  width: max-content;
+  max-width: 260px;
+  background: var(--bg-dropdown);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: inherit;
+  line-height: 1.55;
+  padding: 8px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border-dropdown);
+  box-shadow: var(--shadow-card);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 9999;
+  text-align: left;
+}
+
+[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--bg-dropdown);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 9999;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* First button tooltip — left-align so it doesn't clip off-screen */
+.act-multi-toolbar [data-tooltip]:first-child::after {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+
+.act-multi-toolbar [data-tooltip]:first-child::before {
+  left: 28px;
+  transform: translateX(-50%);
+}
+
+.act-multi-toolbar [data-tooltip]:first-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+.act-help {
+  margin: 0 0 20px;
+  border-radius: 0 0 18px 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+}
+
+.act-help__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 25px;
+  padding: 6px 18px;
+  background: #dbeafe;
+  cursor: pointer;
+  user-select: none;
+}
+
+.act-help__icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #74a9f8;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.act-help__title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 800;
+  color: #172033;
+}
+
+.act-help__toggle {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #1671e8;
+  font-size: 18px;
+  padding: 8px 12px;
+}
+
+.act-help__toggle span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.act-help__toggle span.rotated {
+  transform: rotate(180deg);
+}
+
+.act-help__body {
+  padding: 24px 28px 28px;
+  color: #172033;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.act-help__body h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.act-help__body p {
+  margin: 0 0 18px;
+}
+
+.act-help__body ul {
+  margin: 0 0 20px;
+  padding-left: 28px;
+}
+
+.act-help__body li {
+  margin-bottom: 10px;
+}
+
+.act-help__body strong {
+  font-weight: 800;
+}
+
+.act-help__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.act-help__card {
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.act-help__body h3 {
+  margin: 10px 0 6px;
+}
+
+.act-help__body p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.act-help__body ul,
+.act-help__body ol {
+  margin: 6px 0;
+  padding-left: 22px;
+}
+
+.act-help__body li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .act-help__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Create Multiple DARTs dropdown styling */
+.act-multi-picker-row select {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #3f454d;
+  border-radius: 8px;
+  background: #2b2f34;
+  color: #e8eaed;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.act-multi-picker-row select:focus {
+  border-color: #2d7ff9;
+}
+
+.act-multi-picker-row select option {
+  background: #2b2f34;
+  color: #e8eaed;
+}
+
+/* ==========================================================================
+   Reusable SFD Modal (Scoped to OPM Actions)
+   ========================================================================== */
+.sfd-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 18, .65);
+  backdrop-filter: blur(6px);
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  animation: fade .15s ease;
+}
+
+.sfd-modal {
+  width: 560px;
+  max-width: calc(100vw - 32px);
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45), 0 0 0 1px var(--border-card);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  border: 1px solid var(--border-card);
+  backdrop-filter: blur(39.2px) saturate(170%);
+}
+
+.sfd-modal-body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: visible;
+}
+
+.sfd-modal-head {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-card);
+  flex-shrink: 0;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.sfd-modal-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.sfd-modal-head .close {
+  margin-left: auto;
+}
+
+.sfd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sfd-field label {
+  font-size: 10px;
+  color: var(--text-muted-2, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+}
+
+.sfd-field input,
+.sfd-field select,
+.sfd-field textarea {
+  padding: 9px 12px;
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: inherit;
+  min-width: 0;
+  width: 100%;
+}
+
+.sfd-field input::placeholder,
+.sfd-field textarea::placeholder {
+  color: var(--text-muted-2);
+}
+
+.sfd-field input:focus,
+.sfd-field select:focus,
+.sfd-field textarea:focus {
+  border-color: rgba(96, 165, 250, .5);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
+}
+
+.sfd-field select option {
+  background: var(--bg-dropdown);
+  color: var(--text-primary);
+}
+
+.sfd-field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.sfd-modal-foot {
+  padding: 14px 20px 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.sfd-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--text-muted, #475569);
+  background: var(--bg-input, #ffffff);
+  border: 1px solid var(--border-card, #e2e8f0);
+  cursor: pointer;
+}
+
+.sfd-icon-btn:hover {
+  background: var(--bg-icon-btn);
+  color: var(--text-primary);
+}
+
+.sfd-icon-btn.close:hover {
+  background: var(--bg-icon-btn, #f1f5f9);
+  color: var(--text-primary, #0f172a);
+}
+
+.sfd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 500;
+  background: var(--bg-input);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  transition: background .15s ease, color .15s ease, border-color .15s ease, transform .12s ease;
+  cursor: pointer;
+}
+
+.sfd-btn:hover {
+  background: var(--bg-nav-child-hover);
+  border-color: var(--border-primary);
+}
+
+.sfd-btn.primary {
+  background: #0ea5e9;
+  border-color: #0284c7;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(14, 165, 233, .2);
+}
+
+.sfd-btn.primary:hover {
+  background: #0284c7;
+  border-color: #0369a1;
+}
+
+.sfd-btn.primary:disabled {
+  background: var(--bg-input-disabled, #f1f5f9);
+  border-color: var(--border-card, #e2e8f0);
+  color: var(--text-muted-2, #94a3b8);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Table Checkboxes
+   ========================================================================== */
+.act-cb-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.act-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.act-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border-primary, #94a3b8);
+  border-radius: 4px;
+  background: var(--bg-input, #ffffff);
+  color: transparent;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: bold;
+  transition: all 0.1s ease;
+}
+
+.act-checkbox--on,
+.act-checkbox--indeterminate {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: #ffffff;
+}
+
+input:focus+.act-checkbox {
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3);
+}

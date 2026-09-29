@@ -1,0 +1,169 @@
+<div class="calendar">
+      @switch (store.view()) {
+        @case ('Month') {
+          <div class="cal-month">
+            @if (store.loading()) {
+              <div class="cal-skeleton">
+                @for (row of [0, 1, 2, 3, 4]; track row) {
+                  <div class="cal-skeleton-row">
+                    @for (col of [0, 1, 2, 3, 4, 5, 6]; track col) {
+                      <div class="cal-skeleton-cell"></div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+            <div class="dow-row">
+              @for (d of DOW_SHORT; track d) {<div>{{ d }}</div>}
+            </div>
+            <div class="grid">
+              @for (c of monthCells(); track c.d.getTime()) {
+                <div class="mday"
+                     [class.dim]="!c.inMonth"
+                     [class.today]="c.isToday"
+                     [class.selected]="store.selectedDate() === dateKey(c.d)"
+                      tabindex="0" role="button" (click)="onMonthDayPick($event, c.d)" (keyup.enter)="onMonthDayPick($event, c.d)" >
+                  <div class="dom">
+                    {{ c.d.getDate() }}
+                    @if (c.isToday) {
+                      <app-button type="button" class="overdue-darts-pin" title="Overdue pending DARTs" (click)="openOverdueDarts($event)">!</app-button>
+                    }
+                  </div>
+                  <div class="mday-events">
+                    @for (a of c.acts.slice(0, 3); track a.id) {
+                      <div
+                        class="mevent"
+                        [style.background]="eventColor(a)"
+                        [title]="a.title"
+                         tabindex="0" role="button" (click)="onPick($event, a.id)" (keyup.enter)="onPick($event, a.id)"
+                      >{{ a.title }}</div>
+                    }
+                    @if (c.acts.length > 3) {
+                      <div class="mevent-more" tabindex="0" role="button" (click)="showAllEventsForDay($event, c.d, c.acts)" (keyup.enter)="showAllEventsForDay($event, c.d, c.acts)" title="Click to see all events">+{{ c.acts.length - 3 }} more</div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+            }
+          </div>
+        }
+        @case ('Year') {
+          <div class="cal-year">
+            @if (store.yearLoading()) {
+              <div class="cal-skeleton">
+                @for (row of [0, 1, 2, 3]; track row) {
+                  <div class="cal-skeleton-row">
+                    @for (col of [0, 1, 2]; track col) {
+                      <div class="cal-skeleton-cell" style="height: 140px"></div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              @for (month of yearMonths(); track month.label) {
+                <div class="year-month">
+                  <div class="year-month__title">{{ month.label }}</div>
+                  <div class="year-month__dow-row">
+                    @for (d of WEEKDAY_SHORT; track d) {<div>{{ d }}</div>}
+                  </div>
+                  <div class="year-month__grid">
+                    @for (c of month.cells; track c.d.getTime()) {
+                      <div
+                        class="year-mday"
+                        [class.dim]="!c.inMonth"
+                        [class.today]="c.isToday"
+                         tabindex="0" role="button" (click)="onYearDayPick(c.d)" (keyup.enter)="onYearDayPick(c.d)"
+                      >
+                        <div class="dom">
+                          {{ c.d.getDate() }}
+                          @if (c.isToday) {
+                            <app-button type="button" class="overdue-darts-pin" title="Overdue pending DARTs" (click)="openOverdueDarts($event)">!</app-button>
+                          }
+                        </div>
+                        @for (a of c.acts.slice(0, 3); track a.id) {
+                          <div class="year-mevent" [style.background]="eventColor(a)" [title]="a.title">{{ a.title }}</div>
+                        }
+                        @if (c.acts.length > 3) {
+                          <div class="year-mevent-more" tabindex="0" role="button" (click)="showAllEventsForDay($event, c.d, c.acts)" (keyup.enter)="showAllEventsForDay($event, c.d, c.acts)" title="Click to see all events">+{{ c.acts.length - 3 }} more</div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        }
+        @default {
+          <!-- Week (default) and Day share the same time-slot layout, WITHOUT department lanes -->
+          @let isDay = store.view() === 'Day';
+          @if (store.loading()) {
+            <div class="cal-skeleton">
+              @for (row of [0, 1, 2, 3, 4, 5]; track row) {
+                <div class="cal-skeleton-row">
+                  @for (col of (isDay ? [0] : [0, 1, 2, 3, 4, 5, 6]); track col) {
+                    <div class="cal-skeleton-cell" style="height: 36px"></div>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+          <div class="cal-head" [class.day-mode]="isDay">
+            <div class="col">Time</div>
+            @if (isDay) {
+              <div class="col day today">
+                <span class="dow">{{ dayHead().dow }}</span>
+                <span class="dom">{{ dayHead().dom }} {{ dayHead().month }}</span>
+                @if (dayHead().isToday) {
+                  <app-button type="button" class="overdue-darts-pin" title="Overdue pending DARTs" (click)="openOverdueDarts($event)">!</app-button>
+                }
+              </div>
+            } @else {
+              @for (d of weekDays(); track d.dom) {
+                <div class="col day" [class.today]="d.today">
+                  <span class="dow">{{ d.dow }}</span>
+                  <span class="dom">{{ d.dom }} {{ d.month }}</span>
+                  @if (d.today) {
+                    <app-button type="button" class="overdue-darts-pin" title="Overdue pending DARTs" (click)="openOverdueDarts($event)">!</app-button>
+                  }
+                </div>
+              }
+            }
+          </div>
+          <div class="cal-body" [class.day-mode]="isDay" style="position: relative">
+            @for (slot of timeSlots; track slot) {
+              <div class="time-cell">{{ slot }}</div>
+              @if (isDay) {
+                <div class="cell" [class.today-col]="dayHead().isToday" tabindex="0" role="button" (click)="store.selectActivity(null)" (keyup.enter)="store.selectActivity(null)">
+                  @let dayActivities = filteredActivitiesForDate(store.rangeStart(), slot);
+                  <div class="stack-shell has-more">
+                    @for (a of dayActivities.slice(0, 2); track a.id) {
+                      <div class="week-event" [class.selected]="store.selectedId() === a.id" [style.background]="eventColor(a)" [title]="a.title" tabindex="0" role="button" (click)="onPick($event, a.id)" (keyup.enter)="onPick($event, a.id)">{{ a.title }}</div>
+                    }
+                    @if (dayActivities.length > 2) {
+                      <div class="stack-more" tabindex="0" role="button" (click)="showAllEventsForDay($event, store.rangeStart(), dayActivities)" (keyup.enter)="showAllEventsForDay($event, store.rangeStart(), dayActivities)">+{{ dayActivities.length - 2 }} more</div>
+                    }
+                  </div>
+                </div>
+              } @else {
+                @for (d of weekDays(); let dayIdx = $index; track d.dom) {
+                  <div class="cell" [class.today-col]="d.today" tabindex="0" role="button" (click)="store.selectActivity(null)" (keyup.enter)="store.selectActivity(null)">
+                    @let cellActivities = filteredActivitiesForDate(d.d, slot);
+                    <div class="stack-shell has-more">
+                      @for (a of cellActivities.slice(0, 2); track a.id) {
+                        <div class="week-event" [class.selected]="store.selectedId() === a.id" [style.background]="eventColor(a)" [title]="a.title" tabindex="0" role="button" (click)="onPick($event, a.id)" (keyup.enter)="onPick($event, a.id)">{{ a.title }}</div>
+                      }
+                      @if (cellActivities.length > 2) {
+                        <div class="stack-more" tabindex="0" role="button" (click)="showAllEventsForDay($event, d.d, cellActivities)" (keyup.enter)="showAllEventsForDay($event, d.d, cellActivities)">+{{ cellActivities.length - 2 }} more</div>
+                      }
+                    </div>
+                  </div>
+                }
+              }
+            }
+          </div>
+          }
+        }
+      }
+    </div>

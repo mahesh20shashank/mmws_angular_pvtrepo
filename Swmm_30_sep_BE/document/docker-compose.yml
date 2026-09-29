@@ -1,0 +1,17 @@
+services:
+  document:
+    build: .
+    container_name: document
+    env_file:
+      - .env
+    ports:
+      - "8010:8010"
+    volumes:
+      - document_data:/data/files
+    restart: unless-stopped
+
+volumes:
+  # Named volume so uploaded files survive container restarts/redeploys -
+  # this is the persistence gap the local-disk-only setup in both SWMM and
+  # ITTTM currently has.
+  document_data:

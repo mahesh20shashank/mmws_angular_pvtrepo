@@ -1,0 +1,236 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #05070d;
+  isolation: isolate;
+}
+
+.hero__stars {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    radial-gradient(1.4px 1.4px at 8% 12%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 22% 38%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.6px 1.6px at 42% 8%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 63% 28%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1.3px 1.3px at 81% 15%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 92% 44%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.4px 1.4px at 15% 62%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 35% 78%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 58% 68%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 74% 82%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1.3px 1.3px at 90% 70%, rgba(255, 255, 255, 0.65), transparent);
+  background-repeat: repeat;
+  background-size: 340px 260px;
+  opacity: 0.55;
+  animation: obs-stars-drift 90s linear infinite, obs-stars-twinkle 5s ease-in-out infinite;
+}
+
+.hero__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.hero__glow--blue {
+  top: -10%;
+  left: 5%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(29, 150, 233, 0.28), transparent 70%);
+  animation: obs-glow-pulse 7s ease-in-out infinite;
+}
+
+.hero__glow--gold {
+  bottom: -15%;
+  right: 8%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(255, 193, 7, 0.16), transparent 70%);
+  animation: obs-glow-pulse 7s ease-in-out infinite 2.5s;
+}
+
+@keyframes obs-stars-drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-340px, -260px);
+  }
+}
+
+@keyframes obs-stars-twinkle {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+@keyframes obs-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes obs-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  padding: 2.75rem 2.25rem 2.5rem;
+  animation: obs-fade-up 0.5s ease-out both;
+}
+
+.hero__eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--accent-light, #61c2ff);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.hero__title-plain {
+  color: #ffffff;
+}
+
+.hero__title-accent {
+  margin-left: 0.5rem;
+  background: linear-gradient(90deg, var(--accent-glow, #2eb6fa) 0%, #ffc107 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__subtitle {
+  margin: 0.6rem 0 1.75rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.92rem;
+}
+
+.priority-card {
+  display: block;
+  max-width: 100%;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 2.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(29, 150, 233, 0.1), rgba(255, 255, 255, 0.02));
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.priority-card:hover {
+  border-color: var(--accent-blue, #1d96e9);
+  transform: translateY(-2px);
+}
+
+.priority-card__badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  margin-bottom: 0.6rem;
+  border-radius: 999px;
+  /* Opaque, not a translucent rgba tint — SonarQube (css:S7924) can't resolve the real dark
+     backdrop behind a translucent background, so it flags the pair even though it renders with
+     plenty of contrast. A solid dark-green background pins the actual ratio well above 4.5:1. */
+  background: #17260a;
+  color: #a3e635;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.priority-card__title {
+  margin: 0 0 0.4rem;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.priority-card__desc {
+  margin: 0 0 0.75rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.priority-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent-light, #61c2ff);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.about-card {
+  max-width: 100%;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-card__title {
+  margin: 0 0 1.1rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.about-card blockquote {
+  border-left: 3px solid var(--accent-blue, #1d96e9);
+  padding-left: 1rem;
+  margin: 0 0 1.4rem;
+  color: #ffffff;
+  font-style: italic;
+}
+
+.about-card blockquote cite {
+  display: block;
+  margin-top: 0.4rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8rem;
+  font-style: normal;
+}
+
+.about-card p {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__stars,
+  .hero__glow,
+  .hero__content {
+    animation: none;
+  }
+}

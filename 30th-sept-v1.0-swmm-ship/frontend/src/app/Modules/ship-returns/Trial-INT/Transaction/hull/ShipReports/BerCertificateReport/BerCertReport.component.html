@@ -1,0 +1,114 @@
+<div class="report-container">
+  <!-- TOP BAR -->
+  <div class="flex justify-end mb-4">
+    <button
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      (click)="downloadReport()"
+    >
+      Download Report
+    </button>
+  </div>
+
+  <div id="ber-report-container">
+    <h2 class="report-title">
+      BER Certificate Report -
+      <span class="italic-text">{{ shipName || reportData.shipName || "-" }}</span>
+    </h2>
+
+    <!-- TABLE -->
+    <div class="ber-table-wrapper">
+      <table class="ber-table">
+        <thead>
+          <tr>
+            <th class="sr-col group-header">Sr. No.</th>
+            <th class="label-col group-header">Field Name</th>
+            <th class="group-header">Details</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>1.</td>
+            <td class="label-col font-semibold">Ship Name</td>
+            <td>{{ reportData.shipName || "-" }}</td>
+          </tr>
+          <tr>
+            <td>2.</td>
+            <td class="label-col font-semibold">Command</td>
+            <td>{{ reportData.command || "-" }}</td>
+          </tr>
+          <tr>
+            <td>3.</td>
+            <td class="label-col font-semibold">Initiated By</td>
+            <td>{{ reportData.initiatedBy || "-" }}</td>
+          </tr>
+          <tr>
+            <td>4.</td>
+            <td class="label-col font-semibold">Type of Boat</td>
+            <td>{{ reportData.typeOfBoat || "-" }}</td>
+          </tr>
+          <tr>
+            <td>5.</td>
+            <td class="label-col font-semibold">Boat Registration No.</td>
+            <td>{{ reportData.boatRegistrationNo || "-" }}</td>
+          </tr>
+          <tr>
+            <td>6.</td>
+            <td class="label-col font-semibold">BER For</td>
+            <td>{{ reportData.berFor || "-" }}</td>
+          </tr>
+
+          <tr *ngIf="reportData.berFor === 'HULL' || (reportData.berHull && reportData.berHull !== '-')">
+            <td>7.</td>
+            <td class="label-col font-semibold">Hull</td>
+            <td>{{ reportData.berHull || "-" }}</td>
+          </tr>
+
+          <tr *ngIf="reportData.berFor === 'ENGINE' || (reportData.berEngine && reportData.berEngine !== '-')">
+            <td>7.</td>
+            <td class="label-col font-semibold">Engine</td>
+            <td>{{ reportData.berEngine || "-" }}</td>
+          </tr>
+
+          <tr>
+            <td>8.</td>
+            <td class="label-col font-semibold">DG</td>
+            <td>{{ reportData.dg || "-" }}</td>
+          </tr>
+
+          <tr>
+            <td>9.</td>
+            <td class="label-col font-semibold">Remarks</td>
+            <td>{{ reportData.remarks || "-" }}</td>
+          </tr>
+
+          <tr class="authority-row">
+            <td>10.</td>
+            <td class="label-col font-semibold">Reference Authority</td>
+            <td>
+              <ng-container *ngIf="reportData.authorityImage; else sealPlaceholder">
+                <a
+                  [href]="reportData.authorityImage"
+                  target="_blank"
+                  class="doc-url-link text-blue-600 underline font-medium"
+                >
+                  {{ reportData.authorityImage }}
+                </a>
+              </ng-container>
+              <ng-template #sealPlaceholder>
+                <div class="seal-placeholder">
+                  Authority<br />Seal /<br />Signature
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- STATUS BELOW TABLE -->
+    <div class="report-status-footer mt-4 font-medium">
+      Status : <span class="report-status-badge">{{ reportStatus }}</span>
+    </div>
+  </div>
+</div>

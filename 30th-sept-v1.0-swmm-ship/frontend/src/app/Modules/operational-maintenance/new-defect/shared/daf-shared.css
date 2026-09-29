@@ -1,0 +1,518 @@
+/* Shared styling for the Defect / DART "Digital Defect Book" form family
+   (defect-action-form + its per-reason child forms + trial-details / spare-details).
+   Pulled into each component via `@import` in that component's own .css file so the
+   class names/markup stay identical across all of them without duplicating ~500
+   lines per component. */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- Header ---------- */
+.daf-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.daf-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.daf-back:hover {
+  background: var(--bg-input-disabled);
+}
+
+/* ---------- Form card ---------- */
+.daf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.daf-form-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.daf-form-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.daf-form-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: -8px 0 0;
+}
+
+.daf-mand-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.daf-star {
+  color: #f82c36;
+  font-size: 14px;
+}
+
+.daf-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px 18px;
+}
+
+.daf-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-primary);
+  padding-top: 16px;
+  margin-top: 4px;
+}
+
+/* ---------- Buttons ---------- */
+.daf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.14s;
+}
+
+.daf-btn--ghost {
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.daf-btn--ghost:hover {
+  background: var(--bg-input-disabled);
+}
+
+.daf-btn--secondary {
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input-disabled);
+  color: var(--text-primary);
+}
+
+.daf-btn--secondary:hover {
+  filter: brightness(1.08);
+}
+
+.daf-btn--primary {
+  border: 1px solid var(--accent-blue);
+  background: var(--accent-blue);
+  color: #ffffff;
+}
+
+.daf-btn--primary:hover {
+  filter: brightness(1.08);
+}
+
+/* ---------- Field ---------- */
+.daf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.daf-field--wide {
+  grid-column: 1 / -1;
+}
+
+.daf-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.daf-field-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.daf-field-hint {
+  color: var(--text-muted);
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.daf-field-badge {
+  font-size: 9px;
+  font-weight: 600;
+  background: var(--bg-input);
+  border-radius: 5px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  color: #f59e0b;
+}
+
+.daf-field-badge--user {
+  color: #22c55e;
+}
+
+.daf-field-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: 42px;
+  padding: 0 2px;
+  flex-wrap: wrap;
+}
+
+.daf-field-radio {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.daf-field-radio-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.daf-field-radio-outer {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 1px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.daf-field-radio-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.daf-field-radio--selected .daf-field-radio-outer {
+  border-color: var(--accent-blue);
+}
+
+.daf-field-radio--selected .daf-field-radio-dot {
+  background: var(--accent-blue);
+}
+
+.daf-field-auto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 42px;
+  padding: 0 13px;
+  border-radius: 10px;
+  border: 1px dashed var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.daf-field-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--error-color, #de1f1f);
+  font-family: "Inter", sans-serif;
+}
+
+.daf-btn--warning {
+  border: 1px solid var(--icon-warning, #d97706);
+  background: var(--icon-warning, #d97706);
+  color: #ffffff;
+}
+
+.daf-btn--warning:hover {
+  filter: brightness(1.08);
+}
+
+.daf-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+
+.daf-icon-btn:hover {
+  background: rgba(248, 44, 54, 0.16);
+  color: var(--text-primary);
+}
+
+/* ---------- Trial Details ---------- */
+.daf-trial-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid rgba(245, 185, 75, 0.32);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(245, 185, 75, 0.06);
+}
+
+.daf-trial-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.daf-trial-panel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: #f5b94b;
+}
+
+.daf-trial-panel-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #f5b94b;
+}
+
+.daf-trial-panel-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.daf-trial-saved {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.daf-trial-saved-agency {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.daf-trial-spacer {
+  flex-grow: 1;
+}
+
+.daf-trial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 13px 18px;
+}
+
+/* ---------- Spare Details ---------- */
+.daf-spare-panel {
+  border-color: rgba(0, 136, 255, 0.32);
+  background: rgba(0, 136, 255, 0.06);
+}
+
+.daf-spare-panel-dot {
+  background: #0088ff;
+}
+
+.daf-spare-panel-title {
+  color: #4aa8ff;
+}
+
+.daf-spare-table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+}
+
+.daf-spare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.daf-spare-table thead th {
+  text-align: left;
+  padding: 9px 12px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: var(--bg-input);
+}
+
+.daf-spare-table tbody td {
+  padding: 9px 12px;
+  color: var(--text-primary);
+  border-top: 1px solid var(--border-primary);
+}
+
+.daf-spare-cell-accent {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.daf-spare-row--clickable {
+  cursor: pointer;
+}
+
+.daf-spare-row--clickable:hover {
+  background: var(--bg-input-disabled);
+}
+
+.daf-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.6px solid var(--border-primary);
+  color: transparent;
+}
+
+.daf-checkbox--on {
+  border-color: var(--accent-blue);
+  background: var(--accent-blue);
+  color: #ffffff;
+}
+
+.daf-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 220px;
+}
+
+.daf-filter-field select {
+  height: 38px;
+  border-radius: 9px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.daf-muted {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.daf-modal-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-basis: 100%;
+}
+
+/* ---------- Add Trials / Add Spares modal ---------- */
+.daf-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.daf-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.daf-modal-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+  flex-grow: 1;
+}
+
+.daf-modal-close {
+  margin-left: auto;
+}
+
+/* ---------- Attachment (app-file-input) ----------
+   The component always reserves space for its own floating label even when no
+   `label` input is passed (we render our own label in `.daf-field-head` above it
+   instead) — left as-is, the placeholder text sits low/off-center in the box.
+   Same fix pattern as dl-monitoring's import.component.css. */
+:host ::ng-deep app-file-input .input-container {
+  height: 42px;
+  border-color: var(--border-input);
+  background: var(--bg-input);
+}
+
+:host ::ng-deep app-file-input .floating-label {
+  display: none;
+}
+
+:host ::ng-deep app-file-input .file-display {
+  padding-top: 0;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .daf-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .daf-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

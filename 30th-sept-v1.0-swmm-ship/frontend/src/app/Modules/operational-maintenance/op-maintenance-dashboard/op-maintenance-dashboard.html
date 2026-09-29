@@ -1,0 +1,178 @@
+<div class="flex flex-col gap-3">
+
+  @if (error) {
+    <div class="glass-card rounded-xl p-4 flex items-center justify-between gap-4 border border-red-500/40">
+      <span class="text-red-300 text-sm">{{ error }}</span>
+      <app-button type="button" (click)="loadDashboard()" class="text-[#1D96E9] text-xs underline shrink-0">
+        Retry
+      </app-button>
+    </div>
+  }
+
+  <!-- KPI cards -->
+  <section class="grid grid-cols-4 gap-3">
+    <div class="glass-card rounded-xl p-6 flex items-start justify-between gap-4 min-h-[9rem]">
+      <div class="flex flex-col gap-1.5">
+        <span class="text-white/50 text-xs">Operational</span>
+        <span class="text-white text-base font-semibold leading-tight">Ship Status</span>
+        <span class="text-white/70 text-sm">{{ shipStatus.status }}</span>
+        <app-button type="button" (click)="viewShipStatus()" class="text-[#1D96E9] text-xs underline self-start mt-2">
+          View more
+        </app-button>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 kpi-icon kpi-icon--ship">
+        <app-icon name="ship" [size]="22" />
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-6 flex items-start justify-between gap-4 min-h-[9rem]">
+      <div class="flex flex-col gap-1.5">
+        <span class="text-2xl font-bold kpi-text--ops">{{ kpis.open_darts_ops_count }}</span>
+        <span class="text-white/80 text-sm leading-tight">Open DARTs - Operational Period</span>
+        <app-button type="button" (click)="viewOpenDarts('OPERATIONAL')" class="text-[#1D96E9] text-xs underline self-start mt-2">
+          View more
+        </app-button>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 kpi-icon kpi-icon--ops">
+        <app-icon name="chart-pie" [size]="22" color="#ffffff" />
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-6 flex items-start justify-between gap-4 min-h-[9rem]">
+      <div class="flex flex-col gap-1.5">
+        <span class="text-2xl font-bold kpi-text--refit">{{ kpis.open_darts_refit_count }}</span>
+        <span class="text-white/80 text-sm leading-tight">Open DARTs - Refit Period</span>
+        <app-button type="button" (click)="viewOpenDarts('REFIT')" class="text-[#1D96E9] text-xs underline self-start mt-2">
+          View more
+        </app-button>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 kpi-icon kpi-icon--refit">
+        <app-icon name="wrench" [size]="22" color="#ffffff" />
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-6 flex items-start justify-between gap-4 min-h-[9rem]">
+      <div class="flex flex-col gap-1.5">
+        <span class="text-2xl font-bold kpi-text--closing">{{ kpis.due_for_closing_count }}</span>
+        <span class="text-white/80 text-sm leading-tight">DARTs - Due for Closing</span>
+        <app-button type="button" (click)="viewDueForClosing()" class="text-[#1D96E9] text-xs underline self-start mt-2">
+          View more
+        </app-button>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 kpi-icon kpi-icon--closing">
+        <app-icon name="calendar" [size]="22" color="#ffffff" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6-month stacked bar charts -->
+  <section class="grid grid-cols-2 gap-3">
+    @for (chart of [
+      { title: 'Open DARTs (Last 6 Months)', rows: openDarts6m },
+      { title: 'Closed DARTs (Last 6 Months)', rows: closedDarts6m }
+    ]; track chart.title) {
+      <div class="glass-card rounded-xl p-6">
+        <div class="flex items-center gap-2 mb-5">
+          <app-icon name="chart-bar" [size]="16" variant="accent" />
+          <span class="text-white font-semibold text-sm">{{ chart.title }}</span>
+        </div>
+
+        <div class="flex items-end justify-between gap-2 h-64 border-b border-white/10 px-2 pb-1">
+          @for (row of chart.rows; track row.month) {
+            <div class="flex flex-col items-center gap-1 flex-1 h-full justify-end">
+              <div class="flex flex-col-reverse w-9 rounded-t-md overflow-hidden bar-track">
+                @for (dept of subDepartments; track dept) {
+                  <div
+                    class="bar-segment"
+                    [style.--segment-height.%]="(+row[dept] / maxMonthlyValue) * 100"
+                    [style.--dept-color]="subDeptColors[dept]"
+                  ></div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+        <div class="flex justify-between text-white/40 text-[11px] mt-2 px-2">
+          @for (row of chart.rows; track row.month) {
+            <span>{{ row.month.split(' ')[0] }} {{ row.month.split(' ')[1] }}</span>
+          }
+        </div>
+
+        <div class="flex flex-wrap gap-x-4 gap-y-2 mt-4">
+          @for (dept of subDepartments; track dept) {
+            <span class="flex items-center gap-1.5 text-white/60 text-xs">
+              <span class="w-2.5 h-2.5 rounded-sm inline-block legend-swatch" [style.--dept-color]="subDeptColors[dept]"></span>
+              {{ dept }}
+            </span>
+          }
+        </div>
+      </div>
+    }
+  </section>
+
+  <!-- Sub Department Wise Ops / Non-Ops Status -->
+  <section class="glass-card rounded-xl p-4">
+    <div class="flex items-center gap-2 mb-4">
+      <app-icon name="layout-grid" [size]="16" variant="accent" />
+      <h3 class="text-white/90 font-semibold text-sm tracking-wide">SUB DEPARTMENT WISE OPS/ NON-OPS STATUS</h3>
+    </div>
+
+    <div class="grid grid-cols-4 gap-3">
+      @for (dept of subDeptStatus; track dept.sub_dept) {
+        <div class="rounded-xl p-5 flex flex-col items-center gap-2 subdept-card">
+          <div class="flex items-center justify-between w-full gap-2">
+            <span class="text-white font-semibold text-sm text-center flex-1">Open Defects - {{ dept.sub_dept }}</span>
+            <app-button
+              type="button"
+              (click)="openSubDeptDefects(dept)"
+              class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 open-defects-btn"
+              title="View Open Defects"
+            >
+              <app-icon name="arrow-up-right" [size]="12" color="#ffffff" />
+            </app-button>
+          </div>
+
+          <app-donut-chart
+            [segments]="segmentsFor(dept)"
+            [width]="120"
+            [height]="120"
+            [centerValue]="totalEquipment(dept).toString()"
+            centerLabel="Equipment"
+          />
+
+          <div class="flex flex-col gap-1 text-xs w-full">
+            <span class="flex items-center gap-1.5 text-white/70">
+              <span class="w-2.5 h-2.5 rounded-sm inline-block bg-green-500"></span>
+              Operational ({{ dept.operational }})
+            </span>
+            <span class="flex items-center gap-1.5 text-white/70">
+              <span class="w-2.5 h-2.5 rounded-sm inline-block bg-red-500"></span>
+              Non-Operational ({{ dept.non_operational }})
+            </span>
+          </div>
+
+          <span class="text-white/40 text-xs mt-1">Total Equipment: {{ totalEquipment(dept) }}</span>
+        </div>
+      }
+    </div>
+  </section>
+</div>
+
+@if (selectedSubDept) {
+  <app-modal size="lg" (closeModal)="closeSubDeptDefects()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Open Defects - {{ selectedSubDept.sub_dept }}</h3>
+      <app-button type="button" (click)="closeSubDeptDefects()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <app-data-grid
+      [rowData]="selectedSubDeptDefects"
+      [columnDefs]="subDeptDefectColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="320px">
+    </app-data-grid>
+  </app-modal>
+}

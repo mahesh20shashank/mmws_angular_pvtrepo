@@ -1,0 +1,152 @@
+<div class="hotwork-history-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- TRACK HOTWORK Filter Card using PanelCard -->
+  <app-panel-card title="TRACK HOTWORK HISTORY" icon="search" class="block relative z-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 items-end">
+      <!-- Department Filter -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Department" placeholder="Select Department"
+          [options]="formattedDepartmentOptions()" [ngModel]="departmentFilter()"
+          (ngModelChange)="departmentFilter.set($event)" name="departmentFilter" />
+      </div>
+
+      <!-- Hotwork Date Filter -->
+      <div class="flex flex-col gap-1.5">
+        <label for="history-date" class="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wide">
+          HOTWORK DATE
+        </label>
+        <app-date-picker [singleDate]="false" placeholder="Select Date Range..." [ngModel]="dateFilter()"
+          (ngModelChange)="dateFilter.set($event)">
+        </app-date-picker>
+      </div>
+
+      <!-- Hotwork Time Filter -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Hotwork Time" placeholder="Select Hotwork Time"
+          [options]="formattedTimeOptions()" [ngModel]="timeFilter()"
+          (ngModelChange)="timeFilter.set($event)" name="timeFilter" />
+      </div>
+
+      <!-- Type of Hotwork Filter -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Type of Hotwork" placeholder="Select Type of Hotwork"
+          [options]="formattedTypeOptions()" [ngModel]="typeFilter()"
+          (ngModelChange)="typeFilter.set($event)" name="typeFilter" />
+      </div>
+
+      <!-- Hotwork Location Filter -->
+      <div class="flex flex-col gap-1.5">
+        <label for="history-location" class="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wide">
+          HOTWORK LOCATION
+        </label>
+        <input id="history-location" type="text" [ngModel]="locationFilter()" (ngModelChange)="locationFilter.set($event)"
+          placeholder="Filter by location..."
+          class="w-full bg-[var(--bg-card)] border-b border-sky-500/40 py-1.5 px-2.5 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-sky-400 rounded" />
+      </div>
+
+      <!-- Hotwork Status Filter -->
+      <div class="flex flex-col gap-1.5">
+        <app-select-input label="Hotwork Status" placeholder="Select Hotwork Status"
+          [options]="formattedStatusOptions()" [ngModel]="statusFilter()"
+          (ngModelChange)="statusFilter.set($event)" name="statusFilter" />
+      </div>
+    </div>
+
+    <!-- Apply Filter & Reset Buttons -->
+    <div class="flex items-center justify-end gap-3 pt-4 border-t border-[var(--border-card)] mt-4">
+      <button type="button" (click)="resetFilters()"
+        class="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-500/10 hover:bg-slate-500/20 text-slate-300 border border-slate-500/20 transition-colors flex items-center gap-1.5 cursor-pointer">
+        <app-icon name="rotate-ccw" [size]="14"></app-icon>
+        <span>Reset</span>
+      </button>
+      <button type="button" (click)="applyFilters()"
+        class="px-5 py-2 text-xs font-bold rounded-xl bg-sky-500 hover:bg-sky-600 text-white transition-colors flex items-center gap-1.5 cursor-pointer shadow-lg shadow-sky-500/20">
+        <app-icon name="filter" [size]="14"></app-icon>
+        <span>Apply Filter</span>
+      </button>
+    </div>
+  </app-panel-card>
+
+  <!-- History Data Table Panel using PanelCard and DataGrid -->
+  <app-panel-card title="Hotwork History Records" icon="history" class="block relative z-10">
+    <!-- Shared Component Export Toolbar & Global Search inside panelActions slot -->
+    <div panelActions class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+      <app-export-toolbar [disabled]="filteredHistoryRecords().length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+
+      <div class="flex items-center gap-2 text-xs font-medium hh-label">
+        <label for="global-history-search">Search:</label>
+        <input id="global-history-search" type="text" [ngModel]="historyGlobalSearch()"
+          (ngModelChange)="historyGlobalSearch.set($event)"
+          placeholder="Search..."
+          class="hh-input text-xs px-3 py-1.5 rounded-lg border focus:outline-none focus:border-blue-500 w-36 sm:w-44" />
+      </div>
+    </div>
+
+    <!-- Shared Component AG-Grid DataGrid Component for History Table -->
+    <app-data-grid [rowData]="filteredHistoryRecords()" [columnDefs]="historyColumnDefs" [pageSize]="historyPageSize()"
+      [autoHeight]="true" (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+  </app-panel-card>
+</div>
+
+<app-detail-drawer [open]="!!selectedRecord()" [titleMode]="true"
+  [label]="selectedRecord()?.hotworkCode ?? 'History Details'" [subtitle]="selectedRecord()?.descriptionOfHotwork ?? ''"
+  iconName="history" iconColor="#3b82f6" (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  <div class="space-y-4 p-2 text-sm text-[var(--text-primary)]">
+    <!-- Status Banner -->
+    <div class="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)]">
+      <div class="flex items-center gap-2">
+        <app-icon name="info" [size]="16" class="text-sky-400" />
+        <span class="text-xs text-[var(--text-muted)]">Hotwork Status</span>
+      </div>
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/30">
+        {{ item.currentStatus || 'Completed' }}
+      </span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)] text-xs">
+      <div>
+        <span class="text-[var(--text-muted)] block">Hotwork Code</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.hotworkCode }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Date of Hotwork</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.dateOfHotwork }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Type of Hotwork</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.hotworkType }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Department/ Sub-Department</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.departmentSection }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Hotwork Location</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.hotworkLocation }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Adjacent Compartment</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.adjacentCompartments }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Hotwork Sentry Names</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.sentryNames }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Safe to Weld Certificate</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.safeToWeldCert }}</span>
+      </div>
+    </div>
+
+    <div class="p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)] space-y-2 text-xs">
+      <div>
+        <span class="text-[var(--text-muted)] block font-medium mb-1">Description</span>
+        <span class="text-[var(--text-primary)]">{{ item.descriptionOfHotwork }}</span>
+      </div>
+    </div>
+  </div>
+  }
+</app-detail-drawer>

@@ -1,0 +1,117 @@
+/* The row editor's own styles, moved here from `masters-page.css` with
+   the dialogue they belong to. Every colour is a theme token, so no `[data-theme="light"]`
+   block is needed - the tokens carry both themes.
+
+   The `.btn-primary` / `.btn-secondary` pair is redeclared here rather than reached for from
+   the page, because a projected node carries THIS component's style scope and not the page's.
+   That follows the convention already established across this feature - `spare-form.css`,
+   `item-search.css`, `spare-add.css` and fifteen more each declare the same pair. The right
+   fix is one global button class in `styles.css`, which is a change to the design system and
+   is recorded as an observation rather than made here. */
+
+.obs-editor__hint {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.obs-editor__errors {
+  margin: 0 0 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--row-status-invalid-border);
+  background: var(--row-status-invalid-bg);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+.obs-editor__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.obs-editor__was {
+  margin-top: 0.25rem;
+  color: var(--cell-corrected-text);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+/* Clause 5.1's red text on PATTERN NUMBER, matching `obs-cell--unmatched` in
+   `masters-page.css` - same token, same weight, same dotted underline, so a rating who has just
+   read that treatment on the grid recognises it here as the same signal rather than a new one.
+   `--cell-unmatched-text` is a global theme token (`styles.css`), so no `[data-theme="light"]`
+   block is needed. */
+/* `label`/`input` qualifiers, not bare classes - `.form-field-label`/`.form-field-input`
+   (`styles.css`) apply here too, at equal class specificity, and which of an equal pair wins
+   depends on the two stylesheets' load order. Qualifying by element type outweighs that
+   regardless of order, with no `!important` needed. */
+label.obs-editor__label--unmatched {
+  color: var(--cell-unmatched-text);
+  font-weight: 700;
+}
+
+input.obs-editor__input--unmatched {
+  color: var(--cell-unmatched-text);
+  font-weight: 600;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+/* Requirement 3.4's naming instruction, sitting directly under the control it governs. It is
+   the primary text colour rather than a muted one because it is an instruction the operator
+   has to act on, not a footnote. */
+.obs-editor__instruction {
+  margin-top: 0.3rem;
+  color: var(--text-primary);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
+.obs-editor__note {
+  margin-top: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.obs-editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.btn-primary {
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

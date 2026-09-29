@@ -1,0 +1,241 @@
+<app-form-card title="PAINT INSPECTION BATTER PIT" [showPreviousReport]="true" [showBackButton]="true"
+  [showPaginator]="true" [previewMode]="true" [pageScroll]="true">
+
+  <div
+      previewHeader
+      class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+      <button
+          *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+          type="button"
+          (click)="setActiveTab(tab)"
+          class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+          [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+      >
+          <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+              {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+          </span>
+
+          <span
+              class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+              [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+          >
+              {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+          </span>
+      </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0 pb-12">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-2 gap-3">
+      <!-- <div class="flex flex-col gap-1">
+
+        <app-select [label]="'Class of Ship*'" formControlName="classOfShip" [searchable]="false"
+          [options]="classOfShipOptions" [disabled]="true">
+        </app-select>
+      </div> -->
+
+      <!-- SHIP STATUS -->
+      <div class="flex flex-col gap-1">
+        <app-input [label]="'Ship*'" formControlName="ship" class="w-full">
+        </app-input>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-3 mt-3">
+      <!-- Date of conduct of trials  -->
+      <app-calendar label="Date of conduct of trials*" formControlName="date_of_conduct_trail"></app-calendar>
+      <!--Place of conduct of trials  -->
+      <div class="flex flex-col gap-1">
+
+        <app-select [label]="'Place of conduct of trials*'" formControlName="place_of_conduct_trail"
+          [options]="locationOptions" placeholder="--Select--" class="w-full">
+        </app-select>
+      </div>
+      <!-- Document No. -->
+      <app-input label="Document No.*" formControlName="document_no">
+      </app-input>
+      <!-- Occasion for conduct of Trials -->
+      <div class="flex flex-col gap-1">
+
+        <app-select [label]="'Occasion for conduct of Trials*'" formControlName="occasion_of_conduct_trail"
+          [searchable]="false" [options]="occasionOptions" placeholder="--Select--" class="w-full">
+        </app-select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mt-3"> 
+      <app-select [label]="'Reps Present*'" formControlName="reps_present"
+        [options]="reps_present_options" placeholder="--Select--" [searchable]="false" class="w-full">
+      </app-select>
+
+      <div *ngIf="usersList.length > 0 && form.get('reps_present')?.value !== 'Others'">
+        <app-multiselect [label]="'Select User'" formControlName="reps_present_user" [options]="usersList"
+          placeholder="--Select--"></app-multiselect>
+      </div>
+    </div>
+
+
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input label="Corespondence(fax/letter,etc)*" formControlName="authority">
+        </app-input>
+
+        <app-calendar label="Date*" formControlName="authority_date" [max]="form.get('date_of_conduct_trail')?.value">
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload [label]="'Upload doc*'" formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)">
+        </app-file-upload>
+        <!-- </div> -->
+
+      </div>
+    </app-parameter-card>
+
+    <div class="overflow-x-auto border border-white/20 mt-4">
+      <table class="w-full text-sm border border-white/15 border-collapse">
+        <thead class="bg-[#223654] text-sm">
+          <tr>
+            <th class="border border-white/15 p-2 w-60">Location</th>
+            <th class="border border-white/15" colspan="3">Observation</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="border border-white/15 p-2" rowspan="4">
+              <app-select formControlName="location" [searchable]="false" [options]="locationOption">
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 p-2 space-y-2" colspan="3">
+              <app-select formControlName="defect_status" [searchable]="false" [options]="obsOptions"
+                placeholder="--Select--">
+              </app-select>
+
+              <span *ngIf="form.get('defect_status')?.value === 'nil'" class="text-sm">
+                No defects observed
+              </span>
+
+              <app-input *ngIf="form.get('defect_status')?.value === 'obs'" formControlName="defect_obs"
+                placeholder="Enter observation">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr *ngIf="form.get('location')?.value === 'fwd'">
+            <td class="border border-white/15 p-2 space-y-3">
+              <label class="font-semibold">Paint Scheme</label>
+            </td>
+
+            <td class="border border-white/15 p-2 space-y-3">
+              <app-select formControlName="fwd_paint" [searchable]="false" [options]="paintOptions">
+              </app-select>
+
+              <app-dynamic-textarea *ngIf="form.get('fwd_paint')?.value === 'other'" [form]="form"
+                controlName="fwd_paint_other" placeholder="Enter paint">
+              </app-dynamic-textarea>
+            </td>
+          </tr>
+
+          <tr *ngIf="form.get('location')?.value === 'fwd'">
+            <td class="border border-white/15 p-2 space-y-3">Average DFT</td>
+
+            <td class="border border-white/15 p-2 space-y-3">
+              <div class="space-y-2">
+                <app-select formControlName="fwd_dft_kalvari" [searchable]="false"
+                  [options]="kalvariOptions"></app-select>
+                <app-select formControlName="fwd_dft_ekm" [searchable]="false" [options]="ekmSskOptions"></app-select>
+                <app-select formControlName="fwd_dft_ssk" [searchable]="false" [options]="ekmSskOptions"></app-select>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="form.get('location')?.value === 'fwd'">
+            <td class="border border-white/15 p-2 space-y-3">Overall Condition</td>
+            <td class="border border-white/15 p-2 space-y-3">
+              <app-select formControlName="fwd_overall" [searchable]="false" [options]="overallOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr *ngIf="form.get('location')?.value === 'aft'">
+            <td class="border border-white/15 p-2">Paint Scheme</td>
+
+            <td class="border border-white/15 p-2">
+              <app-select formControlName="aft_paint" [searchable]="false" [options]="paintOptions">
+              </app-select>
+
+              <app-dynamic-textarea *ngIf="form.get('aft_paint')?.value === 'other'" [form]="form"
+                controlName="aft_paint_other" placeholder="Enter paint">
+              </app-dynamic-textarea>
+            </td>
+          </tr>
+
+          <tr *ngIf="form.get('location')?.value === 'aft'">
+            <td class="border border-white/15 p-2">Average DFT</td>
+
+            <td class="border border-white/15 p-2">
+              <app-select formControlName="aft_dft_kalvari" [searchable]="false"
+                [options]="kalvariOptions"></app-select>
+              <app-select formControlName="aft_dft_ekm" [searchable]="false" [options]="ekmSskOptions"></app-select>
+              <app-select formControlName="aft_dft_ssk" [searchable]="false" [options]="ekmSskOptions"></app-select>
+            </td>
+          </tr>
+
+          <tr *ngIf="form.get('location')?.value === 'aft'">
+            <td class="border border-white/15 p-2">Overall Condition</td>
+
+            <td class="border border-white/15 p-2">
+              <app-select formControlName="aft_overall" [searchable]="false" [options]="overallOptions">
+              </app-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

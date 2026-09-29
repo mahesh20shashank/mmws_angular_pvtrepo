@@ -1,0 +1,53 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>{{ title }}</h3>
+    <div class="mo-panel__actions">
+      @if (showSyncButton) {
+        <app-button type="button" class="btn-primary" [disabled]="syncing()" (click)="sync()">
+          {{ syncing() ? "Syncing..." : syncButtonLabel }}
+        </app-button>
+      }
+      @if (showApprovalButton) {
+        <app-button
+          type="button"
+          class="btn-secondary"
+          [disabled]="!selectedRows().length || sending()"
+          (click)="sendForHodApproval()"
+        >
+          {{ sending() ? "Sending..." : "Send for HOD Approval" }}
+        </app-button>
+      }
+    </div>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="!filteredEntries().length" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredEntries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+  />
+</div>
+
+@if (activeEntry(); as entry) {
+  <app-modal size="md" (closeModal)="closeDetail()">
+    <h3 class="detail-modal__title">{{ title }} - {{ entry.itemCode }}</h3>
+    <div class="detail-modal__grid">
+      @for (row of detailRows(); track row.label) {
+        <div class="detail-modal__row"><span>{{ row.label }}</span><strong>{{ row.value }}</strong></div>
+      }
+    </div>
+    <div class="detail-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeDetail()">Close</app-button>
+    </div>
+  </app-modal>
+}

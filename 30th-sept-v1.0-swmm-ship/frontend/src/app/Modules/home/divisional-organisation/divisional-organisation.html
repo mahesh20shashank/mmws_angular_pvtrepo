@@ -1,0 +1,600 @@
+<app-help-guidance [bodyHtml]="helpHtml"></app-help-guidance>
+<app-master-card cardTitle="Divisional Organisation">
+  <div card-header-actions class="do-header-actions">
+    <app-button class="do-zoom-btn" type="button" (click)="zoomOut()" title="Zoom out">
+      <app-icon name="minus" [size]="16" variant="inherit" />
+    </app-button>
+    <span class="do-zoom-label">{{ (zoomLevel() * 100) | number: '1.0-0' }}%</span>
+    <app-button class="do-zoom-btn" type="button" (click)="zoomIn()" title="Zoom in">
+      <app-icon name="plus" [size]="16" variant="inherit" />
+    </app-button>
+    <app-button class="do-zoom-btn" type="button" (click)="resetZoom()" title="Reset zoom">
+      <app-icon name="refresh-cw" [size]="16" variant="inherit" />
+    </app-button>
+
+    @if (showEditToggle()) {
+      <app-button class="do-mode-btn" type="button" [class.do-mode-btn-active]="isEditMode()" (click)="toggleMode()">
+        {{ isEditMode() ? 'View Mode' : 'Edit Mode' }}
+      </app-button>
+    }
+  </div>
+
+  <!-- Canvas -->
+  <div
+    #doCanvas
+    class="do-canvas"
+    [class.do-canvas-panning]="isPanning()"
+    (mousedown)="onCanvasMouseDown($event)"
+    (mousemove)="onCanvasMouseMove($event)"
+    (mouseup)="onCanvasMouseUp()"
+    (mouseleave)="onCanvasMouseUp()"
+    (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)"
+    (touchend)="onTouchEnd()"
+  >
+    @if (loading()) {
+      <div class="do-empty-state">Loading divisional organisation...</div>
+    } @else if (!hierarchy()) {
+      <div class="do-empty-state">
+        <p>No hierarchy has been set up yet.</p>
+        @if (isEditMode()) {
+          <app-button class="do-add-btn" type="button" (click)="addCO()">
+            <app-icon name="plus" [size]="14" variant="inherit" style="margin-right: 4px;" /> Add Commanding Officer
+          </app-button>
+        }
+      </div>
+    } @else {
+      <div
+        class="do-tree-wrapper"
+        [style.transform]="'translate(' + panX() + 'px, ' + panY() + 'px) scale(' + zoomLevel() + ')'"
+      >
+        <ul class="do-tree">
+          <ng-container *ngTemplateOutlet="nodeTpl; context: { node: hierarchy() }"></ng-container>
+        </ul>
+      </div>
+    }
+  </div>
+</app-master-card>
+
+<!-- Recursive node template -->
+<ng-template #nodeTpl let-node="node">
+  <li class="do-tree-item">
+    <div class="do-node-wrapper">
+      <div class="do-node-card" [style.background]="colorFor(node.type)">
+        @if (node.isDepartmentalOfficer) {
+          <div class="do-dept-officer-badge">DEPARTMENTAL OFFICER</div>
+        }
+        @if (node.type === 'division') {
+          <div class="do-badge-count">{{ node.children.length }}</div>
+        }
+
+        @if (isEditMode()) {
+          <div class="do-node-actions">
+            <app-button type="button" class="do-node-action" (click)="editNode(node)">
+              <app-icon name="pencil" [size]="13" color="#2563eb" />
+            </app-button>
+            <app-button type="button" class="do-node-action do-node-action-delete" (click)="deleteNode(node, $event)">
+              <app-icon name="trash-2" [size]="13" color="#ef4444" />
+            </app-button>
+          </div>
+        }
+
+        <app-button
+          type="button"
+          class="do-node-main"
+          [class.do-node-clickable]="node.type === 'division'"
+          (click)="node.type === 'division' ? openSailorModal(node, $event) : null"
+        >
+          @if (node.type === 'division') {
+            <div class="do-node-details">
+              <div class="do-node-name">{{ node.name || 'N/A' }}</div>
+              <div class="do-node-sub">Division: {{ node.divisionName || 'N/A' }}</div>
+              <div class="do-node-hint">
+                <app-icon name="users" [size]="12" variant="inherit" /> Click to view sailors
+              </div>
+            </div>
+          } @else {
+            @if (node.photoUrl) {
+              <img [src]="node.photoUrl" class="do-node-photo" alt="" (error)="$event.target.src='assests/images/demo_pic.jpg'" />
+            } @else {
+              <img src="assets/images/demo_pic.jpg" class="do-node-photo" alt="Default placeholder" (error)="$event.target.src='assests/images/demo_pic.jpg'" />
+            }
+            <div class="do-node-details">
+              <div class="do-node-name">
+                <span class="do-node-name-text">{{ [node.rank, node.name].filter(v => v).join(' ') || 'N/A' }}</span>
+                @if (node.personalNumber) {
+                  <span class="do-node-pno">{{ node.personalNumber }}</span>
+                }
+              </div>
+              @if (node.designation) {
+                <div class="do-node-sub">
+                  {{ node.designation }}
+                  @if (node.isDepartmentalOfficer) {
+                    <span class="do-dy-hod-tag">(Dy HOD)</span>
+                  }
+                </div>
+              } @else if (node.isDepartmentalOfficer) {
+                <div class="do-node-sub">
+                  <span class="do-dy-hod-tag">(Dy HOD)</span>
+                </div>
+              }
+            </div>
+          }
+        </app-button>
+
+        @if (node.type !== 'division' && node.children.length > 0) {
+          <app-button
+            type="button"
+            class="do-node-collapse-toggle"
+            [title]="node.collapsed ? 'Expand' : 'Collapse'"
+            (click)="toggleCollapse(node)"
+          >
+            <app-icon [name]="node.collapsed ? 'chevron-down' : 'chevron-up'" [size]="14" variant="inherit" />
+          </app-button>
+        }
+      </div>
+
+      @if (!node.collapsed && node.type !== 'division') {
+        @if (node.children.length > 0 || (isEditMode() && canAddChild(node))) {
+          <ul>
+            @for (child of node.children; track child.id) {
+              <ng-container *ngTemplateOutlet="nodeTpl; context: { node: child }"></ng-container>
+            }
+            @if (isEditMode() && availableChildTypes(node).length > 0) {
+              <li class="do-add-child-item">
+                <div class="do-add-child-group">
+                  @for (cType of availableChildTypes(node); track cType) {
+                    <app-button class="do-add-child-btn" type="button" (click)="addChildType(node, cType)">
+                      <app-icon name="plus" [size]="12" variant="inherit" style="margin-right: 4px;" /> Add {{ labelFor(cType) }}
+                    </app-button>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      }
+    </div>
+  </li>
+</ng-template>
+
+<!-- Add / Edit node modal -->
+@if (showNodeModal()) {
+  <app-modal size="lg" [title]="modalTitle()" (closeModal)="closeNodeModal()">
+    <div class="do-modal-body">
+      @if (modalNodeType() === 'division') {
+        <div class="do-form-group">
+          <label class="do-form-label" for="doDivisionName">Division Name <span class="do-required">*</span></label>
+          <input
+            id="doDivisionName"
+            type="text"
+            class="do-form-input"
+            [ngModel]="modalDivisionName()"
+            (ngModelChange)="modalDivisionName.set($event)"
+            placeholder="Enter division name"
+          />
+        </div>
+      } @else {
+        <div class="do-form-grid">
+          <!-- Row 1: Name & Rank -->
+          <div class="do-form-group">
+            <label class="do-form-label" for="doNodeName">Name <span class="do-required">*</span></label>
+            <div class="do-select-wrapper">
+              <select
+                id="doNodeName"
+                class="do-form-input do-form-select"
+                [ngModel]="modalSelectedUserId()"
+                (ngModelChange)="modalSelectedUserId.set($event)"
+              >
+                <option [ngValue]="null">-- Select Name --</option>
+                @for (user of modalUsers(); track user.id) {
+                  <option [ngValue]="user.id">{{ user.name }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="do-form-group">
+            <label class="do-form-label" for="doNodeRank">Rank</label>
+            <input
+              id="doNodeRank"
+              type="text"
+              class="do-form-input"
+              [value]="selectedUserDetails()?.rank || ''"
+              placeholder="Rank"
+              readonly
+            />
+          </div>
+
+          <!-- Row 2: Designation & Additional Duty -->
+          <div class="do-form-group">
+            <label class="do-form-label" for="doNodeDesignation">Designation</label>
+            <input
+              id="doNodeDesignation"
+              type="text"
+              class="do-form-input"
+              [value]="selectedUserDetails()?.designation || ''"
+              placeholder="Designation"
+              
+            />
+          </div>
+
+          <div class="do-form-group">
+            <label class="do-form-label" for="doNodeAdditionalDuty">Additional Duty</label>
+            <input
+              id="doNodeAdditionalDuty"
+              type="text"
+              class="do-form-input"
+              [ngModel]="modalAdditionalDuty()"
+              (ngModelChange)="modalAdditionalDuty.set($event)"
+              placeholder="e.g. IT Officer (ITO)"
+            />
+          </div>
+
+          <!-- Row 3: Personal Number -->
+          <div class="do-form-group do-form-group--half">
+            <label class="do-form-label" for="doNodePersonalNumber">Personal Number</label>
+            <input
+              id="doNodePersonalNumber"
+              type="text"
+              class="do-form-input"
+              [value]="selectedUserDetails()?.personal_number || ''"
+              placeholder="Personal Number"
+              readonly
+            />
+          </div>
+
+          <!-- Tag as Departmental Officer (Dy HOD) -->
+          @if (modalNodeType() === 'divisional_officer' && isUnderHod()) {
+            <div class="do-form-group do-form-group--full pt-2">
+              <label class="do-checkbox-label flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="do-checkbox-input"
+                  [ngModel]="modalIsDepartmentalOfficer()"
+                  (ngModelChange)="modalIsDepartmentalOfficer.set($event)"
+                />
+                <span>Tag as Departmental Officer (Dy HOD)</span>
+              </label>
+            </div>
+          }
+
+          <!-- Row 4: Photo -->
+          <div class="do-form-group do-form-group--full">
+            <label class="do-form-label" for="doNodePhoto">Photo</label>
+            <div class="do-file-input-wrapper">
+              <input
+                id="doNodePhoto"
+                type="file"
+                class="do-file-input"
+                accept="image/*"
+                (change)="onPhotoSelected($event)"
+              />
+            </div>
+            @if (modalPhotoPreview()) {
+              <div class="do-photo-preview-container">
+                <div class="do-photo-left">
+                  <img [src]="modalPhotoPreview()" class="do-photo-preview-img" alt="Photo preview" />
+                </div>
+                <div class="do-photo-center">
+                  <div class="do-photo-filename-text">{{ currentPhotoName() }}</div>
+                  <app-button
+                    type="button"
+                    class="do-remove-photo-btn"
+                    (click)="removePhoto()"
+                  >
+                    Remove Photo
+                  </app-button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (modalError()) {
+        <div class="do-form-error">{{ modalError() }}</div>
+      }
+    </div>
+
+    <div class="do-modal-actions">
+      <app-button class="do-btn-secondary" type="button" (click)="closeNodeModal()">Cancel</app-button>
+      <app-button class="do-btn-primary" type="button" [disabled]="saving()" (click)="saveNode()">
+        {{ saving() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- Sailor list right side-drawer modal -->
+@if (showSailorModal() && sailorModalDivision(); as division) {
+  <app-detail-drawer
+    class="do-sailor-drawer"
+    [open]="showSailorModal()"
+    [titleMode]="true"
+    label="Sailor List"
+    (closed)="closeSailorModal()"
+  >
+    <div class="sl-header-sub">
+      <div class="sl-count-label">
+        {{ filteredSailorsList().length }} {{ filteredSailorsList().length === 1 ? 'Sailor' : 'Sailors' }}
+      </div>
+      <div class="sl-header-sub-actions">
+        <app-button type="button" class="sl-btn-print" (click)="printSailorList()" title="Print Sailor List">
+          <app-icon name="printer" [size]="16" variant="inherit" />
+          <span>Print</span>
+        </app-button>
+        @if (isEditMode()) {
+          <app-button type="button" class="sl-btn-add-sailor" (click)="openAddSailorModal(division)">
+            <app-icon name="plus" [size]="16" variant="inherit" />
+            <span>Add Sailor</span>
+          </app-button>
+        }
+      </div>
+    </div>
+
+    <!-- Controls / Filters bar -->
+    <div class="sl-controls-bar">
+      <div class="sl-controls-left">
+        <select
+          class="sl-page-size-select"
+          [ngModel]="sailorPageSize()"
+          (ngModelChange)="onSailorPageSizeChange($event)"
+        >
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+        <span class="sl-unit-label">sailors</span>
+      </div>
+
+      <div class="sl-controls-right">
+        <label class="sl-search-label" for="slSearchInput">Search sailors:</label>
+        <input
+          id="slSearchInput"
+          type="text"
+          class="sl-search-input"
+          placeholder=""
+          [ngModel]="sailorSearchText()"
+          (ngModelChange)="sailorSearchText.set($event); sailorCurrentPage.set(1)"
+        />
+        <app-button type="button" class="sl-btn-clear-filters" (click)="clearSailorFilters()">
+          <app-icon name="filter" [size]="14" variant="inherit" />
+          <span>Clear Filters</span>
+        </app-button>
+      </div>
+    </div>
+
+    <!-- Sailor Table -->
+    <div class="sl-table-container">
+      <table class="sl-table">
+        <thead>
+          <tr>
+            <th class="sl-th sl-th-photo" (click)="toggleSailorSort('name')">
+              <span>PHOTO</span>
+              <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+            </th>
+            <th class="sl-th" (click)="toggleSailorSort('name')">
+              <span>NAME</span>
+              <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+            </th>
+            <th class="sl-th" (click)="toggleSailorSort('rank')">
+              <span>RANK</span>
+              <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+            </th>
+            <th class="sl-th" (click)="toggleSailorSort('designation')">
+              <span>DESIGNATION</span>
+              <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+            </th>
+            <th class="sl-th" (click)="toggleSailorSort('personalNumber')">
+              <span>PERSONAL NUMBER</span>
+              <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+            </th>
+            <th class="sl-th" (click)="toggleSailorSort('photoUploaded')">
+              <span>PHOTO UPLOADED</span>
+              <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+            </th>
+            @if (isEditMode()) {
+              <th class="sl-th sl-th-center" (click)="toggleSailorSort('isRegulator')">
+                <span>REGULATOR</span>
+                <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+              </th>
+              <th class="sl-th sl-th-center">
+                <span>ACTIONS</span>
+                <app-icon name="arrow-up-down" [size]="12" variant="inherit" class="sl-sort-arrows" />
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (sailor of paginatedSailorsList(); track sailor.id) {
+            <tr class="sl-tr">
+              <td class="sl-td sl-td-photo">
+                @if (sailor.photoUrl) {
+                  <img [src]="sailor.photoUrl" class="sl-avatar-img" alt="" (error)="$event.target.src='assets/images/demo_pic.jpg'" />
+                } @else {
+                  <img src="assets/images/demo_pic.jpg" class="sl-avatar-img" alt="Sailor Avatar" (error)="$event.target.src='assets/images/demo_pic.jpg'" />
+                }
+              </td>
+              <td class="sl-td sl-td-name">
+                <strong>{{ sailor.name || '-' }}</strong>
+              </td>
+              <td class="sl-td">{{ sailor.rank || '-' }}</td>
+              <td class="sl-td">{{ sailor.designation || '-' }}</td>
+              <td class="sl-td">{{ sailor.personalNumber || '-' }}</td>
+              <td class="sl-td">{{ sailor.photoUploaded ? 'Yes' : 'No' }}</td>
+              @if (isEditMode()) {
+                <td class="sl-td sl-td-center">
+                  <input
+                    type="checkbox"
+                    class="sl-checkbox"
+                    [checked]="sailor.isRegulator"
+                    (change)="toggleSailorRegulator(sailor, !sailor.isRegulator)"
+                  />
+                </td>
+                <td class="sl-td sl-td-center">
+                  <app-button type="button" class="sl-btn-delete" title="Delete sailor" (click)="deleteNode(sailor, $event)">
+                    <app-icon name="trash-2" [size]="14" color="#ef4444" />
+                  </app-button>
+                </td>
+              }
+            </tr>
+          } @empty {
+            <tr>
+              <td [attr.colspan]="isEditMode() ? 8 : 6" class="sl-td-empty">
+                No sailors found.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination / Footer bar -->
+    <div class="sl-footer-bar">
+      <div class="sl-footer-info">
+        Showing {{ sailorStartItem() }} to {{ sailorEndItem() }} of {{ filteredSailorsList().length }} sailors
+      </div>
+      <div class="sl-pagination-controls">
+        <app-button
+          type="button"
+          class="sl-page-btn sl-page-nav"
+          [disabled]="sailorCurrentPage() <= 1"
+          (click)="setSailorPage(sailorCurrentPage() - 1)"
+          aria-label="Previous page"
+        >
+          <app-icon name="chevron-left" [size]="14" variant="inherit" />
+        </app-button>
+
+        @for (page of sailorPageArray(); track page) {
+          <app-button
+            type="button"
+            class="sl-page-btn"
+            [class.sl-page-btn-active]="page === sailorCurrentPage()"
+            (click)="setSailorPage(page)"
+          >
+            {{ page }}
+          </app-button>
+        }
+
+        <app-button
+          type="button"
+          class="sl-page-btn sl-page-nav"
+          [disabled]="sailorCurrentPage() >= totalSailorPages()"
+          (click)="setSailorPage(sailorCurrentPage() + 1)"
+          aria-label="Next page"
+        >
+          <app-icon name="chevron-right" [size]="14" variant="inherit" />
+        </app-button>
+      </div>
+    </div>
+  </app-detail-drawer>
+}
+
+@if (showAddSailorModal()) {
+  <app-modal size="lg" title="EDIT SAILOR DETAILS" (closeModal)="closeAddSailorModal()">
+    <div class="do-modal-body">
+      <!-- Name * Multi-select field -->
+      <div class="do-form-group do-form-group-relative">
+        <label class="do-form-label">Name <span class="do-required-star">*</span></label>
+
+        <div class="do-chip-select-box" (click)="toggleAddSailorDropdown($event)">
+          <div class="do-chips-container">
+            @for (user of addSailorSelectedRows(); track user.id) {
+              <span class="do-chip">
+                <span class="do-chip-text">{{ user.name }}</span>
+                <button type="button" class="do-chip-remove" (click)="removeSailorChip(user, $event)">×</button>
+              </span>
+            }
+            <input
+              type="text"
+              class="do-chip-input"
+              [placeholder]="addSailorSelectedRows().length === 0 ? 'Search & select sailors' : ''"
+              [ngModel]="addSailorSearch()"
+              (ngModelChange)="addSailorSearch.set($event); openAddSailorDropdown()"
+              (click)="$event.stopPropagation(); openAddSailorDropdown()"
+            />
+          </div>
+          @if (addSailorSelectedRows().length > 0) {
+            <button type="button" class="do-chip-clear" title="Clear all" (click)="clearAllSelectedSailors($event)">×</button>
+          }
+        </div>
+
+        @if (addSailorDropdownOpen()) {
+          <div class="do-select-dropdown" (click)="$event.stopPropagation()">
+            @if (addSailorUsers().length > 0) {
+              <label class="do-dropdown-item do-dropdown-select-all">
+                <input
+                  type="checkbox"
+                  [checked]="isAllSailorsSelected()"
+                  (change)="toggleSelectAllSailors($event)"
+                />
+                <span class="do-item-label"><strong>Select All</strong></span>
+              </label>
+
+              @for (user of addSailorFilteredUsers(); track user.id) {
+                <label class="do-dropdown-item">
+                  <input
+                    type="checkbox"
+                    [checked]="isSailorSelected(user)"
+                    (change)="toggleSailorSelection(user)"
+                  />
+                  <span class="do-item-label">
+                    <strong>{{ user.name }}</strong>
+                    @if (user.rank || user.designation || user.personal_number) {
+                      <span class="do-item-sub">
+                        {{ user.rank ? ' | ' + user.rank : '' }}{{ user.designation ? ' | ' + user.designation : '' }}{{ user.personal_number ? ' | ' + user.personal_number : '' }}
+                      </span>
+                    }
+                  </span>
+                </label>
+              } @empty {
+                <div class="do-dropdown-empty">No matching personnel found.</div>
+              }
+            } @else {
+              <div class="do-dropdown-empty">No available personnel to add.</div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Photo (optional) - only displayed when exactly 1 sailor is selected -->
+      @if (addSailorSelectedRows().length === 1) {
+        <div class="do-form-group do-form-group--full do-mt-4">
+          <label class="do-form-label" for="doAddSailorPhoto">Photo (optional)</label>
+          <div class="do-file-input-wrapper">
+            <input
+              id="doAddSailorPhoto"
+              type="file"
+              class="do-form-input"
+              accept="image/*"
+              (change)="onAddSailorPhotoSelected($event)"
+            />
+          </div>
+          <div class="do-checkbox-hint do-hint-text">
+            <span>Offered when exactly one sailor is selected. Leave it blank and the default photo is used.</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="do-modal-actions do-mt-5">
+      <app-button class="do-btn-secondary" type="button" (click)="closeAddSailorModal()">Cancel</app-button>
+      <app-button
+        class="do-btn-primary"
+        type="button"
+        [disabled]="saving() || addSailorSelectedRows().length === 0"
+        (click)="confirmAddSailors()"
+      >
+        {{ saving() ? 'Saving…' : 'Save' }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+
+@if (pendingDeleteNode()) {
+<app-confirm-delete-modal (confirmed)="confirmDeleteNode()" (cancelled)="cancelDeleteNode()">
+</app-confirm-delete-modal>
+}

@@ -1,0 +1,175 @@
+<app-help-guidance [bodyHtml]="helpHtml"></app-help-guidance>
+<div class="gal-body">
+  <!-- Title -->
+  <div class="gal-title">✨ Department Photo Gallery ✨</div>
+
+  @if (loading()) {
+  <div class="gal-empty-state">Loading gallery...</div>
+  } @else {
+  <!-- Department Filter Pills -->
+  <div class="gal-filters">
+        <app-button
+          [variant]="selectedDepartment() === null ? 'primary' : 'outline'"
+          [customClass]="selectedDepartment() === null ? 'gal-filter-pill gal-filter-pill-active' : 'gal-filter-pill'"
+          (click)="selectDepartment(null)"
+        >
+      All
+    </app-button>
+    @for (dept of departments(); track dept.id) {
+          <app-button
+            [variant]="selectedDepartment() === dept.id ? 'primary' : 'outline'"
+            [customClass]="selectedDepartment() === dept.id ? 'gal-filter-pill gal-filter-pill-active' : 'gal-filter-pill'"
+            (click)="selectDepartment(dept.id)"
+          >
+      {{ dept.name | titlecase }}
+    </app-button>
+    }
+  </div>
+
+  <!-- Add Image Button -->
+  <div class="gal-add-image-container">
+    <app-button class="gal-btn-primary" type="button" (click)="openUploadModal()">+ Add Image</app-button>
+  </div>
+
+  <!-- Main Content -->
+  @if (!images().length) {
+  <div class="gal-empty-state">No images uploaded yet.</div>
+  } @else if (filteredImages().length > 0) {
+  <!-- Main Carousel -->
+  <div class="gal-carousel-container">
+    <div class="gal-carousel">
+      <app-button type="button" class="gal-carousel-nav gal-carousel-nav-prev" (click)="prevImage()">
+        ‹
+      </app-button>
+      <div class="gal-carousel-image-wrapper">
+              <img
+                [src]="activeImage()!.image"
+                [alt]="activeImage()!.title"
+                class="gal-carousel-image"
+              />
+        @if (activeImage()!.title || activeImage()!.caption) {
+        <div class="gal-carousel-overlay">
+          @if (activeImage()!.title) {
+          <div class="gal-carousel-title">{{ activeImage()!.title }}</div>
+          }
+          @if (activeImage()!.caption) {
+          <div class="gal-carousel-caption">{{ activeImage()!.caption }}</div>
+          }
+        </div>
+        }
+      </div>
+      <app-button type="button" class="gal-carousel-nav gal-carousel-nav-next" (click)="nextImage()">
+        ›
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Thumbnails -->
+  <div class="gal-thumbnails-container">
+    @for (image of filteredImages(); track image.id; let i = $index) {
+            <app-button
+              type="button"
+              class="gal-thumbnail"
+              [class.gal-thumbnail-active]="activeIndex() === i"
+              (click)="openViewer(i)"
+            >
+      <img [src]="image.image" [alt]="image.title" class="gal-thumbnail-img" />
+      @if (isEditMode()) {
+                <app-button
+                  type="button"
+                  class="gal-thumbnail-delete"
+                  (click)="deleteImage(image, $event)"
+                >
+        ✕
+      </app-button>
+      }
+    </app-button>
+    }
+  </div>
+  } @else {
+  <div class="gal-empty-state">No images in this department.</div>
+  }
+  }
+</div>
+
+@if (showViewer() && activeImage(); as image) {
+<app-modal size="md" (closeModal)="closeViewer()">
+  <div class="text-right ">
+    <app-icon [size]="20" [strokeWidth]="2" name="x" class="cursor-pointer" (click)="closeViewer()"></app-icon>
+  </div>
+  <div class="gal-viewer">
+    <app-button type="button" class="gal-viewer-nav gal-viewer-prev" (click)="prevImage()">‹</app-button>
+    <img [src]="image.image" [alt]="image.title" class="gal-viewer-image" />
+    <app-button type="button" class="gal-viewer-nav gal-viewer-next" (click)="nextImage()">›</app-button>
+  </div>
+  <div class="gal-viewer-caption">
+    <div class="gal-viewer-title">{{ image.title }}</div>
+    @if (image.caption) {
+    <div class="gal-viewer-sub">{{ image.caption }}</div>
+    }
+  </div>
+
+</app-modal>
+}
+
+@if (showUploadModal()) {
+<app-modal size="md" (closeModal)="closeUploadModal()">
+  <h3 class="gal-modal-title">Add Image</h3>
+
+  <div class="gal-modal-body">
+    <label class="gal-form-label" for="galDepartment">Department *</label>
+      <select
+        id="galDepartment"
+        class="gal-form-input"
+        [ngModel]="uploadDepartment()"
+        (ngModelChange)="setUploadDepartment($event)"
+      >
+        <option value="" [disabled]="true">Select Department</option>
+      @for (dept of departments(); track dept.id) {
+      <option [value]="dept.id">{{ dept.name | titlecase }}</option>
+      }
+    </select>
+
+    <label class="gal-form-label" for="galTitle">Title *</label>
+      <input
+        id="galTitle"
+        type="text"
+        class="gal-form-input"
+        [ngModel]="uploadTitle()"
+        (ngModelChange)="uploadTitle.set($event)"
+      />
+
+      <label class="gal-form-label" for="galCaption">Caption*</label>
+      <input
+        id="galCaption"
+        type="text"
+        class="gal-form-input"
+        [ngModel]="uploadCaption()"
+        (ngModelChange)="uploadCaption.set($event)"
+      />
+
+    <label class="gal-form-label" for="galFile">Image *</label>
+    <input id="galFile" type="file" class="gal-form-input" accept="image/*" (change)="onFileSelected($event)" />
+
+    @if (uploadPreview()) {
+    <img [src]="uploadPreview()" class="gal-upload-preview" alt="Selected preview" />
+    }
+
+    @if (uploadError()) {
+    <div class="gal-form-error">{{ uploadError() }}</div>
+    }
+  </div>
+
+  <div class="gal-modal-actions">
+    <app-button class="gal-btn-secondary" type="button" (click)="closeUploadModal()">Cancel</app-button>
+    <app-button class="gal-btn-primary" type="button" [disabled]="saving()" (click)="uploadImage()">
+      {{ saving() ? 'Adding…' : 'Add' }}
+    </app-button>
+  </div>
+</app-modal>
+}
+
+@if (pendingDeleteImage()) {
+<app-confirm-delete-modal (confirmed)="confirmDeleteImage()" (cancelled)="cancelDeleteImage()">
+</app-confirm-delete-modal>
+}

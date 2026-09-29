@@ -1,0 +1,794 @@
+{
+  "formId": "gps",
+  "title": "GPS - Observation Sheet",
+  "sourceFile": "gps.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "GPS - Observation Sheet",
+      "sectionType": "form",
+      "fields": [],
+      "tables": [],
+      "sectionTitle": "Basic Information",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type":"label",
+            "value": "Basic Information",
+            "colSpan" : 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Submarine",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "_id": "gps_dept",
+            "key": "gps_dept",
+            "name": "gps_dept",
+            "label": "DEPT",
+            "type": "input",
+            "value": "SUBMARINE",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text"
+          },
+          {
+            "_id": "gps_equipment",
+            "key": "gps_equipment",
+            "name": "gps_equipment",
+            "label": "EQUIPMENT",
+            "type": "input",
+            "value": "GPS",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "gps_date",
+            "key": "gps_date",
+            "name": "gps_date",
+            "label": "DATE",
+            "type": "date",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "gps_nature_of_trial",
+            "key": "gps_nature_of_trial",
+            "name": "gps_nature_of_trial",
+            "label": "NATURE OF TRIALS",
+            "type": "input",
+            "value": "OP CHECKS",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "section_2_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo. ",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "OBSERVATIONS",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "REMARKS",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+               "_id": "checks_matrix_1_row_1_combined",
+              "cells": [
+                    {
+                    "_id": "embarked_time",
+                    "key": "embarked_time",
+                    "name": "embarked_time",
+                    "type": "time",
+                    "value": "",
+                    "lb" : "Trial team embarked onboard for Op checks of HF Tx/R ATRX 1000 at hrs",
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "HH:MM",
+                    "style": "max-width: 90px; min-width: 80px; width: 100%; padding: 4px;",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+
+                  {
+                    "_id": "schedule",
+                    "key": "schedule",
+                    "name": "schedule",
+                    "type": "textarea",
+                    "inputType": "text",
+                    "value": "",
+                    "lb" : "hrs on for OP Checks of GPS as per approved schedule vide HQ MoD (N) / DSR letter WP / 0642 dated 06 Aug 14. Following observed: -",
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "1.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Check the antenna is fitted at a position on the ship which ensures a clear view of the satellite constellation.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_2_cell_3_gps_status_1",
+                    "key": "gps_status_1",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "2.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Check for capability of acquiring position to the required accuracy, within 30 min, when there is no valid almanac data.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_3_cell_3_gps_status_2",
+                    "key": "gps_status_2",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "3.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Check for capability of acquiring position to the required accuracy, within 5min, when there is valid almanac data.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_4_cell_3_gps_status_3",
+                    "key": "gps_status_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "4.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Check for capability of re-acquiring position to the required accuracy, within 2 min, when subjected to a power interruption of 60 sec.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_5_cell_3_gps_status_4",
+                    "key": "gps_status_4",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "5.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "Check for a minimum resolution of position, i.e latitude and longitude, of 0.001 minutes.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_6_cell_3_gps_status_5",
+                    "key": "gps_status_5",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "Failure warnings and Status Indications. The equipment should provide indicator for following: -",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "6.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Check for warning of loss of position.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_8_cell_3_gps_status_6",
+                    "key": "gps_status_6",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "7.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "DGPS status indication of the receipt of DGPS signals and whether DGPS corrections are being applied to the indicated ship's position.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_9_cell_3_gps_status_7",
+                    "key": "gps_status_7",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "8.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Check for DGPS integrity status and alarm.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_10_cell_3_gps_status_8",
+                    "key": "gps_status_8",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "9.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Check for DGPS text message display.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_11_cell_3_gps_status_9",
+                    "key": "gps_status_9",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "10.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Check for indication within 5 sec if the specified \"Horizontal Dilution of Precision\" (HDOP) has been exceeded or a new position has not been calculated for more than 1 sec.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_12_cell_3_gps_status_10",
+                    "key": "gps_status_10",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "Miscellaneous checks.",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "section_2_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "section_2_matrix_1_row_14_cell_1_static",
+                    "type": "serial",
+                    "value": "11.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_14_cell_2_static",
+                    "type": "label",
+                    "value": "Interface checks with other user AIS, ECDIS, RADAR, CTD, Trigun/MDA, Gyro, etc.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_2_matrix_1_row_14_cell_3_gps_status_11",
+                    "key": "gps_status_11",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type":"label",
+            "value": "Authority",
+            "colSpan": 12
+          },
+          {
+            "_id": "presenting_authority",
+            "key": "presenting_authority",
+            "name": "presenting_authority",
+            "label": "Presenting Authority",
+            "type": "input",
+            "value": "Ship's Staff",
+            "colSpan":12,
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text"
+          },
+          {
+            "_id": "inspecting_authority",
+            "key": "inspecting_authority",
+            "name": "inspecting_authority",
+            "label": "Inspecting Authority",
+            "type": "input",
+            "value": "WATT (V)",
+            "colSpan":12,
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text"
+          }
+        ],
+        "tables_2": []
+      }
+    }
+  ]
+}

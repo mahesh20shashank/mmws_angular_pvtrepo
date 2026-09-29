@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import django\")",
+      "Bash(python -m venv .venv_check)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('tank/views.py'\\).read\\(\\)\\); ast.parse\\(open\\('tank/serializers.py'\\).read\\(\\)\\); ast.parse\\(open\\('tank/urls.py'\\).read\\(\\)\\); print\\('OK'\\)\")",
+      "Bash(python -c \"import ast; [ast.parse\\(open\\(f\\).read\\(\\)\\) for f in ['ems/views.py','ems/serializers.py','ems/urls.py','users/rbac.py','users/management/commands/seed_rbac.py']]; print\\('OK'\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python manage.py showmigrations ems tank)",
+      "Bash(python manage.py spectacular --file /dev/null)"
+    ]
+  }
+}

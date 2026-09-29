@@ -1,0 +1,402 @@
+.reports {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* ---------- Report navigator (shared collapsible sidebar) ---------- */
+.reports__nav {
+  width: 290px;
+  flex-shrink: 0;
+  transition: width 0.2s ease;
+}
+
+.reports--collapsed .reports__nav {
+  width: 68px;
+}
+
+/* ---------- Detail ---------- */
+.reports__detail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reports__header {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.reports__header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reports__title {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  color: var(--text-primary);
+}
+
+.reports__applied {
+  font-size: 11px;
+  color: #4aa8ff;
+  /* Opaque, not the previous low-opacity tint — SonarQube (css:S7924) measured this under
+     4.5:1 once composited over the real background. */
+  background: #0a2540;
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  border-radius: 100px;
+  padding: 3px 11px;
+}
+
+.reports__spacer {
+  flex-grow: 1;
+}
+
+.reports__toolbtn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.reports__toolbtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.reports__toolbtn-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.reports__chev {
+  color: var(--text-muted);
+}
+
+.reports__count {
+  font-size: 10.5px;
+  color: #4aa8ff;
+  /* Opaque, not the previous low-opacity tint — SonarQube (css:S7924) measured this under
+     4.5:1 once composited over the real background. */
+  background: #0a2540;
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  border-radius: 100px;
+  padding: 1px 8px;
+}
+
+/* Reset filters — shown as the trailing field of the filter grid itself (same row/height as the
+   select fields beside it), not as a separate header button outside the filter panel. */
+.reports__reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 45px;
+  padding: 0 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s;
+}
+
+.reports__reset:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Filter grid ---------- */
+.reports__filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.reports__filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.reports__filter-field--actions {
+  justify-content: flex-end;
+}
+
+.reports__filter-label {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.reports__filter-control {
+  position: relative;
+}
+
+.reports__filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 40px;
+  padding: 10px 34px 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-size: 12.5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.reports__filter-select option {
+  background: var(--bg-dropdown);
+  color: var(--text-primary);
+}
+
+.reports__filter-icon {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+.reports__colpicker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+}
+
+.reports__colpicker-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reports__colpicker-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.reports__colpicker-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.reports__colpicker-reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.reports__colpicker-reset:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.reports__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reports__chip {
+  display: flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.reports__chip--selected {
+  gap: 7px;
+  padding: 5px 6px 5px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  background: rgba(0, 136, 255, 0.12);
+}
+
+.reports__chip-pos {
+  font-weight: 600;
+  font-size: 10px;
+  color: white;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #565151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.reports__chip-name {
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.reports__chip-lock {
+  width: 20px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f5b94b;
+}
+
+.reports__chip-remove {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.reports__chip-remove:hover {
+  /* Opaque, not the previous low-opacity tint — SonarQube (css:S7924) measured this under
+     4.5:1 once composited over the real background. */
+  background: #1c0406;
+  color: #ff9ba0;
+}
+
+.reports__chip--add {
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.reports__chip--add:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(0, 136, 255, 0.4);
+  color: var(--text-primary);
+}
+
+/* ---------- Preview ---------- */
+.reports__preview {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.reports__preview-head {
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.reports__preview-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 13.5px;
+  color: var(--text-primary);
+}
+
+.reports__preview-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.reports__preview app-data-grid {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  padding: 12px 18px 18px;
+  overflow: auto;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .reports {
+    flex-direction: column;
+  }
+
+  .reports__nav,
+  .reports--collapsed .reports__nav {
+    width: 100%;
+  }
+}
+
+:host ::ng-deep .ag-body-horizontal-scroll-viewport,
+:host ::ng-deep .ag-body-vertical-scroll-viewport {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--bg-scrollbar-thumb) var(--bg-scrollbar-track) !important;
+}
+
+:host ::ng-deep .ag-body-horizontal-scroll-viewport::-webkit-scrollbar,
+:host ::ng-deep .ag-body-vertical-scroll-viewport::-webkit-scrollbar {
+  display: block !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+:host ::ng-deep .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb,
+:host ::ng-deep .ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb {
+  background: var(--bg-scrollbar-thumb) !important;
+  border-radius: 99px !important;
+}
+
+:host ::ng-deep .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-track,
+:host ::ng-deep .ag-body-vertical-scroll-viewport::-webkit-scrollbar-track {
+  background: var(--bg-scrollbar-track) !important;
+}

@@ -1,0 +1,62 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="page-container glass-card">
+
+  <div class="page-header">
+    <h1 class="page-title">Search Results - Equipment Running History</h1>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Grid Card -->
+  <div class="grid-card">
+
+    <!-- Filters Row -->
+    <div class="filter-row">
+
+      <app-select-input
+        label="Month"
+        [options]="monthOptions"
+        [(ngModel)]="selectedMonth"
+        (ngModelChange)="onFilterChange()">
+      </app-select-input>
+
+      <app-select-input
+        label="Equipment Nomenclature"
+        [options]="equipmentOptions"
+        [(ngModel)]="selectedEquipment"
+        (ngModelChange)="onFilterChange()">
+      </app-select-input>
+
+      <app-button
+        type="button"
+        class="clear-filter-btn mr-2.5"
+        (click)="clearFilters()">
+        Clear Filter
+      </app-button>
+
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <i class="ti ti-search search-icon" aria-hidden="true"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search">
+      </div>
+    </div>
+
+    <!-- Data Grid -->
+    <app-data-grid
+      [rowData]="filteredRows()"
+      [columnDefs]="columnDefs"
+      [pagination]="true"
+      [height]="'440px'"
+      [loading]="isLoading()">
+    </app-data-grid>
+
+  </div>
+
+</div>

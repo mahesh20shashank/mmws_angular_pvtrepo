@@ -1,0 +1,187 @@
+<app-form-card
+  *ngIf="pageReady"
+  #formCard
+  [title]="formTitle"
+  [smallTitle]="'SEG Catalogue'"
+  [showPreviousReport]="false"
+  [showTopBar]="false"
+  [showBackButton]="true"
+  [backLabel]="'Go Back'"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="false"
+>
+  <form [formGroup]="form" class="p-0 py-4">
+    <div class="mb-4 px-1">
+      <p class="text-sm italic">
+        All fields marked with <span class="">*</span> are mandatory
+      </p>
+    </div>
+
+    <fieldset class="border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold">
+        Catalogue Details
+      </legend>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="ship_name">
+            Ship Name <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="ship_name"
+            [options]="shipOptions"
+            placeholder="--Select--"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="system_name">
+            System Name <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="system_name"
+            [options]="systemOptions"
+            placeholder="--Select--"
+            [disabled]="!form.get('ship_name')?.value"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="sub_system_name">
+            Sub System Name <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="sub_system_name"
+            [options]="subSystemOptions"
+            placeholder="--Select--"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="media_type">
+            Media Type <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="media_type"
+            [options]="mediaTypeOptions"
+            placeholder="--Select Media--"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="select_size">
+            Select Size <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="select_size"
+            [options]="sizeOptions"
+            placeholder="--Select--"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="select_os">
+            Select OS <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="select_os"
+            [options]="osOptions"
+            placeholder="--Select OS--"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="select_interface">
+            Select Interface <span class="">*</span>
+          </label>
+          <app-select
+            formControlName="select_interface"
+            [options]="interfaceOptions"
+            placeholder="--Select Interface--"
+          />
+        </div>
+
+        <app-input
+          label="Application Name"
+          formControlName="application_name"
+          placeholder="Enter application name"
+          [required]="true"
+        />
+
+        <app-input
+          label="Application Version"
+          formControlName="application_version"
+          placeholder="Enter application version"
+          [required]="true"
+        />
+
+        <app-input
+          label="Serial Number"
+          formControlName="serial_no"
+          placeholder="Enter serial number"
+        />
+
+        <app-input
+          label="Make / OEM of Module"
+          formControlName="oem_of_module"
+          placeholder="Enter OEM of module"
+        />
+
+        <app-input
+          label="Pattern Number of Module"
+          formControlName="pattern_number"
+          placeholder="Enter pattern number"
+        />
+
+        <app-input
+          label="OEM Part no of Motherboard"
+          formControlName="oem_part"
+          placeholder="Enter OEM part number"
+        />
+        @if (showSegVerification) {
+          <app-select
+            label="SEG Verification"
+            formControlName="approved"
+            [options]="segVerificationOptions"
+            placeholder="--Select--"
+            [required]="true"
+          />
+        }
+      </div>
+    </fieldset>
+  </form>
+
+  <div
+    formFooter
+    class="flex items-center justify-end gap-1.5"
+  >
+    <button
+      *ngIf="canShowSaveDraft"
+      type="button"
+      class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="draftLoading || submitLoading"
+      (click)="handleSave('draft')"
+    >
+      Save Draft
+    </button>
+    <button
+      *ngIf="canEditForm"
+      type="button"
+      class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="draftLoading || submitLoading"
+      (click)="handleSave('save')"
+    >
+      Save
+    </button>
+    <button
+      *ngIf="canEditForm"
+      type="button"
+      class="form-card-footer-btn pt-glass-btn-primary inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="draftLoading || submitLoading"
+      (click)="handleSubmit()"
+    >
+      Submit
+    </button>
+  </div>
+</app-form-card>

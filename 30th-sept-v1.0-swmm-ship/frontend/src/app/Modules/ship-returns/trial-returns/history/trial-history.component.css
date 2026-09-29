@@ -1,0 +1,83 @@
+.form-select {
+  width: 100%;
+  background: var(--bg-input, rgba(15, 23, 42, 0.7));
+  border: 1px solid var(--border-input, rgba(255, 255, 255, 0.2));
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary, #FFFFFF);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.form-select:focus {
+  border-color: #3B82F6;
+}
+
+.form-select option {
+  background: var(--bg-dropdown, #0F172A);
+  color: var(--text-primary, #FFFFFF);
+}
+
+.form-search-input {
+  width: 100%;
+  background: var(--bg-input, rgba(15, 23, 42, 0.8));
+  border: 1px solid var(--border-input, rgba(255, 255, 255, 0.15));
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text-primary, #FFFFFF);
+  font-size: 0.8125rem;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.form-search-input:focus {
+  border-color: #3B82F6;
+}
+
+.form-search-input::placeholder {
+  color: var(--text-muted, rgba(255, 255, 255, 0.35));
+}
+
+.table-pill {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.badge-status-closed {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34D399;
+}
+
+.badge-status-archived {
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #94A3B8;
+}
+
+/* ================= LIGHT MODE OVERRIDES ================= */
+:host-context([data-theme="light"]) .form-select option,
+[data-theme="light"] .form-select option {
+  background: #FFFFFF !important;
+  color: #0F1C2E !important;
+}
+
+:host-context([data-theme="light"]) .badge-status-closed,
+[data-theme="light"] .badge-status-closed {
+  background: #DCFCE7 !important;
+  border: 1px solid #86EFAC !important;
+  color: #166534 !important;
+}
+
+:host-context([data-theme="light"]) .badge-status-archived,
+[data-theme="light"] .badge-status-archived {
+  background: #F3F4F6 !important;
+  border: 1px solid #D1D5DB !important;
+  color: #374151 !important;
+}

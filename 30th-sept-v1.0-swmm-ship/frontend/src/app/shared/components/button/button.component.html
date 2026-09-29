@@ -1,0 +1,9 @@
+<button [type]="type" [disabled]="!!disabled" class="app-btn-inner" [ngStyle]="$any(customStyle)" [attr.title]="title ?? null">
+  @if (icon) {
+    <i [class]="icon" [ngStyle]="iconSize ? {'font-size': iconSize + 'px'} : null" [ngClass]="iconClass"></i>
+  }
+  <ng-content></ng-content>
+  @if (label) {
+    <span class="btn-label">{{ label }}</span>
+  }
+</button>

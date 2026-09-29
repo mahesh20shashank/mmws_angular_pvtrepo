@@ -1,0 +1,122 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>Create Cart</h3>
+  </div>
+
+  <form [formGroup]="form" class="mo-stub-fields">
+    @for (field of fields; track field.key) {
+      <app-dynamic-field [spec]="field" [control]="getControl(field.key)" />
+    }
+    <div class="mo-stub-fields__actions">
+      <app-button type="button" class="btn-secondary" (click)="clear()">Clear</app-button>
+    </div>
+  </form>
+
+  <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs" height="380px" />
+</div>
+
+@if (activeRow(); as row) {
+  <app-detail-drawer [open]="true" label="Cart View" [titleMode]="true" [wide]="true" (closed)="closeCart()">
+    <fieldset class="cart-fieldset">
+      <legend>Item Information</legend>
+      <div class="cart-detail-row"><span>Item Code</span><strong>{{ row.itemCode }}</strong></div>
+      <div class="cart-detail-row"><span>Quantity</span><strong>{{ row.qtyRequired }}</strong></div>
+      <div class="cart-detail-row"><span>Total Price</span><strong>{{ row.priceRs * row.qtyRequired }}</strong></div>
+      <div class="cart-detail-row"><span>Authority Type</span><strong>{{ getControl("authorityType").value || "-" }}</strong></div>
+      <div class="cart-detail-row"><span>Authority Ref</span><strong>-</strong></div>
+      <div class="cart-detail-row"><span>Authority DT</span><strong>-</strong></div>
+      <div class="cart-detail-row"><span>Refits</span><strong>-</strong></div>
+      <div class="cart-detail-row"><span>Raised for Customer</span><strong>-</strong></div>
+      <div class="cart-detail-row"><span>Raised on Subdepartment code</span><strong>-</strong></div>
+      <div class="cart-detail-row"><span>Date/time</span><strong>{{ nowStamp }}</strong></div>
+      <div class="cart-detail-row"><span>Customer code</span><strong>-</strong></div>
+    </fieldset>
+
+    @if (stage() === "item") {
+      <div class="cart-actions">
+        <app-button type="button" class="btn-primary" (click)="generateDemand()">Proceed To Generate Demand</app-button>
+      </div>
+    }
+
+    @if (stage() === "demand" || stage() === "conversation") {
+      <fieldset class="cart-fieldset">
+        <legend>Internal Demand Details</legend>
+        <div class="cart-detail-row"><span>Internal Demand No.</span><strong>{{ internalDemandNo() }}</strong></div>
+        <div class="cart-detail-row"><span>Department Code</span><strong>-</strong></div>
+        <div class="cart-detail-row"><span>Sub Department Code</span><strong>-</strong></div>
+        <div class="cart-detail-row"><span>Raised On</span><strong>{{ nowStamp }}</strong></div>
+        <div class="cart-detail-row"><span>Authority Type</span><strong>{{ getControl("authorityType").value || "-" }}</strong></div>
+        <div class="cart-detail-row"><span>Demand Type</span><strong>-</strong></div>
+      </fieldset>
+      @if (stage() === "demand") {
+        <div class="cart-actions">
+          <app-button type="button" class="btn-primary" (click)="approveDemand()">Approve</app-button>
+        </div>
+      }
+    }
+
+    @if (stage() === "conversation") {
+      <fieldset class="cart-fieldset">
+        <legend>Internal Conversation</legend>
+        <div class="cart-detail-row"><span>Internal Demand No.</span><strong>{{ internalDemandNo() }}</strong></div>
+
+        <form [formGroup]="conversationForm" class="cart-conv-form">
+          <div class="form-field-label">Department</div>
+          <select class="form-field-select" formControlName="department">
+            <option value="" disabled>Select department</option>
+            @for (opt of departmentOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+          @if (conversationForm.controls.department.invalid && conversationForm.controls.department.touched) {
+            <span class="form-error">Department is required.</span>
+          }
+
+          <div class="form-field-label">Type</div>
+          <select class="form-field-select" formControlName="type">
+            <option value="" disabled>Select type</option>
+            @for (opt of typeOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+          @if (conversationForm.controls.type.invalid && conversationForm.controls.type.touched) {
+            <span class="form-error">Type is required.</span>
+          }
+
+          <div class="form-field-label">Remark</div>
+          <input class="form-field-input" formControlName="remark" placeholder="Enter remark" />
+          @if (conversationForm.controls.remark.invalid && conversationForm.controls.remark.touched) {
+            <span class="form-error">Remark is required.</span>
+          }
+
+          <div class="cart-actions">
+            <app-button type="button" class="btn-secondary" (click)="upload()">Upload</app-button>
+            <app-button type="button" class="btn-primary" [disabled]="conversationForm.invalid" (click)="addConversation()">Add</app-button>
+          </div>
+        </form>
+
+        @if (conversationEntries().length) {
+          <table class="cart-conv-table">
+            <thead>
+              <tr><th>L No</th><th>Dept</th><th>Type</th><th>Remark</th><th>Conv By</th><th>Dtm</th></tr>
+            </thead>
+            <tbody>
+              @for (entry of conversationEntries(); track entry.lNo) {
+                <tr>
+                  <td>{{ entry.lNo }}</td>
+                  <td>{{ entry.department }}</td>
+                  <td>{{ entry.type }}</td>
+                  <td>{{ entry.remark }}</td>
+                  <td>{{ entry.convBy }}</td>
+                  <td>{{ entry.dtm }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </fieldset>
+    }
+  </app-detail-drawer>
+}

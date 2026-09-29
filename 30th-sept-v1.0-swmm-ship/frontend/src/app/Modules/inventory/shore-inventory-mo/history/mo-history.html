@@ -1,0 +1,38 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>History</h3>
+  </div>
+
+  <div class="mo-tabs-row">
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'normal'" (click)="selectTab('normal')">
+      Normal Demands
+    </app-button>
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'pts'" (click)="selectTab('pts')">
+      PTS Demands
+    </app-button>
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'rio'" (click)="selectTab('rio')">
+      RIO Demands
+    </app-button>
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'iif'" (click)="selectTab('iif')">
+      IIF
+    </app-button>
+  </div>
+
+  <app-data-grid [rowData]="rows()" [columnDefs]="columnDefs()" height="420px" />
+</div>
+
+@if (activeEntry()) {
+  <app-modal size="md" (closeModal)="closeDetail()">
+    <h3 class="detail-modal__title">History Entry Details</h3>
+    <div class="detail-modal__grid">
+      @for (row of detailRows(); track row.label) {
+        <div class="detail-modal__row"><span>{{ row.label }}</span><strong>{{ row.value }}</strong></div>
+      }
+    </div>
+    <div class="detail-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeDetail()">Close</app-button>
+    </div>
+  </app-modal>
+}

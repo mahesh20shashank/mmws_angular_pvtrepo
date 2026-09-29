@@ -1,0 +1,104 @@
+<div class="pt-glass-table mx-auto w-full max-w-[1800px] p-2 sm:p-3">
+  <div class="flex w-full flex-col gap-4 xl:flex-row xl:items-start">
+    <!-- Left: CMMS -->
+    <section class="flex min-w-0 flex-1 flex-col gap-3">
+      <header class="flex items-center gap-3 border-b border-[var(--shell-divider-soft)] pb-3">
+        <span class="h-7 w-1 shrink-0 rounded"
+          style="background: linear-gradient(180deg, var(--shell-brand-start), var(--shell-brand-end))"
+          aria-hidden="true"></span>
+        <h3 class="form-section-header text-base font-bold tracking-tight pt-glass-text-secondary">CMMS Equipment</h3>
+      </header>
+
+      <div
+        class="rounded-xl border border-[var(--shell-table-control-border)] bg-[var(--shell-table-control-bg)] p-4 shadow-[var(--shell-glass-inset)]">
+        <div class=" grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div>
+            <label
+              class=" form-section-header pt-glass-text-muted mb-1 block text-[11px] font-semibold uppercase tracking-wide">
+              Equipment Name
+            </label>
+            <input type="text" placeholder="Search nomenclature…"
+              class="w-full rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2.5 text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] focus:border-[#61C2FF] transition"
+              [(ngModel)]="cmmsFilters.nameNom" name="cmmsNameNom" (ngModelChange)="onCmmsFiltersChange()" />
+          </div>
+
+          <div>
+            <label
+              class="form-section-header pt-glass-text-muted mb-1 block text-[11px] font-semibold uppercase tracking-wide">
+              CMMS Code
+            </label>
+            <input type="text" placeholder="E.g. CMS-9821"
+              class="w-full rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2.5 text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] focus:border-[#61C2FF] transition"
+              [(ngModel)]="cmmsFilters.cmmsCode" name="cmmsCode" (ngModelChange)="onCmmsFiltersChange()" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label
+              class="form-section-header pt-glass-text-muted mb-1 block text-[11px] font-semibold uppercase tracking-wide">
+              Assigned Ship
+            </label>
+            <app-select-with-search-box [ngModel]="cmmsFilters.ship" [ngModelOptions]="{ standalone: true }"
+              [options]="shipOptions" placeholder="All Naval Vessels"
+              (ngModelChange)="onCmmsShipChange($event)"></app-select-with-search-box>
+          </div>
+        </div>
+      </div>
+
+      <app-paginate-table #cmmsTable [title]="''" [rowData]="rowData" [url]="cmmsTableUrl" [columnDefs]="columnCMMS"
+        [showHeaderSection]="false" [showPagination]="true"></app-paginate-table>
+    </section>
+
+    <!-- Right: ITTTM -->
+    <section class="flex min-w-0 flex-1 flex-col gap-3">
+      <header class="flex items-center gap-3 border-b border-[var(--shell-divider-soft)] pb-3">
+        <span class="h-7 w-1 shrink-0 rounded"
+          style="background: linear-gradient(180deg, var(--shell-brand-start), var(--shell-brand-end))"
+          aria-hidden="true"></span>
+        <h3 class="form-section-header text-base font-bold tracking-tight pt-glass-text-secondary">ITTTM Equipment</h3>
+      </header>
+
+      <div
+        class="rounded-xl border border-[var(--shell-table-control-border)] bg-[var(--shell-table-control-bg)] p-4 shadow-[var(--shell-glass-inset)]">
+        <div class="mb-0 grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div>
+            <label
+              class="form-section-header pt-glass-text-muted mb-1 block text-[11px] font-semibold uppercase tracking-wide">
+              Equipment Name
+            </label>
+            <input type="text" placeholder="Search nomenclature…"
+              class="w-full rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2.5 text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] focus:border-[#61C2FF] transition"
+              [(ngModel)]="itttmFilters.nameNom" name="itttmNameNom" (ngModelChange)="onItttmFiltersChange()" />
+          </div>
+
+          <div>
+            <label
+              class="form-section-header pt-glass-text-muted mb-1 block text-[11px] font-semibold uppercase tracking-wide">
+              ITTTM Code
+            </label>
+            <input type="text" placeholder="E.g. ITM-770"
+              class="w-full rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2.5 text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] focus:border-[#61C2FF] transition"
+              [(ngModel)]="itttmFilters.itttmCode" name="itttmCode" (ngModelChange)="onItttmFiltersChange()" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label
+              class="form-section-header pt-glass-text-muted mb-1 block text-[11px] font-semibold uppercase tracking-wide">
+              Assigned Ship
+            </label>
+            <app-select-with-search-box [ngModel]="itttmFilters.ship" [ngModelOptions]="{ standalone: true }"
+              [options]="shipOptions" placeholder="All Naval Vessels"
+              (ngModelChange)="onItttmShipChange($event)"></app-select-with-search-box>
+          </div>
+        </div>
+      </div>
+
+      <app-paginate-table #itttmTable [title]="''" [rowData]="rowData1" [url]="itttmTableUrl" [columnDefs]="columnIttm"
+        [showHeaderSection]="false" [showPagination]="true"></app-paginate-table>
+    </section>
+  </div>
+</div>
+
+<app-add-form *ngIf="isEquipmentModalOpen && formConfigForNewDetails?.length" [open]="isEquipmentModalOpen"
+  [formConfig]="formConfigForNewDetails" [formData]="editFormData" [isEditMode]="false"
+  (onSubmit)="handleSubmit($event)" (onChange)="onFieldChange($event)" (onOpenChange)="isEquipmentModalOpen = $event"
+  [fromTitle]="headerTitle"></app-add-form>

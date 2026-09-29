@@ -1,0 +1,45 @@
+<app-help-guidance [bodyHtml]="helpGuidanceHtml" />
+
+<div class="workspace-row" [class.panel-closed]="!store.detailFullView()">
+  <app-filter-panel class="filter-panel-col" />
+
+  <div class="workspace glass glass-card p-2">
+    <app-controls [compact]="store.detailFullView()" />
+    <app-calendar />
+  </div>
+
+  @if (store.detailFullView() && store.selectedActivity()) {
+    <div class="detail-panel-wrapper">
+      <div class="glass-card detail-panel">
+        <app-detail />
+      </div>
+    </div>
+  }
+
+  @if (store.selectedActivity() && !store.detailFullView() && !store.newModalOpen()) {
+    <app-activity-details-modal />
+  }
+
+  @if (store.notifFlyoutOpen()) {
+    <app-notif-flyout />
+  }
+  @if (store.mailFlyoutOpen()) {
+    <app-mail-flyout />
+  }
+
+  @if (store.newModalOpen()) {
+    <app-new-activity-modal />
+  }
+
+  @if (store.overdueDartsModalOpen()) {
+    <app-overdue-darts-modal />
+  }
+
+  @if (store.shiftDueDateModalOpen()) {
+    <app-modal (closeModal)="store.closeShiftDueDateModal()" size="xl">
+      <app-shift-due-date />
+    </app-modal>
+  }
+
+  <app-day-events-modal />
+</div>

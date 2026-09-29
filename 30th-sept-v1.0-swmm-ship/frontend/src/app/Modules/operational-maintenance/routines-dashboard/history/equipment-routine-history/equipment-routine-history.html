@@ -1,0 +1,127 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="page-container glass-card">
+
+  <!-- Grid Card -->
+  <div class="grid-card">
+
+    <!-- Filters Row -->
+    <div class="filter-row">
+
+      <app-select-input
+        label="Sub Dept"
+        [options]="subDeptOptions"
+        [(ngModel)]="selectedSubDept"
+        (ngModelChange)="onFilterChange()">
+      </app-select-input>
+
+      <app-select-input
+        label="Equipment Nomenclature"
+        [options]="equipmentOptions"
+        [(ngModel)]="selectedEquipment"
+        (ngModelChange)="onFilterChange()">
+      </app-select-input>
+
+      <app-select-input
+        label="Routine Name"
+        [options]="routineNameOptions"
+        [(ngModel)]="selectedRoutineName"
+        (ngModelChange)="onFilterChange()">
+      </app-select-input>
+
+      <app-button
+        type="button"
+        class="clear-filter-btn mr-2.5"
+        (click)="clearFilters()">
+        Clear Filter
+      </app-button>
+
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+
+      <div class="search-box">
+        <i class="ti ti-search search-icon" aria-hidden="true"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search" />
+      </div>
+
+     <!-- Export Buttons -->
+        <div class="flex gap-2 pl-2 mr-2.5">
+          <app-export-toolbar
+            [busy]="exportBusy()"
+            [disabled]="filteredRows().length === 0"
+            (exportRequested)="onExport($event)"
+          />
+        </div>
+
+    </div>
+
+    <!-- Data Grid -->
+    <app-data-grid
+      [rowData]="filteredRows()"
+      [columnDefs]="columnDefs"
+      [pagination]="true"
+      [height]="'440px'"
+      [loading]="isLoading()"
+      (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+
+  </div>
+
+</div>
+
+<!-- Timeline detail overlay + slide-in panel -->
+@if (timelinePanelOpen()) {
+  <div
+    class="timeline-overlay"
+    role="button"
+    tabindex="0"
+    aria-label="Close routine history detail"
+    (click)="closeTimeline()"
+    (keyup.enter)="closeTimeline()"
+    (keyup.space)="closeTimeline()">
+  </div>
+
+  <div class="timeline-sidebar">
+    <div class="sidebar-header">
+      <h3>Routine History Detail: {{ timelineTitle() }}</h3>
+      <app-button
+        type="button"
+        class="close-sidebar"
+        aria-label="Close"
+        (click)="closeTimeline()">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="sidebar-filter">
+      <app-select-input
+        label="Filter by Routine Number"
+        [options]="timelineRoutineNoOptions()"
+        [(ngModel)]="timelineSelectedRoutineNo"
+        (ngModelChange)="onTimelineRoutineNoChange()">
+      </app-select-input>
+    </div>
+
+    <div class="sidebar-table-wrapper">
+      @if (timelineLoading()) {
+        <div class="timeline-loading">Loading...</div>
+      } @else if (!timelineRows().length) {
+        <div class="timeline-empty">No completion history found.</div>
+      } @else {
+        <app-data-grid
+          [rowData]="timelineRows()"
+          [columnDefs]="timelineColumnDefs"
+          [pagination]="true"
+          [pageSize]="10"
+          height="360px">
+        </app-data-grid>
+      }
+    </div>
+  </div>
+}

@@ -1,0 +1,23 @@
+<div class="p-2 sm:p-3">
+    <app-paginate-table
+        title="Strakes Master"
+        description="Manage strakes"
+        [showHeaderSection]="true"
+        [addButtons]="[{ label: 'Add strake', key: 'add' }]"
+        (addButtonClick)="openAddShip()"
+        [showImport]="true"
+        [showExport]="true"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [tableLoading]="isLoading"
+        [showSearch]="true">
+    </app-paginate-table>
+</div>
+
+<app-strakes-master-add *ngIf="isFormOpen" [editMode]="isEditMode" [viewMode]="isViewMode" [unitData]="selectedRow"
+    (close)="closeAddForm()" (addNewRequest)="isNewEntryAdded = $event">
+</app-strakes-master-add>
+
+<app-reusable-delete-dialog [open]="isDeleteDialogOpen" [id]="deleteRow?.id" [name]="deleteRow?.name" entityType="Unit"
+    [loading]="isDeleteLoading" (confirm)="confirmDelete()" (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>

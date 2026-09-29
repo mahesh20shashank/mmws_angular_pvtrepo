@@ -1,0 +1,20 @@
+<div class="textarea-wrapper">
+
+  <div class="textarea-container" [class.active]="focused()" [style.background]="backgroundColor()">
+
+    <label for="lable" class="floating-label" [class.visible]="focused() || hasValue()">
+
+      {{ label }}
+      @if (required()) {
+      <span class="required">*</span>
+      }
+
+    </label>
+
+    <textarea [rows]="rows" [readonly]="readonly" [placeholder]="placeholder" [value]="value()" (input)="onInput($event)" (focus)="onFocus()"
+      (blur)="onBlur()">
+    </textarea>
+
+  </div>
+
+</div>

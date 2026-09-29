@@ -1,0 +1,29 @@
+<div class="modal backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.6)] text-left"
+  style="background: rgba(4, 9, 20, 0.85);">
+  <div class="sync-header">
+    <div class="title-wrapper">
+      <app-icon name="refresh-cw" class="header-icon" variant="inherit" />
+      <h3>Last Sync Application Wise</h3>
+    </div>
+
+    <app-button class="close-btn" (click)="closeModal.emit()">
+      <app-icon name="x" />
+    </app-button>
+  </div>
+
+  <div class="sync-grid">
+    @for(item of syncData; track $index){
+
+      <div class="sync-item">
+        <div class="sync-name">
+          {{ item.name }}
+        </div>
+
+        <div class="sync-time">
+          {{ item.lastSync }}
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

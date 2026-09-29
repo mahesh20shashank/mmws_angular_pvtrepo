@@ -1,0 +1,40 @@
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Update Spare Details</h3>
+  </div>
+  <!-- The three states, explicit - see `spare-detail.html`'s identical branches, which this
+       copies. A blank panel under the title said nothing about whether the record was still on
+       its way or never coming. -->
+  @if (state() === "loading") {
+    <div class="obs-detail-skeleton" role="status" aria-live="polite">
+      <p class="obs-detail-skeleton__label">Loading spare details...</p>
+      <div class="obs-detail-skeleton__grid" aria-hidden="true">
+        @for (block of skeletonBlocks; track block) {
+          <div class="obs-detail-skeleton__block"></div>
+        }
+      </div>
+    </div>
+  } @else if (state() === "error") {
+    <div class="obs-detail-state" role="alert">
+      <app-icon name="triangle-alert" [size]="28" variant="danger" />
+      <h4 class="obs-detail-state__title">This spare could not be loaded</h4>
+      <p class="obs-detail-state__text">
+        The server did not answer for this record. Nothing has been changed. Try again, or go back
+        to Search Spare and open it from the list.
+      </p>
+      <div class="obs-detail-state__actions">
+        <app-button type="button" class="btn-secondary" (click)="goBack()">Back to Search Spare</app-button>
+        <app-button type="button" class="btn-primary" (click)="retry()">
+          <app-icon name="refresh-cw" [size]="14" variant="inherit" /> Try again
+        </app-button>
+      </div>
+    </div>
+  } @else if (spare(); as s) {
+    <app-obs-spare-form
+      [initialValue]="s"
+      [saving]="saving()"
+      (submitted)="onSubmit($event)"
+      (cancelled)="goBack()"
+    />
+  }
+</div>

@@ -1,0 +1,121 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Critical Spare List</h3>
+    <div class="crit-legend">
+      <span class="crit-legend__label">Criticality Strength</span>
+      <span class="crit-flag crit-flag--low">LOW</span>
+      <span class="crit-flag crit-flag--moderate">MODERATE</span>
+      <span class="crit-flag crit-flag--high">HIGH</span>
+    </div>
+  </div>
+
+  <div class="crit-auto-note">
+    <app-icon name="info" [size]="14" variant="accent" />
+    This list is generated automatically by SWMM from the issue pattern of each spare. A spare is
+    marked critical, and its strength grade raised from low to moderate to high, according to how
+    often it has been issued during the current year. Entries are not added or removed by hand.
+  </div>
+
+  <div class="crit-filters">
+    @if (isPrivileged()) {
+      <div class="crit-filters__field">
+        <app-select-input
+          label="Department"
+          placeholder="All departments"
+          [options]="departmentOptions()"
+          [ngModel]="departmentFilter()"
+          (ngModelChange)="onDepartmentChange($event)"
+        />
+      </div>
+    }
+    <div class="crit-filters__field">
+      <app-select-input
+        label="Spare Class"
+        placeholder="All"
+        [options]="spareClassOptions()"
+        [ngModel]="spareClassFilter()"
+        (ngModelChange)="onSpareClassChange($event)"
+      />
+    </div>
+    <div class="crit-filters__field">
+      <app-select-input
+        label="Equipment Class"
+        placeholder="All"
+        [options]="equipmentClassOptions()"
+        [ngModel]="equipmentClassFilter()"
+        (ngModelChange)="onEquipmentClassChange($event)"
+      />
+    </div>
+    <app-button type="button" class="btn-secondary" (click)="clearFilters()">
+      <app-icon name="x" [size]="14" variant="inherit" /> Reset filters
+    </app-button>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="!filteredRows().length" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs()" height="480px" />
+</div>
+
+@if (detailSpare(); as spare) {
+  <app-modal size="lg" (closeModal)="closeDetail()">
+    <div class="crit-modal__header">
+      <h3 class="crit-modal__title">Issue History — {{ spare.patternNumber }}</h3>
+      <app-button type="button" class="crit-modal__close" aria-label="Close" (click)="closeDetail()">
+        <app-icon name="x" [size]="16" variant="inherit" />
+      </app-button>
+    </div>
+
+    <div class="crit-auto-note crit-auto-note--tight">
+      This entry is generated automatically by SWMM from the issue pattern of this spare. The
+      strength grade is derived from the number of issues recorded during the current year and is
+      not set by hand.
+    </div>
+
+    <div class="crit-modal__summary">
+      <strong>{{ spare.description }}</strong>
+      <span>Department: {{ spare.departmentName || "—" }}</span>
+      <span class="crit-flag crit-flag--{{ spare.criticalityStrength.toLowerCase() }}">
+        {{ spare.criticalityStrength }}
+      </span>
+      <span>Issues recorded this year: <strong>{{ spare.issuesThisYear }}</strong></span>
+    </div>
+
+    <div class="crit-modal__table-wrap">
+      <table class="crit-modal__table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date of Issue</th>
+            <th>Quantity Issued</th>
+            <th>Equipment</th>
+            <th>Reason</th>
+            <th>Issued By</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of detailRows(spare); track row.issuePk; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ row.issueDate }}</td>
+              <td>{{ row.issuedQty }}</td>
+              <td>{{ row.equipmentNomenclature || row.equipmentClass || "—" }}</td>
+              <td>{{ row.reason }}</td>
+              <td>{{ row.username }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="crit-modal__empty">No issues recorded this year.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </app-modal>
+}

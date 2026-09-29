@@ -1,0 +1,223 @@
+<ng-container *ngIf="embedded; else pageShell">
+  <form [formGroup]="form" class="relative z-[1] space-y-4 p-0 py-2">
+    <p class="pt-glass-form-hint px-1">
+      All fields marked with <span class="required-mark">*</span> are mandatory
+    </p>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <app-input
+        label="Dart Number"
+        formControlName="dart_no"
+        placeholder="Enter DART no"
+      />
+
+      <app-select
+        label="Defect Type"
+        formControlName="defect_type"
+        [options]="defectTypeOptions"
+        placeholder="-- Select --"
+        [required]="true"
+        class="w-full"
+      />
+
+      <app-select
+        label="Ship"
+        formControlName="ship_name"
+        [options]="shipOptions"
+        placeholder="-- Select --"
+        [required]="true"
+        [disabled]="shipFieldLocked"
+        class="w-full"
+      />
+
+      <app-select
+        label="System"
+        formControlName="system"
+        [options]="systemOptions"
+        placeholder="-- Select --"
+        [required]="true"
+        class="w-full"
+        (valueChange)="onSystemSelected($event)"
+      />
+
+      <app-select
+        label="Sub System"
+        formControlName="sub_system"
+        [options]="subsystemOptions"
+        placeholder="-- Select --"
+        class="w-full"
+        (valueChange)="onSubsystemSelected($event)"
+      />
+
+      <app-select
+        label="Sub Sub System"
+        formControlName="sub_sub_system"
+        [options]="subSubSystemOptions"
+        placeholder="-- Select --"
+        class="w-full"
+      />
+
+      <app-select
+        label="MMD Type"
+        formControlName="mmd_type"
+        [options]="mmdTypeOptions"
+        placeholder="-- Select --"
+        class="w-full"
+      />
+
+      <app-calendar
+        label="Date of Defect"
+        formControlName="popup_date"
+        [required]="true"
+      />
+
+      <div class="flex flex-col col-span-4">
+        <app-textarea
+          label="Description"
+          formControlName="description"
+          placeholder="Enter Description of Defect"
+          [rows]="3"
+          [required]="true"
+        />
+      </div>
+    </div>
+  </form>
+</ng-container>
+
+<ng-template #pageShell>
+  <app-form-card
+    #formCard
+    class="flex min-h-0 flex-1 flex-col overflow-hidden"
+    [title]="'REQUEST BACKUP POP UP'"
+    [smallTitle]="'Sub Title'"
+    [showPreviousReport]="true"
+    [showBackButton]="true"
+    [backLabel]="'Go Back'"
+    [showPaginator]="true"
+    [previewMode]="true"
+    [pageScroll]="false"
+  >
+    <form [formGroup]="form" class="space-y-4 p-0 py-4">
+      <p class="pt-glass-form-hint px-1">
+        All fields marked with <span class="required-mark">*</span> are mandatory
+      </p>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <app-input
+          label="Dart Number"
+          formControlName="dart_no"
+          placeholder="Enter DART no"
+        />
+
+        <div class="flex flex-col gap-1">
+          <label class="form-label" for="ship_proposed_date">
+            Ship Proposed Date <span class="required-mark">*</span>
+          </label>
+          <app-calendar formControlName="ship_proposed_date" [required]="true" />
+        </div>
+
+        <app-select
+          label="Defect Type"
+          formControlName="defect_type"
+          [options]="defectTypeOptions"
+          placeholder="-- Select --"
+          [required]="true"
+          class="w-full"
+        />
+
+        <app-select
+          label="Ship"
+          formControlName="ship_name"
+          [options]="shipOptions"
+          placeholder="-- Select --"
+          [required]="true"
+          [disabled]="shipFieldLocked"
+          class="w-full"
+        />
+
+        <app-select
+          label="System"
+          formControlName="system"
+          [options]="systemOptions"
+          placeholder="-- Select --"
+          [required]="true"
+          class="w-full"
+          (valueChange)="onSystemSelected($event)"
+        />
+
+        <app-select
+          label="Sub System"
+          formControlName="sub_system"
+          [options]="subsystemOptions"
+          placeholder="-- Select --"
+          class="w-full"
+          (valueChange)="onSubsystemSelected($event)"
+        />
+
+        <app-select
+          label="Sub Sub System"
+          formControlName="sub_sub_system"
+          [options]="subSubSystemOptions"
+          placeholder="-- Select --"
+          class="w-full"
+        />
+
+        <app-select
+          label="MMD Type"
+          formControlName="mmd_type"
+          [options]="mmdTypeOptions"
+          placeholder="-- Select --"
+          class="w-full"
+        />
+
+        <div class="flex flex-col gap-1">
+          <app-calendar
+            label="Date of Defect"
+            formControlName="popup_date"
+            [required]="true"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1 sm:col-span-2 lg:col-span-3 xl:col-span-4">
+          <app-textarea
+            label="Description"
+            formControlName="description"
+            placeholder="Enter Description of Defect"
+            [rows]="4"
+            [required]="true"
+          />
+        </div>
+      </div>
+    </form>
+
+    <div formFooter class="flex items-center justify-end gap-1.5">
+      <button
+        *ngIf="canShowSaveDraft"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading || !canEdit"
+        (click)="handleSave('draft')"
+      >
+        Save Draft
+      </button>
+      <button
+        *ngIf="canEdit"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading || !canEdit"
+        (click)="handleSave('save')"
+      >
+        Save
+      </button>
+      <button
+        *ngIf="canEdit"
+        type="button"
+        class="form-card-footer-btn pt-glass-btn-primary inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading || !canEdit"
+        (click)="handleSubmit()"
+      >
+        Submit
+      </button>
+    </div>
+  </app-form-card>
+</ng-template>

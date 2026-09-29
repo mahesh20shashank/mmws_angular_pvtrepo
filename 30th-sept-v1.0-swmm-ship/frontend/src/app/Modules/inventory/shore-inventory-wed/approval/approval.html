@@ -1,0 +1,25 @@
+<app-help-guidance />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>Received For Approval</h3>
+    @if (canSendToWlms()) {
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!selectedRows().length || sending()"
+        (click)="sendToWlms()"
+      >
+        {{ sending() ? "Sending..." : "Send to WLMS - Mutliple" }}
+      </app-button>
+    }
+  </div>
+
+  <app-data-grid
+    [rowData]="entries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+  />
+</div>

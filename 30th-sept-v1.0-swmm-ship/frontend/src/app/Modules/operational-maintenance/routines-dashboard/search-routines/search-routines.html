@@ -1,0 +1,90 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card
+  cardTitle="Search Routines"
+  [showHeaderStats]="true"
+  [headerStats]="headerStats()"
+>
+  <form [formGroup]="searchForm" class="space-y-4">
+    <!-- Filters -->
+    <div class="grid grid-cols-5 gap-4 pt-3">
+      <app-select-input
+        label="Sub Department"
+        formControlName="sub_department"
+        [options]="subDepartmentOptions()"
+      >
+      </app-select-input>
+
+      <app-select-input
+        label="Equipment Name"
+        formControlName="equipment"
+        [options]="equipmentOptions()"
+      >
+      </app-select-input>
+
+      <app-select-input
+        label="Routine Type"
+        formControlName="routine_type"
+        [options]="routineTypeOptions()"
+      >
+      </app-select-input>
+
+      <app-select-input
+        label="Routine Name"
+        formControlName="routine_name"
+        [options]="routineNameOptions()"
+      >
+      </app-select-input>
+
+      <div class="flex items-end">
+        <app-button
+          type="button"
+          (click)="clearFilters()"
+          class="h-11 px-4 rounded-[10px] bg-white/10 border border-white/10 text-white whitespace-nowrap shrink-0"
+        >
+          Clear Filter
+        </app-button>
+      </div>
+    </div>
+    <div class="mb-4 rounded-md bg-[#0F4C81] px-4 py-2 text-sm" style="color: #fff">
+      <span class="font-semibold">Note :</span>
+      Routines once planned will be shifted from here to Planned Routines Cart
+    </div>
+
+    <!-- Search + Export -->
+    <div class="flex items-center gap-3 mb-4">
+      <div class="relative flex-1">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40">
+          <app-icon name="search" [size]="16" />
+        </div>
+
+        <input
+          type="text"
+          formControlName="search"
+          placeholder="Search"
+          class="w-full h-9 rounded-lg bg-white/10 border border-white/10 pl-10 text-white placeholder:text-white/40"
+        />
+      </div>
+
+      <app-export-toolbar
+        [busy]="exportBusy()"
+        [disabled]="routines().length === 0"
+        (exportRequested)="onExport($event)"
+      />
+    </div>
+  </form>
+
+  <div class="fuss-grid-wrapper w-full mt-4">
+    <app-data-grid
+      [columnDefs]="columnDefs"
+      [rowData]="routines()"
+      [totalRowCount]="totalRowCount()"
+      [pageSize]="10"
+      [height]="'440px'"
+      [loading]="isLoading()"
+      (rowClicked)="onRowClicked($event)"
+      (pageRequested)="onPageRequested($event)"
+    >
+    </app-data-grid>
+  </div>
+</app-master-card>

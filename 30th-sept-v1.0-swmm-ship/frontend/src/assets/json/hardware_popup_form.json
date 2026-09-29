@@ -1,0 +1,104 @@
+{
+  "formId": "hardware_popup_form",
+  "title": "HARDWARE POP UP",
+  "sourceFile": "hardware_popup_form.html",
+  "sections": [
+    {
+      "id": "main_section",
+      "title": "Main Section",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "defect_type",
+          "label": "Defect Type ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select --",
+              "value": ""
+            },
+            {
+              "label": "Hardware",
+              "value": "hardware"
+            },
+            {
+              "label": "Software",
+              "value": "software"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "ship_name",
+          "label": "Ship ",
+          "required": true,
+          "disabled": true,
+          "placeholder": "",
+          "inputType": "text",
+          "value": "",
+          "options": [],
+          "isDynamic": true,
+          "lookupKey": "ship_name",
+          "prefill": true,
+          "prefillSource": "context.ship_name",
+          "tree": false
+        },
+        {
+          "type": "input",
+          "name": "system",
+          "label": "System ",
+          "required": true,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "sub_system",
+          "label": "Sub System",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "mmd_type",
+          "label": "MMD Type",
+          "required": false,
+          "disabled": false,
+          "placeholder": " ",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "textarea",
+          "name": "description",
+          "label": "Description ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "Enter Description of Defect",
+          "value": "",
+          "rows": 4
+        },
+        {
+          "type": "date",
+          "name": "popup_date",
+          "label": "Date of Defect",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": ""
+        }
+      ],
+      "tables": []
+    }
+  ]
+}

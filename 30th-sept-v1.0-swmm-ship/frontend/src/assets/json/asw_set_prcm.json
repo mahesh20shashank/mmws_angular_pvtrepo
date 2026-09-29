@@ -1,0 +1,242 @@
+{
+  "formId": "prcm",
+  "title": "PRCM",
+  "sourceFile": "prcm.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "Basic Information",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "_id": "ship",
+          "key": "ship",
+          "name": "ship",
+          "label": "Ship ",
+          "type": "input",
+          "inputType": "text",
+          "value": "",
+          "required": true,
+          "disabled": true,
+          "placeholder": "",
+          "colSpan": 4,
+          "isDynamic": true,
+          "lookupKey": "ship_name",
+          "prefill": true,
+          "prefillSource": "context.ship_name"
+        },
+        {
+          "type": "select",
+          "name": "prcm_department",
+          "label": "prcm_department",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select --",
+              "value": ""
+            },
+            {
+              "label": "ND",
+              "value": "ND"
+            },
+            {
+              "label": "ASW",
+              "value": "ASW"
+            },
+            {
+              "label": "COMM",
+              "value": "COMM"
+            },
+            {
+              "label": "GUNNERY",
+              "value": "GUNNERY"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "prcm_equipment",
+          "label": "prcm_equipment",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "inputType": "text"
+        },
+        {
+          "type": "date",
+          "name": "prcm_date",
+          "label": "prcm_date",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": ""
+        },
+        {
+          "type": "select",
+          "name": "prcm_nature_of_trials",
+          "label": "prcm_nature_of_trials",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": ""
+            },
+            {
+              "label": "SATs",
+              "value": "SATs"
+            },
+            {
+              "label": "HATs",
+              "value": "HATS"
+            },
+            {
+              "label": "OP CHECKS",
+              "value": "OP_CHECKS"
+            },
+            {
+              "label": "IIs",
+              "value": "IIS"
+            }
+          ],
+          "isDynamic": false
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "section_2",
+      "title": "Section 2",
+      "sectionType": "hybrid",
+      "fields": [
+        {
+          "type": "textarea",
+          "name": "prcm_general_observations",
+          "label": "prcm_general_observations",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "rows": 5
+        }
+      ],
+      "tables": [
+        {
+          "id": "section_2_matrix_1",
+          "sectionType": "matrixTable",
+          "title": "Section 2",
+          "topHeaders": [
+            [
+              {
+                "label": "SER",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "OBSERVATIONS",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "RESULT",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "REMARKS",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [],
+          "rows": [
+            {
+              "_id": "section_2_matrix_1_row_1",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_1_cell_1_prcm_embarked_onboard_at",
+                  "key": "prcm_embarked_onboard_at",
+                  "type": "input",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "inputType": "text",
+                  "colspan": 4,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_2",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_1_static",
+                  "type": "serial",
+                  "value": "1.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_2_prcm_recording_raw_data_files",
+                  "key": "prcm_recording_raw_data_files",
+                  "type": "textarea",
+                  "value": "",
+                  "rows": 5,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_3_prcm_checks_result",
+                  "key": "prcm_checks_result",
+                  "type": "textarea",
+                  "value": "",
+                  "rows": 5,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_4_prcm_checks_remarks",
+                  "key": "prcm_checks_remarks",
+                  "type": "textarea",
+                  "value": "",
+                  "rows": 5,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        }
+      ]
+    }
+  ]
+}

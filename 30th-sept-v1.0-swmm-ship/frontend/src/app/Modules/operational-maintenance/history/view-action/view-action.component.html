@@ -1,0 +1,150 @@
+<form [formGroup]="form">
+    <div class="view-action-page glass-card">
+
+    <!-- Header -->
+
+    <div class="page-header">
+
+        <div>
+        <div class="dart-title">
+            DART # {{ dartNo }}
+            <span class="status-chip">Closed</span>
+        </div>
+
+        <div class="date-text">
+            Defect Date : {{ defectDate }}
+        </div>
+        </div>
+
+        <div class="header-actions">
+
+        <app-button class="pdf-btn" (click)="downloadPdf()">
+            Download PDF
+        </app-button>
+
+        <app-button class="back-btn" (click)="goBack()">
+            Back
+        </app-button>
+
+        </div>
+
+    </div>
+
+    <!-- Initiation Details -->
+
+    <div class="section-card">
+
+        <div class="section-title">
+        Initiation Details
+        </div>
+
+        <div class="form-grid">
+
+        <div>
+          <label for="equipmentName" class="text-white/60 text-xs mb-1 block">Equipment Name</label>
+          <input id="equipmentName" type="text" formControlName="equipmentName" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="nomenclature" class="text-white/60 text-xs mb-1 block">Nomenclature</label>
+          <input id="nomenclature" type="text" formControlName="nomenclature" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="subDepartment" class="text-white/60 text-xs mb-1 block">Sub Department</label>
+          <input id="subDepartment" type="text" formControlName="subDepartment" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="department" class="text-white/60 text-xs mb-1 block">Department</label>
+          <input id="department" type="text" formControlName="department" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="symptom" class="text-white/60 text-xs mb-1 block">Symptom</label>
+          <input id="symptom" type="text" formControlName="symptom" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="severity" class="text-white/60 text-xs mb-1 block">Severity</label>
+          <input id="severity" type="text" formControlName="severity" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="maintenancePeriod" class="text-white/60 text-xs mb-1 block">Maintenance Period</label>
+          <input id="maintenancePeriod" type="text" formControlName="maintenancePeriod" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="occasion" class="text-white/60 text-xs mb-1 block">Occasion</label>
+          <input id="occasion" type="text" formControlName="occasion" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div class="span-2">
+            <div>
+          <label for="defectDescription" class="text-white/60 text-xs mb-1 block">Defect Description</label>
+          <input id="defectDescription" type="text" formControlName="defectDescription" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        </div>
+
+        <div class="span-2">
+            <div>
+          <label for="shipRemarks" class="text-white/60 text-xs mb-1 block">Ship Remarks</label>
+          <input id="shipRemarks" type="text" formControlName="shipRemarks" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        </div>
+
+        </div>
+
+    </div>
+
+    <!-- Closure Details -->
+
+    <div class="section-card">
+
+        <div class="section-title">
+        Closure Details
+        </div>
+
+        <div class="form-grid">
+
+        <div>
+          <label for="closureDate" class="text-white/60 text-xs mb-1 block">Closure Date</label>
+          <input id="closureDate" type="text" formControlName="closureDate" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="repairAgency" class="text-white/60 text-xs mb-1 block">Repair Agency</label>
+          <input id="repairAgency" type="text" formControlName="repairAgency" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="diagnosisCode" class="text-white/60 text-xs mb-1 block">Diagnosis Code</label>
+          <input id="diagnosisCode" type="text" formControlName="diagnosisCode" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div>
+          <label for="daysDelayed" class="text-white/60 text-xs mb-1 block">Days Delayed</label>
+          <input id="daysDelayed" type="text" formControlName="daysDelayed" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+
+        <div class="span-2">
+            <div>
+          <label for="delayReason" class="text-white/60 text-xs mb-1 block">Delay Reason / Other Reasons</label>
+          <input id="delayReason" type="text" formControlName="delayReason" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        </div>
+
+        <div class="span-2">
+            <div>
+          <label for="lessonLearnt" class="text-white/60 text-xs mb-1 block">Lesson Learnt</label>
+          <input id="lessonLearnt" type="text" formControlName="lessonLearnt" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+        </div>
+
+        </div>
+
+    </div>
+
+    </div>
+</form>

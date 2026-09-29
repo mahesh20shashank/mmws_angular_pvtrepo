@@ -1,0 +1,60 @@
+<div>
+    <div class="filter-section">
+        <div class="dropdown">
+            <app-select-input [label]="'All Sub Department'" [options]="subDepartmentOptions()"
+                [placeholder]="'Select sub department'" [ngModel]="selectedSubDepartmentId()"
+                (ngModelChange)="onSubDepartmentChange($event)">
+            </app-select-input>
+        </div>
+        <div class="hint">
+            <div class="btn-2">
+                <app-button class="subHeading_box">Hint:  Click on row below to open and initialize routines.</app-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-container">
+
+        <div class="search-section">
+            <app-icon name="search" [size]="16" [strokeWidth]="2" class="search-icon" aria-hidden="true" />
+            <input type="text" placeholder="Search..." aria-label="Search routines" [ngModel]="searchTerm()"
+                (ngModelChange)="onSearchTermChange($event)" />
+        </div>
+
+        <app-button
+            type="button"
+            (click)="clearFilters()"
+            class="clear-all-btn">
+            Clear All
+        </app-button>
+
+    </div>
+
+    <div class="data-container">
+        <app-data-grid height="440px" [columnDefs]="columnDefs" [rowData]="rowData()"
+            [pageSize]="10" [loading]="isLoading()" (rowClicked)="onRowClicked($event)"></app-data-grid>
+    </div>
+</div>
+
+@if (showDetailModal()) {
+<div #modalHost>
+<app-modal size="xl" [title]="'Initialize Routines' + (detailEquipment() ? ' - ' + detailEquipment() : '')"
+    titleBg="linear-gradient(135deg, #1E293B 0%, #0F172A 100%)"
+    (closeModal)="closeDetailModal()">
+    <div class="detail-modal">
+        @if (detailRoutineType()) {
+        <p class="detail-subtitle">Routine Type: {{ detailRoutineType() }}</p>
+        }
+
+        @if (detailLoading()) {
+        <p>Loading...</p>
+        } @else if (!detailRows().length) {
+        <p>No pending routines found for this equipment.</p>
+        } @else {
+        <app-data-grid height="320px" [columnDefs]="detailColumnDefs" [rowData]="detailRows()"
+            [pageSize]="10"></app-data-grid>
+        }
+    </div>
+</app-modal>
+</div>
+}

@@ -1,0 +1,48 @@
+<div class="popup-card glass-card date-popover">
+  <div class="date-popover-inner">
+    <div class="dp-head">
+      <app-button type="button" class="dp-nav" aria-label="Previous month" (click)="prevMonth()">
+        <app-icon name="chev-l" [size]="13" />
+      </app-button>
+
+      <div class="dp-head-center">
+        <app-button type="button" class="dp-pill" aria-label="Month">
+          <app-icon name="chev-d" [size]="11" />
+          <span>{{ monthName() }}</span>
+        </app-button>
+
+        <app-button type="button" class="dp-pill" aria-label="Year">
+          <app-icon name="chev-d" [size]="11" />
+          <span>{{ yearLabel() }}</span>
+        </app-button>
+      </div>
+
+      <app-button type="button" class="dp-nav" aria-label="Next month" (click)="nextMonth()">
+        <app-icon name="chev-r" [size]="13" />
+      </app-button>
+    </div>
+
+    <div class="dp-grid">
+      @for (d of dowLabels; track d.k) {
+        <div class="dp-dow">
+          {{ d.l }}
+        </div>
+      }
+
+      @for (c of cells(); track c.d.getTime()) {
+        <app-button
+          type="button"
+          class="dp-day"
+          [class.selected-start]="c.isSelectedStart"
+          [class.selected-end]="c.isSelectedEnd"
+          [class.in-range]="c.isInRange"
+          [class.today]="c.isToday"
+          [class.dim]="!c.inMonth"
+          (click)="pick(c.d)"
+        >
+          {{ c.d.getDate() }}
+        </app-button>
+      }
+    </div>
+  </div>
+</div>

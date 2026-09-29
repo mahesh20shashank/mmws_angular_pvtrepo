@@ -1,0 +1,430 @@
+openapi: 3.0.3
+info:
+  title: Document Service API
+  version: 1.0.0
+  description: Shared document/file storage microservice used by SWMM and ITTTM.
+paths:
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/documents/:
+    get:
+      operationId: v1_documents_retrieve
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/documents/{id}/:
+    get:
+      operationId: v1_documents_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_documents_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/documents/{id}/download/:
+    get:
+      operationId: v1_documents_download_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/documents/upload/:
+    post:
+      operationId: v1_documents_upload_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUpload'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentUpload'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        file:
+          allOf:
+          - $ref: '#/components/schemas/FileObject'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        category:
+          type: string
+          maxLength: 100
+        tags: {}
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+        source_system:
+          $ref: '#/components/schemas/SourceSystem87bEnum'
+        reference_type:
+          type: string
+          maxLength: 100
+        reference_id:
+          type: string
+          maxLength: 100
+        is_global:
+          type: boolean
+        department_id:
+          type: string
+          maxLength: 64
+        ship_or_unit_id:
+          type: string
+          maxLength: 64
+        shared_with_user_ids: {}
+        created_by_user_id:
+          type: string
+          maxLength: 64
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file
+      - id
+      - source_system
+      - title
+      - updated_at
+    DocumentUpload:
+      type: object
+      properties:
+        file:
+          type: string
+          format: uri
+        ship_code:
+          type: string
+          maxLength: 100
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          default: ''
+        category:
+          type: string
+          default: ''
+          maxLength: 100
+        tags:
+          type: array
+          items:
+            type: string
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+        source_system:
+          $ref: '#/components/schemas/DocumentUploadSourceSystemEnum'
+        reference_type:
+          type: string
+          default: ''
+          maxLength: 100
+        reference_id:
+          type: string
+          default: ''
+          maxLength: 100
+        is_global:
+          type: boolean
+          default: false
+        department_id:
+          type: string
+          default: ''
+          maxLength: 64
+        ship_or_unit_id:
+          type: string
+          default: ''
+          maxLength: 64
+        shared_with_user_ids:
+          type: array
+          items:
+            type: string
+        uploaded_by_user_id:
+          type: string
+          default: ''
+          maxLength: 64
+      required:
+      - file
+      - ship_code
+      - source_system
+      - title
+    DocumentUploadSourceSystemEnum:
+      enum:
+      - swmm
+      - ittm
+      type: string
+      description: |-
+        * `swmm` - swmm
+        * `ittm` - ittm
+    FileObject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        original_name:
+          type: string
+          readOnly: true
+        size:
+          type: integer
+          readOnly: true
+        mime_type:
+          type: string
+          readOnly: true
+        checksum:
+          type: string
+          readOnly: true
+        source_system:
+          allOf:
+          - $ref: '#/components/schemas/SourceSystem87bEnum'
+          readOnly: true
+        uploaded_by_user_id:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - checksum
+      - created_at
+      - id
+      - mime_type
+      - original_name
+      - size
+      - source_system
+      - uploaded_by_user_id
+    SourceSystem87bEnum:
+      enum:
+      - swmm
+      - ittm
+      type: string
+      description: |-
+        * `swmm` - SWMM
+        * `ittm` - ITTTM
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

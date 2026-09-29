@@ -1,0 +1,381 @@
+<div class="ov">
+  @if (loading()) {
+    <div class="ov-status">Loading dashboard…</div>
+  } @else if (loadError()) {
+    <div class="ov-status ov-status--error">{{ loadError() }}</div>
+  }
+
+  <!-- ============ KPI GRID ============ -->
+  <section class="ov-kpis">
+    @for (kpi of visibleKpis(); track kpi.key) {
+      <div class="ov-kpi">
+        <app-button
+          type="button"
+          class="ov-drill"
+          title="View breakdown"
+          (click)="openDetail(kpi)"
+        >
+          <app-icon
+            name="arrow-up-right"
+            [size]="14"
+            [strokeWidth]="2"
+            variant="inherit"
+          />
+        </app-button>
+        <app-kpi-card
+          [title]="kpi.title"
+          [count]="kpi.count"
+          [displayValue]="kpi.displayValue"
+          [iconColor]="kpi.iconColor"
+          [iconBg]="kpi.iconBg"
+          [iconName]="kpi.iconName"
+          [trendUp]="kpi.trendUp"
+          [trendData]="kpi.trendData"
+          [selectedPeriod]="kpi.selectedPeriod"
+          [accentPills]="true"
+          cardHeight="auto"
+          (periodChange)="onPeriodChange(kpi.key, $event)"
+        />
+      </div>
+    }
+  </section>
+
+  <app-customize-kpi
+    [isOpen]="kpiPanel.isOpen()"
+    [top]="kpiPanel.popupPosition().top"
+    [left]="kpiPanel.popupPosition().left"
+    [kpis]="allKpis()"
+    [maxSelection]="4"
+    [padToMax]="false"
+    (open)="kpiPanel.open()"
+    (closeModal)="kpiPanel.close()"
+    (selectedChange)="updateSelectedKpis($event)"
+  />
+
+  <!-- ============ ALERTS + QUICK ACTIONS ============ -->
+  <section class="ov-row ov-row--alerts">
+    <app-panel-card
+      [icon]="icons.alerts"
+      iconColor="#F59E0B"
+      iconBg="rgba(245,158,11,0.16)"
+      title="Alerts"
+      subtitle="Operational issues requiring attention"
+    >
+      <div class="alerts">
+        @for (a of alerts(); track a.text) {
+          <app-button
+            type="button"
+            class="alert"
+            [style.borderLeftColor]="a.color"
+            (click)="openAlert(a)"
+          >
+            <span class="alert-dot" [style.background]="a.color"></span>
+            <span class="alert-text">{{ a.text }}</span>
+            <span class="alert-tag" [style.color]="a.color">{{ a.tag }}</span>
+            <app-icon
+              name="chevron-right"
+              [size]="15"
+              [strokeWidth]="2"
+              variant="muted"
+            />
+          </app-button>
+        }
+      </div>
+    </app-panel-card>
+
+    <app-panel-card
+      class="qa-panel"
+      [icon]="icons.quickActions"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      title="Quick Actions"
+      subtitle="Frequently used defect & RA tasks"
+    >
+      <div class="qa-grid">
+        <!-- Primary: Add Defect / DART — dropdown (Reason → Add form) -->
+        <div class="qa-dd">
+          <app-button
+            type="button"
+            class="qa-btn qa-btn--primary"
+            (click)="$event.stopPropagation(); toggleQaMenu()"
+          >
+            <app-icon
+              name="plus"
+              [size]="17"
+              [strokeWidth]="1.8"
+              variant="accent"
+              class="qa-plus-icon"
+            />
+            Add Defect / DART
+            <span class="qa-spacer"></span>
+            <app-icon
+              name="chevron-down"
+              [size]="15"
+              [strokeWidth]="1.9"
+              variant="accent"
+            />
+          </app-button>
+
+          @if (qaOpen()) {
+            <div class="qa-menu">
+              @for (r of qaReasons; track r.value) {
+                <app-button
+                  type="button"
+                  class="qa-menu-item"
+                  (click)="$event.stopPropagation(); selectReason(r.value)"
+                >
+                  <span class="qa-dot" [style.background]="r.color"></span>
+                  <span class="qa-reason-label">{{ r.value }}</span>
+                  <span class="qa-reason-desc">{{ r.desc }}</span>
+                </app-button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Remaining quick actions -->
+        @for (q of quickActions; track q.label) {
+          <app-button type="button" class="qa-btn" (click)="onQuickAction(q)">
+            <app-icon
+              [name]="q.icon"
+              [size]="17"
+              [strokeWidth]="1.8"
+              variant="muted"
+            />
+            {{ q.label }}
+          </app-button>
+        }
+      </div>
+    </app-panel-card>
+  </section>
+
+  <!-- ============ DEPT DISTRIBUTION (drill-down) + SEVERITY DONUT ============ -->
+  <section class="ov-row ov-row--charts">
+    <app-panel-card
+      [icon]="icons.deptBar"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      title="Open DARTs by Department"
+      subtitle="Active DARTs across each ship department"
+    >
+      <app-bar-chart
+        [data]="distData()"
+        xAxisTitle="Departments"
+        yAxisTitle="Open DARTs"
+      />
+    </app-panel-card>
+
+    <app-panel-card
+      [icon]="icons.severity"
+      iconColor="#22C55E"
+      iconBg="rgba(34,197,94,0.16)"
+      title="Open DARTs by Operational Severity"
+      subtitle="Open DARTs grouped by severity band"
+    >
+      <div class="sev">
+        <app-donut-chart
+          [segments]="severity"
+          centerValue="{{ severityTotal }}"
+          centerLabel="Total"
+          [width]="150"
+          [height]="150"
+        />
+        <div class="sev-legend">
+          @for (s of severity; track s.label) {
+            <div class="sev-legend-row">
+              <span class="sev-dot" [style.background]="s.color"></span>
+              <span class="sev-label">{{ s.label }}</span>
+              <span class="sev-value">{{ s.value }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </app-panel-card>
+  </section>
+
+  <!-- ============ DART TREND + DART LOAD BY DEPARTMENT ============ -->
+  <section class="ov-row ov-row--charts">
+    <app-panel-card
+      [icon]="icons.trend"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      title="DART Lifecycle Trend"
+      subtitle="Monthly raised, closed DARTs"
+    >
+      <app-line-chart
+        [series]="trendSeries"
+        [labels]="trendLabels"
+        xAxisTitle="Month"
+        yAxisTitle="Number of DARTs"
+      />
+      <app-chart-legend
+        [items]="trendLegend"
+        markerShape="line"
+        layout="inline"
+        class="trend-legend-bottom"
+      />
+    </app-panel-card>
+
+    <app-panel-card
+      [icon]="icons.deptLoad"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      title="DART Load by Department"
+      subtitle="Open DARTs aggregated across ship departments"
+    >
+      <app-bar-chart
+        [data]="deptLoadBars"
+        orientation="horizontal"
+        [showAxes]="false"
+        [heightPx]="deptLoad.length * 40 + 16"
+      />
+    </app-panel-card>
+  </section>
+
+  <!-- ============ RECENT ACTIVITY ============ -->
+  <section class="ov-oi">
+    <app-panel-card
+      [icon]="icons.activity"
+      iconColor="#22C55E"
+      iconBg="rgba(34,197,94,0.16)"
+      title="Recent Defect & RA Activity"
+      subtitle="Latest DARTs raised or closed across the fleet"
+    >
+      <app-pill-toggle
+        panelActions
+        [options]="periodOpts"
+        [value]="actPeriod()"
+        (valueChange)="setActPeriod($event)"
+      />
+      <app-data-grid
+        [columnDefs]="activityColDefs"
+        [rowData]="activityPageRows()"
+        [pageSize]="10"
+        [totalRowCount]="activityRows().length"
+        [pageSize]="activityPageSize()"
+        height="440px"
+        (pageRequested)="onActivityPageRequested($event)"
+      />
+    </app-panel-card>
+  </section>
+
+  <!-- ============ KPI DETAIL DRAWER ============ -->
+  @if (activeKpi(); as kpi) {
+    <app-detail-drawer
+      [open]="drawerOpen()"
+      [label]="kpi.title"
+      [value]="kpi.displayValue"
+      [subtitle]="kpi.drawerSubtitle"
+      [iconName]="kpi.iconName"
+      [iconColor]="kpi.iconColor"
+      [iconBg]="kpi.iconBg"
+      [stats]="kpi.stats"
+      [sectionTitle]="kpi.sectionTitle"
+      [sectionHint]="kpi.sectionHint"
+      (closed)="closeDetail()"
+    >
+      @if (kpi.mode === "breakdown") {
+        <div class="breakdown">
+          @for (b of kpi.breakdown ?? []; track b.name) {
+            <div class="breakdown-row">
+              <div class="breakdown-head">
+                <span class="breakdown-name">{{ b.name }}</span>
+                <div class="breakdown-nums">
+                  @for (m of b.metrics; track m.label) {
+                    <span class="breakdown-num">
+                      <span class="breakdown-num-val">{{ m.value }}</span>
+                      <span class="breakdown-num-lbl">{{ m.label }}</span>
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="breakdown-track">
+                <div
+                  class="breakdown-fill"
+                  [style.width.%]="b.pct"
+                  [style.background]="b.color || kpi.iconColor"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="dlist">
+          @for (r of kpi.listRows ?? []; track r.title) {
+            <div class="dlist-row">
+              <span class="dlist-dot" [style.background]="r.dotColor"></span>
+              <div class="dlist-body">
+                <div class="dlist-title">{{ r.title }}</div>
+                <div class="dlist-sub">{{ r.sub }}</div>
+              </div>
+              <div class="dlist-side">
+                <span
+                  class="dlist-tag"
+                  [style.color]="r.tagColor"
+                  [style.background]="r.tagColor + '22'"
+                  [style.borderColor]="r.tagColor + '44'"
+                >
+                  {{ r.tag }}
+                </span>
+                <span class="dlist-meta">{{ r.meta }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </app-detail-drawer>
+  }
+
+  <!-- ============ ALERT DETAIL DRAWER ============ -->
+  @if (activeAlert(); as a) {
+    <app-detail-drawer
+      [open]="alertDrawerOpen()"
+      [titleMode]="true"
+      [label]="a.text"
+      [iconName]="alertIconName"
+      [iconColor]="a.color"
+      [iconBg]="a.color + '28'"
+      (closed)="closeAlert()"
+    >
+      <div class="adrawer">
+        <span
+          class="asev"
+          [style.color]="a.color"
+          [style.background]="a.color + '1f'"
+          [style.borderColor]="a.color + '55'"
+          >{{ a.severity }}</span
+        >
+        <p class="adesc">{{ a.desc }}</p>
+
+        <div class="adetails">
+          @for (d of a.details; track d.label) {
+            <div class="adetail-row">
+              <span class="adetail-label">{{ d.label }}</span>
+              <span class="adetail-value">{{ d.value }}</span>
+            </div>
+          }
+        </div>
+
+        @if (a.items.length) {
+          <div class="aitems">
+            <span class="aitems-label">{{ a.itemsLabel }}</span>
+            <div class="aitems-list">
+              @for (it of a.items; track it) {
+                <app-button type="button" class="aitem" (click)="navFromAlert(a)">
+                  <span class="aitem-dot" [style.background]="a.color"></span>
+                  <span class="aitem-text">{{ it }}</span>
+                  <app-icon
+                    name="chevron-right"
+                    [size]="14"
+                    [strokeWidth]="2"
+                    variant="muted"
+                  />
+                </app-button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </app-detail-drawer>
+  }
+</div>

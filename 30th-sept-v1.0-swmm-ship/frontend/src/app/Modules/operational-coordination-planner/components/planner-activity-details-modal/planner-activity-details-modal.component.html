@@ -1,0 +1,94 @@
+@if (a()) {
+  <div class="details-backdrop" tabindex="0" role="button" (click)="close()" (keyup.enter)="close()">
+    <div class="details-modal" tabindex="0" role="dialog" (click)="$event.stopPropagation()" (keyup.enter)="$event.stopPropagation()">
+      <div class="details-head">
+        <h3>Details</h3>
+        <app-button type="button" class="icon-btn close" (click)="close()">
+          <app-icon name="x" [size]="16" />
+        </app-button>
+      </div>
+
+      <div class="details-body">
+        @if (equipment()) {
+          <div class="row"><span class="k">Equipment:</span> <span class="v">{{ equipment() }}</span></div>
+        }
+        @if (dueDate()) {
+          <div class="row"><span class="k">Due Date:</span> <span class="v">{{ dueDate() }}</span></div>
+        }
+        @if (routineName() && !a()!.dart_state) {
+          <div class="row"><span class="k">Routine:</span> <span class="v">{{ routineName() }}</span></div>
+        }
+        @if (section()) {
+          <div class="row"><span class="k">Section:</span> <span class="v">{{ section() }}</span></div>
+        }
+        <div class="row"><span class="k">Category:</span> <span class="v">{{ categoryLabel() }}</span></div>
+        @if (a()!.t) {
+          <div class="row"><span class="k">Time:</span> <span class="v">{{ a()!.t }}</span></div>
+        }
+        @if (a()!.status && !a()!.dart_state && !a()!.plan_state && !a()!.rh_state) {
+          <div class="row"><span class="k">Status:</span> <span class="v">{{ a()!.status }}</span></div>
+        }
+        @if (a()!.created_by) {
+          <div class="row"><span class="k">Created By:</span> <span class="v">{{ a()!.created_by }}</span></div>
+        }
+        @if (a()!.frequency) {
+          <div class="row row--tight">
+            <span class="k">Frequency:</span> <span class="v">{{ a()!.frequency }}</span>
+          </div>
+        }
+        @if (a()!.last_completion) {
+          <div class="row row--tight">
+            <span class="k">Last Completion:</span> <span class="v">{{ a()!.last_completion }}</span>
+          </div>
+        }
+        @if (maintopNo()) {
+          <div class="row row--tight">
+            <span class="k">Maintop No:</span> <span class="v">{{ maintopNo() }}</span>
+          </div>
+        }
+        @if (a()!.dart_state) {
+          <div class="row"><span class="k">Defect State:</span> <span class="v">{{ a()!.dart_state }}</span></div>
+        }
+        @if (a()!.plan_state) {
+          <div class="row"><span class="k">Plan State:</span> <span class="v">{{ a()!.plan_state }}</span></div>
+        }
+      </div>
+
+      <div class="details-foot">
+        <div class="details-foot-actions">
+          @if (isManual()) {
+            @if (canEdit()) {
+              <app-button type="button" class="btn" (click)="editSelected()">Reschedule</app-button>
+            }
+            @if (canCancel()) {
+              <app-button type="button" class="btn danger" (click)="deleteSelected()">{{ isEvent() ? 'Cancel Event' : 'Delete Event' }}</app-button>
+            }
+            @if (isEvent() && !canEdit() && !canCancel()) {
+              <span class="readonly-note">Only HOD, DY HOD, and HOD Writer can edit or cancel events.</span>
+            }
+          } @else {
+            <span class="readonly-note">Read-only — sourced from {{ categoryLabel() }} records.</span>
+          }
+        </div>
+
+        @if (showRedirect()) {
+          <app-button type="button" class="icon-btn expand" title="Open full details" (click)="expand()">
+            <app-icon name="extlink" [size]="14" />
+          </app-button>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+@if (confirmDeleteOpen() && a()) {
+  <app-confirm-dialog
+    [title]="isEvent() ? 'Cancel Event' : 'Delete Activity'"
+    [message]="confirmDeleteMessage()"
+    [confirmLabel]="isEvent() ? 'Yes, Cancel Event' : 'Yes, Delete'"
+    cancelLabel="No, Keep It"
+    [danger]="true"
+    (confirmed)="confirmDelete()"
+    (cancelled)="confirmDeleteOpen.set(false)"
+  />
+}

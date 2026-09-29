@@ -1,0 +1,330 @@
+<div class="rbac-container">
+  <!-- RBAC Admin Section Header -->
+  <div class="rbac-header glass-card">
+    <div class="header-info">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="header-icon">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        Role-Based Access Control (RBAC)
+      </h2>
+      <p>Configure dynamic database-driven roles, permissions, matrix capabilities, and user access levels.</p>
+    </div>
+
+    <!-- Tab Selectors -->
+    <div class="tab-selectors">
+      <app-button class="tab-btn" [class.active]="activeTab() === 'matrix'" (click)="activeTab.set('matrix')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon">
+          <rect width="7" height="9" x="3" y="3" rx="1" />
+          <rect width="7" height="5" x="14" y="3" rx="1" />
+          <rect width="7" height="9" x="14" y="12" rx="1" />
+          <rect width="7" height="5" x="3" y="16" rx="1" />
+        </svg>
+        Permission Matrix
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'nav-visibility'"
+        (click)="activeTab.set('nav-visibility')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon">
+          <rect width="18" height="18" x="3" y="3" rx="2" />
+          <path d="M3 9h18" />
+          <path d="M9 21V9" />
+        </svg>
+        Nav Visibility Matrix
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'catalog'" (click)="activeTab.set('catalog')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+          <path d="M6 6h10" />
+          <path d="M6 10h10" />
+        </svg>
+        Roles Catalog ({{ roles().length }})
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'assignments'" (click)="activeTab.set('assignments')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        User Assignments ({{ users().length }})
+      </app-button>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT: PERMISSION MATRIX -->
+  @if (activeTab() === 'matrix') {
+  <div class="matrix-view">
+    <!-- Role Selector Grid -->
+    <div class="role-selector-box glass-card">
+      <span class="selector-label">SELECT TARGET ROLE TO CONFIGURE PERMISSIONS</span>
+      <div class="role-buttons">
+        @for (role of roles(); track role.id) {
+        <app-button class="role-btn" [class.active]="selectedRoleId() === role.id" (click)="selectRoleForMatrix(role.id)">
+          {{ role.role_name }}
+          @if (role.is_system) {
+          <span class="system-tag">SYSTEM</span>
+          }
+        </app-button>
+        }
+      </div>
+    </div>
+
+    <!-- Matrix Toolbar & Actions -->
+    <div class="matrix-actions-bar glass-card">
+      <div class="active-role-info">
+        Active Role: <span class="role-highlight">{{ getSelectedRoleName() }}</span>
+        | {{ permissions().length }} Permissions Configured
+      </div>
+      <div class="action-buttons">
+        <app-button class="secondary-btn" (click)="selectAllPermissions()">Select All</app-button>
+        <app-button class="secondary-btn" (click)="clearAllPermissions()">Clear All</app-button>
+        <app-button class="primary-btn" [disabled]="isSaving()" (click)="savePermissionMatrix()">
+          @if (isSaving()) {
+          <span class="spinner"></span>
+          }
+          Save Matrix
+        </app-button>
+      </div>
+    </div>
+
+    <!-- Permission Matrix Table -->
+    <div class="table-container glass-card">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>APPLICATION MODULE</th>
+            <th class="clickable-header" (click)="toggleColumn('can_view')">VIEW <span class="sub-header">Toggle
+                All</span></th>
+            <th class="clickable-header" (click)="toggleColumn('can_create')">CREATE <span class="sub-header">Toggle
+                All</span></th>
+            <th class="clickable-header" (click)="toggleColumn('can_edit')">EDIT <span class="sub-header">Toggle
+                All</span></th>
+            <th class="clickable-header" (click)="toggleColumn('can_delete')">DELETE <span class="sub-header">Toggle
+                All</span></th>
+            <th class="clickable-header" (click)="toggleColumn('can_export')">EXPORT <span class="sub-header">Toggle
+                All</span></th>
+            <th class="clickable-header" (click)="toggleColumn('can_approve')">APPROVE <span class="sub-header">Toggle
+                All</span></th>
+            <th>ROW ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (perm of permissions(); track perm.module_id) {
+          <tr>
+            <td class="module-cell">
+              <span class="module-title">{{ getModuleMeta(perm.module_id).title }}</span>
+              <span class="module-meta">{{ perm.module_id }} • {{ getModuleMeta(perm.module_id).category }}</span>
+            </td>
+            <td>
+              <label class="custom-checkbox" [class.disabled-cb]="perm.module_id === 'dashboard'">
+                <input type="checkbox" [(ngModel)]="perm.can_view" [disabled]="perm.module_id === 'dashboard'" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td>
+              <label class="custom-checkbox">
+                <input type="checkbox" [(ngModel)]="perm.can_create" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td>
+              <label class="custom-checkbox">
+                <input type="checkbox" [(ngModel)]="perm.can_edit" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td>
+              <label class="custom-checkbox">
+                <input type="checkbox" [(ngModel)]="perm.can_delete" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td>
+              <label class="custom-checkbox">
+                <input type="checkbox" [(ngModel)]="perm.can_export" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td>
+              <label class="custom-checkbox">
+                <input type="checkbox" [(ngModel)]="perm.can_approve" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td>
+              <app-button class="row-btn" (click)="toggleRow(perm)">Toggle Row</app-button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+
+  <!-- TAB CONTENT: ROLES CATALOG -->
+  <!-- TAB CONTENT: NAV VISIBILITY MATRIX -->
+  @if (activeTab() === 'nav-visibility') {
+  <app-nav-visibility></app-nav-visibility>
+  }
+
+  @if (activeTab() === 'catalog') {
+  <div class="catalog-view">
+    <div class="catalog-header">
+      <h3>Role Directory</h3>
+      <app-button class="primary-btn" (click)="openCreateRoleModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+          <path d="M5 12h14" />
+          <path d="M12 5v14" />
+        </svg>
+        Create Custom Role
+      </app-button>
+    </div>
+
+    <!-- Role Cards Grid -->
+    <div class="role-grid">
+      @for (role of roles(); track role.id) {
+      <div class="role-card glass-card" [class.system]="role.is_system">
+        <div class="role-card-header">
+          <h4>{{ role.role_name }}</h4>
+          <span class="role-pill" [class.system-pill]="role.is_system">
+            {{ role.is_system ? 'System Role' : 'Custom Role' }}
+          </span>
+        </div>
+        <p class="role-description">{{ role.description || 'No description provided.' }}</p>
+        <div class="role-card-footer">
+          <span class="user-count">{{ role.assigned_users_count }} Assigned Users</span>
+          <div class="card-actions">
+            <app-button class="card-action-btn" (click)="openEditRoleModal(role)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
+            </app-button>
+            @if (!role.is_system) {
+            <app-button class="card-action-btn delete" (click)="deleteRole(role.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18" />
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+              </svg>
+            </app-button>
+            }
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- TAB CONTENT: USER ASSIGNMENTS -->
+  @if (activeTab() === 'assignments') {
+  <div class="assignments-view">
+    <div class="assignments-header glass-card">
+      <h3>User Role Matrix</h3>
+      <div class="search-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input type="text" placeholder="Search user, name or department..." [ngModel]="searchUserQuery()"
+          (ngModelChange)="searchUserQuery.set($event)" />
+      </div>
+    </div>
+
+    <!-- User Roles Table -->
+    <div class="table-container glass-card">
+      <app-data-grid
+        [rowData]="filteredUsers()"
+        [columnDefs]="userColumnDefs"
+        [pagination]="true"
+        [pageSize]="10"
+        height="480px"
+        (cellClicked)="onUserGridCellClicked($event)">
+      </app-data-grid>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- MODAL: CREATE / EDIT ROLE -->
+@if (showRoleModal()) {
+<app-modal [title]="roleForm().id ? 'Edit Role Details' : 'Create Custom Role'" size="md" (closeModal)="showRoleModal.set(false)">
+  <div class="modal-body p-0">
+    <div class="form-group">
+      <label for="test">Role Title / Name *</label>
+      <input type="text" [(ngModel)]="roleForm().role_name" placeholder="e.g. Commanding Officer" class="form-control-custom" />
+    </div>
+
+    <div class="form-group mt-3">
+      <label for="test">Code / Alias (Optional)</label>
+      <input type="text" [(ngModel)]="roleForm().code" placeholder="e.g. commanding_officer" class="form-control-custom" />
+    </div>
+
+    <div class="form-group mt-3">
+      <label for="test">Role Description</label>
+      <textarea rows="4" [(ngModel)]="roleForm().description"
+        placeholder="Describe the permissions or scope of this role..." class="form-control-custom"></textarea>
+    </div>
+  </div>
+
+  <div class="modal-footer flex justify-end gap-3 pt-4 border-t border-[var(--border-color,rgba(255,255,255,0.1))]">
+    <app-button class="secondary-btn" (click)="showRoleModal.set(false)">Cancel</app-button>
+    <app-button class="primary-btn" [disabled]="isSaving()" (click)="saveRole()">
+      @if (isSaving()) {
+      <span class="spinner"></span>
+      }
+      Save Role
+    </app-button>
+  </div>
+</app-modal>
+}
+
+<!-- MODAL: ASSIGN USER ROLE -->
+@if (showAssignModal()) {
+<app-modal title="Manage User Role Assignment" size="md" (closeModal)="showAssignModal.set(false)">
+  <div class="modal-body p-0">
+    <div class="user-summary mb-3 p-3 rounded-lg bg-[var(--bg-glass-card,rgba(255,255,255,0.05))]">
+      <span class="summary-label text-muted me-2">Target User:</span>
+      <span class="summary-value font-semibold me-2">{{ assignForm().fullName }}</span>
+      <span class="summary-subtext text-xs text-muted">@{{ assignForm().username }}</span>
+    </div>
+
+    <div class="form-group mt-3">
+      <label for="test">Assigned Role</label>
+      <select class="form-select-custom" [(ngModel)]="assignForm().roleId">
+        <option [ngValue]="null">No Role Assigned</option>
+        @for (role of roles(); track role.id) {
+        <option [ngValue]="role.id">
+          {{ role.role_name }}
+        </option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="modal-footer flex justify-end gap-3 pt-4 border-t border-[var(--border-color,rgba(255,255,255,0.1))]">
+    <app-button class="secondary-btn" (click)="showAssignModal.set(false)">Cancel</app-button>
+    <app-button class="primary-btn" [disabled]="isSaving()" (click)="saveUserRoleAssignment()">
+      @if (isSaving()) {
+      <span class="spinner"></span>
+      }
+      Assign Role
+    </app-button>
+  </div>
+</app-modal>
+}

@@ -1,0 +1,114 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.exported-files-container {
+  width: 100%;
+}
+
+.exported-card {
+  width: 100%;
+
+  border-radius: 24px;
+
+  border: 1px solid var(--border-input);
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--bg-input),
+      var(--bg-card)
+    );
+
+  backdrop-filter: blur(18px);
+
+  overflow: hidden;
+}
+
+.card-header {
+  height: 86px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+
+  border-bottom: 1px solid var(--border-input);
+}
+
+.title {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+// .back-btn {
+//   height: 52px;
+//   padding: 0 28px;
+//   border-radius: 16px;
+//   border: 1px solid rgba(97,194,255,.4);
+//   background: #1f5f92;
+//   color: var(--text-primary);
+//   font-size: 16px;
+//   font-weight: 600;
+
+//   cursor: pointer;
+// }
+
+// .back-btn:hover {
+//   background: #2875b3;
+// }
+
+.grid-wrapper {
+  position: relative;
+
+  padding: 28px;
+}
+
+.empty-state {
+  position: absolute;
+
+  top: 145px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  color: var(--text-primary);
+
+  font-size: 18px;
+  font-weight: 500;
+
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+
+  .card-header {
+    flex-direction: column;
+    height: auto;
+
+    gap: 16px;
+
+    padding: 20px;
+  }
+
+  .back-btn {
+    width: 100%;
+  }
+}
+::ng-deep .submit-button {
+  width: 160px;
+  height: 48px;
+  border: 1px solid rgba(124, 187, 240, 0.55);
+  border-radius: 10px;
+  background: rgba(43, 91, 125, 0.62);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}

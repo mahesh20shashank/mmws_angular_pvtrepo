@@ -1,0 +1,17 @@
+<app-modal size="sm" title="Confirm Delete" [compact]="true" (closeModal)="cancelled.emit()">
+  <div class="confirm-delete">
+    <span class="confirm-delete__icon">
+      <app-icon name="trash-2" [size]="24" variant="danger" />
+    </span>
+    <p class="confirm-delete__text">Are you sure you want to delete this?</p>
+    <p class="confirm-delete__subtext">This action cannot be undone.</p>
+    <div class="confirm-delete__actions">
+      <app-button type="button" class="confirm-delete__cancel-btn" (click)="cancelled.emit()">
+        Cancel
+      </app-button>
+      <app-button type="button" class="confirm-delete__delete-btn" (click)="confirmed.emit()">
+        Delete
+      </app-button>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,37 @@
+/* Page-level rhythm to match the density pass elsewhere (Home's .home-page,
+   KMS's .kms-page): one flex-column gap for inter-section spacing instead of
+   each section carrying its own (larger, inconsistent) margin-bottom. */
+.mo-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mo-page > app-help-guidance {
+  margin-bottom: 0;
+}
+
+.mo-page > .kpi-row {
+  margin-bottom: 0;
+}
+
+.mo-dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.mo-chart-card {
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.mo-chart-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}

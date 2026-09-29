@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.od-solid-btn {
+  color: #ffffff !important;
+}
+
+.header-cotainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-container-def {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.heading-text {
+  color: var(--text-primary);
+}
+
+.sync-status-banner {
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.sync-status-banner--active {
+  border-color: rgba(56, 189, 248, 0.7);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+/* Rows still awaiting shore sync — highlighted while the sync banner is hovered/pinned. */
+:host ::ng-deep .fuss-grid-wrapper .row-sync-pending {
+  box-shadow: inset 3px 0 0 0 #38bdf8;
+  background-color: rgba(56, 189, 248, 0.06) !important;
+}
+
+/* Already-synced rows — dimmed in the same view so pending rows stand out. */
+:host ::ng-deep .fuss-grid-wrapper .row-sync-dim {
+  opacity: 0.45;
+}
+
+:host ::ng-deep .fuss-grid-wrapper ag-grid-angular {
+  padding: 0 !important;
+}
+
+/* The shared grid's default scrollbar track (--bg-scrollbar-track: pure black)
+   reads as a stark bar cutting across this glass-card panel — blend the
+   horizontal scroll rail into the card surface instead, without touching the
+   token used everywhere else in the app. Scroll stays fully functional, it's
+   only the rail/thumb colours that change here. */
+:host ::ng-deep .fuss-grid-wrapper .ag-body-horizontal-scroll-viewport {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+:host ::ng-deep .fuss-grid-wrapper .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:host ::ng-deep .fuss-grid-wrapper .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 99px;
+}

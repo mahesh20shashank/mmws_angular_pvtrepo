@@ -1,0 +1,210 @@
+<form [formGroup]="form" class="spare-form" (ngSubmit)="submit()">
+  <div class="spare-form__columns">
+    <div class="spare-form__main">
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">Classification</legend>
+        <div class="spare-form__grid">
+          <div class="spare-form__field">
+            <app-select-input
+              label="Class of Spares *"
+              formControlName="spareClass"
+              [options]="spareClasses"
+              [readonly]="isEditMode()"
+            />
+            @if (form.controls.spareClass.invalid && form.controls.spareClass.touched) {
+              <span class="form-error">Class of Spares is required.</span>
+            }
+            <small class="obs-help-block">Create Class of Spares if not here...</small>
+          </div>
+          <div class="spare-form__field">
+            <app-select-input
+              label="Equipment Class *"
+              formControlName="equipmentClass"
+              [options]="equipmentClasses"
+              [disabled]="!isEditMode() && !spareClassValue()"
+              [readonly]="isEditMode()"
+            />
+            @if (form.controls.equipmentClass.invalid && form.controls.equipmentClass.touched) {
+              <span class="form-error">Equipment Class is required.</span>
+            }
+            <small class="obs-help-block">Create Equipment Class if not here...</small>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">Identification</legend>
+        <div class="spare-form__grid">
+          <div class="spare-form__field">
+            <app-input-field
+              label="Pattern Number"
+              formControlName="patternNumber"
+              placeholder="MO Item Code. No / OR \. Leave empty if not known"
+            />
+            @if (form.controls.patternNumber.pending) {
+              <small class="obs-help-block">Checking pattern number against ILMS/WLMS...</small>
+            } @else if (form.controls.patternNumber.hasError("patternNotFound") && form.controls.patternNumber.touched) {
+              <span class="form-error"
+                >Pattern number not found in ILMS/WLMS — leave it blank to auto-generate one instead.</span
+              >
+            } @else {
+              <small class="obs-help-block"
+                >Leave blank and SWMM will generate one from the ship code, spare class and
+                equipment class.</small
+              >
+            }
+          </div>
+          <div class="spare-form__field">
+            <app-input-field label="Spare Description *" formControlName="description" />
+            @if (form.controls.description.invalid && form.controls.description.touched) {
+              <span class="form-error">Spare Description is required.</span>
+            }
+            <small class="obs-help-block">Mandatory field. CAPITALS, single spaces between words...</small>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">Nature and Scale</legend>
+        <div class="spare-form__grid">
+          <div class="spare-form__field">
+            <app-select-input label="Category *" formControlName="category" [options]="categoryOptions" />
+            @if (form.controls.category.invalid && form.controls.category.touched) {
+              <span class="form-error">Category is required.</span>
+            }
+            <small class="obs-help-block">P = Permanent, R = Returnable, C = Consumable...</small>
+          </div>
+          <div class="spare-form__field">
+            <app-select-input label="Critical *" formControlName="critical" [options]="criticalOptions" />
+            <!-- The asterisk on this label had no validator behind it, and
+                 the select's clear button can empty the control. Now that the rule exists, the
+                 field states the fix at the field, like every other required control in this
+                 form. -->
+            @if (form.controls.critical.invalid && form.controls.critical.touched) {
+              <span class="form-error">Critical is required. Choose YES or NO.</span>
+            }
+          </div>
+          <div class="spare-form__field">
+            <app-select-input label="Denomination *" formControlName="denomination" [options]="denominations" />
+            @if (form.controls.denomination.invalid && form.controls.denomination.touched) {
+              <span class="form-error">Denomination is required.</span>
+            }
+            <small class="obs-help-block"
+              >NOS, SET, LTRS, KG or MTR. Choose "Add New..." if it is not listed...</small
+            >
+          </div>
+          <div class="spare-form__field">
+            <app-select-input label="Authority *" formControlName="authority" [options]="authorities" />
+            @if (form.controls.authority.invalid && form.controls.authority.touched) {
+              <span class="form-error">Authority is required.</span>
+            }
+            <small class="obs-help-block"
+              >The scale this holding is based on - B&amp;D, MO Item, Shipyard Allowance, MO
+              Allowance, CNAL, Delegated Powers or Others...</small
+            >
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">Quantity</legend>
+        <div class="spare-form__grid">
+          <div class="spare-form__field">
+            <app-input-field label="Qty Held *" type="number" formControlName="quantityAvailable" />
+            @if (form.controls.quantityAvailable.invalid && form.controls.quantityAvailable.touched) {
+              <span class="form-error">
+                @if (form.controls.quantityAvailable.hasError("required")) {
+                  Qty Held is required.
+                } @else {
+                  Qty Held cannot be negative.
+                }
+              </span>
+            }
+            @if (!isEditMode()) {
+              <small class="obs-help-block">Whole number. Authorised quantity is set to match...</small>
+            }
+          </div>
+          @if (isEditMode()) {
+            <div class="spare-form__field">
+              <app-input-field label="Qty Authorised *" type="number" formControlName="quantityAuthorised" />
+              @if (form.controls.quantityAuthorised.invalid && form.controls.quantityAuthorised.touched) {
+                <span class="form-error">
+                  @if (form.controls.quantityAuthorised.hasError("required")) {
+                    Qty Authorised is required.
+                  } @else {
+                    Qty Authorised cannot be negative.
+                  }
+                </span>
+              }
+            </div>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">Stowage</legend>
+        <div class="spare-form__grid">
+          <app-input-field label="Compartment Name" formControlName="compartment" />
+          <app-input-field label="Rack Position" formControlName="rackPosition" placeholder="Centerline, Port or Starboard" />
+          <app-input-field label="Rack Number" formControlName="rackNumber" />
+          <app-input-field label="Box No." formControlName="location" />
+        </div>
+      </fieldset>
+
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">PLL Reference</legend>
+        <div class="spare-form__grid">
+          <app-input-field label="PLL Page No." formControlName="page" />
+          <app-input-field label="PLL Line No." formControlName="line" />
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="spare-form__side">
+      <fieldset class="obs-band obs-band--image">
+        <legend class="obs-band-title">Spare Image</legend>
+        <!-- The frame now always holds an image. It used to hold the literal
+             text "200 x 150" whenever no file had been picked in this session, which on Update
+             Spare was always — so a spare that already had a photograph showed a dashed empty box,
+             and a spare that had none showed exactly the same box. The stored photograph is
+             rendered when there is one, the shared "NO PHOTO AVAILABLE" asset when there is not,
+             and the caption underneath says which case this is and what the picker below will do
+             about it. -->
+        <div class="obs-image-frame">
+          @if (spareImage.previewImages.length) {
+            <img [src]="spareImage.previewImages[0]" alt="Spare preview" class="obs-image-preview" />
+          } @else {
+            <img
+              [src]="storedImageSrc()"
+              [alt]="storedImageAlt()"
+              class="obs-image-preview"
+              (error)="onStoredImageError()"
+            />
+          }
+        </div>
+        <p class="obs-image-caption">
+          @if (spareImage.previewImages.length) {
+            New photograph chosen. It replaces what is on record when you save.
+          } @else {
+            {{ storedImageCaption() }}
+          }
+        </p>
+        <app-file-input #spareImage label="Spare Image" formControlName="image" accept="image/*" />
+      </fieldset>
+    </div>
+  </div>
+
+  <fieldset class="obs-band">
+    <legend class="obs-band-title">Remarks</legend>
+    <app-textarea-input label="Remarks" formControlName="remarks" [rows]="3" />
+  </fieldset>
+
+  @if (!hideActions()) {
+    <div class="spare-form__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+      <app-button type="submit" class="btn-primary" [disabled]="saving() || formStatus() === 'PENDING' || form.invalid">
+        {{ saving() ? "Saving..." : formStatus() === "PENDING" ? "Checking..." : "Save" }}
+      </app-button>
+    </div>
+  }
+</form>

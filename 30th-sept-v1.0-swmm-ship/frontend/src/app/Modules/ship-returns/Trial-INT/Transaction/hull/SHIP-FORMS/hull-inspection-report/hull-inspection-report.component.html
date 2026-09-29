@@ -1,0 +1,105 @@
+<!-- hull-inspection-report.component.html -->
+<app-form-card title="SHIP STAFF REPORT OF HULL INSPECTION" headerColor="#0f172a" textColor="#ffffff"
+  (action)="openApprovalWorkflow()">
+  <!-- FORM CONTENT -->
+
+  <form [formGroup]="form" class="p-0">
+    <div class="w-full mt-2">
+      <!-- SHIP SELECTION AND QUARTER INFORMATION -->
+      <div class="mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-2">
+          <!-- Ship Name -->
+          <app-select label="Select Ship" [required]="true" formControlName="ship_id" [options]="shipOptions" placeholder="--Select--" class="w-full">
+          </app-select>
+          <app-calendar label="Date of Return" formControlName="date_of_return">
+          </app-calendar>
+          <app-year-picker label="Year" [required]="true" [min]="2000" [max]="2026" formControlName="year">
+          </app-year-picker>
+          <app-select label="Quarter Ending" formControlName="quarter_ending" [options]="quarterlyEndingOptions" placeholder="--Select--"
+            class="w-full">
+          </app-select>
+        </div>
+      </div>
+
+      <!-- HULL INSPECTION DEFECTS TABLE -->
+      <div class="mb-6">
+        <div>
+          <div class="flex items-center justify-between mb-3 form-section-header">
+            <p>HULL INSPECTION DEFECTS RECORD</p>
+
+            <!-- <div *ngIf="isDrawingLoaded">
+              <app-shell-expension-ga-dialog-viewer
+                [shipData]="shipDrawingData" [frameRanges]="frameRanges" [selectedCompartments]="selectedCompartmentList">
+              </app-shell-expension-ga-dialog-viewer>
+            </div> -->
+            <!-- <div
+              *ngIf="drawingLoadFailed"
+              class="mt-2 flex items-center justify-center text-sm text-red-600">
+              Failed to load ship drawing.
+            </div> -->
+          </div>
+        </div>
+
+        <!-- ROW COUNT INPUT -->
+        <div class="mb-4 flex items-center space-x-4">
+          <label class="form-section-header text-sm font-medium text-gray-700">
+            Enter Total Number of Rows:
+          </label>
+          <input type="number" min="1" max="99" class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="inspectionRows"
+            (input)="onInspectionRowChange($event)" (change)="onInspectionRowChange($event)" (keyup)="onInspectionRowChange($event)" />
+        </div>
+        <div class="overflow-x-auto w-full border border-[var(--border-primary)] rounded-md">
+          <app-form-input-table-with-headers [data]="inspectionData" [columns]="inspectionColumns"
+            [headerRows]="inpectionHeaderRow" (valueChanged)="onTableValueChanged($event)">
+            <ng-template #serialNumberTpl let-row let-index="index">
+              {{ index + 1 }}
+            </ng-template>
+            <ng-template #inputTpl let-row let-index="index" let-field="field">
+              <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                  handlePotentialTableChange(
+                    index,
+                    field,
+                    $any($event.target).value
+                  )
+                " />
+            </ng-template>
+            <ng-template #calActionTemplate let-row let-index="index">
+              <div class="flex gap-2">
+                <div *ngIf="editMode">
+                  <lucide-icon [img]="deleteIcon" class="w-6 h-6 text-red-600 cursor-pointer" (click)="
+                      handleTableAction({
+                        type: 'delete',
+                        row,
+                        index,
+                        table: 'forthTable',
+                      })
+                    ">
+                  </lucide-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-form-input-table-with-headers>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- FOOTER WITH BUTTONS -->
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-5" [ngClass]="viewMode ? 'justify-start' : 'justify-center'">
+    <app-reusable-button label="Back" variant="back" (clicked)="handleBack()">
+    </app-reusable-button>
+    <app-loading-button *ngIf="!viewMode" label="Clear" [color]="'red'" [icon]="restartIcon"
+      (clicked)="clear()"></app-loading-button>
+    <app-loading-button *ngIf="!viewMode" label="Save draft" [color]="'blue'" [icon]="draftIcon"
+      [loading]="draftLoading" (clicked)="handleSave('draft')"></app-loading-button>
+
+    <app-loading-button *ngIf="!viewMode" label="Submit for approval" [color]="'green'" [icon]="saveIcon"
+      [loading]="saveLoading" (clicked)="handleSave('save')"></app-loading-button>
+  </div>
+</app-form-card>
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="rowId || form.get('id')?.value || ''" [rowData]="editDataDetails" [context]="editDataDetails"
+  (showUserPopupChange)="onApprovalPopupChange($event)">
+</app-approval-work-flow>
+<app-toast></app-toast>

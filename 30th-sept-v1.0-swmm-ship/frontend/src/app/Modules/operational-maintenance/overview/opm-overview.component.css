@@ -1,0 +1,556 @@
+.ov {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ov-status {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--surface-muted, rgba(74, 168, 255, 0.1));
+  color: var(--text-secondary, inherit);
+  font-size: 13px;
+}
+
+.ov-status--error {
+  background: rgba(222, 31, 31, 0.12);
+  color: var(--error-color, #de1f1f);
+}
+
+.ov-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.ov-kpi {
+  position: relative;
+}
+
+.ov-drill {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s, color 0.12s;
+  color: var(--text-muted);
+}
+
+.ov-drill:hover {
+  background: var(--bg-icon-btn);
+  color: var(--text-primary);
+}
+
+/* ---------- Rows ---------- */
+.ov-row {
+  display: grid;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.ov-row--alerts {
+  grid-template-columns: 1fr 1fr;
+}
+
+.ov-row--charts {
+  grid-template-columns: 1fr 1fr;
+}
+
+.ov-oi {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- Alerts (projected into app-panel-card) ---------- */
+.alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: var(--bg-input);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.alert:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.alert svg {
+  flex-shrink: 0;
+}
+
+.alert-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.alert-text {
+  flex-grow: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.alert-tag {
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg-input);
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 100px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+/* ---------- Quick actions ---------- */
+/* .glass-card uses backdrop-filter, which creates its own stacking context, so
+   .qa-menu's z-index only ranks within that local context. When the sibling
+   Alerts card is short, the opened dropdown overflows past this card's bottom
+   edge into the space the charts row occupies — and that row's own glass-card
+   (later in DOM, same flattened root stacking level) paints over it. Raising
+   this card into its own higher stacking context lets its whole subtree
+   (including the overflowing menu) paint above that later sibling. */
+.qa-panel {
+  position: relative;
+  z-index: 20;
+}
+
+.qa-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.qa-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.qa-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.qa-btn svg {
+  flex-shrink: 0;
+}
+
+.qa-btn--primary {
+  width: 100%;
+  border-color: rgba(0, 136, 255, 0.28);
+  background: rgba(0, 136, 255, 0.1);
+}
+
+.qa-btn--primary:hover {
+  background: rgba(0, 136, 255, 0.16);
+}
+
+/* ---------- Add Defect / DART dropdown (Reason → Add form) ---------- */
+.qa-dd {
+  position: relative;
+  grid-column: 1 / -1;
+}
+
+.qa-spacer {
+  flex-grow: 1;
+}
+
+.qa-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-dropdown);
+  box-shadow: var(--shadow-card);
+}
+
+.qa-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  transition: background 0.12s;
+}
+
+.qa-menu-item:hover {
+  background: var(--bg-input);
+}
+
+.qa-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.qa-reason-label {
+  min-width: 68px;
+  flex-shrink: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.qa-reason-desc {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Department drill-down dropdown (panel header) ---------- */
+.dist-select {
+  width: 200px;
+}
+
+/* ---------- DART lifecycle trend legend (moved below the chart) ---------- */
+.trend-legend-bottom {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* ---------- KPI detail drawer breakdown (projected into app-detail-drawer) ---------- */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.breakdown-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.breakdown-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-top: 1px;
+}
+
+.breakdown-nums {
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.breakdown-num {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 32px;
+}
+
+.breakdown-num-val {
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.breakdown-num-lbl {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.breakdown-track {
+  height: 6px;
+  border-radius: 100px;
+  background: var(--bg-input);
+  overflow: hidden;
+}
+
+.breakdown-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+/* ---------- KPI detail drawer list mode (projected into app-detail-drawer) ---------- */
+.dlist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dlist-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dlist-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dlist-body {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.dlist-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dlist-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.dlist-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.dlist-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.dlist-meta {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+/* ---------- Severity donut (projected into app-panel-card) ---------- */
+.sev {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 12px;
+}
+
+.sev-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.sev-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.sev-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.sev-label {
+  flex-grow: 1;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.sev-value {
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ---------- Alert detail drawer (projected into app-detail-drawer) ---------- */
+.adrawer {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.asev {
+  align-self: flex-start;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  border: 1px solid transparent;
+  border-radius: 100px;
+  padding: 3px 12px;
+}
+
+.adesc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 20px;
+  color: var(--text-primary);
+}
+
+.adetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.adetail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.adetail-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.adetail-value {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.aitems {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.aitems-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--text-primary);
+}
+
+.aitems-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+}
+
+.aitem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bg-input);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.13s;
+}
+
+.aitem:last-child {
+  border-bottom: none;
+}
+
+.aitem:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.aitem-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.aitem-text {
+  flex-grow: 1;
+  font-size: 12.5px;
+  line-height: 17px;
+  color: var(--text-primary);
+}
+
+.aitem svg {
+  flex-shrink: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .ov-row--alerts,
+  .ov-row--charts {
+    grid-template-columns: 1fr;
+  }
+}

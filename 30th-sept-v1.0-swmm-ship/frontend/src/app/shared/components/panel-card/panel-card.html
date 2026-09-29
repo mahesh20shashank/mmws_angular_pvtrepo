@@ -1,0 +1,22 @@
+<div class="glass-card pc">
+  <div class="pc-head">
+    @if (icon) {
+      <span class="pc-ic" [style.background]="iconBg">
+        <app-icon [name]="icon" [size]="17" [strokeWidth]="1.9" [color]="iconColor" />
+      </span>
+    }
+    <div class="pc-heading">
+      <span class="pc-title">{{ title }}</span>
+      @if (subtitle) {
+        <span class="pc-sub">{{ subtitle }}</span>
+      }
+    </div>
+    <div class="pc-actions">
+      <ng-content select="[panelActions]"></ng-content>
+    </div>
+  </div>
+
+  <div class="pc-body">
+    <ng-content></ng-content>
+  </div>
+</div>

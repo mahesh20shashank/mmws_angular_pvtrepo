@@ -1,0 +1,203 @@
+<app-master-card cardTitle="Defect Closure Details" cardHeight="auto">
+  <form [formGroup]="closeForm" class="flex flex-col">
+    <!-- TOP SECTION -->
+
+    <div class="p-5 border-b border-white/10">
+      <div class="grid grid-cols-5 gap-x-5 gap-y-1">
+        <div>
+          <app-input-field
+            label="Actual Defect Rectification *"
+            type="date"
+            [max]="maxRectifiedDate"
+            formControlName="rectified_date"
+          >
+          </app-input-field>
+
+          @if (
+            (submitted || f["rectified_date"].touched) &&
+            f["rectified_date"].errors?.["required"]
+          ) {
+            <p class="text-xs mt-1" style="color:#f82c36">
+              Actual Defect Rectification Date is required
+            </p>
+          }
+          @if (
+            (submitted || f["rectified_date"].touched) &&
+            f["rectified_date"].errors?.["futureDate"]
+          ) {
+            <p class="text-xs mt-1" style="color:#f82c36">
+              Actual Defect Rectification Date cannot be in the future
+            </p>
+          }
+        </div>
+
+        <div>
+          <label for="days-delay" class="readonly-field-label">Defect Rectification Days</label>
+          <input id="days-delay" type="text" readonly formControlName="days_delay" class="readonly-field-input" />
+        </div>
+
+        <div>
+          <app-select-input
+            label="Repair Agency Code *"
+            [options]="repairAgencyOptions"
+            formControlName="repair_agency_code"
+          >
+          </app-select-input>
+
+          @if (
+            (submitted || f["repair_agency_code"].dirty) &&
+            f["repair_agency_code"].errors?.["required"]
+          ) {
+            <p class="text-xs mt-1" style="color:#f82c36">
+              Repair Agency Code is required
+            </p>
+          }
+        </div>
+
+        <app-select-input
+          label="Diagnostic Code"
+          [options]="diagnosticOptions"
+          formControlName="diagnostic_code"
+        >
+        </app-select-input>
+        <div>
+          <label for="delay-in-closing" class="readonly-field-label">Delay in Closing DART</label>
+          <input id="delay-in-closing" type="text" readonly formControlName="delay_in_closing"
+            class="readonly-field-input" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-10 gap-x-5 gap-y-1 mt-4">
+        <div class="col-span-6">
+          <label for="lesson-learnt" class="readonly-field-label">Lesson Learnt *</label>
+          <textarea id="lesson-learnt" rows="3" formControlName="lesson_learnt"
+            class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+
+          @if (
+            (submitted || f["lesson_learnt"].touched) &&
+            f["lesson_learnt"].errors?.["required"]
+          ) {
+            <p class="text-xs mt-1" style="color:#f82c36">Lesson Learnt is required</p>
+          }
+        </div>
+
+        <div class="col-span-4">
+          <app-file-input
+            label="Upload Defect Report (if held)"
+            [outsideLabel]="true"
+            [enablePreview]="false"
+            formControlName="defect_report"
+            (previewRequested)="openPreview($event)"
+          >
+          </app-file-input>
+        </div>
+      </div>
+
+      <!-- Spares -->
+
+      <div class="mt-4">
+        <div class="flex items-center justify-between gap-4 mb-3">
+          <h3 class="text-white font-medium">Spares Used</h3>
+
+          <app-button
+            type="button"
+            (click)="addSpare()"
+            class="dcd-btn bg-[#1a73e8] hover:bg-[#1765cc] h-10 px-5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors"
+          >
+            + Add Spare
+          </app-button>
+        </div>
+        <div class="spares-grid-wrapper w-full">
+          <app-data-grid
+            class="spares-grid-wrapper w-full"
+            [columnDefs]="sparesColumnDefs"
+            [rowData]="sparesData"
+            [pageSize]="10"
+            [height]="'440px'"
+            [loading]="isLoading()"
+          >
+          </app-data-grid>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFERENCE DETAILS -->
+
+    <div class="p-5">
+      <h3 class="text-white font-medium mb-4">
+        Defect Reference Details (Read Only)
+      </h3>
+
+      <div class="grid grid-cols-4 gap-x-5 gap-y-3">
+        <div>
+          <label for="equipment-name" class="readonly-field-label">Equipment Name</label>
+          <input id="equipment-name" type="text" readonly formControlName="equipment_name"
+            class="readonly-field-input" />
+        </div>
+
+        <div>
+          <label for="nomenclature" class="readonly-field-label">Eqpt. Nomenclature</label>
+          <input id="nomenclature" type="text" readonly formControlName="nomenclature"
+            class="readonly-field-input" />
+        </div>
+
+        <div>
+          <label for="dart-number" class="readonly-field-label">DART No.</label>
+          <input id="dart-number" type="text" readonly formControlName="dart_number"
+            class="readonly-field-input" />
+        </div>
+
+        <div>
+          <label for="defect-date" class="readonly-field-label">Defect Date</label>
+          <input id="defect-date" type="text" readonly formControlName="defect_date"
+            class="readonly-field-input" />
+        </div>
+
+        <div>
+          <label for="defect-closing-date" class="readonly-field-label">Defect Closing Date</label>
+          <input id="defect-closing-date" type="text" readonly formControlName="defect_closing_date"
+            class="readonly-field-input" />
+        </div>
+
+        <div>
+          <label for="scheduled-date" class="readonly-field-label">Scheduled Date (For DART Closing)</label>
+          <input id="scheduled-date" type="text" readonly formControlName="scheduled_date"
+            class="readonly-field-input" />
+        </div>
+
+        <div class="col-span-2">
+          <label for="defect-description" class="readonly-field-label">Defect Description</label>
+          <textarea id="defect-description" rows="3" readonly formControlName="defect_description"
+            class="readonly-field-input"></textarea>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-5">
+        <app-button
+          type="button"
+          (click)="closeDefect()"
+          class="dcd-btn bg-[#0A4E82] px-5 py-2 rounded-lg"
+        >
+          Close Defect DART
+        </app-button>
+
+        <app-button
+          type="button"
+          (click)="goBack()"
+          class="dcd-btn bg-[#666666] px-5 py-2 rounded-lg"
+        >
+          Back to List
+        </app-button>
+      </div>
+    </div>
+  </form>
+</app-master-card>
+
+@if (showImagePreview) {
+  <app-image-preview
+    [images]="previewImages"
+    [visible]="showImagePreview"
+    (closed)="closePreview()"
+  >
+  </app-image-preview>
+}

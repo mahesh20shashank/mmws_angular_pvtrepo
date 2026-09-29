@@ -1,0 +1,152 @@
+<div class="inv-header glass-card">
+  @if (title()) {
+    <div class="inv-header__top-row">
+      <div class="inv-header__title-row">
+        <h1 class="head2">{{ title() }}</h1>
+        <span class="sub whitespace-nowrap"> - powered by MAT-CDF </span>
+      </div>
+      <ng-container *ngTemplateOutlet="iconsCluster"></ng-container>
+    </div>
+  }
+
+<nav class="inv-tabs">
+  <div class="inv-tabs__tabs">
+    @for (tab of tabs(); track tab.label) {
+      <div class="inv-tabs__item">
+        <app-button
+          type="button"
+          class="inv-tabs__btn"
+          [class.inv-tabs__btn--active]="isActive(tab) || openTab() === tab.label"
+          (click)="toggleTab(tab, $event)"
+        >
+          {{ tab.label }}
+          @if (tab.children) {
+            <app-icon
+              name="chevron-down"
+              [size]="13"
+              variant="inherit"
+              [style.transform]="openTab() === tab.label ? 'rotate(180deg)' : 'rotate(0deg)'"
+            />
+          }
+        </app-button>
+
+        @if (tab.children && openTab() === tab.label) {
+          <div class="inv-tabs__dropdown">
+            @for (child of tab.children; track child.label) {
+              @if (child.externalHref) {
+                <a class="inv-tabs__dropdown-item" [href]="child.externalHref" target="_blank" rel="noopener">
+                  {{ child.label }}
+                </a>
+              } @else if (child.children) {
+                <div class="inv-tabs__dropdown-item-wrapper">
+                  <app-button
+                    type="button"
+                    class="inv-tabs__dropdown-item inv-tabs__dropdown-item--parent"
+                    (click)="toggleSubmenu(child, $event)"
+                  >
+                    <span>{{ child.label }}</span>
+                    <app-icon name="chevron-right" [size]="12" variant="inherit" />
+                  </app-button>
+
+                  @if (openSubmenu() === child.label) {
+                    <div class="inv-tabs__submenu">
+                      @for (grandchild of child.children; track grandchild.label) {
+                        @if (grandchild.externalHref) {
+                          <a
+                            class="inv-tabs__dropdown-item"
+                            [href]="grandchild.externalHref"
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            {{ grandchild.label }}
+                          </a>
+                        } @else {
+                          <app-button
+                            type="button"
+                            class="inv-tabs__dropdown-item"
+                            [class.inv-tabs__dropdown-item--active]="isActive(grandchild)"
+                            (click)="selectChild(grandchild, $event)"
+                          >
+                            {{ grandchild.label }}
+                          </app-button>
+                        }
+                      }
+                    </div>
+                  }
+                </div>
+              } @else {
+                <app-button
+                  type="button"
+                  class="inv-tabs__dropdown-item"
+                  [class.inv-tabs__dropdown-item--active]="isActive(child)"
+                  (click)="selectChild(child, $event)"
+                >
+                  {{ child.label }}
+                </app-button>
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (!title()) {
+    <ng-container *ngTemplateOutlet="iconsCluster"></ng-container>
+  }
+</nav>
+</div>
+
+<ng-template #iconsCluster>
+  <div class="inv-tabs__icons">
+    <output class="inv-indicator" aria-live="polite" [title]="networkStatus.online() ? 'Online' : 'Offline'">
+      <span class="inv-indicator__dot" [style.backgroundColor]="networkStatus.online() ? '#22c55e' : '#ef4444'"></span>
+      <span>{{ networkStatus.online() ? "Online" : "Offline" }}</span>
+    </output>
+
+    <app-button
+      type="button"
+      class="inv-icon-btn inv-theme-btn"
+      [title]="themeService.theme() === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+      (click)="toggleTheme()"
+    >
+      @if (themeService.theme() === "dark") {
+        <app-icon name="sun" [strokeWidth]="2" />
+      } @else {
+        <app-icon name="moon" [strokeWidth]="2" />
+      }
+    </app-button>
+
+    <app-button
+      type="button"
+      class="inv-icon-btn"
+      [class.inv-icon-btn--active]="showPopup() && popupType === 'notification'"
+      title="Notifications"
+      (click)="togglePopup($event, 'notification')"
+    >
+      <app-icon name="bell" [size]="18" [strokeWidth]="1.33333" />
+    </app-button>
+
+    <div class="relative">
+      <app-button
+        type="button"
+        class="inv-icon-btn"
+        [class.inv-icon-btn--active]="showPopup() && popupType === 'mail'"
+        title="Mail"
+        (click)="togglePopup($event, 'mail')"
+      >
+        <app-icon name="mail" [size]="18" />
+      </app-button>
+
+      @if (showPopup()) {
+        <app-button class="fixed z-[999]" style="top: 62px; right: 24px" (click)="$event.stopPropagation()">
+          <app-mail-noti-center [type]="popupType" (closed)="closePopup()" />
+        </app-button>
+      }
+    </div>
+
+    <app-button type="button" class="inv-icon-btn" title="Logout" (click)="logout()">
+      <app-icon name="log-out" [size]="18" [strokeWidth]="2" />
+    </app-button>
+  </div>
+</ng-template>

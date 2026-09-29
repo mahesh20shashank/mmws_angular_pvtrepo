@@ -1,0 +1,482 @@
+<app-form-card
+  title="FINAL UNDERWATER HULL INSPECTION"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-3 gap-3">
+      <app-input
+        [label]="'Ship/Submarine*'"
+        formControlName="ship_or_submarine"
+        class="w-full"
+      >
+      </app-input>
+      <app-input
+        [label]="'Ship/Submarine Name*'"
+        formControlName="ship"
+        class="w-full"
+      >
+      </app-input>
+      <app-calendar
+        [label]="'Date of conduct of inspection*'"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+
+      <app-select
+        [label]="'Place of conduct of inspection*'"
+        formControlName="place_of_conduct_trail"
+        [options]="placesOptions"
+        placeholder="--Select--"
+        class="w-full"
+      >
+      </app-select>
+      <app-select
+        [label]="'Occasion for conduct of Inspection*'"
+        formControlName="occasion_of_conduct_trail"
+        [options]="occasionOptions"
+        placeholder="--Select--"
+        class="w-full"
+      >
+      </app-select>
+
+      <app-select
+        [label]="'Reps Present*'"
+        formControlName="reps_present"
+        [options]="reps_present_options"
+        placeholder="--Select--"
+        [searchable]="false"
+        class="w-full"
+      >
+      </app-select>
+
+      <div
+        *ngIf="usersList.length > 0 && form.get('reps_present')?.value !== 'Others'"
+      >
+        <app-multiselect
+          [label]="'Select User'"
+          formControlName="reps_present_user"
+          [options]="usersList"
+          placeholder="--Select--"
+        ></app-multiselect>
+      </div>
+
+      <div *ngIf="form.get('reps_present')?.value === 'Others'">
+        <app-input
+          [label]="'Enter User'"
+          formControlName="reps_present_other_user"
+          placeholder="Enter name"
+        ></app-input>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+
+        <app-file-upload
+          [label]="'Upload doc*'"
+          formControlName="authority_doc"
+        >
+        </app-file-upload>
+      </div>
+    </app-parameter-card>
+
+    <div class="mt-6 overflow-x-auto mb-10">
+      <table class="w-full border-collapse text-sm">
+        <!-- HEADER -->
+
+        <tbody>
+          <tr>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Parameter</th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Observation</th>
+            <th colspan="2" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Remarks and Docs</th>
+          </tr>
+          <!-- SECTION 2 -->
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              1. DEFECTS/OBSERVATIONS
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              (a)&nbsp; Confirmation on observations / defects of intermediate
+              U/W hull inspection
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="iuwhi_defect_status"
+                [options]="iuwhiDefectOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <!-- Upload if liquidated -->
+              <app-file-upload
+                *ngIf="form.get('iuwhi_defect_status')?.value === 'liquidated'"
+                [multiple]="true"
+                formControlName="defect_doc"
+              >
+              </app-file-upload>
+
+              <!-- Details if pending -->
+              <app-input
+                *ngIf="form.get('iuwhi_defect_status')?.value === 'pending'"
+                formControlName="iuwhi_defect_details"
+                placeholder="Enter details"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              (b) SS to confirm all internal U/W compartments defects have been
+              liquidated
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="internal_defects_status"
+                [options]="internalDefectsOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="form.get('internal_defects_status')?.value === 'pending'"
+                formControlName="internal_defects_details"
+                placeholder="Enter details"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              (c)(i) SS to confirm fitment of all U/W and overboard discharge
+              valves
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="valve_fitment_status"
+                [options]="valveFitmentOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="form.get('valve_fitment_status')?.value === 'pending'"
+                formControlName="valve_fitment_details"
+                placeholder="Enter details"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              (c)(ii) SS to confirm Ship is in the same trim condition as at the
+              time of docking
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="trim_condition_status"
+                [options]="trimConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              (d) Refit authority to confirm no doublers existing on the U/W
+              hull
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="doublers_status"
+                [options]="doublersOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="form.get('doublers_status')?.value === 'no'"
+                formControlName="doublers_details"
+                placeholder="Enter details"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              (e) Fresh defects / observations
+            </td>
+
+            <td colspan="2" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="fresh_defects"
+                placeholder="Enter details"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              2. SS to undertake W/T integrity check of SONAR dome during check
+              flood
+            </td>
+          </tr>
+
+          <tr>
+            <td
+              colspan="1"
+              class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF] border border-white/15 px-3 py-2 align-middle text-white/85"
+            >
+              3.&nbsp;&nbsp; Ship cleared/not cleared for undocking.
+            </td>
+            <td colspan="2" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="undocking_status"
+                [options]="undockingOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td
+              colspan="3"
+              class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-semibold"
+            >
+              Signatures
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-semibold">
+              Signature of Ship Staff
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-semibold">
+              Signature of Refitting Authority
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-semibold">
+              Signature of HITU Inspector
+            </td>
+          </tr>
+
+          <!-- Digital Signature Upload -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="ship_staff_signature"
+              >
+              </app-file-upload>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="refitting_authority_signature"
+              >
+              </app-file-upload>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="hitu_inspector_signature"
+              >
+              </app-file-upload>
+            </td>
+          </tr>
+
+          <!-- Name -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="ship_staff_name" placeholder="Name">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="refitting_authority_name"
+                placeholder="Name"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="hitu_inspector_name"
+                placeholder="Name"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- Rank -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="ship_staff_rank" placeholder="Rank">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="refitting_authority_rank"
+                placeholder="Rank"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="hitu_inspector_rank"
+                placeholder="Rank"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- Designation -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="ship_staff_dsg"
+                placeholder="Designation"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="refitting_authority_dsg"
+                placeholder="Designation"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="hitu_inspector_dsg"
+                placeholder="Designation"
+              >
+              </app-input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

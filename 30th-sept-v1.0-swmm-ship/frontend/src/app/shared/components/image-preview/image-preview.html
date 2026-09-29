@@ -1,0 +1,33 @@
+@if (visible) {
+<div class="preview-overlay fixed inset-0 z-[99999] flex items-center justify-center backdrop-blur-sm"  tabindex="0" role="button" (keyup.enter)="close()" >
+    <div class="preview-panel w-[85vw] h-[85vh] rounded-2xl overflow-hidden flex flex-col"
+         tabindex="0" role="button" (keyup.enter)="$event.stopPropagation()" >
+        <!-- Header -->
+        <div class="preview-header h-16 flex items-center justify-between px-6">
+            <h2 class="text-2xl">Preview Image</h2>
+
+            <app-button class="preview-close-btn text-4xl leading-none" (click)="close()">
+                &times;
+            </app-button>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden">
+
+            <!-- Thumbnails -->
+            <div class="preview-thumbs w-32 p-3 overflow-y-auto">
+                @for (img of images; track $index) {
+                <img [src]="img"  tabindex="0" role="button" (keyup.enter)="activeImage = $index"
+                    class="preview-thumb w-full h-20 object-cover rounded-lg cursor-pointer mb-3 border-2"
+                    [class.preview-thumb--active]="activeImage === $index"  alt="Preview image" />
+                }
+            </div>
+
+            <!-- Main Image -->
+            <div class="flex-1 flex items-center justify-center p-4">
+                <img [src]="images[activeImage]" class="max-w-full max-h-full object-contain"  alt="Preview image" />
+            </div>
+
+        </div>
+    </div>
+</div>
+}

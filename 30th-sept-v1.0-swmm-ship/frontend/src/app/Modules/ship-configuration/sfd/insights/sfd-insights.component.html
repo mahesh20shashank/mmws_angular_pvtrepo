@@ -1,0 +1,87 @@
+<app-page-header-bar
+  icon="bar-chart-3"
+  title="SFD Insights"
+  badgeText="Static Sample Data — not wired to live data yet"
+  badgeColor="#F59E0B"
+  badgeBg="rgba(245, 158, 11, 0.14)"
+  badgeBorder="rgba(245, 158, 11, 0.35)"
+/>
+
+<div class="insights">
+  @for (i of insights; track i.n) {
+    <div class="glass-card insight">
+      <div class="insight__head">
+        <span class="insight__n">{{ i.n }}</span>
+        <span class="insight__title">{{ i.title }}</span>
+      </div>
+
+      <!-- Chart area -->
+      <div class="insight__chart">
+        @switch (i.chart) {
+          @case ("stat") {
+            <div class="insight__stat">
+              <span class="insight__stat-value" [style.color]="i.statColor">{{ i.value }}</span>
+              <span class="insight__stat-unit">records</span>
+            </div>
+          }
+          @case ("bars") {
+            <app-bar-chart [data]="barsData(i.bars)" [showAxes]="false" [showValues]="false"
+              [showCategoryLabels]="false" [heightPx]="110" />
+          }
+          @case ("donut") {
+            <div class="insight__donut">
+              <app-donut-chart
+                [segments]="i.segments || []"
+                [centerValue]="donutTotal(i.segments)"
+                [width]="104"
+                [height]="104"
+                cutout="70%"
+              />
+              <div class="insight__legend">
+                @for (l of i.legend; track l.label) {
+                  <div class="insight__legend-row">
+                    <span class="insight__legend-dot" [style.background]="l.color"></span>
+                    <span class="insight__legend-label">{{ l.label }}</span>
+                    <span class="insight__legend-value">{{ l.value }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @case ("hbars") {
+            <app-bar-chart [data]="hbarsData(i.hbars)" orientation="horizontal" [showAxes]="false"
+              [showTrack]="true" valueSuffix="%" [heightPx]="130" />
+          }
+          @case ("addRemove") {
+            <app-bar-chart [data]="addRemoveData(i.added, i.removed)" [showAxes]="false" [heightPx]="130" />
+          }
+          @case ("line") {
+            <div class="insight__line">
+              <app-line-chart [series]="lineSeries(i.lineData)" [labels]="i.labels || []" [heightPx]="120" />
+            </div>
+          }
+          @case ("gauge") {
+            <app-gauge-chart [value]="i.gaugePct || 0" [color]="i.gaugeColor || '#4AA8FF'"
+              [centerText]="i.value || ''" [heightPx]="120" />
+          }
+        }
+      </div>
+
+      <p class="insight__purpose">{{ i.purpose }}</p>
+      <div class="insight__meta">
+        <div class="insight__meta-row">
+          <span class="insight__meta-key" style="color:#7FB3E0">Formula</span>
+          <span class="insight__meta-val">{{ i.formula }}</span>
+        </div>
+        <div class="insight__meta-row">
+          <span class="insight__meta-key" style="color:#F59E0B">Threshold</span>
+          <span class="insight__meta-val">{{ i.threshold }}</span>
+        </div>
+        <div class="insight__meta-row">
+          <span class="insight__meta-key" style="color:#22C55E">Action</span>
+          <span class="insight__meta-val">{{ i.action }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

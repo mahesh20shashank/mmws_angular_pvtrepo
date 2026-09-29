@@ -1,0 +1,92 @@
+<!-- Developed with Understanding: the popup shows when either this ship's display name or the
+     know-your-ship record is at hand. The subtitle is the display name only (D23) and is left out
+     entirely until HR CDF Step 1 sets the name. -->
+@if(shipData || thisShip.displayName()){
+<div class="login-modal">
+  <!-- Branding -->
+  <div class="login-branding">
+
+    @if (thisShip.displayName(); as shipName) {
+    <p class="brand-subtitle"> {{shipName}} </p>
+    }
+    <img src="assests/images/svg-files/SWMM.svg" alt="SWMM" class="brand-logo">
+
+  </div>
+  <!-- Powered By -->
+  <div class="powered-by"> POWERED BY <span>MATCDF</span> </div>
+  <!-- Heading -->
+  <app-button type="button" (click)="showForgotInfo() ? showForgotInfo.set(false) : closeModal.emit()" class="back-btn"
+    aria-label="Back to Login">
+    <app-icon name="arrow-left" [size]="24" [strokeWidth]="2" variant="inherit" />
+  </app-button>
+  <h1 class="login-title"> LOGIN </h1>
+  <!-- Form -->
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form" [class.form-blurred]="showForgotInfo()">
+    <!-- Username -->
+    <div class="field-group">
+      <div class="floating-field" [class.field-invalid]="f['username'].touched && f['username'].invalid">
+        <input id="fd" type="text" placeholder=" " formControlName="username" class="login-input">
+        <label for="fd" class="floating-label">Username</label>
+        @if (f['username'].touched && f['username'].invalid) {
+        <span class="error-icon">!</span>
+        }
+      </div>
+      @if (f['username'].touched && f['username'].errors?.['required']) {
+      <small class="field-error"> Username is required </small>
+      } @else if (f['username'].touched && f['username'].errors?.['minlength']) {
+      <small class="field-error"> Username must be at least {{ f['username'].errors?.['minlength']?.requiredLength }} characters </small>
+      }
+    </div>
+    <!-- Password -->
+    <div class="field-group">
+      <div class="floating-field" [class.field-invalid]="f['password'].touched && f['password'].invalid">
+        <input id="pass" [type]="showPassword() ? 'text' : 'password'" placeholder=" " formControlName="password"
+          class="login-input">
+        <label for="pass" class="floating-label">Password</label>
+        @if (f['password'].touched && f['password'].invalid) {
+        <span class="error-icon">!</span>
+        }
+        <app-button type="button" class="password-toggle" (click)="showPassword.set(!showPassword())">
+          @if (showPassword()) {
+          <app-icon name="eye-off" [size]="20" [strokeWidth]="2" variant="inherit" />
+          } @else {
+          <app-icon name="eye" [size]="20" [strokeWidth]="2" variant="inherit" />
+          }
+        </app-button>
+      </div>
+      @if (f['password'].touched && f['password'].errors?.['required']) {
+      <small class="field-error"> Password is required </small>
+      } @else if (f['password'].touched && f['password'].errors?.['minlength']) {
+      <small class="field-error"> Password must be at least {{ f['password'].errors?.['minlength']?.requiredLength }} characters </small>
+      }
+    </div>
+    <!-- Forgot -->
+    <div class="forgot-wrapper">
+      <app-button type="button" class="forgot-link" (click)="showForgotInfo.set(!showForgotInfo())">
+        Forgot Password?
+      </app-button>
+    </div>
+    <!-- Forgot Info Box -->
+    @if (showForgotInfo()) {
+    <div class="forgot-info-box">
+      <app-icon name="triangle-alert" [size]="15" [strokeWidth]="2" color="#f87171" />
+      Please Contact E-Pahachan to change password
+    </div>
+    }
+    <!-- Login -->
+    <app-button type="submit" class="login-btn" [disabled]="loginForm.invalid">
+      Secure Login
+    </app-button>
+
+    <!-- Signup -->
+    <!-- <div class="signup-text">
+      Don't have an account?
+      <app-button type="button" class="signup-link" (click)="onSwitchToSignup()">
+        Sign Up
+      </app-button>
+    </div> -->
+  </form>
+
+
+</div>
+}

@@ -1,0 +1,33 @@
+<div class="ins">
+  <section class="ins-grid">
+    @for (c of cards; track c.n) {
+      <div class="glass-card icard">
+        <div class="icard-head">
+          <span class="icard-n">{{ c.n }}</span>
+          <span class="icard-title">{{ c.title }}</span>
+        </div>
+
+        <div class="icard-chart">
+          <app-chart [type]="c.type" [data]="c.data" />
+        </div>
+
+        <p class="icard-desc">{{ c.desc }}</p>
+
+        <div class="icard-meta">
+          <div class="icard-meta-row">
+            <span class="icard-meta-key icard-meta-key--formula">Formula</span>
+            <span class="icard-meta-val">{{ c.formula }}</span>
+          </div>
+          <div class="icard-meta-row">
+            <span class="icard-meta-key icard-meta-key--threshold">Threshold</span>
+            <span class="icard-meta-val">{{ c.threshold }}</span>
+          </div>
+          <div class="icard-meta-row">
+            <span class="icard-meta-key icard-meta-key--action">Action</span>
+            <span class="icard-meta-val">{{ c.action }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </section>
+</div>

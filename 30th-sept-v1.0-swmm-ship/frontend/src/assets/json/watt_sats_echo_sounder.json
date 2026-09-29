@@ -1,0 +1,2490 @@
+{
+  "formId": "echo_sounder",
+  "title": "ECHO SOUNDER",
+  "sourceFile": "echo_sounder.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "Basic Information",
+      "sectionType": "form",
+      "fields": [],
+      "tables": [],
+      "sectionTitle": "Basic Information",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "_id": "ship_name",
+            "key": "ship_name",
+            "name": "ship_name",
+            "label": "Name of Ship *",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "INS",
+                "value": "INS"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "Department *",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              },
+              {
+                "label": "Gunnery",
+                "value": "Gunnery"
+              },
+              {
+                "label": "Communication",
+                "value": "Communication"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "Equipment *",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "ECHO SOUNDER KELTRON V____",
+                "value": "ECHO SOUNDER KELTRON V____"
+              }
+            ],
+            "isDynamic": false,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "trial_date",
+            "key": "trial_date",
+            "name": "trial_date",
+            "label": "Date *",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date"
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "Nature of Trial *",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "HATs",
+                "value": "HATs"
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "OP Checks",
+                "value": "OP Checks"
+              },
+              {
+                "label": "IIs",
+                "value": "IIs"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "observations_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "Observations",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "6%"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 9,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "74%"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 2,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "20%"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "observations_matrix_1_row_1_intro",
+                "cells": [
+                  {
+                    "_id": "embark_time",
+                    "key": "embark_time",
+                    "name": "embark_time",
+                    "type": "time",
+                    "lb": "Trials team embarked onboard at",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "HH:MM",
+                    "inputType": "time",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "embark_date",
+                    "key": "embark_date",
+                    "name": "embark_date",
+                    "type": "date",
+                    "lb": "hrs on",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "dd-mm-yyyy",
+                    "inputType": "date",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "keltron_version",
+                    "key": "keltron_version",
+                    "name": "keltron_version",
+                    "type": "input",
+                    "lb": "for SATs of Echo Sounder Keltron V",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "approved_schedule_reference",
+                    "key": "approved_schedule_reference",
+                    "name": "approved_schedule_reference",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "approved_schedule_suffix",
+                    "type": "label",
+                    "value": "as per IHQ MoD (N) approved schedule. Following observed:-",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "observations_row_2_serial",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_2_description",
+                    "type": "label",
+                    "value": "Check 6.3.1 - Switching ON the Echo Sounder.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_1",
+                    "key": "check_1",
+                    "name": "check_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "observations_row_3_serial",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 7,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_3_description",
+                    "type": "label",
+                    "value": "Check 6.3.2 - Depth reading checks at harbour",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2",
+                    "key": "check_2",
+                    "name": "check_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 7,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_headers",
+                "cells": [
+                  {
+                    "_id": "echo_sounder_header",
+                    "type": "label",
+                    "value": "<b>Echo Sounder</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "hand_lead_line_header",
+                    "type": "label",
+                    "value": "<b>Hand Lead Line</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "draught_header",
+                    "type": "label",
+                    "value": "<b>Draught</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "difference_header",
+                    "type": "label",
+                    "value": "<b>Difference</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_fwd",
+                "cells": [
+                  {
+                    "_id": "check_2_echo_sounder",
+                    "key": "check_2_echo_sounder",
+                    "name": "check_2_echo_sounder",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_hand_lead",
+                    "key": "check_2_hand_lead",
+                    "name": "check_2_hand_lead",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "draught_fwd_label",
+                    "type": "label",
+                    "value": "FWD:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "right"
+                  },
+                  {
+                    "_id": "check_2_draught_fwd",
+                    "key": "check_2_draught_fwd",
+                    "name": "check_2_draught_fwd",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_difference",
+                    "key": "check_2_difference",
+                    "name": "check_2_difference",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_aft",
+                "cells": [
+                  {
+                    "_id": "draught_aft_left_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "draught_aft_label",
+                    "type": "label",
+                    "value": "AFT:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "right"
+                  },
+                  {
+                    "_id": "check_2_draught_aft",
+                    "key": "check_2_draught_aft",
+                    "name": "check_2_draught_aft",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "draught_aft_right_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_roll",
+                "cells": [
+                  {
+                    "_id": "check_2_roll_label",
+                    "type": "label",
+                    "value": "Roll:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_roll",
+                    "key": "check_2_roll",
+                    "name": "check_2_roll",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_roll_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 5,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_pitch",
+                "cells": [
+                  {
+                    "_id": "check_2_pitch_label",
+                    "type": "label",
+                    "value": "Pitch:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_pitch",
+                    "key": "check_2_pitch",
+                    "name": "check_2_pitch",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_pitch_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 5,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_hot",
+                "cells": [
+                  {
+                    "_id": "check_2_hot_label",
+                    "type": "label",
+                    "value": "HOT:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_hot",
+                    "key": "check_2_hot",
+                    "name": "check_2_hot",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_2_hot_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 5,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "observations_row_4_serial",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_4_description",
+                    "type": "label",
+                    "value": "Check 6.3.3 - Check the LED / VGA repeater Unit display readings.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_3",
+                    "key": "check_3",
+                    "name": "check_3",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "observations_row_5_serial",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_5_description",
+                    "type": "label",
+                    "value": "Check 6.3.4 - Check the \"Mark Event\".",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_4",
+                    "key": "check_4",
+                    "name": "check_4",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "observations_row_6_serial",
+                    "type": "serial",
+                    "value": "5",
+                    "colspan": 1,
+                    "rowspan": 2,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_6_description",
+                    "type": "label",
+                    "value": "Check 6.3.5 - Depth reading checks at various depths and different speed upto 1500 mtrs.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_5",
+                    "key": "check_5",
+                    "name": "check_5",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      },
+                      {
+                        "label": "Not offered",
+                        "value": "Not offered"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 2,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_6_depth",
+                "cells": [
+                  {
+                    "_id": "depth_beyond_label",
+                    "type": "label",
+                    "value": "Depth reading checks beyond",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_5_depth_beyond",
+                    "key": "check_5_depth_beyond",
+                    "name": "check_5_depth_beyond",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "mtrs",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "depth_beyond_suffix",
+                    "type": "label",
+                    "value": "mtrs.",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "observations_row_7_serial",
+                    "type": "serial",
+                    "value": "6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_7_description",
+                    "type": "label",
+                    "value": "Check 6.3.6 - Check the distance mark on the chart while monitoring the distance reading at the LOG speed",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_6",
+                    "key": "check_6",
+                    "name": "check_6",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "observations_row_8_serial",
+                    "type": "serial",
+                    "value": "7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_8_description",
+                    "type": "label",
+                    "value": "Check 6.3.7 - Check the USB Printer is connected and take a print.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_7",
+                    "key": "check_7",
+                    "name": "check_7",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "observations_row_9_serial",
+                    "type": "serial",
+                    "value": "8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_9_description",
+                    "type": "label",
+                    "value": "Interface checks with ECDIS and other equipment (if applicable).",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_8",
+                    "key": "check_8",
+                    "name": "check_8",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "observations_row_10_serial",
+                    "type": "serial",
+                    "value": "9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_10_description",
+                    "type": "label",
+                    "value": "Shallow water alarms may be verified at shallow waters of upto 10m depth.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_9",
+                    "key": "check_9",
+                    "name": "check_9",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "observations_row_11_serial",
+                    "type": "serial",
+                    "value": "10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_11_description",
+                    "type": "label",
+                    "value": "Check both Dual Channel (if applicable) and Single Channel operation in Auto Mode only.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_10",
+                    "key": "check_10",
+                    "name": "check_10",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type": "label",
+            "value": "Sea Trials Report",
+            "colSpan": 12
+          },
+          {
+            "_id": "sea_trial_ship_name",
+            "key": "sea_trial_ship_name",
+            "name": "sea_trial_ship_name",
+            "label": "Name of the ship *",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "sea_trial_date",
+            "key": "sea_trial_date",
+            "name": "sea_trial_date",
+            "label": "Date *",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "sound_velocity",
+            "key": "sound_velocity",
+            "name": "sound_velocity",
+            "label": "Sound Velocity *",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "sea_trial_draught_fwd",
+            "key": "sea_trial_draught_fwd",
+            "name": "sea_trial_draught_fwd",
+            "label": "Draught FWD *",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "sea_trial_draught_aft",
+            "key": "sea_trial_draught_aft",
+            "name": "sea_trial_draught_aft",
+            "label": "Draught AFT *",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "unit",
+            "key": "unit",
+            "name": "unit",
+            "label": "Unit *",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "Metre",
+                "value": "Metre"
+              },
+              {
+                "label": "Fathom",
+                "value": "Fathom"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "sea_trial_roll",
+            "key": "sea_trial_roll",
+            "name": "sea_trial_roll",
+            "label": "ROLL *",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 6
+          },
+          {
+            "_id": "sea_trial_pitch",
+            "key": "sea_trial_pitch",
+            "name": "sea_trial_pitch",
+            "label": "PITCH *",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 6
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "sea_trials_report_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "",
+            "topHeaders": [
+              [
+                {
+                  "label": "DATE",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "TIME",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "FWD ECHO SOUNDER DEPTH READING",
+                  "colspan": 2,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "AFT ECHO SOUNDER DEPTH READING",
+                  "colspan": 2,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "CHART DEPTH",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "SHIP SPEED",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                },
+                {
+                  "label": "REMARKS",
+                  "colspan": 1,
+                  "rowspan": 2,
+                  "align": "center"
+                }
+              ],
+              [
+                {
+                  "label": "CH 33",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "CH 210",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "CH 33",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "CH 210",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "sea_trials_report_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_1_sea_trial_date_1",
+                    "key": "sea_trial_date_1",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_2_sea_trial_time_1",
+                    "key": "sea_trial_time_1",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_3_sea_trial_fwd_ch33_1",
+                    "key": "sea_trial_fwd_ch33_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_4_sea_trial_fwd_ch210_1",
+                    "key": "sea_trial_fwd_ch210_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_5_sea_trial_aft_ch33_1",
+                    "key": "sea_trial_aft_ch33_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_6_sea_trial_aft_ch210_1",
+                    "key": "sea_trial_aft_ch210_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_7_sea_trial_chart_depth_1",
+                    "key": "sea_trial_chart_depth_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_8_sea_trial_ship_speed_1",
+                    "key": "sea_trial_ship_speed_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_1_cell_9_sea_trial_remarks_1",
+                    "key": "sea_trial_remarks_1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "sea_trials_report_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_1_sea_trial_date_2",
+                    "key": "sea_trial_date_2",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_2_sea_trial_time_2",
+                    "key": "sea_trial_time_2",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_3_sea_trial_fwd_ch33_2",
+                    "key": "sea_trial_fwd_ch33_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_4_sea_trial_fwd_ch210_2",
+                    "key": "sea_trial_fwd_ch210_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_5_sea_trial_aft_ch33_2",
+                    "key": "sea_trial_aft_ch33_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_6_sea_trial_aft_ch210_2",
+                    "key": "sea_trial_aft_ch210_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_7_sea_trial_chart_depth_2",
+                    "key": "sea_trial_chart_depth_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_8_sea_trial_ship_speed_2",
+                    "key": "sea_trial_ship_speed_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_2_cell_9_sea_trial_remarks_2",
+                    "key": "sea_trial_remarks_2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "sea_trials_report_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_1_sea_trial_date_3",
+                    "key": "sea_trial_date_3",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_2_sea_trial_time_3",
+                    "key": "sea_trial_time_3",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_3_sea_trial_fwd_ch33_3",
+                    "key": "sea_trial_fwd_ch33_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_4_sea_trial_fwd_ch210_3",
+                    "key": "sea_trial_fwd_ch210_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_5_sea_trial_aft_ch33_3",
+                    "key": "sea_trial_aft_ch33_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_6_sea_trial_aft_ch210_3",
+                    "key": "sea_trial_aft_ch210_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_7_sea_trial_chart_depth_3",
+                    "key": "sea_trial_chart_depth_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_8_sea_trial_ship_speed_3",
+                    "key": "sea_trial_ship_speed_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_3_cell_9_sea_trial_remarks_3",
+                    "key": "sea_trial_remarks_3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "sea_trials_report_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_1_sea_trial_date_4",
+                    "key": "sea_trial_date_4",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_2_sea_trial_time_4",
+                    "key": "sea_trial_time_4",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_3_sea_trial_fwd_ch33_4",
+                    "key": "sea_trial_fwd_ch33_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_4_sea_trial_fwd_ch210_4",
+                    "key": "sea_trial_fwd_ch210_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_5_sea_trial_aft_ch33_4",
+                    "key": "sea_trial_aft_ch33_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_6_sea_trial_aft_ch210_4",
+                    "key": "sea_trial_aft_ch210_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_7_sea_trial_chart_depth_4",
+                    "key": "sea_trial_chart_depth_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_8_sea_trial_ship_speed_4",
+                    "key": "sea_trial_ship_speed_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_4_cell_9_sea_trial_remarks_4",
+                    "key": "sea_trial_remarks_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "sea_trials_report_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_1_sea_trial_date_5",
+                    "key": "sea_trial_date_5",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_2_sea_trial_time_5",
+                    "key": "sea_trial_time_5",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_3_sea_trial_fwd_ch33_5",
+                    "key": "sea_trial_fwd_ch33_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_4_sea_trial_fwd_ch210_5",
+                    "key": "sea_trial_fwd_ch210_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_5_sea_trial_aft_ch33_5",
+                    "key": "sea_trial_aft_ch33_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_6_sea_trial_aft_ch210_5",
+                    "key": "sea_trial_aft_ch210_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_7_sea_trial_chart_depth_5",
+                    "key": "sea_trial_chart_depth_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_8_sea_trial_ship_speed_5",
+                    "key": "sea_trial_ship_speed_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_5_cell_9_sea_trial_remarks_5",
+                    "key": "sea_trial_remarks_5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "sea_trials_report_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_1_sea_trial_date_6",
+                    "key": "sea_trial_date_6",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_2_sea_trial_time_6",
+                    "key": "sea_trial_time_6",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_3_sea_trial_fwd_ch33_6",
+                    "key": "sea_trial_fwd_ch33_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_4_sea_trial_fwd_ch210_6",
+                    "key": "sea_trial_fwd_ch210_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_5_sea_trial_aft_ch33_6",
+                    "key": "sea_trial_aft_ch33_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_6_sea_trial_aft_ch210_6",
+                    "key": "sea_trial_aft_ch210_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_7_sea_trial_chart_depth_6",
+                    "key": "sea_trial_chart_depth_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_8_sea_trial_ship_speed_6",
+                    "key": "sea_trial_ship_speed_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "sea_trials_report_matrix_1_row_6_cell_9_sea_trial_remarks_6",
+                    "key": "sea_trial_remarks_6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [
+          {
+            "_id": "presenting_authority",
+            "key": "presenting_authority",
+            "name": "presenting_authority",
+            "label": "Presenting Authority: Ship's Staff",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1
+          },
+          {
+            "_id": "inspecting_authority",
+            "key": "inspecting_authority",
+            "name": "inspecting_authority",
+            "label": "Inspecting Authority: WATT(V/MI)",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1
+          },
+          {
+            "_id": "presenting_nd",
+            "key": "presenting_nd",
+            "name": "presenting_nd",
+            "label": "ND:",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1
+          },
+          {
+            "_id": "presenting_c",
+            "key": "presenting_c",
+            "name": "presenting_c",
+            "label": "C:",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1
+          },
+          {
+            "_id": "inspecting_sti_ti",
+            "key": "inspecting_sti_ti",
+            "name": "inspecting_sti_ti",
+            "label": "STI / TI:",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1
+          },
+          {
+            "_id": "inspecting_sto",
+            "key": "inspecting_sto",
+            "name": "inspecting_sto",
+            "label": "STO:",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1
+          }
+        ],
+        "tables_3": []
+      }
+    }
+  ]
+}

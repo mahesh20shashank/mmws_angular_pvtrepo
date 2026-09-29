@@ -1,0 +1,42 @@
+<div
+  #portalRoot
+  *ngIf="open"
+  class="rd-delete-portal"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="title"
+  (click)="onClose()"
+>
+  <div
+    class="rd-delete-portal__dialog pt-glass-dialog animate-[fadeIn_.2s_ease]"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="pt-glass-dialog__header px-5 py-4">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="text-lg font-semibold leading-tight">{{ title }}</h2>
+        <button
+          type="button"
+          class="pt-glass-table__control flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition"
+          aria-label="Close"
+          (click)="onClose()"
+        >
+          <i class="fa fa-times text-sm" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="rd-delete-portal__body pt-glass-text-secondary text-sm">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="rd-delete-portal__footer">
+      <button type="button" class="rd-delete-portal__btn-cancel" (click)="onClose()">
+        Cancel
+      </button>
+      <button type="button" class="rd-delete-portal__btn-danger" (click)="onConfirm()">
+        <i class="fa fa-trash text-xs" aria-hidden="true"></i>
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

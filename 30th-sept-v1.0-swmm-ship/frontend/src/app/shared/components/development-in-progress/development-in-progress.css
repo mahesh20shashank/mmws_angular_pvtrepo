@@ -1,0 +1,32 @@
+.custom-progress {
+    position: relative;
+    width: 100%;
+    height: 24px;
+    background-color: var(--bg-input);
+    border: 2px solid var(--accent-blue);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background-image: repeating-linear-gradient(45deg,
+            var(--accent-blue) 0px,
+            var(--accent-blue) 6px,
+            transparent 6px,
+            transparent 12px);
+    background-size: 16px 24px;
+    transition: width 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: stripe-move 0.8s linear infinite;
+}
+
+@keyframes stripe-move {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 16px 0;
+    }
+}

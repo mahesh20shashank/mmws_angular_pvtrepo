@@ -1,0 +1,96 @@
+<form [formGroup]="form">
+  <div class="form-grid">
+    @for (field of fields(); track field.key) {
+    @if (isFieldVisible(field)) {
+    <div class="form-field" [class.textarea-width]="field.controlType === 'textarea' || field.fullWidth">
+      @switch (field.controlType) {
+      @case ("text") {
+      <label [attr.for]="'field-' + field.key" class="text-white/60 text-xs mb-1 block">
+        {{ field.label }}
+        @if (isFieldRequired(field)) {
+        <span class="required-star">*</span>
+        }
+      </label>
+      <input [id]="'field-' + field.key" type="text" [placeholder]="field.placeholder" [readonly]="field.readonly ?? false"
+        [formControlName]="field.key"
+        [class.readonly-dotted]="field.readonly"
+        class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      }
+
+      @case ("number") {
+      <app-input-field [label]="field.label" [type]="'number'" [readonly]="field.readonly ?? false"
+        [required]="isFieldRequired(field)" [formControlName]="field.key">
+      </app-input-field>
+      }
+
+      @case ("date") {
+      <app-input-field [label]="field.label" [type]="'date'" [readonly]="field.readonly ?? false"
+        [required]="isFieldRequired(field)" [max]="field.key === 'defectDate' ? maxDefectDate : ''"
+        [formControlName]="field.key">
+      </app-input-field>
+      }
+
+      @case ("radio") {
+      <app-radio-input [label]="field.label" [options]="field.options || []" [formControlName]="field.key">
+      </app-radio-input>
+      }
+
+      @case ("file") {
+      <app-file-input [label]="field.label" [outsideLabel]="true" [enablePreview]="false" (previewRequested)="openPreview($event)" [formControlName]="field.key">
+      </app-file-input>
+      }
+
+      @case ("textarea") {
+      <label [attr.for]="'field-' + field.key" class="text-white/60 text-xs mb-1 block">
+        {{ field.label }}
+        @if (isFieldRequired(field)) {
+        <span class="required-star">*</span>
+        }
+      </label>
+      <textarea [id]="'field-' + field.key" rows="3" [formControlName]="field.key"
+        class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+      }
+
+      @case ("select") {
+      <app-select-input [label]="field.label" [options]="field.options || []" [required]="isFieldRequired(field)"
+        [formControlName]="field.key">
+      </app-select-input>
+      }
+      }
+
+      @if (form.get(field.key)?.invalid && form.get(field.key)?.touched) {
+      <span class="error">
+        {{ getError(field.key) }}
+      </span>
+      }
+    </div>
+    }
+
+    }
+    @if (!form.controls["sparesRequired"].value) {
+    <div class="actions">
+      <app-button type="button" class="cancel-btn" (click)="onCancel()">Cancel</app-button>
+      <app-button type="button" class="save-btn" (click)="openConfirmModal()">Save</app-button>
+    </div>
+    }
+
+    @if (form.controls["sparesRequired"].value) {
+    <div class="actions">
+      <app-button type="button" class="spareBtn button" (click)="openSpareModal()">
+        Select Spares
+      </app-button>
+    </div>
+    }
+  </div>
+</form>
+
+@if (form.controls["sparesRequired"].value && selectedSpares().length > 0) {
+<app-data-grid [height]="'auto'" [autoHeight]="true" [pagination]="true" [rowData]="selectedSpares()"
+  [columnDefs]="selectedSpareColumns">
+</app-data-grid>
+
+  <div class="spareSavebtn">
+    <app-button type="button" class="cancel-btn" (click)="onCancel()">Cancel</app-button>
+    <app-button type="button" class="save-btn" (click)="openConfirmModal()">Save</app-button>
+  </div>
+}

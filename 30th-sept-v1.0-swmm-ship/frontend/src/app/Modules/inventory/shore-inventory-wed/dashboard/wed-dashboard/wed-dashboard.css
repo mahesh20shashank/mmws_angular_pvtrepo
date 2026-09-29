@@ -1,0 +1,58 @@
+/* Page-level rhythm to match the density pass elsewhere (Home's .home-page,
+   KMS's .kms-page): one flex-column gap for inter-section spacing instead of
+   each section carrying its own (larger, inconsistent) margin-bottom. */
+.wed-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wed-page > app-help-guidance {
+  margin-bottom: 0;
+}
+
+.wed-page > .kpi-row {
+  margin-bottom: 0;
+}
+
+/* WED's dashboard has 6 KPI tiles — the shared `.kpi-row` rule (styles.css) deliberately keeps
+   every dashboard's tiles in one never-wrapping row by shrinking them together, which works for
+   the 4-5 tile rows elsewhere but squeezes 6 tiles unreadably narrow on smaller viewports. Scoped
+   to this page only: below 1100px, let tiles wrap onto multiple rows at a readable minimum width
+   instead of continuing to shrink toward zero. */
+@media (max-width: 1100px) {
+  .wed-page > .kpi-row {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  }
+}
+
+/* "PTS/ RIO Demands - Survey Pending" (the authentic legacy label — dashboard_wlms_content.html)
+   is the longest of WED's 6 tile titles and still truncates at the shared component's 2-line
+   clamp. Scoped 3-line override for this page's cards only, rather than raising the clamp (and
+   the resulting extra height) for every other dashboard's shorter labels. */
+:host ::ng-deep .kpi-row .kpi_heading {
+  -webkit-line-clamp: 3;
+  min-height: 54px;
+}
+
+.wed-dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.wed-chart-card {
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.wed-chart-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,110 @@
+.hw-title {
+  color: var(--text-primary);
+}
+
+.hw-border {
+  border-color: var(--border-input);
+}
+
+.hw-label {
+  color: var(--text-muted);
+}
+
+select option {
+  background-color: var(--bg-dropdown, #0f172a);
+  color: var(--text-primary, #f8fafc);
+}
+
+:host-context([data-theme="light"]) select option,
+[data-theme="light"] select option {
+  background-color: #ffffff !important;
+  color: #0f1c2e !important;
+}
+
+:host-context([data-theme="dark"]) select option,
+[data-theme="dark"] select option {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+  /* Ensure select and date picker trigger share identical height and alignment */
+  :host ::ng-deep .dp-trigger {
+    height: 42px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* Light mode adaptation for date picker inside hotwork module */
+  :host-context([data-theme="light"]) ::ng-deep .dp-calander-wrapper,
+  [data-theme="light"] :host ::ng-deep .dp-calander-wrapper {
+    background: var(--bg-dropdown, #ffffff) !important;
+    box-shadow: 0 10px 30px rgba(15, 28, 46, 0.12) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-calendar,
+  [data-theme="light"] :host ::ng-deep .dp-calendar {
+    background: var(--bg-dropdown, #ffffff) !important;
+    border: 1px solid var(--border-card, rgba(15, 28, 46, 0.12)) !important;
+    box-shadow: 0 10px 30px rgba(15, 28, 46, 0.12) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-nav__btn,
+  [data-theme="light"] :host ::ng-deep .dp-nav__btn {
+    color: var(--text-primary, #0f1c2e) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-nav__btn:hover,
+  [data-theme="light"] :host ::ng-deep .dp-nav__btn:hover {
+    background: rgba(15, 28, 46, 0.08) !important;
+    color: #1D96E9 !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-select,
+  [data-theme="light"] :host ::ng-deep .dp-select {
+    background: var(--bg-input, rgba(15, 28, 46, 0.04)) !important;
+    border: 1px solid var(--border-input, rgba(15, 28, 46, 0.15)) !important;
+    color: var(--text-primary, #0f1c2e) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-option,
+  [data-theme="light"] :host ::ng-deep .dp-option {
+    background-color: var(--bg-dropdown, #ffffff) !important;
+    color: var(--text-primary, #0f1c2e) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-weekdays span,
+  [data-theme="light"] :host ::ng-deep .dp-weekdays span {
+    color: var(--text-muted, #3d5166) !important;
+    font-weight: 600;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-day,
+  [data-theme="light"] :host ::ng-deep .dp-day {
+    color: var(--text-primary, #0f1c2e) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-day--other-month,
+  [data-theme="light"] :host ::ng-deep .dp-day--other-month {
+    color: var(--text-muted, #3d5166) !important;
+    opacity: 0.45;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range),
+  [data-theme="light"] :host ::ng-deep .dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range) {
+    background: rgba(26, 163, 242, 0.12) !important;
+    color: var(--text-primary, #0f1c2e) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-day--in-range,
+  [data-theme="light"] :host ::ng-deep .dp-day--in-range {
+    background: rgba(26, 163, 242, 0.15) !important;
+    color: var(--text-primary, #0f1c2e) !important;
+  }
+
+  :host-context([data-theme="light"]) ::ng-deep .dp-day--range-start,
+  :host-context([data-theme="light"]) ::ng-deep .dp-day--range-end,
+  [data-theme="light"] :host ::ng-deep .dp-day--range-start,
+  [data-theme="light"] :host ::ng-deep .dp-day--range-end {
+    background: #1070ca !important;
+    color: #ffffff !important;
+  }

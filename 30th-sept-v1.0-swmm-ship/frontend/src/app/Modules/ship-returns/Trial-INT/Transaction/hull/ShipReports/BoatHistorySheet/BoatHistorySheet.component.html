@@ -1,0 +1,358 @@
+<div class="report-container">
+  <div class="flex justify-end mb-5">
+    <button
+      (click)="downloadReport()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
+    >
+      Download Report
+    </button>
+  </div>
+  <div id="boat-history-sheet-report">
+    <div class="report-title">
+        BOAT HISTORY SHEET REPORT - <span class="italic-text">{{shipName}}</span>
+    </div>
+    <div class="ber-table-wrapper">
+      <table class="ber-table">
+
+        <tbody>
+        <tr>
+            <td report-table-header-s-no>1.</td>
+            <td class="label-col">Boat Registration Number</td>
+            <td>{{ reportData.boat_registration_number || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>2.</td>
+            <td class="label-col">Ship Name</td>
+            <td>{{ reportData.ship_name || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>3.</td>
+            <td class="label-col">Type of Boat</td>
+            <td>{{ reportData.type_of_boat || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>4.</td>
+            <td class="label-col">Engine OEM (Make of Engine)</td>
+            <td>{{ reportData.engine_oem || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>5.</td>
+            <td class="label-col">Boat Builder (OEM)</td>
+            <td>{{ reportData.boat_builder || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>6.</td>
+            <td class="label-col">Built Year</td>
+            <td>{{ reportData.built_year || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>7.</td>
+            <td class="label-col">Original Date of Supply</td>
+            <td>{{ reportData.original_date_of_supply || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>8.</td>
+            <td class="label-col">Unit</td>
+            <td>{{ reportData.unit || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>9.</td>
+            <td class="label-col">Date of Re-Appropriation</td>
+            <td>{{ reportData.date_of_reappropriation || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>10.</td>
+            <td class="label-col">Serial No. (PORT)</td>
+            <td>{{ reportData.serial_no_port || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>11.</td>
+            <td class="label-col">Serial No. (STBD)</td>
+            <td>{{ reportData.serial_no_stbd || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>12.</td>
+            <td class="label-col">Serial No. (CENTER)</td>
+            <td>{{ reportData.serial_no_center || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>13.</td>
+            <td class="label-col">Year of Rendering</td>
+            <td>{{ reportData.year_of_rendering || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>14.</td>
+            <td class="label-col">BER/ABER</td>
+            <td>{{ reportData.ber_aber || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>15.</td>
+            <td class="label-col">Occasion of Rendering</td>
+            <td>{{ reportData.occasion_of_rendering || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>16.</td>
+            <td class="label-col">Condition of Hull</td>
+            <td>{{ reportData.condition_of_hull || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>17.</td>
+            <td class="label-col">Condition of Fittings</td>
+            <td>{{ reportData.condition_of_fittings || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>18.</td>
+            <td class="label-col">Condition of Lifting Arrangement Fitted on Boat Deck</td>
+            <td>{{ reportData.condition_of_lifting_arrangement || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>19.</td>
+            <td class="label-col">Status of Integrated Navigation Suit for Boat (if fitted)</td>
+            <td>{{ reportData.navigation_suit_status || '-' }}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="nested-table-cell">
+
+                <table class="engine-inner-table">
+
+                <thead>
+                    <tr>
+                    <th class="ser-col">
+                        Ser
+                    </th>
+
+                    <th>
+                        Condition of Engine
+                    </th>
+
+                    <th>
+                        Total Running HRS of Engine Run
+                        Since Last Return
+                    </th>
+
+                    <th>
+                        Major Routines undertaken Since
+                        Last Return on Engine
+                    </th>
+
+                    <th>
+                        Assessed Remaining life of
+                        Engine - Years
+                    </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr
+                    *ngFor="
+                        let row of reportTableData;
+                        let i = index
+                    "
+                    >
+                    <td>
+                        {{ i + 1 }}
+                    </td>
+
+                    <td>
+                        {{ row.condition_of_engine || '-' }}
+                    </td>
+
+                    <td>
+                        {{ row.total_running_hours || '-' }}
+                    </td>
+
+                    <td>
+                        {{ row.major_routines || '-' }}
+                    </td>
+
+                    <td>
+                        {{ row.remaining_life || '-' }}
+                    </td>
+                    </tr>
+
+                    <tr *ngIf="!reportTableData.length">
+                    <td colspan="5" class="no-data">
+                        No Data Found
+                    </td>
+                    </tr>
+
+                </tbody>
+
+                </table>
+
+            </td>
+        </tr>
+        <tr><td colspan="3" class="label-col">SPEED TRIALS</td></tr> 
+
+        <tr>
+            <td>20.</td>
+            <td class="label-col">Max. Speed Achieved During Current Trials</td>
+            <td>{{ reportData.max_speed_current_trials || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>21.</td>
+            <td class="label-col">Max. RPM Achieved During Current Trials</td>
+            <td>{{ reportData.max_rpm_current_trials || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>22.</td>
+            <td class="label-col">Max. Speed Achieved During PDI Speed Trials</td>
+            <td>{{ reportData.max_speed_pdi_trials || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>23.</td>
+            <td class="label-col">Max. RPM Achieved During PDI Speed Trials</td>
+            <td>{{ reportData.max_rpm_pdi_trials || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>24.</td>
+            <td class="label-col">
+            If observed speed is less than 90% of PDI speed trials,
+            remedial action taken/initiated
+            </td>
+            <td>{{ reportData.remedial_action_speed_trials || '-' }}</td>
+        </tr>
+        <tr><td colspan="3" class="label-col">WEIGHING OF BOAT</td></tr> 
+        <tr>
+            <td>25.</td>
+            <td class="label-col">Weighing Undertaken On</td>
+            <td>{{ reportData.weighing_undertaken_on || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>26.</td>
+            <td class="label-col">At (Location)</td>
+            <td>{{ reportData.location || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>27.</td>
+            <td class="label-col">Observed Weight</td>
+            <td>{{ reportData.observed_weight || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>28.</td>
+            <td class="label-col">Weight Recorded During PDI Trials</td>
+            <td>{{ reportData.weight_recorded_pdi || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>29.</td>
+            <td class="label-col">
+            If observed weight is greater than 10% of PDI trials weight,
+            remedial action taken/initiated
+            </td>
+            <td>{{ reportData.remedial_action_weight || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>30.</td>
+            <td class="label-col">Major Repairs Undertaken Since Last Return on Hull</td>
+            <td>{{ reportData.major_repairs || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>31.</td>
+            <td class="label-col">Assessed Remaining Life of Hull - Year</td>
+            <td>{{ reportData.remaining_life_hull || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>32.</td>
+            <td class="label-col">
+            Assessed Remaining Life of Collar / Due Date for Change of Collar
+            </td>
+            <td>{{ reportData.collar_due_date || '-' }}</td>
+        </tr>
+
+        <tr>
+            <td>33.</td>
+            <td class="label-col">Validity of IMO Certificate</td>
+            <td>
+              <ng-container *ngIf="reportData.documentUrl; else plainVal">
+                <a
+                  [href]="reportData.documentUrl"
+                  target="_blank"
+                  class="doc-url-link"
+                >
+                  {{ reportData.validity_imo_certificate || reportData.documentUrl }}
+                </a>
+              </ng-container>
+              <ng-template #plainVal>
+                {{ reportData.validity_imo_certificate || '-' }}
+              </ng-template>
+            </td>
+        </tr>
+
+        <tr>
+            <td>34.</td>
+            <td class="label-col">Remarks of Assessment Board (Unit)</td>
+            <td>{{ reportData.remarks || '-' }}</td>
+        </tr>
+
+        <tr><td colspan="3" class="label-col">AUTHORITY SIGNATURE</td></tr> 
+      <tr>
+  <td colspan="3" class="signature-table-cell">
+
+    <table class="signature-table">
+
+      <thead>
+        <tr>
+          <th class="signature-table-col-header text-black font-bold">Board Formation Authority</th>
+          <th class="signature-table-col-header text-black font-bold">Board Member 1</th>
+          <th class="signature-table-col-header text-black font-bold">Board Member 2</th>
+          <th class="signature-table-col-header text-black font-bold">Board President</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>{{ reportData.board_formation_authority || '-' }}</td>
+          <td>{{ reportData.board_member1 || '-' }}</td>
+          <td>{{ reportData.board_member2 || '-' }}</td>
+          <td>{{ reportData.board_president || '-' }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </td>
+</tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+    <!-- STATUS BELOW TABLE -->
+    <div class="report-status-footer">
+      Status : <span class="report-status-badge">{{ reportStatus }}</span>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,62 @@
+<div class="glass-card daf-form" [formGroup]="form">
+  <div class="daf-form-head">
+    <span class="daf-form-title">Digital Defect Book — Services</span>
+    <span class="daf-mand-note">Fields marked <span class="daf-star">*</span> are mandatory</span>
+  </div>
+
+  <div class="daf-form-grid">
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Service <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">Services Master</span>
+      </div>
+      <app-select-input placeholder="Select Service" [required]="true" [options]="serviceOptions" [error]="submitAttempted() && form.controls.service.invalid" formControlName="service" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Linked Equipment <span class="daf-field-hint">(optional)</span></span>
+        <span class="daf-field-badge">CMMS</span>
+      </div>
+      <app-select-input placeholder="Select Linked Equipment" [options]="linkedEquipmentOptions" formControlName="linkedEquipment" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Date Required <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-input-field type="date" [required]="true" [invalid]="submitAttempted() && form.controls.dateRequired.invalid" formControlName="dateRequired" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Place of Ship Availability <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-input-field type="text" placeholder="Enter place of ship availability" [required]="true" [invalid]="submitAttempted() && form.controls.placeOfShipAvailability.invalid" formControlName="placeOfShipAvailability" />
+    </div>
+
+    <div class="daf-field daf-field--wide">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Service Description <span class="daf-star">*</span></span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-rich-text-editor placeholder="Enter service description" formControlName="serviceDescription" />
+    </div>
+
+    <div class="daf-field">
+      <div class="daf-field-head">
+        <span class="daf-field-label">Attachment</span>
+        <span class="daf-field-badge daf-field-badge--user">User</span>
+      </div>
+      <app-file-input placeholder="Attach Word / PDF / image / audio" formControlName="attachment" />
+    </div>
+  </div>
+
+  <div class="daf-form-actions">
+    <app-button type="button" class="daf-btn daf-btn--ghost" (click)="cancel()">Cancel</app-button>
+    <app-button type="button" class="daf-btn daf-btn--secondary" (click)="saveDraft()">Save</app-button>
+    <app-button type="button" class="daf-btn daf-btn--primary" (click)="submit()">Raise DART</app-button>
+  </div>
+</div>

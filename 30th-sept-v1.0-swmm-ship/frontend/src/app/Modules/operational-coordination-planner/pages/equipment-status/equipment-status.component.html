@@ -1,0 +1,40 @@
+<div class="oc-equip-page">
+  <div class="oc-equip-page__banner glass-card">
+    <app-icon name="wrench" [size]="16" variant="inherit" />
+    <span>Equipment Status</span>
+  </div>
+
+  <div class="oc-equip-page__accordion glass-card">
+    @for (section of sections; track section.label) {
+      <div class="oc-equip-panel" [class.oc-equip-panel--open]="isExpanded(section)">
+        <app-button type="button" class="oc-equip-panel__head" (click)="toggle(section)">
+          <span class="oc-equip-panel__label">{{ section.label }}</span>
+          <app-icon [name]="isExpanded(section) ? 'chevron-up' : 'chevron-down'" [size]="16" variant="inherit" />
+        </app-button>
+
+        @if (isExpanded(section)) {
+          <div class="oc-equip-panel__body">
+            <div class="oc-equip-table">
+              <div class="oc-equip-table__head">
+                <span>Equipment Name</span>
+                <span>Status</span>
+              </div>
+              @for (item of items().get(section.label); track item.name) {
+                <div class="oc-equip-table__row">
+                  <span>{{ item.name }}</span>
+                  <span
+                    class="oc-equip-status"
+                    [class.oc-equip-status--ok]="item.status === 'Operational'"
+                    [class.oc-equip-status--bad]="item.status === 'Non-Operational'"
+                  >
+                    {{ item.status }}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

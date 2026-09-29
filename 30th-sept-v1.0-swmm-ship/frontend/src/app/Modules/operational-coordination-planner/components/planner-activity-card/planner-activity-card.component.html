@@ -1,0 +1,28 @@
+<div [class]="cls()">
+      @if (stacked() && a().conflict) {
+        <div class="stack-head">
+          <div
+            class="title-l"
+            [attr.title]="a().title">
+            {{ a().title }}
+          </div>
+          <span class="conflict-badge">!</span>
+        </div>
+      } @else {
+      <div
+        class="title-l"
+        [attr.title]="a().title">
+        {{ a().title }}
+      </div>
+      }
+      <div class="sub-l">{{ a().sub }}</div>
+      <div class="meta-l">
+        <app-icon name="clock" [size]="10" />
+        <span>{{ a().t }}</span>
+      </div>
+      @if (a().prog > 0) {
+        <div class="progress-l">
+          <div class="fill" [style.width.%]="a().prog"></div>
+        </div>
+      }
+    </div>

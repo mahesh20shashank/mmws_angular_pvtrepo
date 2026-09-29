@@ -1,0 +1,135 @@
+@if (isOpen) {
+<app-modal title="Raise Ticket to HelpDesk" size="lg" (closeModal)="onClose()">
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" class="flex-1 overflow-y-auto p-1 flex flex-col gap-4">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold text-[var(--text-primary)]">Ship Name</label>
+        <input type="text" [value]="shipName || 'N/A'" disabled class="w-full px-3 py-2 rounded-lg border border-[var(--border-input,var(--border-primary))] bg-[var(--bg-input)] text-[var(--text-primary)] text-sm opacity-70 cursor-not-allowed outline-none" />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold text-[var(--text-primary)]">Department</label>
+        <input type="text" [value]="department" disabled class="w-full px-3 py-2 rounded-lg border border-[var(--border-input,var(--border-primary))] bg-[var(--bg-input)] text-[var(--text-primary)] text-sm opacity-70 cursor-not-allowed outline-none" />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold text-[var(--text-primary)]">Title <span class="text-red-500">*</span></label>
+      <input 
+        type="text" 
+        formControlName="title" 
+        placeholder="Enter a short title for the issue" 
+        class="w-full px-3 py-2 rounded-lg border text-sm transition-all outline-none bg-[var(--bg-input)] text-[var(--text-primary)]"
+        [ngClass]="isControlInvalid('title') ? 'border-red-500 focus:border-red-500' : 'border-[var(--border-input,var(--border-primary))] focus:border-[var(--subheading-color)]'" />
+      @if (isControlInvalid('title')) {
+        <p class="mt-1 errorClass">Title is required.</p>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold text-[var(--text-primary)]">Ticket Description <span class="text-red-500">*</span></label>
+      <textarea 
+        rows="3" 
+        formControlName="description" 
+        placeholder="Describe the issue in detail" 
+        class="w-full px-3 py-2 rounded-lg border text-sm transition-all outline-none resize-y bg-[var(--bg-input)] text-[var(--text-primary)]"
+        [ngClass]="isControlInvalid('description') ? 'border-red-500 focus:border-red-500' : 'border-[var(--border-input,var(--border-primary))] focus:border-[var(--subheading-color)]'"></textarea>
+      @if (isControlInvalid('description')) {
+        <p class="mt-1 errorClass">Ticket Description is required.</p>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold text-[var(--text-primary)]">Priority</label>
+        <select formControlName="priority" class="w-full px-3 py-2 rounded-lg border border-[var(--border-input,var(--border-primary))] bg-[var(--bg-input)] text-[var(--text-primary)] text-sm focus:border-[var(--subheading-color)] transition-all outline-none">
+          <option value="medium" class="bg-[var(--bg-dropdown,#1b2431)] text-[var(--text-primary)]">Medium</option>
+          <option value="low" class="bg-[var(--bg-dropdown,#1b2431)] text-[var(--text-primary)]">Low</option>
+          <option value="high" class="bg-[var(--bg-dropdown,#1b2431)] text-[var(--text-primary)]">High</option>
+        </select>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold text-[var(--text-primary)]">Mobile No</label>
+        <input 
+          type="text" 
+          formControlName="mobileNo" 
+          maxlength="10"
+          (input)="onMobileInput($event)"
+          placeholder="Enter 10 digit calling mobile number" 
+          class="w-full px-3 py-2 rounded-lg border text-sm transition-all outline-none bg-[var(--bg-input)] text-[var(--text-primary)]"
+          [ngClass]="isControlInvalid('mobileNo') ? 'border-red-500 focus:border-red-500' : 'border-[var(--border-input,var(--border-primary))] focus:border-[var(--subheading-color)]'" />
+        @if (isControlInvalid('mobileNo')) {
+          <p class="mt-1 errorClass">Enter a valid 10-digit Indian mobile number.</p>
+        }
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold text-[var(--text-primary)]">NCN No</label>
+        <input type="text" formControlName="ncnNo" placeholder="Enter your NCN number" class="w-full px-3 py-2 rounded-lg border border-[var(--border-input,var(--border-primary))] bg-[var(--bg-input)] text-[var(--text-primary)] text-sm focus:border-[var(--subheading-color)] transition-all outline-none" />
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-semibold text-[var(--text-primary)]">NCN Email Id</label>
+        <input type="text" formControlName="ncnEmailId" placeholder="Enter your NCN Email Id"
+          class="w-full px-3 py-2 rounded-lg border text-sm transition-all outline-none bg-[var(--bg-input)] text-[var(--text-primary)]"
+          [ngClass]="isControlInvalid('ncnEmailId') ? 'border-red-500 focus:border-red-500' : 'border-[var(--border-input,var(--border-primary))] focus:border-[var(--subheading-color)]'" />
+        @if (isControlInvalid('ncnEmailId')) {
+          <p class="mt-1 errorClass">Enter a valid email address.</p>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold text-[var(--text-primary)]">
+        Opening Remark
+        @if (selectedFile) {
+          <span class="text-red-500">*</span>
+        }
+      </label>
+      <textarea 
+        rows="2" 
+        formControlName="openingRemark" 
+        placeholder="Add an opening remark" 
+        class="w-full px-3 py-2 rounded-lg border text-sm transition-all outline-none resize-y bg-[var(--bg-input)] text-[var(--text-primary)]"
+        [ngClass]="isControlInvalid('openingRemark') ? 'border-red-500 focus:border-red-500' : 'border-[var(--border-input,var(--border-primary))] focus:border-[var(--subheading-color)]'"></textarea>
+      
+      @if (isControlInvalid('openingRemark')) {
+        <p class="mt-1 errorClass">Opening Remark is required when a file attachment is selected.</p>
+      } @else {
+        <span class="text-[11px] text-[var(--text-muted)]">Optional, but required if you attach a file.</span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-xs font-semibold text-[var(--text-primary)]">
+        Attachment <span class="text-[11px] font-normal text-[var(--text-muted)]">(JPG, PNG, PDF only)</span>
+      </label>
+      <div class="flex items-center gap-3 p-2 border rounded-lg bg-[var(--bg-input)]"
+        [ngClass]="fileError ? 'border-red-500' : 'border-[var(--border-input,var(--border-primary))]'">
+        <label class="bg-[var(--bg-card)] border border-[var(--border-primary)] hover:bg-[var(--bg-input)] text-[var(--text-primary)] text-xs font-semibold px-3 py-1.5 rounded cursor-pointer transition-all whitespace-nowrap">
+          Choose Files
+          <input type="file" (change)="onFileChange($event)" accept=".jpg,.jpeg,.png,.pdf" hidden />
+        </label>
+        <span class="text-xs text-[var(--text-muted)] truncate flex-1">{{ selectedFileName || 'No file chosen' }}</span>
+      </div>
+      @if (fileError) {
+        <p class="mt-1 errorClass">{{ fileError }}</p>
+      }
+    </div>
+  </form>
+
+  <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-[var(--border-primary)]">
+    <app-button 
+      type="button" 
+      class="px-4 py-2 rounded-lg border border-[var(--border-primary)] text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] transition-all cursor-pointer" 
+      (click)="onClose()">Cancel</app-button>
+    <app-button 
+      type="button" 
+      class="bg-blue-500 text-white font-medium hover:bg-blue-600 px-4 py-2 rounded-md text-sm btn-raise-ticket" 
+      (click)="onSubmit()">Raise Ticket</app-button>
+  </div>
+</app-modal>
+}
+
+

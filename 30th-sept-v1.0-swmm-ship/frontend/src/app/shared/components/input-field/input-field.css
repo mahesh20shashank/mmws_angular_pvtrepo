@@ -1,0 +1,185 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Label */
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.required {
+  color: var(--error-color, #de1f1f);
+}
+
+/* Input Box */
+.input-container {
+  height: 42px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 16px;
+
+  border: 1px solid var(--border-input);
+  border-radius: 12px;
+
+  background: var(--bg-input);
+
+  transition: all .2s ease;
+}
+
+.input-container.active {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(29, 150, 233, .15);
+}
+
+.input-container:hover {
+  border-color: var(--text-muted);
+}
+
+.input-container.readonly-field {
+  background: var(--bg-input-disabled);
+  border: 1.5px dashed var(--text-muted);
+  /* Matches app-select-input's `.dropdown-trigger.disabled` dimming so every locked field in a form
+     — dropdown or text — reads as equally non-editable, not just the dropdowns. */
+  opacity: 0.6;
+  /* app-select-input's own `.dropdown-trigger.readonly`/`.disabled` already do this — the native
+     `<input readonly>` below has no default browser cursor change of its own (unlike a real
+     `disabled` input), so a locked Deck No/Frame Station/Qty Fitted/... field still showed the
+     ordinary text (I-beam) cursor on hover, the one visual cue that DIDN'T yet say "you can't type
+     here" even after the dashed border/background/opacity fix. Set on both the container and the
+     input itself — `cursor` inherits by default, but the input's own UA style for a focusable
+     text-entry element can still win on some browsers, so this isn't left to inheritance alone. */
+  cursor: not-allowed;
+}
+
+.input-container.readonly-field input {
+  cursor: not-allowed;
+}
+
+.input-container.input-container--invalid {
+  border-color: var(--error-color, #de1f1f);
+  outline: 1px solid var(--error-color, #de1f1f);
+  outline-offset: -1px;
+}
+
+.input-container.input-container--invalid input::placeholder {
+  color: var(--error-color, #de1f1f);
+}
+
+/* Live "required & blank" hint (pre-submit) — a light/muted red, distinct from the full-strength
+   red that only appears after a failed Submit. Opaque (not the previous 0.65-alpha) — the
+   translucent version measured well under 4.5:1 once composited over the real dark background
+   (SonarQube css:S7924); matches app-select-input's `.dropdown-trigger.placeholder-error
+   .placeholder-text`, which got this same fix already — this rule had been missed. */
+.input-container.input-container--placeholder-invalid input::placeholder {
+  color: #e5877f;
+}
+
+/* Locked wins over "needs fixing" styling, not the other way round — app-select-input's own
+   readonly+invalid combo already reads this way (its own "invalid" state only tints the
+   placeholder text, no border/outline change at all, so its dashed readonly-field look was
+   never actually fighting anything) — this field's stronger red border+outline above was
+   overpowering readonly-field's dashed border/background by pure source order, making a locked
+   Deck No/Frame Station/... look like "fix this right now" even though the operator has no way
+   to touch it directly (the value has to come from a cascade, or a "(if not auto-fetched)"
+   fallback field elsewhere on the form) — exactly the wrong signal for a field that's locked
+   because it's *waiting on data*, not because the operator left it blank by mistake. */
+.input-container.readonly-field.input-container--invalid,
+.input-container.readonly-field.input-container--placeholder-invalid {
+  border: 1.5px dashed var(--text-muted);
+  outline: none;
+}
+
+.input-container.readonly-field.input-container--invalid input::placeholder,
+.input-container.readonly-field.input-container--placeholder-invalid input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Input */
+input {
+  width: 100%;
+  height: 100%;
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: var(--text-primary);
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Matches the reference design's date-field placeholder shade (SFD Module standalone mock) — a
+   muted slate-blue distinct from the generic --text-muted grey used by every other field. Darkened
+   from the reference's literal #7d90a4 to clear WCAG AA text contrast (4.5:1). Applies to every
+   `type="date"` app-input-field usage. */
+input.date-placeholder::placeholder {
+  color: #5a6b7d;
+}
+
+/* Native `type="date"` inputs don't support `::placeholder` for their empty dd-mm-yyyy segments
+ * (that's a real limitation, not covered by the rule above) — without this, the empty format hint
+ * renders in the same bright `--text-primary` as an actual chosen date, reading as if a value were
+ * already entered. `.date-empty` (set in input-field.html when the control has no value) recolors
+ * the whole field to the same muted shade while empty; picking a date removes the class. */
+input[type="date"].date-empty {
+  color: #5a6b7d;
+}
+
+/* Remove number arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* Date input */
+input[type="date"] {
+  color: var(--text-primary);
+  color-scheme: var(--native-color-scheme, dark);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: var(--calendar-icon-filter, invert(1));
+  cursor: pointer;
+}
+
+/* Time input — same treatment as `type="date"` above. Without `color-scheme`, the clock icon
+   renders in the browser's default (usually dark) glyph regardless of theme, reading as barely
+   visible/black against this app's dark modal backgrounds (e.g. Start New Sailing's Departure
+   Time field). */
+input[type="time"] {
+  color: var(--text-primary);
+  color-scheme: var(--native-color-scheme, dark);
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: var(--calendar-icon-filter, invert(1));
+  cursor: pointer;
+}

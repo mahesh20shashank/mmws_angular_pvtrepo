@@ -1,0 +1,253 @@
+.ltd-panel {
+  padding: 1.25rem;
+}
+
+.ltd-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.ltd-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.15rem;
+}
+
+.ltd-panel__sub {
+  margin: 0.2rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.ltd-tabs-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: 0.5rem;
+}
+
+.ltd-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.45rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ltd-tab-btn--active {
+  color: var(--accent-blue);
+  background: var(--bg-card);
+  font-weight: 600;
+}
+
+.ltd-badge {
+  background: var(--icon-warning, #D97706);
+  color: #ffffff;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.05rem 0.4rem;
+}
+
+.ltd-filter-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.ltd-filter-row__label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ltd-filter-row__fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.ltd-filter-field {
+  width: 190px;
+}
+
+/* The From/To Date inputs and the search box (rendered inside <app-toolbar-search>) both use the
+   shared `.form-field-input` Tailwind utility, whose default opaque-white border reads far bolder
+   than app-select-input's own subtle themed border — scoped here to this page only, rather than
+   touching the global class every other module also relies on. */
+/* `.form-field-label` (styles.css `@layer components`) compiles Tailwind's `leading-6 py-2.5`
+   into ~44px of label height — far taller than app-select-input's own `.input-label` (~16px,
+   no padding). With `.ltd-filter-row__fields` using `align-items: flex-end`, that mismatch pushed
+   the shorter Leave Type/Status fields down to keep their bottoms aligned, so From/To Date's
+   labels visibly sat higher with a bigger gap above the input. Stripped back to match
+   `.input-label`'s sizing exactly. */
+.ltd-filter-field .form-field-label {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  padding: 0;
+  margin: 0;
+}
+
+.ltd-filter-field .form-field-input,
+:host ::ng-deep .grid-toolbar__search .form-field-input {
+  height: 45px;
+  border-radius: 10px;
+  border-color: var(--border-input);
+  background: var(--bg-input);
+}
+
+.ltd-section-heading {
+  margin: 0.25rem 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: 0.4rem;
+}
+
+.ltd-modal__title {
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.ltd-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.ltd-radio-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.ltd-radio-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ltd-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem 1rem;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .ltd-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+:host ::ng-deep .ltd-form-grid .dropdown-wrapper,
+:host ::ng-deep .ltd-form-grid .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+:host ::ng-deep .ltd-form-grid .input-label,
+:host ::ng-deep .ltd-form-grid .external-label {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--text-muted) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .ltd-form-grid .dropdown-trigger,
+:host ::ng-deep .ltd-form-grid .input-container {
+  height: 42px !important;
+  border-radius: 10px !important;
+}
+
+.ltd-hint {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.ltd-error {
+  display: block;
+  margin-top: 0.3rem;
+  color: #ff6b72;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.ltd-field--invalid {
+  border-color: #ff6b72 !important;
+}
+
+.ltd-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  grid-column: 1 / -1;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reject {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}

@@ -1,0 +1,174 @@
+<div class="monitor-approved-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- MONITOR APPROVED REQUISITIONS Filter Card using PanelCard -->
+  <app-panel-card title="MONITOR APPROVED REQUISITIONS" icon="search" class="block">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2 items-end">
+
+      <!-- Department Filter -->
+      <div class="space-y-1">
+        <app-select-input label="Department" placeholder="Select Department"
+          [options]="formattedDepartmentOptions()" [ngModel]="selectedDepartmentFilter()"
+          (ngModelChange)="selectedDepartmentFilter.set($event)" name="deptFilter" />
+      </div>
+
+      <!-- Type of Hotwork Filter -->
+      <div class="space-y-1">
+        <app-select-input label="Type of Hotwork" placeholder="Select Type of Hotwork"
+          [options]="formattedTypeOptions()" [ngModel]="selectedTypeFilter()"
+          (ngModelChange)="selectedTypeFilter.set($event)" name="typeFilter" />
+      </div>
+
+      <!-- Hotwork Location Filter -->
+      <div class="space-y-1">
+        <label for="filter-location" class="text-xs font-bold mar-label">Hotwork Location</label>
+        <input id="filter-location" type="text" [ngModel]="locationSearchInput()"
+          (ngModelChange)="locationSearchInput.set($event)" placeholder="Enter location..."
+          class="w-full mar-input text-xs px-3.5 py-2.5 rounded-xl border focus:outline-none focus:border-sky-500 transition-colors font-medium placeholder:text-[var(--text-muted)]" />
+      </div>
+
+      <!-- Scheduled for the Day Checkbox & Filter Buttons -->
+      <div class="flex flex-col gap-2 justify-end">
+        <label class="flex items-center gap-2 text-xs text-[var(--text-primary)] font-medium cursor-pointer">
+          <input type="checkbox" [ngModel]="scheduledTodayOnly()" (ngModelChange)="scheduledTodayOnly.set($event)"
+            class="rounded border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500 w-4 h-4 cursor-pointer" />
+          <span>Scheduled for the Day</span>
+        </label>
+
+        <div class="flex items-center gap-2 shrink-0 whitespace-nowrap">
+          <app-button type="button" (click)="applyTopFilters()" (keydown.enter)="applyTopFilters()" style="color: #ffffff !important;"
+            class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-bold h-[34px] px-4 rounded-xl text-xs tracking-wide shadow-md transition-colors cursor-pointer inline-flex items-center justify-center whitespace-nowrap">
+            <div class="flex items-center gap-1.5 whitespace-nowrap">
+
+              <span style="color: #ffffff !important;" class="!text-white whitespace-nowrap">Apply Filters</span>
+            </div>
+          </app-button>
+
+          <app-button type="button" (click)="clearAllFilters()" (keydown.enter)="clearAllFilters()"
+            class="border border-amber-500/40 text-amber-400 hover:bg-amber-500/10 h-[34px] px-3.5 rounded-xl text-xs inline-flex items-center justify-center gap-1.5 font-medium transition-colors cursor-pointer whitespace-nowrap">
+            <div class="flex items-center gap-1.5 whitespace-nowrap">
+              <app-icon name="filter" [size]="13" class="text-amber-400"></app-icon>
+              <span class="whitespace-nowrap">Clear Filters</span>
+            </div>
+          </app-button>
+        </div>
+      </div>
+
+    </div>
+  </app-panel-card>
+
+  <!-- Approved Requisition Records Panel using PanelCard and DataGrid -->
+  <app-panel-card title="Approved Requisition Records" icon="history" class="relative z-10 block">
+    <!-- Shared Component Export Toolbar & Global Search inside panelActions slot -->
+    <div panelActions class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+      <app-export-toolbar [disabled]="filteredRows().length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+
+      <div class="flex items-center gap-2 text-xs font-medium mar-label">
+        <label for="mon-search-input">Search:</label>
+        <input id="mon-search-input" type="text" [ngModel]="globalSearch()" (ngModelChange)="globalSearch.set($event)"
+          placeholder="Search..."
+          class="mar-input text-xs px-3 py-1.5 rounded-lg border focus:outline-none focus:border-sky-500 w-36 sm:w-44" />
+      </div>
+    </div>
+
+    <!-- Shared Component AG-Grid DataGrid Component for Records Table -->
+    <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs" [pageSize]="pageSize()" [autoHeight]="true"
+      (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+  </app-panel-card>
+</div>
+
+<!-- Shared Detail Drawer for Monitoring Record Details -->
+<app-detail-drawer [open]="!!selectedRecord()" [wide]="true" [titleMode]="true"
+  [label]="selectedRecord()?.hotworkCode ?? 'Approved Requisition Details'"
+  subtitle="Approved Hotwork Record & Active Operations" iconName="flame" iconColor="#0ea5e9" (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  <div class="space-y-5 p-2 text-sm text-[var(--text-primary)]">
+
+    <!-- Details Summary Card -->
+    <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-3">
+      <div
+        class="flex items-center gap-2 text-[#1069AB] dark:text-sky-400 font-bold text-xs uppercase tracking-wider pb-2 border-b border-[var(--border-primary)]">
+        <app-icon name="info" [size]="16" class="text-[#1069AB] dark:text-sky-400" />
+        <span>Hotwork Requisition Overview</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Hotwork Code:</span><span
+            class="text-[#1069AB] dark:text-sky-400 font-bold">{{ item.hotworkCode }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Date of
+            Hotwork:</span><span class="text-[var(--text-primary)] font-semibold">{{ item.dateOfHotwork }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Type of
+            Hotwork:</span><span class="text-[var(--text-primary)] font-semibold">{{ item.typeOfHotwork }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Department:</span><span
+            class="text-[var(--text-primary)] font-semibold">{{ item.departmentSubDept }}</span></div>
+        <div class="flex justify-between items-start"><span
+            class="text-[var(--text-muted)] shrink-0">Location:</span><span
+            class="text-[var(--text-primary)] font-medium text-right">{{ item.hotworkLocation }}</span></div>
+        <div class="flex justify-between items-start"><span class="text-[var(--text-muted)] shrink-0">Adjacent
+            Compartment:</span><span class="text-[var(--text-primary)] font-medium text-right">{{
+            item.adjacentCompartment }}</span>
+        </div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Sentry Names:</span><span
+            class="text-emerald-700 dark:text-emerald-400 font-semibold">{{ item.hotworkSentryNames }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Safe to Weld
+            Cert:</span><span class="text-emerald-700 dark:text-emerald-300 font-bold">{{ item.safeToWeldCert }}</span>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-[var(--border-primary)] text-xs">
+        <span class="text-[var(--text-muted)] block mb-1">Description:</span>
+        <p class="text-[var(--text-primary)] bg-[var(--bg-card)] p-2.5 rounded-lg border border-[var(--border-input)]">
+          {{ item.hotworkDescription }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Execution Action Controls -->
+    <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border-primary)]">
+        <div
+          class="flex items-center gap-2 text-[#1069AB] dark:text-sky-400 font-bold text-xs uppercase tracking-wider">
+          <app-icon name="activity" [size]="16" class="text-[#1069AB] dark:text-sky-400" />
+          <span>Hotwork Operation Status</span>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-bold"
+          [class.bg-emerald-100]="item.startPauseStatus === 'In Progress' || item.startPauseStatus === 'Completed'"
+          [class.text-emerald-800]="item.startPauseStatus === 'In Progress' || item.startPauseStatus === 'Completed'"
+          [class.dark:bg-emerald-500\/20]="item.startPauseStatus === 'In Progress' || item.startPauseStatus === 'Completed'"
+          [class.dark:text-emerald-400]="item.startPauseStatus === 'In Progress' || item.startPauseStatus === 'Completed'"
+          [class.bg-amber-100]="item.startPauseStatus === 'Paused'"
+          [class.text-amber-800]="item.startPauseStatus === 'Paused'"
+          [class.dark:bg-amber-500\/20]="item.startPauseStatus === 'Paused'"
+          [class.dark:text-amber-400]="item.startPauseStatus === 'Paused'"
+          [class.bg-slate-200]="item.startPauseStatus === 'Not Started'"
+          [class.text-slate-800]="item.startPauseStatus === 'Not Started'"
+          [class.dark:bg-slate-700\/40]="item.startPauseStatus === 'Not Started'"
+          [class.dark:text-slate-300]="item.startPauseStatus === 'Not Started'">
+          {{ item.startPauseStatus }}
+        </span>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        @if (!item.isCompleted) {
+        <app-button type="button" (click)="toggleStartPause(item)" (keydown.enter)="toggleStartPause(item)"
+          class="px-4 py-2 rounded-lg bg-[#1069AB]/10 hover:bg-[#1069AB]/20 text-[#1069AB] border border-[#1069AB]/30 dark:bg-sky-600/30 dark:hover:bg-sky-600/50 dark:text-sky-200 dark:border-sky-500/40 text-xs font-bold transition-all cursor-pointer">
+          {{ item.startPauseStatus === 'In Progress' ? 'Pause Operation' : item.startPauseStatus === 'Paused' ? 'Resume
+          Operation' : 'Start Hotwork' }}
+        </app-button>
+        <app-button type="button" (click)="markCompleted(item)" (keydown.enter)="markCompleted(item)"
+          class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-500/20 cursor-pointer">
+          Mark Completed
+        </app-button>
+        } @else {
+        <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+          <app-icon name="check-circle" [size]="16" class="text-emerald-700 dark:text-emerald-400" />
+          Hotwork Completed
+        </span>
+        }
+      </div>
+    </div>
+
+  </div>
+  }
+</app-detail-drawer>

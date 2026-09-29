@@ -1,0 +1,123 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>IIF Details {{ iifNo() ? "— " + iifNo() : "" }}</h3>
+  </div>
+
+  @if (!loading()) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      @if (entry(); as row) {
+        <fieldset class="wed-fieldset">
+          <legend>Item &amp; Equipment Details</legend>
+          <div class="wed-detail-row"><span>WED Equipment Name</span><strong>{{ row.equipmentClass || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Category</span><strong>{{ row.category || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Item Description</span><strong>{{ row.itemDescription || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>SWMM Pattern No</span><strong>{{ row.itemCode || "-" }}</strong></div>
+        </fieldset>
+      }
+
+      <div class="wed-form-grid">
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Commonality in other Eqpt</div>
+          <input class="form-field-input" formControlName="comlyInOtherEqpt" />
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Annual Requirement *</div>
+          <input class="form-field-input" formControlName="annualReq" />
+          @if (form.controls.annualReq.invalid && form.controls.annualReq.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Phone No/Fax No *</div>
+          <input class="form-field-input" formControlName="phoneNo" inputmode="numeric" />
+          @if (form.controls.phoneNo.invalid && form.controls.phoneNo.touched) {
+            <span class="form-error">
+              @if (form.controls.phoneNo.hasError("required")) {
+                Required.
+              } @else if (form.controls.phoneNo.hasError("pattern")) {
+                Numbers only.
+              } @else {
+                Number is too large.
+              }
+            </span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Specification</div>
+          <input class="form-field-input" formControlName="specification" />
+        </div>
+        <div class="wed-form-grid__field wed-form-grid__field--wide">
+          <app-textarea-input label="Vendor Address Details with GST No. *" formControlName="address" [rows]="2" />
+          @if (form.controls.address.invalid && form.controls.address.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Quantity Fitted in Eqpt *</div>
+          <input class="form-field-input" formControlName="qtyFittedInEqpt" />
+          @if (form.controls.qtyFittedInEqpt.invalid && form.controls.qtyFittedInEqpt.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Proposed MSL *</div>
+          <input class="form-field-input" formControlName="proposedMsl" />
+          @if (form.controls.proposedMsl.invalid && form.controls.proposedMsl.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <app-file-input label="Upload Photo" formControlName="iifPhoto" accept="image/*" [outsideLabel]="true" />
+          @if (existingIifPhoto()) {
+            <small class="wed-hint">Current photo on file.</small>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">Drawing No *</div>
+          <input class="form-field-input" formControlName="drawingNo" />
+          @if (form.controls.drawingNo.invalid && form.controls.drawingNo.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <app-file-input label="Upload Drawing Document" formControlName="drawingDoc" [outsideLabel]="true" />
+          @if (existingDrawingDoc()) {
+            <small class="wed-hint">Current drawing on file.</small>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">POEV Costing in Rupees *</div>
+          <input class="form-field-input" formControlName="poevCostingRs" />
+          @if (form.controls.poevCostingRs.invalid && form.controls.poevCostingRs.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <div class="form-field-label">BQ Amount in Rupees *</div>
+          <input class="form-field-input" formControlName="bqAmountRs" />
+          @if (form.controls.bqAmountRs.invalid && form.controls.bqAmountRs.touched) {
+            <span class="form-error">Required.</span>
+          }
+        </div>
+        <div class="wed-form-grid__field">
+          <app-file-input label="Upload Mark BQ Document" formControlName="bqDoc" [outsideLabel]="true" />
+          @if (existingBqDoc()) {
+            <small class="wed-hint">Current BQ document on file.</small>
+          }
+        </div>
+        <div class="wed-form-grid__field wed-form-grid__field--wide">
+          <app-textarea-input label="SS Remarks (Purpose of Incatyn)" formControlName="ssRemarks" [rows]="2" />
+        </div>
+      </div>
+
+      <div class="wed-form-actions">
+        <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+        <app-button type="submit" class="btn-primary" [disabled]="saving() || form.invalid">
+          {{ saving() ? "Saving..." : "Save" }}
+        </app-button>
+      </div>
+    </form>
+  }
+</div>

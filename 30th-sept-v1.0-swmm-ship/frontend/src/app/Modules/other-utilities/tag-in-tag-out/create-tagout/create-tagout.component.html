@@ -1,0 +1,516 @@
+<div class="tag-container  space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Header Bar -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <app-button type="button" (click)="goBack()"
+        class="p-1.5 rounded-lg tag-label hover:text-[var(--text-primary)] hover:bg-[var(--bg-icon-btn)] transition-colors"
+        title="Back to TagOut List">
+        <app-icon name="arrow-left" [size]="20"></app-icon>
+      </app-button>
+      <div class="flex items-center gap-2">
+        <app-icon name="plus" [size]="20" class="text-sky-400"></app-icon>
+        <h1 class="text-lg font-bold tracking-wide uppercase tag-title">
+          ADD TAGOUT
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  @if (errorMessage()) {
+  <div class="alert-error p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+    <app-icon name="alert-triangle" [size]="16" class="text-red-500 dark:text-red-400"></app-icon>
+    <span>{{ errorMessage() }}</span>
+  </div>
+  }
+  @if (successMessage()) {
+  <div class="alert-success p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+    <app-icon name="check-circle" [size]="16" class="text-emerald-500 dark:text-emerald-400"></app-icon>
+    <span>{{ successMessage() }}</span>
+  </div>
+  }
+
+  <!-- Main Form Card -->
+  <form (ngSubmit)="onSubmit()" class="glass-card p-6 rounded-[12px] space-y-8">
+
+    <!-- 1. BASIC INFORMATION -->
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          BASIC INFORMATION
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Date -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tag-date" class="text-xs font-semibold tag-label">Date <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="tag-date" type="date" [ngModel]="date()" (ngModelChange)="date.set($event)" name="date"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium cursor-not-allowed opacity-80"
+            readonly required />
+        </div>
+
+        <!-- Ship -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tag-ship" class="text-xs font-semibold tag-label">Ship <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="tag-ship" type="text" [ngModel]="ship()" (ngModelChange)="ship.set($event)" name="ship"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium cursor-not-allowed opacity-80"
+            readonly required />
+        </div>
+
+        <!-- Department -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tag-department" class="text-xs font-semibold tag-label">Department <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="tag-department" type="text" [ngModel]="department()" (ngModelChange)="department.set($event)"
+            name="department"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium cursor-not-allowed opacity-80"
+            readonly required />
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. EQUIPMENT DETAILS -->
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          EQUIPMENT DETAILS
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- TagOut Equipment Name -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="TagOut Equipment Name *" placeholder="Select Ship Equipment"
+            [options]="formattedEquipmentOptions()" [ngModel]="tagoutEquipmentName()"
+            (ngModelChange)="tagoutEquipmentName.set($event ? +$event : null)" name="tagoutEquipmentName"
+            [error]="isFieldInvalid('tagoutEquipmentName')" />
+          @if (isFieldInvalid('tagoutEquipmentName')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('tagoutEquipmentName')
+            }}</span>
+          }
+        </div>
+
+        <!-- Name Of Sub System -->
+        <div class="flex flex-col gap-1.5">
+          <label for="sub-system" class="text-xs font-semibold tag-label">Name Of Sub System <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="sub-system" type="text" [ngModel]="nameOfSubSystem()" (ngModelChange)="nameOfSubSystem.set($event)"
+            name="nameOfSubSystem" placeholder="Enter Name of Sub System" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('nameOfSubSystem')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500" />
+          @if (isFieldInvalid('nameOfSubSystem')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('nameOfSubSystem') }}</span>
+          }
+        </div>
+
+        <!-- Name Of Component -->
+        <div class="flex flex-col gap-1.5">
+          <label for="comp-name" class="text-xs font-semibold tag-label">Name Of Component <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="comp-name" type="text" [ngModel]="nameOfComponent()" (ngModelChange)="nameOfComponent.set($event)"
+            name="nameOfComponent" placeholder="Enter Name of Component" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('nameOfComponent')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500" />
+          @if (isFieldInvalid('nameOfComponent')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('nameOfComponent') }}</span>
+          }
+        </div>
+
+        <!-- Serial No Of Component -->
+        <div class="flex flex-col gap-1.5">
+          <label for="serial-no" class="text-xs font-semibold tag-label">Serial No Of Component <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="serial-no" type="text" [ngModel]="serialNoOfComponent()"
+            (ngModelChange)="serialNoOfComponent.set($event)" name="serialNoOfComponent"
+            placeholder="Enter Serial No of Component" maxlength="100"
+            [class.input-invalid]="isFieldInvalid('serialNoOfComponent')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500" />
+          @if (isFieldInvalid('serialNoOfComponent')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('serialNoOfComponent')
+            }}</span>
+          }
+        </div>
+
+        <!-- Pattern No Of Component -->
+        <div class="flex flex-col gap-1.5">
+          <label for="pattern-no" class="text-xs font-semibold tag-label">Pattern No Of Component</label>
+          <input id="pattern-no" type="text" [ngModel]="patternNoOfComponent()"
+            (ngModelChange)="patternNoOfComponent.set($event)" name="patternNoOfComponent"
+            placeholder="Enter Pattern No of Component" maxlength="100"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500" />
+        </div>
+
+        <!-- Weight Of Item (Kg) -->
+        <div class="flex flex-col gap-1.5">
+          <label for="weight-item" class="text-xs font-semibold tag-label">Weight Of Item (Kg)</label>
+          <input id="weight-item" type="text" [ngModel]="weightOfItem()" (ngModelChange)="onWeightInput($event)"
+            (keydown)="onlyNumberKey($event)" inputmode="decimal" maxlength="10" name="weightOfItem"
+            placeholder="Enter Weight of Item in (Kg)"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. STATUS & TYPE -->
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          STATUS & TYPE
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <!-- Type Radio Buttons -->
+        <div class="flex flex-col gap-2">
+          <span class="text-xs font-semibold tag-label">Type <span class="text-red-500 font-bold ml-0.5">*</span></span>
+          <div class="flex items-center gap-6 pt-1">
+            <label class="flex items-center gap-2 text-xs font-medium text-slate-200 cursor-pointer">
+              <input type="radio" name="type" value="Danger" [ngModel]="type()" (ngModelChange)="onTypeChange($event)"
+                class="accent-sky-500 w-4 h-4 cursor-pointer" />
+              Danger
+            </label>
+            <label class="flex items-center gap-2 text-xs font-medium text-slate-200 cursor-pointer">
+              <input type="radio" name="type" value="Warning" [ngModel]="type()" (ngModelChange)="onTypeChange($event)"
+                class="accent-sky-500 w-4 h-4 cursor-pointer" />
+              Warning
+            </label>
+          </div>
+        </div>
+
+        <!-- Condition Radio Buttons -->
+        <div class="flex flex-col gap-2">
+          <span class="text-xs font-semibold tag-label">Condition <span
+              class="text-red-500 font-bold ml-0.5">*</span></span>
+          <div class="flex items-center gap-5 pt-1">
+            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-200 cursor-pointer">
+              <input type="radio" name="condition" value="Ops" [ngModel]="condition()"
+                (ngModelChange)="condition.set($event)" class="accent-sky-500 w-4 h-4 cursor-pointer" />
+              Ops
+            </label>
+            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-200 cursor-pointer">
+              <input type="radio" name="condition" value="Non Ops" [ngModel]="condition()"
+                (ngModelChange)="condition.set($event)" class="accent-sky-500 w-4 h-4 cursor-pointer" />
+              Non Ops
+            </label>
+            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-200 cursor-pointer">
+              <input type="radio" name="condition" value="Partially Ops" [ngModel]="condition()"
+                (ngModelChange)="condition.set($event)" class="accent-sky-500 w-4 h-4 cursor-pointer" />
+              Partially Ops
+            </label>
+          </div>
+        </div>
+
+        <!-- Special Instructions (Shown for Warning type) -->
+        @if (type() === 'Warning') {
+        <div class="flex flex-col gap-1.5">
+          <label for="special-instructions" class="text-xs font-semibold tag-label">Special Instructions</label>
+          <input id="special-instructions" type="text" [ngModel]="specialInstructions()"
+            (ngModelChange)="specialInstructions.set($event)" name="specialInstructions"
+            placeholder="Enter special instructions..."
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- 4. DEPARTMENT & SCHEDULING -->
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          DEPARTMENT & SCHEDULING
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Department Affected -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="Department Affected *" placeholder="Select Department..."
+            [options]="formattedDepartmentOptions()" [ngModel]="departmentAffected()"
+            (ngModelChange)="departmentAffected.set($event ? '' + $event : '')" name="departmentAffected" />
+          <span class="text-[11px] text-slate-500">Select Department(s)...</span>
+        </div>
+
+        <!-- Expected Date Of Tag in -->
+        <div class="flex flex-col gap-1.5">
+          <label for="expected-tagin" class="text-xs font-semibold tag-label">Expected Date Of Tag in <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="expected-tagin" type="date" [ngModel]="expectedDateOfTagin()"
+            (ngModelChange)="expectedDateOfTagin.set($event)" name="expectedDateOfTagin"
+            [class.input-invalid]="isFieldInvalid('expectedDateOfTagin')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('expectedDateOfTagin')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('expectedDateOfTagin')
+            }}</span>
+          }
+        </div>
+
+        <!-- Tag Out Reason -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="Tag Out Reason *" placeholder="Select Reason..." [options]="formattedReasonOptions()"
+            [ngModel]="tagoutReason()" (ngModelChange)="onReasonChange($event ? '' + $event : '')"
+            name="tagoutReason" />
+          <span class="text-[11px] text-slate-500">Select reason...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. DESCRIPTION & MAINTAINER -->
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          DESCRIPTION & MAINTAINER
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- TagOut Description -->
+        <div class="flex flex-col gap-1.5">
+          <label for="tagout-desc" class="text-xs font-semibold tag-label">TagOut Description</label>
+          <textarea id="tagout-desc" [ngModel]="tagoutDescription()" (ngModelChange)="tagoutDescription.set($event)"
+            name="tagoutDescription" rows="3" placeholder="Enter detailed description..."
+            class="w-full bg-transparent border border-[var(--border-input)] rounded p-2 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500 resize-none h-28"></textarea>
+        </div>
+
+        <!-- TagOut Maintainer Name/Rank -->
+        <div class="flex flex-col gap-1.5">
+          <label for="maintainer" class="text-xs font-semibold tag-label">TagOut Maintainer Name/Rank <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="maintainer" type="text" [ngModel]="tagoutMaintainer()"
+            (ngModelChange)="tagoutMaintainer.set($event)" name="tagoutMaintainer"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium cursor-not-allowed opacity-80"
+            readonly required />
+        </div>
+      </div>
+    </div>
+
+    <!-- CONDITIONAL SECTION 1: TY LOAN / RTLAPP DETAILS -->
+    @if (tagoutReason() === 'ty_loan_rtlapp') {
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          TY LOAN / RTLAPP DETAILS
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="flex flex-col gap-1.5">
+          <label for="ty-loan-ship" class="text-xs font-semibold tag-label">Ty Loan Ship <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="ty-loan-ship" type="text" [ngModel]="tyLoanShip()" (ngModelChange)="tyLoanShip.set($event)"
+            name="tyLoanShip" placeholder="Enter Ty Loan Ship" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('tyLoanShip')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('tyLoanShip')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('tyLoanShip') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="ty-authority" class="text-xs font-semibold tag-label">Authority <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="ty-authority" type="text" [ngModel]="tyAuthority()" (ngModelChange)="tyAuthority.set($event)"
+            name="tyAuthority" placeholder="Enter Authority" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('tyAuthority')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('tyAuthority')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('tyAuthority') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="item-taken-by" class="text-xs font-semibold tag-label">Item Taken By (Name/Phone) <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="item-taken-by" type="text" [ngModel]="tyItemTakenBy()" (ngModelChange)="tyItemTakenBy.set($event)"
+            name="tyItemTakenBy" placeholder="Enter Name and Phone" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('tyItemTakenBy')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('tyItemTakenBy')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('tyItemTakenBy') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="additional-items" class="text-xs font-semibold tag-label">Any Additional Items <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="additional-items" type="text" [ngModel]="tyAdditionalItems()"
+            (ngModelChange)="tyAdditionalItems.set($event)" name="tyAdditionalItems"
+            placeholder="Enter Any Additional Items" maxlength="200"
+            [class.input-invalid]="isFieldInvalid('tyAdditionalItems')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('tyAdditionalItems')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('tyAdditionalItems') }}</span>
+          }
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- CONDITIONAL SECTION 2: SURVEY & DEMAND DETAILS -->
+    @if (tagoutReason() === 'survey_and_demand') {
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          SURVEY & DEMAND DETAILS
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="flex flex-col gap-1.5">
+          <label for="survey-authority" class="text-xs font-semibold tag-label">Authority <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="survey-authority" type="text" [ngModel]="surveryDemandAuthority()"
+            (ngModelChange)="surveryDemandAuthority.set($event)" name="surveryDemandAuthority"
+            placeholder="Enter Authority" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('surveryDemandAuthority')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('surveryDemandAuthority')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('surveryDemandAuthority')
+            }}</span>
+          }
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- CONDITIONAL SECTION 3: REPAIR / OVERHAULING DETAILS -->
+    @if (tagoutReason() === 'repair_or_overhauling') {
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          REPAIR / OVERHAULING DETAILS
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex flex-col gap-1.5">
+          <label for="ra-number" class="text-xs font-semibold tag-label">RA Number <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="ra-number" type="text" [ngModel]="repairRaNumber()" (ngModelChange)="repairRaNumber.set($event)"
+            name="repairRaNumber" placeholder="Enter RA Number" maxlength="100"
+            [class.input-invalid]="isFieldInvalid('repairRaNumber')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('repairRaNumber')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('repairRaNumber') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="oem-details" class="text-xs font-semibold tag-label">Landed In Centre No. / OEM Details <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="oem-details" type="text" [ngModel]="repairLandedDetails()"
+            (ngModelChange)="repairLandedDetails.set($event)" name="repairLandedDetails" placeholder="Enter OEM Details"
+            maxlength="150" [class.input-invalid]="isFieldInvalid('repairLandedDetails')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('repairLandedDetails')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('repairLandedDetails')
+            }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="repair-item-taken-by" class="text-xs font-semibold tag-label">Item Taken By (Name/Phone) <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="repair-item-taken-by" type="text" [ngModel]="repairItemTakenBy()"
+            (ngModelChange)="repairItemTakenBy.set($event)" name="repairItemTakenBy" placeholder="Enter Name and Phone"
+            maxlength="150" [class.input-invalid]="isFieldInvalid('repairItemTakenBy')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('repairItemTakenBy')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('repairItemTakenBy') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="repair-additional-items" class="text-xs font-semibold tag-label">Any Additional Items <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="repair-additional-items" type="text" [ngModel]="repairAdditionalItems()"
+            (ngModelChange)="repairAdditionalItems.set($event)" name="repairAdditionalItems"
+            placeholder="Enter Additional Items" maxlength="200"
+            [class.input-invalid]="isFieldInvalid('repairAdditionalItems')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('repairAdditionalItems')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('repairAdditionalItems')
+            }}</span>
+          }
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- CONDITIONAL SECTION 4: ABER REPLACEMENT DETAILS -->
+    @if (tagoutReason() === 'aber_replacement') {
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          ABER REPLACEMENT DETAILS
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="flex flex-col gap-1.5">
+          <label for="aber-authority" class="text-xs font-semibold tag-label">Authority <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="aber-authority" type="text" [ngModel]="aberAuthority()" (ngModelChange)="aberAuthority.set($event)"
+            name="aberAuthority" placeholder="Enter Authority" maxlength="150"
+            [class.input-invalid]="isFieldInvalid('aberAuthority')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('aberAuthority')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('aberAuthority') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="replacement-item" class="text-xs font-semibold tag-label">Replacement Item <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="replacement-item" type="text" [ngModel]="replacementItem()"
+            (ngModelChange)="replacementItem.set($event)" name="replacementItem" placeholder="Enter Replacement Item"
+            maxlength="150" [class.input-invalid]="isFieldInvalid('replacementItem')"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+          @if (isFieldInvalid('replacementItem')) {
+          <span class="text-[11px] text-[#f82c36] font-medium mt-0.5">{{ getFieldErrorMsg('replacementItem') }}</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="estimated-bom-date" class="text-xs font-semibold tag-label">Estimated BoM Arrival Date</label>
+          <input id="estimated-bom-date" type="date" [ngModel]="estimatedBomArrivalDate()"
+            (ngModelChange)="estimatedBomArrivalDate.set($event)" name="estimatedBomArrivalDate"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm" />
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- CONDITIONAL SECTION 5: CONSUMABLE SURVEY DETAILS -->
+    @if (tagoutReason() === 'consumable_survey') {
+    <div class="space-y-4">
+      <div class="border-b border-[var(--border-card)] pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-400">
+          CONSUMABLE SURVEY DETAILS
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex flex-col gap-1.5">
+          <label for="cs-tagout-desc" class="text-xs font-semibold tag-label">TagOut Description <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <textarea id="cs-tagout-desc" [ngModel]="tagoutDescription()" (ngModelChange)="tagoutDescription.set($event)"
+            name="csTagoutDescription" rows="3" placeholder="Enter detailed description for consumable survey..."
+            class="w-full bg-transparent border border-[var(--border-input)] rounded p-2 focus:outline-none focus:border-sky-400 text-sm placeholder:text-slate-500 resize-none h-28"
+            required></textarea>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="cs-maintainer" class="text-xs font-semibold tag-label">TagOut Maintainer Name/Rank <span
+              class="text-red-500 font-bold ml-0.5">*</span></label>
+          <input id="cs-maintainer" type="text" [ngModel]="tagoutMaintainer()"
+            (ngModelChange)="tagoutMaintainer.set($event)" name="csTagoutMaintainer"
+            class="w-full bg-transparent border-b tag-input py-1.5 focus:outline-none focus:border-sky-400 text-sm font-medium cursor-not-allowed opacity-80"
+            readonly required />
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Submit Action Button -->
+    <div class="pt-6 flex justify-center items-center gap-4">
+      <app-button type="submit" [disabled]="isSubmitting()" style="color: #ffffff !important;"
+        class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-bold py-2.5 px-8 rounded text-sm uppercase tracking-wider shadow-lg transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+        @if (isSubmitting()) {
+        <span style="color: #ffffff !important;" class="!text-white">Submitting...</span>
+        } @else {
+        <span style="color: #ffffff !important;" class="!text-white">Submit Tagout</span>
+        }
+      </app-button>
+      <app-button type="button" (click)="goBack()"
+        class="tag-btn-cancel font-semibold py-2.5 px-5 rounded text-xs uppercase tracking-wider transition-colors cursor-pointer">
+        Cancel
+      </app-button>
+    </div>
+  </form>
+</div>

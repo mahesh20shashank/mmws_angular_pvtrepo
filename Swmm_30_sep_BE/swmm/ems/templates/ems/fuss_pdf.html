@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 10mm;
+        }
+        body {
+            font-family: 'Verdana', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+        }
+        .header-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+        .main-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .main-table td {
+            padding: 10px;
+            border: 1px solid #000;
+            vertical-align: top;
+        }
+        .label {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .value {
+            font-size: 16px;
+            font-weight: normal;
+        }
+        .section-header {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            padding: 8px 10px;
+            border: 1px solid #000;
+            border-bottom: none;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+        .routine-content {
+            border: 1px solid #000;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+        .details-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .details-grid td {
+            border: 1px solid #000;
+            padding: 10px;
+        }
+        .signature-section {
+            width: 100%;
+            margin-top: 60px;
+        }
+        .sig-box {
+            width: 48%;
+            display: inline-block;
+            text-align: center;
+        }
+        .sig-line {
+            border-top: 1px solid #000;
+            margin: 40px auto 10px;
+            width: 80%;
+        }
+        .footer-remarks {
+            margin-top: 40px;
+            border: 2px solid #000;
+            padding: 15px;
+            text-align: center;
+        }
+        .footer-title {
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-title">FUSS INITIATION</div>
+
+        <table class="main-table">
+            <tr>
+                <td width="50%">
+                    <span class="label">Ship Name</span>
+                    <span class="value">{{ fuss.ship|default:"-" }}</span>
+                </td>
+                <td width="20%">
+                    <span class="label">Department</span>
+                    <span class="value">{{ fuss.department|default:"-" }}</span>
+                </td>
+                <td width="30%">
+                    <span class="label">Date</span>
+                    <span class="value">{{ fuss.fuss_date|date:"d M, Y" }}</span>
+                </td>
+            </tr>
+        </table>
+
+        <table class="main-table">
+            <tr>
+                <td width="40%">
+                    <span class="label">Equipment Code</span>
+                    <span class="value">{{ fuss.routine_description_id.equipment_name.equipment_code|default:fuss.equipment_sr_no }}</span>
+                </td>
+                <td>
+                    <span class="label">Equipment Name</span>
+                    <span class="value">{{ fuss.equipment|default:"-" }}</span>
+                </td>
+            </tr>
+        </table>
+
+        <table class="main-table">
+            <tr>
+                <td width="50%">
+                    <span class="label">Maintop / Schedule No.</span>
+                    <span class="value">{{ fuss.maintop_no|default:"-" }}</span>
+                </td>
+                <td>
+                    <span class="label">Frequency</span>
+                    <span class="value">{{ fuss.frequency|default:"-" }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="label">Last Undertaken</span>
+                    <span class="value">{{ fuss.last_undertaken|date:"d M, Y"|default:"-" }}</span>
+                </td>
+                <td>
+                    <span class="label">Date Due</span>
+                    <span class="value">{{ fuss.due_date|date:"d M, Y"|default:"-" }}</span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="section-header">
+            Sr No | R No - Brief Description of Routine
+            <span style="float: right;">Deferment: {{ fuss.recomm_deferment.deferment_code|default:"NO" }}</span>
+        </div>
+        <div class="routine-content">
+            <strong>{{ fuss.serial_no|default:"-" }} | {{ fuss.routine_description_id.routine_no|default:"-" }}</strong> - {{ fuss.routine_description_id.routine_description|default:"-" }}
+        </div>
+
+        <table class="details-grid">
+            <tr>
+                <td width="33%">
+                    <span class="label">Reason Code</span>
+                    <span class="value">{{ fuss.reason.reason_code|default:"-" }}</span>
+                </td>
+                <td width="33%">
+                    <span class="label">Inability Code</span>
+                    <span class="value">{{ fuss.inability.inability_code|default:"-" }}</span>
+                </td>
+                <td>
+                    <span class="label">Remarks</span>
+                    <span class="value">{{ fuss.remarks|default:"-" }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: #fafafa; font-size: 12px; color: #666;">
+                    <em>Reason Details: {{ fuss.reason.description|default:"N/A" }}</em>
+                </td>
+            </tr>
+        </table>
+
+        <div class="section-header">Entry Only if Reason Code is "ROMP"</div>
+        <table class="main-table">
+            <tr>
+                <td width="35%"><span class="label">Last SMP Completed</span> {{ fuss.last_smp_completed|date:"d M, Y"|default:"-" }}</td>
+                <td><span class="label">SMP Duration</span> {{ fuss.last_smp_duration|default:"-" }}</td>
+            </tr>
+            <tr>
+                <td><span class="label">Last AMP Completed</span> {{ fuss.last_amp_completed|date:"d M, Y"|default:"-" }}</td>
+                <td><span class="label">AMP Duration</span> {{ fuss.last_amp_duration|default:"-" }}</td>
+            </tr>
+            <tr>
+                <td><span class="label">Required WEF</span> {{ fuss.amp_smp_required_wef|date:"d M, Y"|default:"-" }}</td>
+                <td><span class="label">Duration</span> {{ fuss.amp_smp_duration|default:"-" }}</td>
+            </tr>
+        </table>
+
+        <div class="signature-section">
+            <div class="sig-box">
+                <div class="sig-line"></div>
+                <span class="label">Signature of HOD</span>
+            </div>
+            <div class="sig-box" style="float: right;">
+                <div class="sig-line"></div>
+                <span class="label">Commanding Officer</span>
+            </div>
+        </div>
+
+        <div class="footer-remarks">
+            <div class="footer-title">REMARKS BY OPS/ADMIN AUTHORITY</div>
+            <table width="100%" style="margin-top: 20px;">
+                <tr>
+                    <td align="left" width="50%"><span class="label">Date:</span> ________________</td>
+                    <td align="left"><span class="label">Designation:</span> ________________</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

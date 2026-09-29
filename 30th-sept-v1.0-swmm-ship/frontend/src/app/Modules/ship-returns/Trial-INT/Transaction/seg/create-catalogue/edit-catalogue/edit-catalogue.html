@@ -1,0 +1,48 @@
+<div class="mx-auto w-full px-2 py-1" *ngIf="pageReady">
+  <div
+    class="overflow-hidden border border-blue-950 bg-slate-100 shadow-[0_10px_24px_rgba(15,23,42,0.12)]">
+    <div
+      class="bg-[#1a2b48] px-4 py-2.5 text-sm font-semibold flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold transition hover:bg-white/20">
+          <i class="fa fa-arrow-left"></i>
+          Back
+        </button>
+        <span>Edit Catalogue</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 sm:p-6">
+      <app-add-form
+        #catalogueForm
+        [open]="true"
+        [isShowPopup]="false"
+        [formConfig]="formConfigForNewDetails"
+        [formData]="editFormData"
+        [isEditMode]="true"
+        fromTitle="Edit Catalogue">
+      </app-add-form>
+
+      <div
+        class="mt-6 flex items-center justify-end gap-3 border-t border-slate-200 pt-4">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold transition hover:bg-slate-50">
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="save()"
+          [disabled]="saving"
+          class="flex items-center gap-2 rounded-lg border border-blue-800 bg-blue-900 px-5 py-2 text-sm font-semibold shadow-sm transition hover:bg-blue-950 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100">
+          <app-icon name="check-circle" [size]="16" />
+          <span>{{ saving ? 'Saving...' : 'Save' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

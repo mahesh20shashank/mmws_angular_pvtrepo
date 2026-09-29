@@ -1,0 +1,18 @@
+<!-- Developed with Understanding: the track carries the progressbar role and every aria value.
+     aria-valuenow is null, and so omitted, in the indeterminate state. -->
+<div
+  class="progress-bar"
+  role="progressbar"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  [attr.aria-valuenow]="clamped()"
+  [attr.aria-valuetext]="valueText()"
+  [attr.aria-label]="label()"
+  [attr.aria-describedby]="describedBy() || null"
+>
+  <div
+    class="progress-bar__fill"
+    [class.progress-bar__fill--indeterminate]="clamped() === null"
+    [style.width.%]="clamped()"
+  ></div>
+</div>

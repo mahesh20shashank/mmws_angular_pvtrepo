@@ -1,0 +1,30 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card cardTitle="Exported Files DL 1" cardHeight="auto">
+  <app-data-grid
+    [rowData]="rows"
+    [columnDefs]="columnDefs"
+    [pagination]="true"
+    [pageSize]="10"
+    height="460px">
+  </app-data-grid>
+</app-master-card>
+
+@if (selectedRow()) {
+  <app-modal size="lg" (closeModal)="closeDetails()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">{{ selectedRow()!.ra_dl_name }} — Routine Details</h3>
+      <button type="button" (click)="closeDetails()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </button>
+    </div>
+
+    <app-data-grid
+      [rowData]="selectedRowDetails()"
+      [columnDefs]="detailColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="360px">
+    </app-data-grid>
+  </app-modal>
+}

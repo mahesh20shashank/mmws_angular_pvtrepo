@@ -1,0 +1,965 @@
+{
+  "formId": "nads_b",
+  "title": "NADS-B",
+  "sourceFile": "nads_b.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "NADS-B",
+      "sectionType": "form",
+      "fields": [],
+      "tables": [],
+      "sectionTitle": "Basic Information",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type": "label",
+            "value": "Basic Information",
+            "colSpan": 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "Department",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              },
+              {
+                "label": "COMM",
+                "value": "COMM"
+              },
+              {
+                "label": "GUNNERY",
+                "value": "GUNNERY"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "Equipment",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "Select Equipment",
+                "value": ""
+              },
+              {
+                "label": "NADS-B",
+                "value": "NADS-B"
+              }
+            ],
+            "isDynamic": false,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "date",
+            "key": "date_",
+            "name": "date_",
+            "label": "Date *",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "Nature of Trial",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATS"
+              },
+              {
+                "label": "OP CHECKS",
+                "value": "OP_CHECKS"
+              },
+              {
+                "label": "IIs",
+                "value": "IIS"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "op_checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "OP Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "checks_matrix_1_row_1_combined",
+                "cells": [
+                  {
+                    "_id": "embarked_time",
+                    "key": "embarked_time",
+                    "name": "embarked_time",
+                    "type": "time",
+                    "value": "",
+                    "lb": "Trials team embarked onboard at hrs on",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "style": "max-width: 90px; min-width: 80px; width: 100%; padding: 4px;",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "schedule",
+                    "key": "schedule",
+                    "name": "schedule",
+                    "type": "date",
+                    "inputType": "date",
+                    "lb": "for OP Checks",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "schedule",
+                    "key": "schedule",
+                    "name": "schedule",
+                    "type": "input",
+                    "inputType": "text",
+                    "value": "",
+                    "lb": "of NADS B as per approved schedule vide",
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Test 01 - Physical Verification of System",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_2_cell_3_test_01",
+                    "key": "test_01",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Test 02- Powering 'ON' System",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_3_cell_3_test_02",
+                    "key": "test_02",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "3.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Test 03- Operating Modes: Login and Start System",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_4_cell_3_test_03",
+                    "key": "test_03",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "3.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Test 04- System Status",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_5_cell_3_test_04",
+                    "key": "test_04",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "3.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_6_cell_2_test_1_rlg1_velocity",
+                    "key": "test_1_rlg1_velocity",
+                    "lb": "Test 05- Aircraft I Target Information. Target Range ≥250 km.Range obtained kts",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_6_cell_3_test_05",
+                    "key": "test_05",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "3.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Test 06- Selection of Coastline Map or Political Boundary Map with Airspace Boundaries",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_7_cell_3_test_06",
+                    "key": "test_06",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "3.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Test 07- Timestamp of ADS-B Target. Check 'UTC' and '1ST' time is displayed at bottom of GUI.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_8_cell_3_test_07",
+                    "key": "test_07",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "3.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Test 08- Target Filters",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_9_cell_3_test_08",
+                    "key": "test_08",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Test 09- Replay Feature",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_10_cell_3_test_09",
+                    "key": "test_09",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Test 10- 360\u00b0 Coverage",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_11_cell_3_test_10",
+                    "key": "test_10",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "3.11",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Test 11 - System Alarms",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_12_cell_3_test_11",
+                    "key": "test_11",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "op_checks_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "op_checks_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "3.12",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Test 12- Dual Redundancy: Auto Selection of ADSB1 or ADSB2 Receiver",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "op_checks_matrix_1_row_13_cell_3_test_12",
+                    "key": "test_12",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "_id": "presenting_authority_label",
+            "type": "label",
+            "value": "<b>Presenting Authority: Ship's Staff</b>",
+            "colSpan": 2
+          },
+          {
+            "_id": "presenting_authority",
+            "key": "presenting_authority",
+            "name": "presenting_authority",
+            "label": "",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1,
+            "colSpan": 4
+          },
+          {
+            "_id": "inspecting_authority_label",
+            "type": "label",
+            "value": "<b>Inspecting Authority: WATT(V/MI)</b>",
+            "colSpan": 2
+          },
+          {
+            "_id": "inspecting_authority",
+            "key": "inspecting_authority",
+            "name": "inspecting_authority",
+            "label": "",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1,
+            "colSpan": 4
+          },
+          {
+            "_id": "nd_label",
+            "type": "label",
+            "value": "<b>ND:</b>",
+            "colSpan": 1
+          },
+          {
+            "_id": "authority_nd",
+            "key": "authority_nd",
+            "name": "authority_nd",
+            "label": "",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1,
+            "colSpan": 3
+          },
+          {
+            "_id": "sti_ti_label",
+            "type": "label",
+            "value": "<b>STI / TI:</b>",
+            "colSpan": 1
+          },
+          {
+            "_id": "authority_sti_ti",
+            "key": "authority_sti_ti",
+            "name": "authority_sti_ti",
+            "label": "",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1,
+            "colSpan": 3
+          },
+          {
+            "_id": "sto_label",
+            "type": "label",
+            "value": "<b>STO:</b>",
+            "colSpan": 1
+          },
+          {
+            "_id": "authority_sto",
+            "key": "authority_sto",
+            "name": "authority_sto",
+            "label": "",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "rows": 1,
+            "colSpan": 3
+          }
+        ]
+      }
+    }
+  ]
+}

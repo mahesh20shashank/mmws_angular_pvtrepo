@@ -1,0 +1,299 @@
+<app-form-card
+  #formCard
+  [title]="'CITADEL CHECKS/ TRIALS DATA FEEDING'"
+  [smallTitle]="'Sub Title'"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  class="h-full"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 "
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="bdcForm">
+    <div class="grid grid-cols-4 gap-3">
+      <!-- SHIP STATUS -->
+      <div class="flex flex-col gap-1">
+        <app-input [label]="'Ship*'" formControlName="ship" class="w-full">
+        </app-input>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <app-calendar
+          [label]="'Date of Conduct of Trials*'"
+          formControlName="date_of_inspection"
+        ></app-calendar>
+      </div>
+
+      <!-- PLACE OF CONDUCT OF TRIALS -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Place of Conduct of Trials*'"
+          formControlName="place_of_conduct_of_trials"
+          [options]="placesOptions"
+          placeholder="--Select--"
+          [searchable]="false"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+
+      <!-- PLACE OF CONDUCT OF TRIALS -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Occasion for Conduct of Trials*'"
+          formControlName="occasion_for_conduct_of_trials"
+          [options]="ocationofconduct"
+          placeholder="--Select--"
+          [searchable]="false"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="bdcForm.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload
+          [label]="'Upload doc*'"
+          formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)"
+        >
+        </app-file-upload>
+        <!-- </div> -->
+      </div>
+    </app-parameter-card>
+    <br />
+
+    <table class="w-full border-collapse text-sm">
+      <tbody>
+        <!-- Section Title -->
+        <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold" colspan="5">
+            1. Equipment Status
+          </td>
+        </tr>
+
+        <!-- Row 1 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            NBC Category A/B/C/D
+          </td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-select
+              formControlName="nbc_category"
+              [options]="nbcCategoryOptions"
+              placeholder="--Select--"
+              [searchable]="false"
+            >
+            </app-select>
+          </td>
+        </tr>
+
+        <!-- Row 2 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            Total No of Citadel Zones
+          </td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input
+              formControlName="total_citadel_zones"
+              type="number"
+              [min]="0"
+              [step]="1"
+              placeholder="Enter number"
+            >
+            </app-input>
+          </td>
+        </tr>
+
+        <!-- Row 3 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">No of NBC Filters</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input
+              formControlName="no_of_nbc_filters"
+              type="number"
+              [min]="0"
+              [step]="1"
+              placeholder="Enter number"
+            >
+            </app-input>
+          </td>
+        </tr>
+
+        <!-- Row 4 (Rowspan Structure) -->
+        <tr>
+          <!-- Main Label -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">NBC Filters</td>
+
+          <!-- Sub Label -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Last Renewal Date</td>
+
+          <!-- Input -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-calendar formControlName="nbc_last_renewal"></app-calendar>
+          </td>
+        </tr>
+
+        <tr>
+          <!-- Sub Label -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Next Due on</td>
+
+          <!-- Input -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-calendar formControlName="nbc_next_due"></app-calendar>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="form-section-header-wo-top-margin mt-5">Trial Status - 2</div>
+    <div class="mt-2">
+      <div
+        class="overflow-x-auto"
+        [class.overflow-y-auto]="totalRowsTrialStatus > 5"
+        [class.max-h-96]="totalRowsTrialStatus > 5"
+      >
+        <app-form-input-table-with-headers
+          [data]="trialStatusTableData"
+          [columns]="trialStatusColumns"
+          [headerRows]="trialStatusHeaderRows"
+          [enableRowActions]="true"
+          (valueChanged)="handleTrialStatusTableChange($event.index, $event.field, $event.value)"
+        >
+        </app-form-input-table-with-headers>
+      </div>
+    </div>
+
+    <div class="form-section-header-wo-top-margin mt-5">
+      Any other observations
+    </div>
+    <div class="mt-2">
+      <div
+        class="overflow-x-auto"
+        [class.overflow-y-auto]="totalRowsOtherObservations > 5"
+        [class.max-h-96]="totalRowsOtherObservations > 5"
+      >
+        <app-form-input-table-with-headers
+          [data]="otherObservationsTableData"
+          [columns]="otherObservationsColumns"
+          [enableRowActions]="true"
+          (valueChanged)="handleOtherObservationsTableChange($event.index, $event.field, $event.value)"
+        >
+        </app-form-input-table-with-headers>
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+      <label
+        class="form-label font-semibold md:col-span-1"
+        for="overall_remarks"
+      >
+        Overall Remarks
+      </label>
+      <div
+        class="md:col-span-3 flex flex-wrap gap-4"
+        role="radiogroup"
+        aria-label="Overall Remarks"
+      >
+        @for (opt of overallRemarksOptions; track opt.value) {
+        <label class="inline-flex items-center gap-2 cursor-pointer text-sm">
+          <input
+            type="radio"
+            formControlName="overall_remarks"
+            [value]="opt.value"
+            class="accent-blue-600"
+          />
+          <span>{{ opt.label }}</span>
+        </label>
+        }
+      </div>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

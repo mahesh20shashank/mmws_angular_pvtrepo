@@ -1,0 +1,37 @@
+lint-drf:
+  extends:
+    - .dev_job
+    - .default_mr_rules
+
+  stage: lint
+
+  allow_failure: true
+
+  script:
+    - cd backend
+    - /home/gitlab-runner/.local/bin/poetry install --no-interaction --no-root
+    - /home/gitlab-runner/.local/bin/poetry run ruff check .
+
+
+# sonar_backend:
+#   extends:
+#     - .dev_job
+#     - .default_mr_rules
+#     - .sonar_template
+
+#   allow_failure: true
+
+#   script:
+#     - |
+#       docker run --rm \
+#       --network host \
+#       -v "$CI_PROJECT_DIR:/usr/src" \
+#       -v "$CI_PROJECT_DIR/.sonar-cache:/tmp/sonar-cache" \
+#       -w /usr/src \
+#       -e SONAR_HOST_URL="$SONAR_HOST_URL" \
+#       -e SONAR_TOKEN="$SONAR_BACKEND_TOKEN" \
+#       172.16.50.13/platform/sonar-scanner:latest \
+#       sonar-scanner \
+#       -Dsonar.projectKey=swmm-ship-backend-aug \
+#       -Dsonar.sources=backend \
+#       -Dsonar.qualitygate.wait=true

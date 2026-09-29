@@ -1,0 +1,128 @@
+<div class="input-wrapper">
+  @if (outsideLabel) {
+    <label [for]="inputId" class="external-label">
+      {{ label }}
+      @if (required) {
+        <span class="required">*</span>
+      }
+    </label>
+  }
+
+  <div class="input-container" [class.active]="focused" [class.no-floating]="outsideLabel">
+    @if (!outsideLabel) {
+      <label [for]="inputId" class="floating-label" [class.visible]="focused || fileName">
+        {{ label }}
+        @if (required) {
+          <span class="required">*</span>
+        }
+      </label>
+    }
+
+    <input
+      #fileInput
+      [id]="inputId"
+      type="file"
+      [accept]="accept"
+      class="hidden-file"
+      [disabled]="readonly"
+      (change)="fileChanged($event)"
+    />
+
+    <app-button type="button" class="file-display" (click)="!readonly && fileInput.click()">
+      {{ fileName || placeholder }}
+    </app-button>
+
+    <div class="file-actions">
+      <app-button
+        type="button"
+        class="icon-btn"
+        (click)="openFilePicker($event, fileInput)"
+      >
+        <app-icon name="upload" [size]="16" variant="inherit" />
+      </app-button>
+
+      @if (fileName) {
+        <app-button type="button" class="icon-btn" (click)="openPreview($event)">
+          <app-icon name="eye" [size]="16" variant="inherit" />
+        </app-button>
+      }
+    </div>
+  </div>
+</div>
+
+@if (showPreview) {
+  <div
+    class="preview-overlay fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm"
+    tabindex="-1"
+    (click)="closePreview()"
+    (keydown.escape)="closePreview()"
+  >
+    <div
+      class="preview-panel w-[50vw] h-[45vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image preview"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+      (keydown.escape)="closePreview()"
+    >
+      <!-- HEADER -->
+      <div class="preview-header flex items-center justify-between px-6 py-4">
+        <h3 class="text-2xl font-medium">Preview Image</h3>
+
+        <app-button
+          type="button"
+          class="preview-close-btn text-4xl leading-none"
+          (click)="closePreview()"
+          aria-label="Close preview"
+        >
+          &times;
+        </app-button>
+      </div>
+
+      <!-- TABS -->
+      @if (previewImages.length > 1) {
+        <div class="preview-tabs flex gap-8 px-6">
+          @for (img of previewImages; track $index) {
+            <app-button
+              type="button"
+              class="preview-tab py-4 text-lg border-b-2 transition-all"
+              [class.preview-tab--active]="activeImage === $index"
+              (click)="activeImage = $index"
+            >
+              Image {{ $index + 1 }}
+            </app-button>
+          }
+        </div>
+      }
+
+      <!-- IMAGE -->
+      <div class="flex-1 flex overflow-hidden">
+        <!-- Thumbnails -->
+
+        <div class="preview-thumbs w-32 overflow-y-auto p-3">
+          @for (img of previewImages; track $index) {
+            <app-button
+              type="button"
+              class="preview-thumb block w-full p-0 mb-3 rounded-lg border-2 overflow-hidden"
+              [class.preview-thumb--active]="activeImage === $index"
+              (click)="activeImage = $index"
+            >
+              <img [src]="img" alt="Thumbnail {{ $index + 1 }}" class="w-full h-20 object-cover cursor-pointer" />
+            </app-button>
+          }
+        </div>
+
+        <!-- Main Image -->
+
+        <div class="flex-1 p-4 flex items-center justify-center">
+          <img
+           alt="Preview"
+            [src]="previewImages[activeImage]"
+            class="max-h-full max-w-full object-contain rounded-lg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+}

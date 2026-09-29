@@ -1,0 +1,42 @@
+<app-paginate-table
+  title="Trial Types"
+  description="Manage trial types"
+  [showHeaderSection]="true"
+  [addButtons]="addButtons"
+  (addButtonClick)="handleAddButtonClick($event)"
+  [rowData]="rowData"
+  [url]="'/master/trial-types/'"
+  [columnDefs]="columnDefs"
+  [showPagination]="true"
+  [tableLoading]="tableLoading"
+  [showSearch]="true"
+>
+</app-paginate-table>
+<!-- <div class="">
+  <div class="rounded-md border border-slate-300 bg-slate-100 overflow-hidden flex flex-col shadow-sm">
+    <div class="flex-1 p-3 sm:p-4 bg-white">
+    </div>
+  </div>
+</div> -->
+
+<app-add-form
+  *ngIf="showCreateLayout"
+  width="80vw"
+  [open]="showCreateLayout"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="editFormData"
+  [isEditMode]="isEditMode"
+  (onSubmit)="handleSubmit($event)"
+  (onOpenChange)="onFormOpenChange($event)"
+  (onSelectChange)="onFormSelectChange($event)"
+  [fromTitle]="isEditMode ? 'Edit Trial Type' : 'Add Trial Type'"
+></app-add-form>
+
+<app-reusable-delete-dialog
+  [open]="showDeleteDialog"
+  [name]="deleteName"
+  entityType="Trial Type"
+  [loading]="deleteLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteDialog()"
+></app-reusable-delete-dialog>

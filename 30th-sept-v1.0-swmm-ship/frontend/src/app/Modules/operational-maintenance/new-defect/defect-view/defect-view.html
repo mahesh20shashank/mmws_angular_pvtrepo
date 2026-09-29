@@ -1,0 +1,188 @@
+@if(!isOpenDefectForm){
+<div class="glass-card flex items-between gap-2 shrink-0 header-cotainer mb-4 px-4 py-4">
+  <div>
+    <h3 class="heading-text mt-1">Defect / DART Management</h3>
+    <p class="text-[11px] text-white/50 mt-0.5">
+      All created DARTs and its status
+    </p>
+  </div>
+
+  <div class="btn-container-def">
+    <app-button type="button" (click)="goToRecentActivity()"
+      class="flex items-center gap-2 px-4 h-10 rounded-lg border border-white/10 bg-white/5 text-white/80 text-sm font-medium whitespace-nowrap hover:bg-white/10 transition-colors">
+      <app-icon name="rotate-ccw" [size]="14" variant="inherit" />
+      <span>Recent Activity</span>
+    </app-button>
+
+    <app-button type="button" (click)="goToApprovalRaStatus()"
+      class="flex items-center gap-2 px-4 h-10 rounded-lg border border-white/10 bg-white/5 text-white/80 text-sm font-medium whitespace-nowrap hover:bg-white/10 transition-colors">
+      <app-icon name="check-check" [size]="14" variant="inherit" />
+      <span>View Approval / RA Status</span>
+    </app-button>
+
+    <app-button type="button" (click)="goToAddDefect()"
+      class="od-solid-btn flex items-center gap-2 px-4 h-10 rounded-lg bg-sky-600 text-sm font-medium whitespace-nowrap hover:bg-sky-500 transition-colors">
+      <span class="text-base leading-none">+</span>
+      <span>Add DART</span>
+    </app-button>
+  </div>
+</div>
+
+<div
+  class="glass-card sync-status-banner flex items-center gap-2 shrink-0 mb-4 px-4 py-3 cursor-pointer transition-colors"
+  [class.sync-status-banner--active]="syncFocusActive()"
+  title="Hover or click to bring transactions awaiting sync to the top"
+  (mouseenter)="onSyncBannerEnter()"
+  (mouseleave)="onSyncBannerLeave()"
+  (click)="onSyncBannerClick()"
+>
+  <app-icon name="refresh-cw" [size]="15" [strokeWidth]="2" variant="accent" />
+  <span class="text-[13px] font-semibold text-sky-400">
+    Data Sync Status — {{ syncStatus() }}
+    @if (pendingSyncCount() > 0) {
+      [{{ pendingSyncCount() }} Transactions awaiting sync]
+    }
+  </span>
+  <span class="text-[11px] text-white/50">
+    Once each transaction has connected and synchronised to shore it becomes immutable.
+  </span>
+</div>
+
+<app-master-card>
+  <div class="py-4">
+    <!-- Tabs: Defect/DART list category + record count -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <div class="tab-bar inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 p-1">
+        @for (tab of tabs; track tab.value) {
+          <button
+            type="button"
+            (click)="activeTab.set(tab.value)"
+            class="px-3.5 h-8 rounded-md text-[13px] font-medium whitespace-nowrap transition-colors"
+            [ngClass]="activeTab() === tab.value
+              ? 'bg-white text-slate-900'
+              : 'text-white/60 hover:text-white/90'"
+          >
+            {{ activeTab() === tab.value ? tab.activeLabel : tab.shortLabel }}
+          </button>
+        }
+      </div>
+
+      <span
+        class="inline-flex items-center rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-400"
+      >
+        {{ recordCount() }} records
+      </span>
+    </div>
+
+    <!-- List header: helper text + search + filters -->
+    <div class="flex items-center justify-between gap-3 flex-wrap mt-3">
+      <p class="text-[11px] text-white/50">
+        @if (activeTab() === 'all') {
+          Select to Raise DART · open transactions stay listed indefinitely
+        } @else {
+          All open transactions stay listed indefinitely
+        }
+      </p>
+
+      <div class="flex items-center gap-2 shrink-0 flex-wrap">
+        <div class="relative">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10">
+            <app-icon name="search" [size]="16" [strokeWidth]="2" color="currentColor" />
+          </div>
+          <input
+            type="text"
+            [value]="searchText"
+            (input)="onSearch($event)"
+            placeholder="Search records"
+            class="w-56 h-10 rounded-[10px] bg-white/[0.04] border border-white/10 pl-10 pr-3 text-white placeholder:text-white/40 outline-none focus:border-white/20"
+          />
+        </div>
+
+        <app-button
+          type="button"
+          (click)="showFilters = !showFilters"
+          class="flex items-center gap-2 h-10 px-4 rounded-lg border text-sm font-semibold whitespace-nowrap transition-colors"
+          [ngClass]="showFilters
+            ? 'border-sky-500/60 bg-sky-500/10 text-white'
+            : 'border-white/10 bg-white/5 text-white/80 hover:bg-white/10'"
+        >
+          <app-icon name="filter" [size]="15" [strokeWidth]="2" [variant]="showFilters ? 'accent' : 'inherit'" />
+          <span>Filters</span>
+          <app-icon name="chevron-down" [size]="14" [strokeWidth]="2" variant="inherit"
+            [class.rotate-180]="showFilters" class="transition-transform duration-200" />
+        </app-button>
+
+        <app-button
+          type="button"
+          (click)="clearFilters()"
+          class="flex items-center gap-2 h-10 px-4 rounded-lg border border-white/10 bg-white/5 text-white text-sm font-semibold whitespace-nowrap hover:bg-white/10 transition-colors"
+        >
+          <app-icon name="refresh-cw" [size]="14" [strokeWidth]="2" variant="inherit" />
+          <span>Reset Filters</span>
+        </app-button>
+
+        <app-button
+          type="button"
+          (click)="goToRaDraft()"
+          [disabled]="!hasSelection()"
+          title="Select at least one DART to raise as an RA draft"
+          class="flex items-center gap-2 h-10 px-4 rounded-lg border border-white/10 bg-white/5 text-sm font-medium whitespace-nowrap transition-colors"
+          [ngClass]="hasSelection()
+            ? 'text-white/80 hover:bg-white/10 cursor-pointer'
+            : 'text-white/40 cursor-not-allowed'"
+        >
+          <app-icon name="send" [size]="14" [strokeWidth]="2" variant="muted" />
+          <span>RA Draft</span>
+        </app-button>
+      </div>
+    </div>
+
+    @if (showFilters) {
+      <form [formGroup]="filterForm" class="grid grid-cols-4 gap-4 mt-4">
+        <app-select-input label="Current Status" [options]="statusOptions()" formControlName="currentStatus">
+        </app-select-input>
+
+        <app-select-input label="Severity" [options]="severityOptions()" formControlName="severity">
+        </app-select-input>
+
+        <app-select-input label="Reason" [options]="reasonOptions()" formControlName="reason">
+        </app-select-input>
+
+        <app-select-input label="Date Range" [options]="dateRangeOptions" formControlName="dateRange">
+        </app-select-input>
+      </form>
+    }
+
+    <!-- Table -->
+    <div class="fuss-grid-wrapper w-full mt-4">
+      <app-data-grid
+        [columnDefs]="colDef"
+        [rowData]="sortedRowData()"
+        [pageSize]="10"
+        height="440px"
+        [showCheckboxes]="true"
+        [suppressRowClickSelection]="true"
+        [getRowId]="rowId"
+        [rowClassRules]="rowClassRules"
+        (selectionChanged)="onSelectionChanged($event)"
+      >
+      </app-data-grid>
+    </div>
+  </div>
+</app-master-card>
+
+@if (selectedRecord(); as record) {
+  <app-defect-record-details-modal
+    [record]="record"
+    (closeModal)="closeRecordDetailsModal()"
+  ></app-defect-record-details-modal>
+}
+
+@if (showRecentActivity()) {
+  <app-recent-activity-modal (closeModal)="closeRecentActivity()"></app-recent-activity-modal>
+}
+
+}
+@else{
+<app-defect-action-form (back)="backFromAction($event)"></app-defect-action-form>
+}

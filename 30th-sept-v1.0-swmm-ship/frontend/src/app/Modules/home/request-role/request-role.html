@@ -1,0 +1,110 @@
+<app-help-guidance [bodyHtml]="helpHtml"></app-help-guidance>
+
+<app-master-card cardTitle="Request a Role">
+  <div class="role-req-body">
+
+    <p class="role-req-subtitle">
+      Ask your Head of Department to grant you a role. Until a role is assigned you can only see Home and Ship Crew.
+    </p>
+
+    <div class="role-req-columns">
+
+      <app-panel-card class="role-req-form-card">
+
+        <div class="role-req-field">
+          <label class="role-req-field-label">Your current role</label>
+          <div class="role-req-field-value role-req-current-role">
+            {{ currentUserProfile()?.profile?.role_master_detail?.role_name || '—' }}
+          </div>
+        </div>
+
+        <div class="role-req-field">
+          <label class="role-req-field-label">Your department</label>
+          <div class="role-req-field-value">
+            {{ currentUserProfile()?.profile?.department_detail?.name || '—' }}
+          </div>
+        </div>
+
+
+
+        <div class="role-req-field">
+          <label class="role-req-field-label">Role requested</label>
+          <app-select-input
+            [options]="roleOptions()"
+            [ngModel]="selectedRoleId()"
+            (ngModelChange)="onRoleChange($event)"
+            placeholder="-- Select a role --"
+            [error]="formTouched() && !selectedRoleId()"
+          />
+          @if (formTouched() && !selectedRoleId()) {
+            <span class="role-req-field-error">Please select a role to continue.</span>
+          }
+        </div>
+
+        @if (isShipadminSelected()) {
+          <div class="role-req-shipadmin-box" [class.role-req-shipadmin-error]="shipadminError()">
+            <label class="role-req-shipadmin-check-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="shipadminConfirmed"
+                (ngModelChange)="shipadminError.set(false)"
+                class="role-req-shipadmin-checkbox"
+              />
+              <span class="role-req-shipadmin-confirm-text">I confirm I am the IT Officer of this ship.</span>
+            </label>
+            <p class="role-req-shipadmin-desc">
+              SHIPADMIN is the application administrator role. Request it only if you are the ship IT Officer.
+              Your confirmation is recorded on the request, and it will be rejected if you are not.
+            </p>
+          </div>
+          @if (shipadminError()) {
+            <span class="role-req-field-error role-req-shipadmin-err-msg">You must confirm you are the IT Officer before sending this request.</span>
+          }
+        }
+
+        <div class="role-req-field">
+          <label for="remarks-area" class="role-req-field-label">
+            Reason <span class="role-req-optional">(optional)</span>
+          </label>
+          <textarea
+            id="remarks-area"
+            [(ngModel)]="remarks"
+            rows="4"
+            placeholder="Why do you need this role"
+            class="role-req-textarea"
+          ></textarea>
+        </div>
+
+        <div class="role-req-actions">
+          <app-button
+            type="button"
+            (click)="submitRequest()"
+            [disabled]="submitting()"
+            class="role-req-submit-btn"
+          >
+            @if (submitting()) {
+              <app-icon name="loader" [spin]="true" [size]="16" />
+            }
+            <span>{{ submitting() ? 'Sending...' : 'Send Request' }}</span>
+          </app-button>
+        </div>
+
+      </app-panel-card>
+
+      <app-panel-card class="role-req-history-card">
+
+        <label class="role-req-field-label role-req-history-label">Your requests</label>
+
+        <app-data-grid
+          [rowData]="requests()"
+          [columnDefs]="requestColumnDefs"
+          [pagination]="true"
+          [pageSize]="10"
+          height="320px">
+        </app-data-grid>
+
+      </app-panel-card>
+
+    </div>
+  </div>
+</app-master-card>

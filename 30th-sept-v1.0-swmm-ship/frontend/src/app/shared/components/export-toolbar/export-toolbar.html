@@ -1,0 +1,25 @@
+<div class="export-toolbar">
+  <span class="export-toolbar__label">Export</span>
+  <app-button type="button" class="export-toolbar__btn export-toolbar__btn--pdf"
+    [class.export-toolbar__btn--disabled]="disabled()"
+    [title]="disabled() ? 'No data to export' : 'Export as PDF'"
+    [attr.aria-disabled]="disabled() || null" [disabled]="!!busy()" (click)="onClick('pdf')">
+    <app-icon name="file-text" [size]="16" [strokeWidth]="1.9" variant="danger"
+      [spin]="busy() === 'pdf'" />
+  </app-button>
+  <app-button type="button" class="export-toolbar__btn export-toolbar__btn--xls"
+    [class.export-toolbar__btn--disabled]="disabled()"
+    [title]="disabled() ? 'No data to export' : 'Export as Excel'"
+    [attr.aria-disabled]="disabled() || null" [disabled]="!!busy()" (click)="onClick('excel')">
+    <app-icon name="sheet" [size]="16" [strokeWidth]="1.9" variant="success"
+      [spin]="busy() === 'excel'" />
+  </app-button>
+  @if (showPrint()) {
+    <app-button type="button" class="export-toolbar__btn"
+      [class.export-toolbar__btn--disabled]="disabled()"
+      [title]="disabled() ? 'No data to print' : 'Print'"
+      [attr.aria-disabled]="disabled() || null" [disabled]="!!busy()" (click)="onClick('print')">
+      <app-icon name="printer" [size]="16" [strokeWidth]="1.9" variant="muted" />
+    </app-button>
+  }
+</div>

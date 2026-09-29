@@ -1,0 +1,13 @@
+deploy_offline:
+  extends:
+    - .offline_deploy_job
+    - .default_dev_rules
+
+  stage: deploy_offline
+
+  environment:
+    name: offline-dev
+
+  script:
+    - chmod +x scripts/deploy_backend.sh
+    - ./scripts/deploy_backend.sh

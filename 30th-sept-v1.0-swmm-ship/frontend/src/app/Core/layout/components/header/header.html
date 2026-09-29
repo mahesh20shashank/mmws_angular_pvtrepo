@@ -1,0 +1,162 @@
+<header class="flex-shrink-0 glass-card mb-2 rounded-xl overflow-visible header-container">
+  <!-- Title & Action row -->
+  <div class="header-top-row px-4 pt-4 pb-2">
+    <div class="header-left-col">
+      <div class="header-title-group">
+        <h1 class="head2 whitespace-nowrap">{{ pageTitle }}</h1>
+        <span class="sub whitespace-nowrap"> - powered by MAT-CDF </span>
+      </div>
+    </div>
+
+    <!-- Action icons -->
+    <div class="header-actions-group">
+      <span class="header-welcome-text whitespace-nowrap">Welcome, {{ getUserDesignation() }}</span>
+
+      <!-- Online Status Indicator (reflects real connectivity only — not user-toggleable) -->
+      <output
+        class="flex Indicator items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-semibold mr-1 sm:mr-2 transition-all duration-300"
+        aria-live="polite"
+        [title]="networkStatus.online() ? 'Online' : 'Offline'"
+      >
+        <span class="w-2 h-2 rounded-full" [style.backgroundColor]="networkStatus.online() ? '#22c55e' : '#ef4444'"></span>
+        <span class="opacity-90" [style.color]="'var(--text-primary)'">{{ networkStatus.online() ? 'Online' : 'Offline' }}</span>
+      </output>
+
+      <!-- Theme Toggle (Dark / Light) -->
+      <app-button
+        class="theme-toggle-btn"
+        [title]="themeService.theme() === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+        [aria-label]="themeService.theme() === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+        (click)="toggleTheme()">
+        @if (themeService.theme() === 'dark') {
+          <!-- Sun icon — click to go light -->
+          <app-icon name="sun" [strokeWidth]="2" />
+        } @else {
+          <!-- Moon icon — click to go dark -->
+          <app-icon name="moon" [strokeWidth]="2" />
+        }
+      </app-button>
+      <app-button class="theme-toggle-btn"
+        [class.icon-btn-active]="isActive('/afterAuth/home/request-role')"
+        aria-label="Request Role"
+        title="Request Role"
+        [routerLink]="['/afterAuth/home/request-role']">
+        <app-icon name="contact-round" [size]="19" [strokeWidth]="1.33333" />
+      </app-button>
+       <app-button class="theme-toggle-btn"
+        [class.icon-btn-active]="isActive('/afterAuth/ticket-management/my-tickets') || isActive('/afterAuth/ticketmanagement/my-tickets')"
+        aria-label="My Tickets"
+        title="My Tickets"
+        [routerLink]="['/afterAuth/ticket-management/my-tickets']">
+        <app-icon name="headset" [size]="19" [strokeWidth]="1.33333" />
+      </app-button>
+
+      <!-- Notification -->
+      @if (showNotificationButton) {
+      <app-button #notificationBtn class="icon-btn relative"
+        [class.icon-btn-active]="showMailPopup && popupType === 'notification'"
+        aria-label="Notifications"
+        title="Notifications"
+        (click)="toggleMailPopup($event, 'notification')">
+        <app-icon name="bell" [size]="19" [strokeWidth]="1.33333" />
+      </app-button>
+      }
+
+      <!-- Mail -->
+      @if (showMailButton) {
+      <app-button #mailBtn class="icon-btn" [class.icon-btn-active]="showMailPopup && popupType === 'mail'"
+        aria-label="Mail" title="Mail" (click)="toggleMailPopup($event, 'mail')">
+        <app-icon name="mail" [size]="19" />
+      </app-button>
+      }
+      <div class="relative">
+        @if (showMailPopup) {
+        <app-button #popupRef class="fixed z-[999]" style="top: 52px; right: 24px" (click)="$event.stopPropagation()">
+          <app-mail-noti-center [type]="popupType" (closed)="closeMailPopup()"></app-mail-noti-center>
+        </app-button>
+        }
+      </div>
+
+      <!-- Logout -->
+      <app-button #profileBtn class="icon-btn" [class.icon-btn-active]="showMailPopup && popupType === 'profile'"
+        aria-label="Logout" title="Logout" (click)="logout()">
+        <app-icon name="log-out" [size]="20" [strokeWidth]="2" />
+      </app-button>
+      <app-button #mobileToggleBtn class="icon-btn header-mobile-toggle" [class.icon-btn-active]="mobileMenuOpen"
+        [aria-label]="mobileMenuOpen ? 'Close Menu' : 'Open Menu'"
+        [title]="mobileMenuOpen ? 'Close Menu' : 'Open Menu'"
+        [attr.aria-expanded]="mobileMenuOpen" (click)="toggleMobileMenu()">
+        @if (mobileMenuOpen) {
+        <app-icon name="x" [size]="22" />
+        } @else {
+        <app-icon name="menu" [size]="22" />
+        }
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Nav tabs -->
+  <nav #navContainer class="relative px-4">
+    <div
+      class="tabs-container flex flex-col items-stretch gap-1 no-scrollbar"
+      [class.hidden]="!mobileMenuOpen">
+      @for (tabKey of tabOrder; track tabKey) {
+      @if (headerTabs[tabKey]?.enabled) {
+      <div class="tab-wrapper" (mouseenter)="hasDropdownChildren(tabKey) && openDropdown(tabKey)"
+        (mouseleave)="closeDropdown()">
+        <app-button (click)="onTabClick(tabKey)" class="nav-tab" [class.nav-tab-active]="isTabActive(tabKey)">
+          <span class="menu-label text-sm">
+            {{ tabLabel(tabKey) }}
+            @if (hasDropdownChildren(tabKey)) {
+            <app-icon name="chevron-down" [size]="14" class="dropdown-icon" variant="inherit" />
+            }
+          </span>
+        </app-button>
+
+        <!-- Dynamic Dropdown -->
+        @if (hasDropdownChildren(tabKey) && hoveredTab === tabKey) {
+        <div class="references-dropdown">
+          <div class="references-dropdown-scroll" [class.references-dropdown-scroll--has-nested]="hasAnyNestedChildren(tabKey)">
+            @for (child of headerTabs[tabKey]?.children; track child.id) {
+            @if (hasNestedChildren(child)) {
+            <!-- Child with its own children (e.g. Inventory's "As is Transaction") —
+                 click-toggled nested flyout, same interaction InventoryTabNav used. -->
+            <div class="dropdown-item-wrapper">
+              <app-button type="button" class="dropdown-item dropdown-item--parent"
+                [class.dropdown-item--open]="openSubmenu === child.id"
+                (click)="toggleChildSubmenu(child, $event)">
+                <span>{{ child.label }}</span>
+                <app-icon name="chevron-right" [size]="12" class="dropdown-submenu-icon" variant="inherit" />
+              </app-button>
+
+              @if (openSubmenu === child.id) {
+              <div class="references-dropdown references-dropdown--nested">
+                <div class="references-dropdown-scroll">
+                  @for (grandchild of child.children; track grandchild.id) {
+                  <app-button class="dropdown-item"
+                    [class.dropdown-item--active]="!grandchild.externalHref && isActive(buildDropdownRoute(grandchild.route || '', grandchild.absoluteRoute))"
+                    (click)="grandchild.externalHref ? openExternalLink(grandchild.externalHref) : navigate(buildDropdownRoute(grandchild.route || '', grandchild.absoluteRoute))">
+                    {{ grandchild.label }}
+                  </app-button>
+                  }
+                </div>
+              </div>
+              }
+            </div>
+            } @else {
+            <app-button class="dropdown-item"
+              [class.dropdown-item--active]="!child.externalHref && isActive(buildDropdownRoute(child.route || '', child.absoluteRoute))"
+              (click)="child.externalHref ? openExternalLink(child.externalHref) : navigate(buildDropdownRoute(child.route || '', child.absoluteRoute))">
+              {{ child.label }}
+            </app-button>
+            }
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+      }
+    </div>
+  </nav>
+</header>

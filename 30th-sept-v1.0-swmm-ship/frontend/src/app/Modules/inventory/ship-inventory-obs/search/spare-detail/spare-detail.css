@@ -1,0 +1,270 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+.obs-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.obs-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.obs-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.obs-panel__actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Fields left, photograph right, both starting at the top so the sticky
+   side column has something to bite on. The track sizes and the 991.98px collapse are the ones
+   `spare-form.css` already declares for the Update screen — the two views of one record now share
+   a shape, and neither invents a second one. */
+.obs-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.obs-detail-main {
+  min-width: 0;
+}
+
+/* Sticky, not fixed. The scroll container is `main.scrollablecontent` in
+   MainLayout, so sticky resolves against the page the operator is actually scrolling. `fixed`
+   would resolve against the viewport and sit over the footer. */
+.obs-detail-aside {
+  position: sticky;
+  top: 0.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .obs-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .obs-detail-aside {
+    position: static;
+  }
+}
+
+/* The banded group, matching `.obs-band` / `.obs-band-title` in
+   `spare-form.css` so the read screen and the write screen carry one visual grammar. Declared
+   again here rather than shared, because both are component-scoped styles and lifting the class
+   into `styles.css` would be a refactor this change was not asked for — recorded as an
+   observation instead. `<section>` plus `<h4>` rather than `<fieldset>` plus `<legend>`: there is
+   not a form control on this page, and the panel's own `<h3>` makes `<h4>` the correct level. */
+.obs-band {
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem 1.1rem;
+  margin: 0 0 1.1rem;
+}
+
+.obs-band-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.obs-band--photo {
+  margin-bottom: 0;
+}
+
+.obs-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.obs-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.obs-detail-field--wide {
+  grid-column: 1 / -1;
+}
+
+.obs-detail-field span {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.obs-detail-field strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+/* A framed box with a real size, so the photograph occupies the same space whether it has
+   loaded, is loading, or is the placeholder. The bare `<img>` this replaces had a max-width and
+   nothing else, so a spare with no photograph rendered a collapsed broken-image icon with its
+   alt text spilling out beside it — which is what the page was reported for. Sized to match the
+   quick-view drawer's own photo frame in `item-search.css`. */
+/* The top margin is gone and the frame now fills its band — the figure has
+   moved out of normal flow beneath the field grid and into the sticky side column, where the band
+   supplies the spacing it used to supply for itself. */
+.obs-detail-photo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.obs-detail-photo figcaption {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.obs-detail-image {
+  width: 260px;
+  max-width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+}
+
+.obs-detail-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-primary);
+}
+
+.obs-detail-pager button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.obs-detail-pager button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.obs-detail-pager__position {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  min-width: 5rem;
+  text-align: center;
+}
+
+/* The not-found and could-not-load branches. Centred, one line of plain
+   words saying what happened, and the moves that are actually available underneath — never a bare
+   panel. Colour carries none of the meaning: the icon and the wording do, and the icon's own
+   variant class supplies the tint in both themes. */
+.obs-detail-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1.25rem;
+}
+
+.obs-detail-state__title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.obs-detail-state__text {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.obs-detail-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.obs-detail-state__actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* A placeholder of the right shape rather than an empty region, so the panel
+   does not collapse and then jump when the record lands. No animation — the blocks are a shape
+   cue, and a pulsing panel on a screen an operator steps through record by record is a
+   distraction, not feedback. */
+.obs-detail-skeleton {
+  padding: 0.5rem 0 0;
+}
+
+.obs-detail-skeleton__label {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.obs-detail-skeleton__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.obs-detail-skeleton__block {
+  height: 2.25rem;
+  border-radius: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+}
+
+/* The pager is a navigation control and means nothing on paper — Print is one of the four
+   actions in this panel's own header, so it is worth not printing it. */
+@media print {
+  .obs-detail-pager {
+    display: none;
+  }
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}

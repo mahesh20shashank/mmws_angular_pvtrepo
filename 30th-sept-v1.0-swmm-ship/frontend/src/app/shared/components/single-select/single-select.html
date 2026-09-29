@@ -1,0 +1,55 @@
+<div class="dropdown-wrapper">
+  @if (label) {
+  <label class="input-label">
+    {{ label }}
+    @if (required()) {
+    <span class="required">*</span>
+    }
+  </label>
+  }
+
+  <div class="dropdown-trigger" [class.active]="isOpen()" [class.disabled]="disabledState()"
+    [class.readonly]="readonly()" [class.error]="error()" tabindex="0" role="combobox" aria-haspopup="listbox"
+    [attr.aria-expanded]="isOpen()" (click)="toggleDropdown()" (keydown.enter)="toggleDropdown()">
+
+    @if (isOpen()) {
+    <input #searchBox type="text" class="search-input" [value]="searchText()" [placeholder]="placeholder"
+      [disabled]="disabledState()" (input)="updateSearch($event)" (click)="preventClose($event)" />
+    }
+
+    @if (!isOpen() && selectedLabel()) {
+    <span class="selected-value" [title]="selectedLabel()">{{ selectedLabel() }}</span>
+    }
+
+    @if (!isOpen() && !selectedLabel()) {
+    <span class="placeholder-text">{{ placeholder }}</span>
+    }
+
+    <div class="dropdown-actions">
+      @if (!disabledState() && !readonly() && selectedLabel() && !isOpen()) {
+      <app-button type="button" class="clear-btn" (click)="clearSelection($event)" title="Clear selection"
+        aria-label="Clear selection">
+        ✕
+      </app-button>
+      }
+
+      <span class="arrow" [class.rotate]="isOpen()">
+        <app-icon name="chevron-down" [size]="18" variant="inherit" />
+      </span>
+    </div>
+  </div>
+
+  @if (isOpen()) {
+  <div class="dropdown-menu" (click)="preventClose($event)">
+    @for (option of filteredOptions(); track optionValue(option)) {
+    <app-button type="button" class="dropdown-item" (click)="selectOption(option)">
+      {{ optionLabel(option) }}
+    </app-button>
+    }
+
+    @if (filteredOptions().length === 0) {
+    <div class="empty-state">No results found</div>
+    }
+  </div>
+  }
+</div>

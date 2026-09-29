@@ -1,0 +1,82 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>Survey Details</h3>
+  </div>
+
+  @if (!loading()) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      @if (entry(); as row) {
+        <fieldset class="wed-fieldset">
+          <legend>Item &amp; Equipment Details</legend>
+          <div class="wed-detail-row"><span>Item Code</span><strong>{{ row.itemCode || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Item Description</span><strong>{{ row.itemDescription || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Equipment Nomenclature</span><strong>{{ row.equipmentNomenclature || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>DART No</span><strong>{{ row.dartNo || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Survey Qty</span><strong>{{ row.qty ?? "-" }}</strong></div>
+        </fieldset>
+      }
+
+      <fieldset class="wed-fieldset">
+        <legend>Held Certificate Details</legend>
+
+        <app-select-input label="Held Certificate Type *" formControlName="certificateType" [options]="certificateTypeOptions" />
+        @if (form.controls.certificateType.invalid && form.controls.certificateType.touched) {
+          <span class="form-error">Held Certificate Type is required.</span>
+        }
+
+        <div class="form-field-label">Held Certificate Number *</div>
+        <input class="form-field-input" formControlName="heldCertNumber" />
+        @if (form.controls.heldCertNumber.invalid && form.controls.heldCertNumber.touched) {
+          <span class="form-error">Held Certificate Number is required.</span>
+        }
+
+        <div class="form-field-label">Held Certificate Date *</div>
+        <input class="form-field-input" type="date" formControlName="heldCertDate" />
+        @if (form.controls.heldCertDate.invalid && form.controls.heldCertDate.touched) {
+          <span class="form-error">Held Certificate Date is required.</span>
+        }
+
+        <app-file-input
+          [label]="pdfRequired ? 'Upload Held Certificate (PDF) *' : 'Upload Held Certificate (PDF)'"
+          formControlName="certificateFile"
+          accept="application/pdf"
+          [outsideLabel]="true"
+        />
+        @if (pdfMissing && attemptedSubmit()) {
+          <span class="form-error">Held Certificate PDF is required.</span>
+        }
+
+        <app-select-input label="SS Remarks *" formControlName="ssRemarks" [options]="ssRemarksOptions" />
+        @if (form.controls.ssRemarks.invalid && form.controls.ssRemarks.touched) {
+          <span class="form-error">SS Remarks is required.</span>
+        }
+      </fieldset>
+
+      @if (serialNumbers.length) {
+        <fieldset class="wed-fieldset">
+          <legend>Item Serial Numbers</legend>
+          <table class="wed-serial-table" formArrayName="serialNumbers">
+            <thead><tr><th>Ser</th><th>Serial No.</th></tr></thead>
+            <tbody>
+              @for (control of serialNumbers.controls; track $index) {
+                <tr>
+                  <td>{{ $index + 1 }}</td>
+                  <td><input class="form-field-input" [formControlName]="$index" placeholder="Enter Serial No." /></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </fieldset>
+      }
+
+      <div class="wed-form-actions">
+        <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+        <app-button type="submit" class="btn-primary" [disabled]="saving() || form.invalid">
+          {{ saving() ? "Saving..." : "Save" }}
+        </app-button>
+      </div>
+    </form>
+  }
+</div>

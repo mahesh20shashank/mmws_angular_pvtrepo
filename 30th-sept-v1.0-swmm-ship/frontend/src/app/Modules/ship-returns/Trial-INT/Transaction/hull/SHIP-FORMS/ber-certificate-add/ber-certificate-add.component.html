@@ -1,0 +1,209 @@
+<app-form-card
+  title="BER Certificate"
+  headerColor="#0f172a"
+  textColor="#ffffff"
+  (action)="openApprovalWorkflow()"
+>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
+      <ng-container *ngIf="LoggedInUser !== 'Ship Staff'">
+        <app-select
+          [label]="'Command'"
+          formControlName="command"
+          [options]="commandOptions"
+          [required]="true"
+        >
+        </app-select>
+      </ng-container>
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Ship'"
+          formControlName="ship_id"
+          [options]="shipOptions"
+          placeholder="--Select--"
+          [required]="true"
+        >
+        </app-select>
+      </div>
+
+      <app-select
+        label="Initiated By"
+        formControlName="initiatedBy"
+        [options]="InitiatedByOptions"
+      >
+      </app-select>
+
+      <!------------------------------------------ Type of Boat-------------------- -->
+      <div class="flex flex-col gap-1">
+        <app-input
+          label="Type of Boat"
+          placeholder="Enter Type"
+          formControlName="type_of_boat"
+        >
+        </app-input>
+      </div>
+
+      <!-- Registration No -->
+      <div class="flex flex-col gap-1">
+        <app-input
+          label="Boat Registration No"
+          placeholder="Enter Registration No"
+          formControlName="registration_no"
+        >
+        </app-input>
+      </div>
+      <!------------------------------------------ BER For -->
+      <app-select
+        label="BER For"
+        [required]="true"
+        formControlName="ber_for"
+        [options]="berForOptions"
+      >
+      </app-select>
+
+      <!------------------------------------------ Hull (Conditional) -->
+      <app-select
+        *ngIf="form.value.ber_for === 'HULL'"
+        label="Hull"
+        [required]="true"
+        formControlName="ber_hull"
+        [options]="hullOptions"
+      >
+      </app-select>
+
+      <!------------------------------------------ Engine (Conditional) -->
+      <app-select
+        *ngIf="form.value.ber_for === 'ENGINE'"
+        label="Engine"
+        [required]="true"
+        formControlName="ber_engine"
+        [options]="engineOptions"
+      >
+      </app-select>
+
+      <!------------------------------------------ DG -->
+      <app-select
+        label="DG"
+        [required]="true"
+        formControlName="dg"
+        [options]="dgOptions"
+      >
+      </app-select>
+      <!------------------------------------------ File Upload -->
+      <div class="file-upload-field gap-1">
+        <app-file-upload
+          [label]="'Reference authority'"
+          formControlName="ref_auth"
+          [allowedFileTypes]="['pdf']"
+          [fileFieldName]="'auth_ref'"
+          [formOrMasterName]="'ber_certficate'"
+        >
+        </app-file-upload>
+      </div>
+    </div>
+
+    <!------------------------------------------ Remarks ------------------------->
+    <div class="mt-4 flex flex-col gap-1">
+      <app-input
+        label="Remarks"
+        placeholder="Enter Remarks"
+        formControlName="remarks"
+      >
+      </app-input>
+    </div>
+
+    <!-- --------------------------------- Signature Preview -- --------------------------------->
+    <div *ngIf="signatureData" class="mt-4 flex justify-end">
+      <div
+        class="flex items-center gap-2 bg-blue-50 p-2 border border-blue-300 rounded-md max-w-md text-gray-800"
+      >
+        <!-- QR Code -->
+        <div class="w-[70px] shrink-0">
+          <img
+            *ngIf="signatureData.qr_code"
+            [src]="signatureData.qr_code"
+            alt="QR Code"
+            class="w-full rounded"
+          />
+        </div>
+
+        <!-- Signature Details -->
+        <div class="text-sm">
+          <div class="text-gray-600 mb-1">
+            <span class="font-semibold text-gray-700"
+              >Electronically Signed by:</span
+            >
+            {{ signatureData?.first_name }} {{ signatureData?.last_name }}
+          </div>
+
+          <div>
+            <span class="font-semibold text-gray-700">User ID:</span>
+            {{ signatureData?.user_id || "N/A" }}
+          </div>
+
+          <div>
+            <span class="font-semibold text-gray-700">Role:</span>
+            {{ signatureData?.role || "N/A" }}
+          </div>
+
+          <div>
+            <span class="font-semibold text-gray-700">Signed At:</span>
+            {{
+              signatureData?.signed_at
+                ? (signatureData?.signed_at | date: "short")
+                : "N/A"
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-toast></app-toast>
+  </form>
+
+  <!-- FOOTER -->
+  <div
+    formFooter
+    class="flex gap-5"
+    [ngClass]="viewMode ? 'justify-start' : 'justify-center'"
+  >
+    <app-reusable-button label="Back" variant="back" (clicked)="handleBack()">
+    </app-reusable-button>
+    <app-loading-button
+      *ngIf="!viewMode"
+      label="Clear"
+      [color]="'red'"
+      [icon]="restartIcon"
+      (clicked)="clear()"
+    ></app-loading-button>
+    <app-loading-button
+      *ngIf="!viewMode && activeTab !== 'save'"
+      label="Save draft"
+      [color]="'blue'"
+      [icon]="draftIcon"
+      [loading]="draftLoading"
+      (clicked)="handleSave('draft')"
+    ></app-loading-button>
+
+    <app-loading-button
+      *ngIf="!viewMode"
+      label="Submit for approval"
+      [color]="'green'"
+      [icon]="saveIcon"
+      [loading]="saveLoading"
+      (clicked)="handleSave('save')"
+    ></app-loading-button>
+  </div>
+</app-form-card>
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="rowId || form.get('id')?.value || ''"
+  [rowData]="editDataDetails"
+  [context]="editDataDetails"
+  (showUserPopupChange)="onApprovalPopupChange($event)"
+>
+</app-approval-work-flow>

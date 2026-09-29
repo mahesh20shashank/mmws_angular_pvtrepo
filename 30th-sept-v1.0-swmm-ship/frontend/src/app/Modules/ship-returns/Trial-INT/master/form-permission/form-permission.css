@@ -1,0 +1,50 @@
+/* Permission Manager uses shared table / form / dialog components. */
+:host {
+  display: block;
+}
+
+/* Clip AG Grid cells so long trial/user names never spill into next column */
+:host ::ng-deep .fp-summary-cell {
+  overflow: hidden !important;
+  min-width: 0 !important;
+}
+
+:host ::ng-deep .fp-summary-cell .ag-cell-wrapper,
+:host ::ng-deep .fp-summary-cell .ag-cell-value {
+  overflow: hidden !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/*
+ * Layout: [truncated first name ……] [+N other]
+ * Name ellipsizes; "+N other" stays visible and fixed width.
+ */
+:host ::ng-deep .fp-name-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  cursor: default;
+  line-height: 1.35;
+}
+
+:host ::ng-deep .fp-name-summary__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .fp-name-summary__more {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-weight: 600;
+  opacity: 0.85;
+}

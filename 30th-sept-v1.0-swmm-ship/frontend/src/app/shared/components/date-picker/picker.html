@@ -1,0 +1,77 @@
+<div class="dp-wrapper" [class.dp-open]="isOpen">
+
+    <!-- ── Single trigger input ── -->
+    <div class="dp-trigger" [class.dp-trigger--active]="isOpen" [class.dp-trigger--invalid]="invalid"
+        [class.dp-trigger--disabled]="disabled || readonly" [attr.aria-disabled]="disabled || readonly" tabindex="0" role="button"
+        (click)="toggleCalendar()" (keydown.enter)="toggleCalendar()"
+        (keydown.space)="toggleCalendar(); $event.preventDefault()">
+
+        <label for="label" class="floating-label" [class.visible]="isOpen || !!value.start">
+            {{ label }}
+            @if (required) {
+            <span class="required">*</span>
+            }
+        </label>
+
+        <span class="dp-value" [class.placeholder]="!value.start"
+            [class.dp-value--placeholder-invalid]="!value.start && placeholderInvalid"
+            [class.with-label]="isOpen || !!value.start">
+            {{ displayLabel }}
+        </span>
+
+        <app-icon name="calendar" class="dp-trigger__icon" [size]="18" variant="inherit" />
+    </div>
+
+    <div class="dp-calander-wrapper">
+        @if (isOpen) {
+        <div class="dp-calendar" tabindex="0" role="button" (keyup.enter)="$event.stopPropagation()">
+
+            <!-- Month / Year nav -->
+            <div class="dp-nav">
+                <app-button class="dp-nav__btn" type="button" (click)="prevMonth()">&#8249;</app-button>
+
+                <div class="dp-nav__selects">
+                    <select class="dp-select" [(ngModel)]="displayMonth" (ngModelChange)="onMonthChange($event)">
+                        @for (m of months; track $index) {
+                        <option class="dp-option" [value]="$index">
+                            {{ m }}
+                        </option>
+                        }
+                    </select>
+                    <select class="dp-select" [(ngModel)]="displayYear" (ngModelChange)="onYearChange($event)">
+                        @for (y of years; track y) {
+                        <option class="dp-option" [value]="y">
+                            {{ y }}
+                        </option>
+                        }
+                    </select>
+                </div>
+
+                <app-button class="dp-nav__btn" type="button" (click)="nextMonth()">&#8250;</app-button>
+            </div>
+
+            <!-- Day-of-week headers -->
+            <div class="dp-grid dp-weekdays">
+                @for (d of dayHeaders; track d) {
+                <span>{{ d }}</span>
+                }
+            </div>
+
+            <!-- Day cells -->
+            <div class="dp-grid dp-days">
+                @for (cell of calendarCells; track cell.date) {
+                <app-button type="button" class="dp-day" [class.dp-day--other-month]="!cell.currentMonth"
+                    [class.dp-day--today]="cell.isToday" [class.dp-day--range-start]="isRangeStart(cell.date)"
+                    [class.dp-day--range-end]="isRangeEnd(cell.date)" [class.dp-day--in-range]="isInRange(cell.date)"
+                    [disabled]="cell.disabled" (click)="selectDate(cell.date)" (mouseenter)="onDayHover(cell.date)"
+                    (mouseleave)="onDayLeave()">
+                    {{ cell.day }}
+                </app-button>
+                }
+            </div>
+
+        </div> }
+    </div>
+    <!-- ── Calendar dropdown ── -->
+
+</div>

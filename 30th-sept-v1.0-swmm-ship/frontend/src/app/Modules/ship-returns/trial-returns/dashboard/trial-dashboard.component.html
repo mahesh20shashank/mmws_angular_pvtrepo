@@ -1,0 +1,211 @@
+<div class="space-y-6">
+  <!-- 4 Frequency Cards (Monthly, Quarterly, Half-Yearly, Annual) using Shared app-kpi-card Component -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Monthly Returns Due Card -->
+    <app-kpi-card title="MONTHLY RETURNS DUE" [displayValue]="monthlyDueCount()" iconName="activity" iconColor="#F472B6"
+      iconBg="rgba(244, 114, 182, 0.15)" [showViewMore]="true" [showDetailArrow]="true" [iconPosition]="'right'"
+      (detailClick)="openReturnModal('monthly')" [showTimelineTab]="false" [showTrends]="false" cardHeight="auto"
+      (click)="openReturnModal('monthly')" class="cursor-pointer hover:opacity-95 transition-all"></app-kpi-card>
+
+    <!-- Quarterly Returns Due Card -->
+    <app-kpi-card title="QUARTERLY RETURNS DUE" [displayValue]="quarterlyDueCount()" iconName="file-text"
+      iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)" [showViewMore]="true" [showDetailArrow]="true"
+      [iconPosition]="'right'" (detailClick)="openReturnModal('quarterly')" [showTimelineTab]="false"
+      [showTrends]="false" cardHeight="auto" (click)="openReturnModal('quarterly')"
+      class="cursor-pointer hover:opacity-95 transition-all"></app-kpi-card>
+
+    <!-- Half-Yearly Returns Due Card -->
+    <app-kpi-card title="HALF-YEARLY RETURNS DUE" [displayValue]="halfYearlyDueCount()" iconName="activity"
+      iconColor="#C084FC" iconBg="rgba(192, 132, 252, 0.15)" [showViewMore]="true" [showDetailArrow]="true"
+      [iconPosition]="'right'" (detailClick)="openReturnModal('half_yearly')" [showTimelineTab]="false"
+      [showTrends]="false" cardHeight="auto" (click)="openReturnModal('half_yearly')"
+      class="cursor-pointer hover:opacity-95 transition-all"></app-kpi-card>
+
+    <!-- Annual Returns Due Card -->
+    <app-kpi-card title="ANNUAL RETURNS DUE" [displayValue]="yearlyDueCount()" iconName="file-text" iconColor="#34D399"
+      [iconPosition]="'right'" iconBg="rgba(52, 211, 153, 0.15)" [showViewMore]="true" [showDetailArrow]="true"
+      (detailClick)="openReturnModal('yearly')" [showTimelineTab]="false" [showTrends]="false" cardHeight="auto"
+      (click)="openReturnModal('yearly')" class="cursor-pointer hover:opacity-95 transition-all"></app-kpi-card>
+  </div>
+
+  <!-- Trial Submission Calendar Timeline Card (Using Shared PanelCard Component) -->
+  <app-panel-card title="Trial Returns Submission Calendar Timeline"
+    subtitle="Real-time progression tracking for monthly, quarterly, half-yearly & annual trial returns across the current month (Days 1 - 31)"
+    icon="activity" iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+    <div panelActions class="flex flex-wrap items-center gap-3 text-xs">
+      <div class="flex items-center gap-3 border border-[var(--border-primary)] bg-[var(--bg-input)] px-3 py-1.5 rounded-lg">
+        <span class="text-[var(--text-muted)] uppercase font-semibold text-[10px]">Frequency:</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#0EA5E9]"></span> Monthly</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>
+          Quarterly</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>
+          Half-Yearly</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#F43F5E]"></span> Annual</span>
+      </div>
+
+      <div class="flex items-center gap-3 border border-[var(--border-primary)] bg-[var(--bg-input)] px-3 py-1.5 rounded-lg">
+        <span class="text-[var(--text-muted)] uppercase font-semibold text-[10px]">Milestone:</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#FBBF24]"></span>
+          Initiated</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#A78BFA]"></span> Synced</span>
+        <span class="flex items-center gap-1 text-[var(--text-primary)]"><span class="w-2.5 h-2.5 rounded-full bg-[#6EE7B7]"></span>
+          Approved</span>
+      </div>
+    </div>
+
+    <!-- Timeline Grid Container -->
+    <div class="overflow-x-auto pt-2">
+      <div class="min-w-[850px]">
+        <div
+          class="grid grid-cols-[220px_1fr] text-xs font-semibold uppercase text-[var(--text-muted)] pb-2 border-b border-[var(--border-primary)]">
+          <div>Return Name</div>
+          <div class="timeline-grid-31 text-center font-mono text-[10px]">
+            @for (day of days; track day) {
+            <span>{{ day }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Timeline Rows -->
+        <div class="space-y-3 mt-3">
+          @for (item of timelineItems(); track item.name) {
+          <div
+            class="grid grid-cols-[220px_1fr] items-center text-xs hover:bg-[var(--bg-input)] p-1.5 rounded-lg transition-colors">
+            <div class="flex flex-col pr-2">
+              <span class="font-medium text-[var(--text-primary)] truncate" [title]="item.name">{{ item.name }}</span>
+              <span class="text-[10px] font-semibold" [style.color]="item.freqColor">{{ item.frequency }}</span>
+            </div>
+
+            <div class="timeline-grid-31 relative items-center h-6">
+              <!-- Background Grid Lines -->
+              <div class="absolute inset-0 timeline-grid-31 pointer-events-none opacity-10">
+                @for (day of days; track day) {
+                <div class="border-r border-[var(--border-primary)] h-full"></div>
+                }
+              </div>
+
+              @if (item.status !== 'Not Initiated') {
+              <!-- Connecting Progress Line -->
+              <div class="absolute h-1 rounded-full top-1/2 -translate-y-1/2 transition-all opacity-80"
+                [style.backgroundColor]="item.freqColor" [style.left.%]="((item.initDay - 1) / 31) * 100"
+                [style.width.%]="(((item.approvedDay || item.syncDay || item.initDay) - item.initDay + 1) / 31) * 100">
+              </div>
+
+              <!-- Milestone Dot: Initiated -->
+              <div
+                class="absolute w-3.5 h-3.5 rounded-full bg-[#FBBF24] border-2 border-slate-900 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 shadow"
+                [style.left.%]="((item.initDay - 0.5) / 31) * 100"
+                [title]="item.name + ' - Initiated Day ' + item.initDay"></div>
+
+              <!-- Milestone Dot: Synced -->
+              @if (item.syncDay) {
+              <div
+                class="absolute w-3.5 h-3.5 rounded-full bg-[#A78BFA] border-2 border-slate-900 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 shadow"
+                [style.left.%]="((item.syncDay - 0.5) / 31) * 100"
+                [title]="item.name + ' - Synced Day ' + item.syncDay"></div>
+              }
+
+              <!-- Milestone Dot: Approved -->
+              @if (item.approvedDay) {
+              <div
+                class="absolute w-3.5 h-3.5 rounded-full bg-[#6EE7B7] border-2 border-slate-900 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 shadow"
+                [style.left.%]="((item.approvedDay - 0.5) / 31) * 100"
+                [title]="item.name + ' - Approved Day ' + item.approvedDay"></div>
+              }
+              } @else {
+              <!-- Not Initiated State Marker -->
+              <div
+                class="absolute w-3 h-3 rounded-full bg-slate-700 border border-slate-500 top-1/2 -translate-y-1/2 left-2"
+                title="Not Yet Initiated"></div>
+              <span class="absolute left-7 text-[10px] text-rose-400 font-semibold italic">Not Initiated</span>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </app-panel-card>
+
+  <!-- Return Details Side Drawer Modal (Using Official Shared DetailDrawer Component) -->
+  <app-detail-drawer [open]="isModalOpen()" (closed)="closeReturnModal()" [label]="modalHeaderTitle()"
+    [value]="totalCount()" [subtitle]="modalSubtitle()" [iconName]="modalIconName()" [iconColor]="modalIconColor()"
+    [iconBg]="modalIconBg()" [stats]="drawerStats()" sectionTitle="Return Breakdown by Status"
+    sectionHint="COUNT · SHARE">
+    <!-- Breakdown Progress Bars Section -->
+    <div class="space-y-4">
+      <!-- Item 1: Initiated Returns -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-medium text-[var(--text-primary)]">Initiated Returns</span>
+          <div class="flex items-center gap-2 font-mono">
+            <span class="font-bold text-[var(--text-primary)]">{{ initiatedCount() }}</span>
+            <span class="text-[var(--text-muted)] text-[10px]">{{ initiatedSharePercent() }}%</span>
+          </div>
+        </div>
+        <div class="w-full h-2 bg-[var(--bg-input)] rounded-full overflow-hidden border border-[var(--border-primary)]">
+          <div class="h-full bg-rose-500 rounded-full transition-all duration-500"
+            [style.width.%]="initiatedSharePercent()"></div>
+        </div>
+      </div>
+
+      <!-- Item 2: Pending Returns -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-medium text-[var(--text-primary)]">Pending Returns</span>
+          <div class="flex items-center gap-2 font-mono">
+            <span class="font-bold text-[var(--text-primary)]">{{ pendingCount() }}</span>
+            <span class="text-[var(--text-muted)] text-[10px]">{{ pendingSharePercent() }}%</span>
+          </div>
+        </div>
+        <div class="w-full h-2 bg-[var(--bg-input)] rounded-full overflow-hidden border border-[var(--border-primary)]">
+          <div class="h-full bg-rose-500/70 rounded-full transition-all duration-500"
+            [style.width.%]="pendingSharePercent()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Returns Detail List with Tabs -->
+    <div class="space-y-3 pt-3 border-t border-[var(--border-primary)] mt-2">
+      <div class="flex gap-2 bg-[var(--bg-input)] p-1 rounded-xl border border-[var(--border-primary)]">
+        <button (click)="setModalTab('initiated')"
+          class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer"
+          [ngClass]="activeModalTab() === 'initiated' ? 'bg-sky-500/20 text-sky-500 dark:text-sky-400 border border-sky-500/30' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'">
+          Initiated ({{ filteredInitiated().length }})
+        </button>
+        <button (click)="setModalTab('pending')"
+          class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer"
+          [ngClass]="activeModalTab() === 'pending' ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'">
+          Pending ({{ filteredPending().length }})
+        </button>
+      </div>
+
+      <!-- List Items Container -->
+      <div class="space-y-2 max-h-64 overflow-y-auto pr-1">
+        @if (activeModalTab() === 'initiated') {
+        @for (item of filteredInitiated(); track item.id) {
+        <div
+          class="p-3 bg-[var(--bg-input)] border border-[var(--border-primary)] rounded-xl flex items-center justify-between hover:bg-[var(--bg-input-disabled)] transition-colors">
+          <div class="space-y-0.5">
+            <span class="text-xs font-semibold text-[var(--text-primary)] block">{{ item.name }}</span>
+            <span class="text-[10px] text-[var(--text-muted)]">{{ item.department }} · Initiated: {{ item.initiatedDate }}</span>
+          </div>
+          <span class="table-pill badge-status-closed text-[10px]">{{ item.status }}</span>
+        </div>
+        }
+        } @else {
+        @for (item of filteredPending(); track item.id) {
+        <div
+          class="p-3 bg-[var(--bg-input)] border border-[var(--border-primary)] rounded-xl flex items-center justify-between hover:bg-[var(--bg-input-disabled)] transition-colors">
+          <div class="space-y-0.5">
+            <span class="text-xs font-semibold text-[var(--text-primary)] block">{{ item.name }}</span>
+            <span class="text-[10px] text-amber-600 dark:text-amber-400 font-medium">{{ item.department }} · Pending Action</span>
+          </div>
+          <span class="table-pill badge-status-returned text-[10px]">Pending</span>
+        </div>
+        }
+        }
+      </div>
+    </div>
+  </app-detail-drawer>
+</div>

@@ -1,0 +1,16 @@
+<app-add-form
+  *ngIf="open"
+  [tabs]="TABS"
+  (onTabChange)="onTabChange($event)"
+  [width]="'75vw'"
+  [open]="open"
+  [position]="'top'"
+  [fromTitle]="title"
+  [formData]="formData"
+  [formConfig]="formConfigForInitiateTrial"
+  [submitLabel]="'Initiate'"
+  (onSubmit)="handleInitiateSubmit($event)"
+  (onOpenChange)="onShellOpenChange($event)"
+  (onFieldChange)="onInitiateFieldChange($event)"
+  [isReadonly]="readOnly">
+</app-add-form>

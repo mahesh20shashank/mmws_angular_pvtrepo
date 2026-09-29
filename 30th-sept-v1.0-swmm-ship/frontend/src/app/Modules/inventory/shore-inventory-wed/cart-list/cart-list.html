@@ -1,0 +1,98 @@
+<app-help-guidance />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>{{ title }}</h3>
+    <div class="wed-panel__actions">
+      @if (showApprovalButton) {
+        <app-button
+          type="button"
+          class="btn-secondary"
+          [disabled]="!selectedRows().length || sending()"
+          (click)="sendForHodApproval()"
+        >
+          {{ sending() ? "Sending..." : "Send for HOD Approval" }}
+        </app-button>
+      }
+      @if (showSyncButton) {
+        <app-button type="button" class="btn-primary" [disabled]="syncing()" (click)="sync()">
+          {{ syncing() ? "Syncing..." : syncButtonLabel }}
+        </app-button>
+      }
+      @if (showRaiseButton) {
+        <app-button type="button" class="btn-raise" [disabled]="raising()" (click)="raise()">
+          {{ raising() ? "Raising..." : raiseButtonLabel }}
+        </app-button>
+      }
+      @if (showEdpsButton) {
+        <app-button
+          type="button"
+          class="btn-secondary"
+          [disabled]="!selectedRows().length || downloadingEdps()"
+          (click)="downloadEdpsPdf()"
+        >
+          {{ downloadingEdps() ? "Preparing..." : "Download EDPS-3 Return Note" }}
+        </app-button>
+      }
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="entries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="showCheckboxes"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+  />
+</div>
+
+@if (receiptEntry(); as entry) {
+  <app-modal size="sm" title="Enter Receipt Details" (closeModal)="closeReceiptModal()">
+    <form [formGroup]="receiptForm" class="wed-receipt-form">
+      <div class="wed-receipt-form__row">
+        <span>Item Code</span>
+        <strong>{{ entry.itemCode }}</strong>
+      </div>
+      <div class="wed-receipt-form__row">
+        <span>Balance Qty (Yet to Receive)</span>
+        <strong>{{ entry.qty }}</strong>
+      </div>
+
+      <div class="form-field-label">Received Qty</div>
+      <input class="form-field-input" type="number" min="1" [attr.max]="entry.qty" formControlName="receivedQty" />
+      @if (receiptForm.controls.receivedQty.invalid && receiptForm.controls.receivedQty.touched) {
+        <span class="form-error">
+          @if (receiptForm.controls.receivedQty.hasError("max")) {
+            Cannot exceed the balance quantity ({{ entry.qty }}).
+          } @else {
+            Enter a valid received quantity (at least 1).
+          }
+        </span>
+      }
+
+      <div class="form-field-label">Received Date</div>
+      <input class="form-field-input" type="date" [attr.max]="today" formControlName="receivedDate" />
+      @if (receiptForm.controls.receivedDate.invalid && receiptForm.controls.receivedDate.touched) {
+        <span class="form-error">
+          @if (receiptForm.controls.receivedDate.hasError("futureDate")) {
+            Received Date cannot be in the future.
+          } @else {
+            Received Date is required.
+          }
+        </span>
+      }
+
+      <div class="wed-receipt-form__actions">
+        <app-button type="button" class="btn-secondary" (click)="closeReceiptModal()">Close</app-button>
+        <app-button
+          type="button"
+          class="btn-primary"
+          [disabled]="savingReceipt() || receiptForm.invalid"
+          (click)="submitReceipt()"
+        >
+          {{ savingReceipt() ? "Saving..." : "Save" }}
+        </app-button>
+      </div>
+    </form>
+  </app-modal>
+}

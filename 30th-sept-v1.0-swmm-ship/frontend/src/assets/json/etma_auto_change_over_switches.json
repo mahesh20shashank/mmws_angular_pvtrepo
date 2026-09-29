@@ -1,0 +1,3467 @@
+{
+  "formId": "auto_change_over_switches",
+  "title": "CHECK OFF LIST \u2014 AUTO CHANGE OVER SWITCHES (ACOS)",
+  "sourceFile": "auto_change_over_switches.html",
+  "sections": [
+    {
+      "id": "trial_information",
+      "title": "CHECK OFF LIST — AUTO CHANGE OVER SWITCHES (ACOS)",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+        {
+            "type":"label",
+            "value": "Trial Information",
+            "colSpan": 12
+          },
+          {
+          "type": "input",
+          "name": "ship_name",
+          "label": "Ship",
+          "required": true,
+            "disabled": true,
+          "placeholder": "",
+          "value": "",
+          "options": [],
+          "isDynamic": true,
+          "lookupKey": "ship_name",
+          "prefill": true,
+          "prefillSource": "context.ship_name",
+          "tree": false,
+          "colSpan": 4
+        },
+          {
+            "_id": "occasion_of_trial",
+            "key": "occasion_of_trial",
+            "name": "occasion_of_trial",
+            "label": "Occasion of Trial ",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select Occasion --",
+                "value": ""
+              },
+              {
+                "label": "a",
+                "value": "a"
+              },
+              {
+                "label": "b",
+                "value": "b"
+              },
+              {
+                "label": "c",
+                "value": "c"
+              },
+              {
+                "label": "d",
+                "value": "d"
+              },
+              {
+                "label": "e",
+                "value": "e"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "presented_by",
+            "key": "presented_by",
+            "name": "presented_by",
+            "label": "Presented By ",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+
+                "label": "Select Presented By",
+
+                "value": ""
+
+              },
+
+              {
+
+                "label": "Ship Staff",
+
+                "value": "SHIP_STAFF"
+
+              },
+
+              {
+
+                "label": "OEM Representative",
+
+                "value": "OEM_REPRESENTATIVE"
+
+              },
+
+              {
+
+                "label": "Yard Representative",
+
+                "value": "YARD_REPRESENTATIVE"
+
+              },
+
+              {
+
+                "label": "Trial Team",
+
+                "value": "TRIAL_TEAM"
+
+              }
+            ],
+            "isDynamic": true,
+            "lookupKey": "presented_by",
+            "prefill": true,
+            "prefillSource": "context.presented_by",
+            "colSpan": 4
+          },
+          {
+            "_id": "location_of_acos",
+            "key": "location_of_acos",
+            "name": "location_of_acos",
+            "label": "Location of ACOS",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "acos_feeds_to_equipment",
+            "key": "acos_feeds_to_equipment",
+            "name": "acos_feeds_to_equipment",
+            "label": "ACOS Feeds to Equipment",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "trial_inspector_name",
+            "key": "trial_inspector_name",
+            "name": "trial_inspector_name",
+            "label": "Trial Inspector (Name)",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4
+          }
+        ],
+        "tables_1": [],
+        "fields_2": [
+          {
+            "type":"label",
+            "value": "1. Test Equipment Used During Trials",
+            "colSpan": 12
+          },
+          {
+            "type":"label",
+            "value": "Select all applicable test equipment:",
+            "colSpan": 12
+          },
+          {
+            "_id": "test_equipment",
+            "key": "test_equipment",
+            "name": "test_equipment",
+            "label": "Test Equipment",
+            "type": "multiselect",
+            "value": [],
+            "required": false,
+            "disabled": false,
+            "placeholder": "--Select--",
+            "colSpan": 6,
+            "isDynamic": false,
+            "options": [
+              {
+                "label": "Insulation Tester",
+                "value": "Insulation Tester"
+              },
+              {
+                "label": "Phase Sequence Meter",
+                "value": "Phase Sequence Meter"
+              },
+              {
+                "label": "Oscilloscope",
+                "value": "Oscilloscope"
+              },
+              {
+                "label": "HIOKI 88820 Analyser (for measurement of change over time)",
+                "value": "HIOKI 88820 Analyser (for measurement of change over time)"
+              },
+              {
+                "label": "Variac",
+                "value": "Variac"
+              },
+              {
+                "label": "Multimeter",
+                "value": "Multimeter"
+              },
+              {
+                "label": "Clamp Meter",
+                "value": "Clamp Meter"
+              }
+            ]
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "2_date_time_table_1",
+            "sectionType": "simpleTable",
+            "title": "2. Date & Time",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Activity",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "30%"
+                },
+                {
+                  "label": "Date",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Time",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "activity",
+                "label": "Activity",
+                "type": "label",
+                "align": "left"
+              },
+              {
+                "key": "date",
+                "label": "Date",
+                "type": "label",
+                "align": "left"
+              },
+              {
+                "key": "time",
+                "label": "Time",
+                "type": "label",
+                "align": "left"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "2_date_time_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Intimation from Ship",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_3_dt_intimation_date",
+                    "key": "dt_intimation_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_4_dt_intimation_time",
+                    "key": "dt_intimation_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "2_date_time_table_1_row_2",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Readiness indicated by Ship",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_3_dt_readiness_date",
+                    "key": "dt_readiness_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_4_dt_readiness_time",
+                    "key": "dt_readiness_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "2_date_time_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "2.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Trials Inspector reported onboard Ship",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_3_dt_inspector_date",
+                    "key": "dt_inspector_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_4_dt_inspector_time",
+                    "key": "dt_inspector_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "2_date_time_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "2.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Trials completed",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_3_dt_completed_date",
+                    "key": "dt_completed_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_4_dt_completed_time",
+                    "key": "dt_completed_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "3_design_requirements_documentation_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "3. Design Requirements / Documentation",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Description",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "30%"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Manufacturer",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_1_cell_3_dr_manufacturer",
+                    "key": "dr_manufacturer",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": true,
+                    "prefillSource": "equipment.manufacturer_name",
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "3.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Make & Model",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_2_cell_3_dr_make_model",
+                    "key": "dr_make_model",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Rating",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_3_cell_3_dr_rating",
+                    "key": "dr_rating",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "3.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Equipment Serial Number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_4_cell_3_dr_serial_no",
+                    "key": "dr_serial_no",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": true,
+                    "prefillSource": "equipment.serial_no",
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "3.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "CMMS Code",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_5_cell_3_dr_cmms_code",
+                    "key": "dr_cmms_code",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": true,
+                    "prefillSource": "equipment.sfd_code",
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "3.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "GRAQ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_6_cell_3_dr_graq",
+                    "key": "dr_graq",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "3.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "ATP",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_7_cell_3_dr_atp",
+                    "key": "dr_atp",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "3.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Board Proceedings",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_8_cell_3_dr_board_proc",
+                    "key": "dr_board_proc",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "FATs Report",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_9_cell_3_dr_fats_report",
+                    "key": "dr_fats_report",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Documentation",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Technical documentation",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_11_cell_3_dr_3101",
+                    "key": "dr_3101",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Technical / functional description including that at PCB and component level",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_12_cell_3_dr_3102",
+                    "key": "dr_3102",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Operating Instruction Manual",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_13_cell_3_dr_3103",
+                    "key": "dr_3103",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_14_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_14_cell_2_static",
+                    "type": "label",
+                    "value": "Preventive maintenance routines / repair instructions Manual along with drawings",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_14_cell_3_dr_3104",
+                    "key": "dr_3104",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_15",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_15_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_15_cell_2_static",
+                    "type": "label",
+                    "value": "Installation and Test Manual",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_15_cell_3_dr_3105",
+                    "key": "dr_3105",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_16",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_16_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_16_cell_2_static",
+                    "type": "label",
+                    "value": "Part Identification list and Tools Catalogue",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_16_cell_3_dr_3106",
+                    "key": "dr_3106",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_17",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_17_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_17_cell_2_static",
+                    "type": "label",
+                    "value": "Test Procedure and Documentation",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_17_cell_3_dr_3107",
+                    "key": "dr_3107",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_18",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_18_cell_1_static",
+                    "type": "serial",
+                    "value": "3.10.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "8%"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_18_cell_2_static",
+                    "type": "label",
+                    "value": "List of onboard and B&D spares",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_18_cell_3_dr_3108",
+                    "key": "dr_3108",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "4_installation_checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "4. Installation Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Reference",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 4,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "SAT / UNSAT",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "4_installation_checks_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Section VIII Para 0811",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_3_static",
+                    "type": "label",
+                    "value": "Check the earthing of equipment",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_4_ic_41_sat",
+                    "key": "ic_41_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_5_ic_41_rmk",
+                    "key": "ic_41_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "4.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Section VIII Para 0812-0814",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_3_static",
+                    "type": "label",
+                    "value": "Check the proper termination of cables",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_4_ic_42_sat",
+                    "key": "ic_42_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_5_ic_42_rmk",
+                    "key": "ic_42_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "4.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0638 (a)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_3_static",
+                    "type": "label",
+                    "value": "Check the clearance between terminals",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_4_ic_43_sat",
+                    "key": "ic_43_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_5_ic_43_rmk",
+                    "key": "ic_43_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0645-0648",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_3_static",
+                    "type": "label",
+                    "value": "Check the fuse holders and fuses are fitted as per rating inside the panel.",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_4_ic_44_sat",
+                    "key": "ic_44_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_5_ic_44_rmk",
+                    "key": "ic_44_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "4.5.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0639-0643",
+                    "colspan": 1,
+                    "rowspan": 2,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_3_static",
+                    "type": "label",
+                    "value": "Check the condition of busbars fitted in ACOS.",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_4_ic_451_sat",
+                    "key": "ic_451_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_5_ic_451_rmk",
+                    "key": "ic_451_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "4.5.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "Check the lifting & locking arrangements.",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_3_ic_452_sat",
+                    "key": "ic_452_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_4_ic_452_rmk",
+                    "key": "ic_452_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "4.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0644",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_3_static",
+                    "type": "label",
+                    "value": "Check the colour coding marking of bus-bars, cables and associated components",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_4_ic_46_sat",
+                    "key": "ic_46_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_5_ic_46_rmk",
+                    "key": "ic_46_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "4.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1019",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_3_static",
+                    "type": "label",
+                    "value": "Check the fitment of emergency handle operator",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_4_ic_47_sat",
+                    "key": "ic_47_sat",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_5_ic_47_rmk",
+                    "key": "ic_47_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "4.8",
+                    "colspan": 1,
+                    "rowspan": 7,
+                    "align": "center",
+                    "width": "20px"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Section XIII Para 1307",
+                    "colspan": 1,
+                    "rowspan": 7,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_3_static",
+                    "type": "label",
+                    "value": "Insulation Resistance Checks",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left",
+                    "className": "font-semibold"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_4_ic_48_sat",
+                    "key": "ic_48_sat",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "--",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 7,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_5_ic_48_rmk",
+                    "key": "ic_48_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 7,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_10_cell_1_static",
+                    "type": "label",
+                    "value": "4.8.1 Insulation value between each Phase and Earth (>2 MΩ)",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_r",
+                    "type": "label",
+                    "value": "R",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "className": "font-semibold"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_y",
+                    "type": "label",
+                    "value": "Y",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "className": "font-semibold"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_b",
+                    "type": "label",
+                    "value": "B",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "className": "font-semibold"
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_12_value_label",
+                    "type": "label",
+                    "value": "Value (MΩ)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_12_cell_1_ins_r_earth",
+                    "key": "ins_r_earth",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "R",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_12_cell_2_ins_y_earth",
+                    "key": "ins_y_earth",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Y",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_12_cell_3_ins_b_earth",
+                    "key": "ins_b_earth",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "B",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_13_cell_1_static",
+                    "type": "label",
+                    "value": "4.8.2 Insulation value between Phases (>2 MΩ)",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_14_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_14_ry",
+                    "type": "label",
+                    "value": "R-Y",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "className": "font-semibold"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_14_yb",
+                    "type": "label",
+                    "value": "Y-B",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "className": "font-semibold"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_14_br",
+                    "type": "label",
+                    "value": "B-R",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "className": "font-semibold"
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_15",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_15_value_label",
+                    "type": "label",
+                    "value": "Value (MΩ)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_15_cell_1_ins_ry",
+                    "key": "ins_ry",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "R-Y",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_15_cell_2_ins_yb",
+                    "key": "ins_yb",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Y-B",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_15_cell_3_ins_br",
+                    "key": "ins_br",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "B-R",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "5_operational_checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "5. Operational Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width" : "80px"
+                },
+                {
+                  "label": "Reference",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 7,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "5_row_51_r1",
+                "cells": [
+                  {
+                    "_id": "5_row_51_ser",
+                    "type": "serial",
+                    "value": "5.1",
+                    "colspan": 1,
+                    "rowspan": 5,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_row_51_ref",
+                    "type": "label",
+                    "value": "Section X Para 1008",
+                    "colspan": 1,
+                    "rowspan": 5,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_row_51_desc",
+                    "type": "label",
+                    "value": "Power Supplies. Check 'Normal' and 'Alternate' power supplies at Input & Output end terminals.",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_row_51_rmk",
+                    "key": "oc_51_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 5,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_row_51_r2",
+                "cells": [
+                  {
+                    "_id": "5_row_51_r2_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_row_51_r2_ip",
+                    "type": "label",
+                    "value": "I/P Supply",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  },
+                  {
+                    "_id": "5_row_51_r2_op",
+                    "type": "label",
+                    "value": "O/P Supply",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  }
+                ]
+              },
+              {
+                "_id": "5_row_51_r3",
+                "cells": [
+                  {
+                    "_id": "5_row_51_r3_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_row_51_r3_ry",
+                    "type": "label",
+                    "value": "R-Y",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "style": "subheader"
+                  },
+                  {
+                    "_id": "5_row_51_r3_yb",
+                    "type": "label",
+                    "value": "Y-B",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  },
+                  {
+                    "_id": "5_row_51_r3_br",
+                    "type": "label",
+                    "value": "B-R",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  },
+                  {
+                    "_id": "5_row_51_r3_op_ry",
+                    "type": "label",
+                    "value": "R-Y",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  },
+                  {
+                    "_id": "5_row_51_r3_op_yb",
+                    "type": "label",
+                    "value": "Y-B",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  },
+                  {
+                    "_id": "5_row_51_r3_op_br",
+                    "type": "label",
+                    "value": "B-R",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "style": "subheader"
+                  }
+                ]
+              },
+              {
+                "_id": "5_row_51_r4_main",
+                "cells": [
+                  {
+                    "_id": "5_row_51_main_label",
+                    "type": "label",
+                    "value": "Main",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_row_51_main_ip_ry",
+                    "key": "ps_main_ip_ry",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_main_ip_yb",
+                    "key": "ps_main_ip_yb",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_main_ip_br",
+                    "key": "ps_main_ip_br",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_main_op_ry",
+                    "key": "ps_main_op_ry",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_main_op_yb",
+                    "key": "ps_main_op_yb",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_main_op_br",
+                    "key": "ps_main_op_br",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_row_51_r5_alt",
+                "cells": [
+                  {
+                    "_id": "5_row_51_alt_label",
+                    "type": "label",
+                    "value": "Alt",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_row_51_alt_ip_ry",
+                    "key": "ps_alt_ip_ry",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_alt_ip_yb",
+                    "key": "ps_alt_ip_yb",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_alt_ip_br",
+                    "key": "ps_alt_ip_br",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_alt_op_ry",
+                    "key": "ps_alt_op_ry",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_alt_op_yb",
+                    "key": "ps_alt_op_yb",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_51_alt_op_br",
+                    "key": "ps_alt_op_br",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "V",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "5.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1009-1011",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_3_static",
+                    "type": "label",
+                    "value": "Check the proper operation of all indication lamp",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_4_oc_52_rmk",
+                    "key": "oc_52_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "5.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1020-1021",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_3_static",
+                    "type": "label",
+                    "value": "Check the local and remote operation of ACOS (if any)",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_4_oc_53_rmk",
+                    "key": "oc_53_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "5.4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1017",
+                    "colspan": 1,
+                    "rowspan": 6,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_3_static",
+                    "type": "label",
+                    "value": "<strong>No Changeover Operation</strong><br>Change the 'Normal' supply voltage through Variac between <strong>374V to 415V</strong> (within 10% of rated voltage). Check the supply should not changeover.",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_4_oc_541_rmk",
+                    "key": "oc_541_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "5.4.2.1",
+                    "colspan": 1,
+                    "rowspan": 2,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_3_static",
+                    "type": "label",
+                    "value": "<strong>Changeover Operation — Normal → Alternate</strong><br>Reduce the normal supply voltage through Variac below <strong>331V</strong> (below 20% of rated voltage) / switch 'OFF' the 'Normal' supply. ACOS should changeover to 'Alternate' supply and check the O/P is through 'Alternate' supply. (Measure the changeover time)",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_4_oc_5421_rmk",
+                    "key": "oc_5421_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 2,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_5b",
+                "cells": [
+                  {
+                    "_id": "5_row_5b_voltage_label",
+                    "type": "label",
+                    "value": "Changeover Voltage:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "right"
+                  },
+                  {
+                    "_id": "5_row_5b_voltage_input",
+                    "key": "co_211_voltage",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "—",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_5b_v_unit",
+                    "type": "label",
+                    "value": "V",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_row_5b_time_label",
+                    "type": "label",
+                    "value": "Changeover Time:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "right"
+                  },
+                  {
+                    "_id": "5_row_5b_time_input",
+                    "key": "co_211_time",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "—",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_5b_ms_unit",
+                    "type": "label",
+                    "value": "ms",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "5.4.2.2",
+                    "colspan": 1,
+                    "rowspan": 3,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_3_static",
+                    "type": "label",
+                    "value": "<strong>Changeover Operation — Alternate → Normal</strong><br>Increase the voltage of 'Normal' supply through Variac above <strong>374V</strong> (10% of rated voltage) / Restore the 'Normal' supply and check the supply should switchover to 'Normal' supply. (Measure the changeover time)",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_4_oc_5422_rmk",
+                    "key": "oc_5422_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 3,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_6b",
+                "cells": [
+                  {
+                    "_id": "5_row_6b_voltage_label",
+                    "type": "label",
+                    "value": "Changeover Voltage:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "right"
+                  },
+                  {
+                    "_id": "5_row_6b_voltage_input",
+                    "key": "co_212_voltage",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "—",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_6b_v_unit",
+                    "type": "label",
+                    "value": "V",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_row_6b_time_label",
+                    "type": "label",
+                    "value": "Changeover Time:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "right"
+                  },
+                  {
+                    "_id": "5_row_6b_time_input",
+                    "key": "co_212_time",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "—",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "5_row_6b_ms_unit",
+                    "type": "label",
+                    "value": "ms",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_6c",
+                "cells": [
+                  {
+                    "_id": "5_row_6b_warning",
+                    "type": "label",
+                    "value": "<span class=\"text-red-500\">⚠ Changeover time must be < 800 mSec</span>",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left",
+                    "style": "warning"
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "5.4.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_3_static",
+                    "type": "label",
+                    "value": "<strong>ACOS Trials with System Load</strong><br>Check the ACOS with system load and ensure proper operation of equipment without power supply interruption while changeover.",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_4_oc_543_rmk",
+                    "key": "oc_543_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "5.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1026-1027",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_3_static",
+                    "type": "label",
+                    "value": "Testing by Test Push. Press 'Test push button' (provided on panel) & hold until switch has changed to 'Alternate' supply. On release switch will revert to 'Normal' supply.",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_4_oc_55_rmk",
+                    "key": "oc_55_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "5.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center",
+                    "width": "80px"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1019",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_3_static",
+                    "type": "label",
+                    "value": "Emergency Hand Operation. Check the emergency hand operation in case of remote control / automatic control failure.",
+                    "colspan": 7,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_4_oc_56_rmk",
+                    "key": "oc_56_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+
+        ]
+      }
+    }
+  ]
+}

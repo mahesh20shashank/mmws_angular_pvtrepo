@@ -1,0 +1,50 @@
+<div class="controls">
+  <!-- VIEW TABS -->
+  <div class="view-tabs">
+    @for (v of views; track v) {
+      <app-button
+        class="view-tab"
+        [class.active]="store.view() === v"
+        (click)="selectView(v)"
+      >
+        {{ v }}
+      </app-button>
+    }
+  </div>
+
+  <!-- WEEK NAV -->
+  <div class="week-nav">
+    <app-button class="step" title="Previous" (click)="stepPrev()">
+      <app-icon name="chev-l" [size]="14" />
+    </app-button>
+
+    <app-button class="step" title="Next" (click)="stepNext()">
+      <app-icon name="chev-r" [size]="14" />
+    </app-button>
+
+    <app-button class="today" type="button" (click)="goToday()">today</app-button>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div
+    class="range"
+    #dateAnchor
+    style="position: relative; cursor: pointer"
+     tabindex="0" role="button" (keyup.enter)="toggleDateOpen()"
+  >
+    @if (store.view() !== 'Year') {
+      <app-icon name="calendar" [size]="14" />
+    }
+
+    <span>
+      {{ rangeLabel() }}
+    </span>
+
+    @if (dateOpen()) {
+      <app-date-popover (dp-pick)="dateOpen.set(false)" />
+    }
+  </div>
+
+  <div class="spacer"></div>
+</div>

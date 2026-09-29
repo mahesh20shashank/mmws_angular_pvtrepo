@@ -1,0 +1,672 @@
+ 
+<app-form-card title="ACCOMMODATION LADDER – PORT/ STBD" headerColor="#0f172a" textColor="#ffffff">
+    <form [formGroup]="form" class="p-0">
+
+
+
+        <div class="grid grid-cols-4 gap-3">
+            <!-- stbdOptions -->
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="port">PORT/STBD*</label>
+                <app-select formControlName="port" [options]="stbdOptions" placeholder="--Select--" class="w-full">
+                </app-select>
+            </div>
+            <!-- SHIP STATUS -->
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="class_of_ship">Class of ship *</label>
+                <app-select formControlName="class_of_ship" [options]="commandOptions">
+                </app-select>
+            </div>
+            <!-- SHIP STATUS -->
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Ship*</label>
+                <app-select formControlName="ship" [options]="commandOptions" placeholder="--Select--" class="w-full">
+                </app-select>
+            </div>
+            <app-calendar label="Date of Inspection*" formControlName="date_of_inspection"></app-calendar>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mt-3">
+            <!-- ---------------------- PARAMETER 1 ------------------------------- -->
+            <app-parameter-card serial="1." title="Type of ladder">
+                <app-select formControlName="type" [options]="commandOptions">
+                </app-select>
+            </app-parameter-card>
+            <!-- ---------------------- PARAMETER 2 ------------------------------- -->
+            <app-parameter-card serial="2." title="Make">
+                <app-select formControlName="make" [options]="commandOptions">
+                </app-select>
+            </app-parameter-card>
+            <!-- ---------------------- PARAMETER 3 ------------------------------- -->
+            <app-parameter-card serial="3." title="Year of Manufacture">
+                <app-year-calendar label="" formControlName="year_of_manufacture" [min]="1900">
+                </app-year-calendar>
+            </app-parameter-card>
+        </div>
+
+        <!-- ---------------------- PARAMETER 4 ------------------------------- -->
+        <app-parameter-card serial="4" title="Load Testing">
+            <div class="form-parameter-sub-header">Date of last load test (Not to exceed 27 months)
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-calendar label="Date of Last Load Test" formControlName="last_load_test"></app-calendar>
+                <app-calendar label="Next Due Date" formControlName="next_due_load_test"></app-calendar>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="load_test_remark">Remarks*</label>
+                    <app-select formControlName="load_test_remark" [options]="SatUnsatOptions">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+        <!-- ---------------------- PARAMETER 5 ------------------------------- -->
+        <app-parameter-card serial="5" title="Serviceability Checks/ Visual Survey of Rope">
+            <div class="form-parameter-sub-header">Date of Last visual survey. To be examined by refitting agencies at
+                intermediate intervals not exceeding 2 years. Check wire rope for signs of excessive wear, corrosion or
+                other defects. Length and Dia of rope.
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-calendar label="Date of Last Load Test" formControlName="last_visual_rope_survey"></app-calendar>
+                <app-calendar label="Next Due Date" formControlName="next_due_visual_rope_survey"></app-calendar>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="visual_rope_survey_remark">Remarks*</label>
+                    <app-select formControlName="visual_rope_survey_remark" [options]="SatUnsatOptions">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+
+        <!-- ---------------------- PARAMETER 6 ------------------------------- -->
+        <app-parameter-card serial="6" title="Destruction test certificate">
+            <div class="grid grid-cols-3 gap-3 mt-2">
+                <app-calendar label="Check date of destruction test"
+                    formControlName="destruction_test_date"></app-calendar>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="destruction_test_date_remark">Remarks*</label>
+                    <app-select formControlName="destruction_test_date_remark" [options]="SatUnsatOptions">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+        <!-- ---------------------- PARAMETER 7 ------------------------------- -->
+        <app-parameter-card serial="7" title="Wire Rope">
+            <div class="form-parameter-sub-header">Date of fitment.
+                (To be maintained NHQ/DNA Policy letter NC/Policy/H-104/Equipment dated 09 May 16)
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+                <app-calendar label="Check date of destruction test"
+                    formControlName="wire_rope_fitment_date"></app-calendar>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="wire_rope_fitment_date_remark">Remarks*</label>
+                    <app-select formControlName="wire_rope_fitment_date_remark" [options]="SatUnsatOptions">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+        <!-- ---------------------- PARAMETER 8 ------------------------------- -->
+        <app-parameter-card serial="8" title="Condition of JB/ Control">
+            <!-- ---------------------------- 8A-------------------------------------- -->
+            <div class="form-parameter-sub-header">8a. Electrical hygiene, condition of connector lugs. Check tightness
+                of electrical cable connections and fasteners
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="condition_of_jb_control">Observation</label>
+                    <app-select formControlName="condition_of_jb_control" [options]="ObservationsNilOptions">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showJBControlInputFeild">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="condition_of_jb_control_remark">Remarks*</label>
+                        <app-select formControlName="condition_of_jb_control_remark" [options]="SatUnsatOptions">
+                        </app-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showJBControlInputFeild">
+                    <app-input label="Enter Remarks" formControlName="condition_of_jb_control_remark">
+                    </app-input>
+                </ng-container>
+            </div>
+            <!-- --------------------------------8b --------------------------------------------------------- -->
+            <div class="form-parameter-sub-header">8b. Status of Switches
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-1 col-span-1">
+                    <label class="form-label" for="switches_status">Observation</label>
+                    <app-select formControlName="switches_status" [options]="ObservationsNilOptions">
+                    </app-select>
+                </div>
+                <!-- 2 Columns -->
+                <ng-container *ngIf="showSwitchesInputField">
+                    <div class="col-span-2">
+                        <app-input label="Enter Remarks" formControlName="switches_status_remark">
+                        </app-input>
+                    </div>
+                </ng-container>
+
+                <!-- 1 Column (when select shown) -->
+                <ng-container *ngIf="!showSwitchesInputField">
+                    <div class="flex flex-col gap-1 col-span-1">
+                        <label class="form-label" for="switches_status_remark">Remarks*</label>
+                        <app-select formControlName="switches_status_remark" [options]="SatUnsatOptions">
+                        </app-select>
+                    </div>
+                </ng-container>
+            </div>
+            <!-- -------------------------------------------------------8C -------------------------------------------------------- -->
+            <div class="form-parameter-sub-header">8c. Status of Indicators
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <!-- 1 Column -->
+                <div class="flex flex-col gap-1 col-span-1">
+                    <label class="form-label" for="indicator_status">Observation</label>
+                    <app-select formControlName="indicator_status" [options]="ObservationsNilOptions">
+                    </app-select>
+                </div>
+
+                <!-- 2 Columns -->
+                <ng-container *ngIf="showIndicatorInputField">
+                    <div class="col-span-2">
+                        <app-input label="Enter Remarks" formControlName="indicator_status_remark">
+                        </app-input>
+                    </div>
+                </ng-container>
+
+                <!-- 1 Column (when select shown) -->
+                <ng-container *ngIf="!showIndicatorInputField">
+                    <div class="flex flex-col gap-1 col-span-1">
+                        <label class="form-label" for="indicator_status_remark">Remarks*</label>
+                        <app-select formControlName="indicator_status_remark" [options]="SatUnsatOptions">
+                        </app-select>
+                    </div>
+                </ng-container>
+            </div>
+        </app-parameter-card>
+
+        <!-- ---------------------- PARAMETER 9 ------------------------------- -->
+        <app-parameter-card serial="9" title="Condition of Foundations">
+
+            <div class="grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="condition_of_foundation">Corrosion/ Pitting/ UnpaintedCondition of
+                        Bond Strap </label>
+                    <app-select formControlName="condition_of_foundation" [options]="ObservationsOptions">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showConditionFoundationInputFeilds">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="condition_of_foundation_remark">Remarks*</label>
+                        <app-select formControlName="condition_of_foundation_remark" [options]="SatUnsatOptions"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+                </ng-container>
+            </div>
+            <ng-container *ngIf="showConditionFoundationInputFeilds">
+                <app-input label="Corrosion" placeholder="Enter remarks" formControlName="Corrosion">
+                </app-input>
+
+                <app-input label="Pitting" placeholder="Enter remarks" formControlName="Pitting">
+                </app-input>
+
+                <app-input label="Unpainted" placeholder="Enter remarks" formControlName="Preserved">
+                </app-input>
+
+                <app-input label="Others" placeholder="Enter Others" formControlName="Others">
+                </app-input>
+            </ng-container>
+        </app-parameter-card>
+
+        <!-- ---------------------------------- PARAMETER 10 ------------------------- -->
+
+        <app-parameter-card serial="10" title="Lubrication of Mechanical Part">
+            <div class="form-parameter-sub-header">Check application of grease on mechanical/ moving parts </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Check lubrication of all gears  and remarks -->
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="lubrication_mechanical_part">Observation</label>
+                    <app-select formControlName="lubrication_mechanical_part" [options]="fillingDrainPlugs">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showlubricationMechanicalRemarkInput">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="lubrication_mechanical_part_remark">Remarks*</label>
+                        <app-select formControlName="lubrication_mechanical_part_remark" [options]="SatUnsatOptions"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showlubricationMechanicalRemarkInput">
+                    <app-input label="Enter Remarks" formControlName="lubrication_mechanical_part_remark">
+                    </app-input>
+                </ng-container>
+            </div>
+        </app-parameter-card>
+        <!-- ---------------------------------- PARAMETER 11 ------------------------- -->
+        <app-parameter-card serial="11" title="Lubrication Points">
+            <div class="form-parameter-sub-header">Condition of greasing points, nipples – clean / painted/ chocked
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Check lubrication of all gears  and remarks -->
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="lubrication_point">Observation</label>
+                    <app-select formControlName="lubrication_point" [options]="fillingDrainPlugs">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showLubricationPointsRemarkInput">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="lubrication_point_remark">Remarks*</label>
+                        <app-select formControlName="lubrication_point_remark" [options]="SatUnsatOptions"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showLubricationPointsRemarkInput">
+                    <app-input label="Enter Remarks" formControlName="lubrication_point_remark">
+                    </app-input>
+                </ng-container>
+            </div>
+        </app-parameter-card>
+        <!-- ---------------------------------- PARAMETER 12 ------------------------- -->
+
+        <app-parameter-card serial="12" title="Drive">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="drive_check">Check for excessive noise during operation</label>
+                    <app-select formControlName="drive_check" [options]="noiseObserved">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showFillingDrainRemarkInput">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="drive_check_remark">Remarks*</label>
+                        <app-select formControlName="drive_check_remark" [options]="SatUnsatOptions"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showFillingDrainRemarkInput">
+                    <app-input label="Enter Remarks" formControlName="drive_check_remark">
+                    </app-input>
+                </ng-container>
+            </div>
+        </app-parameter-card>
+        <!-- LOGIC NOT APPLIED AS MULTIPLE STATEMENTS FOR REMARKS -->
+        <!-- ---------------------------------- PARAMETER 13 ------------------------- -->
+        <app-parameter-card serial="13" title="Limit Switch/ sensor">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="limit_switch_sensor">Functioning of limit switches sensor</label>
+                    <app-select formControlName="limit_switch_sensor" [options]="ObservationsNilOptions">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showFillingDrainRemarkInput">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="limit_switch_sensor_remark">Remarks*</label>
+                        <app-select formControlName="limit_switch_sensor_remark" [options]="SatUnsatOptions"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showFillingDrainRemarkInput">
+                    <app-input label="Enter Remarks" formControlName="limit_switch_sensor_remark">
+                    </app-input>
+                </ng-container>
+            </div>
+        </app-parameter-card>
+        <!-- LOGIC NOT APPLIED AS NOT CORRECT STATEMENTS FOR REMARKS -->
+        <!-- ---------------------------------- PARAMETER 14 ------------------------- -->
+        <app-parameter-card serial="14" title="Insulation Motor">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
+
+                    <app-input label=">2 M Ohms" formControlName="insulation_motor">
+                    </app-input>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="insulation_motor_remark">Remarks*</label>
+                    <app-select formControlName="insulation_motor_remark" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+
+            </div>
+        </app-parameter-card>
+
+
+        <!-- ---------------------------------- PARAMETER 15 ------------------------- -->
+        <app-parameter-card serial="15" title="Operational Trials at SWL">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="operational_trails_swl">Hoisting/ lowering/Slew/Slide
+                        (in-out)–Electrical mode</label>
+                    <app-select formControlName="operational_trails_swl" [options]="ObservationsNilOptions">
+                    </app-select>
+                </div>
+                <ng-container *ngIf="!showFillingDrainRemarkInput">
+                    <div class="flex flex-col gap-1">
+                        <label class="form-label" for="operational_trails_swl_remark">Remarks*</label>
+                        <app-select formControlName="operational_trails_swl_remark" [options]="SatUnsatOptions"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="showFillingDrainRemarkInput">
+                    <app-input label="Enter Remarks" formControlName="operational_trails_swl_remark">
+                    </app-input>
+                </ng-container>
+            </div>
+        </app-parameter-card>
+
+        <div class="form-section-header">
+            CBPM PARAMETERS (Lubrication Oil Status)
+        </div>
+        <!-- --------------------------------------------------------------------------------------------------------------- -->
+
+        <!-- ---------------------------------- PARAMETER 16 ------------------------- -->
+
+        <app-parameter-card serial="16" title="Oil Level in Gear Box">
+            <div class="form-parameter-sub-header">Oil level should be maintained between max and min marking
+                indicated on oil level glass
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="oil_level_gear_box">Observation</label>
+                    <app-select formControlName="oil_level_gear_box" [options]="OilLevelGauge" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="oil_level_gear_box_remarks">Remarks*</label>
+                    <app-select formControlName="oil_level_gear_box_remarks" [options]="overallRemarksOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+
+            </div>
+        </app-parameter-card>
+        <!-- ---------------------------------- PARAMETER 17 ------------------------- -->
+
+        <app-parameter-card serial="17" title="Oil being used in Gear Box">
+            <div class="grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="gear_box">Select*</label>
+                    <app-select formControlName="gear_box" [options]="gearBoxOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="gear_box_observation">Observation*</label>
+                    <app-select formControlName="gear_box_observation" [options]="yesNoOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="gear_box_remark">Remarks*</label>
+                    <app-select formControlName="gear_box_remark" [options]="SatUnsatOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+
+            </div>
+        </app-parameter-card>
+
+
+        <!-- ----------- PARAMETER 18 ------------- -->
+        <app-parameter-card serial="18" title="Change of Oil (in Drum and Gear Box)">
+            <div class="grid grid-cols-3 gap-3">
+                <app-month-year-calendar label="Last date of oil change" formControlName="lastOilChangeDate">
+                </app-month-year-calendar>
+                <app-month-year-calendar label="Due date of oil change" formControlName="nextDueOilChangeDate">
+                </app-month-year-calendar>
+
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="lastOilChangeDate_remarks">Remarks*</label>
+                    <app-select formControlName="lastOilChangeDate_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+
+            </div>
+        </app-parameter-card>
+        <!-- ----------- PARAMETER 19-24 ------------- -->
+        <app-parameter-card serial="19-24" title="Lub oil analysis parameter">
+            <div class="form-parameter-sub-header">19a.Lab Test (report to be enclosed)
+            </div>
+            <div class="grid grid-cols-1 gap-3">
+                <app-input label="Water content" formControlName="water_content_value"
+                    placeholder="Enter Water content remarks">
+                </app-input>
+                <app-input label="Viscosity" formControlName="Viscosity_value" placeholder="Enter Viscosity remarks">
+                </app-input>
+                <app-input label="Base Number" formControlName="base_number_value"
+                    placeholder="Enter Base Number remarks">
+                </app-input>
+                <app-input label="Acid Number" formControlName="acid_number_value"
+                    placeholder="Enter Acid Number remarks">
+                </app-input>
+                <app-input label="Metal traces" formControlName="metal_traces_value"
+                    placeholder="Enter Metal traces remarks">
+                </app-input>
+            </div>
+        </app-parameter-card>
+
+        <!-- ----------- PARAMETER 25 ------------- -->
+
+        <app-parameter-card serial="25" title="SPM Check of Motor (For Motor Vibration)">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="spm_measured">Measured (Green (0-20) | Yellow (20-35) | Red
+                        (>35))</label>
+                    <app-select formControlName="spm_measured" [options]="spmCheckOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="spm_remarks">Remarks*</label>
+                    <app-select formControlName="spm_remarks" [options]="overallRemarksNaOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+
+        <div class="form-section-header">
+            Current/ Load Checks
+        </div>
+        <!-- ----------- PARAMETER 26 ------------- -->
+        <app-parameter-card serial="26" title="Starting current/Slide || In/Out / Tilt In/Out ||  /Lowering/Hoisting ">
+            <div class="form-parameter-sub-header">26 a.Starting current/Slide
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-input label="Reference" formControlName="starting_current_reference"
+                    placeholder="Enter starting current Reference">
+                </app-input>
+                <app-input label="Measured" formControlName="starting_current_measured"
+                    placeholder="Enter starting current measured value">
+                </app-input>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="starting_current_remarks">Remarks*</label>
+                    <app-select formControlName="starting_current_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+
+            <div class="form-parameter-sub-header">26 b.Slide In/Out
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-input label="Reference" formControlName="slide_in_out_reference"
+                    placeholder="Enter starting current Reference">
+                </app-input>
+                <app-input label="Measured" formControlName="slide_in_out_reference_measured"
+                    placeholder="Enter starting current measured value">
+                </app-input>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="slide_in_out_reference_remarks">Remarks*</label>
+                    <app-select formControlName="slide_in_out_reference_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+
+            <div class="form-parameter-sub-header">26 c.Tilt In/Out
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-input label="Reference" formControlName="tilt_in_out_reference"
+                    placeholder="Enter starting current Reference">
+                </app-input>
+                <app-input label="Measured" formControlName="tilt_in_out_measured"
+                    placeholder="Enter starting current measured value">
+                </app-input>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="tilt_in_out_remarks">Remarks*</label>
+                    <app-select formControlName="tilt_in_out_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+
+        </app-parameter-card>
+
+        <!-- ----------- PARAMETER 27 ------------- -->
+
+
+        <app-parameter-card serial="27" title="Running Current  || In/Out / Tilt In/Out ||  /Lowering/Hoisting ">
+            <div class="form-parameter-sub-header">27 a.Starting current/Slide
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-input label="Reference" formControlName="running_current_reference"
+                    placeholder="Enter Acid Number remarks">
+                </app-input>
+                <app-input label="Acid Number" formControlName="running_current_measured"
+                    placeholder="Enter Acid Number remarks">
+                </app-input>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="running_current_remarks">Remarks*</label>
+                    <app-select formControlName="running_current_remarks" [options]="commandOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+
+            <div class="form-parameter-sub-header">27 b.Slide In/Out
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-input label="Reference" formControlName="slide_in_out_reference"
+                    placeholder="Enter starting current Reference">
+                </app-input>
+                <app-input label="Measured" formControlName="slide_in_out_reference_measured"
+                    placeholder="Enter starting current measured value">
+                </app-input>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="slide_in_out_reference_remarks">Remarks*</label>
+                    <app-select formControlName="slide_in_out_reference_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+
+            <div class="form-parameter-sub-header">27 c.Tilt In/Out
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <app-input label="Reference" formControlName="tilt_in_out_reference"
+                    placeholder="Enter starting current Reference">
+                </app-input>
+                <app-input label="Measured" formControlName="tilt_in_out_measured"
+                    placeholder="Enter starting current measured value">
+                </app-input>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="tilt_in_out_remarks">Remarks*</label>
+                    <app-select formControlName="tilt_in_out_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+
+        </app-parameter-card>
+
+        <!-- ----------- PARAMETER 28 ------------- -->
+        <app-parameter-card serial="28" title="Log book exist">
+            <div class="grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="log_book_reference">Reference</label>
+                    <app-select formControlName="log_book_reference" [options]="yesNoOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="log_book_measured">Measured</label>
+                    <app-select formControlName="log_book_measured" [options]="yesNoOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="log_book_remarks">Remarks*</label>
+                    <app-select formControlName="log_book_remarks" [options]="SatUnsatOptions" placeholder="--Select--"
+                        class="w-full">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+        <!-- ----------- PARAMETER 29 ------------- -->
+
+        <app-parameter-card serial="29" title="Periodicity of measurement">
+            <div class="grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="periodicity_reference">Reference (Monthly/ Quarterly)</label>
+                    <app-select formControlName="periodicity_reference" [options]="montlyQuarterlyOption"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="periodicity_measured">Measured</label>
+                    <app-select formControlName="periodicity_measured" [options]="montlyQuarterlyNilOption"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="form-label" for="periodicity_remarks">Remarks*</label>
+                    <app-select formControlName="periodicity_remarks" [options]="SatUnsatOptions"
+                        placeholder="--Select--" class="w-full">
+                    </app-select>
+                </div>
+            </div>
+        </app-parameter-card>
+
+        <!-- ---------------------------------- PARAMETER 31 and 32 ------------------------- -->
+
+        <div class="grid grid-cols-2 gap-3">
+            <app-parameter-card serial="31" title="Any other observations">
+                <app-input label="" placeholder="Enter observations" formControlName="other_observation">
+                </app-input>
+            </app-parameter-card>
+            <app-parameter-card serial="32" title="Overall Remarks">
+                <app-select formControlName="overall_remark" [options]="overallRemarksOptions">
+                </app-select>
+            </app-parameter-card>
+        </div>
+
+    </form>
+
+    <!-- FOOTER -->
+    <div formFooter class="flex gap-5 justify-end">
+        <app-loading-button label="Clear" [color]="'red'" [icon]="restartIcon"
+            (clicked)="handleSave('draft')"></app-loading-button>
+
+
+        <app-loading-button label="Save draft" [color]="'blue'" [icon]="draftIcon" [loading]="loading"
+            (clicked)="handleSave('draft')"></app-loading-button>
+
+        <app-loading-button label="Save" [color]="'green'" [icon]="saveIcon" [loading]="loading"
+            (clicked)="handleSave('save')"></app-loading-button>
+    </div>
+
+</app-form-card>

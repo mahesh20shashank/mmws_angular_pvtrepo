@@ -1,0 +1,83 @@
+<app-master-card cardTitle="Ship Maintenance Periods (Last 1 Year)" cardHeight="auto">
+  <div class="flex justify-end mb-4">
+    <app-button
+      type="button"
+      (click)="clearFilters()"
+      class="flex items-center gap-2 px-3 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm"
+    >
+      <app-icon name="filter" [size]="14" />
+      Clear Filters
+    </app-button>
+  </div>
+
+  <div class="grid grid-cols-4 gap-4 p-4 rounded-xl border border-[#1D96E9]/40 bg-white/[0.02] mb-4">
+    <div>
+      <label for="period-filter" class="text-white/60 text-xs mb-1 block">Maintenance Period</label>
+      <select id="period-filter" [(ngModel)]="periodFilter" (ngModelChange)="onFilterChange()" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+        <option value="All">All</option>
+        <option value="Operational">Operational</option>
+        <option value="Refit">Refit</option>
+      </select>
+    </div>
+    <div>
+      <label for="occasion-filter" class="text-white/60 text-xs mb-1 block">Occasion</label>
+      <select id="occasion-filter" [(ngModel)]="occasionFilter" (ngModelChange)="onFilterChange()" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+        <option value="All">All</option>
+        @for (occasion of occasions; track occasion) {
+          <option [value]="occasion">{{ occasion }}</option>
+        }
+      </select>
+    </div>
+    <div>
+      <label for="mp-from-date" class="text-white/60 text-xs mb-1 block">From Date</label>
+      <input id="mp-from-date" type="date" [(ngModel)]="fromDate" (ngModelChange)="onFilterChange()" placeholder="Select Date" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+    <div>
+      <label for="mp-to-date" class="text-white/60 text-xs mb-1 block">To Date</label>
+      <input id="mp-to-date" type="date" [(ngModel)]="toDate" (ngModelChange)="onFilterChange()" placeholder="Select Date" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2 text-white/60 text-sm">
+      <select [(ngModel)]="pageSize" class="h-9 rounded-lg bg-white/5 border border-white/10 px-2 text-white text-sm">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+      entries per page
+    </div>
+
+    <div class="flex items-center gap-4">
+      <app-button type="button" (click)="copyRows()" title="Copy">
+        <app-icon name="copy" [size]="18" variant="inherit" />
+      </app-button>
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="!filteredRows.length" (exportRequested)="onExport($event)" />
+
+      <div class="flex items-center gap-2">
+        <span class="text-white/60 text-sm">Search:</span>
+        <input
+          type="text"
+          [(ngModel)]="search"
+          (ngModelChange)="onFilterChange()"
+          class="h-9 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm w-48"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-3 mb-3">
+    <input type="text" [(ngModel)]="columnSearch.period" (ngModelChange)="onFilterChange()" placeholder="Search Maintenance Period" class="w-full h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white/80 text-xs" />
+    <input type="text" [(ngModel)]="columnSearch.occasion" (ngModelChange)="onFilterChange()" placeholder="Search Occasion" class="w-full h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white/80 text-xs" />
+    <input type="text" [(ngModel)]="columnSearch.start_date" (ngModelChange)="onFilterChange()" placeholder="Search Start Date" class="w-full h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white/80 text-xs" />
+    <input type="text" [(ngModel)]="columnSearch.stop_date" (ngModelChange)="onFilterChange()" placeholder="Search Stop Date" class="w-full h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white/80 text-xs" />
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredRows"
+    [columnDefs]="columnDefs"
+    [pagination]="true"
+    [pageSize]="pageSize"
+    height="460px">
+  </app-data-grid>
+</app-master-card>

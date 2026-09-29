@@ -1,0 +1,92 @@
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3><app-icon name="settings" [size]="18" variant="success" /> Add Existing Spare</h3>
+    <div class="obs-panel__header-actions">
+      <app-button type="button" class="btn-secondary" (click)="goBack()">Cancel</app-button>
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="saving() || !selectedSpare() || form.invalid || needsReason()"
+        (click)="submit()"
+      >
+        {{ saving() ? "Saving..." : "Save" }}
+      </app-button>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="spare-existing-form" (ngSubmit)="submit()">
+    <div class="spare-existing-form__grid">
+      <div class="spare-existing-form__field">
+        <app-select-input
+          label="Pattern Number *"
+          [placeholder]="loadingSpares() ? 'Loading spares...' : 'Search by pattern number...'"
+          [disabled]="loadingSpares()"
+          formControlName="spareId"
+          [options]="patternOptions()"
+        />
+      </div>
+      <div class="spare-existing-form__field">
+        <app-select-input
+          label="Spare Description *"
+          [placeholder]="loadingSpares() ? 'Loading spares...' : 'Search by description...'"
+          [disabled]="loadingSpares()"
+          formControlName="spareId"
+          [options]="descriptionOptions()"
+        />
+      </div>
+    </div>
+    @if (form.controls.spareId.invalid && form.controls.spareId.touched) {
+      <span class="form-error">Select a spare by pattern number or description.</span>
+    }
+
+    @if (selectedSpare(); as spare) {
+      <fieldset class="obs-band">
+        <legend class="obs-band-title">Spare Details</legend>
+        <p class="obs-help-block obs-help-block--lead">
+          Loaded from the spare's own record. These cannot be changed on this screen.
+        </p>
+        <div class="spare-existing-detail">
+          <div class="spare-existing-detail__row"><span>Department</span><strong>{{ spare.departmentName || "-" }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Spare Class</span><strong>{{ spare.spareClass }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Equipment Class</span><strong>{{ spare.equipmentClass }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Category</span><strong>{{ spare.category }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Denomination</span><strong>{{ spare.denomination }}</strong></div>
+          <div class="spare-existing-detail__row">
+            <span>Authority</span><strong>{{ spare.authority }} (cannot be changed)</strong>
+          </div>
+          <div class="spare-existing-detail__row"><span>Compartment</span><strong>{{ spare.compartment }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Box No.</span><strong>{{ spare.location }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Rack Position</span><strong>{{ spare.rackPosition }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Rack Number</span><strong>{{ spare.rackNumber }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Qty Authorised</span><strong>{{ spare.quantityAuthorised }}</strong></div>
+          <div class="spare-existing-detail__row"><span>Qty Held</span><strong>{{ spare.quantityAvailable }}</strong></div>
+          <div class="spare-existing-detail__row">
+            <span>Criticality</span><strong>{{ CRITICALITY_STRENGTH_LABEL[spare.criticalityStrength] }}</strong>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="spare-existing-form__grid">
+        <div class="spare-existing-form__field">
+          <app-input-field
+            label="Increase Held Quantity By *"
+            type="number"
+            formControlName="quantityToAdd"
+          />
+          @if (form.controls.quantityToAdd.invalid && form.controls.quantityToAdd.touched) {
+            <span class="form-error">Enter a quantity of at least 1.</span>
+          }
+        </div>
+        <app-textarea-input label="Remarks" formControlName="remarks" [rows]="3" />
+      </div>
+
+      @if (needsReason()) {
+        <p class="spare-existing-hint">
+          This will take the authorised holding to {{ projectedTotal() }}. A written
+          reason (min. 10 characters) is required in Remarks when the holding exceeds
+          {{ highHoldingThreshold }}.
+        </p>
+      }
+    }
+  </form>
+</div>

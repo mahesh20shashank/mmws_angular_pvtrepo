@@ -1,0 +1,184 @@
+<form [formGroup]="form" class="aber-form">
+  <!-- Top Row -->
+  <div class="top-grid">
+
+    <div>
+      <app-select-input
+        label="Equipment Name"
+        [options]="equipmentOptions"
+        [required]="true"
+        formControlName="equipmentName">
+      </app-select-input>
+
+      @if (form.get('equipmentName')?.touched && form.get('equipmentName')?.hasError('required')) {
+        <div class="error">Equipment Name is required.</div>
+      }
+    </div>
+
+    <div>
+      <app-select-input
+        label="Nomenclature"
+        [options]="nomenclatureOptions"
+        [required]="true"
+        formControlName="nomenclature">
+      </app-select-input>
+
+      @if (form.get('nomenclature')?.touched && form.get('nomenclature')?.hasError('required')) {
+        <div class="error">Nomenclature is required.</div>
+      }
+    </div>
+
+    <div>
+      <label for="dart-no" class="text-[var(--text-muted)] text-[13px] font-medium mb-2 block">DART No.</label>
+      <input id="dart-no" type="text" readonly formControlName="dartNo"
+        class="w-full h-[45px] rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+    </div>
+
+    <div>
+      <label for="previous-dart-no" class="text-[var(--text-muted)] text-[13px] font-medium mb-2 block">Previous Dart No.</label>
+      <input id="previous-dart-no" type="text" readonly formControlName="previousDartNo"
+        class="w-full h-[45px] rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+    </div>
+
+  </div>
+
+  <!-- Middle Section -->
+  <div class="middle-grid">
+
+    <!-- Left -->
+    <div class="left-column">
+
+    <div>
+      <label for="onboard-location" class="text-[var(--text-muted)] text-[13px] font-medium mb-2 block">OnBoard Location</label>
+      <input id="onboard-location" type="text" readonly formControlName="onBoardLocation"
+        class="w-full h-[45px] rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+    </div>
+
+      <div class="radio-card">
+
+        <div class="section-label">
+          ABER Type
+        </div>
+
+        <div class="radio-group">
+
+          <label class="radio-option">
+            <input type="radio" value="minor" formControlName="aberType">
+            <span>Minor A's & A's</span>
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" value="major" formControlName="aberType">
+            <span>Major A's & A's</span>
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" value="aber" formControlName="aberType">
+            <span>ABER</span>
+          </label>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Right -->
+    <div class="right-column">
+
+      <label for="aa-description" class="text-[var(--text-muted)] text-[13px] font-medium mb-2 block">A's & A's Description <span class="required-star">*</span></label>
+      <textarea id="aa-description" rows="3" formControlName="description"
+        class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+
+      @if (form.get('description')?.touched && form.get('description')?.invalid) {
+        <div class="error">
+          @if (form.get('description')?.hasError('required')) {
+            <span>Description is required.</span>
+          }
+          @if (form.get('description')?.hasError('maxlength')) {
+            <span>Maximum 1000 characters allowed.</span>
+          }
+        </div>
+      }
+
+    </div>
+
+  </div>
+
+  <!-- Bottom Textareas -->
+  <div class="bottom-grid">
+
+      <div class="field-wrapper">
+
+      <label for="authority" class="text-[var(--text-muted)] text-[13px] font-medium mb-2 block">Authority <span class="required-star">*</span></label>
+      <textarea id="authority" rows="3" formControlName="authority"
+        class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+
+      @if (form.get('authority')?.touched && form.get('authority')?.hasError('required')) {
+        <div class="error">
+          Authority is required.
+        </div>
+      }
+
+</div>
+
+    <div class="field-wrapper">
+
+      <label for="remarks" class="text-[var(--text-muted)] text-[13px] font-medium mb-2 block">Remarks</label>
+      <textarea id="remarks" rows="3" formControlName="remarks"
+        class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+
+    </div>
+
+  </div>
+
+  <!-- Spares Required -->
+  <div class="radio-card">
+
+    <div class="section-label">
+      Spares Required?
+    </div>
+
+    <div class="radio-group">
+
+      <label class="radio-option">
+        <input type="radio" value="no" formControlName="sparesRequired">
+        <span>No</span>
+      </label>
+
+      <label class="radio-option">
+        <input type="radio" value="yes" formControlName="sparesRequired">
+        <span>Yes</span>
+      </label>
+
+    </div>
+    @if (showSparesSection) {
+    <div class="show-spares">
+      <app-button type="button" class="spareBtn" (click)="openSpareModal()">
+        Select Spare Parts
+      </app-button>
+    </div>
+    }
+
+
+  </div>
+
+
+  @if (showSparesSection && selectedSpares().length) {
+  <app-data-grid [height]="'auto'" [autoHeight]="true" [pagination]="true" [columnDefs]="selectedSpareColumns"
+    [rowData]="selectedSpares()">
+  </app-data-grid>
+  }
+
+  @if (!showSparesSection || selectedSpares().length > 0) {
+  <div class="actions">
+    <app-button type="button" class="cancel-btn" (click)="onCancel()">Cancel</app-button>
+    <app-button type="button" class="save-btn" (click)="openConfirmModal()">
+      Save
+    </app-button>
+  </div>
+  }
+  <!-- Actions -->
+
+
+</form>

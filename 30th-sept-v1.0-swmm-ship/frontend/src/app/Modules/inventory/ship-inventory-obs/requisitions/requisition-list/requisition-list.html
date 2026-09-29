@@ -1,0 +1,94 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>{{ title }}</h3>
+    <div class="obs-panel__actions">
+      <app-button type="button" class="btn-secondary" [disabled]="!canIssue" (click)="initiateIssue()">
+        Initiate Issue - Multiple Spares
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="!selectedRows().length" (click)="openCartModal('WLMS')">
+        Send to WED Cart - Multiple
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="!selectedRows().length" (click)="openCartModal('ILMS')">
+        Send to MO Cart - Multiple
+      </app-button>
+    </div>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredEntries().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredEntries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+  />
+</div>
+
+@if (viewTarget(); as entry) {
+  <app-modal size="md" (closeModal)="closeViewModal()">
+    <h3 class="obs-modal__title">Requisition Details</h3>
+    <p class="obs-modal__subtitle">{{ entry.patternNumber }} — {{ entry.description }}</p>
+
+    <div class="obs-view-details">
+      <div class="obs-view-details__row"><span>Equipment Class</span><span>{{ entry.equipmentClass || "—" }}</span></div>
+      <div class="obs-view-details__row"><span>Item Category</span><span>{{ entry.category || "—" }}</span></div>
+      <div class="obs-view-details__row"><span>Denomination</span><span>{{ entry.denomination || "—" }}</span></div>
+      <div class="obs-view-details__row"><span>Critical</span><span>{{ entry.critical ? "YES" : "NO" }}</span></div>
+      <div class="obs-view-details__row"><span>Authority</span><span>{{ entry.authority || "—" }}</span></div>
+      <div class="obs-view-details__row"><span>Location / Box No</span><span>{{ entry.boxNo || "—" }}</span></div>
+      @if (kind === "routine") {
+        <div class="obs-view-details__row"><span>Routine Name</span><span>{{ entry.routineName || "—" }}</span></div>
+        <div class="obs-view-details__row"><span>Routine No</span><span>{{ entry.routineNo || "—" }}</span></div>
+        <div class="obs-view-details__row"><span>DART No</span><span>{{ entry.dartNumber || "—" }}</span></div>
+        <div class="obs-view-details__row obs-view-details__row--full">
+          <span>DART Routine Description</span><span>{{ entry.routineDescription || "—" }}</span>
+        </div>
+      } @else {
+        <div class="obs-view-details__row"><span>DART No</span><span>{{ entry.dartNumber || "—" }}</span></div>
+        <div class="obs-view-details__row obs-view-details__row--full">
+          <span>Remarks</span><span>{{ entry.remarks || "—" }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeViewModal()">Close</app-button>
+    </div>
+  </app-modal>
+}
+
+@if (deleteTarget(); as entry) {
+  <app-modal size="sm" (closeModal)="closeDeleteModal()">
+    <h3 class="obs-modal__title">Delete Requisition</h3>
+    <p class="obs-modal__subtitle">Delete requisition for "{{ entry.patternNumber }}"?</p>
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeDeleteModal()">Cancel</app-button>
+      <app-button type="button" class="btn-reject" (click)="confirmDelete()">Delete</app-button>
+    </div>
+  </app-modal>
+}
+
+@if (cartModalOpen()) {
+  <app-modal size="sm" (closeModal)="closeCartModal()">
+    <h3 class="obs-modal__title">Send to {{ cartTarget() === "WLMS" ? "WED" : "MO" }} Cart</h3>
+
+    <form [formGroup]="cartForm" class="obs-modal__form">
+      <app-select-input label="Cart Type" formControlName="cartType" [options]="cartTypeOptions" />
+    </form>
+
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeCartModal()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" [disabled]="saving()" (click)="confirmSendToCart()">
+        {{ saving() ? "Sending..." : "Confirm" }}
+      </app-button>
+    </div>
+  </app-modal>
+}

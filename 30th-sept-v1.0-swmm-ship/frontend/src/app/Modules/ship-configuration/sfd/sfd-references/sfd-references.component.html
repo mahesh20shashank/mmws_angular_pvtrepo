@@ -1,0 +1,145 @@
+<div class="ref-layout">
+  <div class="glass-card sync-card">
+    <div class="sync-header">
+      <span class="sync-title">Nomenclature Synchronization</span>
+      <app-status-chip text="Sync" tone="success" />
+    </div>
+
+    <div class="step0-block">
+      <div class="step0-hint">
+        Run STEP 0 only if the ship you need is missing from the Ship Name list below.
+      </div>
+
+      <div class="step0-row">
+        <span class="step0-btn-wrap" [title]="directoryReady() ? 'Ship names already fetched from CMMS' : ''">
+          <app-button type="button" class="step0-btn" [disabled]="pullingDirectory() || shipLocked()" (click)="runShipDirectoryPull()">
+            <span class="step0-dot">0</span>
+            <span>{{ pullingDirectory() ? "Updating Ship Names..." : "STEP 0 - Update Ship Names from CMMS" }}</span>
+          </app-button>
+        </span>
+
+        <form [formGroup]="shipDirectoryForm" class="step0-filters">
+          <app-select-input label="Command (optional filter)" placeholder="-- All Commands --"
+            [options]="commandOptions()" [disabled]="!directoryReady() || shipLocked()"
+            formControlName="command"></app-select-input>
+
+          <app-select-input label="Ship Name" placeholder="-- Select Ship Name --" [options]="shipOptions()"
+            [disabled]="!directoryReady() || shipLocked() || savingSelection()"
+            formControlName="ship"></app-select-input>
+        </form>
+
+        @if (!directoryReady()) {
+        <span class="step0-lock-hint">
+          <app-icon name="lock" [size]="13" [strokeWidth]="2" />
+          Run STEP 0 to load ship names from CMMS
+        </span>
+        }
+
+        @if (activeShipName()) {
+        <span class="step0-active">Active ship: {{ activeShipName() }} (locked — cannot be changed)</span>
+        }
+      </div>
+    </div>
+
+    <div class="step0-divider"></div>
+
+    @if (!shipLocked()) {
+    <div class="step0-hint step-lock-hint">
+      {{ selectedShipUid()
+      ? "Click STEP 1 below to confirm the ship and lock it in — Steps 2-5 unlock after that."
+      : "Select a ship above, then click STEP 1 to confirm and lock it in." }}
+    </div>
+    }
+
+    <div class="sync-body">
+      <div class="steps-panel">
+        <div class="steps-panel__head">
+          <span>SYNCHRONISATION STEPS</span>
+          <span class="steps-panel__status">
+            {{ summaries().length ? summaries().length + " step(s) run this session" : "No sync run in this session" }}
+          </span>
+        </div>
+
+        <div class="steps-list">
+          @for (card of syncCards; track card.key) {
+          <app-button type="button" class="step-item"
+            [class.step-item--disabled]="isRunning() || !card.endpoint || !isStepUnlocked(card)"
+            [disabled]="isRunning() || !card.endpoint || !isStepUnlocked(card)" [title]="
+                !isStepUnlocked(card)
+                  ? (card.step === 1
+                      ? 'Select a ship above first'
+                      : (card.step === 2 && isCardCompleted('cmms') && subDeptReady() === false
+                          ? 'Assign the outstanding sub departments first, then retry.'
+                          : 'Complete the previous step first'))
+                  : (card.endpoint ? '' : 'Backend endpoint not available yet')
+              " (click)="runSync(card)">
+            <span class="step-item__num"
+              [style.background]="card.endpoint && isStepUnlocked(card) ? card.color : '#5a6472'">
+              {{ isCardRunning(card.key) ? '…' : card.step }}
+            </span>
+            <span class="step-item__label">
+              {{ isCardRunning(card.key)
+              ? "STEP " + card.step + " — Syncing..."
+              : "STEP " + card.step + " — " + card.title + (isCardCompleted(card.key) ? " (Resync)" : "") }}
+            </span>
+            <app-status-chip class="step-item__status" [text]="stepStatusLabel(card)" [tone]="stepStatusTone(card)" />
+          </app-button>
+          }
+        </div>
+
+        <div class="summary-block">
+          @for (s of summaries(); track s.key) {
+          <div class="summary-line" [class.summary-failed]="s.failed">
+            <span class="summary-dot" [style.background]="s.color"></span>
+            <span class="summary-step">STEP {{ s.step }}</span>
+            <span class="summary-title">{{ s.title }}</span>
+            <span class="summary-text">{{ s.failed ? 'failed — ' + s.text : s.text }}</span>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="log-panel">
+        <div class="log-head">
+          <span>PROCESS LOG</span>
+          <app-status-chip [text]="itemCount() + ' ITEMS PROCESSED'" tone="info" />
+        </div>
+        <div class="log-console" #logConsole>
+          @for (line of logLines(); track $index) {
+          <div class="log-line" [class]="'tone-' + line.tone">{{ line.text }}</div>
+          }
+          @if (!logLines().length) {
+          <div class="log-empty">Waiting for sync to start...</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-block">
+      <div class="progress-row">
+        <span class="progress-label">{{ currentAction() }}</span>
+        <span class="progress-value">{{ progress() }}%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progress()"></div>
+      </div>
+    </div>
+  </div>
+
+  @if (pendingShipSelection(); as pending) {
+  <app-modal (closeModal)="cancelShipSelection()" size="sm">
+    <div class="space-y-4">
+      <p class="ship-confirm-warning">Once ship name is selected it can't be changed</p>
+      <p class="ship-confirm-message">
+        Is your Command : <strong>{{ pending.commandName }}</strong><br />
+        Ship name : <strong>{{ pending.shipName }}</strong><br />
+        Ship id : <strong>{{ pending.uid }}</strong>
+      </p>
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button (click)="cancelShipSelection()" class="button secondary-btn cursor-pointer">No</app-button>
+        <app-button (click)="confirmShipSelection()" class="button primary-btn cursor-pointer">Yes</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+</div>

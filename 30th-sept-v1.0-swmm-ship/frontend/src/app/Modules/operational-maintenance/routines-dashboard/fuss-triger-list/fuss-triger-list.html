@@ -1,0 +1,97 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card
+  cardTitle="Raised FUSS"
+
+>
+  <!-- Filters -->
+  <div class="pb-2">
+    <form [formGroup]="fussTriggerForm">
+      <div class="flex items-end gap-3 mt-4">
+        <div class="flex-1 min-w-0">
+          <app-select-input
+            label="Equipment Section"
+            [options]="equipmentSectionOptions"
+            formControlName="equipmentSection"
+          >
+          </app-select-input>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <app-select-input
+            label="Equipment Name"
+            [options]="equipmentNameOptions"
+            formControlName="equipmentName"
+          >
+          </app-select-input>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <app-select-input
+            label="Routine Name"
+            [options]="routineNameOptions"
+            formControlName="routineName"
+          >
+          </app-select-input>
+        </div>
+
+        <app-button
+          type="button"
+          (click)="clearFilters()"
+          class="h-11 px-4 rounded-[10px] bg-white/10 border border-white/10 text-white whitespace-nowrap shrink-0"
+        >
+          Clear Filter
+        </app-button>
+        <app-button
+          type="button"
+          (click)="syncWithCmms()"
+          [disabled]="syncingCmms()"
+          class="h-11 px-4 rounded-[10px] bg-yellow-400 border border-white/10 text-white whitespace-nowrap shrink-0 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {{ syncingCmms() ? 'Syncing…' : 'Sync With CMMS' }}
+        </app-button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Search + Export -->
+  <div class="flex justify-between items-center mt-4 mb-4 gap-3">
+    <div class="relative flex-1">
+      <div
+        class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10"
+      >
+        <app-icon name="search" [size]="16" [strokeWidth]="2" color="currentColor" />
+      </div>
+
+      <input
+        type="text"
+        id=""
+        placeholder="Search"
+        (input)="onSearch($event)"
+        class="w-full h-10 rounded-[10px] bg-white/[0.04] border border-white/10 pl-10 pr-3 content text-white placeholder:text-white/40 outline-none focus:border-white/20"
+      />
+    </div>
+
+    <app-export-toolbar
+      [busy]="exportBusy()"
+      [disabled]="filteredMaintopRoutines().length === 0"
+      (exportRequested)="onExport($event)"
+    />
+  </div>
+
+  <!-- Grid -->
+  <div class="fuss-grid-wrapper w-full mt-4">
+    <app-data-grid
+      [columnDefs]="defectColumnDefs"
+      [rowData]="filteredMaintopRoutines()"
+      [totalRowCount]="totalRowCount()"
+      [pageSize]="10"
+      [resetKey]="filterVersion()"
+      [height]="'440px'"
+      [loading]="isLoading()"
+      (pageRequested)="onPageRequested($event)"
+      (rowClicked)="onRowClicked($any($event))"
+    >
+    </app-data-grid>
+  </div>
+</app-master-card>

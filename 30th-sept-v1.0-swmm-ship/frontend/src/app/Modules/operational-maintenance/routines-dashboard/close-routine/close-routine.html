@@ -1,0 +1,286 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card cardTitle="Close Routine Form" cardHeight="auto">
+
+  <form [formGroup]="form" class="p-4 text-white space-y-4">
+
+    <!-- Top Section -->
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <div>
+        <label for="routine-dart-no" class="text-[10px] text-white/60">Routine DART No.</label>
+        <input
+          id="routine-dart-no"
+          [value]="routine.dart_no"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="equipment-class" class="text-[10px] text-white/60">Equipment Class</label>
+        <input
+          id="equipment-class"
+          [value]="routine.equipment_class"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="equipment-serial-no" class="text-[10px] text-white/60">Equipment Serial No</label>
+        <input
+          id="equipment-serial-no"
+          [value]="routine.equipment_serial_no"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="nomenclature" class="text-[10px] text-white/60">Nomenclature</label>
+        <input
+          id="nomenclature"
+          [value]="routine.nomenclature"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="due-date" class="text-[10px] text-white/60">Due Date</label>
+        <input
+          id="due-date"
+          type="date"
+          [value]="routine.due_date"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="maintenance-remarks" class="text-[10px] text-white/60">Maintenance Remarks</label>
+        <input
+          id="maintenance-remarks"
+          [value]="routine.maintenance_remarks"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="location-on-board" class="text-[10px] text-white/60">Location On Board</label>
+        <input
+          id="location-on-board"
+          [value]="routine.location_on_board"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="maintop-no" class="text-[10px] text-white/60">Maintop / Routine No.</label>
+        <input
+          id="maintop-no"
+          [value]="routine.maintop_no"
+          disabled
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+    </div>
+
+    <!-- Routine Description -->
+
+    <div>
+      <label for="routine-description" class="text-[10px] text-white/60">Routine Description</label>
+
+      <textarea
+        id="routine-description"
+        rows="2"
+        disabled
+        class="w-full rounded-lg bg-white/10 border border-white/15 px-3 py-2 resize-none disabled:cursor-not-allowed"
+      >{{ routine.routine_description }}</textarea>
+    </div>
+
+    <!-- Completion Details -->
+
+    <div class="text-[18px] font-medium pt-2">
+      Completion Details
+    </div>
+
+    <div class="grid grid-cols-4 gap-4">
+
+      <div>
+        <label for="completion-date" class="text-[10px] text-white/60">
+          Routine Completion Date <span class="text-red-400">*</span>
+        </label>
+
+        <input
+          id="completion-date"
+          type="date"
+          formControlName="completion_date"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="running-hours" class="text-[10px] text-white/60">
+          Running Hours
+        </label>
+
+        <input
+          id="running-hours"
+          formControlName="running_hours"
+          placeholder="Enter running hours"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="hours-consumed" class="text-[10px] text-white/60">
+          Time Consumed (Hours)
+        </label>
+
+        <select
+          id="hours-consumed"
+          formControlName="hours_consumed"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        >
+          <option [value]="''">Hours</option>
+          @for (h of hoursOptions; track h.value) {
+            <option [value]="h.value">{{ h.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="minutes-consumed" class="text-[10px] text-white/60">
+          Time Consumed (Minutes)
+        </label>
+
+        <select
+          id="minutes-consumed"
+          formControlName="minutes_consumed"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        >
+          <option [value]="''">Minutes</option>
+          @for (m of minutesOptions; track m.value) {
+            <option [value]="m.value">{{ m.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="completed-by-pno" class="text-[10px] text-white/60">
+          Routine Completed By (PNO) <span class="text-red-400">*</span>
+        </label>
+
+        <input
+          id="completed-by-pno"
+          formControlName="completed_by_pno"
+          placeholder="Enter PNo"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="completed-by-name" class="text-[10px] text-white/60">
+          Name
+        </label>
+
+        <input
+          id="completed-by-name"
+          formControlName="completed_by_name"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+      <div>
+        <label for="rank" class="text-[10px] text-white/60">
+          Rank
+        </label>
+
+        <select
+          id="rank"
+          formControlName="rank"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        >
+          @for (rank of rankOptions; track rank.value) {
+            <option [value]="rank.value">{{ rank.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="manpower-used" class="text-[10px] text-white/60">
+          Total Manpower Used
+        </label>
+
+        <select
+          id="manpower-used"
+          formControlName="manpower_used"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        >
+          @for (opt of manpowerOptions; track opt) {
+            <option [value]="opt">{{ opt }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="trial-team-needed" class="text-[10px] text-white/60">
+          Trial By Trial Team Needed?
+        </label>
+
+        <select
+          id="trial-team-needed"
+          formControlName="trial_team_needed"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        >
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div class="col-span-3">
+        <label for="remarks" class="text-[10px] text-white/60">
+          Remarks
+        </label>
+
+        <input
+          id="remarks"
+          formControlName="remarks"
+          placeholder="Enter any Special tools used, assistance taken, internal trials status"
+          class="w-full h-10 rounded-lg bg-white/10 border border-white/15 px-3 disabled:cursor-not-allowed"
+        />
+      </div>
+
+    </div>
+
+    <!-- Footer Buttons -->
+
+    <div class="flex justify-end gap-3 pt-2">
+
+      <app-button
+        type="button"
+        (click)="backToList()"
+        class="h-9 px-5 rounded-lg bg-white/15 border border-white/15 text-white"
+      >
+        Back to List
+      </app-button>
+
+      <app-button
+        type="button"
+        (click)="closeRoutine()"
+        class="h-9 px-5 rounded-lg bg-[#5E748A] border border-[#6E8398] text-white"
+      >
+        Close Routine
+      </app-button>
+
+    </div>
+
+  </form>
+
+</app-master-card>

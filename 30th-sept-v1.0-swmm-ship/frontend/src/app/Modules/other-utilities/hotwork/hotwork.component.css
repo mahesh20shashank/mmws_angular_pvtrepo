@@ -1,0 +1,158 @@
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+}
+
+.kpi-stat-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.kpi-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.col-search-input {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.col-search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.col-search-input::placeholder {
+  color: #64748b;
+  font-size: 0.7rem;
+}
+
+/* Force equal height and bottom alignment for app-kpi-card inside hotwork component */
+:host ::ng-deep app-kpi-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  flex: 1 !important;
+}
+
+:host ::ng-deep app-kpi-card .kpi-card {
+  height: 100% !important;
+  min-height: 130px !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+
+:host ::ng-deep app-kpi-card .kpi-card > div:first-child {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+:host ::ng-deep app-kpi-card .kpi-bottom-row {
+  margin-top: auto !important;
+  padding-top: 8px !important;
+}
+
+/* Ensure select and date picker trigger share identical height and alignment */
+:host ::ng-deep .dp-trigger {
+  height: 42px !important;
+  border-radius: 12px !important;
+  font-size: 12px !important;
+}
+
+/* Light mode adaptation for date picker inside hotwork module */
+:host-context([data-theme="light"]) ::ng-deep .dp-calander-wrapper,
+[data-theme="light"] :host ::ng-deep .dp-calander-wrapper {
+  background: var(--bg-dropdown, #ffffff) !important;
+  box-shadow: 0 10px 30px rgba(15, 28, 46, 0.12) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-calendar,
+[data-theme="light"] :host ::ng-deep .dp-calendar {
+  background: var(--bg-dropdown, #ffffff) !important;
+  border: 1px solid var(--border-card, rgba(15, 28, 46, 0.12)) !important;
+  box-shadow: 0 10px 30px rgba(15, 28, 46, 0.12) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-nav__btn,
+[data-theme="light"] :host ::ng-deep .dp-nav__btn {
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-nav__btn:hover,
+[data-theme="light"] :host ::ng-deep .dp-nav__btn:hover {
+  background: rgba(15, 28, 46, 0.08) !important;
+  color: #1D96E9 !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-select,
+[data-theme="light"] :host ::ng-deep .dp-select {
+  background: var(--bg-input, rgba(15, 28, 46, 0.04)) !important;
+  border: 1px solid var(--border-input, rgba(15, 28, 46, 0.15)) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-option,
+[data-theme="light"] :host ::ng-deep .dp-option {
+  background-color: var(--bg-dropdown, #ffffff) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-weekdays span,
+[data-theme="light"] :host ::ng-deep .dp-weekdays span {
+  color: var(--text-muted, #3d5166) !important;
+  font-weight: 600;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day,
+[data-theme="light"] :host ::ng-deep .dp-day {
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day--other-month,
+[data-theme="light"] :host ::ng-deep .dp-day--other-month {
+  color: var(--text-muted, #3d5166) !important;
+  opacity: 0.45;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range),
+[data-theme="light"] :host ::ng-deep .dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range) {
+  background: rgba(26, 163, 242, 0.12) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day--in-range,
+[data-theme="light"] :host ::ng-deep .dp-day--in-range {
+  background: rgba(26, 163, 242, 0.15) !important;
+  color: var(--text-primary, #0f1c2e) !important;
+}
+
+:host-context([data-theme="light"]) ::ng-deep .dp-day--range-start,
+:host-context([data-theme="light"]) ::ng-deep .dp-day--range-end,
+[data-theme="light"] :host ::ng-deep .dp-day--range-start,
+[data-theme="light"] :host ::ng-deep .dp-day--range-end {
+  background: #1070ca !important;
+  color: #ffffff !important;
+}
+

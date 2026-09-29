@@ -1,0 +1,209 @@
+<html>
+<head>
+<style>
+    @page {
+        size: A4;
+        margin: 35mm 10mm;
+
+        @top-left {
+            content: "RESTRICTED";
+            font-family: sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        @top-center {
+            content: "MAINTOPS";
+            font-family: sans-serif;
+            font-size: 14pt;
+            font-weight: bold;
+            color: blue;
+        }
+        @top-right {
+            content: "Page " counter(page) " of " counter(pages);
+            font-family: sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+        @bottom-left {
+            content: "PAGE NUMBER " counter(page) " of " counter(pages);
+            font-family: "Helvetica", "Arial", sans-serif;
+            font-size: 10pt;
+        }
+        @bottom-center {
+            content: "INDIAN NAVAL SHIP MAINTENANCE AUTHORITY";
+            font-family: "Helvetica", "Arial", sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #C00000;
+        }
+        @bottom-right {
+            content: "RESTRICTED";
+            font-family: "Helvetica", "Arial", sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+    }
+
+    body {
+        font-family: "Helvetica", "Arial", sans-serif;
+        font-size: 9pt;
+        color: black;
+        line-height: 1.25;
+    }
+    .text-center { text-align: center; }
+    .text-bold { font-weight: bold; }
+    .text-blue { color: #0000FF; }
+    .text-underline { text-decoration: underline; }
+
+    .master-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1.5px solid black;
+    }
+    .master-table td, .master-table th {
+        border: 1px solid black;
+    }
+    .master-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+        font-weight: bold;
+    }
+    .title-cell {
+        vertical-align: middle !important;
+        text-align: center;
+        padding: 5px !important;
+    }
+
+    .routine-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid black;
+        margin-top: 50px;
+    }
+    .routine-table thead {
+        border-bottom: 2px solid black;
+    }
+    .routine-table th,
+    .routine-table td {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-top: none;
+        border-bottom: none;
+        padding: 6px 6px;
+        vertical-align: top;
+    }
+    .routine-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-align: center;
+    }
+    .routine-table thead th {
+        border-bottom: 2px solid black;
+    }
+    .routine-table td:nth-child(1) {
+        text-align: center;
+        width: 8%;
+    }
+    .routine-table td:nth-child(3),
+    .routine-table td:nth-child(4) {
+        text-align: center;
+        width: 10%;
+    }
+    .freq-header-row td {
+        border-bottom: none !important;
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+
+    .report_pdf {
+        padding: 0 100px;
+    }
+</style>
+</head>
+
+<body>
+<div class="report_pdf">
+    <table class="master-table">
+        <tr>
+            <td width="10%">
+                <div class="text-bold">ORIG</div>
+                <div>{{ header.original_date|date:"M Y"|default:"-" }}</div>
+            </td>
+            <td width="10%">
+                <div class="text-bold">AMND {{ header.amendment_no|default:"-" }}</div>
+                <div>{{ header.amendment_date|date:"M Y"|default:"-" }}</div>
+            </td>
+            <td class="title-cell">
+                <div class="text-blue text-bold" style="font-size: 13pt;">{{ header.maintop_title|default:"-" }}</div>
+            </td>
+            <td width="20%" class="text-center">
+                <div class="text-bold">MAINTOPS NO.</div>
+                <div class="text-bold">MT - {{ header.maintop_no|default:"-" }}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <th width="15%">Equipment Code</th>
+            <th width="15%">Equipment Name</th>
+            <th colspan="2">Ships/Submarines Applicable</th>
+        </tr>
+
+        <tr>
+            <td>{{ equipment.equipment_code|default:"-" }}</td>
+            <td>{{ equipment.equipment_name|default:"-" }}</td>
+            <td colspan="2">{{ header.ship_applicable|default:"-" }}</td>
+        </tr>
+
+        <tr>
+            <th class="text-bold">Authority</th>
+            <td colspan="3" style="font-size: 7.5pt;">{{ header.authority|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th class="text-bold">Reference</th>
+            <td colspan="3">{{ header.reference|default:"-" }}</td>
+        </tr>
+    </table>
+
+    <table class="routine-table">
+        <thead>
+            <tr>
+                <th width="10%">Routine No.</th>
+                <th width="60%">Routine Description</th>
+                <th width="15%">By Whom</th>
+                <th width="15%">Frequency</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for freq, items in grouped_data.items %}
+                <tr class="freq-header-row">
+                    <td style="border-right: 1px solid black; border-bottom: none;"></td>
+                    <td class="text-center text-bold">
+                        <div style="text-decoration: underline; margin-bottom: 5px;">
+                            {{ items.0.freq_full_name|default:freq|upper }}
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% for d in items %}
+                <tr>
+                    <td class="text-center">{{ d.routine_no|default:"-" }}</td>
+                    <td>{{ d.routine_description }}</td>
+                    <td class="text-center">{{ d.by_whom|default:"-" }}</td>
+                    <td class="text-center">{{ freq|default:"-" }}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="padding: 0; border: none; border-top: 2px solid black; height: 0px; line-height: 0;">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    <div style="height: 120px;"></div>
+</div>
+
+</body>
+</html>

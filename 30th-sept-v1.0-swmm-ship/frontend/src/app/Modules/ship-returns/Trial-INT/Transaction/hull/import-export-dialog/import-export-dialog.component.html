@@ -1,0 +1,158 @@
+<!-- Overlay -->
+<div class="dialog-overlay" *ngIf="open" (click)="cancel()"></div>
+
+<!-- Dialog Container -->
+<div class="dialog-container" *ngIf="open" (click)="$event.stopPropagation()">
+
+    <div class="dialog-card">
+
+        <!-- ================= HEADER ================= -->
+        <div class="dialog-header">
+            <div>
+                <h2 class="dialog-title">
+                    {{ config?.title || 'Import Records' }}
+                </h2>
+                <p class="dialog-subtitle">
+                    Download the template, fill the required data and upload the completed Excel file.
+                </p>
+            </div>
+
+            <div class="dialog-actions">
+                <button class="icon-btn" title="Close" (click)="cancel()">
+                    ✕
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= BODY ================= -->
+        <div class="dialog-body">
+
+            <form [formGroup]="form" *ngIf="form">
+
+                <ng-container *ngFor="let step of config?.workflow; trackBy: trackByIndex">
+
+                    <!-- ===================================================== -->
+                    <!-- SHIP DROPDOWN -->
+                    <!-- ===================================================== -->
+                    <div *ngIf="isShip(step)" class="form-field-group">
+                        <app-select [formControlName]="step.key!" [label]="step.label || 'Select Ship'" [options]="shipOptions"
+                            placeholder="--Select Ship--" class="w-full">
+                        </app-select>
+                    </div>
+
+                    <!-- ===================================================== -->
+                    <!-- OTHER DROPDOWNS -->
+                    <!-- ===================================================== -->
+                    <div *ngIf="isDropdown(step)" class="form-field-group">
+                        <app-select [formControlName]="step.key!" [label]="step.label || 'Select Option'" [options]="step.options || []"
+                            placeholder="--Select--" class="w-full">
+                        </app-select>
+                    </div>
+
+                    <!-- ===================================================== -->
+                    <!-- RADIO BUTTONS -->
+                    <!-- ===================================================== -->
+                    <div *ngIf="isRadio(step)" class="form-field-group">
+                        <label class="field-label">
+                            {{ step.label }}
+                        </label>
+                        <div class="flex flex-wrap gap-5">
+                            <label *ngFor="let option of step.options" class="flex items-center gap-2 cursor-pointer text-slate-300">
+                                <input type="radio" [value]="option.value" [formControlName]="step.key!" class="accent-blue-600" />
+                                <span>{{ option.label }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ===================================================== -->
+                    <!-- CHECKBOX -->
+                    <!-- ===================================================== -->
+                    <div *ngIf="isCheckbox(step)" class="form-field-group">
+                        <label class="field-label">
+                            {{ step.label }}
+                        </label>
+                        <div class="flex flex-wrap gap-5">
+                            <label *ngFor="let option of step.options" class="flex items-center gap-2 cursor-pointer text-slate-300">
+                                <input type="checkbox" [value]="option.value" class="accent-blue-600">
+                                <span>{{ option.label }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ===================================================== -->
+                    <!-- DOWNLOAD TEMPLATE -->
+                    <!-- ===================================================== -->
+                    <div *ngIf="isDownload(step)" class="form-field-group">
+                        <ng-container *ngIf="getDownloadFile(step) as template; else noTemplate">
+                            <div class="download-box">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="download-info-title">
+                                            {{ template.label }}
+                                        </div>
+                                        <div class="download-info-desc">
+                                            Download the sample Excel template, fill in the required details, and upload the completed file.
+                                        </div>
+                                    </div>
+                                    <button type="button" class="download-btn" (click)="downloadTemplate(step)">
+                                        Download
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #noTemplate>
+                            <div class="no-template-box">
+                                Please select {{ step.dependsOn ? 'Ship Status' : 'options' }} to download the template.
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- ===================================================== -->
+                    <!-- UPLOAD EXCEL -->
+                    <!-- ===================================================== -->
+                    <div *ngIf="isUpload(step)" class="form-field-group">
+                        <label class="field-label">
+                            Upload Excel File
+                        </label>
+                        <div class="file-upload-container">
+                            <div class="file-upload-wrapper">
+                                <!-- Hidden File Input -->
+                                <input #fileInput type="file" hidden [attr.accept]="step.accept || '.xlsx, .xls'"
+                                    (change)="onFileSelected($event)" />
+
+                                <!-- Browse Button -->
+                                <label class="upload-label" (click)="fileInput.click()">
+                                    <span class="upload-btn">
+                                        Choose File
+                                    </span>
+                                </label>
+
+                                <!-- Selected File Name -->
+                                <span class="file-name">
+                                    {{ selectedFile?.name || 'No file selected' }}
+                                </span>
+
+                                <!-- Remove Button -->
+                                <button *ngIf="selectedFile" type="button" class="remove-btn" (click)="removeFile()" title="Remove file">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </ng-container>
+            </form>
+        </div>
+
+        <!-- ================= FOOTER ================= -->
+        <div class="dialog-footer">
+            <button type="button" class="btn-outline" (click)="cancel()">
+                Cancel
+            </button>
+            <button type="button" class="btn-primary" [disabled]="isSubmitDisabled()" (click)="submit()">
+                {{ loading ? 'Uploading...' : 'Upload' }}
+            </button>
+        </div>
+
+    </div>
+</div>

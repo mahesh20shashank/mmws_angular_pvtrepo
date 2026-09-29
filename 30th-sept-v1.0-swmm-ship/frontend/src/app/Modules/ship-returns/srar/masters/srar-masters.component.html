@@ -1,0 +1,268 @@
+<div class="space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Header & Master Actions Panel Card -->
+  <app-panel-card
+    title="SRAR Master Data Configuration"
+    subtitle="Manage equipment lists, validity periods, running updates & ship profiles"
+    icon="settings"
+    iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)"
+  >
+    <div panelActions class="flex flex-wrap items-center gap-3">
+      <app-button (click)="openAddEquipmentModal()" class="button primary-btn flex-row gap-2">
+        <app-icon name="plus" [size]="16" variant="inherit"></app-icon>
+        <span>Add SRAR Equipment</span>
+      </app-button>
+
+      <app-button (click)="openAddTypeModal()" class="button secondary-btn flex-row gap-2">
+        <app-icon name="plus" [size]="16" variant="inherit"></app-icon>
+        <span>Lubricant & Test Kits</span>
+      </app-button>
+    </div>
+  </app-panel-card>
+
+  <!-- Master Tabs Navigation -->
+  <div class="glass-card p-2">
+    <div class="master-tabs">
+      <app-button class="tab-btn" [class.active]="activeTab() === 'equipmentList'" (click)="setTab('equipmentList')">
+        <app-icon name="file-text" [size]="16" variant="inherit"></app-icon>
+        <span>Add SRAR Equipment List</span>
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'validity'" (click)="setTab('validity')">
+        <app-icon name="calendar-check" [size]="16" variant="inherit"></app-icon>
+        <span>Equipment Validity</span>
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'updates'" (click)="setTab('updates')">
+        <app-icon name="rotate-cw" [size]="16" variant="inherit"></app-icon>
+        <span>Running Updates</span>
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'shipDetails'" (click)="setTab('shipDetails')">
+        <app-icon name="anchor" [size]="16" variant="inherit"></app-icon>
+        <span>Ship Details</span>
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Tab Content Panel Card -->
+  <app-panel-card
+    title="SRAR Master Records"
+    subtitle="Configured master entries for monthly running returns"
+    icon="database"
+    iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)"
+  >
+    <!-- TAB 1: Add SRAR Equipment List -->
+    @if (activeTab() === 'equipmentList') {
+      <app-data-grid
+        [rowData]="masterEquipments()"
+        [columnDefs]="masterColumnDefs"
+        [pageSize]="10"
+        [autoHeight]="true"
+        (cellClicked)="onMasterCellClicked($event)"
+      ></app-data-grid>
+    }
+
+    <!-- TAB 2: Equipment Validity -->
+    @if (activeTab() === 'validity') {
+      <app-data-grid
+        [rowData]="validityList()"
+        [columnDefs]="validityColumnDefs"
+        [pageSize]="10"
+        [autoHeight]="true"
+        (cellClicked)="onValidityCellClicked($event)"
+      ></app-data-grid>
+    }
+
+    <!-- TAB 3: Running Updates -->
+    @if (activeTab() === 'updates') {
+      <app-data-grid
+        [rowData]="runningUpdates()"
+        [columnDefs]="runningUpdatesColumnDefs"
+        [pageSize]="10"
+        [autoHeight]="true"
+      ></app-data-grid>
+    }
+
+    <!-- TAB 4: Ship Details -->
+    @if (activeTab() === 'shipDetails') {
+      <app-data-grid
+        [rowData]="shipDetails()"
+        [columnDefs]="shipDetailsColumnDefs"
+        [pageSize]="10"
+        [autoHeight]="true"
+      ></app-data-grid>
+    }
+  </app-panel-card>
+</div>
+
+<!-- ======================= MODAL 1: Add SRAR Equipment ======================= -->
+@if (isAddEquipmentModalOpen()) {
+  <app-modal size="md" (closeModal)="closeAddEquipmentModal()">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom flex items-center justify-between pb-4 border-b mb-4" style="border-color: var(--border-primary);">
+        <h3 class="head3 flex items-center gap-2">
+          <app-icon name="plus" [size]="20" variant="accent"></app-icon>
+          <span>Add SRAR Equipment</span>
+        </h3>
+        <app-button (click)="closeAddEquipmentModal()" class="action-btn">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <div class="modal-body-custom space-y-4">
+        <div class="form-group mb-4">
+          <app-select-input
+            label="Select Category"
+            placeholder="Search or select category..."
+            [options]="categoryOptions()"
+            [ngModel]="selectedCategoryCode()"
+            (ngModelChange)="onCategoryChange($event)">
+          </app-select-input>
+        </div>
+
+        @if (selectedCategoryCode()) {
+          <div class="form-group">
+            <span class="form-label block mb-1">Select Equipment</span>
+            @if (loadingAvailableEquipments()) {
+              <div class="p-4 rounded-lg text-xs subHeading_of_kpis text-center" style="background: var(--bg-input); border: 1px solid var(--border-primary);">
+                Loading equipment for this category...
+              </div>
+            } @else if (availableEquipments().length === 0) {
+              <div class="p-4 rounded-lg text-xs subHeading_of_kpis text-center" style="background: var(--bg-input); border: 1px solid var(--border-primary);">
+                No SFD equipment found under this category for this ship.
+              </div>
+            } @else {
+              <div class="max-h-48 overflow-y-auto space-y-2 p-2 rounded-lg" style="background: var(--bg-input); border: 1px solid var(--border-primary);">
+                @for (eq of availableEquipments(); track eq.id) {
+                  <label class="flex items-center gap-3 p-2 rounded hover:bg-card cursor-pointer text-xs" style="color: var(--text-primary);">
+                    <input type="checkbox" [checked]="isEquipmentSelected(eq.id)" class="custom-checkbox"
+                      (change)="toggleEquipmentSelection(eq.id)" />
+                    <span>{{ eq.nomenclature }}<span class="subHeading_of_kpis"> — {{ eq.equipment_code }}{{ eq.serial_no ? ' / ' + eq.serial_no : '' }}</span></span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="modal-footer-custom flex items-center justify-end gap-3 pt-4 border-t mt-6" style="border-color: var(--border-primary);">
+        <app-button (click)="closeAddEquipmentModal()" class="button secondary-btn">
+          Cancel
+        </app-button>
+        <app-button (click)="saveAddEquipment()" [disabled]="!selectedCategoryCode() || selectedEquipmentIds().length === 0"
+          class="button primary-btn">
+          Save Equipment
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}
+
+<!-- ======================= MODAL 2: Add Equipment Type (Lubricant & Test Kits) ======================= -->
+@if (isAddTypeModalOpen()) {
+  <app-modal size="md" (closeModal)="closeAddTypeModal()">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom flex items-center justify-between pb-4 border-b mb-4" style="border-color: var(--border-primary);">
+        <h3 class="head3 flex items-center gap-2">
+          <app-icon name="plus" [size]="20" variant="accent"></app-icon>
+          <span>Add Equipment Type</span>
+        </h3>
+        <app-button (click)="closeAddTypeModal()" class="action-btn">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <div class="modal-body-custom space-y-4">
+        <div class="form-group">
+          <span class="form-label block mb-1">Select Section</span>
+          <select [ngModel]="selectedTypeSection()" (ngModelChange)="selectedTypeSection.set($event)"
+            class="custom-select w-full">
+            <option value="" disabled selected>Select Section</option>
+            @for (sec of typeSections; track sec) {
+              <option [value]="sec">{{ sec }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <span class="form-label block mb-1">Equipment / Item Name</span>
+          <input type="text" [ngModel]="typeText()" (ngModelChange)="typeText.set($event)"
+            placeholder="Enter the item name" class="form-input w-full" />
+        </div>
+      </div>
+
+      <div class="modal-footer-custom flex items-center justify-end gap-3 pt-4 border-t mt-6" style="border-color: var(--border-primary);">
+        <app-button (click)="closeAddTypeModal()" class="button secondary-btn">
+          Cancel
+        </app-button>
+        <app-button (click)="saveAddType()" [disabled]="!selectedTypeSection() || !typeText().trim()"
+          class="button primary-btn">
+          Save Item
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}
+
+<!-- ======================= MODAL 3: Confirm Equipment Deletion ======================= -->
+@if (isDeleteConfirmModalOpen()) {
+  <app-modal size="md" (closeModal)="closeDeleteConfirmModal()">
+    <div class="modal-dialog-custom">
+      <div class="modal-header-custom flex items-center justify-between pb-4 border-b mb-4" style="border-color: var(--border-primary);">
+        <h3 class="head3 flex items-center gap-2 text-red-400">
+          <app-icon name="alert-triangle" [size]="20" variant="accent"></app-icon>
+          <span>Confirm Equipment Deletion</span>
+        </h3>
+        <app-button (click)="closeDeleteConfirmModal()" class="action-btn">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <div class="modal-body-custom space-y-3 py-2">
+        <p class="text-sm" style="color: var(--text-primary);">
+          Are you sure you want to delete this equipment from the master list?
+        </p>
+        @if (equipmentToDelete(); as item) {
+          <div class="p-3 rounded-lg border text-xs space-y-1.5" style="background: var(--bg-input); border-color: var(--border-primary);">
+            <div class="font-semibold text-sm" style="color: var(--text-primary);">
+              {{ item.nomenclature }}
+            </div>
+            @if (item.srarTab) {
+              <div style="color: var(--text-muted);">
+                Section: <span style="color: var(--text-primary);">{{ item.srarTab }}</span>
+              </div>
+            }
+            @if (item.serialNo && item.serialNo !== '-') {
+              <div style="color: var(--text-muted);">
+                Serial No: <span style="color: var(--text-primary);">{{ item.serialNo }}</span>
+              </div>
+            }
+            @if (item.locationOnBoard && item.locationOnBoard !== '-') {
+              <div style="color: var(--text-muted);">
+                Location: <span style="color: var(--text-primary);">{{ item.locationOnBoard }}</span>
+              </div>
+            }
+          </div>
+        }
+        <p class="text-xs text-red-400/80 italic">
+          This action cannot be undone.
+        </p>
+      </div>
+
+      <div class="modal-footer-custom flex items-center justify-end gap-3 pt-4 border-t mt-6" style="border-color: var(--border-primary);">
+        <app-button (click)="closeDeleteConfirmModal()" class="button secondary-btn">
+          Cancel
+        </app-button>
+        <app-button (click)="confirmDeleteMasterItem()" class="button bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+          <app-icon name="trash-2" [size]="16" variant="inherit"></app-icon>
+          <span>Delete Equipment</span>
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}

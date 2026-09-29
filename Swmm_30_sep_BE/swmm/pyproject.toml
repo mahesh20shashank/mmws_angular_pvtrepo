@@ -1,0 +1,58 @@
+[[tool.poetry.source]]
+name = "nexus"
+url = "http://172.16.50.12:8081/repository/pypi-group-prod/simple"
+priority = "primary"
+
+[project]
+name = "swmm"
+version = "0.1.0"
+description = ""
+authors = [
+    { name = "Cloudstrats" }
+]
+readme = "Readme.md"
+requires-python = ">=3.10,<4"
+
+dependencies = [
+    "django>=5.2,<6.0",
+    "django-cors-headers>=4.9,<5.0",
+    "django-environ>=0.13,<1.0",
+    "django-filter>=25.2,<26.0",
+    "django-redis>=5.4,<6.0",
+    "djangorestframework>=3.17,<4.0",
+    "djangorestframework-simplejwt>=5.5,<6.0",
+    "drf-spectacular>=0.29,<1.0",
+    "celery>=5.6,<6.0",
+    "cryptography (>=50.0.0,<51.0.0)",
+    "faker>=40.21,<41.0",
+    "gunicorn>=26.0,<27.0",
+    "ldap3>=2.9,<3.0",
+    "openpyxl>=3.1,<4.0",
+    "pillow (>=12.3.0,<13.0.0)",
+    "psycopg[binary] (>=3.3.4,<4.0.0)",
+    "pyjwt (>=2.13.0,<3.0.0)",
+    "pyodbc>=5.3,<6.0",
+    "python-dotenv>=1.2,<2.0",
+    "pyyaml>=6.0,<7.0",
+    "redis>=6.2,<7.0",
+    "requests>=2.34,<3.0",
+    "pandas>=2.2.3,<3.0",
+    "whitenoise (>=6.12.0,<7.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "qrcode (>=8.2,<9.0)",
+    "drf-spectacular-sidecar (>=2026.6.1,<2027.0.0)",
+    "weasyprint (>=68.0,<69.0)",
+    "pyasn1 (>=0.6.4,<0.7.0)",
+    "ruff (>=0.16.2,<0.17.0)",
+    "xlrd (>=2.0.2,<3.0.0)",
+    "jpype1 (>=1.5.0,<2.0.0)",
+    "drf-yasg (>=1.21.15,<2.0.0)"
+]
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = ">=2.3,<3.0"
+pre-commit = "^4.6.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

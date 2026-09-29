@@ -1,0 +1,644 @@
+{
+  "formId": "gyro_std_22",
+  "title": "GYRO",
+  "sourceFile": "gyro_std_22.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "GYRO",
+      "sectionType": "form",
+      "fields": [],
+      "tables": [],
+      "sectionTitle": "Basic Information",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type": "label",
+            "value": "Basic Information",
+            "colSpan": 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "Department",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              },
+              {
+                "label": "Gunnery",
+                "value": "Gunnery"
+              },
+              {
+                "label": "Communication",
+                "value": "Communication"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "Equipment",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "GYRO",
+                "value": "GYRO"
+              }
+            ],
+            "isDynamic": false,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "trial_date",
+            "key": "trial_date",
+            "name": "trial_date",
+            "label": "Date *",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "Nature of Trial",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "HATs",
+                "value": "HATs"
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "OP Checks",
+                "value": "OP Checks"
+              },
+              {
+                "label": "IIs",
+                "value": "IIs"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "observations_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "Observations",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "6%"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 9,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "69%"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 2,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "25%"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "observations_matrix_1_intro_row",
+                "cells": [
+                  {
+                    "_id": "gyro_embarked_time",
+                    "key": "gyro_embarked_time",
+                    "name": "gyro_embarked_time",
+                    "type": "time",
+                    "lb": "Trials team embarked onboard at",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "HH:MM",
+                    "inputType": "time",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_embarked_date",
+                    "key": "gyro_embarked_date",
+                    "name": "gyro_embarked_date",
+                    "type": "date",
+                    "lb": "hrs on",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "dd-mm-yyyy",
+                    "inputType": "date",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_sat_reference",
+                    "key": "gyro_sat_reference",
+                    "name": "gyro_sat_reference",
+                    "type": "input",
+                    "lb": "for SATs of GYRO",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_schedule_suffix",
+                    "type": "label",
+                    "value": "as per IHQ MoD (N) approved schedule. Following observed:-",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "observations_row_1_serial",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_1_description",
+                    "type": "label",
+                    "value": "Check 1 - Switching on GYRO",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_1_result",
+                    "key": "gyro_check_1_result",
+                    "name": "gyro_check_1_result",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "observations_row_2_serial",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_2_description",
+                    "type": "label",
+                    "value": "Check 2 – Repeaters check",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_2_result",
+                    "key": "gyro_check_2_result",
+                    "name": "gyro_check_2_result",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_heading",
+                "cells": [
+                  {
+                    "_id": "observations_row_3_serial",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 3,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_3_description",
+                    "type": "label",
+                    "value": "Check 3 – Transit bearing checks carried out while leaving",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_3_harbour",
+                    "key": "gyro_check_3_harbour",
+                    "name": "gyro_check_3_harbour",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_3_harbour_suffix",
+                    "type": "label",
+                    "value": "harbour.",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_3_result",
+                    "key": "gyro_check_3_result",
+                    "name": "gyro_check_3_result",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 3,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_headers",
+                "cells": [
+                  {
+                    "_id": "transit_bearing_header",
+                    "type": "label",
+                    "value": "<b>Transit Bearing</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "gyro_reading_header",
+                    "type": "label",
+                    "value": "<b>GYRO</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "gyro_error_header",
+                    "type": "label",
+                    "value": "<b>Error</b>",
+                    "isBold": true,
+                    "backgroundColor": "#e5e7eb",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "gyro_header_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_3_readings",
+                "cells": [
+                  {
+                    "_id": "gyro_check_3_transit_bearing",
+                    "key": "gyro_check_3_transit_bearing",
+                    "name": "gyro_check_3_transit_bearing",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_3_gyro_reading",
+                    "key": "gyro_check_3_gyro_reading",
+                    "name": "gyro_check_3_gyro_reading",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_3_error",
+                    "key": "gyro_check_3_error",
+                    "name": "gyro_check_3_error",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_reading_blank",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "observations_row_4_serial",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_4_description",
+                    "type": "label",
+                    "value": "Check 4 – Interface checks with Radar, NDDU, ECDIS, CTD, wind Computer and other users.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_4_result",
+                    "key": "gyro_check_4_result",
+                    "name": "gyro_check_4_result",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "observations_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "observations_row_5_serial",
+                    "type": "serial",
+                    "value": "5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "observations_row_5_description",
+                    "type": "label",
+                    "value": "Check 5 – Changeover of GYRO checks. GYRO to Magnetic Compass and vice versa.",
+                    "colspan": 9,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "gyro_check_5_result",
+                    "key": "gyro_check_5_result",
+                    "name": "gyro_check_5_result",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_5": [
+          {
+            "_id": "presenting_authority",
+            "key": "presenting_authority",
+            "name": "presenting_authority",
+            "label": "Presenting Authority:",
+            "type": "input",
+            "value": "Ship's Staff",
+            "required": false,
+            "disabled": false,
+            "placeholder": "Enter presenting authority",
+            "inputType": "text",
+            "colSpan": 6
+          },
+          {
+            "_id": "inspecting_authority",
+            "key": "inspecting_authority",
+            "name": "inspecting_authority",
+            "label": "Inspecting Authority:",
+            "type": "input",
+            "value": "WATT(V/MI)",
+            "required": false,
+            "disabled": false,
+            "placeholder": "Enter inspecting authority",
+            "inputType": "text",
+            "colSpan": 6
+          },
+          {
+            "_id": "presenting_nd",
+            "key": "presenting_nd",
+            "name": "presenting_nd",
+            "label": "ND:",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "inspecting_sti_ti",
+            "key": "inspecting_sti_ti",
+            "name": "inspecting_sti_ti",
+            "label": "STI / TI:",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "inspecting_sto",
+            "key": "inspecting_sto",
+            "name": "inspecting_sto",
+            "label": "STO:",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4
+          }
+        ]
+      }
+    }
+  ]
+}

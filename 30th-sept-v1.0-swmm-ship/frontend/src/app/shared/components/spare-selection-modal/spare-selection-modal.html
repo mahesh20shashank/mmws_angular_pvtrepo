@@ -1,0 +1,34 @@
+<app-modal [title]="title" size="xl" (closeModal)="closeModal.emit()">
+  <div class="spare-modal">
+    <!-- Body -->
+    <div class="modal-body p-0">
+      <div class="tabs-container mb-3 flex gap-2">
+        @for (tab of tabs(); track tab) {
+        <app-button type="button" class="tab-btn" [class.active]="selectedTab() === tab" (click)="selectTab(tab)">
+          {{ tab }}
+        </app-button>
+        }
+      </div>
+
+      <div class="search-section mb-3">
+        <input type="text" placeholder="Search..." [formControl]="searchControl" class="form-control-custom" />
+      </div>
+
+      <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs()" [pagination]="true"
+        [showCheckboxes]="true" [suppressRowClickSelection]="true" [getRowId]="rowId"
+        (selectionChanged)="onSelectionChanged($event)" (gridReady)="onGridReady($event)">
+      </app-data-grid>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer flex justify-end gap-3 pt-4 mt-4 border-t border-[var(--border-color,rgba(255,255,255,0.1))]">
+      <app-button type="button" class="btn-cancel button" (click)="closeModal.emit()">
+        Cancel
+      </app-button>
+
+      <app-button type="button" class="btn-save button" (click)="saveSelection()">
+        Add Selected
+      </app-button>
+    </div>
+  </div>
+</app-modal>

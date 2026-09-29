@@ -1,0 +1,115 @@
+.glass-card {
+  background-color: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.tag-title {
+  color: var(--text-primary);
+}
+
+.tag-label {
+  color: var(--text-muted, #94a3b8);
+}
+
+.tag-input {
+  color: var(--text-primary, #f8fafc);
+  border-color: var(--border-input, rgba(255, 255, 255, 0.2));
+}
+
+.tag-input option,
+select option {
+  background-color: var(--bg-dropdown, #1e2028);
+  color: var(--text-primary, #f8fafc);
+}
+
+/* Calendar picker icon styling for Dark & Light mode - no hover color change */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(55%) sepia(95%) saturate(3000%) hue-rotate(175deg) brightness(110%) contrast(105%) !important;
+  opacity: 1 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(55%) sepia(95%) saturate(3000%) hue-rotate(175deg) brightness(110%) contrast(105%) !important;
+  opacity: 1 !important;
+}
+
+:host-context([data-theme="light"]) input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator,
+:host-context([data-theme="light"]) input[type="date"]::-webkit-calendar-picker-indicator:hover,
+[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(35%) sepia(90%) saturate(2000%) hue-rotate(185deg) brightness(95%) !important;
+  opacity: 1 !important;
+}
+
+:host-context([data-theme="dark"]) input[type="date"],
+[data-theme="dark"] input[type="date"] {
+  color-scheme: dark;
+}
+
+:host-context([data-theme="light"]) input[type="date"],
+[data-theme="light"] input[type="date"] {
+  color-scheme: light;
+}
+
+.input-invalid {
+  border-color: #f82c36 !important;
+  border-bottom-color: #f82c36 !important;
+}
+
+.input-invalid::placeholder {
+  color: #f82c36 !important;
+}
+
+.alert-error {
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #b91c1c;
+}
+
+:host-context([data-theme="dark"]) .alert-error,
+[data-theme="dark"] .alert-error {
+  background-color: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.alert-success {
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #047857;
+}
+
+:host-context([data-theme="dark"]) .alert-success,
+[data-theme="dark"] .alert-success {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #6ee7b7;
+}
+
+.tag-btn-cancel {
+  background-color: #334155;
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.tag-btn-cancel:hover {
+  background-color: #475569;
+}
+
+:host-context([data-theme="light"]) .tag-btn-cancel,
+[data-theme="light"] .tag-btn-cancel {
+  background-color: #e2e8f0;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+:host-context([data-theme="light"]) .tag-btn-cancel:hover,
+[data-theme="light"] .tag-btn-cancel:hover {
+  background-color: #cbd5e1;
+  color: #0f172a;
+}

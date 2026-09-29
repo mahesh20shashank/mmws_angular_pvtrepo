@@ -1,0 +1,234 @@
+<div class="space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Ship-Life Exploitation KPIs (hours underway, distance run, days at sea/harbour) -->
+  @if (exploitationCards().length) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    @for (card of exploitationCards(); track card.title) {
+    <app-kpi-card [title]="card.title" [displayValue]="card.value" [description]="card.subtext"
+      [iconName]="card.icon" [iconColor]="card.color" [iconBg]="card.bg" [accentColor]="card.color"
+      [iconPosition]="'right'" [showDetailArrow]="false" [showTimelineTab]="false" [showTrends]="false"
+      [showViewMore]="false" cardHeight="auto"></app-kpi-card>
+    }
+  </div>
+  }
+
+  <!-- Analytics Section (Using Shared PanelCard Component with Bar & Donut Charts) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Monthly SRAR Submission Trend Panel -->
+    <app-panel-card title="Monthly SRAR Submission Trend"
+      subtitle="Last 6 Months submission progression across active ship units" icon="chart-bar" iconColor="#38BDF8"
+      iconBg="rgba(56, 189, 248, 0.15)">
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+        <app-bar-chart [categories]="monthlyCategories()" [stackedSeries]="monthlyStackedSeries()"
+          yAxisTitle="Submissions" [heightPx]="220"></app-bar-chart>
+      </div>
+    </app-panel-card>
+
+    <!-- Yearly SRAR Application Status Panel -->
+    <app-panel-card title="Yearly SRAR Application Status"
+      subtitle="Current year status distribution across review lifecycle" icon="chart-pie" iconColor="#38BDF8"
+      iconBg="rgba(56, 189, 248, 0.15)">
+      <div
+        class="p-6 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-center justify-around gap-6">
+        <app-donut-chart [segments]="yearlyStatusSegments()" [centerValue]="yearlyApprovedPercentage()"
+          centerLabel="Overall" centerDescription="Approved" [width]="180" [height]="180"></app-donut-chart>
+        <div class="flex flex-col gap-3">
+          @for (seg of yearlyStatusSegments(); track seg.label) {
+          <div class="flex items-center gap-3 text-xs">
+            <span class="w-3 h-3 rounded-full" [style.backgroundColor]="seg.color"></span>
+            <span class="text-white/90 font-medium">{{ seg.label }}</span>
+            <span class="text-white/60 font-mono">({{ seg.value }})</span>
+          </div>
+          }
+        </div>
+      </div>
+    </app-panel-card>
+  </div>
+
+  <!-- Fuel Consumption & DGUF -->
+  <div class="flex items-center justify-end gap-2">
+    <label for="srarYearFilter" class="text-xs text-white/60">Year</label>
+    <select id="srarYearFilter" class="custom-select text-xs" [value]="selectedYear() ?? ''"
+      (change)="onYearFilterChange($any($event.target).value)">
+      <option value="">All years</option>
+      @for (yr of availableYears(); track yr) {
+      <option [value]="yr">{{ yr }}</option>
+      }
+    </select>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Fuel Consumption Trend -->
+    <app-panel-card title="Fuel Consumption Trend"
+      subtitle="Fuel Oil (Tons) vs AVCAT (Litres), per return — click a point to drill in" icon="chart-line"
+      iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+        @if (fuelHasData()) {
+        <app-line-chart [labels]="fuelLabels()" [series]="fuelSeries()" yAxisTitle="Monthly consumption"
+          [heightPx]="240" (pointClick)="onFuelPointClick($event)"></app-line-chart>
+        } @else {
+        <div class="flex flex-col items-center justify-center gap-2 py-14 text-center">
+          <app-icon name="chart-line" [size]="26" variant="muted" />
+          <p class="text-sm text-white/70">No fuel consumption recorded yet</p>
+          <p class="text-xs text-white/45">Fuel figures are entered on the SRAR return; this chart fills
+            in as returns are completed.</p>
+        </div>
+        }
+      </div>
+    </app-panel-card>
+
+    <!-- DGUF Running Hours -->
+    <app-panel-card title="DGUF — Running Hours by Diesel Alternator"
+      subtitle="Sea &amp; anchorage vs port hours, from SRAR form 8 — click a bar to drill in" icon="chart-bar"
+      iconColor="#FBBF24" iconBg="rgba(251, 191, 36, 0.15)">
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+        @if (dgufHasData()) {
+        <app-bar-chart [categories]="dgufCategories()" [stackedSeries]="dgufSeries()" yAxisTitle="Hours"
+          [heightPx]="240" (categoryClick)="onDgufBarClick($event)"></app-bar-chart>
+        } @else {
+        <div class="flex flex-col items-center justify-center gap-2 py-14 text-center">
+          <app-icon name="chart-bar" [size]="26" variant="muted" />
+          <p class="text-sm text-white/70">No DGUF data entered yet</p>
+          <p class="text-xs text-white/45">DGUF running hours come from form 8 of the SRAR return. This
+            chart populates once a return records them.</p>
+        </div>
+        }
+      </div>
+    </app-panel-card>
+  </div>
+
+  <!-- Recent Submissions Table Panel -->
+
+  <!-- Interactive Right-Side Slide Drawer Modal Component (Using Shared app-detail-drawer Component) -->
+  <app-detail-drawer [open]="isModalOpen()" (closed)="closeModal()" [label]="modalTitle()" [iconName]="'file-text'"
+    [titleMode]="true" [wide]="true">
+    <!-- Report Detail Drawer Content -->
+    @if (modalType() === 'reportDetail') {
+    @if (isLoadingDetail()) {
+    <div class="flex flex-col items-center justify-center py-16 gap-3">
+      <div class="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-xs text-white/70">Fetching report details...</span>
+    </div>
+    } @else if (selectedReport()) {
+    <div class="space-y-5 text-sm text-white/90">
+      <!-- Overview Card -->
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <span class="text-xs text-white/50 block">Ship Unit</span>
+          <span class="font-semibold text-white">{{ selectedReport()?.shipName }}</span>
+        </div>
+        <div>
+          <span class="text-xs text-white/50 block">Month / Year</span>
+          <span class="text-white/80">{{ selectedReport()?.month }} {{ selectedReport()?.year }}</span>
+        </div>
+        <div>
+          <span class="text-xs text-white/50 block">Engineer Officer</span>
+          <span class="text-white/80">{{ selectedReport()?.engineerOfficer }}</span>
+        </div>
+        <div>
+          <span class="text-xs text-white/50 block">Submission Date</span>
+          <span class="text-white/80">{{ selectedReport()?.submissionDate }}</span>
+        </div>
+        <div>
+          <span class="text-xs text-white/50 block">Approval Status</span>
+          <span class="status-pill mt-1" [ngClass]="getStatusClass(selectedReport()?.approvalStatus || '')">
+            {{ selectedReport()?.approvalStatus }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Running Parameters Section -->
+      @if (selectedReport()?.runningParameters) {
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-cyan-300 flex items-center gap-2">
+          <app-icon name="gauge" [size]="15"></app-icon>
+          Running Parameters
+        </h4>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Underway Time</span>
+            <span class="font-mono text-white font-medium">
+              {{ selectedReport()?.runningParameters?.duringMonthHours }}h
+              {{ selectedReport()?.runningParameters?.duringMonthMinutes }}m
+            </span>
+          </div>
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Distance Run</span>
+            <span class="font-mono text-white font-medium">{{
+              selectedReport()?.runningParameters?.duringMonthDistance }} NM</span>
+          </div>
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Max Speed</span>
+            <span class="font-mono text-white font-medium">{{
+              selectedReport()?.runningParameters?.maxSpeedDuringMonth }} Knots</span>
+          </div>
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Max Shaft RPM</span>
+            <span class="font-mono text-white font-medium">{{ selectedReport()?.runningParameters?.maxShaftRpm }}
+              RPM</span>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Fuel Consumption Section -->
+      @if (selectedReport()?.fuelConsumption) {
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-emerald-300 flex items-center gap-2">
+          <app-icon name="fuel" [size]="15"></app-icon>
+          Fuel Consumption Summary (Tons)
+        </h4>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">B/F Last Month</span>
+            <span class="font-mono text-white font-medium">{{ selectedReport()?.fuelConsumption?.bfLastMonth }}</span>
+          </div>
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Received</span>
+            <span class="font-mono text-emerald-400 font-medium">+{{ selectedReport()?.fuelConsumption?.received
+              }}</span>
+          </div>
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Total Consumed</span>
+            <span class="font-mono text-amber-400 font-medium">-{{ selectedReport()?.fuelConsumption?.totalCons
+              }}</span>
+          </div>
+          <div class="bg-black/20 p-2.5 rounded-lg border border-white/5">
+            <span class="text-white/50 block">Balance Left</span>
+            <span class="font-mono text-cyan-300 font-semibold">{{ selectedReport()?.fuelConsumption?.balLeftOnboard
+              }}</span>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+    }
+
+    <!-- KPI List Drawer Content -->
+    @if (modalType() === 'kpiList') {
+    <div class="space-y-4">
+      <app-data-grid
+        [rowData]="filteredReports()"
+        [columnDefs]="kpiListColumnDefs"
+        [pagination]="true"
+        [pageSize]="10"
+        height="320px"
+        (cellClicked)="onKpiListCellClicked($event)">
+      </app-data-grid>
+    </div>
+    }
+
+    <!-- DGUF Breakdown Drawer Content -->
+    @if (modalType() === 'dgufBreakdown') {
+    <div class="space-y-4">
+      <app-data-grid
+        [rowData]="dgufBreakdownRows()"
+        [columnDefs]="dgufBreakdownColumnDefs"
+        [pagination]="true"
+        [pageSize]="10"
+        height="320px"
+        (cellClicked)="onDgufBreakdownCellClicked($event)">
+      </app-data-grid>
+    </div>
+    }

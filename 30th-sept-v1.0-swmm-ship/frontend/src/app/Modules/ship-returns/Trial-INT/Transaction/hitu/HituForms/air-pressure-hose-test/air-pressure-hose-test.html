@@ -1,0 +1,548 @@
+<app-form-card
+  title="AIR PRESSURE TEST / HOSE TEST"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+
+  <form [formGroup]="bdcForm">
+    <!-- <div class="grid grid-cols-4 gap-3">
+   
+      
+      <div class="flex flex-col gap-1">
+        <label class="form-label" for="class_of_ship">Class of ship *</label>
+        <app-select formControlName="class_of_ship" [options]="classOfShipOptions" placeholder="--Select--" class="w-full">
+        </app-select>
+      </div>
+      
+      <div class="flex flex-col gap-1">
+        <label class="form-label" for="ship">Ship*</label>
+        <app-select
+          formControlName="ship"
+          [options]="shipOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="form-label" for="date_of_inspection"
+          >Date of Conduct of Trials*</label
+        >
+        <app-calendar formControlName="date_of_inspection"></app-calendar>
+      </div>
+
+      
+      <div class="flex flex-col gap-1">
+        <label class="form-label" for="place_of_conduct_of_trials"
+          >Place of Conduct of Trials*</label
+        >
+        <app-select
+          formControlName="place_of_conduct_of_trials"
+          [options]="commandOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+
+      
+      <div class="flex flex-col gap-1">
+        <label class="form-label" for="occasion_for_conduct_of_trials"
+          >Occasion for Conduct of Trials*</label
+        >
+       <app-select
+            formControlName="occasion_for_conduct_of_trials"
+            [options]="ocationofconduct"
+            placeholder="--Select--"
+            class="w-full">
+            </app-select>
+      </div>
+
+      
+      <div class="col-span-2 flex flex-col gap-1">
+        <label class="form-label" for="authority_for_conduct_of_trials"
+          >Authority for Conduct of Trials*</label
+        >
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          
+          <app-input
+            formControlName="authority_for_conduct_of_trials"
+            placeholder="Enter Authority for Conduct of Trials"
+          >
+          </app-input>
+
+          
+
+          <app-calendar formControlName="authority_date"></app-calendar>
+
+          <label class="upload-label">
+            <input type="file" (change)="onFileChange($event)" hidden />
+            <span class="upload-btn">Choose File</span>
+          </label>
+        </div>
+      </div>
+    </div> -->
+    <div class="grid grid-cols-2 gap-3">
+      <!-- <div class="flex flex-col gap-1">
+                <label class="form-label" for="classOfShip">Class of Ship*</label>
+                <app-select formControlName="classOfShip" [options]="classOfShipOptions" [disabled]="true">
+                </app-select>
+            </div> -->
+
+      <!-- SHIP STATUS -->
+      <div class="flex flex-col gap-1">
+        <app-input
+          [label]="'Ship*'"
+          formControlName="ship"
+          placeholder="ship name"
+          class="w-full"
+        >
+        </app-input>
+      </div>
+
+      <!-- <app-input label="ship" formControlName="Ship">
+            </app-input> -->
+
+      <!-- Date of conduct of trials  -->
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+      <!--Place of conduct of trials  -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Place of conduct of trials*'"
+          formControlName="place_of_conduct_trail"
+          [options]="placesOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+
+      <!-- Occasion for conduct of Trials -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Occasion for conduct of Trials*'"
+          formControlName="occasion_of_conduct_trail"
+          [searchable]="false"
+          [options]="occasionOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="bdcForm.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+        <app-file-upload
+          [label]="'Upload doc*'"
+          (filesUploaded)="handleFilesUploaded($event)"
+          formControlName="authority_doc"
+        >
+        </app-file-upload>
+      </div>
+    </app-parameter-card>
+
+    <table class="w-full border-collapse text-sm mt-5">
+      <!-- Header -->
+      <thead>
+        <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+          <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Ser</th>
+          <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Description</th>
+          <th class="border border-white/15 px-3 py-2 align-middle text-white/85" width="60%">Remarks</th>
+        </tr>
+      </thead>
+
+      <!-- Body -->
+      <tbody>
+        <!-- 1 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-bold">1</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Type of test</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <!-- <app-input formControlName="type_of_test" placeholder="Enter type of test"></app-input> -->
+            <app-select
+              formControlName="type_of_test"
+              [options]="typeOfTestOptions"
+              placeholder="Select type of test"
+              [searchable]="false"
+            >
+            </app-select>
+          </td>
+        </tr>
+
+        <!-- 2 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Reference document</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <!-- <app-input formControlName="reference_document"></app-input> -->
+            <app-file-upload
+              formControlName="reference_document"
+            ></app-file-upload>
+          </td>
+        </tr>
+
+        <!-- 3 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Cluster No</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-select
+              formControlName="cluster_no"
+              [searchable]="false"
+              [options]="clusterOptions"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 4 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">4</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Compartments located within</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input formControlName="compartments"></app-input>
+          </td>
+        </tr>
+
+        <!-- 5 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Frame station</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input formControlName="frame_station"></app-input>
+          </td>
+        </tr>
+
+        <!-- 6 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">ITP location</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input formControlName="itp_location"></app-input>
+          </td>
+        </tr>
+
+        <!-- 7 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">7</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Test pressure</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input formControlName="test_pressure"></app-input>
+          </td>
+        </tr>
+
+        <!-- 8 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">8</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Last Test date</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-calendar formControlName="last_test_date"></app-calendar>
+          </td>
+        </tr>
+
+        <!-- 9 Adjacent -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">9</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Adjacent compartments</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <app-input formControlName="fwd" placeholder="Fwd"></app-input>
+              <app-input formControlName="aft" placeholder="Aft"></app-input>
+              <app-input
+                formControlName="above"
+                placeholder="Above"
+              ></app-input>
+              <app-input
+                formControlName="below"
+                placeholder="Below"
+              ></app-input>
+              <app-input formControlName="port" placeholder="Port"></app-input>
+              <app-input formControlName="stbd" placeholder="Stbd"></app-input>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 10 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">10</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of test</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-calendar formControlName="date_of_test"></app-calendar>
+          </td>
+        </tr>
+
+        <!-- 11 -->
+        <!-- <tr>
+      <td class="border border-white/15 px-3 py-2 align-middle text-white/85">11</td>
+      <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Drop of Pressure</td>
+      <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+
+       
+
+
+     
+
+
+
+
+           
+      </td>
+    </tr> -->
+
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">11</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Drop of Pressure</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <div class="grid grid-cols-2 gap-4">
+              <!-- Observation Dropdown -->
+              <div>
+                <label class="text-sm font-semibold block mb-1">
+                  Observation
+                </label>
+
+                <div class="flex items-center gap-2">
+                  <app-input
+                    formControlName="dop_observation"
+                    placeholder="Observation"
+                    class="flex-1"
+                  >
+                  </app-input>
+
+                  <!-- Alphanumeric input for Machinery Compartment (2nd option) -->
+                </div>
+              </div>
+
+              <!-- Remarks Dropdown -->
+              <div>
+                <label class="text-sm font-semibold block mb-1">
+                  Remarks
+                </label>
+
+                <app-select
+                  formControlName="dop_remarks"
+                  [options]="statusOptions"
+                  placeholder="Select Remarks"
+                >
+                </app-select>
+                <app-input
+                  *ngIf="bdcForm.get('dop_observation')?.value === 'machinery_compartment'"
+                  formControlName="dop_machinery_input"
+                  type="text"
+                  placeholder="Enter data"
+                  w-full
+                ></app-input>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 12 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">12</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Preparation prior APT</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input formControlName="preparation"></app-input>
+          </td>
+        </tr>
+
+        <!-- 13 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">13</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Ty blanking</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <div class="flex items-start gap-4">
+              <!-- Col 1: Type Number input (1–10) -->
+              <div class="w-36 flex-shrink-0">
+                <label class="text-xs font-semibold text-white/60 block mb-1"
+                  >Type No.</label
+                >
+                <app-input
+                  formControlName="ty_blanking"
+                  type="number"
+                  placeholder="1 – 10"
+                >
+                </app-input>
+              </div>
+
+              <!-- Col 2: Dynamic inputs (appear beside, not below) -->
+              <div
+                class="flex flex-col gap-2 flex-1"
+                *ngIf="getTyBlankingCount() > 0"
+              >
+                <label class="text-xs font-semibold text-white/60 block mb-1"
+                  >Values</label
+                >
+                <ng-container
+                  *ngFor="let item of getTyBlankingInputsArray(); let i = index"
+                >
+                  <app-input
+                    [formControlName]="'ty_blanking_item_' + (i + 1)"
+                    [placeholder]="'Enter value ' + (i + 1)"
+                  >
+                  </app-input>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 14 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">14</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Observations</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <div formArrayName="observations" class="flex flex-col gap-2">
+              <div
+                *ngFor="let ctrl of observationsArray.controls; let i = index"
+                class="flex items-center gap-2"
+              >
+                <!-- Observation input -->
+                <app-input
+                  [formControlName]="i"
+                  placeholder="Enter observation"
+                  class="flex-1"
+                >
+                </app-input>
+
+                <!-- Remove (−) button -->
+                <button
+                  type="button"
+                  (click)="removeObservation(i)"
+                  [disabled]="observationsArray.length === 1"
+                  class="flex items-center justify-center w-8 h-8 rounded-full text-white font-bold text-lg leading-none transition bg-red-500 hover:bg-red-600 disabled:bg-white/[0.08] disabled:cursor-not-allowed"
+                >
+                  &minus;
+                </button>
+
+                <!-- Add (+) button — only on last row -->
+                <button
+                  *ngIf="i === observationsArray.length - 1"
+                  type="button"
+                  (click)="addObservation()"
+                  class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 hover:bg-green-600 text-white font-bold text-lg leading-none transition"
+                >
+                  &plus;
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 15 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">15</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Recommendations</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-input formControlName="recommendations"></app-input>
+          </td>
+        </tr>
+
+        <!-- 16 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">16</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Overall Status</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <app-select
+              formControlName="overall_status"
+              [options]="statusOptions"
+              placeholder="Select Status"
+              [searchable]="false"
+            >
+            </app-select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <!-- FOOTER -->
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

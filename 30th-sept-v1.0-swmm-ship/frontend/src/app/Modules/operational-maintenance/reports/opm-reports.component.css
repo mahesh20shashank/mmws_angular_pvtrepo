@@ -1,0 +1,331 @@
+.rep {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.rep--collapsed {
+  grid-template-columns: 72px 1fr;
+}
+
+.rep-nav {
+  position: sticky;
+  top: 0;
+}
+
+.rep-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* ---------- Report header ---------- */
+.rep-head {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* keep the filter dropdowns above the preview card below */
+  position: relative;
+}
+
+.rep-head-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rep-title {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  color: var(--text-primary);
+}
+
+.rep-applied {
+  font-size: 11px;
+  color: var(--accent-blue);
+  background: var(--bg-comm-btn, rgba(26, 163, 242, 0.15));
+  border: 1px solid var(--accent-blue);
+  border-radius: 100px;
+  padding: 3px 11px;
+}
+
+.rep-spacer {
+  flex-grow: 1;
+}
+
+/* ---------- Header toolbar buttons (Columns / Filters / Reset) ---------- */
+.rep-toolbtn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  cursor: pointer;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+
+.rep-toolbtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.rep-toolbtn-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.rep-chev {
+  color: var(--text-muted);
+}
+
+.rep-count {
+  font-size: 10.5px;
+  color: var(--accent-blue, #1d96e9);
+  background: var(--bg-accent-subtle, rgba(29, 150, 233, 0.12));
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  border-radius: 100px;
+  padding: 1px 8px;
+}
+
+.rep-reset {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s;
+}
+
+.rep-reset:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Filter grid ---------- */
+.rep-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.rep-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rep-filter-label {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ---------- Columns picker ---------- */
+.rep-colpicker {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+}
+
+.rep-colpicker-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rep-colpicker-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.rep-colpicker-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rep-colpicker-reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.rep-colpicker-reset:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.rep-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rep-chip {
+  display: flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.rep-chip--selected {
+  gap: 7px;
+  padding: 5px 6px 5px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(0, 136, 255, 0.4);
+  background: rgba(0, 136, 255, 0.12);
+}
+
+.rep-chip-pos {
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--accent-blue, #1d96e9);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(29, 150, 233, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rep-chip-name {
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.rep-chip-lock {
+  width: 20px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f5b94b;
+}
+
+.rep-chip-remove {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.rep-chip-remove:hover {
+  background: rgba(248, 44, 54, 0.14);
+  color: #f82c36;
+}
+
+.rep-chip--add {
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.rep-chip--add:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(0, 136, 255, 0.4);
+  color: var(--text-primary);
+}
+
+/* ---------- Preview ---------- */
+.rep-preview {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.rep-preview-head {
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.rep-preview-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 13.5px;
+  color: var(--text-primary);
+}
+
+.rep-preview-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rep-preview app-data-grid {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  padding: 12px 18px 18px;
+  overflow: auto;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .rep,
+  .rep--collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .rep-nav {
+    position: static;
+  }
+}

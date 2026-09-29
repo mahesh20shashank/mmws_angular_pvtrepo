@@ -1,0 +1,964 @@
+<app-form-card #formCard [title]="'LOAD TRIALS – GTG OCCASION OF TRIALS'"
+  [smallTitle]="'GAS TURBINE GENERATOR INHOUSE LOAD TRIAL REPORT'" [showBackButton]="true" [showPreviousReport]="true"
+  [showPaginator]="true" [previewMode]="true" [pageScroll]="false" [currentPage]="currentPage" [totalPages]="totalPages"
+  (paginator)="goToPage($event)" (prevPage)="goToPreviousPage()" (nextPage)="goToNextPage()"
+  (firstPage)="goToFirstPage()" (lastPage)="goToLastPage()" (previousReport)="openPreviousReport()">
+
+  <button previewHeader *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment" type="button"
+    (click)="setActiveTab(tab)"
+    class="pt-glass-form-tab relative min-h-[58px] min-w-[220px] max-w-[240px] shrink-0 overflow-hidden rounded-[20px] px-6 text-center text-slate-800 dark:text-white"
+    [class.pt-glass-form-tab--active]="isSameEquipment(activeHeaderEquipment, tab)">
+    <span
+      class="relative block max-w-[195px] overflow-hidden text-ellipsis whitespace-nowrap pt-2 text-[15px] font-bold tracking-wide text-slate-900 dark:text-white">
+      {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+    </span>
+
+    <span
+      class="relative mt-1 block max-w-[195px] overflow-hidden text-ellipsis whitespace-nowrap text-[10px] font-semibold"
+      [ngClass]="
+        isSameEquipment(activeHeaderEquipment, tab)
+          ? 'pt-glass-form-tab-sub--active text-[#1069AB] dark:text-[#61C2FF]'
+          : 'pt-glass-form-tab-sub--idle text-slate-500 dark:text-slate-300'
+      ">
+      {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+    </span>
+  </button>
+
+  <form [formGroup]="form"
+    class="min-w-0 max-w-full p-0 py-4 pb-8 [&_table>thead]:!bg-transparent [&_table_thead>tr]:!bg-transparent [&_table_thead_th]:!text-slate-800 dark:[&_table_thead_th]:!text-slate-100 [&_table_tbody_td]:!text-left [&_table_tbody_td_.flex]:!justify-start">
+    <header class="gtg-paper-header mb-6 px-3 py-6 sm:px-5">
+      <div
+        class="flex flex-col items-center gap-4 text-[15px] font-bold uppercase tracking-wide text-[#1e3a5f] dark:text-white">
+        <label class="flex w-full max-w-4xl flex-wrap items-center justify-center gap-2">
+          <span class="shrink-0">LOAD TRIALS – GTG OCCASION OF TRIALS –</span>
+          <input type="text" formControlName="occasion_of_current_trial" class="gtg-header-box min-w-[12rem] flex-1"
+            aria-label="Occasion of trials" />
+        </label>
+
+        <label class="flex items-center gap-2">
+          <span>TRIALS DATE -</span>
+          <input type="date" formControlName="trials_date" class="gtg-header-date" aria-label="Trials date" />
+        </label>
+
+        <div class="mt-2 text-center">GAS TURBINE GENERATOR</div>
+
+        <label class="flex flex-wrap items-baseline justify-center gap-2">
+          <span>INHOUSE LOAD TRIAL REPORT –</span>
+          <input type="text" formControlName="trial_report_no" class="gtg-header-line w-64 max-w-full"
+            aria-label="Inhouse load trial report number" />
+        </label>
+
+        <div class="flex flex-wrap items-baseline justify-center gap-2 text-center">
+          <span>GTG - (</span>
+          <input type="text" formControlName="kw" class="gtg-header-line w-24" aria-label="KW" />
+          <span>KW ) SHIP –</span>
+          <input type="text" formControlName="ship" class="gtg-header-line w-48 font-bold" aria-label="Ship" />
+        </div>
+        <input type="hidden" formControlName="gtg" />
+      </div>
+    </header>
+
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+      <p class="text-sm text-slate-500 dark:text-slate-300 italic">
+        All fields marked with <span class="text-red-500">*</span> are mandatory
+      </p>
+    </div>
+
+    <!-- 1. Trial Details -->
+    <fieldset class="min-w-0 max-w-full overflow-x-auto border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-300 italic dark:text-slate-300 italic">1. Trial Details</legend>
+
+      <div class="grid grid-cols-3 gap-3">
+        <div class="col-span-3 flex flex-col gap-1">
+          <app-input label="(a) Presented by" [required]="true" formControlName="presented_by"
+            placeholder="Enter presented by"></app-input>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <app-calendar label="(b) Trial date" [required]="true" formControlName="trial_date"
+            class="w-full"></app-calendar>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <app-input label="(c) Trial Undertaken by" [required]="true" formControlName="trial_undertaken_by"
+            placeholder="Enter trial undertaken by"></app-input>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <app-input label="(d) Occasion of current trial" [required]="true" formControlName="occasion_of_current_trial"
+            placeholder="Enter occasion of current trial"></app-input>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <app-calendar label="(e) Date of last trial carried out on" [required]="true"
+            formControlName="date_of_last_trial" class="w-full"></app-calendar>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <app-file-upload label="(f) Proposal reference" [required]="true"
+            formControlName="proposal_reference"></app-file-upload>
+        </div>
+
+        <div class="col-span-3 grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <app-input label="(g) File reference" [required]="true" formControlName="file_reference"
+              placeholder="Enter file reference"></app-input>
+          </div>
+
+          <div class="flex flex-col gap-1 text-black">
+            <app-input
+              label="(h) Reference document for trial  | Def Stan 08-142, EED-Q-242(R3) and GTG Technical Manual."
+              formControlName="reference_document_for_trial" [disabled]="true"
+              placeholder="Reference document for trial"></app-input>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 2. Test Equipment Used -->
+    <fieldset class="min-w-0 max-w-full overflow-x-auto border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-300 italic">2. Test Equipment Used</legend>
+
+      <div class="grid grid-cols-1 gap-3">
+        <div class="flex flex-col gap-1">
+          <app-select label="Select Test Equipment" [required]="true" formControlName="test_equipment_used"
+            [disabled]="false" [options]="equipmentOptions" placeholder="-- Select --" class="w-full" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <app-textarea label="Remarks" [rows]="2" [disabled]="false" placeholder="Remarks"
+            formControlName="test_equipment_remarks" class="w-full"></app-textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <app-etma-proforma-table legend="3. Equipment Details" variant="grouped-key-value"
+      [keyValueGroups]="equipmentDetailsGroups"></app-etma-proforma-table>
+
+    <app-etma-proforma-table legend="4. Insulation Resistance (i.a.w. NES 511(Issue 2) and NES 502 Issue 4)"
+      variant="serial-key-value" class="[&_td:first-child]:!text-center"
+      [serialRows]="insulationResistanceRows"></app-etma-proforma-table>
+
+    <app-etma-proforma-table legend="5. Protection Checks" variant="matrix" minWidth="1100px"
+      class="[&_td:nth-child(1)]:!text-center [&_th]:text-center [&_th:nth-child(8)]:min-w-[180px] [&_td]:text-left [&_td:nth-child(3)]:text-center [&_td:nth-child(4)]:text-center [&_td:nth-child(4)_.flex]:justify-center [&_td:nth-child(4)_label]:whitespace-nowrap [&_td:nth-child(6)]:text-center [&_td:nth-child(7)]:text-center [&_td:nth-child(7)_.flex]:justify-center [&_td:nth-child(7)_label]:whitespace-nowrap [&_td:nth-child(8)]:text-center [&_td:nth-child(8)]:min-w-[180px] [&_td:nth-child(9)]:text-center"
+      [columns]="protectionCheckColumns" [matrixSections]="protectionCheckSections"></app-etma-proforma-table>
+
+    <app-etma-proforma-table legend="6. Instrumentation" variant="matrix" minWidth="1150px"
+      class="[&_td:nth-child(1)]:!text-center [&_th]:text-center [&_th:nth-child(3)]:min-w-[170px] [&_th:nth-child(7)]:min-w-[180px] [&_td]:text-left [&_td:nth-child(3)]:min-w-[170px] [&_td:nth-child(3)_.flex]:flex-nowrap [&_td:nth-child(3)_.flex]:justify-center [&_td:nth-child(3)_label]:whitespace-nowrap [&_td:nth-child(4)]:text-center [&_td:nth-child(5)]:text-center [&_td:nth-child(5)_.flex]:justify-center [&_td:nth-child(5)_label]:whitespace-nowrap [&_td:nth-child(6)]:text-center [&_td:nth-child(6)_.flex]:justify-center [&_td:nth-child(6)_label]:whitespace-nowrap [&_td:nth-child(7)]:text-center [&_td:nth-child(7)]:min-w-[180px] [&_td:nth-child(8)]:text-center"
+      [columns]="instrumentationColumns" [matrixSections]="instrumentationSections"></app-etma-proforma-table>
+
+    <app-etma-proforma-table legend="7. GTG Control Panel Checks" variant="matrix" minWidth="700px"
+      class="[&_td:nth-child(1)]:!text-center [&_th]:text-center [&_th:nth-child(3)]:!w-[12%] [&_td:nth-child(3)]:!w-[12%] [&_td:nth-child(3)]:text-center [&_td:nth-child(3)_.flex]:justify-center"
+      [columns]="gtgPanelColumns" [matrixSections]="gtgPanelSections"></app-etma-proforma-table>
+
+    <app-etma-proforma-table legend="8. Miscellaneous Checks" variant="matrix" minWidth="1000px"
+      class="[&_td:nth-child(1)]:!text-center [&_th]:text-center [&_th:nth-child(2)]:!w-[30%] [&_td:nth-child(2)]:!w-[30%] [&_th:nth-child(4)]:min-w-[180px] [&_td:nth-child(3)]:text-center [&_td:nth-child(3)_.flex]:justify-center [&_td:nth-child(4)]:text-center [&_td:nth-child(4)]:min-w-[180px] [&_td:nth-child(5)]:text-center"
+      [columns]="miscellaneousColumns" [matrixSections]="miscellaneousSections">
+      <div class="mt-4 rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <p>For Para 1 to 7, following to be followed while filling the details mentioned in sub serials:-</p>
+        <ul class="list-disc pl-5 mt-1 space-y-0.5">
+          <li><span class="text-red-500 font-bold">**</span> - To be checked/filled/measured by ETMA trial member.</li>
+          <li><span class="text-red-500 font-bold">***</span> - To be provided by SS.</li>
+          <li><span class="text-red-500 font-bold">****</span> - To be checked/provided by Yard.</li>
+        </ul>
+      </div>
+    </app-etma-proforma-table>
+
+    <!-- 9. Speed Control Test -->
+    <fieldset class="min-w-0 max-w-full overflow-x-auto border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-300 italic">9. Speed Control Test</legend>
+
+      <div class="mb-4 max-w-xs">
+        <app-input label="Nominal Frequency" formControlName="nominal_frequency" [type]="'number'" [min]="0"
+          placeholder="Enter nominal frequency" [required]="true"></app-input>
+        <p class="mt-1 text-xs text-slate-500">Hz</p>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-700 mb-2">(a) Steady State Test</p>
+      <p class="text-sm font-semibold text-slate-600 mb-2">WITH PHM (RCHM) 'ON'</p>
+
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-6">
+        <table class="w-full border-collapse min-w-[1000px] text-xs">
+          <thead>
+
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Load (% of Rated Capacity)</th>
+              <th class="px-2 py-2 font-semibold">Initial Speed(Hz)/(Min)</th>
+              <th class="px-2 py-2 font-semibold">Final Speed(Hz)/(Max)</th>
+              <th class="px-2 py-2 font-semibold">Permissible Limit</th>
+              <th class="px-2 py-2 font-semibold">Frequency Modulation (Less than ± 0.25% of Rated Frequency)</th>
+              <th class="px-2 py-2 font-semibold">Remarks</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'phm_on_steady_state'">
+            <tr *ngFor="let load of gtgSteadyStateLoadRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ load }}</td>
+              <td class="px-2 py-2"><app-input formControlName="initial_speed_hz" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="final_speed_hz" [type]="'number'" [min]="0"></app-input>
+              </td>
+              <td *ngIf="i === 0" class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="gtgSteadyStateLoadRows.length">50 ± 0.1 Hz</td>
+              <td class="px-2 py-2"><app-input formControlName="frequency_modulation" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>WITH PHM (RCHM) 'OFF'</p>
+      <div class="etma-table-wrap border rounded-md overflow-x-auto">
+        <table class="w-full border-collapse min-w-[1100px] text-xs">
+          <thead>
+
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Load (% of Rated Capacity)</th>
+              <th class="px-2 py-2 font-semibold">Initial Speed(Hz)/(Min)</th>
+              <th class="px-2 py-2 font-semibold">Final Speed(Hz)/(Max)</th>
+              <th class="px-2 py-2 font-semibold">Governor Droop (at 100% Load Change)</th>
+              <th class="px-2 py-2 font-semibold">Permissible limits</th>
+              <th class="px-2 py-2 font-semibold">Frequency Modulation (Less than ± 0.25% of Rated Frequency)</th>
+              <th class="px-2 py-2 font-semibold">Remarks</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'phm_off_steady_state'">
+            <tr *ngFor="let row of gtgSteadyStateOffRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadLabel }}</td>
+              <td class="px-2 py-2"><app-input formControlName="initial_speed_hz" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="final_speed_hz" [type]="'number'" [min]="0"></app-input>
+              </td>
+              <td *ngIf="i === 0 && !row.calculatedDroop"
+                class="px-2 py-2 text-left text-slate-600 font-semibold align-middle" [attr.rowspan]="5">NA</td>
+              <td *ngIf="row.calculatedDroop" class="px-2 py-2">
+                <div class="flex items-center justify-center gap-1">
+                  <app-input formControlName="governor_droop" [type]="'number'" [min]="0" [readonly]="true"></app-input>
+                  <span class="font-semibold">%</span>
+                </div>
+              </td>
+              <td *ngIf="i === 0 && !row.calculatedDroop"
+                class="px-2 py-2 text-left text-slate-600 font-semibold align-middle whitespace-nowrap"
+                [attr.rowspan]="5">3% ± 0.2% of rated frequency</td>
+              <td *ngIf="row.calculatedDroop"
+                class="px-2 py-2 text-left text-slate-600 font-semibold align-middle whitespace-nowrap">{{
+                row.droopPermissibleText }}</td>
+              <td class="px-2 py-2">
+                <ng-container *ngIf="row.frequencyModulationNA; else offFreqModInput">
+                  <div class="text-center text-slate-600 font-semibold">NA</div>
+                </ng-container>
+                <ng-template #offFreqModInput>
+                  <app-input formControlName="frequency_modulation" [type]="'number'" [min]="0"
+                    [readonly]="true"></app-input>
+                </ng-template>
+              </td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700 mb-6">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>
+            The load to be gradually reduced in say quarter load steps from full load to no load and increased in the
+            same manner up to full load. When the speed has stabilised after each load change the steady state frequency
+            to be recorded. (Set frequency to rated value when at 50% load).
+          </li>
+          <li>
+            Governor Droop - (No load frequency - Full load frequency) *100/Nominal frequency Nominal frequency – (No
+            load frequency + Full load frequency)/2
+          </li>
+          <li>
+            <b>Frequency Modulation</b> Frequency Modulation is the periodic variation in frequency. The periodicity of
+            Frequency modulation should be considered to be longer than 1 cycle time at nominal frequency and less than
+            10 seconds. Frequency Modulation(Percent) = 100 x (Fmax – Fmin)/(2 x Fnominal)
+          </li>
+        </ul>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(b) Transient Test</p>
+      <p class="text-sm font-semibold text-slate-700 dark:text-white mb-2">PHM (RCHM) 'ON'</p>
+
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-6">
+        <table class="w-full border-collapse min-w-[1200px] text-xs">
+          <thead>
+
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Load %</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Initial Speed (Hz)</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Momentary Speed(Hz)</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Final Speed (Hz)</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">% Peak</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="3">Time of Recovery to within ± 0.5% of Rated
+                Value</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold text-center">Initial</th>
+              <th class="px-2 py-2 font-semibold text-center">To</th>
+              <th class="px-2 py-2 font-semibold text-center">Observed</th>
+              <th class="px-2 py-2 font-semibold text-center">Permissible Limit</th>
+              <th class="px-2 py-2 font-semibold text-center">Final Value</th>
+              <th class="px-2 py-2 font-semibold text-center">Observed(Sec)</th>
+              <th class="px-2 py-2 font-semibold text-center">Permissible Limit(Sec)</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'phm_on_transient'">
+            <tr *ngFor="let row of gtgTransientOnRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadInitial }}</td>
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadTo }}</td>
+              <td class="px-2 py-2"><app-input formControlName="initial_speed_hz" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="momentary_speed_hz" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="final_speed_hz" [type]="'number'" [min]="0"></app-input>
+              </td>
+              <td class="px-2 py-2"><app-input formControlName="peak_observed" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td *ngIf="row.peakPermissibleLimit" class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="row.peakLimitRowspan || 1">{{ row.peakPermissibleLimit }}</td>
+              <td class="px-2 py-2"><app-input formControlName="recovery_final_value" [type]="'number'" [min]="0"
+                  [readonly]="true" placeholder="From nominal frequency"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="recovery_observed" [type]="'number'" [min]="0"
+                  placeholder="Enter numbers only"></app-input></td>
+              <td *ngIf="row.recoveryPermissibleLimit"
+                class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="row.recoveryLimitRowspan || 1">{{ row.recoveryPermissibleLimit }}</td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm font-semibold text-slate-700 dark:text-white mb-2">PHM (RCHM) 'OFF'</p>
+
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-6">
+        <table class="w-full border-collapse min-w-[1200px] text-xs">
+          <thead>
+
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Load %</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Initial Speed (Hz)</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Momentary Speed(Hz)</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Final Speed (Hz)</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">% Peak</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="3">Time of Recovery to within ± 0.5% of Final
+                Value</th>
+              <th class="px-2 py-2 font-semibold text-center" rowspan="2">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold text-center">Initial</th>
+              <th class="px-2 py-2 font-semibold text-center">To</th>
+              <th class="px-2 py-2 font-semibold text-center">Observed</th>
+              <th class="px-2 py-2 font-semibold text-center">Permissible Limits</th>
+              <th class="px-2 py-2 font-semibold text-center">Final Value</th>
+              <th class="px-2 py-2 font-semibold text-center">Observed(Sec)</th>
+              <th class="px-2 py-2 font-semibold text-center">Permissible Limits(Sec)</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'phm_off_transient'">
+            <tr *ngFor="let row of gtgTransientOffRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadInitial }}</td>
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadTo }}</td>
+              <td class="px-2 py-2"><app-input formControlName="initial_speed_hz" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="momentary_speed_hz" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="final_speed_hz" [type]="'number'" [min]="0"></app-input>
+              </td>
+              <td class="px-2 py-2"><app-input formControlName="peak_observed" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td *ngIf="row.peakPermissibleLimit" class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="row.peakLimitRowspan || 1">{{ row.peakPermissibleLimit }}</td>
+              <td class="px-2 py-2"><app-input formControlName="recovery_final_value" [type]="'number'" [min]="0"
+                  [readonly]="true" placeholder="From nominal frequency"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="recovery_observed" [type]="'number'" [min]="0"
+                  placeholder="Enter numbers only"></app-input></td>
+              <td *ngIf="row.recoveryPermissibleLimit"
+                class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="row.recoveryLimitRowspan || 1">{{ row.recoveryPermissibleLimit }}</td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700 mb-6">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>
+            (i) Frequency deviation in the event of instantaneous load shedding and surge of 50% and 100% of rated
+            active load should be recorded.
+          </li>
+          <li>
+            (ii) Formula for % peak = |Initial frequency − Momentary frequency| × 100 / Nominal frequency
+          </li>
+          <!-- <li>
+            Load up (0→25, 0→50, 0→75, 0→100): Final Value = Final Speed × 99.5 / 100. Load down (25→0, 50→0, 75→0, 100→0): Final Value = Final Speed × 100.5 / 100. PHM OFF Final Value uses the matching PHM ON Final Speed. Sat/Unsat uses % Peak and Observed(Sec) only.
+          </li> -->
+        </ul>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(c) Governor Range</p>
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-6">
+        <table class="w-full border-collapse min-w-[600px] text-xs">
+          <thead>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Load %</th>
+              <th class="px-2 py-2 font-semibold">Measured Frequency (Hz)</th>
+              <th class="px-2 py-2 font-semibold">Remark</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'governor_range'">
+            <tr *ngFor="let load of governorRangeLoadRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ load }}</td>
+              <td class="px-2 py-2"><app-input formControlName="measured_frequency_hz" [type]="'number'" [min]="0"
+                  placeholder="Enter numbers only"></app-input></td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700 mb-6">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Permitted limits for frequencies measured at 0% and 100% loads should not be less than ± 3% (as per def
+            stan) and ± 1% of Nominal for mechanical governors and electronic governors respectively</li>
+          <li>This test is undertaken by varying the frequency using the frequency control knob/ lever provided for the
+            alternator on the switchboards</li>
+        </ul>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(d) Rate Affected by Governor Motor</p>
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-4">
+        <table class="w-full border-collapse min-w-[900px] text-xs">
+          <thead>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold" rowspan="2">Load %</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Rate (Hz/ Sec)</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Permissible Limits</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Up</th>
+              <th class="px-2 py-2 font-semibold">Down</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'governor_rate'">
+            <tr *ngFor="let load of governorRateLoadRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ load }}</td>
+              <td class="px-2 py-2"><app-input formControlName="rate_up" [type]="'number'" [min]="0"
+                  placeholder="Enter numbers only"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="rate_down" [type]="'number'" [min]="0"
+                  placeholder="Enter numbers only"></app-input></td>
+              <td *ngIf="i === 0" class="px-2 py-2 text-slate-600 align-middle"
+                [attr.rowspan]="governorRateLoadRows.length">{{ governorRatePermissibleLimit }}</td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Permitted limits for frequencies measured at 0% and 100% loads should not be less than ± 3% and ± 1% of
+            Nominal for mechanical governors and electronic governors respectively.</li>
+          <li>This test is undertaken by holding the lever for frequency change in Up position or Down position for
+            durations sufficient to record the graphs.</li>
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset class="min-w-0 max-w-full overflow-x-auto border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-300 italic">10. Voltage Control Test</legend>
+
+      <div class="mb-4 max-w-xs">
+        <app-input label="Nominal Voltage" formControlName="nominal_voltage" [type]="'number'" [min]="0"
+          placeholder="Auto-calculated from no-load and full-load voltages" [required]="true"></app-input>
+        <p class="mt-1 text-xs text-slate-500">Volt.</p>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(a) Steady State Test</p>
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-4">
+        <table class="w-full border-collapse min-w-[1300px] text-xs">
+          <thead>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold" rowspan="2">Load%</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">KW</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Volts</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Permissible Limit</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">P.F.</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">AMPs</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Voltage Modulation (Less Than 2% of Rated Voltage)</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Observed Max</th>
+              <th class="px-2 py-2 font-semibold">Observed Min</th>
+              <th class="px-2 py-2 font-semibold">Rated(Amps)</th>
+              <th class="px-2 py-2 font-semibold">Observed(Amps)</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'voltage_steady_state'">
+            <tr *ngFor="let load of gtgVoltageSteadyStateLoadRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ load }}</td>
+              <td class="px-2 py-2"><app-input formControlName="kw" [type]="'number'" [min]="0"
+                  placeholder="Enter KW"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="volts_max" [type]="'number'" [min]="0"
+                  placeholder="Max"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="volts_min" [type]="'number'" [min]="0"
+                  placeholder="Min"></app-input></td>
+              <td *ngIf="i === 0" class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="gtgVoltageSteadyStateLoadRows.length">1%</td>
+              <td class="px-2 py-2"><app-input formControlName="power_factor" [type]="'number'" [min]="0"
+                  placeholder="P.F."></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="rated_amps" [type]="'number'" [min]="0"
+                  placeholder="Rated"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="observed_amps" [type]="'number'" [min]="0"
+                  placeholder="Observed"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="voltage_modulation" [type]="'number'" [min]="0"
+                  [readonly]="true" placeholder="Calculated"></app-input></td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700 mb-6">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><b>Note:</b> Permitted limits of voltage ± 1% (as per EED) of rated voltage or as per technical manuals
+            for already commissioned ships.</li>
+          <li>The load to be gradually reduced in say quarter load steps from full load to no load and when the voltage
+            has stabilised after each load change the steady state voltage to be recorded. (Set voltage to Nominal value
+            at 50% load).</li>
+          <li>(iii) Voltage Modulation. Voltage Modulation is the periodic voltage variation of single line to line user
+            voltage. The periodicity of voltage modulation should be considered to be longer than 1 cycle time at
+            nominal frequency and less than 10 seconds. Voltage used in the below mentioned equation is RMS voltage.
+            Voltage Modulation(Percent) = 100 x (Vmax – Vmin)/(2 x Vnominal)</li>
+        </ul>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(b) Transient Test</p>
+      <div class="mb-4 max-w-xs flex items-end gap-2">
+        <app-input label="M-Load" formControlName="m_load_amps" [type]="'number'" [min]="0"
+          [required]="true"></app-input>
+        <span class="pb-2 text-xs text-slate-600 font-semibold">Amps</span>
+      </div>
+
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-4">
+        <table class="w-full border-collapse min-w-[1200px] text-xs">
+          <thead>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Load %</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Initial Voltage(V)</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Momentary Voltage(V)</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Final Voltage(V)</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">% Peak</th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Final Value</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Time of Recovery to Within ± 1% of Final Value
+              </th>
+              <th class="px-2 py-2 font-semibold" rowspan="2">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Initial</th>
+              <th class="px-2 py-2 font-semibold">To</th>
+              <th class="px-2 py-2 font-semibold">Observed</th>
+              <th class="px-2 py-2 font-semibold">Permissible Limits</th>
+              <th class="px-2 py-2 font-semibold">Observed(Sec)</th>
+              <th class="px-2 py-2 font-semibold">Permissible Limits(Sec)</th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'voltage_transient'">
+            <tr *ngFor="let row of gtgVoltageTransientRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadInitial }}</td>
+              <td class="px-2 py-2 font-semibold text-center">{{ row.loadTo }}</td>
+              <td class="px-2 py-2"><app-input formControlName="initial_voltage" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="momentary_voltage" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="final_voltage" [type]="'number'" [min]="0"></app-input>
+              </td>
+              <td class="px-2 py-2"><app-input formControlName="peak_observed" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td *ngIf="row.peakPermissibleLimit" class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="row.peakLimitRowspan || 1">{{ row.peakPermissibleLimit }}</td>
+              <td class="px-2 py-2"><app-input formControlName="final_value" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="recovery_observed" [type]="'number'" [min]="0"
+                  placeholder="Enter numbers only"></app-input></td>
+              <td *ngIf="row.recoveryPermissibleLimit"
+                class="px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                [attr.rowspan]="row.recoveryLimitRowspan || 1">{{ row.recoveryPermissibleLimit }}</td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700 mb-6">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>M-Load equals application of an additional load equal to 50% rated kVA at zero to 0.4 PF lagging. Towards
+            this starting of an induction motor could be undertaken if M-Load is not available. The motor chosen should
+            be such that its kVA calculated based on its starting current and voltage input is equal to 50% of rated kVA
+            of the alternator. The motor should have Direct-on-Line (DOL) starter.</li>
+          <li>Formula for % peak – (Initial voltage – Momentary voltage) * 100 Nominal voltage. Nominal voltage – (No
+            load voltage + Full load voltage)/2</li>
+        </ul>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(c) Voltage Balance</p>
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-6">
+        <table class="w-full border-collapse min-w-[1000px] text-xs">
+          <thead>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold">Load %</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="3">Line Voltages</th>
+              <th class="px-2 py-2 font-semibold">Difference (Between Max &amp; Min of Three Values)</th>
+              <th class="px-2 py-2 font-semibold">Permissible Limit (1% of the Average of Three Line Voltages)</th>
+              <th class="px-2 py-2 font-semibold">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th></th>
+              <th class="px-2 py-2 font-semibold">R-Y</th>
+              <th class="px-2 py-2 font-semibold">Y-B</th>
+              <th class="px-2 py-2 font-semibold">B-R</th>
+              <th colspan="3"></th>
+            </tr>
+          </thead>
+          <tbody [formArrayName]="'voltage_balance'">
+            <tr *ngFor="let load of voltageBalanceLoadRows; let i = index" [formGroupName]="i">
+              <td class="px-2 py-2 font-semibold text-center">{{ load }}</td>
+              <td class="px-2 py-2"><app-input formControlName="line_voltage_ry" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="line_voltage_yb" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="line_voltage_br" [type]="'number'"
+                  [min]="0"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="difference" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td class="px-2 py-2"><app-input formControlName="permissible_limit" [type]="'number'" [min]="0"
+                  [readonly]="true"></app-input></td>
+              <td class="px-2 py-2">
+                <div class="flex gap-3 justify-center">
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status" value="Sat"
+                      class="accent-blue-500" /><span>Sat</span></label>
+                  <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                      value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">(d) Voltage Range</p>
+      <div class="etma-table-wrap border rounded-md overflow-x-auto mb-4">
+        <table class="w-full border-collapse min-w-[900px] text-xs">
+          <thead>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th class="px-2 py-2 font-semibold"></th>
+              <th class="px-2 py-2 font-semibold">Load %</th>
+              <th class="px-2 py-2 font-semibold text-center" colspan="2">Voltage Measured on Switchboard (Volts)</th>
+              <th class="w-[16%] px-2 py-2 font-semibold">Permissible Limit (5% of Rated Voltage)</th>
+              <th class="px-2 py-2 font-semibold">Remarks</th>
+            </tr>
+            <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+              <th></th>
+              <th></th>
+              <th class="px-2 py-2 font-semibold">At Lowest Limit of Trimmer</th>
+              <th class="px-2 py-2 font-semibold">At Highest Limit of Trimmer</th>
+              <th colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let group of voltageRangeGroups">
+              <ng-container [formArrayName]="voltageRangeArrayName(group.key)">
+                <tr *ngFor="let load of voltageRangeLoadRows; let i = index" [formGroupName]="i">
+                  <td *ngIf="i === 0" class="px-2 py-2 font-semibold align-middle"
+                    [attr.rowspan]="voltageRangeLoadRows.length">{{ group.label }}</td>
+                  <td class="px-2 py-2 font-semibold text-center">{{ load }}</td>
+                  <td class="px-2 py-2"><app-input formControlName="voltage_lowest" [type]="'number'"
+                      [min]="0"></app-input></td>
+                  <td class="px-2 py-2"><app-input formControlName="voltage_highest" [type]="'number'"
+                      [min]="0"></app-input></td>
+                  <td *ngIf="group.key === 'avr' && i === 0"
+                    class="w-[16%] px-2 py-2 text-left text-slate-600 font-semibold align-middle"
+                    [attr.rowspan]="voltageRangeLoadRows.length * voltageRangeGroups.length">
+                    {{ form.get('voltage_range_permissible_limit')?.value || '—' }}
+                  </td>
+                  <td class="px-2 py-2">
+                    <div class="flex gap-3 justify-center">
+                      <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                          value="Sat" class="accent-blue-500" /><span>Sat</span></label>
+                      <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                          value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rounded-md proforma-note-box bg-amber-50 p-3 text-xs text-slate-700 mb-6">
+        <p class="font-semibold mb-1 note-title">Note:</p>
+        <p>This test is undertaken by varying the voltage trimmer (Hand/ Auto as applicable) from lowest limit to the
+          highest limit.</p>
+      </div>
+
+      <p class="text-sm font-semibold text-slate-800 dark:text-white px-3 py-2 rounded-md mb-3">(e) Voltage
+        Waveform Harmonic Content</p>
+      <div
+        class="flex flex-wrap items-center gap-3 rounded-md border border-violet-200 px-3 py-3 mb-6 text-xs text-slate-700 dark:border-slate-600 dark:text-white">
+        <span class="flex-1 text-slate-700 dark:text-white">Maximum total harmonic content of waveform at no load (not to exceed 2% of the amplitude of
+          fundamental)</span>
+        <app-input
+          class="w-40 [&_input]:!bg-white [&_input]:!text-slate-700 dark:[&_input]:!bg-slate-800 dark:[&_input]:!text-slate-100"
+          formControlName="harmonic_content" [type]="'number'" [min]="0" placeholder="Enter value"></app-input>
+      </div>
+    </fieldset>
+
+    <fieldset class="min-w-0 max-w-full overflow-x-auto border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-300 italic">11. Paralleling Trial</legend>
+      <ul class="list-disc pl-5 space-y-2 text-xs text-slate-800 dark:text-white mb-4">
+        <li class="text-slate-800 dark:text-white"><strong class="font-semibold text-slate-900 dark:text-white">Attended Paralleling.</strong> Test to be carried out for machines not designed for unattended parallel operation.
+          For machines designed for unattended paralleling, this test should be conducted in Non-APMS mode/ switching
+          off modules facilitating continuous parallel operation.</li>
+        <li class="text-slate-800 dark:text-white"><strong class="font-semibold text-slate-900 dark:text-white">Unattended Paralleling.</strong> Using M-loads and Ship's loads in combination (as required) should be carried out
+          only for machines designed for running in unattended paralleling mode through Automatic Power Management
+          System or through any other system facilitating running of alternators in parallel for continuous durations.
+          Results to be recorded as per table at Appendix 'A'.</li>
+      </ul>
+      <p class="text-sm font-semibold mb-2 text-slate-800 dark:text-white">Paralleling Trial:</p>
+      <div class="flex gap-3 mb-4">
+        <button type="button" class="px-5 py-2 rounded-md bg-emerald-600 text-white font-semibold text-sm"
+          [class.ring-2]="parallelingTrial === 'yes'" [class.ring-offset-2]="parallelingTrial === 'yes'"
+          (click)="addParallelingTrialRow()">YES</button>
+        <button type="button" class="px-5 py-2 rounded-md bg-red-600 text-white font-semibold text-sm"
+          [class.ring-2]="parallelingTrial === 'no'" [class.ring-offset-2]="parallelingTrial === 'no'"
+          (click)="setParallelingTrial('no')">NO</button>
+      </div>
+
+      <div formArrayName="dynamic_paralleling_trial_rows"
+        *ngIf="showParallelingSection && dynamicParallelingTrialRows.length">
+        <div *ngFor="let row of dynamicParallelingTrialRows.controls; let i = index" [formGroupName]="i"
+          class="border border-slate-300 rounded-md p-4 mb-4">
+          <h4 class="text-center font-semibold underline mb-4">Unattended Paralleling Trial Between</h4>
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="font-semibold mb-2">DG 1</p>
+              <app-select label="Select Equipment" [required]="true" formControlName="paralleling_trial_machine_1"
+                [options]="equipmentOptions" placeholder="Select Equipment"></app-select>
+              <div class="grid grid-cols-2 gap-3 mt-3">
+                <app-input label="Rated/D-Rated" formControlName="parallel_rated_dg1" [type]="'number'"
+                  [min]="0"></app-input>
+                <app-input label="Amps" formControlName="parallel_amps_dg1" [type]="'number'" [min]="0"></app-input>
+              </div>
+            </div>
+            <div>
+              <p class="font-semibold mb-2">DG 2</p>
+              <app-select label="Select Equipment" [required]="true" formControlName="paralleling_trial_machine_2"
+                [options]="equipmentOptions" placeholder="Select Equipment"></app-select>
+              <div class="grid grid-cols-2 gap-3 mt-3">
+                <app-input label="Rated/D-Rated" formControlName="parallel_rated_dg2" [type]="'number'"
+                  [min]="0"></app-input>
+                <app-input label="Amps" formControlName="parallel_amps_dg2" [type]="'number'" [min]="0"></app-input>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngFor="let unit of ['kw', 'kva']">
+            <div class="etma-table-wrap border rounded-md overflow-x-auto mb-4">
+              <table class="w-full border-collapse min-w-[1200px] text-xs">
+                <thead>
+                  <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+                    <th class="px-2 py-2 font-semibold" colspan="10">{{ unit === 'kw' ? 'kW sharing' : 'kVAr sharing' }}
+                    </th>
+                  </tr>
+                  <tr class="!bg-transparent !text-slate-800 dark:!text-slate-100 print:[print-color-adjust:exact]">
+                    <th class="px-2 py-2" colspan="2">Load Range</th>
+                    <th class="px-2 py-2">Combined Load</th>
+                    <th class="px-2 py-2">Proportionate Share A</th>
+                    <th class="px-2 py-2">Proportionate Share B</th>
+                    <th class="px-2 py-2">Actual Load A</th>
+                    <th class="px-2 py-2">Actual Load B</th>
+                    <th class="px-2 py-2">Difference (W)</th>
+                    <th class="px-2 py-2">Tolerance Band (Z)</th>
+                    <th class="px-2 py-2">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let config of parallelingIncreasingRows; let incIndex = index">
+                    <tr [formGroupName]="parallelingSharingControlName(config, unit)">
+                      <td *ngIf="incIndex === 0" class="px-2 py-2 font-semibold" rowspan="5">Increasing Loads</td>
+                      <td class="px-2 py-2 font-semibold text-left">{{ config.label }}%</td>
+                      <td class="px-2 py-2"><app-input formControlName="combined_val" [readonly]="true"></app-input>
+                      </td>
+                      <td class="px-2 py-2"><app-input formControlName="proportionate_a" [readonly]="true"></app-input>
+                      </td>
+                      <td class="px-2 py-2"><app-input formControlName="proportionate_b" [readonly]="true"></app-input>
+                      </td>
+                      <td class="px-2 py-2"><app-input formControlName="machine_a" [type]="'number'"
+                          [min]="0"></app-input></td>
+                      <td class="px-2 py-2"><app-input formControlName="machine_b" [type]="'number'"
+                          [min]="0"></app-input></td>
+                      <td class="px-2 py-2"><app-input formControlName="difference" [readonly]="true"></app-input></td>
+                      <td *ngIf="incIndex === 0" class="px-2 py-2 align-middle" rowspan="10"><app-input
+                          formControlName="tolerance_band" [readonly]="true"></app-input></td>
+                      <td class="px-2 py-2">
+                        <div class="flex gap-3 justify-center">
+                          <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                              value="Sat" class="accent-blue-500" /><span>Sat</span></label>
+                          <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                              value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <ng-container *ngFor="let config of parallelingDecreasingRows; let decIndex = index">
+                    <tr [formGroupName]="parallelingSharingControlName(config, unit)">
+                      <td *ngIf="decIndex === 0" class="px-2 py-2 font-semibold" rowspan="5">Decreasing Loads</td>
+                      <td class="px-2 py-2 font-semibold text-left">{{ config.label }}%</td>
+                      <td class="px-2 py-2"><app-input formControlName="combined_val" [readonly]="true"></app-input>
+                      </td>
+                      <td class="px-2 py-2"><app-input formControlName="proportionate_a" [readonly]="true"></app-input>
+                      </td>
+                      <td class="px-2 py-2"><app-input formControlName="proportionate_b" [readonly]="true"></app-input>
+                      </td>
+                      <td class="px-2 py-2"><app-input formControlName="machine_a" [type]="'number'"
+                          [min]="0"></app-input></td>
+                      <td class="px-2 py-2"><app-input formControlName="machine_b" [type]="'number'"
+                          [min]="0"></app-input></td>
+                      <td class="px-2 py-2"><app-input formControlName="difference" [readonly]="true"></app-input></td>
+                      <td class="px-2 py-2">
+                        <div class="flex gap-3 justify-center">
+                          <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                              value="Sat" class="accent-blue-500" /><span>Sat</span></label>
+                          <label class="inline-flex items-center gap-1"><input type="radio" formControlName="status"
+                              value="Unsat" class="accent-blue-500" /><span>Unsat</span></label>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+
+          <div class="flex items-center justify-between mt-2">
+            <p class="text-sm font-semibold">Select another combination</p>
+            <div class="flex gap-3">
+              <button type="button" class="px-4 py-2 rounded-md bg-emerald-600 text-white text-sm font-semibold"
+                (click)="addParallelingTrialRow()">YES</button>
+              <button type="button" class="px-4 py-2 rounded-md bg-red-600 text-white text-sm font-semibold"
+                (click)="removeParallelingTrialRow(i)">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="min-w-0 max-w-full overflow-x-auto border border-slate-300 rounded-md p-4 mb-6">
+      <legend class="px-2 text-sm font-semibold text-slate-700 dark:text-slate-300 italic">12. Recommendations</legend>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <app-textarea label="Trial Team Member" formControlName="gen_r_ship_engineer_officer" [rows]="3"></app-textarea>
+        <app-textarea label="Electrical officer INS KOLKATA" formControlName="trial_officer" [rows]="3"></app-textarea>
+      </div>
+      <app-textarea label="13. Recommendations / Summary" formControlName="recommendations" [rows]="5"></app-textarea>
+      <div class="mt-4">
+        <p class="text-sm font-semibold mb-2 text-slate-800 dark:text-white">Final Status</p>
+        <div class="flex flex-wrap gap-4">
+          <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"><input type="radio" formControlName="final_status" value="1"
+              class="accent-blue-500" /><span class="text-slate-800 dark:text-white">Cleared for Normal Exploitation</span></label>
+          <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"><input type="radio" formControlName="final_status" value="2"
+              class="accent-blue-500" /><span class="text-slate-800 dark:text-white">Cleared for stand alone mode; re-offer paralleling trials</span></label>
+          <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-white cursor-pointer"><input type="radio" formControlName="final_status" value="3"
+              class="accent-blue-500" /><span class="text-slate-800 dark:text-white">UNSAT</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+  </form>
+
+  <div formFooter class="flex items-center justify-end gap-2">
+    <button *ngIf="canShowSaveDraft" type="button"
+      class="form-card-footer-btn inline-flex items-center justify-center rounded-full px-5 py-2 text-xs font-bold uppercase tracking-wider !text-white bg-[#2d3f50] hover:bg-[#394f63] dark:bg-[#2d3f50] dark:hover:bg-[#394f63] border border-[#485c70] transition shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="draftLoading" (click)="handleSave('draft')">
+      Save Draft
+    </button>
+    <button *ngIf="canEditForm" type="button"
+      class="form-card-footer-btn inline-flex items-center justify-center rounded-full px-5 py-2 text-xs font-bold uppercase tracking-wider !text-white bg-[#2d3f50] hover:bg-[#394f63] dark:bg-[#2d3f50] dark:hover:bg-[#394f63] border border-[#485c70] transition shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="saveLoading" (click)="handleSave('save')">
+      Save
+    </button>
+    <button *ngIf="canEditForm" type="button"
+      class="form-card-footer-btn inline-flex items-center justify-center rounded-full px-5 py-2 text-xs font-bold uppercase tracking-wider !text-white bg-[#0284c7] hover:bg-[#0369a1] dark:bg-[#0284c7] dark:hover:bg-[#0369a1] shadow-md transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="submitLoading" (click)="handleSave('submit')">
+      Submit
+    </button>
+  </div>
+</app-form-card>

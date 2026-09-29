@@ -1,0 +1,19 @@
+<app-form-card-dialog [open]="true" [title]="title" [subtitle]="subtitle"
+    [submitLabel]="editMode ? 'Update' : 'Save'" cancelLabel="Cancel" (close)="closeDialog()"
+    (submit)="handleSave()" (cancel)="closeDialog()" [showFooter]="viewMode ? false : true"
+    [loading]="loading">
+
+    <form [formGroup]="form">
+        <div class="grid grid-cols-2 gap-4">
+            <app-input label="Refit Name" formControlName="name" [required]="true">
+            </app-input>
+            <app-input label="Refit Code" formControlName="code">
+            </app-input>
+        </div>
+        <div class="mt-4 flex items-center gap-2">
+            <input type="checkbox" formControlName="active" id="active_refit" class="h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+            <label for="active_refit" class="text-sm font-semibold text-white cursor-pointer select-none">Active</label>
+        </div>
+    </form>
+
+</app-form-card-dialog>

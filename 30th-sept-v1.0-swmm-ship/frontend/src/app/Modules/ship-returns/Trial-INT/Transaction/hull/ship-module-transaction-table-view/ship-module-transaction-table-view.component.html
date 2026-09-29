@@ -1,0 +1,52 @@
+<app-toast></app-toast>
+
+<div class="mb-4">
+  <!-- Tabs -->
+  <app-transaction-table-tabs
+    [tabs]="tabList"
+    [activeTab]="currentTab"
+    (tabChange)="onTabChange($event)"
+  >
+  </app-transaction-table-tabs>
+</div>
+
+<!-- Table -->
+<app-paginate-table
+  [title]="config?.title"
+  [description]="config?.description"
+  [showHeaderSection]="true"
+  [showSearch]="true"
+  [addButtons]="addButtons"
+  (addButtonClick)="handleAddNewRecord()"
+  [showImport]="true"
+  [rowData]="rowData"
+  [columnDefs]="columnDefs"
+  [showPagination]="true"
+  [tableLoading]="isLoading"
+  [totalCount]="totalCount"
+  [totalPages]="totalPages"
+  [currentPage]="page"
+  (pageChange)="onPageChange($event)"
+  (handleImport)="openImportDialog()"
+>
+</app-paginate-table>
+
+<app-reusable-delete-dialog
+  [open]="isDeleteDialogOpen"
+  [id]="deleteRow?.id"
+  [name]="deleteRow?.name"
+  entityType="Record"
+  [loading]="isDeleteLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteDialog()"
+>
+</app-reusable-delete-dialog>
+
+<app-import-export-dialog
+  [open]="showImportDialog"
+  [loading]="loading"
+  [config]="importConfig"
+  (import)="uploadExcel($event)"
+  (close)="showImportDialog = false"
+>
+</app-import-export-dialog>

@@ -1,0 +1,194 @@
+<div class="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+  <app-form-card
+    #formCard
+    [title]="'REQUISITION'"
+    [smallTitle]="'Maintenance & Operations Trial'"
+    [showPreviousReport]="true"
+    [showBackButton]="true"
+    [backLabel]="'Go Back'"
+    [showPaginator]="true"
+    [previewMode]="true"
+    [pageScroll]="false"
+    (back)="handleCancel()"
+  >
+    <div previewHeader class="requisition-form__header shrink-0 px-4  sm:px-6">
+      <span class="requisition-form__icon" aria-hidden="true">
+        <app-icon name="compass" [size]="16"></app-icon>
+      </span>
+      <h1 class="requisition-form__title text-slate-900 dark:text-white">Requisition</h1>
+      
+    </div>
+
+    <form [formGroup]="form" class="requisition-form" (ngSubmit)="handleSave('save')">
+      <p class="requisition-form__mandatory mb-3 px-1 ">
+        All fields marked with <span class="text-red-500">*</span> are mandatory
+      </p>
+
+      <div class="requisition-form__grid mt-4">
+         <div class="requisition-form__field">
+          <app-calendar
+            label="Proposed Date of Trial"
+            formControlName="proposed_date"
+            [disabled]="true"
+          />
+          <p class="requisition-form__hint">Prefilled from trial — not editable</p>
+        </div>
+        <div class="requisition-form__field">
+          <app-select
+            label="Trial Unit"
+            formControlName="trial_unit_id"
+            [options]="trialUnitOptions"
+            placeholder="Select Trial Unit"
+            [required]="true"
+            [disabled]="true"
+          />
+          <p class="requisition-form__hint">Prefilled from trial — not editable</p>
+        </div>
+
+        <div class="requisition-form__field">
+          <app-select
+            label="Satellite Unit"
+            formControlName="satellite_unit_id"
+            [options]="satelliteUnitOptions"
+            placeholder="Select Satellite Unit"
+            [required]="true"
+            [disabled]="true"
+          />
+          <p class="requisition-form__hint">Prefilled from trial — not editable</p>
+        </div>
+       
+        
+        <div class="requisition-form__field">
+          <app-multiselect
+            label="Equipment"
+            formControlName="equipment_ids"
+            [options]="equipmentOptions"
+            placeholder="Select Equipment"
+            [required]="true"
+            [maxVisibleTags]="1"
+            [disabled]="true"
+          />
+          <p class="requisition-form__hint">Prefilled from trial — not editable</p>
+        </div>
+        <div class="requisition-form__field">
+          <app-multiselect
+            label="Section"
+            formControlName="section_ids"
+            [options]="sectionOptions"
+            placeholder="Select Section"
+            [required]="true"
+            [disabled]="true"
+          />
+          <p class="requisition-form__hint">Prefilled from trial — not editable</p>
+        </div>
+        <div class="requisition-form__field">
+          <app-multiselect
+            label="Department"
+            formControlName="department_ids"
+            [options]="departmentOptions"
+            placeholder="Select Department"
+          />
+          <p class="requisition-form__hint">
+            Prefills from selected section(s); you can change it
+          </p>
+        </div>
+
+        <div class="requisition-form__field">
+          <app-select
+            label="Trial Occasion"
+            formControlName="trial_occasion_id"
+            [options]="trialOccasionOptions"
+            placeholder="Select Trial Occasion"
+            [required]="true"
+          />
+          <p class="requisition-form__hint">Occasion / event the trial is associated with</p>
+        </div>
+
+        
+
+        
+
+
+        <div class="requisition-form__field">
+          <app-select
+            label="Presented By"
+            formControlName="presented_by_id"
+            [options]="presentedByOptions"
+            placeholder="Select Presented By"
+          />
+          <p class="requisition-form__hint">Officer / authority presenting the requisition (optional)</p>
+        </div>
+
+        
+      </div>
+
+      <div class="requisition-form__triple">
+        <div class="requisition-form__field">
+          <app-textarea
+            label="Reason for Trial"
+            formControlName="reason_for_trial"
+            placeholder="Enter the reason for conducting this trial"
+            [rows]="1"
+            [required]="true"
+          />
+          <p class="requisition-form__hint">Brief justification or trigger for the trial</p>
+        </div>
+
+        <div class="requisition-form__field">
+          <app-file-upload
+            
+            formControlName="reference_document"
+            [autoUpload]="true"
+          />
+          <p class="requisition-form__hint">PDF, DOCX or XLSX • max 10 MB</p>
+        </div>
+
+        <div class="requisition-form__field">
+          <app-textarea
+            label="Remarks"
+            formControlName="remarks"
+            placeholder="Add any additional remarks or observations"
+            [rows]="1"
+          />
+          <p class="requisition-form__hint">Optional notes for reviewers</p>
+        </div>
+      </div>
+    </form>
+
+    <div formFooter class="flex items-center justify-end gap-1.5">
+      <button
+        *ngIf="canSaveDraft"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading || !canEdit"
+        (click)="handleSave('draft')"
+      >
+        Save Draft
+      </button>
+      <button
+        *ngIf="canEdit"
+        type="button"
+        class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading || !canEdit"
+        (click)="handleSave('save')"
+      >
+        Save
+      </button>
+      <button
+        *ngIf="canEdit"
+        type="button"
+        class="form-card-footer-btn pt-glass-btn-primary inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading || !canEdit"
+        (click)="handleSubmitRequisition()"
+      >
+        Submit
+      </button>
+    </div>
+  </app-form-card>
+</div>
+<app-approval-work-flow
+  [showUserPopuphead]="shouldShowUserPopup"
+  [isSubmitTime]="isSubmitTime"
+  [context]="formApiService.context"
+  (showUserPopupChange)="shouldShowUserPopup = $event; isSubmitTime = $event"
+></app-approval-work-flow>

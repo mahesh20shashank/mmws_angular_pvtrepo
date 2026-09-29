@@ -1,0 +1,73 @@
+.rd-delete-portal {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.rd-delete-portal__dialog {
+  width: 100%;
+  max-width: 28rem;
+  max-height: min(90vh, 32rem);
+  overflow: hidden;
+  border-radius: 1.25rem;
+}
+
+.rd-delete-portal__body {
+  padding: 1.25rem 1.5rem;
+}
+
+.rd-delete-portal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.rd-delete-portal__btn-cancel {
+  border: 1px solid var(--shell-table-control-border);
+  background: var(--shell-table-control-bg);
+  color: var(--shell-text-primary);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.rd-delete-portal__btn-cancel:hover {
+  border-color: color-mix(in srgb, var(--shell-accent) 35%, var(--shell-table-control-border));
+}
+
+.rd-delete-portal__btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--shell-danger, #f82c36) 55%, transparent);
+  border-radius: 0.75rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--shell-danger, #f82c36) 92%, #fff) 0%,
+    var(--shell-danger, #f82c36) 100%
+  );
+  color: #fff;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--shell-danger, #f82c36) 28%, transparent);
+  transition: filter 0.15s ease;
+}
+
+.rd-delete-portal__btn-danger:hover {
+  filter: brightness(1.06);
+}

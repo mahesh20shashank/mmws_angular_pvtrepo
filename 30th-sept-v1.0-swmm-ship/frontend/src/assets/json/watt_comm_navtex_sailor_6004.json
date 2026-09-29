@@ -1,0 +1,1138 @@
+{
+  "formId": "navtex_sailor_6004",
+  "title": "Navtex RX Sailor 6004",
+  "sourceFile": "navtex_sailor_6004.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "Navtex RX Sailor 6004",
+      "sectionType": "form",
+      "fields": [],
+      "tables": [],
+      "sectionTitle": "Basic Information",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type":"label",
+            "value": "Basic Information",
+            "colSpan": 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name",
+            "colSpan": 4
+          },
+          {
+            "_id": "navtex_sailor_department",
+            "key": "navtex_sailor_department",
+            "name": "navtex_sailor_department",
+            "label": "Department",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+             "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select --",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "P15A"
+              },
+              {
+                "label": "ASW",
+                "value": "P17"
+              },
+              {
+                "label": "COMM",
+                "value": "P17A"
+              },
+              {
+                "label": "GUNNERY",
+                "value": "P28"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "navtex_sailor_equipment",
+            "key": "navtex_sailor_equipment",
+            "name": "navtex_sailor_equipment",
+            "label": "Equipment",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "navtex_sailor_equipment",
+            "prefill": true,
+             "colSpan": 4,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "navtex_sailor_date",
+            "key": "navtex_sailor_date",
+            "name": "navtex_sailor_date",
+            "label": "Date",
+            "type": "date",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+             "colSpan": 4
+          },
+          {
+            "_id": "navtex_sailor_nature_of_trials",
+            "key": "navtex_sailor_nature_of_trials",
+            "name": "navtex_sailor_nature_of_trials",
+            "label": "Nature of Trial",
+            "type": "select",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+             "colSpan": 4,
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATS"
+              },
+              {
+                "label": "OP CHECKS",
+                "value": "OP_CHECKS"
+              },
+              {
+                "label": "IIs",
+                "value": "IIS"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "navtex_sailor_serial_number",
+            "key": "navtex_sailor_serial_number",
+            "name": "navtex_sailor_serial_number",
+            "label": "Serial Number",
+            "type": "textarea",
+            "value": "",
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+              "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.serial_no"
+          }
+        ],
+
+
+        "tables_1": [
+          {
+            "id": "checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "Ser No.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observation",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+               "_id": "checks_matrix_1_row_1_combined",
+              "cells": [
+                    {
+                    "_id": "embarked_time",
+                    "key": "embarked_time",
+                    "name": "embarked_time",
+                    "type": "time",
+                    "value": "",
+                    "lb" : "Trial team reported onboard for Op Checks of Navtex Rx SAILOR 6004 at hrs",
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "HH:MM",
+                    "style": "max-width: 90px; min-width: 80px; width: 100%; padding: 4px;",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+
+                  {
+                    "_id": "schedule",
+                    "key": "schedule",
+                    "name": "schedule",
+                    "type": "textarea",
+                    "inputType": "text",
+                    "value": "",
+                    "lb" : "The trials carried were out i.a.w. approved scheduled and CNO. 07/10 are enumerated in succeeding paragraphs :-",
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "<b>Physical checks/Setup</b>",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 8,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "(i)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_3_static",
+                    "type": "label",
+                    "value": "Fitment of TX/RX unit in Bridge.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_4_navtex_sailor_tx_rx_fitment_bridge",
+                    "key": "navtex_sailor_tx_rx_fitment_bridge",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "(ii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_2_navtex_sailor_antenna_location",
+                    "key": "navtex_sailor_antenna_location",
+                    "type": "input",
+                    "lb" : "Fitment of Antenna on",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_3_navtex_sailor_antenna_fitment",
+                    "key": "navtex_sailor_antenna_fitment",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "(iii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Antenna connection to Tx/Rx.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_3_navtex_sailor_antenna_connection",
+                    "key": "navtex_sailor_antenna_connection",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "(iv)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Grounding of Tx/Rx and securing of system.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_3_navtex_sailor_grounding_securing",
+                    "key": "navtex_sailor_grounding_securing",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "(v)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "All sub-assemblies are fixed properly.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_3_navtex_sailor_subassemblies_fixing",
+                    "key": "navtex_sailor_subassemblies_fixing",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "(vi)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Securing of connecting cable.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_3_navtex_sailor_cable_securing",
+                    "key": "navtex_sailor_cable_securing",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "(vii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Power supply to TX/Rx.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_3_navtex_sailor_power_supply",
+                    "key": "navtex_sailor_power_supply",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "(viii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Check all switches, button, push button, and display if of the equipment.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_3_navtex_sailor_switches_buttons_display",
+                    "key": "navtex_sailor_switches_buttons_display",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "<b>Functional checks</b>",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 5,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "(i)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_3_static",
+                    "type": "label",
+                    "value": "Check Power ON",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_4_navtex_sailor_power_on",
+                    "key": "navtex_sailor_power_on",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "(ii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Checks Self-Test",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_12_cell_3_navtex_sailor_frequency_setting",
+                    "key": "navtex_sailor_frequency_setting",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "(iii)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Check broad cast reception of messages",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_13_cell_3_navtex_sailor_message_reception",
+                    "key": "navtex_sailor_message_reception",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_14_cell_1_static",
+                    "type": "serial",
+                    "value": "(iv)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_14_cell_2_static",
+                    "type": "label",
+                    "value": "Check equipment memory including saving of received messages.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_14_cell_3_navtex_sailor_display_functions",
+                    "key": "navtex_sailor_display_functions",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_15",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_1_static",
+                    "type": "serial",
+                    "value": "(v)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_2_static",
+                    "type": "label",
+                    "value": "Check for printer connection and print of received message",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_15_cell_3_navtex_sailor_alarm_functions",
+                    "key": "navtex_sailor_alarm_functions",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "remarks_table_1",
+            "sectionType": "simpleTable",
+            "title": "REMARKS",
+            "topHeaders": [
+              [
+                {
+                  "label": "Sr No",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "SS Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "sr_no",
+                "label": "Sr No",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "observations",
+                "label": "Observations",
+                "type": "label",
+                "align": "left"
+              },
+              {
+                "key": "ss_remarks",
+                "label": "SS Remarks",
+                "type": "label",
+                "align": "left"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "remarks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "remarks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 2,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 2,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [
+          {
+           "type":"label",
+           "value": "Presenting Authority",
+           "colSpan": 12
+          },
+          {
+            "_id": "navtex_sailor_presenting_authority",
+            "key": "navtex_sailor_presenting_authority",
+            "name": "navtex_sailor_presenting_authority",
+            "label": "Presenting Authority",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "Dockyard",
+                "value": "dockyard"
+              },
+              {
+                "label": "Shipstaff",
+                "value": "shipstaff"
+              },
+              {
+                "label": "OEM",
+                "value": "oem"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "navtex_sailor_watt",
+            "key": "navtex_sailor_watt",
+            "name": "navtex_sailor_watt",
+            "label": "WATT",
+            "type": "input",
+            "value": "VZG",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text"
+          }
+        ]
+      }
+    }
+  ]
+}

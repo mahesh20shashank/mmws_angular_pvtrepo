@@ -1,0 +1,72 @@
+<div class="speed-card relative overflow-hidden">
+
+  <!-- TOP RIGHT ICON -->
+  <app-button class="absolute top-0 right-0 z-10
+                 w-6 h-6 rounded-full flex items-center justify-center
+                 bg-white/[0.06] border border-white/[0.10]
+                 transition-all duration-300
+                 hover:bg-white/[0.14] hover:border-white/[0.22]">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M7 17L17 7M17 7H7M17 7V17"
+        stroke="white"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </svg>
+  </app-button>
+
+  <!-- TITLE -->
+  <!-- <div class="text-white text-[11px] font-medium mb-2 opacity-80">
+    {{ title }}
+  </div> -->
+
+  <!-- CHART -->
+  <div
+    echarts
+    [options]="chartOption"
+    class="w-full h-[140px]">
+  </div>
+
+  <!-- FOOTER -->
+<!-- FOOTER -->
+<!-- FOOTER -->
+<div class="mt-2 px-1">
+
+  <div class="flex items-center justify-between text-[10px] mb-1">
+    <span class="text-white/70 font-medium">
+      Total Equipments
+    </span>
+
+    <span class="text-white font-semibold">
+      {{ total }}
+    </span>
+  </div>
+
+  <div class="flex items-center justify-between text-[10px] mb-1">
+
+    <div class="flex items-center gap-1 text-[#49ffd4]">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#49ffd4]"></span>
+      Operational
+    </div>
+
+    <span class="text-white/80">
+      {{ operational }}
+    </span>
+  </div>
+
+  <div class="flex items-center justify-between text-[10px]">
+
+    <div class="flex items-center gap-1 text-[#ff4d6d]">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#ff4d6d]"></span>
+      Non-Operational
+    </div>
+
+    <span class="text-white/80">
+      {{ nonOperational }}
+    </span>
+  </div>
+
+</div>
+
+</div>

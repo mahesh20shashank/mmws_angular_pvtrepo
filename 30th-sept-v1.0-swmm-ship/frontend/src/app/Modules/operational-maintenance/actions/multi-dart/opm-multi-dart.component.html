@@ -1,0 +1,591 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+@if (view === "addMultiple") {
+<div class="act-head">
+  <div class="act-heading">
+    <span class="act-title">Create Multiple DARTs</span>
+    <span class="act-sub">Saved Multiple DART drafts — anyone in your department can open and continue where the last
+      person left off</span>
+  </div>
+  <div class="act-head-btns">
+    <app-button type="button" class="sfd-btn" (click)="goBack()">
+      <app-icon name="arrow-left" [size]="15" variant="inherit" />Back to List
+    </app-button>
+    <app-button type="button" class="sfd-btn primary" (click)="openNewMultiple()">
+      <app-icon name="plus" [size]="15" variant="inherit" />New Multiple DART
+    </app-button>
+  </div>
+</div>
+
+<div class="glass-card act-grid-wrap">
+  @if (multiDraftRows.length) {
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <!-- Search Bar -->
+    <div style="position: relative; width: 300px;">
+      <app-icon name="search" [size]="15" variant="muted"
+        style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;" />
+      <input type="text" class="act-new-multi-input" style="padding-left: 32px; margin: 0;"
+        placeholder="Search drafts..." [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+    </div>
+
+    <!-- Actions (Copy, Export) -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <app-button type="button" class="act-icon-btn"
+        style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"
+        title="Copy to clipboard" (click)="copyData()">
+        <app-icon name="clipboard" [size]="15" variant="inherit" />
+      </app-button>
+      <app-export-toolbar [disabled]="filteredDraftRows.length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+    </div>
+  </div>
+  <app-data-grid [columnDefs]="multiDraftColumnDefs" [rowData]="filteredDraftRows" [pageSize]="10" height="520px" />
+  } @else {
+  <div class="act-multi-empty">
+    <app-icon name="file-text" [size]="36" variant="muted" />
+    <span>No drafts saved yet. Use <strong>New Multiple DART</strong> to start one.</span>
+  </div>
+  }
+</div>
+
+<!-- ============ NEW MULTIPLE DART FORM ============ -->
+} @else if (view === "newMultiple") {
+
+<div class="act-head">
+  <div class="act-heading">
+    <span class="act-title">New Multiple DART</span>
+    <span class="act-sub">One row is one DART. The DART No is held for you and confirmed when you save — nothing
+      reaches the database until then.</span>
+  </div>
+</div>
+
+<div class="act-multi-toolbar glass-card">
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'create'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'create'"
+    (click)="activeToolbarAction.set('create'); openCreateMultipleDartsModal()"
+    data-tooltip="Pick an equipment and specify how many DARTs you want for it. Add that many rows at once without removing the rows already in the grid.">
+    <app-icon name="file-text" [size]="14" variant="inherit" />
+    Create Multiple DARTs
+  </app-button>
+
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'add'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'add'" (click)="activeToolbarAction.set('add'); addMultipleRow()"
+    data-tooltip="Add one empty row and fill in the DART details manually.">
+    <app-icon name="plus" [size]="14" variant="inherit" />
+    Add Row
+  </app-button>
+
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'download'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'download'"
+    (click)="activeToolbarAction.set('download'); openDownloadTemplateModal()"
+    data-tooltip="Download an Excel template to complete offline. If rows are already on screen, they are included exactly as they appear. If no rows exist, you can choose how many blank rows to download.">
+    <app-icon name="download" [size]="14" variant="inherit" />
+    Download Template
+  </app-button>
+
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'import'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'import'"
+    (click)="activeToolbarAction.set('import'); openImportExcelModal()"
+    data-tooltip="Load a completed Excel template. This will replace every row currently in the grid.">
+    <app-icon name="file-spreadsheet" [size]="14" variant="inherit" />
+    Import Excel
+  </app-button>
+
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'draft'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'draft'"
+    (click)="activeToolbarAction.set('draft'); openSaveDraftModal()"
+    data-tooltip="Save this batch as a draft so anyone in your department can continue working on it later. No DART is raised at this stage.">
+    <app-icon name="save" [size]="14" variant="inherit" />
+    Save Draft
+  </app-button>
+
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'save'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'save'"
+    (click)="activeToolbarAction.set('save'); openSaveRowModal(-1)"
+    data-tooltip="Raise every selected row as a DART. You will be asked to confirm and provide the maintenance period before saving.">
+    <app-icon name="send" [size]="14" variant="inherit" />
+    Save Multiple DART
+  </app-button>
+
+  <app-button type="button" class="act-btn" [class.act-btn--primary]="activeToolbarAction() === 'back'"
+    [class.act-btn--ghost]="activeToolbarAction() !== 'back'"
+    (click)="activeToolbarAction.set('back'); view = 'addMultiple'" data-tooltip="Return to the list of saved drafts">
+    <app-icon name="arrow-left" [size]="14" variant="inherit" />
+    Back to Drafts
+  </app-button>
+</div>
+
+<div class="glass-card act-grid-wrap act-new-multi-wrap">
+  <div class="act-new-multi-table-scroll">
+    <table class="act-table act-new-multi-table">
+      <thead>
+        <tr>
+          <th class="act-new-multi-th-cb">
+            <label class="act-cb-wrap" title="Select / deselect all rows">
+              <input type="checkbox" class="act-sr-only" [checked]="isAllMultipleSelected()"
+                [indeterminate]="isSomeMultipleSelected()" (change)="toggleAllMultipleRows()" />
+              <span class="act-checkbox" [class.act-checkbox--on]="isAllMultipleSelected()"
+                [class.act-checkbox--indeterminate]="isSomeMultipleSelected()">
+                @if (isAllMultipleSelected()) { &#10003; }
+                @else if (isSomeMultipleSelected()) { &ndash; }
+              </span>
+            </label>
+          </th>
+          <th>DART No</th>
+          <th>S No</th>
+          <th>Equipment Name <span class="act-star">*</span></th>
+          <th>Eqpt Nomenclature <span class="act-star">*</span></th>
+          <th>Sub-Department</th>
+          <th>Defect Date <span class="act-star">*</span></th>
+          <th>Scheduled Date</th>
+          <th>Symptoms <span class="act-star">*</span></th>
+          <th>Severity <span class="act-star">*</span></th>
+          <th>Req. Assistance</th>
+          <th>Defective Component</th>
+          <th>Defect Description <span class="act-star">*</span></th>
+          <th>SS Remarks</th>
+          <th>Spares Request</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (!newMultipleRows().length) {
+        <tr>
+          <td colspan="16" class="act-new-multi-empty">No rows yet &mdash; click <strong>Add Row</strong> to start.
+          </td>
+        </tr>
+        }
+        @for (item of pagedMultipleRows(); track item.globalIndex) {
+        <tr class="act-new-multi-row" [class.act-new-multi-row--selected]="selectedMultipleRows().has(item.globalIndex)"
+          (mouseenter)="hoveredDart = item.globalIndex" (mouseleave)="hoveredDart = null">
+          <!-- Checkbox column (replaces #) -->
+          <td class="act-new-multi-th-cb">
+            <label class="act-cb-wrap">
+              <input type="checkbox" class="act-sr-only" [checked]="selectedMultipleRows().has(item.globalIndex)"
+                (change)="toggleMultipleRowSelection(item.globalIndex)" />
+              <span class="act-checkbox" [class.act-checkbox--on]="selectedMultipleRows().has(item.globalIndex)">
+                @if (selectedMultipleRows().has(item.globalIndex)) { &#10003; }
+              </span>
+            </label>
+          </td>
+          <!-- DART No -->
+          <td class="act-new-multi-dart-no" [style.color]="hoveredDart === item.globalIndex ? '#000000' : '#f82c36'">
+            {{ item.row.dartNo && item.row.dartNo !== '—' ? item.row.dartNo : 'D-E-' + (50000 + item.globalIndex) }}
+          </td>
+          <!-- S No — auto serial 1, 2, 3… -->
+          <td class="act-new-multi-idx">{{ item.globalIndex + 1 }}</td>
+          <!-- Equipment Name -->
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="equipmentDropdownOptions"
+              [error]="isInvalidOption(item.row.equipmentName, multiEquipmentOptionsFull)"
+              [ngModel]="item.row.equipmentName"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'equipmentName', $any($event))">
+            </app-select-input>
+            @if (isInvalidOption(item.row.equipmentName, multiEquipmentOptionsFull)) {
+            <div style="color: #dc2626; font-size: 11px; margin-top: 4px;">Not matched: {{ item.row.equipmentName }}
+            </div>
+            }
+          </td>
+          <!-- Eqpt Nomenclature -->
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="nomenclatureDropdownOptionsFor(item.row)"
+              [error]="isInvalidOption(item.row.eqptNomenclature, item.row.nomenclatureOptions || multiNomenclatureOptionsFull)"
+              [ngModel]="item.row.eqptNomenclature"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'eqptNomenclature', $any($event))">
+            </app-select-input>
+            @if (isInvalidOption(item.row.eqptNomenclature, item.row.nomenclatureOptions ||
+            multiNomenclatureOptionsFull)) {
+            <div style="color: #dc2626; font-size: 11px; margin-top: 4px;">Not matched: {{ item.row.eqptNomenclature }}
+            </div>
+            }
+          </td>
+          <td><input class="act-new-multi-input" [value]="item.row.subDept"
+              (input)="updateMultipleRow(item.globalIndex, 'subDept', $any($event.target).value)" /></td>
+          <td><input class="act-new-multi-input" type="date" [value]="item.row.defectDate"
+              (input)="updateMultipleRow(item.globalIndex, 'defectDate', $any($event.target).value)" /></td>
+          <td><input class="act-new-multi-input" type="date" [value]="item.row.scheduledDate"
+              (input)="updateMultipleRow(item.globalIndex, 'scheduledDate', $any($event.target).value)" /></td>
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="symptomDropdownOptions"
+              [error]="isInvalidOption(item.row.symptoms, multiSymptomOptions)"
+              [ngModel]="item.row.symptoms"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'symptoms', $any($event))">
+            </app-select-input>
+            @if (isInvalidOption(item.row.symptoms, multiSymptomOptions)) {
+            <div style="color: #dc2626; font-size: 11px; margin-top: 4px;">Not matched: {{ item.row.symptoms }}</div>
+            }
+          </td>
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="severityDropdownOptions"
+              [error]="isInvalidOption(item.row.severity, multiSeverityOptions)"
+              [ngModel]="item.row.severity"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'severity', $any($event))">
+            </app-select-input>
+            @if (isInvalidOption(item.row.severity, multiSeverityOptions)) {
+            <div style="color: #dc2626; font-size: 11px; margin-top: 4px;">Not matched: {{ item.row.severity }}</div>
+            }
+          </td>
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="reqAssistanceDropdownOptions"
+              [error]="isInvalidOption(item.row.reqAssistance, multiReqAssistanceOptions)"
+              [ngModel]="item.row.reqAssistance"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'reqAssistance', $any($event))">
+            </app-select-input>
+            @if (isInvalidOption(item.row.reqAssistance, multiReqAssistanceOptions)) {
+            <div style="color: #dc2626; font-size: 11px; margin-top: 4px;">Not matched: {{ item.row.reqAssistance }}
+            </div>
+            }
+          </td>
+          <td><input class="act-new-multi-input" [value]="item.row.defectiveComponent"
+              (input)="updateMultipleRow(item.globalIndex, 'defectiveComponent', $any($event.target).value)" /></td>
+          <td><input class="act-new-multi-input" [value]="item.row.defectDescription"
+              (input)="updateMultipleRow(item.globalIndex, 'defectDescription', $any($event.target).value)" /></td>
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="ssRemarksDropdownOptions"
+              [error]="isInvalidOption(item.row.ssRemarks, multiSsRemarksOptions)"
+              [ngModel]="item.row.ssRemarks"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'ssRemarks', $any($event))">
+            </app-select-input>
+            @if (isInvalidOption(item.row.ssRemarks, multiSsRemarksOptions)) {
+            <div style="color: #dc2626; font-size: 11px; margin-top: 4px;">Not matched: {{ item.row.ssRemarks }}</div>
+            }
+          </td>
+          <td>
+            <app-select-input
+              placeholder="— select —"
+              [options]="sparesRequestDropdownOptions"
+              [ngModel]="item.row.sparesRequest"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="updateMultipleRow(item.globalIndex, 'sparesRequest', $any($event))">
+            </app-select-input>
+            @if (item.row.sparesRequest === 'Yes') {
+            <div style="margin-top: 4px; text-align: center; font-size: 11px;">
+              <a href="javascript:void(0)" style="color: #0284c7; text-decoration: underline; font-weight: 500;"
+                (click)="linkSpares(item.globalIndex)">Link Spares</a>
+              @if (item.row.selectedSpares && item.row.selectedSpares.length > 0) {
+              <div style="color: #059669; margin-top: 2px;">
+                ({{ item.row.selectedSpares.length }} Linked)
+              </div>
+              }
+            </div>
+            }
+          </td>
+          <!-- Action -->
+          <td>
+            @if (item.row.status === 'RAISED') {
+            <div style="color: #059669; font-weight: 600; text-align: center;">
+              RAISED
+            </div>
+            } @else {
+            <div class="act-new-multi-actions">
+              <app-button type="button" class="act-btn act-btn--primary act-btn--sm" title="Raise this DART"
+                [disabled]="!isRowValid(item.row)" (click)="openSaveRowModal(item.globalIndex)">
+                Save
+              </app-button>
+              <app-button type="button" class="act-icon-btn" title="Delete row"
+                (click)="removeMultipleRow(item.globalIndex)">
+                <app-icon name="trash-2" [size]="14" variant="danger" />
+              </app-button>
+            </div>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="act-new-multi-footer">
+    <div class="act-pg-left">
+      <span class="act-pg-label">Entries per page</span>
+      <select class="act-pg-size-select" [value]="multiPageSize()"
+        (change)="multiPageSize.set(+$any($event.target).value); multiPage.set(1)">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <div class="act-pg-right">
+      <span class="act-pg-range">
+        @if (newMultipleRows().length) {
+        {{ multiPageRangeStart() }}–{{ multiPageRangeEnd() }} of {{ newMultipleRows().length }}
+        } @else {
+        0–0 of 0
+        }
+      </span>
+      <div class="act-pg-btns">
+        <!-- First -->
+        <app-button type="button" class="act-pg-btn" title="First page" [disabled]="multiPage() <= 1"
+          (click)="goToMultiPage(1)">
+          <app-icon name="chevrons-left" [size]="13" variant="inherit" />
+        </app-button>
+        <!-- Prev -->
+        <app-button type="button" class="act-pg-btn" title="Previous page" [disabled]="multiPage() <= 1"
+          (click)="goToMultiPage(multiPage() - 1)">
+          <app-icon name="chevron-left" [size]="13" variant="inherit" />
+        </app-button>
+        <!-- Page numbers -->
+        @for (p of multiPageNumbers(); track p) {
+        <app-button type="button" class="act-pg-btn" [class.act-pg-btn--active]="multiPage() === p"
+          (click)="goToMultiPage(p)">{{ p }}</app-button>
+        }
+        <!-- Next -->
+        <app-button type="button" class="act-pg-btn" title="Next page" [disabled]="multiPage() >= multiTotalPages()"
+          (click)="goToMultiPage(multiPage() + 1)">
+          <app-icon name="chevron-right" [size]="13" variant="inherit" />
+        </app-button>
+        <!-- Last -->
+        <app-button type="button" class="act-pg-btn" title="Last page" [disabled]="multiPage() >= multiTotalPages()"
+          (click)="goToMultiPage(multiTotalPages())">
+          <app-icon name="chevrons-right" [size]="13" variant="inherit" />
+        </app-button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+
+<!-- ============ RAISE THIS DART? modal ============ -->
+@if (saveRowModalOpen()) {
+<app-form-modal [title]="saveRowModalIndex() >= 0 ? 'Raise this DART?' : 'Raise these DARTs?'"
+  (cancel_btn)="closeSaveRowModal()" (save)="confirmSaveRowWithData($event)">
+</app-form-modal>
+}
+
+<!-- ============ DART read-only detail drawer ============ -->
+@if (multiDartsModalOpen()) {
+<div class="sfd-modal-backdrop" tabindex="0" role="button" (click)="closeCreateMultipleDartsModal()"
+  (keyup.enter)="closeCreateMultipleDartsModal()">
+  <div class="sfd-modal" tabindex="0" role="button" (click)="$event.stopPropagation()"
+    (keyup.enter)="$event.stopPropagation()" style="width: 820px;">
+    <div class="sfd-modal-head">
+      <h3>Create Multiple DARTs</h3>
+      <app-button type="button" class="sfd-icon-btn close" (click)="closeCreateMultipleDartsModal()">
+        <app-icon name="x" [size]="14" variant="inherit" />
+      </app-button>
+    </div>
+    <div class="sfd-modal-body">
+      <p class="act-form-desc" style="color: var(--text-muted); font-size: 13px; margin: 0 0 8px 0;">Pick an equipment
+        and say how many DARTs you want against it, then <strong>Add to list</strong>. Repeat for as many equipment as
+        you need, and <strong>Create Rows</strong> adds them all to the grid at once.</p>
+
+      <div class="act-multi-picker-row">
+
+        <!-- Equipment Name Dropdown -->
+        <div class="sfd-field" style="flex:2">
+          <app-select-input
+            label="Equipment Name"
+            placeholder="Select Equipment"
+            [options]="multiDartsEqpNameOptions"
+            [ngModel]="multiDartsEqpName()"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="onMultiEqpNameChange(toIdString($event))">
+          </app-select-input>
+        </div>
+
+
+        <!-- Equipment Nomenclature Dropdown -->
+        <div class="sfd-field" style="flex:2">
+          <app-select-input
+            label="Equipment Nomenclature"
+            placeholder="Select Nomenclature"
+            [options]="multiDartsEqpNomenclatureOptions"
+            [ngModel]="multiDartsEqpNomenclature()"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="multiDartsEqpNomenclature.set(toIdString($event))">
+          </app-select-input>
+        </div>
+
+
+        <!-- Number of DARTs -->
+        <div class="sfd-field" style="flex:1">
+          <label for="multiDartsCount">Number of DARTs</label>
+
+          <input id="multiDartsCount" type="number" min="1" [value]="multiDartsCount()"
+            (input)="multiDartsCount.set(+$any($event.target).value || 1)" />
+        </div>
+
+
+        <!-- Add to List -->
+        <app-button type="button" class="sfd-btn" style="align-self:flex-end" (click)="addToMultiDartsList()">
+
+          Add to list
+        </app-button>
+
+      </div>
+
+      <div class="act-table-wrap" style="margin-top:12px">
+        <table class="act-table">
+          <thead>
+            <tr>
+              <th>Equipment Name</th>
+              <th>Equipment Nomenclature</th>
+              <th>Number of DARTs</th>
+              <th style="width: 40px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (!multiDartsList().length) {
+            <tr>
+              <td colspan="4" style="color:var(--text-muted);padding:12px 8px">Nothing added yet.</td>
+            </tr>
+            }
+            @for (item of multiDartsList(); track $index) {
+            <tr>
+              <td>{{ item.equipment_code }}</td>
+              <td>{{ item.eqptNomenclature || '—' }}</td>
+              <td>{{ item.count }}</td>
+              <td style="text-align: right; padding-right: 12px;">
+                <app-button type="button" class="sfd-icon-btn"
+                  style="color: #64748b; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;"
+                  (click)="removeFromMultiDartsList($index)">
+                  <app-icon name="trash" [size]="14" variant="inherit" />
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="sfd-modal-foot" style="margin-top:16px">
+      <app-button type="button" class="sfd-btn" (click)="closeCreateMultipleDartsModal()">Cancel</app-button>
+      <app-button type="button" class="sfd-btn primary" (click)="createMultipleDartsRows()">Create Rows</app-button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ============ Import Excel modal ============ -->
+@if (importExcelModalOpen()) {
+<div class="sfd-modal-backdrop" tabindex="0" role="button" (click)="closeImportExcelModal()"
+  (keyup.enter)="closeImportExcelModal()">
+  <div class="sfd-modal" tabindex="0" role="button" (click)="$event.stopPropagation()"
+    (keyup.enter)="$event.stopPropagation()">
+    <div class="sfd-modal-head">
+      <h3>Import Excel</h3>
+      <app-button type="button" class="sfd-icon-btn close" (click)="closeImportExcelModal()">
+        <app-icon name="x" [size]="14" variant="inherit" />
+      </app-button>
+    </div>
+    <div class="sfd-modal-body">
+      <p class="act-form-desc">Choose the filled template and say how many DARTs it holds. If the two disagree nothing
+        is
+        imported, so a wrong file cannot quietly overwrite your grid.</p>
+      @if (newMultipleRows().length) {
+      <div class="act-import-warn">
+        <app-icon name="triangle-alert" [size]="15" variant="warning" />
+        <span><strong>This will replace the {{ newMultipleRows().length }} row{{ newMultipleRows().length > 1 ? 's' :
+            ''
+            }} currently in the grid.</strong> Anything you have typed and not saved will be lost.</span>
+      </div>
+      }
+      <label class="act-inline-input">
+        <span>Filled template (.xlsx)</span>
+        <input type="file" accept=".xlsx" (change)="setImportExcelFile($event)" />
+      </label>
+      <label class="act-inline-input">
+        <span>Number of DARTs in the file</span>
+        <input type="number" min="1" placeholder="" [value]="importExcelCount() ?? ''"
+          (input)="importExcelCount.set(+$any($event.target).value || null)" />
+      </label>
+      @if (importExcelError()) {
+      <p style="color: #dc2626; font-size: 13px; margin-top: 8px;">{{ importExcelError() }}</p>
+      }
+      <div class="act-form-actions">
+        <app-button type="button" class="sfd-btn" (click)="closeImportExcelModal()">Cancel</app-button>
+        <app-button type="button" class="sfd-btn primary" (click)="confirmImportExcel()">Import</app-button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ============ Save Draft modal ============ -->
+@if (saveDraftModalOpen()) {
+<div class="sfd-modal-backdrop" tabindex="0" role="button" (click)="closeSaveDraftModal()"
+  (keyup.enter)="closeSaveDraftModal()">
+  <div class="sfd-modal" tabindex="0" role="button" (click)="$event.stopPropagation()"
+    (keyup.enter)="$event.stopPropagation()">
+    <div class="sfd-modal-head">
+      <h3>Save Draft</h3>
+      <app-button type="button" class="sfd-icon-btn close" (click)="closeSaveDraftModal()">
+        <app-icon name="x" [size]="14" variant="inherit" />
+      </app-button>
+    </div>
+    <div class="sfd-modal-body">
+      <p class="act-form-desc">Give this batch a name your department will recognise. Anyone in your department can
+        open
+        it and carry on.</p>
+      <label class="act-inline-input">
+        <span>Draft name</span>
+        <input type="text" placeholder="e.g. AMP defects Aug" [value]="saveDraftName()"
+          (input)="saveDraftName.set($any($event.target).value)" />
+      </label>
+      <div class="act-form-actions">
+        <app-button type="button" class="act-btn act-btn--ghost" (click)="closeSaveDraftModal()">Cancel</app-button>
+        <app-button type="button" class="act-btn act-btn--primary" (click)="confirmSaveDraft()">Save Draft</app-button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ============ Download Template modal ============ -->
+@if (downloadTemplateModalOpen()) {
+<div class="sfd-modal-backdrop" tabindex="0" role="button" (click)="closeDownloadTemplateModal()"
+  (keyup.enter)="closeDownloadTemplateModal()">
+  <div class="sfd-modal" tabindex="0" role="button" (click)="$event.stopPropagation()"
+    (keyup.enter)="$event.stopPropagation()">
+    <div class="sfd-modal-head">
+      <h3>Download a blank template</h3>
+      <app-button type="button" class="sfd-icon-btn close" (click)="closeDownloadTemplateModal()">
+        <app-icon name="x" [size]="14" variant="inherit" />
+      </app-button>
+    </div>
+    <div class="sfd-modal-body">
+      <p class="act-form-desc">
+        The grid is empty, so this will be a blank workbook you can fill in offline. Its
+        Equipment Name and Equipment Nomenclature drop downs carry <strong>every
+          equipment your department holds on this ship</strong>.
+      </p>
+      <label class="act-inline-input" style="margin-top: 16px;">
+        <span style="font-weight: 500; margin-bottom: 8px; display: block;">How many rows do you want?</span>
+        <input type="number" [value]="downloadTemplateRows()"
+          (input)="downloadTemplateRows.set(+$any($event.target).value)" />
+      </label>
+      <p class="act-form-desc" style="margin-top: 8px; color: #666; font-size: 13px;">
+        You can delete any you do not use, or add more below them.
+      </p>
+      <div class="act-form-actions" style="margin-top: 24px;">
+        <app-button type="button" class="act-btn act-btn--ghost" (click)="closeDownloadTemplateModal()">Cancel</app-button>
+        <app-button type="button" class="act-btn act-btn--primary" (click)="confirmDownloadTemplate()">Download</app-button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+@if (showSpareModal()) {
+<app-spare-selection-modal [selectedSpares]="activeRowSelectedSpares()" [source]="currentSpareSource()"
+  (closeModal)="closeSpareModal()" (save)="onSparesSelected($event)">
+</app-spare-selection-modal>
+}

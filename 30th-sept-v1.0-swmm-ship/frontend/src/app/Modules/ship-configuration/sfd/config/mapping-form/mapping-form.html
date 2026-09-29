@@ -1,0 +1,65 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+
+    <div class="w-full max-w-2xl rounded-2xl sfd-modal-bg glass-card  shadow-2xl">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between model-border-header border-primary px-4 py-2">
+            <h2 class="text-lg font-semibold">
+                {{ isEditMode ? 'Edit Equipment Mapping' : 'Add Equipment Mapping' }}
+            </h2>
+
+            <app-button type="button" (click)="closeModal()"
+                class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input hover:">
+                ✕
+            </app-button>
+        </div>
+
+        <!-- Body -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <div class="form-container model-border-header">
+
+                <div class="form-field">
+                <label class="form-label" for="equip"> Equipment Name</label>
+                <input formControlName="equip" id='equip' class="form-control" readOnly="true" label="Equipment" />
+
+                @if (form.controls.equip.invalid &&
+                (form.controls.equip.touched)) {
+                <span class="form-error">
+                    Equipment is required.
+                </span>
+                }
+
+                </div>
+
+                <div class="form-field">
+                    <app-select-input formControlName="system" placeholder="Search System Options.." [options]="systemOptions()" label="System">
+                    </app-select-input>
+                    @if (form.controls.system.invalid &&
+                    (form.controls.system.touched)) {
+                    <span class="form-error">
+                        System is required.
+                    </span>
+                    }
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-3 px-6 py-4">
+
+                <app-button type="button" (click)="closeModal()"
+                    class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input">
+                    Cancel
+                </app-button>
+
+                <app-button class="submit-btn" type="submit">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </app-button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

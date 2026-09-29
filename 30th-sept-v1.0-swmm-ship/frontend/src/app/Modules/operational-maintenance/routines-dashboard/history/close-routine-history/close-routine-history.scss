@@ -1,0 +1,133 @@
+/* ============================================================
+   Close Routine History – Component Styles
+   Same dark-navy design system shared across OP. Maintenance.
+   ============================================================ */
+
+/* ---------- Design tokens (theme-aware) ---------- */
+$bg-page      : var(--bg-input);
+$bg-card      : var(--bg-card);
+$bg-input     : var(--bg-input);
+$border-subtle: var(--border-primary);
+$border-emph  : var(--border-input);
+$text-primary : var(--text-primary);
+$text-muted   : var(--text-muted);
+
+/* ---------- Page wrapper ---------- */
+.page-container {
+  display        : flex;
+  flex-direction : column;
+  gap            : 0;
+  padding        : 1.5rem;
+  background     : $bg-page;
+  min-height     : 100%;
+  color          : $text-primary;
+  font-family    : 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ---------- Page header ---------- */
+.page-header {
+  margin-bottom: 1.25rem;
+}
+
+.page-title {
+  font-size  : 20px;
+  font-weight: 600;
+  color      : $text-primary;
+  margin     : 0 0 12px;
+  line-height: 1.3;
+}
+
+.header-divider {
+  height    : 0.5px;
+  background: $border-subtle;
+}
+
+/* ---------- Grid card ---------- */
+.grid-card {
+  background    : $bg-card;
+  border-radius : 12px;
+  border        : 0.5px solid $border-subtle;
+  padding       : 1.25rem;
+  display       : flex;
+  flex-direction: column;
+  gap           : 1rem;
+}
+
+/* ---------- Toolbar ---------- */
+.toolbar {
+  display    : flex;
+  align-items: center;
+}
+
+/* Search box */
+.search-box {
+  position  : relative;
+  flex      : 1;
+  margin-left: 10px;
+
+  .search-icon {
+    position      : absolute;
+    left          : 12px;
+    top           : 50%;
+    transform     : translateY(-50%);
+    font-size     : 16px;
+    color         : $text-muted;
+    pointer-events: none;
+  }
+
+  input {
+    width        : 99%;
+    height       : 42px;
+    padding      : 0 12px 0 38px;
+    background   : $bg-input;
+    border       : 0.5px solid $border-subtle;
+    border-radius: 8px;
+    color        : $text-primary;
+    font-size    : 14px;
+    outline      : none;
+    transition   : border-color 0.15s ease;
+    box-sizing   : border-box;
+
+    &::placeholder { color: $text-muted; }
+    &:focus        { border-color: var(--text-muted); }
+  }
+}
+
+/* ---------- AG Grid dark skin overrides ---------- */
+:host ::ng-deep {
+
+  .ag-theme-alpine-dark,
+  .ag-theme-quartz-dark {
+    --ag-background-color             : #{$bg-card};
+    --ag-header-background-color      : var(--bg-input);
+    --ag-odd-row-background-color     : var(--bg-input);
+    --ag-border-color                 : #{$border-subtle};
+    --ag-row-border-color             : #{$border-subtle};
+    --ag-header-foreground-color      : #{$text-muted};
+    --ag-foreground-color             : #{$text-primary};
+    --ag-selected-row-background-color: rgba(0, 86, 179, 0.15);
+    --ag-font-size                    : 13px;
+  }
+
+  .ag-header-cell-label {
+    font-weight: 500;
+    font-size  : 13px;
+    color      : $text-primary;
+  }
+
+  .ag-overlay-no-rows-center {
+    color    : $text-muted;
+    font-size: 14px;
+  }
+
+  .ag-paging-panel {
+    border-top : 0.5px solid $border-subtle;
+    color      : $text-muted;
+    font-size  : 13px;
+    padding-top: 10px;
+  }
+
+  .ag-row:hover {
+    background: var(--bg-input) !important;
+  }
+}

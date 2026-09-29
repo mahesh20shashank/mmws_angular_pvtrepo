@@ -1,0 +1,49 @@
+<div class="relative select-container">
+  <button
+    type="button"
+    (click)="toggle()"
+    [disabled]="disabled"
+    class="flex h-[45px] w-full items-center justify-between gap-2 rounded-[10px] border border-[var(--border-input,#ffffff40)] bg-[var(--bg-input,rgba(255,255,255,0.08))] px-4 text-left text-sm text-[var(--text-primary,#ffffff)] outline-none transition hover:border-[var(--border-focus,#ffffff70)] focus:border-[var(--border-focus,#61C2FF)]"
+    [class.cursor-not-allowed]="disabled"
+    [class.opacity-50]="disabled"
+  >
+    <span class="min-w-0 truncate text-[var(--text-muted,rgba(255,255,255,0.5))]" [class.text-[var(--text-primary,#ffffff)]]="value || value === 0">
+      {{ selectedLabel }}
+    </span>
+    <i
+      class="fas fa-chevron-down shrink-0 text-[11px] text-[var(--text-muted,rgba(255,255,255,0.5))] transition-transform"
+      [class.rotate-180]="isOpen"
+      aria-hidden="true"
+    ></i>
+  </button>
+
+  <div
+    *ngIf="isOpen && !disabled"
+    class="absolute z-[100] mt-1 w-full overflow-hidden rounded-md border border-[var(--border-card,rgba(255,255,255,0.2))] bg-[var(--bg-card,#0d2438)] text-[var(--text-primary,#ffffff)] shadow-xl"
+    role="listbox"
+  >
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterOptions()"
+      placeholder="Search…"
+      class="w-full border-0 border-b border-[var(--border-card,rgba(255,255,255,0.15))] bg-transparent px-3 py-2 text-sm text-[var(--text-primary,#ffffff)] outline-none placeholder:text-[var(--text-muted,rgba(255,255,255,0.5))] focus:border-[#61C2FF]"
+      (click)="$event.stopPropagation()"
+    />
+
+    <button
+      *ngFor="let option of filteredOptions"
+      type="button"
+      class="block w-full px-3 py-2 text-left text-sm text-[var(--text-primary,rgba(255,255,255,0.9))] transition hover:bg-[var(--bg-hover,rgba(255,255,255,0.1))]"
+      [class.bg-[#1069AB]]="option.value === value"
+      [class.!text-white]="option.value === value"
+      (click)="select(option)"
+    >
+      {{ option.label }}
+    </button>
+
+    <p *ngIf="filteredOptions.length === 0" class="px-3 py-2 text-sm text-[var(--text-muted,rgba(255,255,255,0.6))]">
+      No results found
+    </p>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<div class="review-table-card mx-auto max-w-8xl rounded-lg">
+  <div class="w-full overflow-x-auto">
+      <table class="review-table w-full min-w-[720px] border-collapse">
+        <thead>
+          <tr>
+            <th colspan="4" class="review-table-th px-5 py-3.5">
+              <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-between">
+                <h1 class="review-table-title text-sm font-bold uppercase tracking-wide sm:text-base">
+                  Final Remark Observation
+                </h1>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                  <span class="review-table-rating-label text-[10px] font-bold uppercase tracking-wider">Rating</span>
+                  <div class="review-table-stars-box inline-flex items-center gap-0.5 rounded-md px-2 py-1">
+                    <button
+                      *ngFor="let star of ratingSteps"
+                      type="button"
+                      (click)="setRating(star)"
+                      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                      (mouseenter)="setHoverRating(star)"
+                      (mouseleave)="setHoverRating(null)"
+                      class="px-0.5 transition-transform hover:scale-110 focus:outline-none disabled:cursor-not-allowed disabled:opacity-40"
+                      [attr.aria-label]="'Rate ' + star + ' out of ' + maxRating"
+                    >
+                      <i
+                        class="fas fa-star text-sm sm:text-base"
+                        [ngClass]="isStarActive(star) ? 'text-amber-400' : 'text-slate-300 dark:text-white/30'"
+                      ></i>
+                    </button>
+                  </div>
+                  <span
+                    class="min-w-[4.5rem] rounded-lg px-2.5 py-1 text-center text-[10px] font-bold uppercase tracking-wide"
+                    [ngClass]="
+                      rating
+                        ? 'border border-amber-400/40 bg-amber-500/15 text-amber-600 dark:text-amber-300'
+                        : 'review-table-badge--unrated'
+                    "
+                  >
+                    {{ rating ? rating + ' / ' + maxRating : 'Not rated' }}
+                  </span>
+                </div>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th class="review-table-th w-14 px-3 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider">ID</th>
+            <th class="review-table-th px-3 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider">Observation</th>
+            <th class="review-table-th w-[220px] px-3 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider">Attachment</th>
+            <th class="review-table-th w-[120px] px-3 py-2.5 text-center text-[10px] font-bold uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="let row of data; let i = index">
+            <tr>
+              <td class="review-table-td w-12 align-middle text-center">
+                <span class="review-table-id font-semibold">#{{ i + 1 }}</span>
+              </td>
+              <td class="review-table-td align-middle">
+                <app-textarea [(ngModel)]="row.observation" [rows]="1" class="text-xs"></app-textarea>
+              </td>
+              <td class="review-table-td w-48 align-middle">
+                <app-file-upload
+                  [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                  [(ngModel)]="row.fileName"
+                ></app-file-upload>
+              </td>
+              <td class="review-table-td w-28 align-middle">
+                <div class="flex items-center justify-center gap-1">
+                  <button
+                    *ngIf="i === data.length - 1"
+                    [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                    (click)="addRow()"
+                    type="button"
+                    class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <svg class="mx-auto h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                  <button *ngIf="isReoffer"
+                    [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                    (click)="toggleParent(row)"
+                    type="button"
+                    class="review-table-reoffer-btn inline-flex h-7 items-center justify-center gap-1.5 rounded-lg px-3 text-[10px] font-bold uppercase transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+                    [class.is-expanded]="row.isExpanded"
+                  >
+                    <i class="fas fa-redo-alt text-[9px]" aria-hidden="true"></i>
+                    <span>Reoffer</span>
+                  </button>
+                  <button
+                    [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                    (click)="deleteRow(i)"
+                    type="button"
+                    class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-rose-400/40 bg-rose-500/15 text-rose-500 dark:text-rose-400 transition hover:bg-rose-500/25 hover:text-rose-600 dark:hover:text-rose-300 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <svg class="mx-auto h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="row.isExpanded">
+              <td class="review-table-td"></td>
+              <td colspan="3" class="review-table-td p-0">
+                <div class="review-table-child-area p-3">
+                  <div class="space-y-2">
+                    <div
+                      *ngFor="let rem of row.remarks; let childIdx = index"
+                      class="review-table-child-card grid grid-cols-[1fr_240px_auto] items-center gap-3 rounded-lg p-2"
+                    >
+                      <div>
+                        <span class="review-table-child-label mb-1 block text-[9px] font-bold uppercase">
+                          Remark {{ childIdx + 1 }}
+                        </span>
+                        <app-textarea [(ngModel)]="rem.childNote" [rows]="2" class="text-xs"></app-textarea>
+                      </div>
+
+                      <div class="flex items-center justify-center">
+                        <button
+                          *ngIf="!rem.isSigned"
+                          (click)="signRemark(rem)"
+                          type="button"
+                          class="review-table-sign-btn flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 text-[10px] font-bold uppercase transition"
+                        >
+                          <i class="fas fa-signature text-xs" aria-hidden="true"></i>
+                          <span class="whitespace-nowrap">Sign</span>
+                        </button>
+
+                        <div
+                          *ngIf="rem.isSigned"
+                          class="relative mt-4 flex w-full items-center gap-2 rounded-lg border border-emerald-400/35 bg-emerald-500/10 p-1 pr-6"
+                        >
+                           <div class="shrink-0 rounded bg-white/40 dark:bg-white/10 p-0.5 shadow-sm">
+                            <qrcode [qrdata]="rem.qrSignatureData" [width]="50" [colorDark]="'#065f46'"></qrcode>
+                          </div>
+                          <div class="min-w-0 flex-1 leading-tight">
+                            <h3 class="truncate text-[10px] font-bold uppercase text-[var(--text-primary)]">
+                              {{ rem.userDetailseData?.first_name }} {{ rem.userDetailseData?.last_name }}
+                            </h3>
+                            <p class="truncate text-[9px] font-semibold text-emerald-600 dark:text-emerald-400">
+                              {{ rem.userDetailseData?.unit_name }}
+                            </p>
+                             <p class="text-[8px] italic text-[var(--text-muted)]">
+                              {{ rem.userDetailseData?.timestamp | date: 'short' }}
+                            </p>
+                          </div>
+                          <button
+                            [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                            (click)="signRemark(rem)"
+                            type="button"
+                             class="absolute right-1 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--text-muted)] transition hover:bg-rose-500/15 hover:text-rose-500"
+                          >
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                        (click)="removeChildRemark(row, childIdx)"
+                        type="button"
+                         class="self-center rounded-full p-2 text-[var(--text-muted)] transition hover:bg-rose-500/15 hover:text-rose-500 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <i class="fas fa-trash-alt text-sm" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+                    (click)="addChildRemark(row)"
+                    type="button"
+                     class="review-table-add-btn mt-3 inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-[10px] font-bold uppercase tracking-wide transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                    <span>Add Remark</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+  </div>
+</div>

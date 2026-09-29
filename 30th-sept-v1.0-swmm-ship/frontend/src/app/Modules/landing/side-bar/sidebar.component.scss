@@ -1,0 +1,82 @@
+.sidebar-nav {
+    @apply fixed left-6 top-1/2 hidden -translate-y-1/2 lg:flex flex-col items-center gap-3.5 p-2 z-40 rounded-full;
+
+    background: rgba(4, 9, 20, 0.4);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.nav-btn {
+    @apply relative flex items-center justify-center w-11 h-11 rounded-full cursor-pointer transition-all duration-300;
+
+    color: var(--text-muted);
+
+    &:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+
+.nav-tooltip {
+    position: absolute;
+    left: calc(100% + 14px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+
+    padding: 6px 12px;
+    border-radius: 8px;
+
+    background: rgba(4, 9, 20, 0.92);
+    border: 1px solid var(--border-primary);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+
+    color: var(--text-primary);
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    line-height: 1;
+    white-space: nowrap;
+
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 50;
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: -4px;
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+        width: 7px;
+        height: 7px;
+        background: rgba(4, 9, 20, 0.92);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom-left-radius: 2px;
+        z-index: -1;
+    }
+}
+
+.nav-btn:hover .nav-tooltip,
+.nav-tooltip--show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+.nav-btn-active {
+    color: white;
+    transform: scale(1.05);
+
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}

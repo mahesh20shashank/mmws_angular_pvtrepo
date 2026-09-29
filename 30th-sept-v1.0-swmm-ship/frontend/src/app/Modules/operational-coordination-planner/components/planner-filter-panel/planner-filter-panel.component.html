@@ -1,0 +1,167 @@
+<div class="filter-panel glass-card">
+  <div class="filter-panel__heading">Filter</div>
+
+  @if (canCreateEvent()) {
+    <app-button type="button" class="new-event-button" (click)="openNewEvent()">
+      <app-icon name="plus" [size]="16" />
+      <span>New Event</span>
+    </app-button>
+  }
+
+  <label class="filter-row filter-row--all">
+    <input type="checkbox" [checked]="allChecked()" (change)="toggleAll()" />
+    <span class="filter-row__label">All Events</span>
+    <span class="filter-row__count">{{ totalCount() }}</span>
+  </label>
+
+  <div class="filter-list">
+    @for (cat of categories(); track cat.id) {
+      <label class="filter-row">
+        <input type="checkbox" [checked]="isChecked(cat.id)" (change)="toggle(cat.id)" />
+        <app-icon [name]="cat.icon" [size]="14" [style.color]="cat.swatch" />
+        <span class="filter-row__label">{{ cat.label }}</span>
+      </label>
+    }
+  </div>
+
+  @if (canAddActivity()) {
+    <div class="add-activity-widget">
+      <p class="add-activity-widget__title">
+        <app-icon name="map-pin" [size]="14" />
+        Add Activity
+      </p>
+      <input
+        type="text"
+        id="newActivityTitle"
+        class="add-activity-widget__input"
+        placeholder="Activity title"
+        aria-label="Activity title"
+        maxlength="200"
+        [value]="newActivityTitle()"
+        (input)="newActivityTitle.set($any($event.target).value)"
+      />
+      <input
+        type="date"
+        id="newActivityDate"
+        class="add-activity-widget__input"
+        aria-label="Activity date"
+        [value]="newActivityDate()"
+        (input)="newActivityDate.set($any($event.target).value)"
+      />
+      <app-button
+        type="button"
+        class="add-activity-widget__submit"
+        [disabled]="addingActivity() || !newActivityTitle().trim() || !newActivityDate()"
+        (click)="submitNewActivity()"
+      >
+        Add to calendar
+      </app-button>
+    </div>
+  }
+
+  <div class="pending-planning-section">
+    <app-icon name="square" [size]="16" [style.color]="'#f59e0b'" />
+    <span class="pending-planning-label">Pending Planning</span>
+    <span class="pending-planning-count">{{ pendingPlanningCount() }}</span>
+  </div>
+
+  <div class="filter-panel__legend-heading">Legend</div>
+
+  <!-- DART Section -->
+  <div class="legend-section">
+    <div class="legend-section-title">DART</div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #f472b6;"></span>
+      <span class="legend-label">raised</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #facc15;"></span>
+      <span class="legend-label">pending</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #e57373;"></span>
+      <span class="legend-label">overdue</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #9e9e9e;"></span>
+      <span class="legend-label">closed</span>
+    </div>
+  </div>
+
+  <!-- STATUS Section -->
+  <div class="legend-section">
+    <div class="legend-section-title">STATUS</div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #3b82f6;"></span>
+      <span class="legend-label">Upcoming</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #f87171;"></span>
+      <span class="legend-label">Overdue and not done</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #78716c;"></span>
+      <span class="legend-label">Done</span>
+    </div>
+  </div>
+
+  <!-- PLAN FLAG Section -->
+  <div class="legend-section">
+    <div class="legend-section-title">PLAN FLAG</div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #9e9e9e;"></span>
+      <span class="legend-label">planned</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #f59e0b;"></span>
+      <span class="legend-label">due</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #e57373;"></span>
+      <span class="legend-label">overdue</span>
+    </div>
+  </div>
+
+  <!-- RUNNING HOURS Section -->
+  <div class="legend-section">
+    <div class="legend-section-title">RUNNING HOURS</div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #34d399;"></span>
+      <span class="legend-label">upcoming</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #e57373;"></span>
+      <span class="legend-label">overdue</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #9e9e9e;"></span>
+      <span class="legend-label">done</span>
+    </div>
+  </div>
+
+  <!-- ORIGINAL DUE Section -->
+  <div class="legend-section">
+    <div class="legend-section-title">ORIGINAL DUE</div>
+    <div class="legend-item">
+      <span class="legend-dot legend-dot--outline" style="border-color: #4682b4;"></span>
+      <span class="legend-label">marker shifted</span>
+    </div>
+  </div>
+
+  <!-- CUSTOM Section -->
+  <div class="legend-section">
+    <div class="legend-section-title">CUSTOM</div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background-color: #64748b;"></span>
+      <span class="legend-label">Departmental activity</span>
+    </div>
+  </div>
+
+  <!-- Shift Due Date Button -->
+  @if (canShiftDueDate()) {
+    <app-button type="button" class="filter-row filter-row--legend" (click)="openShiftDueDate()">
+      <span class="overdue-dot">⇅</span>
+      <span class="filter-row__label">Shift due date</span>
+    </app-button>
+  }
+</div>

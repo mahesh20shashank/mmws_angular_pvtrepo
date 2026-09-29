@@ -1,0 +1,39 @@
+<div class="p-2 sm:p-3">
+  <app-paginate-table
+        title="Subsystem"
+        description="Manage subsystems"
+        [showHeaderSection]="true"
+        [addButtons]="addButtons"
+        (addButtonClick)="handleAddButtonClick($event)"
+        [rowData]="rowData"
+        [url]="'/master/subsystems/'"
+        [columnDefs]="columnSubsystemData"
+        [showPagination]="true"
+        [tableLoading]="tableLoading"
+        [showSearch]="true"
+      >
+      </app-paginate-table>
+</div>
+
+<app-add-form
+  *ngIf="showCreateLayout"
+  width="40vw"
+  [open]="showCreateLayout"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="editFormData"
+  [isEditMode]="isEditMode"
+  (onSubmit)="handleSubmit($event)"
+  (onFieldChange)="onFieldChange($event)"
+  (onOpenChange)="onFormOpenChange($event)"
+  [fromTitle]="isEditMode ? 'EDIt SUBSYSTEM' : 'Add SUBSYSTEM'">
+</app-add-form>
+
+<!-- Reusable Delete Dialog -->
+<app-reusable-delete-dialog
+  [open]="showDeleteDialog"
+  [name]="deleteName"
+  [entityType]="'Subsystem'"
+  [loading]="deleteLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>

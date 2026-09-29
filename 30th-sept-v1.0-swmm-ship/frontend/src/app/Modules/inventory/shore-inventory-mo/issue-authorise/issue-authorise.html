@@ -1,0 +1,38 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>Issue Authorise</h3>
+  </div>
+
+  <form [formGroup]="form" class="mo-stub-fields">
+    @for (field of fields; track field.key) {
+      <app-dynamic-field [spec]="field" [control]="getControl(field.key)" />
+    }
+    <div class="mo-stub-fields__actions">
+      <app-button type="button" class="btn-secondary" (click)="clear()">Clear</app-button>
+    </div>
+  </form>
+
+  <app-data-grid [rowData]="rows()" [columnDefs]="columnDefs" height="380px" />
+</div>
+
+@if (activeRow(); as row) {
+  <app-detail-drawer [open]="true" label="Internal Issue Details" [titleMode]="true" (closed)="closeDrawer()">
+    <div class="issue-detail">
+      <div class="issue-detail__row"><span>Internal Demand No</span><strong>{{ row.internalDemandNo }}</strong></div>
+      <div class="issue-detail__row"><span>Issued Date Time</span><strong>{{ row.issuedDatetime }}</strong></div>
+      <div class="issue-detail__row"><span>Item Code</span><strong>{{ row.itemCode }}</strong></div>
+      <div class="issue-detail__row"><span>SH No</span><strong>{{ row.shNo }}</strong></div>
+      <div class="issue-detail__row"><span>Int Stock Serial</span><strong>{{ row.intStockSerial }}</strong></div>
+      <div class="issue-detail__row"><span>Handed Over Qty</span><strong>{{ row.handedOverQty }}</strong></div>
+    </div>
+    <div class="issue-detail__actions">
+      @if (row.authorised) {
+        <span class="issue-detail__authorised">Issue Authorized</span>
+      } @else {
+        <app-button type="button" class="btn-primary" (click)="authorise()">Authorize Issue</app-button>
+      }
+    </div>
+  </app-detail-drawer>
+}

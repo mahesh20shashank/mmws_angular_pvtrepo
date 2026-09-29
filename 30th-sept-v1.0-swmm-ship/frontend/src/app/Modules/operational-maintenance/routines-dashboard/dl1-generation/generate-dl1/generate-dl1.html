@@ -1,0 +1,158 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card cardTitle="Generate DL 1">
+
+  <!-- Top filter row -->
+  <div class="flex items-end gap-4 m-2 flex-wrap ">
+    <div class="flex items-end gap-4 flex-wrap">
+      <div>
+        <label for="refit-type" class="text-white/60 text-xs mb-1 block">Refit Type</label>
+        <select id="refit-type" [(ngModel)]="refitType" (ngModelChange)="resetDlNoApplied()" class="w-48 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option value="">-- Select Refit --</option>
+          @for (opt of refitTypeOptions(); track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="yard-name" class="text-white/60 text-xs mb-1 block">Select Yard Name</label>
+        <select id="yard-name" [(ngModel)]="yard" (ngModelChange)="resetDlNoApplied()" class="w-44 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          @for (y of yards; track y.key) {
+            <option [ngValue]="y">{{ y.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="export-format" class="text-white/60 text-xs mb-1 block">Export File Format</label>
+        <select id="export-format" [(ngModel)]="exportFormat" class="w-36 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          @for (format of exportFormats; track format) {
+            <option [value]="format">{{ format }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <span class="text-xs mb-1 block invisible select-none" aria-hidden="true">Actions</span>
+      <div class="flex items-center gap-3">
+        <app-button type="button" (click)="openAddRoutinesModal()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm">
+          Click to Add DL Routines
+        </app-button>
+
+        @if (canExport) {
+          <app-button type="button" (click)="exportRoutines()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center gap-1.5">
+            <app-icon name="download" [size]="14" />
+            Export to Navyojana
+          </app-button>
+        }
+
+        <app-button type="button" (click)="loadDraftRows()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center gap-1.5">
+          <app-icon name="refresh-cw" [size]="14" />
+          Generate DL I
+        </app-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DL No row -->
+  <div class="flex items-end gap-3 mb-4">
+    <div>
+      <label for="dl-no" class="text-white/60 text-xs mb-1 block">DL No :-</label>
+      <input id="dl-no" type="text" [(ngModel)]="dlNo" placeholder="Enter DL No" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+    <div>
+      <span class="text-xs mb-1 block invisible select-none" aria-hidden="true">Ok</span>
+      <app-button type="button" (click)="confirmDlNo()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm">
+        OK
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Table toolbar -->
+  <div class="flex items-center justify-end gap-3 mb-3">
+    <span class="text-white/60 text-sm">Global Search:</span>
+    <input type="text" aria-label="Search DL 1 draft rows" [(ngModel)]="globalSearch" (ngModelChange)="onSearchChange()" class="w-52 h-9 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+  </div>
+
+  <!-- Table -->
+  <div class="fuss-grid-wrapper w-full">
+    <app-data-grid
+      [columnDefs]="columnDefs"
+      [rowData]="draftRows()"
+      [totalRowCount]="totalRowCount()"
+      [pageSize]="10"
+      [height]="'440px'"
+      [loading]="isLoading()"
+      (pageRequested)="onPageRequested($event)">
+    </app-data-grid>
+  </div>
+
+
+  <div class="mt-4">
+    <app-button type="button" (click)="save()" class="h-10 mb-2 px-5 w-fit rounded-lg bg-[#1D96E9] text-white text-sm flex items-center gap-2">
+      <app-icon name="check" [size]="14" />
+      Save
+    </app-button>
+  </div>
+</app-master-card>
+
+@if (showAddRoutinesModal()) {
+  <app-modal size="lg" (closeModal)="closeAddRoutinesModal()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Generate DL I</h3>
+      <app-button type="button" (click)="closeAddRoutinesModal()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <div>
+        <label for="refit-nomenclature" class="text-white/60 text-xs mb-1 block">Refit Nomenclature</label>
+        <select id="refit-nomenclature" [(ngModel)]="refitNomenclature" (ngModelChange)="onRefitNomenclatureChange()"
+          class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option value="">Select Refit</option>
+          @for (opt of refitTypeOptions(); track opt.value) {
+            <option [value]="opt.value">{{ opt.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="refit-start-date" class="text-white/60 text-xs mb-1 block">Refit Start Date</label>
+        <input id="refit-start-date" type="date" [(ngModel)]="refitStartDate" readonly
+          class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+      <div>
+        <label for="refit-end-date" class="text-white/60 text-xs mb-1 block">Refit End Date</label>
+        <input id="refit-end-date" type="date" [(ngModel)]="refitEndDate" readonly
+          class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+
+      <div class="col-span-1">
+        <label for="refit-routine-names" class="text-white/60 text-xs mb-1 block">Select Refit Routine Names</label>
+        <select id="refit-routine-names" multiple [(ngModel)]="selectedRoutineNameGroups"
+          class="w-full h-24 rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm">
+          @for (group of refitRoutineNameGroups; track group.label) {
+            <option [value]="group.label">{{ group.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="from-date" class="text-white/60 text-xs mb-1 block">From Date</label>
+        <input id="from-date" type="date" [(ngModel)]="fromDate" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="to-date" class="text-white/60 text-xs mb-1 block">To Date</label>
+        <input id="to-date" type="date" [(ngModel)]="toDate" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+      <app-button type="button" (click)="getRoutinesForDraft()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">
+        Get Routines for DL 1 Creation
+      </app-button>
+      <app-button type="button" (click)="closeAddRoutinesModal()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+        Close
+      </app-button>
+    </div>
+  </app-modal>
+}

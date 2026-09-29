@@ -1,0 +1,101 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Results : Return Spares</h3>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredEntries().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <div class="obs-filter-row">
+    <label class="obs-checkbox">
+      <input type="checkbox" [checked]="criticalOnly()" (change)="criticalOnly.set(!criticalOnly())" />
+      Critical
+    </label>
+    <div class="obs-filter-row__categories">
+      <span class="obs-filter-row__label">Issue Type</span>
+      @for (option of issueTypeFilterOptions; track option.key) {
+        <label class="obs-checkbox">
+          <input type="checkbox" [checked]="issueTypeFilters()[option.key]" (change)="toggleIssueType(option.key)" />
+          <span class="obs-issue-flag-swatch" [class.obs-issue-flag-swatch--ty-loan]="option.key === 'TY_LOAN'"></span>
+          {{ option.label }}
+        </label>
+      }
+    </div>
+    <div class="obs-filter-row__categories">
+      <span class="obs-filter-row__label">Category</span>
+      @for (option of categoryFilterOptions; track option.key) {
+        <label class="obs-checkbox">
+          <input type="checkbox" [checked]="categoryFilters()[option.key]" (change)="toggleCategory(option.key)" />
+          {{ option.label }}
+        </label>
+      }
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredEntries()"
+    [columnDefs]="columnDefs"
+    height="480px"
+    (rowClicked)="onRowClicked($event)"
+  />
+</div>
+
+@if (activeEntry(); as entry) {
+  <app-modal size="sm" (closeModal)="closeModal()">
+    <h3 class="obs-modal__title">Return Details</h3>
+    <p class="obs-modal__subtitle">{{ entry.patternNumber }} — {{ entry.description }}</p>
+
+    <form [formGroup]="form" class="obs-modal__form">
+      <div class="obs-modal__field">
+        <app-input-field
+          label="Qty Returned *"
+          type="number"
+          formControlName="quantityReturned"
+          [invalid]="form.controls.quantityReturned.invalid && form.controls.quantityReturned.touched"
+        />
+        @if (form.controls.quantityReturned.invalid && form.controls.quantityReturned.touched) {
+          <span class="form-error">Enter a quantity of at least 1.</span>
+        }
+      </div>
+      <div class="obs-modal__field">
+        <app-select-input
+          label="Returned By *"
+          formControlName="returnedBy"
+          [options]="returnedByOptions()"
+        />
+        @if (form.controls.returnedBy.invalid && form.controls.returnedBy.touched) {
+          <span class="form-error">Returned By is required.</span>
+        }
+      </div>
+      <div class="obs-modal__field">
+        <app-select-input
+          label="Returned Item Status *"
+          formControlName="itemStatus"
+          [options]="itemStatusOptions"
+        />
+        @if (form.controls.itemStatus.invalid && form.controls.itemStatus.touched) {
+          <span class="form-error">Returned Item Status is required.</span>
+        }
+      </div>
+      <div class="obs-modal__field">
+        <app-textarea-input label="Return Remarks *" [rows]="3" formControlName="remarks" />
+        @if (form.controls.remarks.invalid && form.controls.remarks.touched) {
+          <span class="form-error">Return Remarks are required.</span>
+        }
+      </div>
+    </form>
+
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeModal()">Close</app-button>
+      <app-button type="button" class="btn-primary" [disabled]="saving() || form.invalid" (click)="submitReturn()">
+        {{ saving() ? "Submitting..." : "Submit" }}
+      </app-button>
+    </div>
+  </app-modal>
+}

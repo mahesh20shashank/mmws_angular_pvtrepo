@@ -1,0 +1,624 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.page {
+  color: var(--text-primary);
+  width: 100%;
+
+}
+
+/* ==========================
+   TOP SECTION
+========================== */
+
+.top-layout {
+  display: grid;
+  grid-template-columns: 67.5% 32.5%;
+  gap: 11px;
+  margin-right: 0.875rem;
+}
+
+/* ==========================
+   PROFILE CARD
+========================== */
+
+.profile-card {
+  padding: 16px 24px;
+  height: 24.875rem;
+}
+
+.profile-name {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.profile-content {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: 3fr 10fr;
+}
+
+/* IMAGE */
+
+.profile-image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-image {
+  width: 8.5625rem;
+  height: 9.875rem;
+  flex-shrink: 0;
+  aspect-ratio: 137/158;
+  border-radius: 12px;
+}
+
+/* DETAILS */
+
+.profile-details {
+  flex: 1;
+  height: 9.875rem;
+}
+
+.fields-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 12px;
+}
+
+.field {
+  border: 1px dashed var(--border-primary);
+  background: var(--bg-input);
+  border-radius: 10px;
+  padding: 8px 14px;
+  min-height: 50px;
+}
+
+.field label {
+  display: block;
+  font-size: 10px;
+  margin-bottom: 3px;
+  color: var(--text-muted);
+}
+
+.value {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* SUMMARY */
+
+.summary-section {
+  margin-top: 2rem;
+  height: 8.625rem;
+}
+
+.summary-section label {
+  display: block;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.summary-box {
+  border-radius: 0.625rem;
+  border: 1px dashed var(--border-primary);
+  background: var(--bg-input);
+  height: 8.625rem;
+  padding: 12px 14px;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ==========================
+   TEAM MEMBERS
+========================== */
+
+.members-card {
+  padding: 16px;
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.members-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+
+  height: 56px;
+  padding: 8px 10px;
+
+  margin-bottom: 8px;
+}
+
+.member-image {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.member-rank {
+  font-size: 10px;
+  opacity: .7;
+  display: flex;
+  justify-content: space-between;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ==========================
+   TICKETS
+========================== */
+
+.tickets-card {
+  margin-top: 12px;
+  padding: 14px 18px 18px;
+}
+
+.tickets-title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.ticket {
+  height: 122px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid var(--border-primary);
+  border-radius: 14px;
+
+  padding: 0 24px;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.ticket-content h3 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+}
+
+.ticket-content p {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* TICKET STACK */
+
+.ticket-decoration {
+  position: relative;
+
+  width: 58px;
+  height: 106px;
+
+  border-radius: 10px;
+
+  background: var(--ticket-color);
+}
+
+.ticket-decoration::before {
+  content: '';
+
+  position: absolute;
+
+  width: 58px;
+  height: 106px;
+
+  border-radius: 10px;
+
+  left: -18px;
+  top: -2px;
+
+  background: #5d9cf5;
+}
+
+.ticket-decoration::after {
+  content: '';
+
+  position: absolute;
+
+  width: 58px;
+  height: 106px;
+
+  border-radius: 10px;
+
+  left: 18px;
+  top: -2px;
+
+  opacity: .65;
+
+  background: var(--ticket-color);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+/* Tablet: 768px - 1024px */
+@media (max-width: 1024px) {
+  .top-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-right: 0.5rem;
+  }
+
+  .profile-card {
+    height: auto;
+    padding: 14px 18px;
+  }
+
+  .members-card {
+    height: auto;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .profile-content {
+    grid-template-columns: 2fr 8fr;
+    gap: 0.75rem;
+  }
+
+  .fields-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 10px;
+  }
+
+  .tickets-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .ticket {
+    height: 110px;
+    padding: 0 18px;
+  }
+
+  .ticket-content h3 {
+    font-size: 28px;
+  }
+
+  .ticket-content p {
+    font-size: 12px;
+  }
+}
+
+/* Mobile: Below 768px */
+@media (max-width: 768px) {
+  .page {
+    padding: 8px;
+  }
+
+  .top-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-right: 0;
+  }
+
+  .profile-card {
+    height: auto;
+    padding: 12px 14px;
+  }
+
+  .profile-name {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .profile-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 120px;
+  }
+
+  .profile-details {
+    height: auto;
+  }
+
+  .fields-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .field {
+    padding: 6px 10px;
+    min-height: 45px;
+  }
+
+  .field label {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .value {
+    font-size: 11px;
+  }
+
+  .summary-section {
+    margin-top: 1.5rem;
+    height: auto;
+  }
+
+  .summary-box {
+    height: auto;
+    min-height: 80px;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  /* TEAM MEMBERS - MOBILE */
+  .members-card {
+    height: 350px;
+    padding: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .members-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .member-item {
+    height: 50px;
+    gap: 10px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+  }
+
+  .member-image {
+    width: 35px;
+    height: 35px;
+  }
+
+  .member-name {
+    font-size: 11px;
+  }
+
+  .member-rank {
+    font-size: 9px;
+    gap: 4px;
+  }
+
+  .icon-container {
+    gap: 0.4rem;
+  }
+
+  .text-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+  }
+
+  /* TICKETS - MOBILE */
+  .tickets-card {
+    margin-top: 10px;
+    padding: 12px 10px 14px;
+  }
+
+  .tickets-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .tickets-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ticket {
+    height: 100px;
+    padding: 0 16px;
+    margin-bottom: 4px;
+  }
+
+  .ticket-content h3 {
+    font-size: 24px;
+  }
+
+  .ticket-content p {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .ticket-decoration {
+    width: 48px;
+    height: 90px;
+  }
+
+  .ticket-decoration::before {
+    width: 48px;
+    height: 90px;
+    left: -15px;
+    top: -2px;
+  }
+
+  .ticket-decoration::after {
+    width: 48px;
+    height: 90px;
+    left: 15px;
+    top: -2px;
+  }
+}
+
+/* Small Mobile: Below 480px */
+@media (max-width: 480px) {
+  .page {
+    padding: 6px;
+  }
+
+  .profile-name {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .profile-card {
+    padding: 10px 12px;
+  }
+
+  .profile-image {
+    width: 80px;
+    height: 100px;
+  }
+
+  .fields-grid {
+    gap: 6px;
+  }
+
+  .field {
+    padding: 5px 8px;
+    min-height: 40px;
+  }
+
+  .field label {
+    font-size: 8px;
+  }
+
+  .value {
+    font-size: 10px;
+  }
+
+  .summary-box {
+    min-height: 70px;
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .members-card {
+    padding: 10px;
+    height: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .member-item {
+    height: 48px;
+    gap: 8px;
+    padding: 5px 6px;
+  }
+
+  .member-image {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .member-name {
+    font-size: 10px;
+  }
+
+  .member-rank {
+    font-size: 8px;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .icon-container {
+    gap: 0.3rem;
+    flex-direction: column;
+  }
+
+  .text-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+
+  .tickets-card {
+    padding: 10px 8px 12px;
+  }
+
+  .tickets-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .ticket {
+    height: 90px;
+    padding: 0 12px;
+  }
+
+  .ticket-content h3 {
+    font-size: 20px;
+  }
+
+  .ticket-content p {
+    font-size: 10px;
+  }
+}
+
+
+.text-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  font-size: 24px;
+  line-height: 1;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: transform 0.2s ease;
+}
+
+.text-icon:hover {
+  transform: scale(1.15);
+}

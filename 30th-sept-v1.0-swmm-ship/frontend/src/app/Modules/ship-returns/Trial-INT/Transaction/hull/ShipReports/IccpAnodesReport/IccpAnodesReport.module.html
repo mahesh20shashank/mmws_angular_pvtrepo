@@ -1,0 +1,215 @@
+<div class="report-container" id="iccp-report">
+  <!-- TOP BAR -->
+  <div class="flex justify-end mb-4">
+    <button
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      (click)="downloadReport()"
+    >
+      Download Report
+    </button>
+  </div>
+
+  <!-- TITLE -->
+  <h2 class="report-title">QUARTERLY HULL POTENTIAL DATA OF SHIPS FITTED WITH SACRIFICIAL ANODES REPORT - <span class="italic-text"> {{ shipName || '-' }} </span></h2>
+
+  <!-- DETAILS -->
+   <div class="details-section-border mb-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
+          <div class="detail-item">
+            <span class="detail-key"> 1. Ship Name :</span>
+            <span class="detail-value">
+              {{ shipName || '-' }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-key"> 2. Ship last Undocked :</span>
+            <span class="detail-value">{{ shipLastUndocked || '-' }}</span>
+          </div>
+      </div>
+      <div class="detail-item my-2">
+        <span class="detail-key"> 3. Brief details of paint applied during last last calibrated docking :</span>
+        <span class="detail-value">{{ briefDetails || '-' }}</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
+      <div class="detail-item">
+        <span class="detail-key"> 4. Complete anti corrosive paint last renewed :</span>
+        <span class="detail-value">{{ antiCorrosivePaintRenewed || '-' }}</span>
+      </div> 
+      <div class="detail-item">
+        <span class="detail-key"> 5. Type of Sacrifical Anode :</span>
+        <span class="detail-value">{{ typeOfSacrificialAnode || '-' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-key"> 6. Type Reference Electrode Used :</span>
+        <span class="detail-value">{{ referenceElectrodeUsed || '-' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-key"> 7. Quarter Ending :</span>
+        <span class="detail-value">{{ quarterEnding || '-' }}</span>
+      </div> 
+      <div class="detail-item">
+        <span class="detail-key"> 8. Reference Electrode Last Calibrated on :</span>
+        <span class="detail-value">{{
+        referenceElectrodeLastCalibrated
+          ? (
+              referenceElectrodeLastCalibrated
+              | date : 'dd/MM/yyyy'
+            )
+          : '-'
+        }}
+      </span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-key"> 9. Remarks :</span>
+        <span class="detail-value">{{ remarks || '-' }}</span>
+      </div>
+      <div class="detail-item" *ngIf="documentUrl">
+        <span class="detail-key"> Document :</span>
+        <span class="detail-value">
+          <a [href]="documentUrl" target="_blank" class="doc-url-link">{{ documentUrl }}</a>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  
+<h3 class="mb-5 font-bold">SACRIFICIAL ANODES</h3>
+  <!-- TABLE 1 -->
+  <div class="table-scroll-wrapper mb-5">
+    <table class="report-table">
+      <thead>
+        <!-- ROW 1: Group headers -->
+        <tr>
+          <th rowspan="2" class="report-table-header-s-no group-header">Sr No</th>
+          <!-- Location of Survey -->
+          <th rowspan="2" class="report-table-header group-header max-width-40px">PORT/STBD</th>
+          <!-- Grading of Hull Structure -->
+          <th colspan="2" class="report-table-header group-header">Location/Frame station</th>
+          <!-- Defect Description -->
+          <th rowspan="2" class="report-table-header group-header">Replaced During Last Dry Docking</th>
+
+
+          
+          
+          <!-- Repair Undertaken -->
+          <th rowspan="2" class="report-table-header group-header">Remarks</th>
+        </tr>
+
+        <!-- ROW 2: Sub-group headers -->
+        <tr>
+          <!-- Location of Survey sub-headers -->
+          <th class="report-table-header">From</th>
+          <th class="report-table-header">To</th>
+       </tr>
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let row of sacrificalAnodes; let i = index"
+        >
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.port_stbd || '-' }}</td>
+          <td>{{ row.frame_station_from || '-' }}</td>
+          <td>{{ row.frame_station_to || '-' }}</td>
+          <td>{{ row.replaced_during_last_docking || '-' }}</td>
+          <td>{{ row.remarks || '-' }}</td>
+        </tr>
+
+        <!-- No Data Row -->
+        <tr *ngIf="!sacrificalAnodes.length">
+          <td colspan="27" style="text-align: center; padding: 20px;">
+            No Data Found
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+  </div>
+
+<h3 class="mb-5 font-bold">PORTABLE REFERENCE ELECTRODE READINGS</h3>
+
+  <!-- TABLE 2 -->
+  <div class="table-scroll-wrapper">
+    <table class="report-table">
+      <thead>
+        <!-- ROW 1: Group headers -->
+        <tr>
+          <th rowspan="3" class="report-table-header-s-no group-header">Sr No</th>
+
+          <!-- Location of Survey -->
+          <th rowspan="3" class="report-table-header group-header">Date</th>
+
+          <!-- Grading of Hull Structure -->
+          <th rowspan="3" class="report-table-header group-header">Time</th>
+          <!-- Defect Description -->
+          <th colspan="6" class="report-table-header group-header">Hull Potential in mill volts</th>
+
+          <!-- Repair Undertaken -->
+          <th rowspan="3" class="report-table-header group-header">Ship berthed/ sailing. (If berthed alongside some other ship, then name of the ship)</th>
+          <th rowspan="3" class="report-table-header group-header">Remarks</th>
+
+        </tr>
+
+        <!-- ROW 2: Sub-group headers -->
+        <tr>
+          <!-- Location of Survey sub-headers -->
+          
+          <th colspan="2" class="report-table-header group-header">Forward (Frame Station)</th>
+          <th colspan="2" class="report-table-header group-header">Midship (Frame Station)</th>
+          <th colspan="2" class="report-table-header group-header">Aft (Frame Station)</th>
+         </tr>
+
+        <!-- ROW 3: Leaf headers -->
+        <tr>
+          <!-- Frame Station -->
+          <th class="report-table-header">PORT</th>
+          <th class="report-table-header">STBD</th>
+
+          <!-- Defect Frame Stn -->
+          <th class="report-table-header">PORT</th>
+          <th class="report-table-header">STBD</th>
+
+          <!-- Structural Members -->
+         <th class="report-table-header">PORT</th>
+          <th class="report-table-header">STBD</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let row of portable_reference_electrodes; let i = index"
+        >
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.date || '-' }}</td>
+          <td>{{ row.time || '-' }}</td>
+          <td>{{ row.forward_port || '-' }}</td>
+          <td>{{ row.forward_stbd || '-' }}</td>
+          <td>{{ row.midship_port || '-' }}</td>
+          <td>{{ row.midship_stbd || '-' }}</td>
+          <td>{{ row.aft_port || '-' }}</td>
+          <td>{{ row.aft_stbd || '-' }}</td>
+          <td>{{ row.ship_berthed || '-' }}</td>
+          <td>{{ row.remarks || '-' }}</td>
+        </tr>
+
+        <!-- No Data Row -->
+        <tr *ngIf="!portable_reference_electrodes.length">
+          <td colspan="27" style="text-align: center; padding: 20px;">
+            No Data Found
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+  </div>
+
+  <!-- STATUS BELOW TABLE -->
+  <div class="report-status-footer">
+    Status : <span class="report-status-badge">{{ reportStatus }}</span>
+  </div>
+
+</div>

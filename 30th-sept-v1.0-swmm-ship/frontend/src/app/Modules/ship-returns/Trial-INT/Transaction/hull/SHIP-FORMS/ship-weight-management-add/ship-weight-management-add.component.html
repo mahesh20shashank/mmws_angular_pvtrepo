@@ -1,0 +1,116 @@
+<app-toast></app-toast>
+<app-form-card title="SHIP WEIGHT MANAGEMENT" headerColor="#0f172a" textColor="#ffffff"
+  (action)="openApprovalWorkflow()">
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-4 gap-3">
+      <!-- -------------------------------------------------------------------------- -->
+      <!-- --------------------- THESE FEILDS WILL BE AUTO FILLED -------------------- -->
+      <!-- -------------------------------------------------------------------------- -->
+
+      <ng-container *ngIf="LoggedInUser !== 'Ship Staff'">
+        <app-select [label]="'Command'" formControlName="command" [options]="commandOptions" [required]="true">
+        </app-select>
+
+        <app-select [label]="'Class of ship'" formControlName="class_of_ship" [options]="classOfShipOptions"
+          [required]="true">
+        </app-select>
+      </ng-container>
+
+      <app-select [label]="'Ship'" formControlName="ship" [options]="shipOptions" placeholder="--Select--"
+        [required]="true">
+      </app-select>
+
+      <!-- -------------------------------------------------------------------------- -->
+
+      <app-calendar label="Date of Return" formControlName="date_of_return"></app-calendar>
+
+      <app-select formControlName="ship_status" [options]="shipStatusOptions" [label]="'Select status'"
+        [required]="true">
+      </app-select>
+
+      <app-select *ngIf="form.value.ship_status === 'refit'" [label]="'Refit'" formControlName="refit_status"
+        [options]="refitStatusOptions" placeholder="--Select--" class="w-full">
+      </app-select>
+
+      <div class="flex flex-col gap-1">
+        <app-calendar *ngIf="form.value.ship_status === 'refit'" label="Refit Commencement Date"
+          formControlName="refit_date"></app-calendar>
+        <p *ngIf="
+            form.get('refit_date')?.touched && form.get('refit_date')?.invalid
+          " class="text-red-500 text-xs">
+          Refit date is required
+        </p>
+      </div>
+      <app-file-upload *ngIf="form.value.ship_status === 'refit'" [label]="'Reference authority'"
+        formControlName="ref_auth" [allowedFileTypes]="['pdf']" [fileFieldName]="'auth_ref'"
+        [formOrMasterName]="'ship_weight_manage'">
+      </app-file-upload>
+    </div>
+
+    <!----------------------------------- OPS TABLE -------------------------------------->
+    <div *ngIf="form.value.ship_status === 'ops'" class="col-span-2 mt-2">
+      <!-- ROW COUNT INPUT -->
+      <div *ngIf="!viewMode" class="mb-4 flex items-center space-x-4">
+        <label class="form-section-header text-sm font-medium text-gray-700">
+          Enter Total Number of Rows:
+        </label>
+
+        <input type="number" [min]="editMode ? totalRowsOpsInEditMode : 1" max="99"
+          class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="totalRowsOps" (input)="onOpsRowCountChange($event)" (change)="onOpsRowCountChange($event)" (keyup)="onOpsRowCountChange($event)" />
+      </div>
+
+      <!-- TABLE -->
+      <div class="overflow-x-auto" [class.overflow-y-auto]="totalRowsOps > 5" [class.max-h-96]="totalRowsOps > 5">
+        <app-reusable-input-table [data]="opsTableData" [columns]="OPSColumns" [isReadonly]="viewMode">
+          <ng-template #inputTpl let-row let-index="index" let-field="field">
+            <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                handleOpsTableChange(index, field, $any($event.target).value)
+              " />
+          </ng-template>
+        </app-reusable-input-table>
+      </div>
+    </div>
+
+    <!--------------------------- REFIT TABLE -------------------------------->
+
+    <div *ngIf="form.value.ship_status === 'refit'" class="col-span-2 mt-2">
+      <!-- ROW COUNT INPUT -->
+      <div *ngIf="!viewMode" class="mb-4 flex items-center space-x-4">
+        <label class="form-section-header text-sm font-medium text-gray-700">
+          Enter Total Number of Rows:
+        </label>
+        <input type="number" [min]="editMode ? totalRowsRefitInEditMode : 1" max="99"
+          class="w-20 rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none focus:border-accent-light" [value]="totalRowsRefit" (input)="onRefitRowCountChange($event)" (change)="onRefitRowCountChange($event)" (keyup)="onRefitRowCountChange($event)" />
+      </div>
+      <!-- TABLE -->
+      <div class="overflow-x-auto" [class.overflow-y-auto]="totalRowsRefit > 5" [class.max-h-96]="totalRowsRefit > 5">
+        <app-reusable-input-table [data]="refitTableData" [columns]="RefitColumns">
+          <ng-template #inputTpl let-row let-index="index" let-field="field">
+            <input class="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg-input)] px-3 py-2 text-sm text-[var(--ag-cell-color)] outline-none transition focus:border-accent-light" [value]="row[field]" (input)="
+                handleRefitTableChange(index, field, $any($event.target).value)
+              " />
+          </ng-template>
+        </app-reusable-input-table>
+      </div>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-5" [ngClass]="viewMode ? 'justify-start' : 'justify-center'">
+    <app-reusable-button label="Back" variant="back" (clicked)="backButton()">
+    </app-reusable-button>
+    <app-loading-button *ngIf="!viewMode" label="Clear" [color]="'red'" [icon]="restartIcon"
+      (clicked)="clear()"></app-loading-button>
+    <app-loading-button *ngIf="!viewMode && activeTab !== 'save'" label="Save draft" [color]="'blue'" [icon]="draftIcon"
+      [loading]="draftLoading" (clicked)="handleSave('draft')"></app-loading-button>
+
+    <app-loading-button *ngIf="!viewMode" label="Submit for approval" [color]="'green'" [icon]="saveIcon"
+      [loading]="saveLoading" (clicked)="handleSave('save')"></app-loading-button>
+  </div>
+</app-form-card>
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="rowId || form.get('id')?.value || ''" [rowData]="editDataDetails" [context]="editDataDetails"
+  (showUserPopupChange)="onApprovalPopupChange($event)">
+</app-approval-work-flow>

@@ -1,0 +1,48 @@
+<app-master-card cardTitle="Refit Routine Detail">
+
+  <div class="flex items-center gap-3 mt-2 mb-2">
+    <app-button
+      type="button"
+      (click)="goBack()"
+      class="h-10 px-4 rounded-xl bg-white/10 border border-white/10 text-white hover:bg-white/20 transition">
+      Back
+    </app-button>
+
+    <app-button
+      type="button"
+      (click)="generateDl()"
+      class="h-10 px-4 rounded-xl bg-[#1D96E9] border border-[#1D96E9] text-white hover:opacity-90 transition">
+      Generate DL 1
+    </app-button>
+  </div>
+
+  @if (detail()) {
+    <div class="flex items-center gap-4 mb-5 flex-wrap">
+      <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+        Maintop No - {{ detail()!.maintop_no }}
+      </div>
+      <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+        Routine Name - {{ detail()!.routine_name }}
+      </div>
+      <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+        Equipment Name - {{ detail()!.equipment_name }}
+      </div>
+      <div class="px-4 h-10 flex items-center rounded-xl bg-white/10 border border-white/10 text-white text-sm">
+        Converted - {{ detail()!.converted ? 'Yes' : 'No' }}
+      </div>
+    </div>
+  }
+
+  <div class="fuss-grid-wrapper w-full">
+    <app-data-grid
+      [columnDefs]="columnDefs"
+      [rowData]="detail()?.routine_descriptions ?? []"
+      [pageSize]="10"
+      [height]="'440px'"
+      [showCheckboxes]="true"
+      [loading]="isLoading()"
+      (selectionChanged)="onSelectionChanged($event)">
+    </app-data-grid>
+  </div>
+
+</app-master-card>

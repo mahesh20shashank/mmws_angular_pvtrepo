@@ -1,0 +1,30 @@
+<div class="flyout" style="right: 60px">
+      <div class="flyout-head">
+        Inbox
+        <span class="badge-inline">{{ store.unreadMailCount() }} unread</span>
+        <app-button class="clear">Open inbox</app-button>
+      </div>
+      <div style="max-height: 400px; overflow-y: auto">
+        @for (m of store.inbox(); track m.id) {
+          <div class="notif" [style.opacity]="m.unread ? 1 : 0.65">
+            <div class="ic"
+                 [style.background]="m.unread ? 'rgba(96,165,250,.18)' : 'var(--glass-2)'"
+                 [style.color]="m.unread ? '#93c5fd' : 'var(--ink-3)'"
+                 [style.border]="'1px solid ' + (m.unread ? 'rgba(96,165,250,.3)' : 'var(--glass-edge)')">
+              <app-icon name="mail" [size]="14" />
+            </div>
+            <div class="body" style="flex: 1; min-width: 0">
+              <div style="display: flex; align-items: center; gap: 6px">
+                <b style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ m.from }}</b>
+                <span style="font-size: 10px; color: var(--ink-4)">{{ m.when }}</span>
+              </div>
+              <div style="color: var(--ink-2); font-weight: 500; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ m.subject }}</div>
+              <div style="color: var(--ink-3); font-size: 11px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ m.preview }}</div>
+            </div>
+            @if (m.unread) {
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); flex-shrink: 0; margin-top: 8px; box-shadow: 0 0 6px var(--accent-2)"></span>
+            }
+          </div>
+        }
+      </div>
+    </div>

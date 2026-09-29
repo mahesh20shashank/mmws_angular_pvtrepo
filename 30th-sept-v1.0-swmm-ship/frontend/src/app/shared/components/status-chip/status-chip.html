@@ -1,0 +1,16 @@
+<span
+  class="status-chip"
+  [class.status-chip--success]="tone === 'success'"
+  [class.status-chip--warning]="tone === 'warning'"
+  [class.status-chip--danger]="tone === 'danger'"
+  [class.status-chip--info]="tone === 'info'"
+  [class.status-chip--neutral]="tone === 'neutral'"
+  [style.color]="style.color"
+  [style.background]="style.bg"
+  [style.borderColor]="style.border"
+>
+  @if (dot) {
+    <span class="status-chip__dot" [style.background]="style.color"></span>
+  }
+  {{ text }}
+</span>

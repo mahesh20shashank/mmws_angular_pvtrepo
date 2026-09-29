@@ -1,0 +1,187 @@
+<div class="space-y-6">
+  <!-- Hero Section -->
+  <div class="hero-banner p-8 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center text-center shadow-2xl">
+    <div class="hero-anchor">⚓</div>
+    <div class="relative z-10 max-w-2xl space-y-3">
+      <h1 class="text-3xl font-extrabold tracking-wide text-white flex items-center justify-center gap-2">
+        Ship <span class="text-amber-400">Returns</span>
+      </h1>
+      <div class="flex items-center justify-center gap-3">
+        <span class="h-[2px] w-10 bg-gradient-to-r from-amber-400 to-sky-400 rounded-full"></span>
+        <app-icon name="anchor" [size]="18" class="text-amber-400"></app-icon>
+        <span class="h-[2px] w-10 bg-gradient-to-r from-sky-400 to-amber-400 rounded-full"></span>
+      </div>
+      <p class="text-xs text-white/80 max-w-lg mx-auto leading-relaxed">
+        Digital platform for efficient monitoring, evaluation, and submission of ship maintenance and trial returns
+      </p>
+    </div>
+  </div>
+
+  <!-- Warship Showcase Carousel -->
+  <div class="glass-card p-4 overflow-hidden relative group">
+    <div class="relative h-72 md:h-96 rounded-xl overflow-hidden">
+      @for (slide of slides; track slide.id) {
+        @if (activeSlide() === slide.id) {
+          <div class="absolute inset-0 transition-all duration-500">
+            <img [src]="slide.imageUrl" [alt]="slide.title" class="w-full h-full object-cover rounded-xl" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
+            <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-xs font-semibold text-white flex items-center gap-2">
+              <app-icon name="ship" [size]="16" class="text-amber-400"></app-icon>
+              <span>{{ slide.title }} — {{ slide.subtitle }}</span>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- Carousel Navigation Buttons -->
+      <button
+        (click)="prevSlide()"
+        type="button"
+        aria-label="Previous slide"
+        class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/70 border border-white/20 text-white flex items-center justify-center hover:bg-slate-900 transition-colors z-20 cursor-pointer"
+      >
+        <app-icon name="chevron-left" [size]="20" variant="inherit"></app-icon>
+      </button>
+      <button
+        (click)="nextSlide()"
+        type="button"
+        aria-label="Next slide"
+        class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/70 border border-white/20 text-white flex items-center justify-center hover:bg-slate-900 transition-colors z-20 cursor-pointer"
+      >
+        <app-icon name="chevron-right" [size]="20" variant="inherit"></app-icon>
+      </button>
+
+      <!-- Indicators -->
+      <div class="absolute bottom-4 right-4 flex items-center gap-2 z-20">
+        @for (slide of slides; track slide.id) {
+          <button
+            (click)="setSlide(slide.id)"
+            type="button"
+            [attr.aria-label]="'Go to slide ' + (slide.id + 1)"
+            class="h-2 rounded-full transition-all cursor-pointer"
+            [ngClass]="activeSlide() === slide.id ? 'w-6 bg-amber-400' : 'w-2 bg-white/40 hover:bg-white/70'"
+          ></button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- About Ship Returns Card (Using Shared PanelCard Component) -->
+  <app-panel-card
+    title="About Ship Returns"
+    subtitle="Digital maintenance and operational trial returns module"
+    icon="info"
+    iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)"
+  >
+    <div class="space-y-4">
+      <!-- Quote Block -->
+      <div class="p-4 bg-amber-500/10 border-l-4 border-amber-400 rounded-r-xl italic text-sm text-amber-700 dark:text-amber-200 font-medium">
+        "Timely maintenance ensures operational readiness and mission success."
+      </div>
+
+      <div class="text-sm text-[var(--text-muted)] space-y-3 leading-relaxed">
+        <p>
+          <strong class="text-[var(--text-primary)]">Ship Returns</strong> is a digital module designed to simplify the monitoring and submission of operational and maintenance returns from ships of the Indian Navy. Traditionally, ship staff had to manually compile routine reports from logbooks and maintenance systems such as MAINTOPS, which required significant time and effort.
+        </p>
+
+        <p>
+          The <strong class="text-[var(--text-primary)]">Returns Module</strong> provides a centralized platform where ships can initiate, track, and submit periodic returns including monthly, quarterly, and annual reports. The system ensures accurate record keeping, better visibility of equipment status, and timely reporting to higher command authorities.
+        </p>
+
+        <p>
+          By digitizing these processes, the platform reduces administrative workload onboard ships and improves efficiency, transparency, and operational readiness across the naval fleet.
+        </p>
+      </div>
+    </div>
+  </app-panel-card>
+
+  <!-- INS Kochi & Vessel Specifications Card (Using Shared PanelCard Component) -->
+  <app-panel-card
+    title="INS Kochi (D64)"
+    subtitle="Kolkata-class Guided Missile Destroyer"
+    icon="ship"
+    iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+      <!-- Vessel Narrative Text -->
+      <div class="md:col-span-7 space-y-3 text-sm text-[var(--text-muted)] leading-relaxed">
+        <p>
+          <strong class="text-[var(--text-primary)]">INS Kochi (D64)</strong> is a Kolkata-class guided missile destroyer of the Indian Navy. Commissioned on <strong class="text-sky-600 dark:text-sky-400 font-semibold">30 September 2015</strong>, it is one of the most advanced stealth warships built in India and plays a vital role in protecting India's maritime interests.
+        </p>
+        <p>
+          The ship is equipped with modern radar systems, surface-to-air missiles, anti-ship missiles, torpedoes, and advanced electronic warfare systems. Its stealth design reduces radar visibility, making it highly effective in modern naval operations.
+        </p>
+        <p>
+          Built at <strong class="text-amber-600 dark:text-amber-400 font-semibold">Mazagon Dock Shipbuilders Limited, Mumbai</strong>, INS Kochi represents India's growing capability in indigenous defence shipbuilding and naval technology.
+        </p>
+      </div>
+
+      <!-- Vessel Specifications Table Card -->
+      <div class="md:col-span-5 bg-[var(--bg-input)] border border-[var(--border-primary)] rounded-xl overflow-hidden shadow-xl">
+        <div class="bg-sky-500/10 p-3 border-b border-[var(--border-primary)] text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-300 flex items-center gap-2">
+          <app-icon name="activity" [size]="16" variant="inherit"></app-icon>
+          <span>Vessel Specifications</span>
+        </div>
+        <div class="divide-y divide-[var(--border-primary)] text-xs">
+          <div class="p-3 flex justify-between">
+            <span class="text-[var(--text-muted)] font-semibold uppercase">Class</span>
+            <span class="text-[var(--text-primary)] font-medium">Kolkata-class Destroyer</span>
+          </div>
+          <div class="p-3 flex justify-between">
+            <span class="text-[var(--text-muted)] font-semibold uppercase">Commissioned</span>
+            <span class="text-[var(--text-primary)] font-medium">30 September 2015</span>
+          </div>
+          <div class="p-3 flex justify-between">
+            <span class="text-[var(--text-muted)] font-semibold uppercase">Displacement</span>
+            <span class="text-[var(--text-primary)] font-medium">~7,400 tonnes</span>
+          </div>
+          <div class="p-3 flex justify-between">
+            <span class="text-[var(--text-muted)] font-semibold uppercase">Length</span>
+            <span class="text-[var(--text-primary)] font-medium">163 meters</span>
+          </div>
+          <div class="p-3 flex justify-between">
+            <span class="text-[var(--text-muted)] font-semibold uppercase">Role</span>
+            <span class="text-[var(--text-primary)] font-medium">Multi-role Guided Missile Destroyer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-panel-card>
+
+  <!-- Trial Authorities Section (Using Shared PanelCard Component) -->
+  <app-panel-card
+    title="Naval Trial Authorities"
+    subtitle="Designated evaluation units, dockyards, and quality assurance commands"
+    icon="shield-check"
+    iconColor="#38BDF8"
+    iconBg="rgba(56, 189, 248, 0.15)"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      @for (agency of agencies(); track agency.name) {
+        <div class="p-4 bg-[var(--bg-input)] border border-[var(--border-primary)] rounded-xl space-y-2">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-sky-500/10 border border-sky-500/30 text-sky-500 dark:text-sky-400 rounded-lg">
+              <app-icon name="shield-check" [size]="20" variant="inherit"></app-icon>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-[var(--text-primary)]">{{ agency.name }}</h4>
+              <span class="text-xs text-sky-600 dark:text-sky-400 font-medium">{{ agency.role }}</span>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-[var(--border-primary)] text-xs space-y-1 text-[var(--text-muted)]">
+            <div class="flex items-center gap-2">
+              <app-icon name="map-pin" [size]="14" class="text-[var(--text-muted)]"></app-icon>
+              <span>{{ agency.location }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <app-icon name="mail" [size]="14" class="text-[var(--text-muted)]"></app-icon>
+              <span class="font-mono">{{ agency.contactEmail }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </app-panel-card>
+</div>

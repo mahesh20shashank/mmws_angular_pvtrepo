@@ -1,0 +1,23 @@
+<!-- SWMM App - Op. Maintenance / Create Defect -->
+<div class="h-screen overflow-hidden flex font-sans m-0 p-0">
+  <!-- Sidebar -->
+  <app-sidebar [collapsed]="sidebarCollapsed" (collapsedChange)="sidebarCollapsed = $event"></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+    @if (activeInventoryTabs(); as tabs) {
+      <app-inventory-tab-nav [tabs]="tabs" [title]="activeInventoryTitle()"></app-inventory-tab-nav>
+    } @else {
+      <app-header></app-header>
+    }
+
+    <!-- Scrollable Content Area -->
+    <main #contentArea class="flex-1 scrollablecontent overflow-y-auto pb-0">
+      <app-breadcrum></app-breadcrum>
+
+      <router-outlet></router-outlet>
+    </main>
+
+    <app-footer></app-footer>
+  </div>
+</div>

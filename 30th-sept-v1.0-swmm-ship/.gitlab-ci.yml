@@ -1,0 +1,31 @@
+workflow:
+  rules:
+    # Merge Request pipeline
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(swmm_dev|swmm_stage)$/'
+    # Dev pipeline
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "swmm_dev"'
+    - when: never
+
+variables:
+  DOCKER_CONFIG: "/home/gitlab-runner/.docker"
+
+stages:
+  - precheck
+  - gitleaks
+  - lint
+  - sonar
+  - trivy_fs
+  - build
+  - sbom
+  - trivy_image
+  - push
+  - deploy
+  - deploy_offline
+
+include:
+  - local: 'ci/templates.yml'
+  - local: 'ci/precheck.yml'
+  - local: 'ci/security.yml'
+  - local: 'ci/quality.yml'
+  - local: 'ci/build.yml'
+  - local: 'ci/deploy.yml'

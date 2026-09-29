@@ -1,0 +1,98 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>Demand Consolidation</h3>
+  </div>
+
+  <form [formGroup]="form" class="mo-stub-fields">
+    @for (field of fields; track field.key) {
+      <app-dynamic-field [spec]="field" [control]="getControl(field.key)" />
+    }
+    <div class="mo-stub-fields__actions">
+      <app-button type="button" class="btn-secondary" (click)="clear()">Clear</app-button>
+    </div>
+  </form>
+
+  <app-data-grid [rowData]="rows()" [columnDefs]="columnDefs" height="380px" />
+</div>
+
+@if (activeRow(); as row) {
+  @if (drawer() === "reject") {
+    <app-detail-drawer [open]="true" label="Reject Details" [titleMode]="true" (closed)="close()">
+      <div class="dc-detail-row"><span>Internal Demand</span><strong>{{ row.custCode }}</strong></div>
+      <div class="dc-detail-row"><span>CliInternNo</span><strong>{{ row.cli }}</strong></div>
+      <div class="dc-detail-row"><span>Demo</span><strong>{{ row.demo }}</strong></div>
+      <div class="dc-detail-row"><span>NameCode</span><strong>{{ row.namecode }}</strong></div>
+      <div class="dc-detail-row"><span>Demand Qty</span><strong>{{ row.demandQty }}</strong></div>
+      <div class="dc-reason">
+        <label class="form-field-label">Reason for rejection</label>
+        <textarea class="form-field-input" rows="3" [formControl]="rejectReason" placeholder="Enter a reason"></textarea>
+      </div>
+      <div class="dc-actions">
+        <app-button type="button" class="btn-danger" (click)="reject()">Reject Internal Demand</app-button>
+      </div>
+    </app-detail-drawer>
+  }
+
+  @if (drawer() === "generate") {
+    <app-detail-drawer [open]="true" label="Generate Demand" [titleMode]="true" (closed)="close()">
+      <fieldset class="dc-fieldset">
+        <legend>Demand Basic Information</legend>
+        <div class="dc-detail-row"><span>Cust Code</span><strong>{{ row.custCode }}</strong></div>
+        <div class="dc-detail-row"><span>Demand No</span><strong>{{ row.demandNo }}</strong></div>
+        <div class="dc-detail-row"><span>Dt Raised</span><strong>{{ row.dtRaised }}</strong></div>
+        <div class="dc-detail-row"><span>Drm Registered</span><strong>{{ row.drmRegistered }}</strong></div>
+        <div class="dc-detail-row"><span>Item Code</span><strong>{{ row.itemCode }}</strong></div>
+        <div class="dc-detail-row"><span>Qty</span><strong>{{ row.demandQty }}</strong></div>
+      </fieldset>
+      <fieldset class="dc-fieldset">
+        <legend>Additional Details</legend>
+        <div class="dc-detail-row"><span>Date Requirement</span><strong>{{ row.dateRequirement }}</strong></div>
+        <div class="dc-detail-row"><span>Stn Code</span><strong>{{ row.stnCode }}</strong></div>
+        <div class="dc-detail-row"><span>Priority Code</span><strong>{{ row.priorityCode }}</strong></div>
+        <div class="dc-detail-row"><span>Urgency Ref</span><strong>{{ row.urgencyRef }}</strong></div>
+        <div class="dc-detail-row"><span>Equipment Code</span><strong>{{ row.equipmentCode }}</strong></div>
+        <div class="dc-detail-row"><span>Authority</span><strong>{{ row.authority }}</strong></div>
+      </fieldset>
+      <div class="dc-actions">
+        <app-button type="button" class="btn-primary" (click)="generate()">Generate Internal Demand</app-button>
+      </div>
+    </app-detail-drawer>
+  }
+
+  @if (drawer() === "hq") {
+    <app-detail-drawer [open]="true" label="HQ Approval Details" [titleMode]="true" (closed)="close()">
+      <fieldset class="dc-fieldset">
+        <legend>Request Details</legend>
+        <div class="dc-detail-row"><span>Request No</span><strong>{{ row.requestNo }}</strong></div>
+        <div class="dc-detail-row"><span>DTM Request</span><strong>{{ row.dtmRequest }}</strong></div>
+        <div class="dc-detail-row"><span>Cust Code</span><strong>{{ row.custCode }}</strong></div>
+        <div class="dc-detail-row"><span>Cust Name</span><strong>{{ row.custName }}</strong></div>
+        <div class="dc-detail-row"><span>Item Code</span><strong>{{ row.itemCode }}</strong></div>
+        <div class="dc-detail-row"><span>Item Description</span><strong>{{ row.description }}</strong></div>
+      </fieldset>
+      <fieldset class="dc-fieldset">
+        <legend>Classification Details</legend>
+        <div class="dc-detail-row"><span>DEN</span><strong>{{ row.den }}</strong></div>
+        <div class="dc-detail-row"><span>CRP</span><strong>{{ row.crp }}</strong></div>
+        <div class="dc-detail-row"><span>AuthTP</span><strong>{{ row.authTp }}</strong></div>
+        <div class="dc-detail-row"><span>Request by Role</span><strong>{{ row.requestByRole }}</strong></div>
+        <div class="dc-detail-row"><span>Qty Request</span><strong>{{ row.qtyRequest }}</strong></div>
+        <div class="dc-detail-row"><span>Qty Approved</span><strong>{{ row.qtyApproved }}</strong></div>
+      </fieldset>
+      <fieldset class="dc-fieldset">
+        <legend>Station &amp; Authority Details</legend>
+        <div class="dc-detail-row"><span>Sel Stn Code</span><strong>{{ row.selStnCode }}</strong></div>
+        <div class="dc-detail-row"><span>Demanding Stn</span><strong>{{ row.demandingStn }}</strong></div>
+        <div class="dc-detail-row"><span>Authority Ref</span><strong>{{ row.authorityRef }}</strong></div>
+        <div class="dc-detail-row"><span>Authority Ref by Unit</span><strong>{{ row.authorityRefUnit }}</strong></div>
+        <div class="dc-detail-row"><span>Authority DE by Unit</span><strong>{{ row.authorityDeUnit }}</strong></div>
+        <div class="dc-detail-row"><span>Demand No</span><strong>{{ row.demandNo }}</strong></div>
+      </fieldset>
+      <div class="dc-actions">
+        <app-button type="button" class="btn-primary" (click)="approveForHq()">Approve for HQ</app-button>
+      </div>
+    </app-detail-drawer>
+  }
+}

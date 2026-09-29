@@ -1,0 +1,95 @@
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideLeft {
+  animation: slideLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.timeline-grid-31 {
+  display: grid;
+  grid-template-columns: repeat(31, minmax(0, 1fr));
+}
+
+.table-pill {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.badge-status-closed {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34D399;
+}
+
+.badge-status-in-progress {
+  background: rgba(217, 119, 6, 0.2);
+  border: 1px solid rgba(217, 119, 6, 0.5);
+  color: #FBBF24;
+}
+
+.badge-status-draft {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #60A5FA;
+}
+
+.badge-status-returned {
+  background: rgba(225, 29, 72, 0.2);
+  border: 1px solid rgba(225, 29, 72, 0.5);
+  color: #F43F5E;
+}
+
+/* ================= LIGHT MODE OVERRIDES ================= */
+:host-context([data-theme="light"]) .badge-status-closed,
+[data-theme="light"] .badge-status-closed {
+  background: #DCFCE7 !important;
+  border: 1px solid #86EFAC !important;
+  color: #166534 !important;
+}
+
+:host-context([data-theme="light"]) .badge-status-in-progress,
+[data-theme="light"] .badge-status-in-progress {
+  background: #FEF3C7 !important;
+  border: 1px solid #FDE68A !important;
+  color: #92400E !important;
+}
+
+:host-context([data-theme="light"]) .badge-status-draft,
+[data-theme="light"] .badge-status-draft {
+  background: #E0F2FE !important;
+  border: 1px solid #7DD3FC !important;
+  color: #075985 !important;
+}
+
+:host-context([data-theme="light"]) .badge-status-returned,
+[data-theme="light"] .badge-status-returned {
+  background: #FFE4E6 !important;
+  border: 1px solid #FECDD3 !important;
+  color: #E11D48 !important;
+}

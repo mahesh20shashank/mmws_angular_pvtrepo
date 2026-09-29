@@ -1,0 +1,785 @@
+{
+  "formId": "ntds_2",
+  "title": "NTDS-2",
+  "sourceFile": "ntds_2.html",
+  "sections": [
+    {
+      "id": "section_1",
+      "title": "NTDS-2",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "SHIP",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name",
+            "colSpan": 6
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "DEPT",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 6,
+            "options": [
+              {
+                "label": "Select Dept",
+                "value": ""
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "ELE",
+                "value": "ELE"
+              },
+              {
+                "label": "COMMN",
+                "value": "COMMN"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "EQUIPMENT",
+            "type": "input",
+            "value": "NTDS-2",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "date",
+            "key": "date",
+            "name": "date",
+            "label": "DATE *",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "NATURE OF TRIALS",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "Select Nature of Trials",
+                "value": ""
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATs"
+              },
+              {
+                "label": "OP CHECKS",
+                "value": "OP CHECKS"
+              },
+              {
+                "label": "IIs",
+                "value": "IIs"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "OBSERVATIONS",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "RESULT",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "REMARKS",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "checks_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_1_cell_1_embark_time",
+                    "key": "embark_time",
+                    "type": "time",
+                    "lb": "Trials team embarked onboard at",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_1_cell_2_traps_location",
+                    "key": "traps_location",
+                    "type": "input",
+                    "value": "",
+                    "lb": "on or SATs of NTDS as per approved schedule, BR 4050 and CNO 07/10. Following observed:-",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "<b>CHECKS</b>",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "<b>Area at Sea:</b>",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "01",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Test Case 1 - Preliminary Procedures",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_3_Test_Case_1_Preliminary_Procedures_result",
+                    "key": "Test_Case_1_Preliminary_Procedures_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_4_cell_4_Test_Case_1_Preliminary_Procedures_remarks",
+                    "key": "Test_Case_1_Preliminary_Procedures_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "02",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Test Case 2 – Tow streaming",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_3_Test_Case_2_Tow_streaming_result",
+                    "key": "Test_Case_2_Tow_streaming_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_5_cell_4_Test_Case_2_Tow_streaming_remarks",
+                    "key": "Test_Case_2_Tow_streaming_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "03",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "Test Case 3 – System Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_3_Test_Case_3_System_Checks_result",
+                    "key": "Test_Case_3_System_Checks_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_6_cell_4_Test_Case_3_System_Checks_remarks",
+                    "key": "Test_Case_3_System_Checks_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "04",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Test Case 4 – Shallow water Towed Array Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_3_Test_Case_4_Shallow_water_Towed_Array_Checks_result",
+                    "key": "Test_Case_4_Shallow_water_Towed_Array_Checks_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_7_cell_4_Test_Case_4_Shallow_water_Towed_Array_Checks_remarks",
+                    "key": "Test_Case_4_Shallow_water_Towed_Array_Checks_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "05",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Test Case 5 – Synthetic Demonstration and EAD Firing",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_3_Test_Case_5_Synthetic_Demonstration_and_EAD_Firing_result",
+                    "key": "Test_Case_5_Synthetic_Demonstration_and_EAD_Firing_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_8_cell_4_Test_Case_5_Synthetic_Demonstration_and_EAD_Firing_remarks",
+                    "key": "Test_Case_5_Synthetic_Demonstration_and_EAD_Firing_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "06",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Test Case 6 – Tow recovery",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_3_Test_Case_6_Tow_recovery_result",
+                    "key": "Test_Case_6_Tow_recovery_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_9_cell_4_Test_Case_6_Tow_recovery_remarks",
+                    "key": "Test_Case_6_Tow_recovery_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "07",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Appendix A – Scenario for Detection and Bearing Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_3_Test_Case_7_Appendix_A_Scenario_for_Detection_and_Bearing_Checks_result",
+                    "key": "Test_Case_7_Appendix_A_Scenario_for_Detection_and_Bearing_Checks_result",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_10_cell_4_Test_Case_7_Appendix_A_Scenario_for_Detection_and_Bearing_Checks_remarks",
+                    "key": "Test_Case_7_Appendix_A_Scenario_for_Detection_and_Bearing_Checks_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_1_general_observations_label",
+                    "type": "label",
+                    "value": "General Observations",
+                    "colspan": 1,
+                    "align": "left",
+                    "rowspan": 1
+                  },
+                  {
+                    "_id": "checks_matrix_1_row_11_cell_2_general_observations",
+                    "key": "general_observations",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 6,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "_id": "traps_presenting_authority",
+            "key": "traps_presenting_authority",
+            "name": "traps_presenting_authority",
+            "label": "Presenting Authority",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "Dockyard",
+                "value": "dockyard"
+              },
+              {
+                "label": "Shipstaff",
+                "value": "shipstaff"
+              },
+              {
+                "label": "OEM",
+                "value": "oem"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "traps_inspecting_authority",
+            "key": "traps_inspecting_authority",
+            "name": "traps_inspecting_authority",
+            "label": "Inspecting Authority",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text"
+          }
+        ],
+        "tables_2": []
+      }
+    }
+  ]
+}

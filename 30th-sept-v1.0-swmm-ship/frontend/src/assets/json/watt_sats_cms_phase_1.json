@@ -1,0 +1,4041 @@
+{
+  "formId": "cms_phase_1",
+  "title": "CMS PHASE - I",
+  "sourceFile": "cms_phase_1.html",
+  "sections": [
+    {
+      "id": "section_1",
+      "title": "CMS PHASE - I",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "SHIP",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "_id": "dept",
+            "key": "dept",
+            "name": "dept",
+            "label": "DEPT",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Select Department",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "Communication",
+                "value": "Communication"
+              },
+              {
+                "label": "Gunnery",
+                "value": "Gunnery"
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "EQUIPMENT",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "date",
+            "key": "date",
+            "name": "date",
+            "label": "DATE *",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "NATURE OF TRIALS",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "Select Nature of Trials",
+                "value": ""
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATs"
+              },
+              {
+                "label": "OP Checks",
+                "value": "OP Checks"
+              },
+              {
+                "label": "IIs",
+                "value": "IIs"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "cms_trials_observations_matrix",
+            "sectionType": "matrixTable",
+            "title": "",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "TRIAL SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "12%"
+                },
+                {
+                  "label": "OBSERVATIONS",
+                  "colspan": 8,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "REMARKS",
+                  "colspan": 2,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "17%"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "cms_trials_intro_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_embarked_time",
+                    "key": "cms_trials_embarked_time",
+                    "name": "cms_trials_embarked_time",
+                    "type": "input",
+                    "inputType": "text",
+                    "value": "",
+                    "lb": "Trials team embarked onboard at",
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "style": "max-width: 115px; min-width: 100px; width: 100%; padding: 4px;",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trials_hours_on_label",
+                    "type": "label",
+                    "value": "hrs on",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trials_embarked_date",
+                    "key": "cms_trials_embarked_date",
+                    "name": "cms_trials_embarked_date",
+                    "type": "date",
+                    "inputType": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trials_schedule_note",
+                    "type": "label",
+                    "value": "for SATs of CMS as per NHQ approved schedule. Following observed:-",
+                    "colspan": 6,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_1_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_1_heading",
+                    "type": "label",
+                    "value": "<b>3. Target Tracking and Fusion</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_1_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_1_serial",
+                    "type": "serial",
+                    "value": "1.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_1_trial_serial",
+                    "type": "label",
+                    "value": "3.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_1_observation",
+                    "type": "label",
+                    "value": "Surface target tracking – COTS – IBS Radar",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_1_result",
+                    "key": "cms_trial_check_1_result",
+                    "name": "cms_trial_check_1_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_2_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_2_serial",
+                    "type": "serial",
+                    "value": "2.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_2_trial_serial",
+                    "type": "label",
+                    "value": "3.1.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_2_observation",
+                    "type": "label",
+                    "value": "Surface Target Tracking – SSR",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_2_result",
+                    "key": "cms_trial_check_2_result",
+                    "name": "cms_trial_check_2_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_3_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_3_serial",
+                    "type": "serial",
+                    "value": "3.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_3_trial_serial",
+                    "type": "label",
+                    "value": "3.1.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_3_observation",
+                    "type": "label",
+                    "value": "Surface Target Tracking – MFSTAR",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_3_result",
+                    "key": "cms_trial_check_3_result",
+                    "name": "cms_trial_check_3_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_4_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_4_serial",
+                    "type": "serial",
+                    "value": "4.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_4_trial_serial",
+                    "type": "label",
+                    "value": "3.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_4_observation",
+                    "type": "label",
+                    "value": "Air Target Tracking – ASR Radar",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_4_result",
+                    "key": "cms_trial_check_4_result",
+                    "name": "cms_trial_check_4_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_5_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_5_serial",
+                    "type": "serial",
+                    "value": "5.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_5_trial_serial",
+                    "type": "label",
+                    "value": "3.2.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_5_observation",
+                    "type": "label",
+                    "value": "Air Target Tracking – MFSTAR",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_5_result",
+                    "key": "cms_trial_check_5_result",
+                    "name": "cms_trial_check_5_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_6_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_6_serial",
+                    "type": "serial",
+                    "value": "6.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_6_trial_serial",
+                    "type": "label",
+                    "value": "3.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_6_observation",
+                    "type": "label",
+                    "value": "Fusion of Tracks",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_6_result",
+                    "key": "cms_trial_check_6_result",
+                    "name": "cms_trial_check_6_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_2_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_2_heading",
+                    "type": "label",
+                    "value": "<b>4. Inter System Integration</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_7_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_7_serial",
+                    "type": "serial",
+                    "value": "7.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_7_trial_serial",
+                    "type": "label",
+                    "value": "4.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_7_observation",
+                    "type": "label",
+                    "value": "LOG Data",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_7_result",
+                    "key": "cms_trial_check_7_result",
+                    "name": "cms_trial_check_7_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_8_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_8_serial",
+                    "type": "serial",
+                    "value": "8.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_8_trial_serial",
+                    "type": "label",
+                    "value": "4.1.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_8_observation",
+                    "type": "label",
+                    "value": "Gyro Data",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_8_result",
+                    "key": "cms_trial_check_8_result",
+                    "name": "cms_trial_check_8_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_9_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_9_serial",
+                    "type": "serial",
+                    "value": "9.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_9_trial_serial",
+                    "type": "label",
+                    "value": "4.1.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_9_observation",
+                    "type": "label",
+                    "value": "GPS Information",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_9_result",
+                    "key": "cms_trial_check_9_result",
+                    "name": "cms_trial_check_9_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_10_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_10_serial",
+                    "type": "serial",
+                    "value": "10.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_10_trial_serial",
+                    "type": "label",
+                    "value": "4.1.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_10_observation",
+                    "type": "label",
+                    "value": "WIND Data",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_10_result",
+                    "key": "cms_trial_check_10_result",
+                    "name": "cms_trial_check_10_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_11_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_11_serial",
+                    "type": "serial",
+                    "value": "11.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_11_trial_serial",
+                    "type": "label",
+                    "value": "4.1.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_11_observation",
+                    "type": "label",
+                    "value": "Echo Sounder Data",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_11_result",
+                    "key": "cms_trial_check_11_result",
+                    "name": "cms_trial_check_11_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_3_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_3_heading",
+                    "type": "label",
+                    "value": "<b>5. Advanced Navigation</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_12_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_12_serial",
+                    "type": "serial",
+                    "value": "12.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_12_trial_serial",
+                    "type": "label",
+                    "value": "5.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_12_observation",
+                    "type": "label",
+                    "value": "Time for two tracks to be specific distance apart",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_12_result",
+                    "key": "cms_trial_check_12_result",
+                    "name": "cms_trial_check_12_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_13_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_13_serial",
+                    "type": "serial",
+                    "value": "13.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_13_trial_serial",
+                    "type": "label",
+                    "value": "5.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_13_observation",
+                    "type": "label",
+                    "value": "Setting up of Anchor Watch – Case Watch ON",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_13_result",
+                    "key": "cms_trial_check_13_result",
+                    "name": "cms_trial_check_13_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_14_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_14_serial",
+                    "type": "serial",
+                    "value": "14.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_14_trial_serial",
+                    "type": "label",
+                    "value": "5.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_14_observation",
+                    "type": "label",
+                    "value": "Course to steer to take up Assigned station",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_14_result",
+                    "key": "cms_trial_check_14_result",
+                    "name": "cms_trial_check_14_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_4_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_4_heading",
+                    "type": "label",
+                    "value": "<b>6. Aircraft Control</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_15_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_15_serial",
+                    "type": "serial",
+                    "value": "15.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_15_trial_serial",
+                    "type": "label",
+                    "value": "6.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_15_observation",
+                    "type": "label",
+                    "value": "Create ACOS",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_15_result",
+                    "key": "cms_trial_check_15_result",
+                    "name": "cms_trial_check_15_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_16_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_16_serial",
+                    "type": "serial",
+                    "value": "16.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_16_trial_serial",
+                    "type": "label",
+                    "value": "6.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_16_observation",
+                    "type": "label",
+                    "value": "Carrying ACOS Route with Route Plan",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_16_result",
+                    "key": "cms_trial_check_16_result",
+                    "name": "cms_trial_check_16_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_5_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_5_heading",
+                    "type": "label",
+                    "value": "<b>7. LRSAM</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_17_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_17_serial",
+                    "type": "serial",
+                    "value": "17.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_17_trial_serial",
+                    "type": "label",
+                    "value": "7.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_17_observation",
+                    "type": "label",
+                    "value": "Select Mode – LRSAM",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_17_result",
+                    "key": "cms_trial_check_17_result",
+                    "name": "cms_trial_check_17_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_18_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_18_serial",
+                    "type": "serial",
+                    "value": "18.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_18_trial_serial",
+                    "type": "label",
+                    "value": "7.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_18_observation",
+                    "type": "label",
+                    "value": "LRSAM Hold Fire policy",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_18_result",
+                    "key": "cms_trial_check_18_result",
+                    "name": "cms_trial_check_18_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_19_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_19_serial",
+                    "type": "serial",
+                    "value": "19.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_19_trial_serial",
+                    "type": "label",
+                    "value": "7.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_19_observation",
+                    "type": "label",
+                    "value": "LRSAM ship protection",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_19_result",
+                    "key": "cms_trial_check_19_result",
+                    "name": "cms_trial_check_19_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_20_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_20_serial",
+                    "type": "serial",
+                    "value": "20.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_20_trial_serial",
+                    "type": "label",
+                    "value": "7.4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_20_observation",
+                    "type": "label",
+                    "value": "Manual Gun Assignment",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_20_result",
+                    "key": "cms_trial_check_20_result",
+                    "name": "cms_trial_check_20_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_21_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_21_serial",
+                    "type": "serial",
+                    "value": "21.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_21_trial_serial",
+                    "type": "label",
+                    "value": "7.5.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_21_observation",
+                    "type": "label",
+                    "value": "Cancel Manual Gun Assignment",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_21_result",
+                    "key": "cms_trial_check_21_result",
+                    "name": "cms_trial_check_21_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_22_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_22_serial",
+                    "type": "serial",
+                    "value": "22.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_22_trial_serial",
+                    "type": "label",
+                    "value": "7.6.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_22_observation",
+                    "type": "label",
+                    "value": "Engage Command given to LRSAM",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_22_result",
+                    "key": "cms_trial_check_22_result",
+                    "name": "cms_trial_check_22_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_23_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_23_serial",
+                    "type": "serial",
+                    "value": "23.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_23_trial_serial",
+                    "type": "label",
+                    "value": "7.6.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_23_observation",
+                    "type": "label",
+                    "value": "Case STOP engagement selected",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_23_result",
+                    "key": "cms_trial_check_23_result",
+                    "name": "cms_trial_check_23_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_24_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_24_serial",
+                    "type": "serial",
+                    "value": "24.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_24_trial_serial",
+                    "type": "label",
+                    "value": "7.7.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_24_observation",
+                    "type": "label",
+                    "value": "Display of WCS engagement Planning - LEP",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_24_result",
+                    "key": "cms_trial_check_24_result",
+                    "name": "cms_trial_check_24_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_25_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_25_serial",
+                    "type": "serial",
+                    "value": "25.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_25_trial_serial",
+                    "type": "label",
+                    "value": "7.8.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_25_observation",
+                    "type": "label",
+                    "value": "Display WCS engagement report & Engaging missile Data",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_25_result",
+                    "key": "cms_trial_check_25_result",
+                    "name": "cms_trial_check_25_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_26_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_26_serial",
+                    "type": "serial",
+                    "value": "26.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_26_trial_serial",
+                    "type": "label",
+                    "value": "7.9.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_26_observation",
+                    "type": "label",
+                    "value": "Manual Target Indication to LRSAM MFCs",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_26_result",
+                    "key": "cms_trial_check_26_result",
+                    "name": "cms_trial_check_26_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_27_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_27_serial",
+                    "type": "serial",
+                    "value": "27.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_27_trial_serial",
+                    "type": "label",
+                    "value": "7.10.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_27_observation",
+                    "type": "label",
+                    "value": "Cancel Target Indication to LRSAM MFCs",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_27_result",
+                    "key": "cms_trial_check_27_result",
+                    "name": "cms_trial_check_27_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_28_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_28_serial",
+                    "type": "serial",
+                    "value": "28.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_28_trial_serial",
+                    "type": "label",
+                    "value": "7.11.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_28_observation",
+                    "type": "label",
+                    "value": "Create LRSAM sectors",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_28_result",
+                    "key": "cms_trial_check_28_result",
+                    "name": "cms_trial_check_28_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_29_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_29_serial",
+                    "type": "serial",
+                    "value": "29.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_29_trial_serial",
+                    "type": "label",
+                    "value": "7.12.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_29_observation",
+                    "type": "label",
+                    "value": "Edit LRSAM Sectors",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_29_result",
+                    "key": "cms_trial_check_29_result",
+                    "name": "cms_trial_check_29_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_30_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_30_serial",
+                    "type": "serial",
+                    "value": "30.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_30_trial_serial",
+                    "type": "label",
+                    "value": "7.13.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_30_observation",
+                    "type": "label",
+                    "value": "Delete LRSAM Sectors",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_30_result",
+                    "key": "cms_trial_check_30_result",
+                    "name": "cms_trial_check_30_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_31_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_31_serial",
+                    "type": "serial",
+                    "value": "31.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_31_trial_serial",
+                    "type": "label",
+                    "value": "7.14.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_31_observation",
+                    "type": "label",
+                    "value": "Manual Target indication to LRSAM EOD for surface targets",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_31_result",
+                    "key": "cms_trial_check_31_result",
+                    "name": "cms_trial_check_31_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_32_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_32_serial",
+                    "type": "serial",
+                    "value": "32.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_32_trial_serial",
+                    "type": "label",
+                    "value": "7.15.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_32_observation",
+                    "type": "label",
+                    "value": "Cancel Target Indication to LRSAM for Surface Target",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_32_result",
+                    "key": "cms_trial_check_32_result",
+                    "name": "cms_trial_check_32_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_33_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_33_serial",
+                    "type": "serial",
+                    "value": "33.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_33_trial_serial",
+                    "type": "label",
+                    "value": "7.16.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_33_observation",
+                    "type": "label",
+                    "value": "Manual Gun Assignment for Surface Targets",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_33_result",
+                    "key": "cms_trial_check_33_result",
+                    "name": "cms_trial_check_33_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_34_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_34_serial",
+                    "type": "serial",
+                    "value": "34.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_34_trial_serial",
+                    "type": "label",
+                    "value": "7.17.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_34_observation",
+                    "type": "label",
+                    "value": "Cancel manual gun assignment for surface targets",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_34_result",
+                    "key": "cms_trial_check_34_result",
+                    "name": "cms_trial_check_34_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_6_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_6_heading",
+                    "type": "label",
+                    "value": "<b>8. KAVACH</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_35_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_35_serial",
+                    "type": "serial",
+                    "value": "35.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_35_trial_serial",
+                    "type": "label",
+                    "value": "8.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_35_observation",
+                    "type": "label",
+                    "value": "Assigning TD to Kavach System",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_35_result",
+                    "key": "cms_trial_check_35_result",
+                    "name": "cms_trial_check_35_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_36_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_36_serial",
+                    "type": "serial",
+                    "value": "36.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_36_trial_serial",
+                    "type": "label",
+                    "value": "8.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_36_observation",
+                    "type": "label",
+                    "value": "Cancel TD to Kavach System on track",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_36_result",
+                    "key": "cms_trial_check_36_result",
+                    "name": "cms_trial_check_36_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_7_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_7_heading",
+                    "type": "label",
+                    "value": "<b>9. BrahMos</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_37_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_37_serial",
+                    "type": "serial",
+                    "value": "37.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_37_trial_serial",
+                    "type": "label",
+                    "value": "9.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_37_observation",
+                    "type": "label",
+                    "value": "Mode change of BrahMos",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_37_result",
+                    "key": "cms_trial_check_37_result",
+                    "name": "cms_trial_check_37_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_38_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_38_serial",
+                    "type": "serial",
+                    "value": "38.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_38_trial_serial",
+                    "type": "label",
+                    "value": "9.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_38_observation",
+                    "type": "label",
+                    "value": "Add to Surface target list",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_38_result",
+                    "key": "cms_trial_check_38_result",
+                    "name": "cms_trial_check_38_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_39_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_39_serial",
+                    "type": "serial",
+                    "value": "39.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_39_trial_serial",
+                    "type": "label",
+                    "value": "9.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_39_observation",
+                    "type": "label",
+                    "value": "Forces Distribution",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_39_result",
+                    "key": "cms_trial_check_39_result",
+                    "name": "cms_trial_check_39_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_40_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_40_serial",
+                    "type": "serial",
+                    "value": "40.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_40_trial_serial",
+                    "type": "label",
+                    "value": "9.4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_40_observation",
+                    "type": "label",
+                    "value": "Assign Restricted Area",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_40_result",
+                    "key": "cms_trial_check_40_result",
+                    "name": "cms_trial_check_40_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_41_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_41_serial",
+                    "type": "serial",
+                    "value": "41.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_41_trial_serial",
+                    "type": "label",
+                    "value": "9.5.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_41_observation",
+                    "type": "label",
+                    "value": "Create/ Edit waypoints",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_41_result",
+                    "key": "cms_trial_check_41_result",
+                    "name": "cms_trial_check_41_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_42_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_42_serial",
+                    "type": "serial",
+                    "value": "42.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_42_trial_serial",
+                    "type": "label",
+                    "value": "9.6.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_42_observation",
+                    "type": "label",
+                    "value": "Generation of Commands (BrFCS)",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_42_result",
+                    "key": "cms_trial_check_42_result",
+                    "name": "cms_trial_check_42_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_43_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_43_serial",
+                    "type": "serial",
+                    "value": "43.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_43_trial_serial",
+                    "type": "label",
+                    "value": "9.6.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_43_observation",
+                    "type": "label",
+                    "value": "Transmission of Fire Command (BrahMos)",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_43_result",
+                    "key": "cms_trial_check_43_result",
+                    "name": "cms_trial_check_43_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_44_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_44_serial",
+                    "type": "serial",
+                    "value": "44.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_44_trial_serial",
+                    "type": "label",
+                    "value": "9.6.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_44_observation",
+                    "type": "label",
+                    "value": "Transmission of Trigger Hold Command (BrahMos)",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_44_result",
+                    "key": "cms_trial_check_44_result",
+                    "name": "cms_trial_check_44_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_45_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_45_serial",
+                    "type": "serial",
+                    "value": "45.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_45_trial_serial",
+                    "type": "label",
+                    "value": "9.6.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_45_observation",
+                    "type": "label",
+                    "value": "Transmission of Stop Fire Command (BrahMos)",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_45_result",
+                    "key": "cms_trial_check_45_result",
+                    "name": "cms_trial_check_45_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_8_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_8_heading",
+                    "type": "label",
+                    "value": "<b>10. HUMSA</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_46_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_46_serial",
+                    "type": "serial",
+                    "value": "46.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_46_trial_serial",
+                    "type": "label",
+                    "value": "10.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_46_observation",
+                    "type": "label",
+                    "value": "Detection on HUMSA Sonar Active Channels 1 to 8",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_46_result",
+                    "key": "cms_trial_check_46_result",
+                    "name": "cms_trial_check_46_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_47_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_47_serial",
+                    "type": "serial",
+                    "value": "47.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_47_trial_serial",
+                    "type": "label",
+                    "value": "10.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_47_observation",
+                    "type": "label",
+                    "value": "Detection on HUMSA Sonar Passive Channels 1 to 8",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_47_result",
+                    "key": "cms_trial_check_47_result",
+                    "name": "cms_trial_check_47_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_48_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_48_serial",
+                    "type": "serial",
+                    "value": "48.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_48_trial_serial",
+                    "type": "label",
+                    "value": "10.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_48_observation",
+                    "type": "label",
+                    "value": "Drop Track command for HUMSA sonar",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_48_result",
+                    "key": "cms_trial_check_48_result",
+                    "name": "cms_trial_check_48_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_9_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_9_heading",
+                    "type": "label",
+                    "value": "<b>11. IAC MOD C</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_49_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_49_serial",
+                    "type": "serial",
+                    "value": "49.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_49_trial_serial",
+                    "type": "label",
+                    "value": "11.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_49_observation",
+                    "type": "label",
+                    "value": "Centralised Mode Selected by operator",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_49_result",
+                    "key": "cms_trial_check_49_result",
+                    "name": "cms_trial_check_49_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_50_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_50_serial",
+                    "type": "serial",
+                    "value": "50.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_50_trial_serial",
+                    "type": "label",
+                    "value": "11.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_50_observation",
+                    "type": "label",
+                    "value": "Designate Target from IRL",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_50_result",
+                    "key": "cms_trial_check_50_result",
+                    "name": "cms_trial_check_50_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_51_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_51_serial",
+                    "type": "serial",
+                    "value": "51.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_51_trial_serial",
+                    "type": "label",
+                    "value": "11.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_51_observation",
+                    "type": "label",
+                    "value": "Designate target from TTL",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_51_result",
+                    "key": "cms_trial_check_51_result",
+                    "name": "cms_trial_check_51_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_52_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_52_serial",
+                    "type": "serial",
+                    "value": "52.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_52_trial_serial",
+                    "type": "label",
+                    "value": "11.4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_52_observation",
+                    "type": "label",
+                    "value": "Order Engage-IRL/TTL when engagement Possible",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_52_result",
+                    "key": "cms_trial_check_52_result",
+                    "name": "cms_trial_check_52_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_53_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_53_serial",
+                    "type": "serial",
+                    "value": "53.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_53_trial_serial",
+                    "type": "label",
+                    "value": "11.5.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_53_observation",
+                    "type": "label",
+                    "value": "Order STOP fire – which already engaged by IAC",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_53_result",
+                    "key": "cms_trial_check_53_result",
+                    "name": "cms_trial_check_53_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_54_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_54_serial",
+                    "type": "serial",
+                    "value": "54.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_54_trial_serial",
+                    "type": "label",
+                    "value": "11.6.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_54_observation",
+                    "type": "label",
+                    "value": "Order Cancel TD by IRL / TTL",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_54_result",
+                    "key": "cms_trial_check_54_result",
+                    "name": "cms_trial_check_54_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_55_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_55_serial",
+                    "type": "serial",
+                    "value": "55.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_55_trial_serial",
+                    "type": "label",
+                    "value": "12.6.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_55_observation",
+                    "type": "label",
+                    "value": "Break track when bearing is under tracking",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_55_result",
+                    "key": "cms_trial_check_55_result",
+                    "name": "cms_trial_check_55_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_10_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_10_heading",
+                    "type": "label",
+                    "value": "<b>12. SHAKTI</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_56_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_56_serial",
+                    "type": "serial",
+                    "value": "56.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_56_trial_serial",
+                    "type": "label",
+                    "value": "12.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_56_observation",
+                    "type": "label",
+                    "value": "Set EW System mode to Centralised",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_56_result",
+                    "key": "cms_trial_check_56_result",
+                    "name": "cms_trial_check_56_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_57_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_57_serial",
+                    "type": "serial",
+                    "value": "57.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_57_trial_serial",
+                    "type": "label",
+                    "value": "12.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_57_observation",
+                    "type": "label",
+                    "value": "Create sectors of non-interest",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_57_result",
+                    "key": "cms_trial_check_57_result",
+                    "name": "cms_trial_check_57_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_58_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_58_serial",
+                    "type": "serial",
+                    "value": "58.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_58_trial_serial",
+                    "type": "label",
+                    "value": "12.2.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_58_observation",
+                    "type": "label",
+                    "value": "Delete sectors of non-interest",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_58_result",
+                    "key": "cms_trial_check_58_result",
+                    "name": "cms_trial_check_58_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_59_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_59_serial",
+                    "type": "serial",
+                    "value": "59.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_59_trial_serial",
+                    "type": "label",
+                    "value": "12.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_59_observation",
+                    "type": "label",
+                    "value": "Track Bearing when operator is able to undertake tracking",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_59_result",
+                    "key": "cms_trial_check_59_result",
+                    "name": "cms_trial_check_59_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_60_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_60_serial",
+                    "type": "serial",
+                    "value": "60.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_60_trial_serial",
+                    "type": "label",
+                    "value": "12.4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_60_observation",
+                    "type": "label",
+                    "value": "JAM ESM Bearing",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_60_result",
+                    "key": "cms_trial_check_60_result",
+                    "name": "cms_trial_check_60_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_61_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_61_serial",
+                    "type": "serial",
+                    "value": "61.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_61_trial_serial",
+                    "type": "label",
+                    "value": "12.5.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_61_observation",
+                    "type": "label",
+                    "value": "Track and JAM when bearing is neither under tracking nor Jamming",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_61_result",
+                    "key": "cms_trial_check_61_result",
+                    "name": "cms_trial_check_61_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_62_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_62_serial",
+                    "type": "serial",
+                    "value": "62.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_62_trial_serial",
+                    "type": "label",
+                    "value": "12.7.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_62_observation",
+                    "type": "label",
+                    "value": "Stop JAM when bearing is under Jamming",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_62_result",
+                    "key": "cms_trial_check_62_result",
+                    "name": "cms_trial_check_62_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_63_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_63_serial",
+                    "type": "serial",
+                    "value": "63.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_63_trial_serial",
+                    "type": "label",
+                    "value": "12.8.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_63_observation",
+                    "type": "label",
+                    "value": "Assign bearing for Jamming",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_63_result",
+                    "key": "cms_trial_check_63_result",
+                    "name": "cms_trial_check_63_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_64_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_64_serial",
+                    "type": "serial",
+                    "value": "64.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_64_trial_serial",
+                    "type": "label",
+                    "value": "12.9.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_64_observation",
+                    "type": "label",
+                    "value": "Break Assign Bearing",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_64_result",
+                    "key": "cms_trial_check_64_result",
+                    "name": "cms_trial_check_64_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_65_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_65_serial",
+                    "type": "serial",
+                    "value": "65.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_65_trial_serial",
+                    "type": "label",
+                    "value": "12.10.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_65_observation",
+                    "type": "label",
+                    "value": "FLAG 2 Alarm",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_65_result",
+                    "key": "cms_trial_check_65_result",
+                    "name": "cms_trial_check_65_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_66_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_66_serial",
+                    "type": "serial",
+                    "value": "66.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_66_trial_serial",
+                    "type": "label",
+                    "value": "12.11.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_66_observation",
+                    "type": "label",
+                    "value": "Lock ON Alarm",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_66_result",
+                    "key": "cms_trial_check_66_result",
+                    "name": "cms_trial_check_66_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_section_11_heading_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_section_11_heading",
+                    "type": "label",
+                    "value": "<b>13. NAYAN</b>",
+                    "colspan": 12,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_67_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_67_serial",
+                    "type": "serial",
+                    "value": "67.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_67_trial_serial",
+                    "type": "label",
+                    "value": "13.1.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_67_observation",
+                    "type": "label",
+                    "value": "Add Area of interest",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_67_result",
+                    "key": "cms_trial_check_67_result",
+                    "name": "cms_trial_check_67_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_68_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_68_serial",
+                    "type": "serial",
+                    "value": "68.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_68_trial_serial",
+                    "type": "label",
+                    "value": "13.2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_68_observation",
+                    "type": "label",
+                    "value": "Display of Emitter Status",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_68_result",
+                    "key": "cms_trial_check_68_result",
+                    "name": "cms_trial_check_68_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trial_check_69_row",
+                "cells": [
+                  {
+                    "_id": "cms_trial_check_69_serial",
+                    "type": "serial",
+                    "value": "69.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "cms_trial_check_69_trial_serial",
+                    "type": "label",
+                    "value": "13.3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_69_observation",
+                    "type": "label",
+                    "value": "Display of Emitter Location",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trial_check_69_result",
+                    "key": "cms_trial_check_69_result",
+                    "name": "cms_trial_check_69_result",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "required": false,
+                    "disabled": false,
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false
+                  }
+                ]
+              },
+              {
+                "_id": "cms_trials_general_observations_row",
+                "cells": [
+                  {
+                    "_id": "cms_trials_general_observations_label",
+                    "type": "label",
+                    "value": "<b>General Observations:-</b>",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trials_general_observations",
+                    "key": "cms_trials_general_observations",
+                    "name": "cms_trials_general_observations",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 4,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 6,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "cms_trials_general_observations_spacer",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 8,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type": "label",
+            "value": "<b>Presenting Authority:</b> Ship's Staff",
+            "colSpan": 12
+          },
+          {
+            "_id": "presenting_nd",
+            "key": "presenting_nd",
+            "name": "presenting_nd",
+            "label": "ND:",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 6
+          },
+
+          {
+            "type": "label",
+            "value": "<b>Inspecting Authority:</b> WATT (V)",
+            "colSpan": 12
+          },
+          {
+            "_id": "inspecting_sti_ti",
+            "key": "inspecting_sti_ti",
+            "name": "inspecting_sti_ti",
+            "label": "STI / TI:",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 6
+          },
+          {
+            "_id": "inspecting_sto",
+            "key": "inspecting_sto",
+            "name": "inspecting_sto",
+            "label": "STO:",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text",
+            "colSpan": 6
+          }
+        ]
+      }
+    }
+  ]
+}

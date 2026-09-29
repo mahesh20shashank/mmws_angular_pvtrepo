@@ -1,0 +1,143 @@
+<div class="pending-requisitions-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Main Section Container using Shared PanelCard Component -->
+  <app-panel-card title="REQUISITIONS - APPROVAL PENDING" icon="search">
+
+    <!-- Toolbar Header Slot (ExportToolbar & Search Input) -->
+    <div panelActions class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+      <app-export-toolbar [disabled]="filteredRows().length === 0" (exportRequested)="onExport($event)"></app-export-toolbar>
+
+      <div class="flex items-center gap-2 text-xs font-medium text-[var(--text-muted)]">
+        <label for="req-search-input">Search:</label>
+        <input id="req-search-input" type="text" [ngModel]="globalSearch()" (ngModelChange)="globalSearch.set($event)"
+          placeholder="Search..."
+          class="bg-[var(--bg-input)] text-[var(--text-primary)] border border-[var(--border-input)] text-xs px-3 py-1.5 rounded-lg focus:outline-none focus:border-sky-500 w-36 sm:w-44 placeholder:text-[var(--text-muted)]" />
+      </div>
+    </div>
+
+    <!-- Top Filter Section (Department, Type, Location, Apply & Clear) -->
+    <div class="mb-4 p-4 bg-[var(--bg-input)] rounded-xl border border-[var(--border-primary)] space-y-3">
+      <span class="text-xs font-bold text-[var(--text-muted)] tracking-wider block uppercase">
+        FILTER:
+      </span>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+
+        <!-- Department -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="DEPARTMENT" placeholder="Select Department"
+            [options]="formattedDepartmentOptions()" [ngModel]="selectedDepartmentFilter()"
+            (ngModelChange)="selectedDepartmentFilter.set($event)" name="deptFilter" />
+        </div>
+
+        <!-- Type of Hotwork -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="TYPE OF HOTWORK" placeholder="Select Type of Hotwork"
+            [options]="formattedTypeOptions()" [ngModel]="selectedTypeFilter()"
+            (ngModelChange)="selectedTypeFilter.set($event)" name="typeFilter" />
+        </div>
+
+        <!-- Hotwork Location -->
+        <div class="flex flex-col gap-1.5">
+          <label for="filter-location" class="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wide">
+            HOTWORK LOCATION
+          </label>
+          <input id="filter-location" type="text" [ngModel]="locationSearchInput()"
+            (ngModelChange)="locationSearchInput.set($event)" placeholder="Enter location..."
+            class="w-full bg-[var(--bg-card)] border-b border-sky-500/40 py-1.5 px-2.5 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-sky-400 rounded" />
+        </div>
+
+        <!-- Filter Action Buttons -->
+        <div class="flex items-center gap-2 shrink-0 whitespace-nowrap">
+          <app-button type="button" (click)="applyTopFilters()" style="color: #ffffff !important;"
+            class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-bold h-[32px] px-4 rounded-lg text-xs tracking-wide shadow-md transition-colors cursor-pointer inline-flex items-center justify-center whitespace-nowrap">
+            <div class="flex items-center gap-1.5 whitespace-nowrap">
+              <span style="color: #ffffff !important;" class="!text-white whitespace-nowrap">Apply Filters</span>
+            </div>
+          </app-button>
+
+          <app-button type="button" (click)="clearAllFilters()"
+            class="border border-amber-500/40 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 h-[32px] px-3.5 rounded-lg text-xs inline-flex items-center justify-center gap-1.5 font-medium transition-colors cursor-pointer whitespace-nowrap">
+            <div class="flex items-center gap-1.5 whitespace-nowrap">
+              <app-icon name="filter" [size]="13" class="text-amber-600 dark:text-amber-400"></app-icon>
+              <span class="whitespace-nowrap">Clear Filters</span>
+            </div>
+          </app-button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Shared AG-Grid Component -->
+    <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs" [pageSize]="pageSize()" [autoHeight]="true"
+      (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+
+  </app-panel-card>
+</div>
+
+<!-- Shared Detail Drawer -->
+<app-detail-drawer [open]="!!selectedRecord()" [wide]="true" [titleMode]="true"
+  [label]="selectedRecord()?.hotworkCode ?? 'Requisition Details'"
+  subtitle="Pending Requisition Details & Approval Actions" iconName="flame" iconColor="#0ea5e9"
+  (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  <div class="space-y-5 p-2 text-sm text-[var(--text-primary,#f8fafc)]">
+
+    <!-- Status Alert Message -->
+    @if (actionSuccessMessage()) {
+    <div
+      class="bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+      <app-icon name="check" [size]="16" class="text-emerald-400"></app-icon>
+      <span>{{ actionSuccessMessage() }}</span>
+    </div>
+    }
+
+    <!-- Details Summary Card -->
+    <div class="p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border-card)] space-y-3">
+      <div
+        class="flex items-center gap-2 text-sky-500 dark:text-sky-400 font-bold text-xs uppercase tracking-wider pb-2 border-b border-[var(--border-primary)]">
+        <app-icon name="info" [size]="16" class="text-sky-500 dark:text-sky-400" />
+        <span>Requisition Information</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Hotwork Code:</span><span
+            class="text-sky-500 dark:text-sky-400 font-bold">{{ item.hotworkCode }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Date of
+            Hotwork:</span><span class="text-[var(--text-primary)] font-semibold">{{ item.dateOfHotwork }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Type of
+            Hotwork:</span><span class="text-[var(--text-primary)] font-semibold">{{ item.typeOfHotwork }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Department | Sub-Department:</span><span
+            class="text-[var(--text-primary)] font-semibold">{{ item.departmentSubDept }}</span></div>
+        <div class="flex justify-between items-start"><span
+            class="text-[var(--text-muted)] shrink-0">Location:</span><span
+            class="text-[var(--text-primary)] font-medium text-right">{{ item.hotworkLocation }}</span></div>
+        <div class="flex justify-between items-start"><span class="text-[var(--text-muted)] shrink-0">Adjacent
+            Compartment:</span><span class="text-[var(--text-primary)] font-medium text-right">{{
+            item.adjacentCompartment }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Sentry Names:</span><span
+            class="text-[var(--text-primary)] font-semibold">{{ item.sentryNames }}</span></div>
+        <div class="flex justify-between items-center"><span class="text-[var(--text-muted)]">Approval
+            Status:</span><span class="text-amber-600 dark:text-amber-300 font-bold">{{ item.approvalStatus }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center justify-end gap-3 pt-2">
+      <app-button type="button" [disabled]="isActionInProgress()" (click)="rejectRequisition()"
+        class="px-4 py-2 rounded-lg bg-red-600/30 hover:bg-red-600/50 text-red-300 border border-red-500/40 text-xs font-bold transition-all cursor-pointer disabled:opacity-50">
+        Reject Requisition
+      </app-button>
+      <app-button type="button" [disabled]="isActionInProgress()" (click)="approveRequisition()"
+        style="color: #ffffff !important;"
+        class="px-6 py-2 rounded-lg bg-[#1069AB] hover:bg-[#195d95] !text-white text-xs font-bold transition-all shadow-md cursor-pointer disabled:opacity-50">
+        <span style="color: #ffffff !important;" class="!text-white">Approve Requisition</span>
+      </app-button>
+    </div>
+
+  </div>
+  }
+</app-detail-drawer>

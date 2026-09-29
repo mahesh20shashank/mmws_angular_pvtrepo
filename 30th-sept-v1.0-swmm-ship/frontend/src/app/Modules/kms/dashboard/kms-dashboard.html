@@ -1,0 +1,63 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="kms-page">
+  @if (showHeaderBar) {
+    <app-page-header-bar icon="layout-dashboard" iconVariant="accent" title="Dashboard" badgeText="Knowledge Management Overview" />
+  }
+
+  <div class="kms-kpi-row grid grid-cols-[repeat(6,minmax(9.5rem,1fr))] gap-3 overflow-x-auto">
+    @for (stat of stats(); track stat.title) {
+      <app-kpi-card
+        [title]="stat.title"
+        [count]="stat.value"
+        [iconName]="stat.iconName"
+        [iconBg]="stat.iconBg"
+        [iconColor]="stat.iconColor"
+        [accentColor]="stat.iconColor"
+        [showTrends]="false"
+        [showTimelineTab]="false"
+        [viewMoreRoute]="stat.route"
+        viewMoreLabel="View more →"
+        iconPosition="right"
+        cardHeight="9.5rem"
+      />
+    }
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <app-panel-card title="Documents per Equipment" icon="folder-open" iconColor="#4AA8FF" iconBg="rgba(74,168,255,0.16)">
+      @if (equipmentChartData().length) {
+        <app-bar-chart [data]="equipmentChartData()" yAxisTitle="Count" [heightPx]="260" />
+      } @else {
+        <div class="py-8 text-center flex flex-col gap-2">
+          <p class="text-sm text-[var(--text-muted)]">No data available.</p>
+          <a routerLink="/afterAuth/kms/technical/overview" class="text-[13px] text-[#1D96E9] hover:underline">Add Technical Manuals</a>
+        </div>
+      }
+    </app-panel-card>
+
+    <app-panel-card title="Documents per Certificate Category" icon="award" iconColor="#a855f7" iconBg="rgba(168,85,247,0.16)">
+      @if (categoryChartData().length) {
+        <app-bar-chart [data]="categoryChartData()" yAxisTitle="Count" [heightPx]="260" primaryColor="#a855f7" primaryValueColor="#c9a3f7" />
+      } @else {
+        <div class="py-8 text-center flex flex-col gap-2">
+          <p class="text-sm text-[var(--text-muted)]">No data available.</p>
+          <a routerLink="/afterAuth/kms/certificates/overview" class="text-[13px] text-[#1D96E9] hover:underline">Add Certificates here</a>
+        </div>
+      }
+    </app-panel-card>
+  </div>
+
+  <app-panel-card title="Correspondences Received vs. Sent (Last 12 Months)" icon="chart-line" iconColor="#22C55E" iconBg="rgba(34,197,94,0.16)">
+    <div panelActions>
+      <app-button type="button" class="text-[13px] font-medium text-[#1D96E9] hover:underline" (click)="openDetailModal()">View Details</app-button>
+    </div>
+    <app-line-chart [series]="correspondenceSeries()" [labels]="correspondenceLabels()" yAxisTitle="Count" [heightPx]="320" />
+  </app-panel-card>
+
+  @if (showDetailModal()) {
+    <app-modal size="xl" title="Correspondence Details" (closeModal)="closeDetailModal()">
+      <app-data-grid [rowData]="correspondenceDetail()" [columnDefs]="detailColumnDefs" height="420px" />
+    </app-modal>
+  }
+</div>

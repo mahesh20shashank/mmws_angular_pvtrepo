@@ -1,0 +1,79 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+.obs-panel__header {
+  margin-bottom: 1rem;
+}
+
+.obs-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+/* The loading/error states, copied from `spare-detail.css` - style is component-scoped under
+   Angular's view encapsulation, so the two screens each carry their own copy of the same
+   classes rather than one importing the other's stylesheet. */
+.obs-detail-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1.25rem;
+}
+
+.obs-detail-state__title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.obs-detail-state__text {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.obs-detail-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.obs-detail-state__actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* A placeholder of the right shape rather than an empty region, so the panel does not collapse
+   and then jump when the record lands. */
+.obs-detail-skeleton {
+  padding: 0.5rem 0 0;
+}
+
+.obs-detail-skeleton__label {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.obs-detail-skeleton__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.obs-detail-skeleton__block {
+  height: 2.25rem;
+  border-radius: 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+}

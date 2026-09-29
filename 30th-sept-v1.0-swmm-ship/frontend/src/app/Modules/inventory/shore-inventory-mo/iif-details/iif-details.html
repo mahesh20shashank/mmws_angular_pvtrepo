@@ -1,0 +1,164 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>IIF Details {{ swmmIifNo() ? "— " + swmmIifNo() : "" }}</h3>
+  </div>
+
+  @if (!loading()) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      @if (entry(); as row) {
+        <fieldset class="mo-fieldset">
+          <legend>Item Details</legend>
+          <div class="mo-detail-row"><span>SWMM Pattern No</span><strong>{{ row.itemCode || "-" }}</strong></div>
+          <div class="mo-detail-row"><span>Item Description</span><strong>{{ row.itemDescription || "-" }}</strong></div>
+          <div class="mo-detail-row"><span>Category</span><strong>{{ row.category || "-" }}</strong></div>
+          <div class="mo-detail-row"><span>Equipment Class</span><strong>{{ row.equipmentClass || "-" }}</strong></div>
+        </fieldset>
+      }
+
+      <fieldset class="mo-fieldset">
+        <legend>Identification</legend>
+        <div class="mo-form-grid">
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">NCAGE Code</div>
+            <input class="form-field-input" formControlName="ncageCode" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Old Item Code</div>
+            <input class="form-field-input" formControlName="olditemCode" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Year Introduced</div>
+            <input class="form-field-input" formControlName="yearIntroduced" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">NSN Inventory Type</div>
+            <input class="form-field-input" formControlName="nsnInventoryType" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Classification of Item</div>
+            <input class="form-field-input" formControlName="classificationOfItem" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Function Anticipated</div>
+            <input class="form-field-input" formControlName="functionAnticipated" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">ACL Anticipated</div>
+            <input class="form-field-input" formControlName="aclAnticipated" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Shelf Life</div>
+            <input class="form-field-input" formControlName="shelfLife" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="mo-fieldset">
+        <legend>Pricing</legend>
+        <div class="mo-form-grid">
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Price Reference</div>
+            <input class="form-field-input" formControlName="priceRef" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Price Date</div>
+            <input type="date" class="form-field-input" formControlName="priceDate" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Currency Code</div>
+            <input class="form-field-input" formControlName="currencyCode" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Price (CC)</div>
+            <input class="form-field-input" formControlName="priceCc" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">EASK Book Reference</div>
+            <input class="form-field-input" formControlName="easkBookRef" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="mo-fieldset">
+        <legend>Quantities</legend>
+        <div class="mo-form-grid">
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Quantity</div>
+            <input class="form-field-input" formControlName="qty" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Qty War Reserve</div>
+            <input class="form-field-input" formControlName="qtyWarReserve" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Qty Constituent</div>
+            <input class="form-field-input" formControlName="qtyConstituent" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Qty Range Scale</div>
+            <input class="form-field-input" formControlName="qtyRangeScale" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Qty Ship Fit</div>
+            <input class="form-field-input" formControlName="qtyShipFit" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Qty Present</div>
+            <input class="form-field-input" formControlName="qtyPresent" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Immediate Usage</div>
+            <input class="form-field-input" formControlName="immediateUsage" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">End Usage</div>
+            <input class="form-field-input" formControlName="endUsage" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="mo-fieldset">
+        <legend>Vendor / Contact Details</legend>
+        <div class="mo-form-grid">
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Addressee</div>
+            <input class="form-field-input" formControlName="addressee" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">State</div>
+            <input class="form-field-input" formControlName="state" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Phone Number</div>
+            <input class="form-field-input" formControlName="phoneNumber" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Fax</div>
+            <input class="form-field-input" formControlName="fax" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">Email</div>
+            <input type="email" class="form-field-input" formControlName="emailId" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">PAN Number</div>
+            <input class="form-field-input" formControlName="panNumber" />
+          </div>
+          <div class="mo-form-grid__field">
+            <div class="form-field-label">GST Number</div>
+            <input class="form-field-input" formControlName="gstNumber" />
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="mo-form-actions">
+        <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+        <app-button type="submit" class="btn-primary" [disabled]="saving()">
+          {{ saving() ? "Saving..." : "Save" }}
+        </app-button>
+      </div>
+    </form>
+  }
+</div>

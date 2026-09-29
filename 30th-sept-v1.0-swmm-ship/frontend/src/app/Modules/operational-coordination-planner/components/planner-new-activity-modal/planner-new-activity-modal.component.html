@@ -1,0 +1,157 @@
+<div class="modal-backdrop" tabindex="0" role="button" (keyup.enter)="close()">
+  <div class="modal" tabindex="0" role="button" (keyup.enter)="$event.stopPropagation()">
+    <div class="modal-head">
+      <h3>
+        @if (resourceType() === 'event') {
+          {{ editorMode() === 'edit' ? 'Edit Event' : 'New Event' }}
+        } @else {
+          {{ editorMode() === 'edit' ? 'Edit Activity' : 'New Activity' }}
+        }
+      </h3>
+
+      <app-button type="button" class="icon-btn close" (click)="close()">
+        <app-icon name="x" [size]="14"></app-icon>
+      </app-button>
+    </div>
+
+    <!-- EVENT FORM -->
+    @if (resourceType() === 'event') {
+      <form [formGroup]="eventForm" (ngSubmit)="create()">
+        <div class="modal-body">
+
+          <!-- Title -->
+          <app-input-field label="Title" type="text" placeholder="e.g. Maintenance Review" formControlName="title" [required]="true">
+          </app-input-field>
+
+          <!-- Date -->
+          <app-date-picker label="Date" [singleDate]="true" [minDate]="minSelectableDate()" formControlName="date" [required]="true">
+          </app-date-picker>
+
+          <!-- Time Row (Start Time & End Time) -->
+          <div class="time-row">
+            <app-input-field label="Start Time" type="time" placeholder="HH:MM" formControlName="start_time" [required]="true">
+            </app-input-field>
+            <app-input-field label="End Time" type="time" placeholder="HH:MM" formControlName="end_time" [required]="true"
+              [invalid]="!!(eventForm.get('end_time')?.hasError('timeRange') && (eventForm.get('end_time')?.touched || eventForm.get('start_time')?.touched))">
+            </app-input-field>
+          </div>
+          @if (eventForm.get('end_time')?.hasError('timeRange') && (eventForm.get('end_time')?.touched || eventForm.get('start_time')?.touched)) {
+            <div class="field-error">End time must be after start time.</div>
+          }
+
+          <!-- Category -->
+          <div class="category-field">
+            <label for="category" class="category-label">Category <span class="required">*</span></label>
+            <select id="category" class="category-select" formControlName="category" required
+              [class.category-select--invalid]="eventForm.get('category')?.invalid && eventForm.get('category')?.touched">
+              <option value="">Select a category</option>
+              @for (cat of categories(); track cat.value) {
+                <option [value]="cat.value">{{ cat.label }}</option>
+              }
+              <option value="new_category">+ New Category</option>
+            </select>
+            @if (eventForm.get('category')?.invalid && eventForm.get('category')?.touched) {
+              <div class="field-error">Please select a category.</div>
+            }
+          </div>
+
+          <!-- New Category Input -->
+          @if (eventForm.get('category')?.value === 'new_category') {
+            <div class="form-field">
+              <label for="newCatInput" class="form-field-label">Category Name</label>
+              <input
+                #newCatInput
+                id="newCatInput"
+                type="text"
+                class="form-field-input"
+                placeholder="Enter new category name"
+                [value]="customCategory()"
+                (change)="customCategory.set(newCatInput.value)">
+            </div>
+          }
+
+          <!-- Description -->
+          <app-textarea-input label="Description" placeholder="Event details and remarks" formControlName="description">
+          </app-textarea-input>
+
+          <!-- Document -->
+          <app-file-input label="Attach Document" formControlName="document">
+          </app-file-input>
+
+        </div>
+
+        <div class="modal-foot">
+          <app-button type="button" class="btn" (click)="close()">
+            Cancel
+          </app-button>
+
+          <app-button type="submit" class="btn primary" [disabled]="eventForm.invalid">
+            {{ editorMode() === 'edit' ? 'Save Changes' : 'Create Event' }}
+          </app-button>
+        </div>
+      </form>
+    }
+
+    <!-- ACTIVITY FORM -->
+    @if (resourceType() === 'activity') {
+      <form [formGroup]="activityForm" (ngSubmit)="create()">
+        <div class="modal-body">
+
+          <!-- Title -->
+          <app-input-field label="Title" type="text" placeholder="e.g. Maintenance Planning" formControlName="title" [required]="true">
+          </app-input-field>
+
+          <!-- Date -->
+          <app-date-picker label="Date" [singleDate]="true" [minDate]="minSelectableDate()" formControlName="date" [required]="true">
+          </app-date-picker>
+
+          <!-- Lane -->
+          <div class="form-field">
+            <label for="actLane" class="form-field-label">Lane / Department <span class="required">*</span></label>
+            <select id="actLane" class="form-field-select" formControlName="lane" required>
+              @for (lane of lanes; track lane.value) {
+                <option [value]="lane.value">{{ lane.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Category -->
+          <div class="form-field">
+            <label for="actCategory" class="form-field-label">Category <span class="required">*</span></label>
+            <select id="actCategory" class="form-field-select" formControlName="category" required>
+              @for (cat of categories(); track cat.value) {
+                <option [value]="cat.value">{{ cat.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Priority -->
+          <div class="form-field">
+            <label for="actPriority" class="form-field-label">Priority <span class="required">*</span></label>
+            <select id="actPriority" class="form-field-select" formControlName="priority" required>
+              @for (pri of priorities; track pri.value) {
+                <option [value]="pri.value">{{ pri.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Description -->
+          <app-textarea-input label="Description" placeholder="Activity details and remarks" formControlName="description">
+          </app-textarea-input>
+
+        </div>
+
+        <div class="modal-foot">
+          <app-button type="button" class="btn" (click)="close()">
+            Cancel
+          </app-button>
+
+          <app-button type="submit" class="btn primary" [disabled]="activityForm.invalid">
+            {{ editorMode() === 'edit' ? 'Save Changes' : 'Create Activity' }}
+          </app-button>
+        </div>
+      </form>
+    }
+
+  </div>
+</div>

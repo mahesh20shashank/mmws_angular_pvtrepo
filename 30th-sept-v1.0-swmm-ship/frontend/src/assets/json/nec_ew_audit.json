@@ -1,0 +1,2712 @@
+{
+  "formId": "nec_ew_audit",
+  "title": "EW AUDIT",
+  "sourceFile": "nec_ew_audit.html",
+  "sections": [
+    {
+      "id": "section_1",
+      "title": "EW Audit NEC Report",
+      "sectionType": "fields",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship ",
+            "type": "input",
+            "inputType": "text",
+            "value": "",
+            "colSpan": 4,
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "type": "input",
+            "name": "ew_audit_system",
+            "label": "System",
+            "required": false,
+            "colSpan": 4,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "inputType": "text"
+          },
+          {
+            "type": "date",
+            "name": "ew_audit_installation_date",
+            "label": "Select Installation Date ",
+            "required": true,
+            "colSpan": 4,
+            "disabled": false,
+            "placeholder": "",
+            "value": ""
+          },
+          {
+            "type": "date",
+            "name": "ew_audit_hat_completion_date",
+            "label": "Date of Completion of HATs",
+            "required": true,
+            "colSpan": 4,
+            "value": "",
+            "showIf": {
+              "field": "ew_audit_hat_pending",
+              "value": true,
+              "operator": "notEquals"
+            }
+          },
+          {
+            "type": "date",
+            "name": "ew_audit_sat_completion_date",
+            "label": "Date of Completion of SATs",
+            "required": true,
+            "colSpan": 4,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "showIf": {
+              "field": "ew_audit_sat_pending",
+              "value": true,
+              "operator": "notEquals"
+            }
+          },
+          {
+            "type": "select",
+            "name": "ew_audit_system_status",
+            "label": "System Status",
+            "colSpan": 4,
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "Ops",
+                "value": "Ops"
+              },
+              {
+                "label": "Non-ops",
+                "value": "Non-ops"
+              },
+              {
+                "label": "Partially Ops",
+                "value": "Partially Ops"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "type": "checkbox",
+            "name": "ew_audit_hat_pending",
+            "label": "HATs Pending",
+            "colSpan": 3,
+            "value": false
+          },
+          {
+            "type": "checkbox",
+            "name": "ew_audit_sat_pending",
+            "label": "SATs Pending",
+            "colSpan": 3,
+            "value": false
+          },
+          {
+            "type": "textarea",
+            "name": "ew_audit_system_status_remarks",
+            "label": "Other Remarks",
+            "placeholder": "Please explain why system is not fully operational",
+            "rows": 1,
+            "colSpan": 12,
+            "required": false,
+            "disabled": true,
+            "value": "",
+            "showIf": {
+              "field": "ew_audit_system_status",
+              "values": [
+                "Ops",
+                ""
+              ],
+              "operator": "notIn"
+            }
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "check_list_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "CHECK LIST",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Test",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Satisfactory",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks (if any)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "General",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Physical checks for any damage",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_2_cell_3_cl_gen_1",
+                    "key": "cl_gen_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_2_cell_4_cl_gen_remarks_1",
+                    "key": "cl_gen_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "All connectors intact with units",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_3_cell_3_cl_gen_2",
+                    "key": "cl_gen_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_3_cell_4_cl_gen_remarks_2",
+                    "key": "cl_gen_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "All connectors protected with anticorrosion/ vulcanizing tape",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_4_cell_3_cl_gen_3",
+                    "key": "cl_gen_3",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_4_cell_4_cl_gen_remarks_3",
+                    "key": "cl_gen_remarks_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Proper routing of all EW cables on mast and all along its route",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_5_cell_3_cl_gen_4",
+                    "key": "cl_gen_4",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_5_cell_4_cl_gen_remarks_4",
+                    "key": "cl_gen_remarks_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "AC temperature during system operation is maintained at 18–25 °C",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_6_cell_3_cl_gen_5",
+                    "key": "cl_gen_5",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_6_cell_4_cl_gen_remarks_5",
+                    "key": "cl_gen_remarks_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Input supply to isolation transformer",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_7_cell_3_cl_gen_6",
+                    "key": "cl_gen_6",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_7_cell_4_cl_gen_remarks_6",
+                    "key": "cl_gen_remarks_6",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Gyro feed point is same as that during installation (not changed)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_8_cell_3_cl_gen_7",
+                    "key": "cl_gen_7",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_8_cell_4_cl_gen_remarks_7",
+                    "key": "cl_gen_remarks_7",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Check whether all cables/ PCBs inside processor, LRUs are intact/ fitted properly",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_9_cell_3_cl_gen_8",
+                    "key": "cl_gen_8",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_9_cell_4_cl_gen_remarks_8",
+                    "key": "cl_gen_remarks_8",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Blowers are in running condition during system ON",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_10_cell_3_cl_gen_9",
+                    "key": "cl_gen_9",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_10_cell_4_cl_gen_remarks_9",
+                    "key": "cl_gen_remarks_9",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Pinging checks are OK",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_11_cell_3_cl_gen_10",
+                    "key": "cl_gen_10",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_11_cell_4_cl_gen_remarks_10",
+                    "key": "cl_gen_remarks_10",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "11",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Air Filters cleaned",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_12_cell_3_cl_gen_11",
+                    "key": "cl_gen_11",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_12_cell_4_cl_gen_remarks_11",
+                    "key": "cl_gen_remarks_11",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "check_list_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "12",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Radar pre-trigger, from each onboard radar, connected to radar blanking interface is OK",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_13_cell_3_cl_gen_12",
+                    "key": "cl_gen_12",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "Yes",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "No",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "check_list_matrix_1_row_13_cell_4_cl_gen_remarks_12",
+                    "key": "cl_gen_remarks_12",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [],
+        "tables_2": [
+          {
+            "id": "broad_guidelines_for_system_op_checks_table_1",
+            "sectionType": "simpleTable",
+            "title": "BROAD GUIDELINES FOR SYSTEM OP-CHECKS",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "(I) Power Supply/ Power Supply cards failure",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "In the ESM rack, air filters of the ESM units are required to be cleaned by removing the front panel air filter screws. Remove the air filter and clean the same using vacuum cleaner/ air gun or shake the dust off the filter using hand. After cleaning it, place the air filters back to its location and refit the air filter cover with its screws.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_1_cell_3_ps_1",
+                    "key": "ps_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_1_cell_4_ps_remarks_1",
+                    "key": "ps_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_1_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "A UPS is recommended for the whole system (to power up the ESM racks) to ensure smooth system functioning and to isolate the ship power supply fluctuations/ transients/ abrupt power switching.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_2_cell_3_ps_2",
+                    "key": "ps_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_2_cell_4_ps_remarks_2",
+                    "key": "ps_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Check whether the blowers fixed at the rear of the processor units ESM E/J Processor (WOR), C/D Band Processor are in running condition.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_3_cell_3_ps_3",
+                    "key": "ps_3",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_3_cell_4_ps_remarks_3",
+                    "key": "ps_remarks_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Whenever system is switched OFF and needs to be switched ON again, DO NOT IMMEDIATELY SWITCH ON, and wait for 5 minutes. A time gap of at least 5 minute has to be maintained between each switch OFF and switch ON.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_4_cell_3_ps_4",
+                    "key": "ps_4",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_1_row_4_cell_4_ps_remarks_4",
+                    "key": "ps_remarks_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "broad_guidelines_for_system_op_checks_table_2",
+            "sectionType": "simpleTable",
+            "title": "",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "(II) Degradation/ Failure in Front End Electronic components",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_2_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Avoid exposure of system to high RF radiation when at harbor/ during Sea & Action of other near ships.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_1_cell_3_deg_1",
+                    "key": "deg_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_1_cell_4_deg_remarks_1",
+                    "key": "deg_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_2_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure usage of limiters in the Gonio section (DFA) to reduce the future damage of the front end electronic components.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_2_cell_3_deg_2",
+                    "key": "deg_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_2_row_2_cell_4_deg_remarks_2",
+                    "key": "deg_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "broad_guidelines_for_system_op_checks_table_3",
+            "sectionType": "simpleTable",
+            "title": "",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "(III) Discontinuities/ poor contact in EW cables",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_3_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure that connectors (RF cables, Control Cables, Power Supply Cables) are intact at all units on mast. Ensure the same at ESM rack top.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_1_cell_3_disc_1",
+                    "key": "disc_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_1_cell_4_disc_remarks_1",
+                    "key": "disc_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_3_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure that all the EW cables connectors and unused/ spare connectors on rack top are protected with water resistant tape/ vulcanizing tape to avoid corrosion.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_2_cell_3_disc_2",
+                    "key": "disc_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_2_cell_4_disc_remarks_2",
+                    "key": "disc_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_3_row_3",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure all cables are properly routed on mast to avoid tread ON/ step ON/ crushing of the cables by ship staff during mast climbing for other maintenance works like painting/ cleaning etc.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_3_cell_3_disc_3",
+                    "key": "disc_3",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_3_cell_4_disc_remarks_3",
+                    "key": "disc_remarks_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_3_row_4",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Recommended to replace the Radial RF Cable of Radial make with RF cables of Times Microwave.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_4_cell_3_disc_4",
+                    "key": "disc_4",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_3_row_4_cell_4_disc_remarks_4",
+                    "key": "disc_remarks_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [],
+        "tables_3": [
+          {
+            "id": "broad_guidelines_for_system_op_checks_table_4",
+            "sectionType": "simpleTable",
+            "title": "",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "(IV) Interface issues (radar blanking, LAN connections, Gyro)",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_4_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure Gyro feed tapping point finalized during the system installation and HATs is not changed or broken. Also, ensure that ship Gyro data is reaching to the input of the interfacing unit by switching on SDN/ Gyro converters as configured for each platform.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_1_cell_3_intf_1",
+                    "key": "intf_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_1_cell_4_intf_remarks_1",
+                    "key": "intf_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_4_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure the radar pre-trigger (Pre-Sync) output pulse is reaching the radar blanking junction box (Interface) of the EW System by co-ax cable from the available onboard radars. Make sure that the cable is not broken/ physically damaged/ disturbed. Pre-trigger should meet the following as per MIL 751 A: Pulse Amplitude: 6-28 V across 75 ohm load (Positive Polarity) Pre-trigger Delay: 1\u03bcsec (minimum) before Actual Transmission pulse Pulse Width: 1 \u03bcsec (minimum)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_2_cell_3_intf_2",
+                    "key": "intf_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_4_row_2_cell_4_intf_remarks_2",
+                    "key": "intf_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "broad_guidelines_for_system_op_checks_table_5",
+            "sectionType": "simpleTable",
+            "title": "",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "(V) Failure in digital cards/ circuit",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_5_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Check for any loose cables out of its position, PCBs Loosening. If found so, ensure proper tightening of loose cables, fix cables into their positions, insert PCBs firmly into their slot by pressing on the facial panel of the PCBs and tighten the PCB fixing screws softly (only 3 to 4 turns of the screw in the clockwise direction is sufficient). DO NOT over tighten the PCB fixing screws.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_1_cell_3_dc_1",
+                    "key": "dc_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_1_cell_4_dc_remarks_1",
+                    "key": "dc_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_5_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Inspect the following, wherever applicable:- LEDs in ESM rack LEDs on processor LRUs",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_2_cell_3_dc_2",
+                    "key": "dc_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_5_row_2_cell_4_dc_remarks_2",
+                    "key": "dc_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "broad_guidelines_for_system_op_checks_matrix_6",
+            "sectionType": "matrixTable",
+            "title": "BROAD GUIDELINES FOR SYSTEM OP-CHECKS",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "Checks Under System Power Off Condition:",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure all system units are properly installed as per the installation manual.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_2_cell_3_sc_off_1",
+                    "key": "sc_off_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_2_cell_4_sc_off_remarks_1",
+                    "key": "sc_off_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_3",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure all the antenna radomes of mast mount units DFA (starboard), DFA (port), C/D Antenna and DFS unit, Front End unit, 18-40 RDF units (if installed) are free from dust and foreign deposits/ bodies. These units need to be cleaned with soft damp cloth. CAUTION: DO NOT PAINT RADOMES/ MAST MOUNT UNITS/ CABLES",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_3_cell_3_sc_off_2",
+                    "key": "sc_off_2",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_3_cell_4_sc_off_remarks_2",
+                    "key": "sc_off_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_5",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "To ensure that the UPS Batteries do not drain or become dry, switch ON the isolation transformer at least for one hour in a month (especially during ship refits), since the isolation transformer 230 V AC output supplies the power to UPS of Operation Console.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_5_cell_3_sc_off_4",
+                    "key": "sc_off_4",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_5_cell_4_sc_off_remarks_4",
+                    "key": "sc_off_remarks_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_6",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "Checks Under System Power On Condition:",
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_7",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Carry out pinging checks with all subunits and wherever applicable",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_7_cell_3_sc_on_5",
+                    "key": "sc_on_5",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_7_cell_4_sc_on_remarks_5",
+                    "key": "sc_on_remarks_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_8",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Ensure all OB Spares are available at all times and are functionally OK.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_8_cell_3_sc_on_6",
+                    "key": "sc_on_6",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_8_cell_4_sc_on_remarks_6",
+                    "key": "sc_on_remarks_6",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_9",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Power ON / maintenance BITE checks Verification of BITE logs",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_9_cell_3_sc_on_7",
+                    "key": "sc_on_7",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_9_cell_4_sc_on_remarks_7",
+                    "key": "sc_on_remarks_7",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_10",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Display of tracks in console containing frequency parameter, PW & PRI for available emissions in harbour",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_10_cell_3_sc_on_8",
+                    "key": "sc_on_8",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_10_cell_4_sc_on_remarks_8",
+                    "key": "sc_on_remarks_8",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_11",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Are threshold level settings as per HATs/ SATs document",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_11_cell_3_sc_on_9",
+                    "key": "sc_on_9",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_11_cell_4_sc_on_remarks_9",
+                    "key": "sc_on_remarks_9",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_12",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Are attenuation levels in C/D band as per HATs/ SATs document",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_12_cell_3_sc_on_10",
+                    "key": "sc_on_10",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_12_cell_4_sc_on_remarks_10",
+                    "key": "sc_on_remarks_10",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_13",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "11",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Are offsets in DDT cards appropriate?",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_13_cell_3_sc_on_11",
+                    "key": "sc_on_11",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_matrix_6_row_13_cell_4_sc_on_remarks_11",
+                    "key": "sc_on_remarks_11",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_4": [],
+        "tables_4": [
+          {
+            "id": "broad_guidelines_for_system_op_checks_table_7",
+            "sectionType": "simpleTable",
+            "title": "",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Description",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Details / Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "check_list_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "check_list_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "(VII) Miscellaneous information (to be sought from ship’s staff)",
+                    "colspan": 4,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_7_row_1",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Average DOA errors and Radar Advantage Factor",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_1_cell_3_misc_remarks_1",
+                    "key": "misc_remarks_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_7_row_2",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Existing known defects, if any",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_2_cell_3_misc_remarks_2",
+                    "key": "misc_remarks_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_7_row_3",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Recurring defects, with implication on system performance",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_3_cell_3_misc_remarks_3",
+                    "key": "misc_remarks_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "broad_guidelines_for_system_op_checks_table_7_row_4",
+                "cells": [
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Details of critical modules/ sub-assemblies with high failure rate, warranting augmentation in OBS",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "broad_guidelines_for_system_op_checks_table_7_row_4_cell_3_misc_remarks_4",
+                    "key": "misc_remarks_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ]
+      },
+      "tables": [],
+      "fields": []
+    }
+  ]
+}

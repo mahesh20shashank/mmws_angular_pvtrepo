@@ -1,0 +1,285 @@
+<div class="group relative flex min-h-[45px] w-full flex-col justify-center gap-1 rounded-[10px] border border-white/40 bg-white/[0.08] px-3 py-1.5 transition">
+  <label *ngIf="label" class="block text-[11px] font-medium text-white/65">
+    {{ label }} <span *ngIf="required" class="text-red-500">*</span>
+  </label>
+
+  <input
+    #fileInput
+    type="file"
+    hidden
+    [attr.multiple]="multiple ? '' : null"
+    [attr.accept]="accept || null"
+    [required]="required"
+    [disabled]="disabled || isUploading"
+    (change)="onFileChange($event)"
+  />
+
+  <!-- ===== MAIN INPUT ROW ===== -->
+  <div class="w-full flex flex-wrap items-center gap-1">
+
+    <!-- UPLOADED FILES (shown inside input with green tick) -->
+    <ng-container *ngIf="uploadedFiles.length">
+      <div
+        *ngFor="let file of visibleUploadedFiles; let i = index"
+        class="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-white shadow-sm"
+      >
+        <!-- GREEN TICK -->
+        <i class="fa-solid fa-circle-check text-green-500 text-[12px]"></i>
+
+        <!-- FILE NAME -->
+        <button
+          type="button"
+          class="max-w-[140px] truncate text-[11px] font-medium text-white hover:text-[#61C2FF] hover:underline"
+          [title]="file.name"
+          (click)="openFile(file.file_path)"
+        >
+          {{ file.name }}
+        </button>
+
+        <!-- VIEW ICON -->
+        <button
+          type="button"
+          title="View file"
+           class="cursor-pointer text-white/60 hover:text-white"
+          (click)="openFile(file.file_path)"
+        >
+          <i class="fa-solid fa-eye text-[11px]"></i>
+        </button>
+
+         <!-- REMOVE ICON -->
+        <button
+          type="button"
+          title="Remove file"
+           class="cursor-pointer text-red-400 hover:opacity-80"
+          [disabled]="disabled || isUploading"
+          (click)="removeFile(i)"
+        >
+          <i class="fa-solid fa-xmark text-[11px]"></i>
+        </button>
+      </div>
+
+      <!-- SHOW MORE / LESS -->
+      <button
+        *ngIf="hiddenFilesCount > 0 || showAllFiles"
+        type="button"
+        class="text-[11px] font-semibold text-[#61C2FF] hover:underline"
+        (click)="toggleShowAllFiles()"
+      >
+        {{ showAllFiles ? 'Show less' : '+' + hiddenFilesCount + ' more' }}
+      </button>
+    </ng-container>
+
+    <!-- SELECTED FILES (pre-upload) -->
+    <ng-container *ngIf="selectedFiles.length">
+      <div
+        *ngFor="let file of selectedFiles; let i = index"
+        class="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-white"
+      >
+        <!-- FILE NAME -->
+        <button
+          type="button"
+          class="max-w-[140px] cursor-pointer truncate text-[11px] font-medium text-white hover:text-[#61C2FF] hover:underline"
+          [title]="file.name"
+          (click)="previewSelectedFile(file)"
+        >
+          {{ file.name }}
+        </button>
+
+        <!-- PREVIEW ICON -->
+        <button
+          type="button"
+          title="Preview file"
+            class="cursor-pointer text-white/60 hover:text-white"
+          (click)="previewSelectedFile(file)"
+        >
+          <i class="fa-solid fa-eye text-[11px]"></i>
+        </button>
+
+        <!-- UPLOAD ICON -->
+        <button
+          type="button"
+          title="Upload file"
+          class="cursor-pointer text-[#61C2FF] hover:opacity-80"
+          [disabled]="disabled || isUploading"
+          (click)="uploadSelectedFile(i)"
+        >
+          <i class="fa-solid fa-upload text-[11px]"></i>
+        </button>
+
+        <!-- REMOVE ICON -->
+        <button
+          type="button"
+          title="Remove file"
+          class="cursor-pointer text-red-400 hover:opacity-80"
+          [disabled]="disabled || isUploading"
+          (click)="removeSelectedFile(i)"
+        >
+          <i class="fa-solid fa-xmark text-[11px]"></i>
+        </button>
+      </div>
+    </ng-container>
+
+    <button
+      *ngIf="selectedFiles.length && multiple && canAddMoreFiles"
+      type="button"
+      class="rounded-full border border-white/30 bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold text-white/80 transition hover:border-[#61C2FF] disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="disabled || isUploading"
+      (click)="fileInput.click()"
+    >
+      <i class="fa-solid fa-plus text-[10px]"></i>
+      <span>Add file</span>
+    </button>
+
+    <!-- NO FILE STATE — Choose file button -->
+    <ng-container *ngIf="!selectedFiles.length">
+
+      <button
+        *ngIf="!showFileSelector && uploadedFiles.length"
+        type="button"
+         class="rounded-full border border-white/30 bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold text-white/80 hover:border-[#61C2FF] disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="disabled || isUploading"
+        (click)="triggerFileSelector()"
+      >
+        + Add file
+      </button>
+
+      <button
+        *ngIf="showFileSelector"
+        type="button"
+         class="flex items-center gap-1.5 rounded-md border border-[#4f8fd5] bg-[#1069AB] px-3 py-1 text-[11px] font-semibold text-white shadow-sm transition hover:bg-[#195d95] disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="disabled || isUploading"
+        (click)="fileInput.click()"
+      >
+        <i class="fa-solid fa-file text-[11px]"></i>
+        <span>Choose file</span>
+      </button>
+
+      <button
+        *ngIf="showFileSelector && uploadedFiles.length"
+        type="button"
+          class="rounded-full border border-white/20 px-2 py-0.5 text-[11px] font-semibold text-white/80 hover:bg-white/10"
+        [disabled]="disabled || isUploading"
+        (click)="hideFileSelector()"
+      >
+        Hide
+      </button>
+
+    </ng-container>
+
+    <!-- UPLOADING INDICATOR -->
+    <p *ngIf="isUploading" class="text-[11px] font-semibold text-[#61C2FF]">
+      <i class="fa-solid fa-spinner fa-spin text-[11px] mr-1"></i>
+      Uploading...
+    </p>
+
+  </div>
+
+</div>
+
+<!-- Legacy upload markup retained for reference.
+<label *ngIf="label" class="mb-1.5 block text-sm font-medium text-white">{{ label }}</label>
+<div class="flex w-full gap-2 rounded-md border border-white/20 bg-white/10">
+
+  <input
+    #fileInput
+    type="file"
+    hidden
+    [attr.multiple]="multiple ? '' : null"
+    [disabled]="disabled || isUploading"
+    (change)="onFileChange($event)"
+  />
+
+  <div class="flex items-center gap-2">
+    <button
+      *ngIf="!showFileSelector && multiple"
+      type="button"
+        class="rounded-full border border-dashed border-white/30 bg-white/10 px-2.5 py-1 text-[11px] font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="disabled || isUploading"
+      (click)="triggerFileSelector()"
+    >
+      + Add file
+    </button>
+
+    <div *ngIf="showFileSelector" class="flex items-center gap-2">
+      <button
+        type="button"
+        class="rounded-full bg-slate-800 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="disabled || isUploading"
+        (click)="fileInput.click()"
+      >
+        Choose file
+      </button>
+      <button
+        *ngIf="uploadedFiles.length"
+        type="button"
+        class="rounded-full border border-slate-300 px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-50"
+        [disabled]="isUploading"
+        (click)="hideFileSelector()"
+      >
+        Hide
+      </button>
+    </div>
+
+    <p *ngIf="isUploading" class="text-[11px] font-semibold text-blue-600">Uploading...</p>
+  </div>
+
+  <div class=" flex flex-wrap items-center gap-1.5" *ngIf="uploadedFiles.length">
+    <div
+      *ngFor="let file of visibleUploadedFiles; let i = index"
+      class="group flex max-w-full items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1"
+      title="{{ file.name }}"
+    >
+      <button
+        type="button"
+        class="max-w-[150px] truncate text-[11px] font-medium text-slate-700 hover:text-slate-900"
+        (click)="openFile(file.file_path)"
+      >
+        {{ file.name }}
+      </button>
+      <button
+        type="button"
+        class="rounded-full px-1 text-[10px] font-semibold text-blue-700 hover:bg-blue-50"
+        [disabled]="!file.file_path"
+        (click)="openFile(file.file_path)"
+      >
+        View
+      </button>
+      <button
+        *ngIf="multiple"
+        type="button"
+        class="rounded-full px-1 text-[10px] font-bold text-rose-500 hover:bg-rose-50 disabled:opacity-50"
+        [disabled]="disabled || isUploading"
+        (click)="removeFile(uploadedFiles.indexOf(file))"
+      >
+        x
+      </button>
+    </div>
+
+    <button
+      *ngIf="hiddenFilesCount > 0 && !showAllFiles"
+      type="button"
+        class="rounded-full border border-white/20 bg-white/10 px-2 py-1 text-[10px] font-semibold text-white transition"
+      (click)="toggleShowAllFiles()"
+    >
+      +{{ hiddenFilesCount }} more
+    </button>
+
+    <button
+      *ngIf="uploadedFiles.length > 2 && showAllFiles"
+      type="button"
+        class="rounded-full border border-white/20 bg-white/10 px-2 py-1 text-[10px] font-semibold text-white transition"
+      (click)="toggleShowAllFiles()"
+    >
+      Show less
+    </button>
+
+    <button
+      type="button"
+      class="rounded-full border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-semibold text-rose-600 hover:bg-rose-100 disabled:opacity-50"
+      [disabled]="disabled || isUploading"
+      (click)="removeFile()"
+    >
+      Clear
+    </button>
+  </div>
+</div> -->

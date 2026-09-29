@@ -1,0 +1,139 @@
+<div class="outbox-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Main Section Container using Shared PanelCard Component -->
+  <app-panel-card title="APPROVE HOTWORK OUTBOX" icon="send">
+
+    <!-- Toolbar Header Slot (ExportToolbar & Search Input) -->
+    <div panelActions class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+      <app-export-toolbar [disabled]="filteredRowData().length === 0" (exportRequested)="handleExport($event)"></app-export-toolbar>
+
+      <div class="flex items-center gap-2 text-xs font-medium text-[var(--text-muted)]">
+        <label for="outbox-search-input">Search:</label>
+        <input id="outbox-search-input" type="text" [ngModel]="globalSearch()" (ngModelChange)="globalSearch.set($event)"
+          placeholder="Search..."
+          class="bg-[var(--bg-input)] text-[var(--text-primary)] border border-[var(--border-input)] text-xs px-3 py-1.5 rounded-lg focus:outline-none focus:border-sky-500 w-36 sm:w-44 placeholder:text-[var(--text-muted)]" />
+      </div>
+    </div>
+
+    <!-- Top Filter Section (Department, Type, Location, Apply & Clear) -->
+    <div class="mb-4 p-4 bg-[var(--bg-input)] rounded-xl border border-[var(--border-primary)] space-y-3">
+      <span class="text-xs font-bold text-[var(--text-muted)] tracking-wider block uppercase">
+        FILTER:
+      </span>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+
+        <!-- Department -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="DEPARTMENT" placeholder="Select Department"
+            [options]="formattedDepartmentOptions()" [ngModel]="selectedDepartment()"
+            (ngModelChange)="selectedDepartment.set($event)" name="deptFilter" />
+        </div>
+
+        <!-- Type of Hotwork -->
+        <div class="flex flex-col gap-1.5">
+          <app-select-input label="TYPE OF HOTWORK" placeholder="Select Type of Hotwork"
+            [options]="formattedTypeOptions()" [ngModel]="selectedType()"
+            (ngModelChange)="selectedType.set($event)" name="typeFilter" />
+        </div>
+
+        <!-- Hotwork Location -->
+        <div class="flex flex-col gap-1.5">
+          <label for="filter-location" class="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wide">
+            HOTWORK LOCATION
+          </label>
+          <input id="filter-location" type="text" [ngModel]="locationSearch()"
+            (ngModelChange)="locationSearch.set($event)" placeholder="Enter location..."
+            class="w-full bg-[var(--bg-card)] border-b border-sky-500/40 py-1.5 px-2.5 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-sky-400 rounded" />
+        </div>
+
+        <!-- Filter Action Buttons -->
+        <div class="flex items-center gap-2 shrink-0 whitespace-nowrap">
+          <app-button type="button" (click)="applyFilters()" style="color: #ffffff !important;"
+            class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-bold h-[32px] px-4 rounded-lg text-xs tracking-wide shadow-md transition-colors cursor-pointer inline-flex items-center justify-center whitespace-nowrap">
+            <div class="flex items-center gap-1.5 whitespace-nowrap">
+              <span style="color: #ffffff !important;" class="!text-white whitespace-nowrap">Apply Filters</span>
+            </div>
+          </app-button>
+
+          <app-button type="button" (click)="clearFilters()"
+            class="border border-amber-500/40 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 h-[32px] px-3.5 rounded-lg text-xs inline-flex items-center justify-center gap-1.5 font-medium transition-colors cursor-pointer whitespace-nowrap">
+            <div class="flex items-center gap-1.5 whitespace-nowrap">
+              <app-icon name="filter" [size]="13" class="text-amber-600 dark:text-amber-400"></app-icon>
+              <span class="whitespace-nowrap">Clear Filters</span>
+            </div>
+          </app-button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Shared AG-Grid Component -->
+    <app-data-grid [rowData]="filteredRowData()" [columnDefs]="colDefs" [pageSize]="10" [autoHeight]="true"
+      (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+
+  </app-panel-card>
+</div>
+
+<app-detail-drawer [open]="!!selectedRecord()" [titleMode]="true"
+  [label]="selectedRecord()?.hotworkCode ?? 'Outbox Record'" [subtitle]="selectedRecord()?.descriptionOfHotwork ?? ''"
+  iconName="send" iconColor="#3b82f6" (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  <div class="space-y-4 p-2 text-sm text-[var(--text-primary)]">
+    <!-- Status Banner -->
+    <div class="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)]">
+      <div class="flex items-center gap-2">
+        <app-icon name="info" [size]="16" class="text-sky-400" />
+        <span class="text-xs text-[var(--text-muted)]">Approval Status</span>
+      </div>
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+        {{ item.status || 'Pending Approval' }}
+      </span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)] text-xs">
+      <div>
+        <span class="text-[var(--text-muted)] block">Hotwork Code</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.hotworkCode }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Date of Hotwork</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.dateOfHotwork }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Type of Hotwork</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.hotworkType }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Department | Sub-Department</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.departmentSection }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Location</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.hotworkLocation }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Adjacent Compartment</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.adjacentCompartments }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Hotwork Sentry Names</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.sentryNames }}</span>
+      </div>
+      <div>
+        <span class="text-[var(--text-muted)] block">Time Left Expiry</span>
+        <span class="font-semibold text-[var(--text-primary)]">{{ item.timeLeftExpiry }}</span>
+      </div>
+    </div>
+
+    <div class="p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)] space-y-2 text-xs">
+      <div>
+        <span class="text-[var(--text-muted)] block font-medium mb-1">Description</span>
+        <span class="text-[var(--text-primary)]">{{ item.descriptionOfHotwork }}</span>
+      </div>
+    </div>
+  </div>
+  }
+</app-detail-drawer>

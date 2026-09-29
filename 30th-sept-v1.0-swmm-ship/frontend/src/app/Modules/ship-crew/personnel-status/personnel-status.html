@@ -1,0 +1,48 @@
+<div class="ps-page">
+  <app-help-guidance />
+
+  <div class="ps-tile-row">
+    @for (tab of tabs; track tab) {
+    <app-button type="button" class="glass-card ps-tile" [class]="tabColorClass[tab]"
+      [class.ps-tile--active]="activeTab() === tab" (click)="selectTab(tab)">
+      <div class="ps-tile__info">
+        <div class="ps-tile__count">{{ counts()[tab] }}</div>
+        <div class="ps-tile__label">{{ tabLabels[tab] }}</div>
+      </div>
+      <div class="ps-tile__icon">
+        <app-icon [name]="tabIcon[tab]" [size]="20" color="#ffffff" />
+      </div>
+    </app-button>
+    }
+  </div>
+
+  <div class="ps-tabs-row">
+    @for (tab of tabs; track tab) {
+    <app-button type="button" class="ps-tab-btn" [class.ps-tab-btn--active]="activeTab() === tab" (click)="selectTab(tab)">
+      {{ tabLabels[tab] }}
+      <span class="ps-tab-btn__count">{{ counts()[tab] }}</span>
+    </app-button>
+    }
+  </div>
+
+  <div class="glass-card ps-panel">
+    <div class="ps-filters">
+      <div class="ps-filters__group">
+        <app-select-input label="Department" placeholder="All departments" [options]="departmentOptions()"
+          [ngModel]="deptFilter()" (ngModelChange)="onDeptChange($event)" />
+      </div>
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">
+        <app-icon name="x" [size]="14" variant="inherit" /> Clear filters
+      </app-button>
+    </div>
+
+    <div class="grid-toolbar">
+      <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+      <div class="grid-toolbar__end">
+        <app-export-toolbar [busy]="exportBusy()" [disabled]="!rows().length" (exportRequested)="onExport($event)" />
+      </div>
+    </div>
+
+    <app-data-grid [rowData]="rows()" [columnDefs]="columnDefs()" height="480px" />
+  </div>
+</div>

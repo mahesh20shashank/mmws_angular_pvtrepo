@@ -1,0 +1,130 @@
+<!-- The row editor, shared by both entry modes. Building a row by hand
+     and correcting an imported row are the same act on the same seventeen columns against the
+     same rule engine, so this dialogue serves both and there is no second implementation of
+     it. It is the shared `modal`, the shared `select-input`, the page's own bound labels, and
+     the same theme tokens every other form on this screen uses. -->
+<app-modal size="lg" [compact]="true" [title]="title()" (closeModal)="cancel()">
+  <p class="obs-editor__hint">
+    @if (showingOnlyFlaggedColumns()) {
+      Showing only the field(s) this row is currently failing on. Every closed column is a
+      list, so only a value the import rules permit can be chosen. Press {{ saveLabel() }} - the
+      row is checked against the import rules and turns green the moment it passes. Nothing is
+      written to the Ship Inventory here.
+    } @else {
+      These are the cells as the sheet would hold them. Every closed column is a list, so only a
+      value the import rules permit can be chosen. Press {{ saveLabel() }} - the row is checked
+      against the import rules and turns green the moment it passes. Nothing is written to the
+      Ship Inventory here.
+    }
+  </p>
+
+  <!-- The back end's own clause-led messages, the same strings the ERRORS column renders, so
+       the dialogue and the table never word the same failure two ways. -->
+  @if (errors()) {
+    <p class="obs-editor__errors" role="alert">{{ errors() }}</p>
+  }
+
+  <form [formGroup]="form" class="obs-editor__grid">
+    @for (column of columns(); track column.apiField) {
+      <div class="form-field">
+        @if (column.apiField === "spare_class") {
+          <app-select-input
+            [label]="column.header"
+            [formControlName]="column.apiField"
+            [options]="spareClassOptions()"
+            [placeholder]="selectPlaceholder"
+          />
+          <!-- Clause 2.5 permits these for this department and route, but the ship has not
+               set them up in Masters yet, so a row using one could only ever fail. Named
+               here rather than left as an unexplained absence from the list. -->
+          @if (spareClassesNotSetUp().length) {
+            <span class="obs-editor__note">
+              Not yet set up in Masters, so not offered: {{ spareClassesNotSetUp().join(", ") }}.
+            </span>
+          }
+        } @else if (column.apiField === "equipment_class") {
+          <!-- Requirement 3.4. The department's existing equipment classes for the chosen
+               spare class are offered first, and a genuinely new one is entered by typing it -
+               `allowCustomValue` on the shared select, which says in its own empty state that
+               what was typed will be used as typed. The instruction sits directly beneath the
+               control because a naming rule belongs where the name is entered, not inside a
+               collapsed help panel. -->
+          <app-select-input
+            [label]="column.header"
+            [formControlName]="column.apiField"
+            [options]="equipmentClassOptions()"
+            [allowCustomValue]="true"
+            [placeholder]="selectPlaceholder"
+          />
+          @if (equipmentClassInstruction()) {
+            <span class="obs-editor__instruction">{{ equipmentClassInstruction() }}</span>
+          }
+        } @else if (column.apiField === "category") {
+          <app-select-input
+            [label]="column.header"
+            [formControlName]="column.apiField"
+            [options]="categoryOptions()"
+            [placeholder]="selectPlaceholder"
+          />
+        } @else if (column.apiField === "denomination") {
+          <app-select-input
+            [label]="column.header"
+            [formControlName]="column.apiField"
+            [options]="denominationOptions()"
+            [placeholder]="selectPlaceholder"
+          />
+        } @else if (column.apiField === "rack_position") {
+          <!-- Clause 2.14 makes this optional, so its placeholder says "none" rather than
+               "select" - the empty choice is a real and permitted answer here. -->
+          <app-select-input
+            [label]="column.header"
+            [formControlName]="column.apiField"
+            [options]="rackPositionOptions()"
+            [placeholder]="optionalPlaceholder"
+          />
+        } @else if (column.apiField === "critical") {
+          <!-- Clause 2.20 - YES, or the cell is left empty. -->
+          <app-select-input
+            [label]="column.header"
+            [formControlName]="column.apiField"
+            [options]="criticalOptions()"
+            [placeholder]="optionalPlaceholder"
+          />
+        } @else {
+          <!-- Clause 5.1's red text, the same treatment `obs-cell--unmatched` gives this same
+               cell in the grid (`masters-page.css`) - carried here so a pattern number that
+               matched no source of truth still reads as the thing to fix once it is sitting in
+               its own field instead of a grid row. Scoped to `pattern_number` specifically:
+               every other plain-text column here is ordinary, uncoloured data. -->
+          <label
+            class="form-field-label"
+            [class.obs-editor__label--unmatched]="column.apiField === 'pattern_number' && patternUnmatched()"
+            [attr.for]="'obsRowEdit_' + column.apiField"
+          >{{ column.header }}</label>
+          <input
+            [id]="'obsRowEdit_' + column.apiField"
+            type="text"
+            class="form-field-input"
+            [class.obs-editor__input--unmatched]="column.apiField === 'pattern_number' && patternUnmatched()"
+            [formControlName]="column.apiField"
+          />
+        }
+        <!-- Where the application corrected this cell from a source of truth, what the
+             workbook itself held is shown here, so the correction is judged rather than
+             guessed at. Clause 4.4 asks for exactly this. -->
+        @if (correctionFor(column) !== undefined) {
+          <span class="obs-editor__was">
+            Corrected by SWMM from ILMS or WLMS. Before correction: {{ correctionFor(column) || "(empty)" }}
+          </span>
+        }
+      </div>
+    }
+  </form>
+
+  <div class="obs-editor__actions">
+    <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+    <app-button type="button" class="btn-primary" [disabled]="busy()" (click)="save()">
+      {{ busy() ? "Checking…" : saveLabel() }}
+    </app-button>
+  </div>
+</app-modal>

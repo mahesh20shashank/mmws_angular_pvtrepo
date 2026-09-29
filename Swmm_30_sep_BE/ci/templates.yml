@@ -1,0 +1,48 @@
+default:
+  interruptible: true
+
+.default_mr_rules:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(swmm_dev|swmm_stage)$/'
+
+.default_dev_rules:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "swmm_dev"'
+
+.dev_job:
+  tags:
+    - dev-be
+
+.sonar_template:
+  stage: sonar
+
+  before_script:
+    - mkdir -p "$CI_PROJECT_DIR/.sonar-cache"
+    - chmod -R 777 "$CI_PROJECT_DIR/.sonar-cache"
+
+.trivy_fs_template:
+  stage: trivy_fs
+  allow_failure: true
+
+.trivy_image_template:
+  stage: trivy_image
+  allow_failure: true
+
+.build_template:
+  stage: build
+
+.syft_template:
+  stage: sbom
+  allow_failure: false
+
+.push_template:
+  stage: push
+
+.deploy_template:
+  stage: deploy
+
+.offline_deploy_job:
+  tags:
+    - dev-be
+  variables:
+    DOCKER_CONFIG: "/home/gitlab-runner/.docker"

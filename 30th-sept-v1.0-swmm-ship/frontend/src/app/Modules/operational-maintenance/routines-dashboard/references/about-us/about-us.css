@@ -1,0 +1,159 @@
+.about-us-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Hero */
+.hero-section {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(29, 150, 233, 0.25), rgba(29, 150, 233, 0.05));
+  color: var(--text-primary);
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: #1d96e9;
+}
+
+.hero-subtitle {
+  margin-top: 0.75rem;
+  font-size: 1.125rem;
+  color: var(--text-muted);
+}
+
+/* Carousel */
+.carousel-section {
+  width: 100%;
+}
+
+.ship-carousel {
+  position: relative;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 450px;
+}
+
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 450px;
+  object-fit: fill;
+  border-radius: 15px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  z-index: 2;
+}
+
+.carousel-control:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.carousel-control.prev {
+  left: 1rem;
+}
+
+.carousel-control.next {
+  right: 1rem;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.indicator {
+  height: 3px;
+  width: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.indicator.active {
+  background-color: var(--accent-blue);
+}
+
+/* About Card */
+.about-card {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  color: var(--text-primary);
+}
+
+.about-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.check-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--icon-success, #22C55E);
+}
+
+.about-quote {
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 1rem;
+  font-size: 1.1rem;
+  font-style: italic;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+}
+
+.about-text {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0 0 0.75rem 0;
+}
+
+.about-text em {
+  font-style: italic;
+  color: var(--text-primary);
+}

@@ -1,0 +1,428 @@
+/* ═══════════════════════════════════════════════
+   Date Picker Component – date-picker.component.css
+   ═══════════════════════════════════════════════ */
+
+/* ── CSS custom properties (theme tokens) ── */
+:host {
+  display: block;
+  width: 100%;
+
+  --dp-bg: var(--bg-input);
+  --dp-surface: var(--bg-dropdown);
+  --dp-border: var(--border-dropdown);
+  --dp-accent: var(--accent-blue);
+  --dp-accent-glow: rgba(29, 150, 233, 0.25);
+  --dp-text: var(--text-primary);
+  --dp-text-muted: var(--text-muted);
+  --dp-text-dim: var(--text-muted-2);
+  --dp-range-bg: var(--bg-comm-btn, rgba(29, 150, 233, 0.12));
+  --dp-hover-bg: var(--bg-nav-child-hover);
+  --dp-radius: 8px;
+  --dp-cell: 30px;
+}
+
+/* ══════════════════════════════════════════
+   Wrapper
+   ══════════════════════════════════════════ */
+.dp-wrapper {
+  position: relative;
+  overflow: visible;
+}
+
+/* ══════════════════════════════════════════
+   Trigger (single input box)
+   ══════════════════════════════════════════ */
+.dp-trigger {
+
+  position: relative;
+
+  width: 100%;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 16px;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--border-input);
+
+  background: var(--bg-input);
+
+  cursor: pointer;
+
+  transition: .25s;
+
+}
+
+/* `:not(.dp-trigger--disabled)` on the hover half only — now that `.dp-trigger--disabled` no
+   longer sets `pointer-events: none` (see that rule's own doc), hover styling on a locked trigger
+   would otherwise actually fire again; nothing about being locked should visibly react to a mouse
+   passing over it. */
+.dp-trigger:not(.dp-trigger--disabled):hover,
+.dp-trigger.active {
+
+  border-color: var(--text-muted);
+
+}
+
+/* Matches app-input-field's `.input-container--invalid` treatment (full red border, only after a
+   failed Submit) so a form can mix date-pickers with text/select fields and get one consistent
+   validation look. */
+.dp-trigger--invalid {
+  border-color: #f82c36;
+  outline: 1px solid #f82c36;
+  outline-offset: -1px;
+}
+
+/* `.dp-value.placeholder` below (3 classes here vs. its 2) always needs to win over the plain
+   muted placeholder color when a field is both blank and invalid, regardless of which rule this
+   stylesheet happens to declare first. */
+.dp-trigger--invalid .dp-value,
+.dp-trigger--invalid .dp-value.placeholder {
+  color: #f82c36;
+}
+
+/* Live "required & blank" hint (pre-submit) — softer red, matches
+   `.input-container--placeholder-invalid`/`.dropdown-trigger.placeholder-error`. Same
+   3-vs-2-classes reasoning as above. */
+.dp-value.placeholder.dp-value--placeholder-invalid {
+  color: #e5877f;
+}
+
+/* Matches app-input-field's `.readonly-field`/app-select-input's `.dropdown-trigger.disabled` —
+   the same dashed, dimmed "locked" look every other field type uses (e.g. Update mode, which
+   disables most of the SFD dynamic form's fields via FormControl).
+   No `pointer-events: none` here (unlike this same class's own first cut) — that property pulls
+   the element out of hit-testing entirely, so the browser computes hover cursor for whatever's
+   BEHIND it instead, which silently defeats the `cursor: not-allowed` right above it on this same
+   rule. app-select-input's own `.dropdown-trigger.readonly` (as opposed to its separate `.disabled`
+   state) never had this property for exactly that reason. Safe to drop: `selectDate()`/
+   `toggleCalendar()` (picker.ts) already guard on `this.disabled || this.readonly` in TypeScript,
+   so blocking clicks never actually depended on this CSS property — only the cursor did. */
+.dp-trigger--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background: var(--bg-input-disabled);
+  border: 1.5px dashed var(--border-input);
+}
+
+/* Locked wins over "needs fixing" styling, not the other way round — same fix, same reasoning as
+   app-input-field's identical combined selector: `.dp-trigger--invalid`'s `outline` isn't a
+   `border` property, so `--disabled`'s later, full `border` shorthand above never actually
+   cancelled it out — the red outline kept showing through the dashed border regardless of
+   declaration order, making a locked-but-blank date field (e.g. a CMMS-auto-fetched Installation
+   Date the cascade found nothing for) look like "fix this right now" even though the operator has
+   no way to touch it directly. */
+.dp-trigger--disabled.dp-trigger--invalid {
+  border: 1.5px dashed var(--border-input);
+  outline: none;
+}
+
+.dp-trigger--disabled.dp-trigger--invalid .dp-value,
+.dp-trigger--disabled.dp-trigger--invalid .dp-value.placeholder,
+.dp-trigger--disabled .dp-value.placeholder.dp-value--placeholder-invalid {
+  color: var(--text-muted);
+}
+
+.floating-label {
+
+  position: absolute;
+
+  left: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  transition: .2s;
+
+  font-size: 14px;
+
+  color: var(--text-muted);
+
+  pointer-events: none;
+
+}
+
+.floating-label .required {
+  color: var(--error-color, #de1f1f);
+}
+
+.floating-label.visible {
+
+  top: 3px;
+
+  transform: none;
+
+  font-size: 11px;
+
+  color: var(--text-muted);
+
+}
+
+.dp-trigger__icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--dp-text-muted);
+}
+
+.dp-trigger__label {
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.dp-trigger__label--placeholder {
+  color: var(--dp-text-muted);
+}
+
+.dp-trigger__chevron {
+  width: 10px;
+  height: 6px;
+  flex-shrink: 0;
+  color: var(--dp-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.dp-trigger__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ══════════════════════════════════════════
+   Calendar panel
+   ══════════════════════════════════════════ */
+
+.dp-calander-wrapper {
+  position: absolute;
+  border-radius: 16px;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 9999;
+  background: #2e2626e8;
+}
+
+
+.dp-calendar {
+  background: rgb(46 52 63 / 65%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, .45),
+    inset 0 1px 0 rgba(255, 255, 255, .12);
+
+  overflow: hidden;
+
+  padding: 16px;
+}
+
+
+
+@keyframes dp-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Navigation row ── */
+.dp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.dp-nav__btn {
+  background: none;
+  border: none;
+  color: var(--dp-text);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dp-nav__btn:hover {
+  background: var(--dp-hover-bg);
+  color: var(--dp-accent);
+}
+
+.dp-nav__selects {
+  display: flex;
+  gap: 6px;
+}
+
+.dp-select {
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 8px;
+  cursor: pointer;
+  outline: none;
+  appearance: auto;
+  transition: border-color 0.15s;
+}
+
+.dp-select:hover,
+.dp-select:focus {
+  border-color: var(--dp-accent);
+}
+
+/* ══════════════════════════════════════════
+   Calendar grid
+   ══════════════════════════════════════════ */
+.dp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, var(--dp-cell));
+  gap: 2px;
+}
+
+/* ── Weekday headers ── */
+.dp-weekdays span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  font-size: 11.5px;
+  color: var(--dp-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ── Day cells ── */
+.dp-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dp-cell);
+  height: var(--dp-cell);
+  border: none;
+  background: none;
+  border-radius: 50%;
+  font-size: 13px;
+  color: var(--dp-text);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.dp-day:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.dp-day--other-month {
+  color: var(--dp-text-dim);
+}
+
+.dp-day--today:not(.dp-day--range-start):not(.dp-day--range-end) {
+  color: var(--dp-accent);
+  font-weight: 700;
+}
+
+/* Range: start & end circles */
+.dp-day--range-start,
+.dp-day--range-end {
+  background: var(--dp-accent) !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--dp-accent-glow);
+  z-index: 1;
+}
+
+/* Pill shape between start and end */
+.dp-day--range-start {
+  border-radius: 50% 0 0 50%;
+}
+
+.dp-day--range-end {
+  border-radius: 0 50% 50% 0;
+}
+
+.dp-day--range-start.dp-day--range-end {
+  border-radius: 50%;
+}
+
+/* Days inside the range */
+.dp-day--in-range {
+  background: var(--dp-range-bg);
+  border-radius: 0;
+  color: var(--dp-text);
+}
+
+/* Plain hover (not part of a range) */
+.dp-day:hover:not(:disabled):not(.dp-day--range-start):not(.dp-day--range-end):not(.dp-day--in-range) {
+  background: var(--dp-hover-bg);
+  color: var(--text-primary);
+}
+
+.dp-value {
+  width: 100%;
+  font-size: 14px;
+  color: var(--text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.dp-value.with-label {
+  padding-top: 12px;
+}
+
+
+.dp-value.placeholder {
+
+  color: var(--text-muted);
+
+}
+
+.calendar-icon {
+
+  width: 18px;
+  height: 18px;
+
+  color: var(--text-muted);
+
+  flex-shrink: 0;
+
+}
+
+/* Dropdown options */
+.dp-option {
+  background-color: rgba(0, 0, 0, 0.64);
+  color: var(--text-primary);
+}
+
+/* Chromium (Chrome/Edge) scrollbar */
+.dp-select::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dp-select::-webkit-scrollbar-track {
+  background: #3a3d4a;
+  border-radius: 10px;
+}
+
+.dp-select::-webkit-scrollbar-thumb {
+  background: #7a7d86;
+  border-radius: 10px;
+}
+
+.dp-select::-webkit-scrollbar-thumb:hover {
+  background: #9a9ca3;
+}

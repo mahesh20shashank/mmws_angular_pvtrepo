@@ -1,0 +1,1549 @@
+<app-form-card title="CHECKS OF ICCP SYSTEM (Occasion)" headerColor="#0f172a" textColor="#ffffff">
+    <!-- FORM CONTENT -->
+    <form [formGroup]="form" class="p-0">
+        <!-- ROW 1 -->
+        <div class="grid grid-cols-3 gap-3">
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="classOfShip">Class of Ship</label>
+                <app-select formControlName="classOfShip" [options]="classOfShipOptions" [disabled]="true">
+                </app-select>
+            </div>
+
+            <!-- SHIP STATUS -->
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Ship</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="make">Make</label>
+                <app-select formControlName="make" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <!-- Date of conduct of trials  -->
+            <div class="flex flex-col gap-1">
+                <app-calendar label="Date of Inspection*" formControlName="date_of_inspection"></app-calendar>
+            </div>
+            <!--Place of conduct of trials  -->
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="place_of_conduct_trail">Occasion of Inspection</label>
+                <app-select formControlName="place_of_conduct_trail" [options]="occasionOptions"
+                    placeholder="--Select--" class="w-full">
+                </app-select>
+            </div>
+
+
+            <!-- Berthed at -->
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Berthed at</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-3">
+            <!-- Type of Refit -->
+            <div class="flex flex-col gap-1">
+                <app-calendar label="Docking Date
+                    (In case of OHMI and Surprise checks–Last Docking Date to be entered)"
+                    formControlName="date_of_inspection"></app-calendar>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="occasion_of_conduct_trail">Type of Refit
+                    (In case of OHMI and Surprise check–Last Refit Details to be entered)
+                </label>
+                <app-select formControlName="occasion_of_conduct_trail" [options]="refitOptions"
+                    placeholder="--Select--" class="w-full">
+                </app-select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mt-3">
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Ship Alongside</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Type of Anodes</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">No. of Anodes</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Type of REs</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">No. of REs</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="form-label" for="ship">Portable RE</label>
+                <app-select formControlName="ship" [options]="classOfShipOptions" placeholder="--Select--"
+                    class="w-full">
+                </app-select>
+            </div>
+            <div class="flex flex-col gap-1 col-span-1">
+                <app-calendar label="Date of last Diving checks" formControlName="date_of_inspection"></app-calendar>
+            </div>
+            <div class="flex flex-col gap-1 col-span-1">
+                <app-calendar label="Date of last cleaning of ICCP Anodes and REs"
+                    formControlName="date_of_inspection"></app-calendar>
+            </div>
+            <div class="flex flex-col gap-1 col-span-1">
+                <app-calendar label="Calibration Details of Portable RE"
+                    formControlName="date_of_inspection"></app-calendar>
+            </div>
+        </div>
+
+        <!------------------------------------- Preset Potential Value (mV) -------------------------------------->
+        <div class="my-8">
+            <h3 class="text-lg font-semibold mb-4">Preset Potential Value (mV)</h3>
+            <!-- -------------------------- RE  -------------------------->
+            <div class="overflow-x-auto overflow-y-visible border border-white/15 rounded-md">
+                <table class="min-w-full divide-y divide-white/10">
+                    <thead class="bg-white/[0.04]">
+                        <tr>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE (#)
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE1
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE2
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE3
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE4
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE5
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE6
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE7
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                RE8
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white/[0.06] divide-y divide-white/10">
+                        <!--location -->
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium border-r border-white/15 bg-white/[0.04]">
+                                Locations
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re1_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re2_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re3_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re4_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re5_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re6_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re7_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="re8_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--Fr stn -->
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium border-r border-white/15 bg-white/[0.04]">
+                                Fr Stn
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re1_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re2_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re3_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re4_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re5_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re6_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re7_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="re8_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- -------------------------- ANODE  -------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10">
+                    <thead class="bg-white/[0.04]">
+                        <tr>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                Anode (*)
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A1
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A2
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A3
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A4
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A5
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A6
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A7
+                            </th>
+                            <th
+                                class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border-r border-white/15">
+                                A8
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white/[0.06] divide-y divide-white/10">
+                        <!--location -->
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium border-r border-white/15 bg-white/[0.04]">
+                                Locations
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A1_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A2_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A3_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A4_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A5_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A6_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A7_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A8_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--Fr stn -->
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium border-r border-white/15 bg-white/[0.04]">
+                                Fr Stn
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A1_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A2_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A3_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A4_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A5_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A6_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A7_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                            <td class="custom-input">
+                                <input type="text" formControlName="A8_stn"
+                                    class="w-full px-2 py-1 border border-white/15 rounded">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- -------------------------- Check No.1  ------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="check-column">
+                                Check No.1
+                            </th>
+                            <th colspan="4" class="table-header-cell-bottom-border">
+                                ACU(s) in OFF position. Measure Hull potential with Portable RE.
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th class="table-header-cell">Frame Stn</th>
+                            <th class="table-header-cell">Port (mV)</th>
+                            <th class="table-header-cell">Stbd (mV)</th>
+                            <th class="table-header-cell">Remarks</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+
+                            <td class="table-cell">
+                                <input type="number" class="custom-input" placeholder="Numeric" min="0">
+                            </td>
+
+                            <td class="table-cell">
+                                <input type="number" class="custom-input" placeholder="Numeric" min="0">
+                            </td>
+
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A5_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option value="over">Over protected</option>
+                                        <option value="full">Fully protected</option>
+                                        <option value="not">Not protected</option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- -------------------------- Check No.2  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="check-column">
+                                Check No.2
+                            </th>
+                            <th colspan="8" class="table-header-cell-bottom-border">
+                                <p> 1. ACU(s) switched OFF.</p>
+                                <p> 2. Measure Hull potential on the terminals of REs on panel (mV)</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="table-header-cell">
+                                RE1
+                            </th>
+                            <th class="table-header-cell">
+                                RE2
+                            </th>
+                            <th class="table-header-cell">
+                                RE3
+                            </th>
+                            <th class="table-header-cell">
+                                RE4
+                            </th>
+                            <th class="table-header-cell">
+                                RE5
+                            </th>
+                            <th class="table-header-cell">
+                                RE6
+                            </th>
+                            <th class="table-header-cell">
+                                RE7
+                            </th>
+                            <th class="table-header-cell">
+                                RE8
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- -------------------------- Check No.3  ------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="check-column">
+                                Check No.3
+                            </th>
+                            <th colspan="4" class="table-header-cell-bottom-border">
+                                ACU(s) On in Auto mode. Measure Hull potential with Portable RE.
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th class="table-header-cell">Frame Stn</th>
+                            <th class="table-header-cell">Port (mV)</th>
+                            <th class="table-header-cell">Stbd (mV)</th>
+                            <th class="table-header-cell">Remarks</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+
+                            <td class="table-cell">
+                                <input type="number" class="custom-input" placeholder="Numeric" min="0">
+                            </td>
+
+                            <td class="table-cell">
+                                <input type="number" class="custom-input" placeholder="Numeric" min="0">
+                            </td>
+
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="A5_location"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option value="over">Over protected</option>
+                                        <option value="full">Fully protected</option>
+                                        <option value="not">Not protected</option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- -------------------------- Check No.4  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="1" class="check-column">
+                                Check No.4a.
+                            </th>
+                            <th colspan="9" class="table-header-cell-bottom-border">
+                                Measure hull potential, Anode current and Anode voltage in Auto mode
+                                (Terminal Reading).
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" class="table-header-cell tableCellBottomBorder">
+                                Hull potential (mV)
+                            </th>
+                            <th class="table-header-cell">
+                                RE1
+                            </th>
+                            <th class="table-header-cell">
+                                RE2
+                            </th>
+                            <th class="table-header-cell">
+                                RE3
+                            </th>
+                            <th class="table-header-cell">
+                                RE4
+                            </th>
+                            <th class="table-header-cell">
+                                RE5
+                            </th>
+                            <th class="table-header-cell">
+                                RE6
+                            </th>
+                            <th class="table-header-cell">
+                                RE7
+                            </th>
+                            <th class="table-header-cell">
+                                RE8
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th rowspan="2" class="table-header-cell">
+                                Anode current (Amps)
+                            </th>
+                            <th class="table-header-cell">
+                                A1
+                            </th>
+                            <th class="table-header-cell">
+                                A2
+                            </th>
+                            <th class="table-header-cell">
+                                A3
+                            </th>
+                            <th class="table-header-cell">
+                                A4
+                            </th>
+                            <th class="table-header-cell">
+                                A5
+                            </th>
+                            <th class="table-header-cell">
+                                A6
+                            </th>
+                            <th class="table-header-cell">
+                                A7
+                            </th>
+                            <th class="table-header-cell">
+                                A8
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th rowspan="1" class="table-header-cell tableCellTopBorder">
+                                Anode vol (V)
+                            </th>
+                            <td colspan="8" class="table-header-cell tableCellTopBorder">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                    </tbody>
+                    <thead>
+                        <tr>
+                            <th rowspan="1" class="check-column">
+                                Check 4b.
+                            </th>
+                            <th colspan="9" class="table-header-cell-bottom-border">
+                                Measure hull potential, Anode current and Anode voltage in Auto mode (Display Reading).
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" class="table-header-cell tableCellBottomBorder">
+                                Hull potential (mV)
+                            </th>
+                            <th class="table-header-cell">
+                                RE1
+                            </th>
+                            <th class="table-header-cell">
+                                RE2
+                            </th>
+                            <th class="table-header-cell">
+                                RE3
+                            </th>
+                            <th class="table-header-cell">
+                                RE4
+                            </th>
+                            <th class="table-header-cell">
+                                RE5
+                            </th>
+                            <th class="table-header-cell">
+                                RE6
+                            </th>
+                            <th class="table-header-cell">
+                                RE7
+                            </th>
+                            <th class="table-header-cell">
+                                RE8
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th rowspan="2" class="table-header-cell">
+                                Anode current (Amps)
+                            </th>
+                            <th class="table-header-cell">
+                                A1
+                            </th>
+                            <th class="table-header-cell">
+                                A2
+                            </th>
+                            <th class="table-header-cell">
+                                A3
+                            </th>
+                            <th class="table-header-cell">
+                                A4
+                            </th>
+                            <th class="table-header-cell">
+                                A5
+                            </th>
+                            <th class="table-header-cell">
+                                A6
+                            </th>
+                            <th class="table-header-cell">
+                                A7
+                            </th>
+                            <th class="table-header-cell">
+                                A8
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th rowspan="1" class="table-header-cell tableCellTopBorder">
+                                Anode vol (V)
+                            </th>
+                            <td colspan="8" class="table-header-cell tableCellTopBorder">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- -------------------------- Check No.5  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="check-column">
+                                Check No.5
+                            </th>
+                            <th colspan="9" class="table-header-cell-bottom-border">
+                                <p> 1.ACU(s) switched to manual mode. Currents set to Zero. ACU switched ON.</p>
+                                <p> 2. Measure and record Hull Potential as indicated by ICCP REs (mV)</p>
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <th class="table-header-cell">
+                                RE1
+                            </th>
+                            <th class="table-header-cell">
+                                RE2
+                            </th>
+                            <th class="table-header-cell">
+                                RE3
+                            </th>
+                            <th class="table-header-cell">
+                                RE4
+                            </th>
+                            <th class="table-header-cell">
+                                RE5
+                            </th>
+                            <th class="table-header-cell">
+                                RE6
+                            </th>
+                            <th class="table-header-cell">
+                                RE7
+                            </th>
+                            <th class="table-header-cell">
+                                RE8
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- -------------------------- Check No.6  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="check-column">
+                                Check No.6
+                            </th>
+                            <th colspan="9" class="table-header-cell-bottom-border">
+                                <p> 1.ACU(s) switched OFF. </p>
+                                <p> 2.Measure open circuit Voltage of Anodes with Hull (V)</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="table-header-cell">
+                                A1
+                            </th>
+                            <th class="table-header-cell">
+                                A2
+                            </th>
+                            <th class="table-header-cell">
+                                A3
+                            </th>
+                            <th class="table-header-cell">
+                                A4
+                            </th>
+                            <th class="table-header-cell">
+                                A5
+                            </th>
+                            <th class="table-header-cell">
+                                A6
+                            </th>
+                            <th class="table-header-cell">
+                                A7
+                            </th>
+                            <th class="table-header-cell">
+                                A8
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- -------------------------- Check No.7  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th colspan="4" class="check-column tableCellBottomBorder">
+                                Check No.7
+                                <p class="text-color-black">
+                                    To check ICCP system functionality and to record amount of current required to be
+                                    impressed to maintain the hull potential in the protected zone</p>
+                            </th>
+                            <th colspan="5" class="table-header-cell-bottom-border">
+                                <ol class="">
+                                    <li>1. ACU-1 switched ON in manual mode. Other ACU(s) switched OFF.</li>
+                                    <li>2. Current to be impressed in increments of 01 or 02 Amps.</li>
+                                    <li>3. Check response to increase of impressed current by means of ICCP REs
+                                        associated
+                                        with ACU-1. Cross check with Portable REs.</li>
+                                    <li>4. Increase currents till the point where the hull potential starts to decrease
+                                        (in
+                                        the case of ships with hull potential in the protected/over-protected zone).
+                                    </li>
+                                    <li>5. Increase currents till hull potential is within the protected zone ie.
+                                        220–250mV
+                                        (in the case of ships with hull potential in under protected zone).</li>
+                                </ol>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="table-cell tableCellHeader">ACU No.: 1</td>
+                        </tr>
+                        <tr>
+
+                            <th class="table-header-cell">
+                                RE1
+                            </th>
+                            <th class="table-header-cell">
+                                RE2
+                            </th>
+                            <th class="table-header-cell">
+                                RE3
+                            </th>
+                            <th class="table-header-cell">
+                                RE4
+                            </th>
+                            <th class="table-header-cell">
+                                RE5
+                            </th>
+                            <th class="table-header-cell">
+                                RE6
+                            </th>
+                            <th class="table-header-cell">
+                                RE7
+                            </th>
+                            <th class="table-header-cell">
+                                RE8
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- -------------------------- Check No.9  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="check-column">
+                                Check No.9
+                            </th>
+                            <th colspan="9" class="table-header-cell-bottom-border">
+                                Check continuity of fuses (SAT/UNSAT)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="table-header-cell">
+                                A1
+                            </th>
+                            <th class="table-header-cell">
+                                A2
+                            </th>
+                            <th class="table-header-cell">
+                                A3
+                            </th>
+                            <th class="table-header-cell">
+                                A4
+                            </th>
+                            <th class="table-header-cell">
+                                A5
+                            </th>
+                            <th class="table-header-cell">
+                                A6
+                            </th>
+                            <th class="table-header-cell">
+                                A7
+                            </th>
+                            <th class="table-header-cell">
+                                A8
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td class="check-empty-cell"></td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A1"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A2"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A3"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A4"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A5"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A6"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A7"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="relative w-full">
+                                    <select formControlName="check_9_A8"
+                                        class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let option of ReOptions" [value]="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- -------------------------- Check No.10  --------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+
+                    <thead>
+                        <tr>
+                            <th rowspan="1" class="check-column">
+                                Check No.10
+                            </th>
+                            <th colspan="9" class="table-header-cell-bottom-border">
+                                Attach hull potential, Anode currents and voltages of previous day.
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" class="table-header-cell tableCellBottomBorder">
+                                Hull potential (mV)
+                            </th>
+                            <th class="table-header-cell">
+                                RE1
+                            </th>
+                            <th class="table-header-cell">
+                                RE2
+                            </th>
+                            <th class="table-header-cell">
+                                RE3
+                            </th>
+                            <th class="table-header-cell">
+                                RE4
+                            </th>
+                            <th class="table-header-cell">
+                                RE5
+                            </th>
+                            <th class="table-header-cell">
+                                RE6
+                            </th>
+                            <th class="table-header-cell">
+                                RE7
+                            </th>
+                            <th class="table-header-cell">
+                                RE8
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th rowspan="2" class="table-header-cell">
+                                Anode current (Amps)
+                            </th>
+                            <th class="table-header-cell">
+                                A1
+                            </th>
+                            <th class="table-header-cell">
+                                A2
+                            </th>
+                            <th class="table-header-cell">
+                                A3
+                            </th>
+                            <th class="table-header-cell">
+                                A4
+                            </th>
+                            <th class="table-header-cell">
+                                A5
+                            </th>
+                            <th class="table-header-cell">
+                                A6
+                            </th>
+                            <th class="table-header-cell">
+                                A7
+                            </th>
+                            <th class="table-header-cell">
+                                A8
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A1">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A2">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A3">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A4">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A5">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A6">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A7">
+                            </td>
+                            <td class="table-cell">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th rowspan="1" class="table-header-cell tableCellTopBorder">
+                                Anode vol (V)
+                            </th>
+                            <td colspan="8" class="table-header-cell tableCellTopBorder">
+                                <input type="text" class="custom-input" formControlName="check_6_A8">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- -------------------------- Check No.11  ------------------------------------------------------->
+            <div class="overflow-x-auto border border-white/15 rounded-md my-2">
+                <table class="min-w-full divide-y divide-white/10 inspection-table">
+                    <tbody>
+                        <tr>
+                            <th class="check-column">
+                                Check No. 11
+                            </th>
+                            <!-- <div class="grid grid-cols-3 gap-3">
+            <div class="flex flex-col gap-1"> -->
+                            <td class="table-cell">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="flex flex-col gap-1 p-2">
+                                        <label class="form-label" for="ship">Inspection of Cofferdams</label>
+                                        <div class="relative w-full">
+                                            <!-- <label class="form-label" for="ship">Inspection of Cofferdams</label> -->
+                                            <select formControlName="check_9_A2"
+                                                class="w-full appearance-none rounded-none border border-white/20 bg-white/[0.06] py-2 pl-3 pr-10 text-sm text-white/80 shadow-[0_2px_6px_rgba(15,23,42,0.08)] transition hover:border-white/20 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/25 disabled:cursor-not-allowed disabled:bg-white/[0.06] disabled:text-white/60">
+                                                <option value="">--Select--</option>
+                                                <option *ngFor="let option of openClosedOptions" [value]="option.value">
+                                                    {{ option.label }}
+                                                </option>
+                                            </select>
+                                            <i
+                                                class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/60"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </form>
+
+    <!-- FOOTER -->
+    <div formFooter class="flex gap-5 justify-end">
+        <app-loading-button label="Clear" [color]="'red'" [icon]="restartIcon"
+            (clicked)="handleSave('draft')"></app-loading-button>
+
+
+        <app-loading-button label="Save draft" [color]="'blue'" [icon]="draftIcon" [loading]="loading"
+            (clicked)="handleSave('draft')"></app-loading-button>
+
+        <app-loading-button label="Save" [color]="'green'" [icon]="saveIcon" [loading]="loading"
+            (clicked)="handleSave('save')"></app-loading-button>
+    </div>
+
+</app-form-card>

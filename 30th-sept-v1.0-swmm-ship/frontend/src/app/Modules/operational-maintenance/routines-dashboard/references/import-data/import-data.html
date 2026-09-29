@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="header-container">
+        <div class="box-container-heading">
+            Nomenclature Synchronization
+        </div>
+
+        <div class="btn-1">
+            <app-button class="subHeading_box" (click)="startSync()">
+                Step 3 : CMMS Nom. Wise Routines Sync
+            </app-button>
+        </div>
+
+        <div class="btn-2">
+            <app-button class="subHeading_box" (click)="generateRoutines()">
+                Step 4 : CMMS Nom. Wise Missing Routines
+            </app-button>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="progress-container">
+        <div class="content">
+            {{ statusText }}
+        </div>
+
+        <div class="content">
+            {{ progress }}%
+        </div>
+    </div>
+
+    <div class="bar">
+        <div class="progress-fill" [style.--progress-pct.%]="progress"></div>
+    </div>
+
+    <div class="write-area">
+        <div class="progress-status">
+            <div class="content">
+                {{ processedItems }} Items Processed
+            </div>
+        </div>
+
+        <div class="area">
+            <textarea rows="10" readonly [value]="logs()"
+                class="w-full rounded-lg bg-black border border-white/10 px-3 py-2 text-white/60 text-sm"></textarea>
+        </div>
+    </div>
+</div>

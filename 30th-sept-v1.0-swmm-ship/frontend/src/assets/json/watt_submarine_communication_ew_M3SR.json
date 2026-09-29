@@ -1,0 +1,823 @@
+{
+  "formId": "m3sr",
+  "title": "M3SR HF TX/RX \u2014 DAILY SUMMARY OF PROGRESS",
+  "sourceFile": "M3SR.html",
+  "sections": [
+    {
+      "id": "trial_header_information",
+      "title": "M3SR HF TX/RX — DAILY SUMMARY OF PROGRESS",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type":"label",
+            "value": "Trial Header Information",
+            "colSpan": 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Name of Ship",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name",
+            "colSpan": 4
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "Equipment",
+            "type": "input",
+            "value": "M3SR HF TX/RX",
+            "required": false,
+            "disabled": true,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "sno",
+            "key": "sno",
+            "name": "sno",
+            "label": "SNo.",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan":4
+          },
+          {
+            "_id": "trial_date",
+            "key": "trial_date",
+            "name": "trial_date",
+            "label": "Date",
+            "type": "date",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "date",
+            "colSpan": 4
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "Nature of Trials",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select Nature of Trials --",
+                "value": ""
+              },
+              {
+                "label": "Op-Checks",
+                "value": "Op-Checks"
+              },
+              {
+                "label": "LLS",
+                "value": "lls"
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATs"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "Department",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select Department --",
+                "value": ""
+              },
+              {
+                "label": "Communication",
+                "value": "Communication"
+              },
+              {
+                "label": "SUBMARINE",
+                "value": "SUBMARINE"
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "Gunnery",
+                "value": "Gunnery"
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [],
+        "fields_5": [
+          {
+            "type": "label",
+            "name": "Tboard",
+            "key": "Tboard",
+            "value": "<p class='text-xs'>Trials team embarked onboard at </p>",
+            "colSpan":2
+          },
+          {
+            "type": "time",
+            "name": "Tboard_time",
+            "key": "Tboard_time",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "HH:MM",
+            "colSpan": 2
+          },
+          {
+             "type": "label",
+            "name": "Tboard_lable",
+            "key": "Tboard_lable",
+            "colSpan":1,
+            "value": "<p class='text-xs'>on</p>"
+          },
+          {
+            "type": "date",
+            "name": "Tboard_date",
+            "key": "Tboard_date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "DD:MM:YYYY",
+            "colSpan": 3
+          },
+          {
+             "type": "label",
+            "name": "Tboard_lable1",
+            "key": "Tboard_lable1",
+            "colSpan":4,
+            "value": "<p class='text-xs'>for Op-Checks of M3SR as per approved schedule, BR 4050 and CNO 07/10. Following observed:-</p>"
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "checks_table_1",
+            "sectionType": "simpleTable",
+            "title": "Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations / Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Result",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "observations_checks",
+                "label": "Observations / Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "result",
+                "label": "Result",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remarks",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "checks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "checks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1.0",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_table_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Checks prior switching ON",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_table_1_row_1_cell_3_chk_1_res",
+                    "key": "chk_1_res",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Sat",
+                        "value": "Sat"
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": "Unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_table_1_row_1_cell_4_chk_1_rmk",
+                    "key": "chk_1_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_table_1_row_2",
+                "cells": [
+                  {
+                    "_id": "checks_table_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2.0",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_table_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Self test",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_table_1_row_2_cell_3_chk_2_res",
+                    "key": "chk_2_res",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Sat",
+                        "value": "Sat"
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": "Unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_table_1_row_2_cell_4_chk_2_rmk",
+                    "key": "chk_2_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "checks_table_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3.0",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_table_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Twniy of M3SR as transmission (with Anis) Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_table_1_row_3_cell_3_chk_3_res",
+                    "key": "chk_3_res",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Sat",
+                        "value": "Sat"
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": "Unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_table_1_row_3_cell_4_chk_3_rmk",
+                    "key": "chk_3_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "checks_table_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4.0",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_table_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Checks as Transmitter in CE mode (local position) (with Anis)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_table_1_row_4_cell_3_chk_4_res",
+                    "key": "chk_4_res",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Sat",
+                        "value": "Sat"
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": "Unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_table_1_row_4_cell_4_chk_4_rmk",
+                    "key": "chk_4_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "checks_table_1_row_5",
+                "cells": [
+                  {
+                    "_id": "checks_table_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "5.0",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "checks_table_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Checks as Transmitter in Voice mode",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "checks_table_1_row_5_cell_3_chk_5_res",
+                    "key": "chk_5_res",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Sat",
+                        "value": "Sat"
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": "Unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "checks_table_1_row_5_cell_4_chk_5_rmk",
+                    "key": "chk_5_rmk",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "remarks_table_1",
+            "sectionType": "simpleTable",
+            "title": "Remarks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "SS Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Sign",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "sr_no",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "observations",
+                "label": "Observations",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "ss_remarks",
+                "label": "SS Remarks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "sign",
+                "label": "Sign",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "remarks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "remarks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": " ",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [
+          {
+            "_id": "presenting_authority",
+            "key": "presenting_authority",
+            "name": "presenting_authority",
+            "label": "Presenting Authority",
+            "type": "select",
+            "value": "",
+            "colspan":12,
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "Ship's Staff",
+                "value": "shipstaff"
+              },
+              {
+                "label": "Dockyard",
+                "value": "dockyard"
+              },
+              {
+                "label": "OEM",
+                "value": "oem"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "watt",
+            "key": "watt",
+            "name": "watt",
+            "label": "Inspecting Authority",
+            "type": "input",
+            "value": "WATT (V)",
+            "colspan":12,
+            "required": false,
+            "disabled": true,
+            "placeholder": "",
+            "inputType": "text"
+          }
+        ],
+        "tables_3": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+/* Page-level rhythm to match the density pass elsewhere (Home's .home-page,
+   KMS's .kms-page): one flex-column gap for inter-section spacing instead of
+   each section carrying its own (larger, inconsistent) margin-bottom. */
+.crew-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.crew-page > app-help-guidance {
+  margin-bottom: 0;
+}
+
+.crew-page > .kpi-row {
+  margin-bottom: 0;
+}
+
+.crew-panel {
+  padding: 1.25rem;
+}
+
+.crew-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.crew-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.crew-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.crew-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Clear Filters has no label above it (unlike the Category/Department groups), so it needs its
+   own explicit height to land on the same 34px control band those groups bottom-align to —
+   scoped to this row only, not the shared `.btn-secondary` class the Download buttons above and
+   the confirm-modal below also use. */
+.crew-filters .btn-secondary {
+  height: 34px;
+}
+
+.crew-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.crew-filters__group--dept {
+  flex: 0 1 240px;
+  min-width: 200px;
+}
+
+.crew-filters__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.crew-pill-group {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.crew-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 0 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* `app-select-input`'s own `.dropdown-trigger` defaults to 45px — taller than the Category
+   pill group (34px) and the Clear Filters button next to it. With `.crew-filters` bottom-
+   aligning each group, that mismatch pushed this group's label up relative to Category's,
+   and its control sat visibly taller than its neighbours. Matched down to the same 34px
+   control band so all three (pills / dropdown / button) sit on one consistent row. */
+:host ::ng-deep .crew-filters__group--dept .dropdown-trigger {
+  height: 34px;
+  border-radius: 8px;
+}
+
+.crew-pill--active {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border-color: var(--accent-blue, #1d96e9);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.crew-modal__title {
+  margin: 0 0 0.75rem;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.crew-modal__message {
+  margin: 0 0 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.crew-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}

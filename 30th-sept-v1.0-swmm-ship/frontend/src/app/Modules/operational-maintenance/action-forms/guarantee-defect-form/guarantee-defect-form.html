@@ -1,0 +1,68 @@
+<form [formGroup]="form">
+  <div class="form-grid">
+    @for (field of fields(); track field.key) {
+    @if (isFieldVisible(field)) {
+    <div class="form-field field-{{ field.key }}">
+      @switch (field.controlType) {
+      @case ("text") {
+      <label [attr.for]="'field-' + field.key" class="text-white/60 text-xs mb-1 block">
+        {{ field.label }}
+        @if (isFieldRequired(field)) {
+        <span class="required-star">*</span>
+        }
+      </label>
+      <input [id]="'field-' + field.key" type="text" [readonly]="field.readonly ?? false" [formControlName]="field.key"
+        [class.readonly-dotted]="field.readonly"
+        class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      }
+
+      @case ("date") {
+      <app-input-field [label]="field.label" [type]="'date'" [required]="isFieldRequired(field)" [max]="field.key === 'defectDate' ? maxDefectDate : ''" [formControlName]="field.key">
+      </app-input-field>
+      }
+
+      @case ("select") {
+      <app-select-input [label]="field.label" [options]="field.options || []" [required]="isFieldRequired(field)"
+        [formControlName]="field.key">
+      </app-select-input>
+      }
+
+      @case ("textarea") {
+      <label [attr.for]="'field-' + field.key" class="text-white/60 text-xs mb-1 block">
+        {{ field.label }}
+        @if (isFieldRequired(field)) {
+        <span class="required-star">*</span>
+        }
+      </label>
+      <textarea [id]="'field-' + field.key" rows="3" [formControlName]="field.key"
+        class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+      }
+
+      @case ("radio") {
+      <app-radio-input [label]="field.label" [options]="field.options || []" [formControlName]="field.key">
+      </app-radio-input>
+      }
+
+      <!-- @case ("file") {
+            <app-file-input [label]="field.label" [outsideLabel]="true" [formControlName]="field.key">
+            </app-file-input>
+          } -->
+      }
+
+      @if (form.get(field.key)?.invalid && form.get(field.key)?.touched) {
+      <span class="error">
+        {{ getError(field.key) }}
+      </span>
+      }
+    </div>
+    }
+    @if (field.key === "repairPlace") {
+    <div class="save-button-container">
+      <app-button type="button" class="cancel-btn" (click)="onCancel()">Cancel</app-button>
+      <app-button type="button" class="save-btn" (click)="openConfirmModal()">Save</app-button>
+    </div>
+
+    }
+    }
+  </div>
+</form>

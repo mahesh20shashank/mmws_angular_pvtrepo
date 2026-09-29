@@ -1,0 +1,133 @@
+<ng-template #iconTpl>
+  <div class="kpi-icon-box" [ngStyle]="{ background: iconBg || null }">
+    @if (iconName) {
+      <app-icon
+        [name]="iconName"
+        [size]="20"
+        [strokeWidth]="1.8"
+        [color]="iconColor"
+      />
+    } @else if (iconPath) {
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        [attr.stroke]="iconColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path [attr.d]="iconPath"></path>
+      </svg>
+    } @else {
+      <app-icon
+        name="wrench"
+        [size]="20"
+        [strokeWidth]="1.8"
+        [color]="iconColor"
+      />
+    }
+  </div>
+</ng-template>
+
+<ng-template #bottomRowTpl>
+  <!-- Dynamic Tabs -->
+  @if (showTimelineTab) {
+    <div class="flex gap-1 sub2 tab-container" [class.accent-pills]="accentPills">
+      @for (tab of timelineOptions; track tab.key) {
+        <app-button
+          type="button"
+          class="kpi-time-tab"
+          [class.kpi-time-tab-active]="activeTab === tab.key"
+          (click)="changeTab(tab.key)"
+        >
+          {{ tab.label }}
+        </app-button>
+      }
+    </div>
+  }
+
+  <!-- Trend -->
+  @if (showTrends) {
+    <div
+      class="kpi-trend kpi-content"
+      [ngStyle]="{ color: trendColor }"
+      (mouseenter)="onHoverOnTrendPercentage()"
+      (mouseleave)="onLeaveMouseOnTrendPercentae()"
+    >
+      @if (trendState !== 'neutral') {
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 14"
+          fill="none"
+          [attr.stroke]="trendColor"
+          stroke-width="2.5"
+        >
+          <polyline [attr.points]="trendPoints" />
+        </svg>
+      }
+
+      {{ currentTrend }}
+    </div>
+  }
+
+  @if (viewMoreRoute) {
+    <a [routerLink]="viewMoreRoute" class="kpi-view-more">{{ viewMoreLabel }}</a>
+  } @else if (showViewMore) {
+    <app-button type="button" (click)="onDetailClick($event)" class="kpi-view-more cursor-pointer border-0">
+      {{ viewMoreLabel }}
+    </app-button>
+  }
+</ng-template>
+
+@if (iconPosition === 'right') {
+  <!-- Icon-on-the-right layout: count/title/bottom-row stacked on the left, icon badge on the right -->
+  <div
+    class="glass-card flex items-start justify-between gap-3 p-3 kpi-card"
+    [ngStyle]="{ height: cardHeight, 'border-top': accentColor ? '3px solid ' + accentColor : null }"
+  >
+    <div class="flex flex-col justify-between h-full min-w-0">
+      <div class="flex flex-col gap-1">
+        <span class="no_kpi" [appCountUp]="displayCount"></span>
+        <div class="kpi_heading">{{ title }}</div>
+        @if (description) {
+          <div class="kpi-description">{{ description }}</div>
+        }
+      </div>
+      <div class="kpi-bottom-row">
+        <ng-container *ngTemplateOutlet="bottomRowTpl" />
+      </div>
+    </div>
+    <ng-container *ngTemplateOutlet="iconTpl" />
+  </div>
+} @else {
+  <div
+    class="glass-card flex flex-col p-2 kpi-card"
+    [ngStyle]="{ height: cardHeight, 'border-top': accentColor ? '3px solid ' + accentColor : null }"
+  >
+    <!-- Top -->
+    <div class="flex items-center gap-2.5">
+      <ng-container *ngTemplateOutlet="iconTpl" />
+
+      <!-- Count -->
+      <div class="flex flex-col justify-center">
+        <span class="no_kpi" [appCountUp]="displayCount"></span>
+      </div>
+    </div>
+
+    <!-- Label -->
+    <div class="kpi_heading">
+      {{ title }}
+    </div>
+    @if (description) {
+      <div class="kpi-description">{{ description }}</div>
+    }
+
+    <!-- Bottom -->
+    <div class="kpi-bottom-row">
+      <ng-container *ngTemplateOutlet="bottomRowTpl" />
+    </div>
+  </div>
+}

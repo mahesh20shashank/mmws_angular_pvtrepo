@@ -1,0 +1,241 @@
+@import '../shared/daf-shared.css';
+
+/* ---------- Field grid spans (local to this form's layout) ---------- */
+.daf-field--span2 {
+  grid-column: span 2;
+}
+
+.daf-field-spacer {
+  min-width: 0;
+}
+
+/* Two stacked fields sharing one grid cell (SS Remarks+Attachment, Symptoms+Trials
+   Required, either side of the tall Defect Description field). A flex column here
+   instead of `grid-row: span 2` on Defect Description — CSS Grid distributes a
+   row-spanning item's extra height across ALL rows it spans, which put a large gap
+   between SS Remarks and Attachment instead of trailing after Attachment where it
+   reads correctly. Each field sizes to its own content; the column's own natural
+   height can be shorter than the grid row (set by Defect Description) without
+   stretching anything inside it. */
+.daf-field-column {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 0;
+}
+
+/* ---------- Responsive overrides for shared daf- classes ----------
+   Angular's view encapsulation scopes `@import`ed rules per-component, so these only
+   affect this form's own template — aber-form/as-and-as-form/services-form keep the
+   shared daf-shared.css behaviour untouched. Both classes previously used a fixed
+   `height: 42px`, which clipped their content if it ever had to wrap on a narrow
+   screen (a long "past DARTs" link, or a radio group whose options no longer fit
+   on one line); `min-height` keeps the same look everywhere it currently fits. */
+.daf-field-radio-group,
+.daf-field-auto {
+  height: auto;
+  min-height: 42px;
+}
+
+.daf-form-actions {
+  flex-wrap: wrap;
+}
+
+/* ---------- Auto-fetched detail summary (selected equipment, location on board, ...) ----------
+   Shared by every "SFD (auto-fetched)" panel this form shows once equipment is picked —
+   `auto-fit` sizing adapts to however many items a given panel has (5 for equipment
+   identity, 4 for location) without a separate column count/breakpoint per panel. */
+.daf-detail-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px 14px;
+  margin-top: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+}
+
+.daf-detail-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.daf-detail-summary-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.daf-detail-summary-value {
+  font-size: 12.5px;
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+}
+
+.daf-detail-summary-value--strong {
+  font-weight: 600;
+}
+
+/* ---------- Inline field hint / note text ---------- */
+.daf-field-note {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin: -2px 0 2px;
+}
+
+/* ---------- Past DART Number (read-only, auto-fetched link) ---------- */
+.daf-history-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--accent-blue);
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.daf-history-link:hover {
+  background: var(--bg-input-disabled);
+}
+
+/* ---------- DART Trigger / rectified-onboard row ---------- */
+.daf-trigger-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 13px 18px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border-primary);
+}
+
+.daf-trigger-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.daf-trigger-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 18px;
+}
+
+.daf-section-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 7px;
+}
+
+.daf-section-dot--trigger {
+  background: #14b8a6;
+}
+
+.daf-section-dot--rectified {
+  background: #a855f7;
+}
+
+/* ---------- "Log another defect?" confirmation (shown after Raise DART) ---------- */
+.daf-log-another {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.daf-log-another__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.daf-log-another__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.14);
+  flex-shrink: 0;
+}
+
+.daf-log-another__title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.daf-log-another__text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.daf-log-another__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-primary);
+}
+
+@media (max-width: 900px) {
+  .daf-trigger-row {
+    grid-template-columns: 1fr;
+  }
+
+  .daf-trigger-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .daf-field--span2 {
+    grid-column: span 1;
+  }
+
+  .daf-trigger-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .daf-detail-summary {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .daf-form {
+    padding: 14px;
+  }
+
+  .daf-form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .daf-form-actions .daf-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .daf-detail-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}

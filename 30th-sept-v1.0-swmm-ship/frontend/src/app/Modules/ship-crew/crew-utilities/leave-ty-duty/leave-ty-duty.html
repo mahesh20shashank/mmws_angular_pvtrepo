@@ -1,0 +1,254 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card ltd-panel">
+  <div class="ltd-panel__header">
+    <div>
+      <h3>Leave / TY Duty Details</h3>
+      <p class="ltd-panel__sub">Manage and view all leave / TY duty requests</p>
+    </div>
+    <app-button type="button" class="btn-primary" (click)="openApplyModal()">+ Input details for Leave Forecast</app-button>
+  </div>
+
+  <div class="ltd-tabs-row">
+    <app-button type="button" class="ltd-tab-btn" [class.ltd-tab-btn--active]="activeTab() === 'my-applications'" (click)="selectTab('my-applications')">
+      My Applications
+    </app-button>
+    <app-button type="button" class="ltd-tab-btn" [class.ltd-tab-btn--active]="activeTab() === 'pending'" (click)="selectTab('pending')">
+      Leave Forecast Amendment Requests
+      <span class="ltd-badge">{{ pendingApplications().length }}</span>
+    </app-button>
+  </div>
+
+  <div class="ltd-filter-row">
+    <span class="ltd-filter-row__label">
+      <app-icon name="filter" [size]="14" variant="inherit" />
+      Filter:
+    </span>
+
+    <div class="ltd-filter-row__fields">
+      @if (activeTab() === "my-applications") {
+        <div class="ltd-filter-field">
+          <app-select-input
+            label="Leave Type"
+            [options]="leaveTypeFilterOptions"
+            [ngModel]="leaveTypeFilter()"
+            (ngModelChange)="onLeaveTypeFilterChange($event)"
+          />
+        </div>
+        <div class="ltd-filter-field">
+          <app-select-input
+            label="Status"
+            [options]="statusFilterOptions"
+            [ngModel]="statusFilter()"
+            (ngModelChange)="onStatusFilterChange($event)"
+          />
+        </div>
+        <div class="form-field ltd-filter-field">
+          <label class="form-field-label" for="ltdFromDate">From Date</label>
+          <input id="ltdFromDate" type="date" class="form-field-input" [ngModel]="dateFrom()" (ngModelChange)="dateFrom.set($event)" />
+        </div>
+        <div class="form-field ltd-filter-field">
+          <label class="form-field-label" for="ltdToDate">To Date</label>
+          <input id="ltdToDate" type="date" class="form-field-input" [ngModel]="dateTo()" (ngModelChange)="dateTo.set($event)" />
+        </div>
+      } @else {
+        <div class="ltd-filter-field">
+          <app-select-input
+            label="Status"
+            [options]="statusFilterOptions"
+            [ngModel]="amendStatusFilter()"
+            (ngModelChange)="onAmendStatusFilterChange($event)"
+          />
+        </div>
+        <div class="ltd-filter-field">
+          <app-select-input
+            label="Leave Type"
+            [options]="leaveTypeFilterOptions"
+            [ngModel]="amendLeaveTypeFilter()"
+            (ngModelChange)="onAmendLeaveTypeFilterChange($event)"
+          />
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">
+        <app-icon name="x" [size]="14" variant="inherit" /> Clear Filters
+      </app-button>
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="!filteredRows().length" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs" height="440px" />
+</div>
+
+@if (showApplyModal()) {
+  <app-modal size="lg" (closeModal)="showApplyModal.set(false)">
+    <h3 class="ltd-modal__title">Input details for Leave Forecast</h3>
+
+    <div class="ltd-radio-row">
+      <label><input type="radio" name="leaveType" value="On Leave" [(ngModel)]="leaveType" /> Leave</label>
+      <label><input type="radio" name="leaveType" value="Ty Duty" [(ngModel)]="leaveType" /> TY Duty</label>
+    </div>
+
+    <div class="form-field">
+      <app-select-input
+        label="Select Personnel"
+        placeholder="— Select Employee —"
+        [options]="personnelOptions()"
+        [ngModel]="selectedPno"
+        (ngModelChange)="onSelectPersonnel($event)"
+      />
+      <span class="ltd-hint">Optional shortcut — auto-fills the two fields below, which you can also type/edit directly.</span>
+    </div>
+
+    <div class="ltd-form-grid">
+      <div>
+        <app-input-field
+          label="1. Name of Personnel"
+          placeholder="Enter name"
+          [required]="true"
+          [invalid]="nameInvalid"
+          [ngModel]="personnelName"
+          (ngModelChange)="personnelName = $event"
+        />
+        @if (nameInvalid) {
+          <span class="ltd-error">Name of Personnel is required.</span>
+        }
+      </div>
+      <div>
+        <app-input-field
+          label="2. Personnel Number"
+          placeholder="Enter personnel number"
+          [required]="true"
+          [invalid]="personnelNumberInvalid"
+          [ngModel]="personnelNumber"
+          (ngModelChange)="personnelNumber = $event"
+        />
+        @if (personnelNumberInvalid) {
+          <span class="ltd-error">Personnel Number is required.</span>
+        }
+      </div>
+    </div>
+
+    <h4 class="ltd-section-heading">{{ sectionLabel }}</h4>
+
+    <div class="ltd-form-grid">
+      <label class="ltd-checkbox">
+        <input type="checkbox" [(ngModel)]="hasPrefix" /> 3. {{ typeLabel }} Prefix Applicable?
+      </label>
+      @if (hasPrefix) {
+        <app-input-field
+          label="Prefix Start Date"
+          type="date"
+          [ngModel]="prefixStartDate"
+          (ngModelChange)="prefixStartDate = $event"
+        />
+      }
+
+      <div>
+        <app-input-field
+          label="5. {{ typeLabel }} Commencement Date"
+          type="date"
+          [required]="true"
+          [invalid]="startDateInvalid"
+          [ngModel]="startDate"
+          (ngModelChange)="startDate = $event"
+        />
+        @if (startDateInvalid) {
+          <span class="ltd-error">Commencement Date is required.</span>
+        }
+      </div>
+      <div>
+        <app-input-field
+          label="6. {{ typeLabel }} Completion Date"
+          type="date"
+          [required]="true"
+          [invalid]="endDateInvalid"
+          [ngModel]="endDate"
+          (ngModelChange)="endDate = $event"
+        />
+        @if (endDateInvalid) {
+          <span class="ltd-error">{{ endDate ? "Completion Date cannot be before Commencement Date." : "Completion Date is required." }}</span>
+        }
+      </div>
+
+      <label class="ltd-checkbox">
+        <input type="checkbox" [(ngModel)]="hasSuffix" /> 7. {{ typeLabel }} Suffix Applicable?
+      </label>
+      @if (hasSuffix) {
+        <app-input-field
+          label="Suffix Till Date"
+          type="date"
+          [ngModel]="suffixCompletionDate"
+          (ngModelChange)="suffixCompletionDate = $event"
+        />
+        <app-input-field
+          label="Reporting Date"
+          type="date"
+          [ngModel]="reportingDate"
+          (ngModelChange)="reportingDate = $event"
+        />
+      }
+
+      <app-input-field
+        label="10. No. of Days"
+        placeholder="Auto calculated"
+        [readonly]="true"
+        [ngModel]="noOfDays.toString()"
+      />
+      <app-input-field
+        label="11. {{ typeLabel }} Station"
+        [placeholder]="'Enter ' + typeLabel.toLowerCase() + ' station'"
+        [ngModel]="station"
+        (ngModelChange)="station = $event"
+      />
+      <app-input-field
+        label="Reason (Optional)"
+        placeholder="Enter reason"
+        [ngModel]="reason"
+        (ngModelChange)="reason = $event"
+      />
+      <app-file-input
+        label="Attachment (Optional)"
+        accept="*/*"
+        [outsideLabel]="true"
+        [ngModel]="attachment"
+        (ngModelChange)="onAttachmentChange($event)"
+      />
+    </div>
+
+    <div class="ltd-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="showApplyModal.set(false)">Cancel</app-button>
+      <app-button type="button" class="btn-primary" (click)="submitApply()">Submit</app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showRejectModal()) {
+  <app-modal size="sm" (closeModal)="showRejectModal.set(false)">
+    <h3 class="ltd-modal__title">Reject Application</h3>
+    <div class="form-field">
+      <label class="form-field-label" for="rejectionReason">Reason for Rejection</label>
+      <textarea id="rejectionReason" class="form-field-input" rows="3" [(ngModel)]="rejectionReason"></textarea>
+    </div>
+    <div class="ltd-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="showRejectModal.set(false)">Cancel</app-button>
+      <app-button type="button" class="btn-reject" (click)="confirmReject()">Reject</app-button>
+    </div>
+  </app-modal>
+}
+
+@if (pendingConfirm(); as pending) {
+  <app-modal size="sm" (closeModal)="cancelPending()">
+    <h3 class="ltd-modal__title">Confirm</h3>
+    <p class="ltd-hint">{{ pending.message }}</p>
+    <div class="ltd-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelPending()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" (click)="confirmPending()">{{ pending.confirmLabel }}</app-button>
+    </div>
+  </app-modal>
+}

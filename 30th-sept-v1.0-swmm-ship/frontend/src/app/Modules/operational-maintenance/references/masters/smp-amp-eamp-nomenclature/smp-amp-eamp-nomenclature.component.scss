@@ -1,0 +1,150 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-card,
+.grid-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-input);
+  border-radius: 14px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.form-card {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+
+.grid-card {
+  position: relative;
+  z-index: 1;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.submit-btn {
+  height: 40px;
+  background: rgb(13, 61, 107, 0.3);
+  border: 0.0625rem solid rgb(13, 61, 107, 0.3);
+  padding: 0.5rem 0.9375rem;
+  color: var(--text-primary);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.search-wrapper {
+  width: 350px;
+}
+
+.export-actions {
+  display: flex;
+  gap: 8px;
+}
+.readonly-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.readonly-field label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.readonly-input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #f5f5f5;
+}
+.search-box {
+  flex: 1;
+}
+
+.search-box input {
+  width: 90%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-input);
+  margin-left:8px;
+  background: var(--bg-input);
+
+  color: var(--text-primary);
+}
+
+::ng-deep .amend-action-btn {
+  min-width: 80px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #1D96E9;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+::ng-deep .amend-action-btn:hover {
+  background: #1580c9;
+}
+
+::ng-deep .submit-button {
+  min-width: 80px;
+  height: 45px;
+  border: 1px solid rgba(124, 187, 240, 0.55);
+  border-radius: 10px;
+  background: rgba(43, 91, 125, 0.62);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.grid-wrap {
+  position: relative;
+}
+
+.grid-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 13px;
+  border-radius: 12px;
+}

@@ -1,0 +1,88 @@
+<div class="page-container">
+
+  <!-- Add Maintenance Period Card -->
+  <div class="form-card">
+
+    <div class="card-title">
+      Add Maintenance Period (SMP/AMP/EAMP)
+    </div>
+
+    <form [formGroup]="maintenanceForm">
+
+      <div class="form-row">
+
+        <app-select-input
+          label="Maintenance Type"
+          [options]="refitTypeOptions"
+          formControlName="type">
+        </app-select-input>
+
+        <div class="readonly-field">
+          <label for="mp-start-date">Start Date</label>
+          <input id="mp-start-date" type="date" formControlName="startDate" class="form-field-input" />
+        </div>
+
+        <div class="readonly-field">
+          <label for="mp-completion-date">Completion Date</label>
+          <input id="mp-completion-date" type="date" formControlName="endDate" class="form-field-input" />
+        </div>
+
+        <app-button
+          type="button"
+          class="px-4 h-11 rounded-lg bg-[#0056B3] text-white submit-button glass-card"
+          (click)="addMaintenancePeriod()">
+          Submit
+        </app-button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <!-- Grid Card -->
+  <div class="grid-card">
+
+    <div class="toolbar">
+
+      <div class="search-box">
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Search" />
+
+      </div>
+
+     <div class="flex gap-2 pl-2 mr-3">
+          <app-export-toolbar [busy]="exportBusy()" [disabled]="!rowData().length" (exportRequested)="onExport($event)" />
+        </div>
+
+    </div>
+
+    <!-- Grid stays mounted across reloads; ag-grid just gets fresh rowData
+         pushed in, instead of being torn down/rebuilt each time. -->
+    <div class="grid-wrap">
+
+      <app-data-grid
+        [rowData]="rowData()"
+        [columnDefs]="columnDefs"
+        [pagination]="true"
+        [height]="'440px'"
+        [loading]="loading">
+      </app-data-grid>
+    </div>
+
+  </div>
+
+</div>
+
+@if (showAmendModal) {
+
+  <app-amend-nomenclature-modal
+    [row]="selectedRow"
+    (modalClosed)="closeModal()"
+    (save)="saveChanges()">
+  </app-amend-nomenclature-modal>
+
+}

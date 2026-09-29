@@ -1,0 +1,738 @@
+{
+  "formId": "kashmir_fcs",
+  "title": "Kashmir FCS",
+  "sourceFile": "kashmir_fcs.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "Basic Information",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "ship",
+          "label": "Ship",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [],
+          "isDynamic": true,
+          "lookupKey": "ship_id",
+          "prefill": true,
+          "prefillSource": "context.ship",
+          "tree": false
+        },
+        {
+          "type": "select",
+          "name": "department",
+          "label": "Department",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select --",
+              "value": "-- Select --"
+            },
+            {
+              "label": "GUN",
+              "value": "P28"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "equipment",
+          "label": "EQUIPMENT",
+          "required": true,
+          "disabled": true,
+          "placeholder": "",
+          "value": "AMDR 2D",
+          "inputType": "text",
+          "prefill": true,
+          "prefillSource": "equipment.nomenclature"
+        },
+        {
+          "type": "date",
+          "name": "date",
+          "label": "Date",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": ""
+        },
+        {
+          "type": "select",
+          "name": "nature_of_trials",
+          "label": "Nature of Trial",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": "--Select--"
+            },
+            {
+              "label": "SATs",
+              "value": "SATs"
+            },
+            {
+              "label": "HATs",
+              "value": "HATS"
+            },
+            {
+              "label": "OP CHECKS",
+              "value": "OP_CHECKS"
+            },
+            {
+              "label": "IIs",
+              "value": "IIS"
+            }
+          ],
+          "isDynamic": false
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "checks",
+      "title": "Checks",
+      "sectionType": "matrixTable",
+      "fields": [],
+      "tables": [
+        {
+          "id": "checks_matrix_1",
+          "sectionType": "matrixTable",
+          "title": "Checks",
+          "topHeaders": [
+            [
+              {
+                "label": "SER",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "OBSERVATIONS",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "RESULT",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "REMARKS",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [
+            {
+              "key": "ser",
+              "label": "SER",
+              "type": "serial",
+              "align": "center"
+            },
+            {
+              "key": "observations",
+              "label": "OBSERVATIONS",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "result",
+              "label": "RESULT",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "remarks",
+              "label": "REMARKS",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "checks_matrix_1_row_1",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_1_cell_1_kashmir_embark_time_part_1",
+                  "key": "kashmir_embark_time_part_1",
+                  "type": "input",
+                  "label": "Trials team embarked onboard at on for SATs of Kashmir FCS as per approved schedule, BR 4050 and CNO 07/10. Following observed: -",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "inputType": "text",
+                  "options": [],
+                  "colspan": 4,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_1_cell_2_kashmir_embark_date_part_2",
+                  "key": "kashmir_embark_date_part_2",
+                  "type": "date",
+                  "label": "Trials team embarked onboard at on for SATs of Kashmir FCS as per approved schedule, BR 4050 and CNO 07/10. Following observed: -",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_2",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_2_cell_1_static",
+                  "type": "serial",
+                  "value": "01",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_2_cell_2_static",
+                  "type": "label",
+                  "value": "Check TD to all OE-4 devices.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_2_cell_3_ch_test_1_remarks",
+                  "key": "ch_test_1_remarks",
+                  "type": "textarea",
+                  "label": "ch test 1 remarks",
+                  "value": "",
+                  "rows": 4,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_2_cell_4_status_5_11_part_1",
+                  "key": "status_5_11_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_2_cell_5_status_5_11_part_2",
+                  "key": "status_5_11_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_3",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_3_cell_1_static",
+                  "type": "serial",
+                  "value": "02",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_2_static",
+                  "type": "label",
+                  "value": "Check assign TV to all tracks and check target appears on TV display.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_3_ch_test_2_remarks",
+                  "key": "ch_test_2_remarks",
+                  "type": "textarea",
+                  "label": "ch test 2 remarks",
+                  "value": "",
+                  "rows": 4,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_4_status_5_12_part_1",
+                  "key": "status_5_12_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_3_cell_5_status_5_12_part_2",
+                  "key": "status_5_12_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_4",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_4_cell_1_static",
+                  "type": "serial",
+                  "value": "03",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_2_static",
+                  "type": "label",
+                  "value": "Checking operation in centralized mode.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_3_ch_test_3_remarks",
+                  "key": "ch_test_3_remarks",
+                  "type": "textarea",
+                  "label": "ch test 3 remarks",
+                  "value": "",
+                  "rows": 4,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_4_status_5_13_part_1",
+                  "key": "status_5_13_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_4_cell_5_status_5_13_part_2",
+                  "key": "status_5_13_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_5",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_5_cell_1_static",
+                  "type": "serial",
+                  "value": "04",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_2_static",
+                  "type": "label",
+                  "value": "LFNJ Checks.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_3_ch_test_4_remarks",
+                  "key": "ch_test_4_remarks",
+                  "type": "textarea",
+                  "label": "ch test 4 remarks",
+                  "value": "",
+                  "rows": 4,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_4_status_5_14_part_1",
+                  "key": "status_5_14_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_5_cell_5_status_5_14_part_2",
+                  "key": "status_5_14_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_6",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_6_cell_1_static",
+                  "type": "serial",
+                  "value": "05",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_2_static",
+                  "type": "label",
+                  "value": "Firing checks with training missiles.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_3_ch_test_5_remarks",
+                  "key": "ch_test_5_remarks",
+                  "type": "textarea",
+                  "label": "ch test 5 remarks",
+                  "value": "",
+                  "rows": 4,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_4_status_5_15_part_1",
+                  "key": "status_5_15_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_6_cell_5_status_5_15_part_2",
+                  "key": "status_5_15_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "checks_matrix_1_row_7",
+              "cells": [
+                {
+                  "_id": "checks_matrix_1_row_7_cell_1_static",
+                  "type": "serial",
+                  "value": "06.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_2_static",
+                  "type": "label",
+                  "value": "Check multi target engagement on Kashmir FCS.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_3_ch_test_6_remarks",
+                  "key": "ch_test_6_remarks",
+                  "type": "textarea",
+                  "label": "ch test 6 remarks",
+                  "value": "",
+                  "rows": 4,
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_4_status_5_16_part_1",
+                  "key": "status_5_16_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "checks_matrix_1_row_7_cell_5_status_5_16_part_2",
+                  "key": "status_5_16_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        }
+      ]
+    },
+    {
+      "id": "presenting_authority",
+      "title": "Presenting Authority",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "dmr_16a_presenting_authority",
+          "label": "Presenting Authority ",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": "--Select--"
+            },
+            {
+              "label": "Shipstaff",
+              "value": "shipstaff"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "dmr_16a_inspecting_authority",
+          "label": "Inspecting Authority",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "WATT",
+          "inputType": "text"
+        }
+      ],
+      "tables": []
+    }
+  ]
+}

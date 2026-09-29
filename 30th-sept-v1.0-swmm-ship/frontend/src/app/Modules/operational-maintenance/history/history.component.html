@@ -1,0 +1,110 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<form [formGroup]="form" (ngSubmit)="search()">
+
+  <div class="history-filter-grid glass-card">
+
+    <app-select-input
+      label="Period"
+      [options]="maintenancePeriodOptions()"
+      formControlName="maintenancePeriod">
+    </app-select-input>
+
+    <app-select-input
+      label="Occasion"
+      [options]="dartOccasionOptions()"
+      formControlName="dartOccasion">
+    </app-select-input>
+
+    <app-select-input
+      label="Sub-Dept"
+      [options]="subDepartmentOptions()"
+      formControlName="subDepartment">
+    </app-select-input>
+
+    <app-select-input
+      label="Type"
+      [options]="dartTypeOptions()"
+      formControlName="dartType">
+    </app-select-input>
+
+    <div class="date-range-field">
+      <span class="date-range-label">Defect Date Range</span>
+      <div class="date-range-inputs">
+        <app-icon name="calendar" [size]="16" variant="muted" />
+        <input type="date" formControlName="dateFrom" class="date-range-input" />
+        <span class="date-range-sep">to</span>
+        <input type="date" formControlName="dateTo" class="date-range-input" />
+      </div>
+    </div>
+
+    <app-select-input
+      label="Department Name"
+      [options]="departmentOptions()"
+      formControlName="department">
+    </app-select-input>
+
+    <div class="equipment-search-field">
+      <label for="equipment-search" class="date-range-label">Equipment (Name/Nom)</label>
+      <div class="equipment-search-inputs">
+        <input
+          id="equipment-search"
+          type="text"
+          formControlName="equipment"
+          placeholder="Search..."
+          class="equipment-search-input"
+        />
+        <app-button type="submit" class="equipment-search-btn">
+          <app-icon name="search" [size]="16" />
+        </app-button>
+      </div>
+    </div>
+
+  </div>
+
+</form>
+
+<div class="history-result-card">
+
+  <div class="flex items-center justify-end mb-3">
+    <div class="flex items-center gap-4">
+      <app-button type="button" (click)="copyRows()" title="Copy" class="text-white">
+        <app-icon name="copy" [size]="18" variant="inherit" />
+      </app-button>
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="!rowData().length" (exportRequested)="onExport($event)" />
+
+      <app-button
+        type="button"
+        (click)="syncWithCMMS()"
+        [disabled]="syncingCmms()"
+        class="flex items-center gap-1.5 px-3 h-10 rounded-lg bg-[#F4B400] text-[#171A1F] text-sm font-medium whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        <app-icon name="refresh-cw" [size]="14" />
+        <span>{{ syncingCmms() ? 'Syncing...' : 'Sync With CMMS' }}</span>
+      </app-button>
+    </div>
+  </div>
+
+  @if(errorMessage) {
+
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+
+  } @else {
+
+   <app-data-grid
+      [rowData]="rowData()"
+      [columnDefs]="columnDefs"
+      [pagination]="true"
+      [pageSize]="pageSize"
+      height="440px"
+      [loading]="isLoading()"
+      [showCheckboxes]="true"
+      (selectionChanged)="onSelectionChanged($event)"
+        >
+    </app-data-grid>
+
+  }
+
+</div>

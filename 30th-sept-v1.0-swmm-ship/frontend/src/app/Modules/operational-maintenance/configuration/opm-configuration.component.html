@@ -1,0 +1,60 @@
+
+  <div class="glass-card config__selector-head">
+    <div class="title-pannel">
+      <app-icon name="settings" [size]="24" [strokeWidth]="1.9" variant="accent" />
+      <span class="config__selector-title">Enterprise Reference Data</span>
+      <app-status-chip tone="info" text="Read Only - Master data is centrally governed by CMMS / HQ. Records cannot be added, edited or deleted here" />
+    </div>
+  </div>
+
+<div class="reference-data">
+  <div class="reference-layout" [class.reference-layout--collapsed]="referenceSidebarCollapsed()">
+    <aside class="config-sidebar" aria-label="Reference data navigation"
+      [class.reference-sidebar--collapsed]="referenceSidebarCollapsed()">
+      <app-collapsible-sidebar title="Reference Data" [items]="referenceSidebarItems()"
+        [selectedId]="selectedReferenceSection()" [collapsed]="referenceSidebarCollapsed()"
+        (itemSelected)="selectReference($event)" (collapsedChange)="referenceSidebarCollapsed.set($event)">
+      </app-collapsible-sidebar>
+    </aside>
+
+    <!-- Right Content -->
+    <section class="reference-content glass-card">
+
+
+        <div class="reference-content__header ms-3 mt-1">
+
+          <div>
+
+            <div class="reference-content__title">
+              {{ currentReference().title  }}
+              <app-status-chip text="Read Only" tone="info">
+              </app-status-chip>
+            </div>
+
+            <div class="reference-content__subtitle">
+              {{ currentReference().description }}
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      <div class="reference-table-shell">
+
+        @if (referenceLoading()) {
+          <div class="reference-table-loading">Loading...</div>
+        }
+
+        <app-data-grid [pageSize]="10"
+            [columnDefs]="referenceColumnDefs()"
+            [rowData]="referenceRowData()"
+          [height]="dynamicGridHeight()"
+          [totalRowCount]="referenceTotalCount()">
+        </app-data-grid>
+
+      </div>
+    </section>
+  </div>
+</div>

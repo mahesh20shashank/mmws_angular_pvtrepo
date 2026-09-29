@@ -1,0 +1,129 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  width: min(420px, calc(100vw - 32px));
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-input);
+  color: var(--text-primary);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.modal-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-input);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-footer {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.close-btn,
+.secondary-btn,
+.primary-btn {
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.close-btn {
+  width: 30px;
+  height: 30px;
+  background: var(--bg-input-disabled);
+}
+
+.secondary-btn,
+.primary-btn {
+  height: 38px;
+  padding: 0 16px;
+}
+
+.secondary-btn {
+  background: var(--bg-input-disabled);
+}
+
+.primary-btn {
+  background: #0056B3;
+}
+::ng-deep .submit-button {
+  width: 90px;
+  height: 38px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #1D96E9;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+::ng-deep .submit-button:hover {
+  background: #1580c9;
+}
+
+.readonly-field-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.readonly-field-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1.5px dashed var(--border-input);
+  background: var(--bg-input-disabled);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Plain native <input type="date"> — the browser's own calendar picker
+ * (respects OS/browser theme automatically), styled to match this app's
+ * other editable fields instead of a custom-built calendar dropdown. */
+.date-field-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.date-field-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: var(--icon-invert, none);
+}
+
+:root:not([data-theme="light"]) .date-field-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

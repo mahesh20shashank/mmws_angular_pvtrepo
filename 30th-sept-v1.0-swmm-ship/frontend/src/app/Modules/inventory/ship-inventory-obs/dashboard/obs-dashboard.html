@@ -1,0 +1,57 @@
+<div class="obs-page">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <div class="kpi-row">
+    @for (tile of tiles(); track tile.label) {
+      <app-kpi-card
+        cardHeight="auto"
+        [title]="tile.label"
+        [count]="tile.count"
+        [iconName]="tile.icon"
+        [iconColor]="tile.iconColor"
+        [iconBg]="tile.iconBg"
+        [accentColor]="tile.iconColor"
+        iconPosition="right"
+        [showTimelineTab]="false"
+        [showTrends]="false"
+        [showViewMore]="true"
+        viewMoreLabel="View more →"
+        (detailClick)="viewMore(tile.viewMoreRoute)"
+      />
+    }
+  </div>
+
+  <div class="obs-dashboard-charts">
+    <div class="glass-card obs-chart-card">
+      <div class="obs-chart-card__header">
+        <span><app-icon name="chart-column" [size]="16" variant="accent" /> Spares Issued</span>
+        <select
+          class="obs-chart-card__filter"
+          aria-label="Filter Spares Issued chart"
+          [value]="issuedFilter()"
+          (change)="onIssuedFilterChange($any($event.target).value)"
+        >
+          <option value="defect">Defect</option>
+          <option value="tyLoan">Ty Loan</option>
+        </select>
+      </div>
+      <app-bar-chart [data]="issuedData()" [heightPx]="240" primaryColor="#0088FF" primaryValueColor="#7FC0FF" />
+    </div>
+
+    <div class="glass-card obs-chart-card">
+      <div class="obs-chart-card__header">
+        <span><app-icon name="history" [size]="16" variant="accent" /> Spares Returned</span>
+        <select
+          class="obs-chart-card__filter"
+          aria-label="Filter Spares Returned chart"
+          [value]="returnedFilter()"
+          (change)="onReturnedFilterChange($any($event.target).value)"
+        >
+          <option value="defect">Defect</option>
+          <option value="tyLoan">Ty Loan</option>
+        </select>
+      </div>
+      <app-bar-chart [data]="returnedData()" [heightPx]="240" primaryColor="#ff9f43" primaryValueColor="#ffc37e" />
+    </div>
+  </div>
+</div>

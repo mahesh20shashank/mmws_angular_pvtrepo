@@ -1,0 +1,152 @@
+<div
+  class="
+    glass-card
+    rounded-[15px]
+    border
+    border-white/15
+    overflow-hidden
+    flex
+    flex-col
+    text-white
+  "
+  [ngStyle]="{ height: cardHeight }"
+>
+
+  <!-- Header -->
+  <div
+    class="
+      h-[66px]
+      px-6
+      flex
+      items-center
+      justify-between
+      border-b
+      border-white/10
+      shrink-0
+    "
+  >
+  @if(data){
+    <h2 class="
+            font-poppins
+            text-[18px]
+            font-medium
+            text-white
+          ">
+      {{ data.heading }}
+    </h2>
+  }
+
+
+        @if (data.view_all_flag) {
+        <app-button class="
+                  text-[#42A5FF]
+                  text-[14px]
+                  font-medium
+                " (click)="openHistoryPopup()">
+          View All
+        </app-button>
+        }
+
+
+  </div>
+
+  <!-- Timeline -->
+  <div
+    class="
+      flex-1
+      overflow-y-auto
+      px-6
+      py-5
+    "
+  >
+
+@for (item of data.movement_and_configuration_histories; track $index; let last = $last) {
+    <div
+
+      class="
+        relative
+        grid
+        grid-cols-[42px_120px_1fr]
+        gap-4
+        pb-8
+      "
+    >
+
+      <!-- Timeline -->
+      <div
+        class="
+          relative
+          flex
+          justify-center
+        "
+      >
+
+        <!-- Dot -->
+        <div
+          class="
+            w-7
+            h-7
+            rounded-full
+            bg-white/35
+            z-10
+          "
+        >
+        </div>
+
+        <!-- Line -->
+
+        @if(!last){
+            <div class="
+                        absolute
+                        top-7
+                        w-[2px]
+                        h-full
+                        bg-white/25
+                      "></div>
+        }
+
+      </div>
+
+      <!-- Date -->
+      <div
+        class="
+          pt-1
+          text-[14px]
+          text-white/85
+          whitespace-nowrap
+        "
+      >
+        {{ formatDate(item.date) }}
+      </div>
+
+      <!-- Content -->
+      <div>
+        <div
+          class="
+            text-[15px]
+            font-medium
+            text-white
+            leading-tight
+          "
+        >
+          {{ item.title }}
+        </div>
+
+        <div
+          class="
+            mt-1
+            text-[14px]
+            text-white/45
+            leading-tight
+          "
+        >
+          {{ item.description }}
+        </div>
+
+      </div>
+
+    </div>
+  }
+  </div>
+
+</div>

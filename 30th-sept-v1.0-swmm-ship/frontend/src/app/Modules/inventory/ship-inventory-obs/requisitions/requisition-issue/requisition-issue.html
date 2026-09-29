@@ -1,0 +1,70 @@
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Issue Spare</h3>
+    <app-button type="button" class="btn-secondary" (click)="goBack()">Back</app-button>
+  </div>
+
+  <form [formGroup]="form" class="obs-issue-form">
+    <div class="obs-issue-form__grid">
+      <div class="obs-issue-form__field">
+        <app-select-input label="Issued To *" formControlName="username" [options]="usernameOptions()" />
+        @if (form.controls.username.invalid && form.controls.username.touched) {
+          <span class="form-error">Issued To is required.</span>
+        }
+      </div>
+    </div>
+    <div class="obs-issue-form__field">
+      <app-textarea-input label="Remarks *" [rows]="2" formControlName="remarks" />
+      @if (form.controls.remarks.invalid && form.controls.remarks.touched) {
+        <span class="form-error">Remarks is required.</span>
+      }
+    </div>
+  </form>
+
+  <table class="obs-multi-table">
+    <thead>
+      <tr>
+        <th>Pattern No</th>
+        <th>Spare Description</th>
+        <th>Qty Auth</th>
+        <th>Qty Held</th>
+        <th>Quantity Issued</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (entry of entries(); track entry.id) {
+        <tr>
+          <td>{{ entry.patternNumber }}</td>
+          <td>{{ entry.description }}</td>
+          <td>{{ entry.quantityAuthorised }}</td>
+          <td>{{ entry.quantityAvailable }}</td>
+          <td>
+            <input
+              type="number"
+              min="1"
+              class="obs-multi-table__qty"
+              [class.obs-multi-table__qty--invalid]="quantityInvalid(entry)"
+              [attr.aria-label]="'Quantity issued for ' + entry.patternNumber"
+              [value]="quantityFor(entry.id)"
+              (input)="updateQuantity(entry.id, $any($event.target).value)"
+            />
+            @if (quantityInvalid(entry)) {
+              <span class="form-error obs-multi-table__error">Must be at least 1.</span>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="obs-issue-form__actions">
+    <app-button
+      type="button"
+      class="btn-primary"
+      [disabled]="saving() || form.invalid || hasRowErrors()"
+      (click)="submit()"
+    >
+      {{ saving() ? "Submitting..." : "Submit" }}
+    </app-button>
+  </div>
+</div>

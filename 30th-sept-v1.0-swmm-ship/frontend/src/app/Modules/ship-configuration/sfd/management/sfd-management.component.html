@@ -1,0 +1,1080 @@
+<div class="mgmt">
+  @switch (view()) {
+  <!-- ============ LIST VIEW ============ -->
+  @case ("list") {
+  <div class="glass-card mgmt__header">
+    <div class="mgmt__header-row">
+      <div class="mgmt__header-text">
+        <span class="mgmt__title">SFD Details</span>
+      </div>
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__btn" (click)="openRecentActivity()">
+        <app-icon name="history" [size]="15" [strokeWidth]="1.8" variant="inherit" />
+        Recent Activity
+      </app-button>
+      <app-button type="button" class="mgmt__btn" (click)="viewApproval()">
+        <app-icon name="circle-check-big" [size]="15" [strokeWidth]="1.8" variant="success" />
+        View Approval Status
+      </app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" (click)="openAdd()">
+        <app-icon name="plus" [size]="15" [strokeWidth]="2" variant="inherit" />
+        Add SFD
+      </app-button>
+    </div>
+  </div>
+
+  <div class="glass-card mgmt__list">
+    <div class="mgmt__list-head">
+      <div class="mgmt__list-title-group">
+        <span class="mgmt__list-title">Active Systems &amp; Equipment{{ activeShipLabel() ? " — " + activeShipLabel() : "" }}</span>
+      </div>
+      <div class="mgmt__list-actions">
+        <div class="mgmt__search">
+          <app-icon name="search" [size]="16" [strokeWidth]="2" variant="muted" />
+          <label for="sfdSearchInput" class="sr-only">Search records</label>
+          <input id="sfdSearchInput" placeholder="Search records" #searchInput [value]="searchTerm()"
+            (input)="setSearchTerm(searchInput.value)" />
+        </div>
+        <app-button type="button" class="mgmt__btn" (click)="toggleActFilters()">
+          <app-icon name="filter" [size]="15" [strokeWidth]="2" variant="inherit" />
+          Filter
+          @if (actHasFilters()) {
+          <span class="mgmt__filter-badge">{{ actAppliedCount() }}</span>
+          }
+          <app-icon name="chevron-down" [size]="12" [strokeWidth]="2" variant="inherit" [class.mgmt__chevron--up]="actFiltersOpen()" />
+        </app-button>
+      </div>
+    </div>
+
+    @if (actFiltersOpen()) {
+    <div class="mgmt__filters">
+      <div class="mgmt__filter-grid">
+        @for (f of actFilterFields(); track f.name) {
+        <div class="mgmt__filter-group">
+          <span class="mgmt__filter-label">{{ f.name }}</span>
+          <app-select-input class="mgmt__filter-select" [ngModel]="f.value" (ngModelChange)="setActFilter(f.name, $event)"
+            [placeholder]="f.placeholder" [options]="f.options" />
+        </div>
+        }
+        <div class="mgmt__filter-group mgmt__filter-actions">
+          <span class="mgmt__filter-label">&nbsp;</span>
+          <app-button type="button" class="mgmt__btn" (click)="clearActFilters()">
+            <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" variant="inherit" />
+            Reset Filters
+          </app-button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <app-data-grid [columnDefs]="sfdCols" [rowData]="filteredSfdRows()" [totalRowCount]="activeTotalCount()"
+      [pageSize]="activePageSize()" (pageRequested)="onActiveListPageRequested($event)"
+      (rowClicked)="onActiveRowClicked($event)" (cellClicked)="onSfdCellClicked($event)" height="440px" />
+  </div>
+  }
+
+  <!-- ============ ADD / UPDATE VIEW ============ -->
+  @case ("add") {
+  <ng-container *ngTemplateOutlet="sfdFormTemplate" />
+  }
+
+  <!-- ============ DELETED VIEW ============ -->
+  @case ("deleted") {
+  <div class="glass-card mgmt__view">
+    <div class="mgmt__view-head">
+      <app-button type="button" class="mgmt__btn" (click)="back()">
+        <app-icon name="arrow-left" [size]="14" [strokeWidth]="2" variant="accent" />
+        Back
+      </app-button>
+      <span class="mgmt__list-title">Previously Removed SFD Equipment</span>
+      <app-status-chip text="Read-only" tone="neutral" />
+    </div>
+    <app-data-grid [columnDefs]="deletedCols" [rowData]="deletedRows()" [pageSize]="10" height="440px" />
+  </div>
+  }
+
+  <!-- ============ APPROVAL VIEW ============ -->
+  @case ("approval") {
+  <div class="glass-card mgmt__view">
+    <div class="mgmt__view-head">
+      <app-button type="button" class="mgmt__btn" (click)="back()">
+        <app-icon name="arrow-left" [size]="14" [strokeWidth]="2" variant="accent" />
+        Back
+      </app-button>
+      <span class="mgmt__list-title">Approval Tracking &amp; INSMA Remarks</span>
+      <span class="mgmt__spacer"></span>
+      <div class="mgmt__search">
+        <app-icon name="search" [size]="16" [strokeWidth]="2" variant="muted" />
+        <label for="approvalSearchInput" class="sr-only">Search approvals</label>
+        <input id="approvalSearchInput" placeholder="Search approvals…" #approvalSearchInput [value]="approvalSearchTerm()"
+          (input)="setApprovalSearchTerm(approvalSearchInput.value)" />
+      </div>
+      <app-button type="button" class="mgmt__btn mgmt__btn--accent" (click)="toggleApprovalFilters()">
+        <app-icon name="filter" [size]="15" [strokeWidth]="2" variant="accent" />
+        Filters
+        @if (approvalHasFilters()) {
+        <span class="mgmt__filter-badge">{{ approvalAppliedCount() }}</span>
+        }
+        <app-icon name="chevron-down" [size]="12" [strokeWidth]="2" variant="accent" [class.mgmt__chevron--up]="approvalFiltersOpen()" />
+      </app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" [disabled]="syncingWithCmms()"
+        title="Sync with CMMS — pull down any approvals/rejections INSMA has made in CMMS and apply them here"
+        (click)="syncWithCmms()">
+        <app-icon name="refresh-cw" [size]="14" [strokeWidth]="2" variant="inherit" [spin]="syncingWithCmms()" />
+        {{ syncingWithCmms() ? 'Syncing…' : 'Sync with CMMS' }}
+      </app-button>
+    </div>
+
+    @if (approvalFiltersOpen()) {
+    <div class="mgmt__filters">
+      <div class="mgmt__filter-grid">
+        <div class="mgmt__filter-group">
+          <span class="mgmt__filter-label">SFD Category</span>
+          <app-select-input class="mgmt__filter-select" [ngModel]="approvalCategoryFilter()" (ngModelChange)="setApprovalCategoryFilter($event)"
+            placeholder="Select SFD Category" [options]="approvalCategoryOptions()" />
+        </div>
+        <div class="mgmt__filter-group">
+          <span class="mgmt__filter-label">Current Status</span>
+          <app-select-input class="mgmt__filter-select" [ngModel]="approvalStatusFilter()" (ngModelChange)="setApprovalStatusFilter($event)"
+            placeholder="Select Status" [options]="approvalStatusOptions()" />
+        </div>
+        <div class="mgmt__filter-group mgmt__filter-actions">
+          <span class="mgmt__filter-label">&nbsp;</span>
+          <app-button type="button" class="mgmt__btn mgmt__btn--accent" (click)="clearApprovalFilters()">
+            <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" variant="accent" />
+            Reset Filters
+          </app-button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <app-data-grid [columnDefs]="approvalCols" [rowData]="filteredApprovalRows()" [pageSize]="10" height="440px"
+      (rowClicked)="onApprovalRowClicked($event)" />
+  </div>
+  }
+
+  <!-- ============ APPROVAL DETAIL (inline, not a popup) ============ -->
+  @case ("approvalDetail") {
+  @if (approvalDetailRow(); as row) {
+  <div class="glass-card mgmt__view">
+    <div class="mgmt__view-head">
+      <app-button type="button" class="mgmt__btn" (click)="closeApprovalDetail()">
+        <app-icon name="arrow-left" [size]="14" [strokeWidth]="2" variant="accent" />
+        Back
+      </app-button>
+      <span class="mgmt__list-title">Request {{ row.id }}</span>
+      <app-status-chip [text]="approvalStatusLabel(row.status)" [tone]="approvalStatusTone(row.status)" />
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__btn mgmt__btn--accent"
+        [title]="approvalIsEditable() ? 'View / edit the complete original SFD form for this request' : 'View every field submitted with this request'"
+        (click)="openFullFormFromApproval(row)">
+        <app-icon name="file-text" [size]="14" [strokeWidth]="2" variant="accent" />
+        View Full Form
+      </app-button>
+    </div>
+
+    <div class="mgmt__plain-grid mgmt__plain-grid--5">
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Request ID</span><div class="mgmt__plain-value">{{ row.id }}</div></div>
+
+      <div class="mgmt__plain-field">
+        <span class="mgmt__field-label">Equipment Name</span>
+        @if (approvalIsEditable()) {
+        <app-input-field [formControl]="approvalEditForm.controls.eqp" type="text" placeholder="Equipment Name" />
+        } @else {
+        <div class="mgmt__plain-value">{{ row.eqp }}</div>
+        }
+      </div>
+
+      <div class="mgmt__plain-field">
+        <span class="mgmt__field-label">SFD Category</span>
+        @if (approvalIsEditable()) {
+        <app-input-field [formControl]="approvalEditForm.controls.cat" type="text" placeholder="SFD Category" />
+        } @else {
+        <div class="mgmt__plain-value">{{ row.cat }}</div>
+        }
+      </div>
+
+      <div class="mgmt__plain-field">
+        <span class="mgmt__field-label">Submitted By</span>
+        @if (approvalIsEditable()) {
+        <app-input-field [formControl]="approvalEditForm.controls.by" type="text" placeholder="Submitted By" />
+        } @else {
+        <div class="mgmt__plain-value">{{ row.by }}</div>
+        }
+      </div>
+
+      <div class="mgmt__plain-field">
+        <span class="mgmt__field-label">Submitted Date</span>
+        @if (approvalIsEditable()) {
+        <app-input-field [formControl]="approvalEditForm.controls.date" type="text" placeholder="Submitted Date" />
+        } @else {
+        <div class="mgmt__plain-value">{{ row.date }}</div>
+        }
+      </div>
+
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">INSMA Officer</span><div class="mgmt__plain-value">{{ row.officer || "—" }}</div></div>
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Approval Date</span><div class="mgmt__plain-value">{{ row.approveDate }}</div></div>
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Last Updated Date</span><div class="mgmt__plain-value">{{ row.lastUpdatedDate }}</div></div>
+
+      @if (row.requestType === "remove") {
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Equipment Sr No</span><div class="mgmt__plain-value">{{ row.equipmentSrNo || "—" }}</div></div>
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Sub Department</span><div class="mgmt__plain-value">{{ row.subDept || "—" }}</div></div>
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Compartment Name</span><div class="mgmt__plain-value">{{ row.compartmentName || "—" }}</div></div>
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Removal Date</span><div class="mgmt__plain-value">{{ row.removalDate || "—" }}</div></div>
+      <div class="mgmt__plain-field"><span class="mgmt__field-label">Removal Authority</span><div class="mgmt__plain-value">{{ row.removalAuthority || "—" }}</div></div>
+      }
+    </div>
+
+    @if (row.requestType === "remove") {
+    <div class="mgmt__field">
+      <span class="mgmt__field-label">Removal Remark</span>
+      <div class="mgmt__readonly-value">{{ row.removalRemark || "—" }}</div>
+    </div>
+    }
+
+    <div class="mgmt__field">
+      <span class="mgmt__field-label">INSMA Remarks</span>
+      <div class="mgmt__readonly-value">{{ row.remarks || "—" }}</div>
+    </div>
+
+    @if (approvalIsEditable()) {
+    <div class="mgmt__modal-divider"></div>
+    <div class="mgmt__correction-banner">
+      <span class="mgmt__correction-icon">
+        <app-icon name="square-pen" [size]="14" [strokeWidth]="2" variant="warning" />
+      </span>
+      <span class="mgmt__correction-title">Returned for Correction — Edit &amp; Resubmit</span>
+    </div>
+    <p class="mgmt__correction-desc">Amend the request per INSMA remarks and revert it to the reviewing authority.</p>
+    <div class="mgmt__field">
+      <span class="mgmt__field-label">Correction / Amendment Note</span>
+      <app-textarea-input [formControl]="approvalEditForm.controls.correctionNote" [rows]="3"
+        placeholder="Describe the correction made before resubmitting…" />
+    </div>
+    }
+
+    <div class="mgmt__form-actions">
+      @if (approvalIsEditable()) {
+      <app-button type="button" class="mgmt__btn" (click)="closeApprovalDetail()">Cancel</app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" (click)="submitApprovalDetailEdit()">
+        <app-icon name="refresh-cw" [size]="14" [strokeWidth]="2" variant="inherit" />
+        Resubmit for Approval
+      </app-button>
+      } @else {
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" title="Close — Return to Approval Tracking" (click)="closeApprovalDetail()">Close</app-button>
+      }
+    </div>
+  </div>
+  }
+  }
+  }
+</div>
+
+<!-- ============ RECENT ACTIVITY POPUP ============ -->
+@if (recentActivityOpen()) {
+<app-modal size="lg" (closeModal)="closeRecentActivity()">
+  <div class="mgmt__modal mgmt__modal--activity">
+    <div class="mgmt__modal-head">
+      <span class="mgmt__view-icon">
+        <app-icon name="history" [size]="16" [strokeWidth]="1.9" variant="accent" />
+      </span>
+      <div class="mgmt__view-head-text">
+        <span class="mgmt__view-title">Recent Activity</span>
+      </div>
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__modal-close" title="Close" (click)="closeRecentActivity()">✕</app-button>
+    </div>
+
+    <div class="mgmt__activity-list">
+      @if (recentActivityLoading()) {
+      <span class="mgmt__remove-loading-text">Loading recent activity…</span>
+      } @else if (recentActivityRows().length === 0) {
+      <span class="mgmt__remove-loading-text">No recent activity.</span>
+      } @else {
+      @for (a of recentActivityRows(); track a.code + a.date + a.tag) {
+      <div class="mgmt__activity-row">
+        <span class="mgmt__activity-icon" [class.mgmt__activity-icon--added]="a.icon === 'added'"
+          [class.mgmt__activity-icon--removed]="a.icon === 'removed'"
+          [class.mgmt__activity-icon--serialChanged]="a.icon === 'serialChanged'"
+          [class.mgmt__activity-icon--submitted]="a.icon === 'submitted'">
+          @switch (a.icon) {
+          @case ("added") {
+          <app-icon name="plus" [size]="14" [strokeWidth]="2.2" variant="inherit" />
+          }
+          @case ("removed") {
+          <app-icon name="trash-2" [size]="14" [strokeWidth]="2" variant="inherit" />
+          }
+          @case ("serialChanged") {
+          <app-icon name="repeat" [size]="14" [strokeWidth]="2" variant="inherit" />
+          }
+          @case ("submitted") {
+          <app-icon name="send" [size]="14" [strokeWidth]="2" variant="inherit" />
+          }
+          }
+        </span>
+        <div class="mgmt__activity-main">
+          <div class="mgmt__activity-title-row">
+            <span class="mgmt__activity-name">{{ a.name }}</span>
+            <app-status-chip [text]="a.tag" [tone]="a.tone" />
+          </div>
+          <span class="mgmt__activity-detail">{{ a.code }} · {{ a.detail }}</span>
+        </div>
+        <div class="mgmt__activity-meta">
+          <span class="mgmt__activity-date">{{ a.date }}</span>
+          <span class="mgmt__activity-by">{{ a.by }}</span>
+        </div>
+      </div>
+      }
+      }
+    </div>
+  </div>
+</app-modal>
+}
+
+<!-- ============ RECORD EDIT MODAL ============ -->
+@if (recModalOpen() && recModalRow(); as row) {
+<app-modal size="md" (closeModal)="closeRecordEdit()">
+  <div class="mgmt__modal" [formGroup]="recForm">
+    <div class="mgmt__modal-head">
+      <span class="mgmt__editing-icon">
+        <app-icon name="repeat" [size]="16" [strokeWidth]="1.9" variant="warning" />
+      </span>
+      <div class="mgmt__editing-text">
+        <span class="mgmt__editing-title">{{ recModalTitle() }}</span>
+        <span class="mgmt__editing-sub">{{ recModalSub() }}</span>
+      </div>
+      <app-button type="button" class="mgmt__modal-close" title="Close" (click)="closeRecordEdit()">✕</app-button>
+    </div>
+
+    <div class="mgmt__modal-summary">
+      <div class="mgmt__modal-summary-head">
+        <app-status-chip [text]="row.code" tone="info" />
+        <span class="mgmt__modal-summary-name">{{ row.name }}</span>
+      </div>
+      <div class="mgmt__modal-summary-grid">
+        <div class="mgmt__plain-field"><span class="mgmt__field-label">Nomenclature</span><div class="mgmt__plain-value">{{ recModalDetails()?.equipment_nomenclature || row.nomen }}</div></div>
+        <div class="mgmt__plain-field"><span class="mgmt__field-label">Sub Dept</span><div class="mgmt__plain-value">{{ recModalDetails()?.sub_dept || row.dept }}</div></div>
+        <div class="mgmt__plain-field"><span class="mgmt__field-label">Maintop</span><div class="mgmt__plain-value">{{ recModalDetails()?.maintop_no || row.maintop }}</div></div>
+        <div class="mgmt__plain-field"><span class="mgmt__field-label">Current Serial</span><div class="mgmt__plain-value">{{ recModalDetails()?.current_sr_no || row.serial }}</div></div>
+      </div>
+    </div>
+
+    @if (recModalMode() === "serial") {
+    <div class="mgmt__field">
+      <app-input-field formControlName="serial" type="text" placeholder="Enter new serial number"
+        label="New Equipment Serial No" [required]="true" />
+      <span class="mgmt__field-hint">Serial number must be unique for the selected equipment.</span>
+    </div>
+    <div class="mgmt__modal-summary-grid">
+      <div class="mgmt__field">
+        <app-input-field formControlName="removalAuthority" type="text" placeholder="e.g. INSMA / Command HQ"
+          label="Removal Authority" [required]="true" />
+      </div>
+      <div class="mgmt__field">
+        <app-input-field formControlName="removalDate" type="date" placeholder="dd/mm/yyyy" label="Removal Date"
+          dateLocale="en-GB" [required]="true" />
+      </div>
+    </div>
+    <div class="mgmt__field">
+      <app-input-field formControlName="installationDate" type="date" placeholder="dd/mm/yyyy"
+        label="Installation Date" dateLocale="en-GB" [required]="true" />
+    </div>
+    } @else {
+    <div class="mgmt__modal-summary-grid">
+      <div class="mgmt__field">
+        <app-input-field formControlName="qty" type="number" placeholder="Qty" label="Quantity" [required]="true" />
+      </div>
+      <div class="mgmt__field">
+        <app-input-field formControlName="serial" type="text" placeholder="Serial number" label="Equipment Serial No" />
+      </div>
+    </div>
+    }
+
+    <div class="mgmt__form-actions">
+      <app-button type="button" class="mgmt__btn" title="Cancel — Discard changes and close this modal" (click)="closeRecordEdit()">Cancel</app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" title="Submit — Send this update for INSMA approval" (click)="saveRecordEdit()">Submit for Approval</app-button>
+    </div>
+  </div>
+</app-modal>
+}
+
+<!-- ============ SYSTEM NAME AUTO-SELECTED INFO POPUP ============
+     Opened by onEquipmentPicked() when the picked equipment isn't mapped to a system yet but a
+     default "System Name" was still auto-filled (see systemDefaultInfoModalOpen's doc) — a plain
+     instruction popup, no fields, just an acknowledgement. -->
+@if (systemDefaultInfoModalOpen()) {
+<app-modal size="sm" title="System Not Mapped" (closeModal)="closeSystemDefaultInfoModal()">
+  <div class="mgmt__info-banner">
+    <app-icon name="info" [size]="19" [strokeWidth]="2" variant="accent" />
+    <p class="mgmt__info-banner-text">
+      This equipment is not mapped to a System. Select a System from the dropdown. If the System
+      is unknown, leave the field blank and proceed.
+    </p>
+  </div>
+  <div class="mgmt__form-actions">
+    <app-button type="button" class="mgmt__btn mgmt__btn--primary" (click)="closeSystemDefaultInfoModal()">OK</app-button>
+  </div>
+</app-modal>
+}
+
+@if (deleteConfirmModalOpen()) {
+<app-modal size="sm" title="Confirm Deletion" (closeModal)="deleteConfirmModalOpen.set(false)">
+  <div class="mgmt__confirm-content">
+    <app-icon name="alert-circle" [size]="24" [strokeWidth]="2" variant="danger" />
+    <div class="mgmt__confirm-text">
+      <p class="mgmt__confirm-title">Are you sure you want to delete this SFD record?</p>
+      @if (deleteConfirmRow(); as row) {
+      <div class="mgmt__confirm-details">
+        <div class="mgmt__confirm-row">
+          <span class="mgmt__confirm-label">Code:</span>
+          <span class="mgmt__confirm-value">{{ row.code }}</span>
+        </div>
+        <div class="mgmt__confirm-row">
+          <span class="mgmt__confirm-label">Name:</span>
+          <span class="mgmt__confirm-value">{{ row.name }}</span>
+        </div>
+      </div>
+      }
+      <p class="mgmt__confirm-warning">This action will soft delete the record and it cannot be undone.</p>
+    </div>
+  </div>
+  <div class="mgmt__form-actions">
+    <app-button type="button" class="mgmt__btn" (click)="deleteConfirmModalOpen.set(false)">Cancel</app-button>
+    <app-button type="button" class="mgmt__btn mgmt__btn--danger" (click)="onDeleteConfirmOk()">Delete</app-button>
+  </div>
+</app-modal>
+}
+
+<!-- Maintop No. column — click asks for confirmation before actually downloading the PDF. -->
+@if (maintopDownloadConfirmOpen()) {
+<app-modal size="sm" title="Download Maintop File" (closeModal)="cancelMaintopDownload()">
+  <div class="mgmt__confirm-content">
+    <app-icon name="file-text" [size]="24" [strokeWidth]="2" variant="accent" />
+    <div class="mgmt__confirm-text">
+      <p class="mgmt__confirm-title">Do you want to download this file?</p>
+      @if (maintopDownloadConfirmRow(); as row) {
+      <div class="mgmt__confirm-details">
+        <div class="mgmt__confirm-row">
+          <span class="mgmt__confirm-label">Maintop No:</span>
+          <span class="mgmt__confirm-value">{{ row.maintop }}</span>
+        </div>
+        <div class="mgmt__confirm-row">
+          <span class="mgmt__confirm-label">Name:</span>
+          <span class="mgmt__confirm-value">{{ row.name }}</span>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  <div class="mgmt__form-actions">
+    <app-button type="button" class="mgmt__btn" (click)="cancelMaintopDownload()">Cancel</app-button>
+    <app-button type="button" class="mgmt__btn mgmt__btn--primary" (click)="onMaintopDownloadConfirmOk()">Yes, Download</app-button>
+  </div>
+</app-modal>
+}
+
+<!-- ============ RECORD VIEW DRAWER (Active list row click) — read-only "Ship Fit Details" ============ -->
+<!-- Opens the same way as OPM Actions' DART detail view (app-detail-drawer, wide slide-over)
+     instead of a centered app-modal, for consistency across every Actions screen. -->
+<app-detail-drawer [open]="recordViewOpen()" [wide]="true" [titleMode]="true"
+  [label]="recordViewRow()?.name ?? ''" [subtitle]="(recordViewRow()?.code ?? '') + ' · Active'"
+  iconName="eye" iconColor="var(--icon-accent)" iconBg="rgba(0,136,255,0.14)"
+  sectionTitle="SFD Details" (closed)="closeRecordView()">
+  <div class="mgmt__form-grid">
+    @for (f of recordViewFields(); track f.label) {
+    <div class="mgmt__field">
+      <div class="mgmt__field-head">
+        <span class="mgmt__field-label">{{ f.label }}</span>
+        <span class="mgmt__field-source" [style.color]="f.badgeColor">{{ f.badge }}</span>
+      </div>
+      <div class="mgmt__readonly-value">{{ f.value }}</div>
+    </div>
+    }
+  </div>
+</app-detail-drawer>
+
+<!-- ============ REMOVE FLOW (modal overlay) ============ -->
+@if (removeRow(); as rr) {
+<div class="mgmt__remove-overlay">
+  <app-button type="button" class="mgmt__remove-backdrop" aria-label="Close" (click)="closeRemove()"></app-button>
+
+  @if (removeStage() === "loading") {
+  <div class="glass-card mgmt__remove-card mgmt__remove-card--loading">
+    <span class="mgmt__remove-loading-text">Checking for active maintenance routines &amp; defect records…</span>
+  </div>
+  }
+
+  @if (removeStage() === "choose") {
+  <div class="glass-card mgmt__remove-card mgmt__remove-card--choose">
+    <div class="mgmt__remove-card-head">
+      <span class="mgmt__remove-icon">
+        <app-icon name="trash-2" [size]="19" [strokeWidth]="1.9" variant="danger" />
+      </span>
+      <div class="mgmt__editing-text">
+        <span class="mgmt__editing-title">Remove {{ rr.name }}</span>
+        <span class="mgmt__editing-sub">Serial {{ rr.serial }} · {{ rr.nomen }} · {{ rr.dept }}</span>
+      </div>
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__modal-close" title="Close" (click)="closeRemove()">✕</app-button>
+    </div>
+    <div class="mgmt__warning-banner">
+      Active maintenance routines and defect records exist for <strong>{{ rr.name }}</strong>. Select how to proceed
+      before this removal can be submitted for INSMA approval.
+    </div>
+    <div class="mgmt__remove-options">
+      <app-button type="button" class="mgmt__remove-option" [class.mgmt__remove-option--active]="removeOption() === 'close'"
+        title="Close pending records — Close all open routines and defects for this equipment"
+        (click)="setRemoveOption('close')">
+        <span class="mgmt__remove-dot" [class.mgmt__remove-dot--active]="removeOption() === 'close'">
+          <span class="mgmt__remove-dot-inner"></span>
+        </span>
+        <span>Close the pending maintenance routines and defect records</span>
+      </app-button>
+      <app-button type="button" class="mgmt__remove-option" [class.mgmt__remove-option--active]="removeOption() === 'associate'"
+        title="Associate records — Link the existing history to the Equipment Serial No instead of closing it"
+        (click)="setRemoveOption('associate')">
+        <span class="mgmt__remove-dot" [class.mgmt__remove-dot--active]="removeOption() === 'associate'">
+          <span class="mgmt__remove-dot-inner"></span>
+        </span>
+        <span>Associate all maintenance history and defect records with the Equipment Serial No.</span>
+      </app-button>
+    </div>
+    <div class="mgmt__form-actions">
+      <app-button type="button" class="mgmt__btn" title="Cancel — Discard the removal request" (click)="closeRemove()">Cancel</app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" [disabled]="!removeOption()"
+        title="Continue — Proceed to the Removal Details form"
+        (click)="removeContinue()">Continue</app-button>
+    </div>
+  </div>
+  }
+
+  @if (removeStage() === "defects") {
+  <div class="glass-card mgmt__remove-card mgmt__remove-card--defects">
+    <div class="mgmt__view-head">
+      <span class="mgmt__list-title">Active Maintenance Routines &amp; Defect Records</span>
+      <app-status-chip [text]="rr.name" tone="neutral" />
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__modal-close" title="Close" (click)="closeRemove()">✕</app-button>
+    </div>
+    <div class="mgmt__plain-table-wrap">
+      <app-data-grid
+        [rowData]="removeDefectRows()"
+        [columnDefs]="removeDefectCols"
+        [pagination]="true"
+        [pageSize]="10"
+        height="320px">
+      </app-data-grid>
+    </div>
+  </div>
+  }
+
+  @if (removeStage() === "form") {
+  <div class="glass-card mgmt__remove-card mgmt__remove-card--form" [formGroup]="removeForm">
+    <div class="mgmt__view-head">
+      <span class="mgmt__section-title">Removal Details</span>
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__modal-close" title="Close" (click)="closeRemove()">✕</app-button>
+    </div>
+    <div class="mgmt__form-grid mgmt__form-grid--readonly">
+      <div class="mgmt__field">
+        <span class="mgmt__field-label">Equipment Nomenclature</span>
+        <div class="mgmt__readonly-value">{{ removeDetails()?.equipment_nomenclature || rr.nomen }}</div>
+      </div>
+      <div class="mgmt__field">
+        <span class="mgmt__field-label">Equipment Serial No.</span>
+        <div class="mgmt__readonly-value">{{ removeDetails()?.equipment_sr_no || rr.serial }}</div>
+      </div>
+      <div class="mgmt__field">
+        <span class="mgmt__field-label">Sub Department</span>
+        <div class="mgmt__readonly-value">{{ removeDetails()?.sub_dept || rr.dept }}</div>
+      </div>
+      <div class="mgmt__field">
+        <span class="mgmt__field-label">Location on Board</span>
+        <div class="mgmt__readonly-value">{{ removeDetails()?.compartment_name || rr.compartment || "—" }}</div>
+      </div>
+    </div>
+    <div class="mgmt__form-grid">
+      <div class="mgmt__field">
+        <app-input-field formControlName="removalDate" type="date" placeholder="dd/mm/yyyy"
+          label="Removal Date" dateLocale="en-GB" [required]="true"
+          [invalid]="removeForm.controls.removalDate.invalid && removeForm.controls.removalDate.touched" />
+        @if (removeForm.controls.removalDate.invalid && removeForm.controls.removalDate.touched) {
+        <span class="mgmt__field-error">Removal Date is required.</span>
+        }
+      </div>
+      <div class="mgmt__field">
+        <app-input-field formControlName="authority" type="text" placeholder="Enter removal authority"
+          label="Authority for Removal" [required]="true"
+          [invalid]="removeForm.controls.authority.invalid && removeForm.controls.authority.touched" />
+        @if (removeForm.controls.authority.invalid && removeForm.controls.authority.touched) {
+        <span class="mgmt__field-error">Authority for Removal is required.</span>
+        }
+      </div>
+      <div class="mgmt__field mgmt__field--full">
+        <span class="mgmt__field-label">Remarks <span class="mgmt__req">*</span></span>
+        <app-textarea-input formControlName="remarks" [rows]="2" />
+        @if (removeForm.controls.remarks.invalid && removeForm.controls.remarks.touched) {
+        <span class="mgmt__field-error">Remarks is required.</span>
+        }
+      </div>
+    </div>
+    <div class="mgmt__form-actions">
+      <app-button type="button" class="mgmt__btn"
+        [title]="removeOption() ? 'Back — Return to the previous step' : 'Cancel — Discard the removal request'"
+        (click)="removeOption() ? removeBackChoose() : closeRemove()">{{ removeOption() ? "Back" : "Cancel" }}</app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" [disabled]="removalDetailsMissing()"
+        [title]="removalDetailsMissing() ? 'Equipment Nomenclature, Serial No., Sub Department or Location on Board could not be fetched — Submit is disabled until they\'re available' : 'Submit — Send this removal request for INSMA approval'"
+        (click)="requestRemoveConfirm()">Submit for INSMA Approval</app-button>
+    </div>
+  </div>
+  }
+
+  @if (removeStage() === "confirm") {
+  <div class="glass-card mgmt__remove-card mgmt__remove-card--choose">
+    <div class="mgmt__remove-card-head">
+      <span class="mgmt__remove-icon">
+        <app-icon name="trash-2" [size]="19" [strokeWidth]="1.9" variant="danger" />
+      </span>
+      <div class="mgmt__editing-text">
+        <span class="mgmt__editing-title">Remove {{ rr.name }}?</span>
+        <span class="mgmt__editing-sub">Serial {{ rr.serial }} · {{ rr.nomen }} · {{ rr.dept }}</span>
+      </div>
+      <span class="mgmt__spacer"></span>
+      <app-button type="button" class="mgmt__modal-close" title="Close" (click)="closeRemove()">✕</app-button>
+    </div>
+    <div class="mgmt__warning-banner">
+      Are you sure you want to delete this equipment? This submits a removal request for INSMA
+      approval — <strong>{{ rr.name }}</strong> stays on the active list until it's approved.
+    </div>
+    <div class="mgmt__form-actions">
+      <app-button type="button" class="mgmt__btn" title="Back — Review the Removal Details again"
+        (click)="cancelRemoveConfirm()">Back</app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary" title="Confirm — Send this removal request for INSMA approval"
+        (click)="submitRemove()">Yes, Submit for Approval</app-button>
+    </div>
+  </div>
+  }
+</div>
+}
+
+<ng-template #sfdFormTemplate>
+  <app-button type="button" class="mgmt__back" (click)="back()">
+    <app-icon name="arrow-left" [size]="15" [strokeWidth]="2" variant="accent" />
+    Back to List
+  </app-button>
+
+  <!-- "View Full Form" (eye icon, Approval Tracking grid) — shows whatever INSMA remarks are on
+       this request, regardless of its current status (Pending/Approved/Returned/Rejected all can
+       carry a real INSMA note, not just a Returned/Rejected one). viewFullFormFromApprovalRow()
+       sets approvalDetailRow right before opening this same modal (fullFormModalOpen), so it's
+       already available here without a separate fetch. Gated on fullFormModalOpen() specifically
+       — sfdFormTemplate is also reused for the plain full-page Add/Update screen, where
+       approvalDetailRow() could still be holding a stale row from a previously-closed approval
+       view; without this gate the banner could wrongly resurface there. Gated on ar.remarks
+       itself (not status) so it only ever shows once INSMA has actually written something. -->
+  @if (fullFormModalOpen() && approvalDetailRow(); as ar) {
+    @if (ar.remarks?.trim()) {
+    <div class="mgmt__correction-banner">
+      <span class="mgmt__correction-icon">
+        <app-icon name="square-pen" [size]="14" [strokeWidth]="2" variant="warning" />
+      </span>
+      <span class="mgmt__correction-title">INSMA Remarks — {{ approvalStatusLabel(ar.status) }}{{ ar.officer ? " (" + ar.officer + ")" : "" }}</span>
+    </div>
+    <div class="mgmt__field">
+      <span class="mgmt__field-label">INSMA Remarks</span>
+      <div class="mgmt__readonly-value">{{ ar.remarks }}</div>
+    </div>
+    }
+  }
+
+  @if (showEditingBanner() && editRow(); as er) {
+  <div class="mgmt__editing-banner">
+    <span class="mgmt__editing-icon">
+      <app-icon name="square-pen" [size]="16" [strokeWidth]="1.9" variant="warning" />
+    </span>
+    <div class="mgmt__editing-text">
+      <span class="mgmt__editing-title">Updating existing SFD record</span>
+      <span class="mgmt__editing-sub">{{ er.code }} · {{ er.name }} — editable fields are pre-loaded below; change only the fields you are authorized for.</span>
+    </div>
+  </div>
+
+  <div class="glass-card mgmt__edit-details">
+    <span class="mgmt__edit-details-title">Current Record Details</span>
+    <div class="mgmt__edit-details-grid">
+      @if (er.code) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Code</span>
+        <span class="mgmt__edit-detail-value">{{ er.code }}</span>
+      </div>
+      }
+      @if (er.name) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Name</span>
+        <span class="mgmt__edit-detail-value">{{ er.name }}</span>
+      </div>
+      }
+      @if (er.cat) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Category</span>
+        <span class="mgmt__edit-detail-value">{{ er.cat }}</span>
+      </div>
+      }
+      @if (er.serial) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Serial No</span>
+        <span class="mgmt__edit-detail-value">{{ er.serial }}</span>
+      </div>
+      }
+      @if (er.dept) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Sub Department</span>
+        <span class="mgmt__edit-detail-value">{{ er.dept }}</span>
+      </div>
+      }
+      @if (er.qty) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Quantity</span>
+        <span class="mgmt__edit-detail-value">{{ er.qty }}</span>
+      </div>
+      }
+      @if (er.nomen) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Nomenclature</span>
+        <span class="mgmt__edit-detail-value">{{ er.nomen }}</span>
+      </div>
+      }
+      @if (er.maintop) {
+      <div class="mgmt__edit-detail-item">
+        <span class="mgmt__edit-detail-label">Maintop</span>
+        <span class="mgmt__edit-detail-value">{{ er.maintop }}</span>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- transaction type -->
+  <div class="glass-card mgmt__section mgmt__section--row" [class.mgmt__section--danger]="!sfdType()">
+    <div class="mgmt__section-heading">
+      <span class="mgmt__section-title">Transaction Type</span>
+      <p class="mgmt__section-desc">Select whether this SFD transaction is for a System or an Equipment.</p>
+    </div>
+    <div class="mgmt__radios">
+      <!-- Editing/viewing an existing record (editRow() set): its Transaction Type is fixed —
+           only the one it was actually submitted as is even shown now, not shown-but-greyed —
+           explicit product direction. Add mode (editRow() null) still shows both, exactly as
+           before. -->
+      @if (!editRow() || sfdType() === 'Equipment') {
+      <app-button type="button" class="mgmt__radio" [class.mgmt__radio--active]="sfdType() === 'Equipment'"
+        title="Equipment — This transaction is for a single piece of equipment"
+        (click)="setSfdType('Equipment')">
+        <span class="mgmt__radio-dot"></span>Equipment
+      </app-button>
+      }
+      @if (!editRow() || sfdType() === 'System') {
+      <app-button type="button" class="mgmt__radio" [class.mgmt__radio--active]="sfdType() === 'System'"
+        title="System — This transaction is for a full system"
+        (click)="setSfdType('System')">
+        <span class="mgmt__radio-dot"></span>System
+      </app-button>
+      }
+    </div>
+  </div>
+
+  <!-- category selection + dynamic form — rendered as a disabled preview (CAT I / Equipment shape)
+       until a Transaction Type is actually picked above, so the page never looks empty. -->
+  <div class="glass-card mgmt__section" [class.mgmt__section--disabled]="!sfdType()" [formGroup]="addForm">
+    <span class="mgmt__section-title">Select SFD Category</span>
+    <p class="mgmt__section-desc">Select the applicable SFD category. The system renders the relevant fields based on the selected category.</p>
+    <div class="mgmt__cat-list">
+      @for (c of categories; track c.id) {
+      <!-- Same "existing record" carve-out as Transaction Type above — every category besides the
+           one this record actually was is hidden entirely, not shown-but-locked. -->
+      @if (!editRow() || category() === c.id) {
+      <app-button type="button" class="mgmt__cat-option" (click)="selectCategory(c.id)"
+        [title]="c.title + ' — ' + c.desc">
+        <span class="mgmt__cat-radio" [style.border-color]="category() === c.id ? c.color : 'var(--text-muted)'">
+          <span class="mgmt__cat-radio-dot" [style.background]="c.color" [style.visibility]="category() === c.id ? 'visible' : 'hidden'"></span>
+        </span>
+        <span class="mgmt__cat-text">
+          <span class="mgmt__cat-code">{{ c.id }}</span>
+          <span class="mgmt__cat-desc">{{ c.desc }}</span>
+        </span>
+      </app-button>
+      }
+      }
+    </div>
+
+  @if (activeCategoryCard(); as cat) {
+  <div class="mgmt__form-head">
+      <span class="mgmt__form-dot" [style.background]="cat.color"></span>
+      <span class="mgmt__section-title">{{ cat.title }}</span>
+      <span class="mgmt__spacer"></span>
+      <span class="mgmt__hint">Fields marked <span class="mgmt__hint-star">*</span> are mandatory</span>
+    </div>
+    @for (grp of displayFieldGroups(); track grp.title ?? $index) {
+    @if (grp.title) {
+    <div class="mgmt__group-heading" [class.mgmt__group-heading--first]="$first">
+      <span class="mgmt__group-heading-dot"></span>
+      <span class="mgmt__group-heading-title">{{ grp.title }}</span>
+    </div>
+    }
+    <div class="mgmt__form-grid">
+      @for (f of grp.fields; track f.key) {
+      <div class="mgmt__field" [class.mgmt__field--editable-highlight]="isFieldHighlightedEditable(f.rawName)">
+        <div class="mgmt__field-head">
+          <span class="mgmt__field-label">
+            {{ f.label }} @if (f.required) { <span class="mgmt__req">*</span> }
+          </span>
+          <span class="mgmt__field-source" [style.color]="f.badgeColor">{{ f.badge }}</span>
+        </div>
+
+        @switch (f.kind) {
+          @case ("select") {
+          <!-- No [required] binding here on purpose — see the comment on `f.required`'s own
+               computation (toDisplayField, sfd-management.component.ts) for why: Angular's
+               BUILT-IN RequiredValidator directive auto-attaches to any element carrying BOTH
+               `[required]` and `[formControlName]`, purely by attribute-selector match — it has no
+               idea `required` here is app-select-input's own unrelated @Input (never even shows its
+               own internal asterisk in this usage, since no [label] is passed either; the visible
+               asterisk above comes from this template's own f.required span). That silently
+               re-added Validators.required on top of whatever buildControlsForSpecs() actually
+               decided — including the empty validators array it deliberately builds for
+               Compartment Name/Deck No/Location once a "(New Eqpt)" sibling exists, permanently
+               undoing that fix for every Dropdown-kind field one level below the framework, with no
+               trace of it anywhere in this component's own code. Harmless to drop for every OTHER
+               select field too — a genuinely required one already gets its Validators.required
+               explicitly from buildControlsForSpecs, so the built-in directive was only ever
+               redundant there, never load-bearing. -->
+          <app-select-input [formControlName]="f.key" [placeholder]="f.placeholder" [options]="f.options"
+            [readonly]="f.readonly" [error]="fieldInvalid(f.key)" [placeholderError]="fieldPlaceholderInvalid(f.key)"
+            [allowCustomValue]="f.allowCustomValue ?? false" />
+          <!-- Same discoverability idea as the legacy Add SFD form's own "Type X if you can't find
+               it in the dropdown" captions — this one only shows when allowCustomValue is actually
+               true (OEM Part No, Shelf Life (New Eqpt), and any Old-group field currently holding a
+               hand-typed value with no catalog match — see toDisplayField's allowCustomWhenBlank),
+               so it never promises free-typing on a field that doesn't actually accept it. -->
+          @if (f.allowCustomValue && !addForm.get(f.key)?.disabled) {
+          <span class="mgmt__field-hint--emphasis">Not in the list? Type it in — your entry will be used as-is.</span>
+          }
+          <!-- Compartment Name can't free-type (allowCustomValue is deliberately off for it — the
+               value must match a real Compartment master record, since Deck No/Frame Station/
+               Location all cascade off it) — this is its equivalent escape hatch: create the
+               missing compartment right here instead of sending the operator off to Configuration
+               and back. Only on the live, pickable copy — not CAT I's locked Old "Compartment
+               Name" (f.readonly), which has no field to interact with in the first place.
+               f.readonly alone isn't enough in Update/View mode though — it's driven by
+               cmmsLocked, which (see toDisplayField) is unconditionally false whenever editRow()
+               is set, since Update's OWN lock (applyEditLockdown's FormControl.disable()) is a
+               completely separate mechanism it doesn't know about — same gap the "Type it in"
+               hint just above had, same fix. -->
+          @if (isCompartmentPickerField(f.rawName) && !f.readonly && !addForm.get(f.key)?.disabled) {
+          <app-button type="button" class="mgmt__field-hint--emphasis mgmt__field-hint--btn"
+            (click)="openAddCompartment(f.key)">
+            Not in the list? + Add New Compartment
+          </app-button>
+          }
+          @if (fieldInvalid(f.key)) {
+          <span class="mgmt__field-error">{{ f.label }} is required.</span>
+          }
+          }
+          @case ("date") {
+          <app-date-picker [formControlName]="f.key" [singleDate]="true" [placeholder]="f.placeholder"
+            [maxDate]="dateFieldMax(f.rawName)" [minDate]="dateFieldMin(f.rawName)" [readonly]="f.readonly"
+            [invalid]="fieldInvalid(f.key)" [placeholderInvalid]="fieldPlaceholderInvalid(f.key)" />
+          @if (fieldInvalid(f.key)) {
+          <span class="mgmt__field-error">{{ fieldErrorMessage(f) }}</span>
+          }
+          }
+          @case ("number") {
+          <app-input-field [formControlName]="f.key" type="number" [placeholder]="f.placeholder" [readonly]="f.readonly"
+            [invalid]="fieldInvalid(f.key)" [placeholderInvalid]="fieldPlaceholderInvalid(f.key)" />
+          @if (fieldInvalid(f.key)) {
+          <span class="mgmt__field-error">{{ fieldErrorMessage(f) }}</span>
+          }
+          }
+          @case ("text") {
+          <app-input-field [formControlName]="f.key" type="text" [placeholder]="f.placeholder" [readonly]="f.readonly"
+            [invalid]="fieldInvalid(f.key)" [placeholderInvalid]="fieldPlaceholderInvalid(f.key)" />
+          @if (fieldInvalid(f.key)) {
+          <span class="mgmt__field-error">{{ f.label }} is required.</span>
+          }
+          }
+          @case ("frameRange") {
+          @if (f.rawName === "Frame Station (New Eqpt)") {
+          <div class="mgmt__frame-range">
+            <app-input-field [formControl]="newFrameFromControl" type="text" placeholder="From" [readonly]="f.readonly"
+              [invalid]="newFrameFieldInvalid(newFrameFromControl.value) || newFrameRangeOrderInvalid()"
+              [placeholderInvalid]="newFrameFieldBlank(newFrameFromControl.value) || newFrameRangeOrderBlank()" />
+            <span class="mgmt__frame-range-dash">–</span>
+            <app-input-field [formControl]="newFrameToControl" type="text" placeholder="To" [readonly]="f.readonly"
+              [invalid]="newFrameFieldInvalid(newFrameToControl.value) || newFrameRangeOrderInvalid()"
+              [placeholderInvalid]="newFrameFieldBlank(newFrameToControl.value) || newFrameRangeOrderBlank()" />
+          </div>
+          @if (newFrameFieldInvalid(newFrameFromControl.value) || newFrameFieldInvalid(newFrameToControl.value)) {
+          <span class="mgmt__field-error">
+            {{ f.label }}
+            {{ !newFrameFromControl.value.trim() || !newFrameToControl.value.trim() ? "is required." : "must be greater than 0." }}
+          </span>
+          } @else if (newFrameRangeOrderInvalid()) {
+          <span class="mgmt__field-error">{{ f.label }}: "To" cannot be less than "From".</span>
+          }
+          } @else {
+          <div class="mgmt__frame-range">
+            <app-input-field [formControl]="frameFromControl" type="text" placeholder="From" [readonly]="f.readonly"
+              [invalid]="frameFieldInvalid(frameFromControl.value) || frameRangeOrderInvalid()"
+              [placeholderInvalid]="frameFieldBlank(frameFromControl.value) || frameRangeOrderBlank()" />
+            <span class="mgmt__frame-range-dash">–</span>
+            <app-input-field [formControl]="frameToControl" type="text" placeholder="To" [readonly]="f.readonly"
+              [invalid]="frameFieldInvalid(frameToControl.value) || frameRangeOrderInvalid()"
+              [placeholderInvalid]="frameFieldBlank(frameToControl.value) || frameRangeOrderBlank()" />
+          </div>
+          @if (frameFieldInvalid(frameFromControl.value) || frameFieldInvalid(frameToControl.value)) {
+          <span class="mgmt__field-error">
+            {{ f.label }}
+            {{ !frameFromControl.value.trim() || !frameToControl.value.trim() ? "is required." : "must be greater than 0." }}
+          </span>
+          } @else if (frameRangeOrderInvalid()) {
+          <span class="mgmt__field-error">{{ f.label }}: "To" cannot be less than "From".</span>
+          }
+          }
+          }
+          @case ("auto") {
+          <app-input-field [formControlName]="f.key" type="text" [placeholder]="f.placeholder" [readonly]="true" />
+          }
+          @case ("check") {
+          <div class="mgmt__check-row" [class.mgmt__check-row--locked]="!!editRow()">
+            <app-button type="button" class="mgmt__check-option" [disabled]="!!editRow()" [title]="f.label + ' — Yes'" (click)="setCheckVal(f.rawName, 'Yes')">
+              <span class="mgmt__check-dot" [class.mgmt__check-dot--active]="checkVals()[f.rawName] === 'Yes'">
+                <span class="mgmt__check-dot-inner"></span>
+              </span>
+              <span>Yes</span>
+            </app-button>
+            <app-button type="button" class="mgmt__check-option" [disabled]="!!editRow()" [title]="f.label + ' — No'" (click)="setCheckVal(f.rawName, 'No')">
+              <span class="mgmt__check-dot" [class.mgmt__check-dot--active]="(checkVals()[f.rawName] || 'No') === 'No'">
+                <span class="mgmt__check-dot-inner"></span>
+              </span>
+              <span>No</span>
+            </app-button>
+          </div>
+          }
+          @case ("serial") {
+          <app-input-field [formControl]="serialControl" type="text" placeholder="Enter serial no to fetch history"
+            [invalid]="showUnavail() || serialRequiredInvalid() || serialDuplicateVisible()" [placeholderInvalid]="serialRequiredBlank()" />
+          @if (serialRequiredInvalid()) {
+          <span class="mgmt__field-error">{{ f.label }} is required.</span>
+          } @else if (serialDuplicateVisible()) {
+          <span class="mgmt__field-error">{{ f.label }} already exists on another equipment record.</span>
+          }
+          @if (showUnavail()) {
+          <div class="mgmt__hist-unavail">
+            <app-icon name="x" [size]="13" [strokeWidth]="2.4" variant="danger" />
+            <span>Equipment history is unavailable</span>
+          </div>
+          }
+          }
+        }
+      </div>
+      }
+    </div>
+    }
+
+    @if (showHistoryOffline()) {
+    <div class="mgmt__offline-banner">
+      <app-icon name="wifi-off" [size]="19" [strokeWidth]="1.9" variant="danger" />
+      <div class="mgmt__offline-text">
+        <span class="mgmt__offline-title">Equipment history is unavailable</span>
+        <span class="mgmt__offline-sub">Offline — it will be retrieved automatically when network connectivity is restored. You may continue and submit; the history will be associated with this Equipment Serial No after synchronization.</span>
+      </div>
+    </div>
+    }
+
+    <div class="mgmt__form-actions">
+      @if (fullFormReadOnly()) {
+      <app-button type="button" class="mgmt__btn" title="Close" (click)="back()">Close</app-button>
+      } @else {
+      <app-button type="button" class="mgmt__btn" title="Cancel — Discard changes and return to the list" (click)="back()">Cancel</app-button>
+      <app-button type="button" class="mgmt__btn mgmt__btn--primary"
+        [title]="editRow() ? 'Update — Submit these changes for INSMA approval' : 'Submit — Send this new SFD record for INSMA approval'"
+        (click)="submitAdd()">{{ editRow() ? "Update" : "Submit" }}</app-button>
+      }
+    </div>
+  }
+  </div>
+</ng-template>
+
+<!-- ============ FULL FORM MODAL — "View Full Form" from a Returned/Change Approval Tracking
+     request. Reuses the exact same category-driven add/edit form (sfdFormTemplate) and submits via
+     the same submitAdd()/PUT sfd-list/{id}/ update path as editing a record from the Active list —
+     openFullFormFromApproval() just locates and prefills the matching Active-list record first.
+     `size="xl"` — the inner `.mgmt__modal--wide` (sfd-management.component.css) sizes itself to
+     min(920px, 94vw) for this exact 3-column dense form, but that's the CONTENT's own width; the
+     surrounding app-modal card clips to whatever `size` says regardless (its own `.modal-card--lg`
+     was only min(720px, ...) — narrower than the content it was wrapping, silently clipping the
+     3rd column off the right edge instead of ever showing it). `xl` (min(960px, ...)) is the
+     smallest size step that's actually wider than mgmt__modal--wide's own target. ============ -->
+@if (fullFormModalOpen()) {
+<app-modal size="xl" (closeModal)="closeFullFormModal()">
+  <div class="mgmt__modal mgmt__modal--wide">
+    <ng-container *ngTemplateOutlet="sfdFormTemplate" />
+  </div>
+</app-modal>
+}
+
+<!-- ============ EQUIPMENT HISTORY DRAWER ============ -->
+<app-detail-drawer [open]="effectiveHistoryOpen()" [wide]="true" [titleMode]="true" label="Equipment History"
+  [subtitle]="'Auto-retrieved from CMMS / ILMS · Serial ' + historyValue()"
+  iconName="history" iconColor="var(--icon-accent)" iconBg="rgba(0,136,255,0.14)"
+  badgeText="Read-only" [stats]="historyDrawerStats" sectionTitle="Service Record" (closed)="closeHistory()">
+  <div class="mgmt__hist-sections">
+    @for (section of historySections; track section.title) {
+    <div class="mgmt__hist-section">
+      <span class="mgmt__hist-section-title">
+        @switch (section.title) {
+          @case ("Previous Ship(s)") {
+            <app-icon class="mgmt__hist-section-icon" name="flag" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+          @case ("Installation History") {
+            <app-icon class="mgmt__hist-section-icon" name="plus" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+          @case ("Removal History") {
+            <app-icon class="mgmt__hist-section-icon" name="trash-2" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+          @case ("Maintenance History") {
+            <app-icon class="mgmt__hist-section-icon" name="wrench" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+          @case ("Defect History") {
+            <app-icon class="mgmt__hist-section-icon" name="triangle-alert" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+          @case ("Pending Defects") {
+            <app-icon class="mgmt__hist-section-icon" name="bell" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+          @case ("Pending Routines") {
+            <app-icon class="mgmt__hist-section-icon" name="clock" [size]="14" [strokeWidth]="2" variant="accent" />
+          }
+        }
+        {{ section.title }}
+      </span>
+      @for (row of section.rows; track row.a) {
+      <div class="mgmt__hist-row">
+        <div class="mgmt__hist-row-text">
+          <span class="mgmt__hist-row-a">{{ row.a }}</span>
+          <span class="mgmt__hist-row-b">{{ row.b }}</span>
+        </div>
+        <app-status-chip [text]="row.tag" [tone]="row.tone" />
+      </div>
+      }
+    </div>
+    }
+  </div>
+</app-detail-drawer>
+
+<!-- ============ "+ ADD COMPARTMENT" (Compartment Name dropdown's own escape hatch) ============ -->
+<!-- Same CompartmentForm the Configuration > Compartments screen uses (own full-screen overlay
+     chrome already built in) — opened inline over whichever modal/drawer the Add/Update SFD form
+     is currently showing in, so the operator's in-progress submission is never lost. -->
+@if (compartmentAddModalOpen()) {
+<app-compartment-from [compartment]="null" (closed)="closeAddCompartment()" (saved)="onCompartmentAdded($event)">
+</app-compartment-from>
+}

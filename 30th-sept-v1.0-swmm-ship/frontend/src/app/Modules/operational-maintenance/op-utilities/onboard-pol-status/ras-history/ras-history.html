@@ -1,0 +1,31 @@
+<app-master-card cardTitle="Fuelling Details (History)" cardHeight="auto">
+  <div class="flex items-end gap-3 mb-4 pt-4">
+    <div>
+      <label for="fuelling-start-date-from" class="text-white/60 text-xs mb-1 block">Fuelling Start Date From</label>
+      <input id="fuelling-start-date-from" type="date" [(ngModel)]="startDateFrom" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+    <div>
+      <label for="fuelling-start-date-to" class="text-white/60 text-xs mb-1 block">Fuelling Start Date To</label>
+      <input id="fuelling-start-date-to" type="date" [(ngModel)]="startDateTo" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+    <div>
+      <label for="fuelling-at" class="text-white/60 text-xs mb-1 block">Fuelling At</label>
+      <select id="fuelling-at" [(ngModel)]="locationFilter" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+        <option value="">-- All --</option>
+        <option value="AT_SEA">At Sea</option>
+        <option value="AT_HARBOUR">At Harbour</option>
+      </select>
+    </div>
+    <button type="button" (click)="clearFilters()" class="h-10 px-4 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+      Clear
+    </button>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredRows()"
+    [columnDefs]="columnDefs"
+    [pagination]="true"
+    [pageSize]="10"
+    height="460px">
+  </app-data-grid>
+</app-master-card>

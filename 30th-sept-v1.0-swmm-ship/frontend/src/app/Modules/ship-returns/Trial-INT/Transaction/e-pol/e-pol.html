@@ -1,0 +1,182 @@
+<div class="mt-3">
+  <app-form-card #formCard [title]="'E-POL'" [smallTitle]="'Sub Title'" [showPreviousReport]="true"
+    [showBackButton]="true" [showPaginator]="true" [previewMode]="true" [pageScroll]="true">
+    <div class="grid grid-cols-12 gap-2">
+      <div class="col-span-4 flex flex-col overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] p-2">
+        <div class="border-b border-white/15 px-3 py-2 mb-2">
+          <h3 class="text-sm font-bold uppercase tracking-wide text-white/80">E-POL</h3>
+        </div>
+        <form [formGroup]="form" class="flex flex-col">
+          <div class="w-full overflow-hidden rounded-xl border border-white/15">
+            <table class="!w-full table-fixed border-collapse text-sm text-white">
+              <colgroup>
+                <col class="w-[42%]" />
+                <col class="w-[58%]" />
+              </colgroup>
+              <tbody>
+                <tr>
+                  <td colspan="2" class="p-2">
+                    <app-select formControlName="equipment" [options]="equipmentOptions" labelKey="equipment_name"
+                      valueKey="equipment_id" placeholder="--Select--"
+                      (valueChange)="onEquipmentChange($event)"></app-select>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70 whitespace-nowrap">
+                    Sampling Date:
+                  </td>
+                  <td class="p-2 align-middle">
+                    <app-calendar formControlName="samplingDate"></app-calendar>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Equipment Status:
+                  </td>
+                  <td class="p-2 min-w-0 align-middle">
+                    <app-radio-group formControlName="equipmentStatus"
+                      [options]="equipmentStatusOptions"></app-radio-group>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Oil Type:
+                  </td>
+                  <td class="p-2 min-w-0 cursor-not-allowed align-middle">
+                    <app-radio-group formControlName="oilType" [options]="oilTypeOptions"
+                      [disabled]="true"></app-radio-group>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Return Type:
+                  </td>
+                  <td class="p-2 min-w-0 align-middle">
+                    <app-radio-group formControlName="returnType" [options]="returnTypeOptions"></app-radio-group>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Type of Lubricant:
+                  </td>
+                  <td class="p-2 align-middle">
+                    <app-input formControlName="typeOfLubricant"></app-input>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Running Hrs post Major overhaul:
+                  </td>
+                  <td class="p-2 align-middle">
+                    <app-input formControlName="runningHrsAfterMajorOverhaul"></app-input>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Hrs Since Last Routine Oil Change:
+                  </td>
+                  <td class="p-2 align-middle">
+                    <app-input formControlName="hrsSinceLastRoutineOilChange"></app-input>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Qty of Fresh Oil added in the Month (Ltrs):
+                  </td>
+                  <td class="p-2 align-middle">
+                    <app-input formControlName="qtyOfFreshOilAdded"></app-input>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td class="px-3 py-2 align-middle text-xs font-semibold uppercase tracking-wide text-white/70">
+                    Upload file:
+                  </td>
+                  <td class="p-2 align-middle">
+                    <app-file-upload formControlName="uploadFile"></app-file-upload>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="my-2">
+          <div class="w-full overflow-hidden rounded-xl border border-white/15">
+            <table class="!w-full table-fixed border-collapse text-sm text-white">
+              <thead>
+                <tr class="bg-white/[0.06]">
+                  <th class="w-16 border-b border-white/15 px-3 py-2 text-left text-[11px] font-bold uppercase tracking-wider text-white/70">SNo.</th>
+                  <th class="border-b border-white/15 px-3 py-2 text-left text-[11px] font-bold uppercase tracking-wider text-white/70">Equipment Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of completedEquipmentList; let idx = index" class="border-t border-white/10"
+                  [ngClass]="item.equipmentId == selectedEquipment?.equipment_id ? 'bg-[#1069AB]/25' : ''">
+                  <td class="px-3 py-2 align-middle">{{ idx + 1 }}</td>
+                  <td class="px-3 py-2 align-middle">
+                    <a href="javascript:void(0)"
+                      class="font-medium text-[#61C2FF] transition hover:opacity-80"
+                      (click)="onEquipmentClick(item)">
+                      {{ item.equipmentName }}({{ item.equipmentNomenclature }})
+                    </a>
+                  </td>
+                </tr>
+                <tr class="border-t border-white/10">
+                  <td colspan="2" class="px-3 py-2 text-end text-xs text-white/60">
+                    {{ completionPercent | number:'1.2-2' }}% completed
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-8 flex flex-col gap-4">
+
+        <div
+          *ngIf="['Monthly', 'Quaterly'].includes(form.get('returnType')?.value) && form.get('equipmentStatus')?.value === 'OPS'"
+          class="overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06]">
+          <div
+            class="border-b border-white/15 bg-white/[0.04] px-3 py-2 text-sm font-semibold uppercase tracking-wide text-white/80">
+            LUB OIL BASIC TESTS
+          </div>
+          <div class="p-3">
+            <app-reusable-input-table [data]="ePol.basicOilProperties"
+              [columns]="ePol.basicOilPropertiesColumns"></app-reusable-input-table>
+          </div>
+        </div>
+        <div *ngIf="form.get('returnType')?.value === 'Quaterly'"
+          class="overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06]">
+          <div
+            class="border-b border-white/15 bg-white/[0.04] px-3 py-2 text-sm font-semibold uppercase tracking-wide text-white/80">
+            LUB OIL ADVANCE TESTS
+          </div>
+          <div class="p-3">
+            <app-reusable-input-table [data]="ePol.advanceOilProperties"
+              [columns]="ePol.advanceOilPropertiesColumns"></app-reusable-input-table>
+          </div>
+        </div>
+        <div *ngIf="isDTTT" class="overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06]">
+          <div
+            class="border-b border-white/15 bg-white/[0.04] px-3 py-2 text-sm font-semibold uppercase tracking-wide text-white/80">
+            COOLENT TEST
+          </div>
+          <div class="p-3">
+            <app-reusable-input-table [data]="ePol.coolentTest"
+              [columns]="ePol.coolentTestColumns"></app-reusable-input-table>
+          </div>
+        </div>
+
+        <app-review-table [isReoffer]="false"></app-review-table>
+      </div>
+    </div>
+
+    <div formFooter class="flex gap-5 justify-end">
+      <app-loading-button [disabled]="!this.formApiService?.context?.workflow_rights?.can_edit" label="Save draft"
+        [color]="'blue'" [icon]="'Save'" [loading]="draftLoading" (clicked)="handleSave('draft')"></app-loading-button>
+
+      <app-loading-button [disabled]="!this.formApiService?.context?.workflow_rights?.can_edit" label="Save"
+        [color]="'green'" [icon]="'SaveAllIcon'" [loading]="submitLoading"
+        (clicked)="handleSave('save')"></app-loading-button>
+    </div>
+  </app-form-card>
+</div>

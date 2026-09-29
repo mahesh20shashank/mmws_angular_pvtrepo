@@ -1,0 +1,127 @@
+<div class="grid-wrapper" [style.height]="height">
+  @if (loading) {
+    <div class="grid-skeleton" [style.height]="height">
+      <div class="grid-skeleton-header">
+        @for (col of columnDefs; track $index) {
+          <div class="grid-skeleton-cell grid-skeleton-shimmer"></div>
+        }
+      </div>
+      @for (row of skeletonRows; track $index) {
+        <div class="grid-skeleton-row">
+          @for (col of columnDefs; track $index) {
+            <div class="grid-skeleton-cell grid-skeleton-shimmer"></div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Two additions on the element below - [floatingFiltersHeight], an explicit height for the
+       per-column filter row, and (filterChanged), the hook that keeps the pagination footer's
+       count honest when a caller-enabled filter changes what is on screen. Both are inert on a
+       grid whose columns declare no floating filter, because ag-grid does not render the filter
+       row and never raises the event. -->
+  <ag-grid-angular
+    [class.grid-hidden]="loading"
+    class="ag-theme-quartz ag-theme-custom"
+    [theme]="'legacy'"
+    style="width: 100%; height: 100%"
+    [domLayout]="autoHeight ? 'autoHeight' : 'normal'"
+    [rowData]="rowData"
+    [columnDefs]="finalColumnDefs"
+    [icons]="icons"
+    [defaultColDef]="defaultColDef"
+    [pagination]="pagination"
+    [paginationPageSize]="pageSize"
+    [suppressPaginationPanel]="true"
+    [suppressMovableColumns]="!enableColumnReorder"
+    [suppressDragLeaveHidesColumns]="true"
+    rowSelection="multiple"
+    [isRowSelectable]="rowSelectableFn"
+    [suppressRowClickSelection]="suppressRowClickSelection"
+    [getRowId]="agGetRowId"
+    [rowClassRules]="rowClassRules"
+    [rowHeight]="40"
+    [headerHeight]="50"
+    [floatingFiltersHeight]="floatingFiltersHeight"
+    [enableBrowserTooltips]="true"
+    (gridReady)="onGridReady($event)"
+    (firstDataRendered)="onFirstDataRendered()"
+    (filterChanged)="onFilterChanged()"
+    (selectionChanged)="onSelectionChanged()"
+    (cellClicked)="onCellClicked($event)"
+    (rowClicked)="onRowClicked($event)"
+    (columnMoved)="onColumnMoved($event)"
+  >
+  </ag-grid-angular>
+
+  <!-- @if (pagination && totalRows > pageSize) { -->
+  <div class="pagination-container">
+    <div class="page-size">
+      <span>Entries per page</span>
+
+      <select id="" [value]="pageSize" (change)="onPageSizeChange($event)">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+
+  <div class="pagination-center">
+  <span class="page-info">
+{{ startRow() }}-{{ endRow() }} of {{ totalRows() }}  </span>
+
+ <!-- First Page (|<) -->
+    <app-button
+      type="button"
+      (click)="firstPage()"
+      [disabled]="currentPage() === 1"
+    >
+      <app-icon
+        class="first-page-icon"
+        name="chevron-last"
+        [size]="18"
+        style="transform: rotate(180deg);">
+      </app-icon>
+    </app-button>
+
+    <!-- Previous (<) -->
+    <app-button
+      type="button"
+      (click)="prevPage()"
+      [disabled]="currentPage() === 1"
+    >
+      <app-icon
+        name="chevron-left"
+        [size]="18">
+      </app-icon>
+    </app-button>
+
+    <!-- Next (>) -->
+    <app-button
+      type="button"
+      (click)="nextPage()"
+       [disabled]="currentPage() === totalPages()"
+
+    >
+      <app-icon
+        name="chevron-right"
+        [size]="18">
+      </app-icon>
+    </app-button>
+
+    <!-- Last Page (>|) -->
+    <app-button
+      type="button"
+      (click)="lastPage()"
+      [disabled]="currentPage() === totalPages()"
+    >
+      <app-icon
+        name="chevron-last"
+        [size]="18">
+      </app-icon>
+    </app-button>
+  </div>
+  <!-- } -->
+</div>

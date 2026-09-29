@@ -1,0 +1,257 @@
+:host {
+      --c-defect: #e65b5b;
+      --c-defect-bg: rgba(230,91,91,.12);
+      --c-defect-edge: rgba(230,91,91,.45);
+      --c-routine: #fb923c;
+      --c-routine-bg: rgba(251,146,60,.12);
+      --c-routine-edge: rgba(251,146,60,.45);
+      --c-trial: #2dd4bf;
+      --c-trial-bg: rgba(45,212,191,.12);
+      --c-trial-edge: rgba(45,212,191,.45);
+      --c-planned_routine: #7c3aed;
+      --c-planned_routine-bg: rgba(124,58,237,.12);
+      --c-planned_routine-edge: rgba(124,58,237,.5);
+      --c-audit: #5b811d;
+      --c-audit-bg: rgba(91,129,29,.12);
+      --c-audit-edge: rgba(91,129,29,.45);
+      --c-others: #94a3b8;
+      --c-others-bg: rgba(148,163,184,.10);
+      --c-others-edge: rgba(148,163,184,.35);
+      --c-alert: #f87171;
+      --c-alert-bg: rgba(248,113,113,.14);
+      --c-alert-edge: rgba(248,113,113,.55);
+      --c-warn: #fbbf24;
+      --c-warn-bg: rgba(251,191,36,.14);
+      --c-warn-edge: rgba(251,191,36,.5);
+    }
+
+    .activity {
+      position: absolute;
+      inset: 5px;
+      border-radius: 9px;
+      padding: 7px 9px;
+      font-size: 11.5px;
+      line-height: 1.25;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .18s ease, filter .15s ease;
+      border: 1px solid;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+      backdrop-filter: blur(10px) saturate(150%);
+      -webkit-backdrop-filter: blur(10px) saturate(150%);
+    }
+
+    .activity.stacked {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      min-height: 18px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      margin: 0;
+      flex: 0 0 auto;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .activity.stacked.conflict {
+      padding-inline: 6px 5px;
+    }
+
+    .activity::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%);
+      pointer-events: none;
+    }
+
+    .activity:hover {
+      transform: translateY(-2px);
+      z-index: 4;
+    }
+
+    .activity.selected {
+      z-index: 6;
+      box-shadow: 0 0 0 2px #60a5fa, 0 12px 30px rgba(59,130,246,.35);
+    }
+
+    .title-l {
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+    }
+
+    .sub-l {
+      color: var(--text-muted);
+      font-size: 10.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+    }
+
+    .meta-l {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--text-muted);
+      position: relative;
+    }
+
+    .activity.cat-defect { background: var(--c-defect-bg); border-color: var(--c-defect-edge); box-shadow: 0 4px 16px rgba(230,91,91,.12); }
+    .activity.cat-defect:hover { box-shadow: 0 8px 24px rgba(230,91,91,.25); }
+    .activity.cat-routine { background: var(--c-routine-bg); border-color: var(--c-routine-edge); box-shadow: 0 4px 16px rgba(251,146,60,.12); }
+    .activity.cat-routine:hover { box-shadow: 0 8px 24px rgba(251,146,60,.25); }
+    .activity.cat-trial { background: var(--c-trial-bg); border-color: var(--c-trial-edge); box-shadow: 0 4px 16px rgba(45,212,191,.12); }
+    .activity.cat-trial:hover { box-shadow: 0 8px 24px rgba(45,212,191,.25); }
+    .activity.cat-planned_routine   { background: var(--c-planned_routine-bg); border-color: var(--c-planned_routine-edge); box-shadow: 0 4px 16px rgba(124,58,237,.14); }
+    .activity.cat-planned_routine:hover { box-shadow: 0 8px 24px rgba(124,58,237,.3); }
+    .activity.cat-audit { background: var(--c-audit-bg); border-color: var(--c-audit-edge); box-shadow: 0 4px 16px rgba(91,129,29,.12); }
+    .activity.cat-audit:hover { box-shadow: 0 8px 24px rgba(91,129,29,.25); }
+    .activity.cat-others { background: var(--c-others-bg); border-color: var(--c-others-edge); }
+    .activity.cat-others:hover { box-shadow: 0 8px 20px rgba(148,163,184,.18); }
+
+    .activity.conflict {
+      background: var(--c-alert-bg);
+      border-color: var(--c-alert);
+      box-shadow: 0 0 0 1px var(--c-alert) inset, 0 6px 22px rgba(248,113,113,.25);
+    }
+
+    .activity.conflict::after {
+      content: '!';
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      width: 14px;
+      height: 14px;
+      background: #ef4444;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+      box-shadow: 0 0 0 3px rgba(239,68,68,.25);
+    }
+
+    .activity.stacked.conflict::after {
+      display: none;
+    }
+
+    .stack-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .conflict-badge {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #ef4444;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+      box-shadow: 0 0 0 2px rgba(239,68,68,.25);
+    }
+
+    .activity.delayed {
+      box-shadow: inset 3px 0 0 var(--c-warn), 0 4px 16px rgba(251,191,36,.18);
+    }
+
+    .progress-l {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--border-card);
+    }
+
+    .progress-l .fill {
+      height: 100%;
+      background: var(--text-muted);
+      box-shadow: 0 0 8px currentColor;
+    }
+    /* =====================================================
+   WEEK VIEW + DETAIL PANEL OPEN
+   Compact activity cards
+   ===================================================== */
+
+.activity.compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activity.stacked .title-l {
+  display: block;
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  max-width: calc(100% - 18px);
+  font-size: 8.5px;
+  line-height: 1.15;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.activity.stacked .sub-l,
+.activity.stacked .meta-l,
+.activity.stacked .progress-l {
+  display: none !important;
+}
+
+.activity.compact .sub-l,
+.activity.compact .meta-l,
+.activity.compact .progress-l {
+  display: none !important;
+}
+
+.activity.compact .title-l {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  white-space: normal;
+  word-break: break-word;
+
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+  line-height: 1.2;
+  font-size: 11px;
+  font-weight: 600;
+
+  text-align: center;
+}
+
+
+    .activity.cat-defect .progress-l .fill { background: var(--c-defect); }
+    .activity.cat-routine .progress-l .fill { background: var(--c-routine); }
+    .activity.cat-trial .progress-l .fill { background: var(--c-trial); }
+    .activity.cat-planned_routine .progress-l .fill { background: var(--c-planned_routine); }
+    .activity.cat-audit .progress-l .fill { background: var(--c-audit); }
+    .activity.cat-others .progress-l .fill { background: var(--c-others); }

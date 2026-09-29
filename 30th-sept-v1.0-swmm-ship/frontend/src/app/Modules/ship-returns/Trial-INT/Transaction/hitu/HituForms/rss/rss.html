@@ -1,0 +1,1585 @@
+<app-form-card
+  title="RADAR SIGNATURE SUPPRESSION SCREEN CLOSURE (RSS SCREEN CLOSURE)"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-2 gap-3">
+      <!-- <div class="flex flex-col gap-1">
+
+        <app-select [label]="'Class of Ship*'" formControlName="classOfShip" [searchable]="false"
+          [options]="classOfShipOptions" [disabled]="true">
+        </app-select>
+      </div> -->
+
+      <!-- SHIP STATUS -->
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 mt-3">
+      <div class="flex flex-col gap-1">
+        <app-input
+          [label]="'Ship*'"
+          formControlName="ship"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-input>
+      </div>
+      <!-- Date of conduct of trials  -->
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+      <!--Place of conduct of trials  -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Place of conduct of trials*'"
+          formControlName="place_of_conduct_trail"
+          [options]="locationOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+      <!-- Document No. -->
+      <app-input label="Document No.*" formControlName="document_no">
+      </app-input>
+      <!-- Occasion for conduct of Trials -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Occasion for conduct of Trials*'"
+          formControlName="occasion_of_conduct_trail"
+          [searchable]="false"
+          [options]="occasionOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload
+          [label]="'Upload doc*'"
+          formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)"
+        >
+        </app-file-upload>
+        <!-- </div> -->
+      </div>
+    </app-parameter-card>
+
+    <div class="mt-1 overflow-x-auto mt-8">
+      <table class="w-full border-collapse text-sm">
+        <!-- HEADER -->
+        <thead>
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <th class="w-16 border border-white/15 px-3 py-2 align-middle text-white/85">Ser</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Parameter</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Checks</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Observations</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- SECTION -->
+          <!-- <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">Plant Definition</td>
+          </tr> -->
+
+          <!-- 1 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Make</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="3">
+              <app-input
+                formControlName="manufacturer_name"
+                placeholder="--Select--"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- 2 -->
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Model</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="3">
+              <app-input formControlName="model" placeholder="--Select--">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Year of Manufacture</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="3">
+              <input type="date" formControlName="year_of_manuf" />
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">4.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Electrical Checks</td>
+
+            <!-- Status Dropdown -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="electrical_check_status"
+                [searchable]="false"
+                [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'UNSAT', value: 'UNSAT' }
+                  ]"
+                (selectionChange)="onElectricalCheckChange($event)"
+              >
+              </app-select>
+            </td>
+
+            <!-- Details Column -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <!-- SAT -->
+              <span
+                *ngIf="form.get('electrical_check_status')?.value === 'SAT'"
+                class="text-sm font-medium"
+              >
+                NIL
+              </span>
+
+              <!-- UNSAT -->
+              <app-input
+                *ngIf="form.get('electrical_check_status')?.value === 'UNSAT'"
+                type="text"
+                formControlName="electrical_check_details"
+                placeholder="Enter alphanumeric data"
+                class="input-field"
+              ></app-input>
+            </td>
+
+            <!-- Remark Column -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <span
+                *ngIf="form.get('electrical_check_status')?.value === 'SAT'"
+              >
+                SAT
+              </span>
+
+              <span
+                *ngIf="form.get('electrical_check_status')?.value === 'UNSAT'"
+              >
+                UNSAT
+              </span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">5.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Limit Switch</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Functioning of limit switches
+            </td>
+
+            <!-- Dropdown -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="limit_switch"
+                [searchable]="false"
+                [options]="[
+                      { label: 'Ops', value: 'ops' },
+                      { label: 'Non Ops', value: 'non_ops' }
+                    ]"
+              >
+              </app-select>
+            </td>
+
+            <!-- Remark -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <input
+                formControlName="lim_switch_remark"
+                class="input-field"
+                readonly
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">6</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Oil Level in Gear Box</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs">Check Oil level</td>
+
+            <!-- Dropdown -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="oil_level"
+                [searchable]="false"
+                [options]="[
+                      { label: '40-100% filled', value: '40_100' },
+                      { label: 'Less than 40% filled', value: 'less_40' },
+                      { label: 'Empty', value: 'empty' }
+                    ]"
+              >
+              </app-select>
+            </td>
+
+            <!-- Remark + Observation -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 space-y-2">
+              <!-- Display -->
+              <input
+                class="input-field"
+                readonly
+                [value]="
+                      form.get('oil_level_remark')?.value === 'SAT_OBS'
+                        ? 'SAT with Observation'
+                        : form.get('oil_level_remark')?.value
+                    "
+              />
+
+              <!-- Observation textarea -->
+              <textarea
+                *ngIf="form.get('oil_level_remark')?.value === 'SAT_OBS'"
+                formControlName="oil_level_remark_obs"
+                placeholder="Enter observation"
+                class="input-field p-2"
+              >
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">7</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Type of oil used in Gear Box
+            </td>
+
+            <!-- Oil Type -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="oil_type"
+                [searchable]="false"
+                [options]="[
+                    { label: 'OC300', value: 'OC300' },
+                    { label: 'SS320', value: 'SS320' },
+                    { label: 'Others/Equivalent oil', value: 'others' }
+                  ]"
+                placeholder="Select Type"
+              >
+              </app-select>
+            </td>
+
+            <!-- Oil Available -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="oil_available"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Yes', value: 'yes' },
+                    { label: 'No', value: 'no' }
+                  ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+
+            <!-- Remark -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <input
+                formControlName="oil_remark"
+                class="input-field"
+                readonly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">8</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Condition of Foundations and Structure
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs">
+              Corrosion / Pitting / Unpainted / Others
+            </td>
+
+            <!-- DROPDOWN -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="foundation_condition"
+                [searchable]="false"
+                [options]="[
+                  { label: 'No Observation', value: 'no_observation' },
+                  { label: 'Observation', value: 'observation' }
+                ]"
+                placeholder="Select"
+              >
+              </app-select>
+
+              <!-- OBS CHECKBOX / INPUT AREA -->
+              <ng-container
+                *ngIf="form.get('foundation_condition')?.value === 'observation'"
+              >
+                <div class="mt-2 flex flex-col gap-2">
+                  <app-input
+                    formControlName="corrosion_obs"
+                    placeholder="Corrosion"
+                  ></app-input>
+
+                  <app-input
+                    formControlName="pitting_obs"
+                    placeholder="Pitting"
+                  ></app-input>
+
+                  <app-input
+                    formControlName="unpainted_obs"
+                    placeholder="Unpainted"
+                  ></app-input>
+
+                  <app-input
+                    formControlName="others_obs"
+                    placeholder="Others"
+                  ></app-input>
+                </div>
+              </ng-container>
+            </td>
+
+            <!-- REMARK COLUMN -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 space-y-2">
+              <!-- AUTO REMARK -->
+              <input
+                [value]="form.get('foundation_remark')?.value"
+                class="input-field"
+                readonly
+              />
+
+              <!-- TEXTAREA -->
+              <textarea
+                *ngIf="form.get('foundation_condition')?.value === 'observation'"
+                formControlName="foundation_remark_obs"
+                placeholder="Enter details"
+                class="input-field p-2"
+              >
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">9</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs">Greasing points</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Condition of grease nipples – Charged / Painted / Choked
+            </td>
+
+            <!-- Condition -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 space-y-2">
+              <app-select
+                formControlName="lubrication_points"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Charged', value: 'charged' },
+                    { label: 'Painted', value: 'painted' },
+                    { label: 'Choked', value: 'choked' },
+                    { label: 'Missing', value: 'missing' },
+                    { label: 'Others', value: 'others' }
+                  ]"
+              >
+              </app-select>
+
+              <!-- Others input -->
+            </td>
+
+            <!-- Remark -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <input
+                formControlName="greasing_point_remarks"
+                class="input-field"
+                readonly
+              />
+              <div class="mt-2">
+                <app-input
+                  *ngIf="form.get('lubrication_points')?.value === 'others'"
+                  type="text"
+                  formControlName="lubrication_points_other"
+                  placeholder="Enter details"
+                  class="input-field"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-center">10</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Drive</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs">
+              Check for abnormal noise
+            </td>
+
+            <!-- SELECT -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="drive_condition"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Noise Observed', value: 'observation' }
+                  ]"
+              >
+              </app-select>
+            </td>
+
+            <!-- INPUT / REMARK AREA -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs">
+              <!-- NIL CASE -->
+              <input
+                *ngIf="form.get('drive_condition')?.value === 'nil'"
+                formControlName="noise_operan_remarks"
+                class="input-field"
+                readonly
+                value="SAT"
+              />
+
+              <!-- OBSERVATION CASE -->
+              <app-input
+                *ngIf="form.get('drive_condition')?.value === 'observation'"
+                formControlName="noise_op"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+          </tr>
+          <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="5">
+              11. Safety Checks - Visual
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">11.1</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              In Electrical operation, the RSS will not Open/Close with the Side
+              lock engaged
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="electrical_oper"
+                [searchable]="false"
+                [options]="[
+                        { label: 'Nil', value: 'nil' },
+                        { label: 'Observation', value: 'observation' }
+                      ]"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <!-- NIL CASE -->
+              <input
+                *ngIf="form.get('electrical_oper')?.value === 'nil'"
+                formControlName="electrical_oper_remarks"
+                class="input-field"
+                readonly
+                value="SAT"
+              />
+
+              <!-- OBSERVATION CASE -->
+              <app-input
+                *ngIf="form.get('electrical_oper')?.value === 'observation'"
+                formControlName="electrical_oper_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">11.2</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              If RSS closure is in open condition, motor should not start for
+              opening
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="rss_closure"
+                [searchable]="false"
+                [options]="rssClosureOptions"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="2">
+              <app-input
+                *ngIf="extract('rss_closure') === 'observation'"
+                formControlName="rss_closure_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span *ngIf="extract('rss_closure') === 'nil'">
+                {{ form.get('rss_closure_remarks')?.value }}
+              </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">11.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              When the Emergency stop is pressed, the operation of the RSS
+              Screen is stopped in Electrical
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="rss_screen"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('rss_screen','rss_screen_obs','rss_screen_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('rss_screen')?.value === 'observation'"
+                formControlName="rss_screen_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span *ngIf="extract('rss_screen') === 'nil'"> SAT </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">11.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              During Manual mode of operation, the RSS Screen can be freely
+              operated by the disengaging the clutches from motor with the help
+              of handle
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="manual_mode"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('manual_mode','manual_mode_obs','manual_mode_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="extract('manual_mode') === 'observation'"
+                formControlName="manual_mode_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span *ngIf="extract('manual_mode') === 'nil'"> SAT </span>
+            </td>
+          </tr>
+
+          <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="5">
+              12. Electric Mode (Opening Procedures)
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">12.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Checks the Clutching of lever with gear box before the start
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="gear_box"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('gear_box','gear_box_obs','gear_box_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('gear_box')?.value === 'observation'"
+                formControlName="gear_box_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span *ngIf="extract('gear_box') === 'nil'"> SAT </span>
+
+              <app-input
+                *ngIf="extract('gear_box') === 'observation'"
+                formControlName="gear_box_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">12.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Energize the Electrical Panel
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="electrical_panel"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('electrical_panel','electrical_panel_obs','electrical_panel_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="extract('electrical_panel') === 'observation'"
+                formControlName="electrical_panel_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span
+                *ngIf="extract('electrical_panel') === 'nil'"
+                class="font-medium"
+              >
+                SAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">12.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Disengage the Manual locks from the bottom of the screen
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="manual_locks"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('manual_locks','manual_locks_obs','manual_locks_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('manual_locks')?.value === 'observation'"
+                formControlName="manual_locks_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <input
+                *ngIf="form.get('manual_locks')?.value === 'nil'"
+                formControlName="manual_locks_remarks"
+                class="input-field"
+                readonly
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">12.4</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Select the Open/Off S1 switch & hold towards Left up and reach its
+              limit positions
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="switch_hold"
+                [searchable]="false"
+                [options]="rssClosureOptions"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <!-- Observation textbox -->
+              <app-input
+                *ngIf="extract('switch_hold') === 'observation'"
+                formControlName="switch_hold_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- Auto remarks -->
+              <span *ngIf="extract('switch_hold') === 'nil'"> SAT </span>
+
+              <span
+                *ngIf="extract('switch_hold') === 'observation' &&
+                 !form.get('switch_hold_obs')?.value"
+              >
+                UNSAT
+              </span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">12.5</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              The limit switch will be active once the screen will lift to its
+              final positions and motor will be cut off
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="cut_off"
+                [searchable]="false"
+                [options]="rssClosureOptions"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <!-- Observation textbox -->
+              <app-input
+                *ngIf="extract('cut_off') === 'observation'"
+                formControlName="cut_off_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- Auto remarks -->
+              <span *ngIf="extract('cut_off') === 'nil'"> SAT </span>
+
+              <span
+                *ngIf="extract('cut_off') === 'observation' &&
+                 !form.get('cut_off_obs')?.value"
+              >
+                UNSAT
+              </span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">12.6</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Once the Motor cut-off screen will not move further from its final
+              position
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="final_pos"
+                [searchable]="false"
+                [options]="rssClosureOptions"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <!-- Observation textbox -->
+              <app-input
+                *ngIf="extract('final_pos') === 'observation'"
+                formControlName="final_pos_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- Auto remarks -->
+              <span *ngIf="extract('final_pos') === 'nil'"> SAT </span>
+
+              <span
+                *ngIf="extract('final_pos') === 'observation' &&
+                 !form.get('final_pos_obs')?.value"
+              >
+                UNSAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="5">
+              13. Electric Mode (Closing Procedure)
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">13.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Checks the clutching of lever with gear box before the start
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="electrical_mode"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('electrical_mode','electrical_mode_obs','electrical_mode_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <!-- Observation -->
+              <app-input
+                *ngIf="extract('electrical_mode') === 'observation'"
+                formControlName="electrical_mode_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- Nil -->
+              <span
+                *ngIf="extract('electrical_mode') === 'nil'"
+                class="font-medium"
+              >
+                SAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">13.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Energize the Electrical Panel
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="electrical_pan"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('electrical_pan','electrical_pan_obs','electrical_pan_remarks')"
+              >
+              </app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('electrical_pan')?.value === 'observation'"
+                formControlName="electrical_pan_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <div *ngIf="form.get('electrical_pan')?.value === 'nil'">SAT</div>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">13.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Engage the Manual locks from the bottom of the screen
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="engage_manual"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('engage_manual','engage_manual_obs','engage_manual_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('electrical_pan')?.value === 'observation'"
+                formControlName="electrical_pan_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span *ngIf="form.get('electrical_pan')?.value === 'nil'">
+                SAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">13.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Select the Open/ Off S1 switch & hold towards Right from control
+              panel until the screen reached to closing position
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="s1_switch"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('s1_switch','s1_switch_obs','s1_switch_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('s1_switch')?.value === 'observation'"
+                formControlName="s1_switch_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <div *ngIf="form.get('s1_switch')?.value === 'nil'">SAT</div>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">13.5</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              The limit switch will be active once the screen will lower to its
+              final positions and motor will be cut off
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="cut_off1"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                (selectionChange)="handleObservation('cut_off1','cut_off1_obs','cut_off1_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('cut_off1')?.value === 'observation'"
+                formControlName="cut_off1_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <div *ngIf="form.get('cut_off1')?.value === 'nil'">SAT</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">13.6</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Once the Motor Cut-off screen will not move further from its final
+              position
+            </td>
+
+            <!-- Dropdown -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="motor_cut"
+                [searchable]="false"
+                [options]="[
+        { label: 'Nil', value: 'nil' },
+        { label: 'Observation', value: 'observation' }
+      ]"
+                (selectionChange)="handleObservation('motor_cut','motor_cut_obs','motor_cut_remarks')"
+              >
+              </app-select>
+            </td>
+
+            <!-- SAT or Observation -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <!-- Observation Textarea -->
+              <app-input
+                *ngIf="form.get('motor_cut')?.value === 'observation'"
+                formControlName="motor_cut_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- Non-editable SAT Text -->
+              <div *ngIf="form.get('motor_cut')?.value === 'nil'">
+                {{ form.get('motor_cut_remarks')?.value }}
+              </div>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">13.7</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Engage the locks at bottom of the screen with manual locking level
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="lock_level"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'lock_level',
+                    'lock_level_obs',
+                    'lock_level_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('lock_level')?.value === 'observation'"
+                formControlName="lock_level_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span
+                *ngIf="form.get('lock_level')?.value === 'nil'"
+                class="font-medium"
+              >
+                SAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="5">
+              14. Manual Mode(Opening Procedure)
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">14.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Unlock the Latch from the top of the frame from both sides
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="latch"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'latch',
+                    'latch_obs',
+                    'latch_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="2">
+              <!-- Observation textbox -->
+              <app-input
+                *ngIf="extract('latch') === 'observation'"
+                formControlName="latch_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <!-- Non-editable Remark -->
+              <span *ngIf="form.get('latch_remarks')?.value">
+                {{ form.get('latch_remarks')?.value }}
+              </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">14.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Operate the winch using the manual lever and rotate for downward
+              movement of the screen
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="winch"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'winch',
+                    'winch_obs',
+                    'winch_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <span *ngIf="form.get('winch')?.value === 'nil'"> SAT </span>
+
+              <app-input
+                *ngIf="form.get('winch')?.value === 'observation'"
+                formControlName="winch_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">14.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Operate the winch unite the screen reaches its maximum position
+              towards the shipside
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="shipside"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'shipside',
+                    'shipside_obs',
+                    'shipside_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('shipside')?.value === 'observation'"
+                formControlName="shipside_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span
+                *ngIf="form.get('shipside')?.value === 'nil'"
+                class="font-medium"
+              >
+                SAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="5">
+              15. Manual Mode (Closing Procedure)
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">15.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Unlock the Latch from the top of the frame from both sides
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="frame"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'frame',
+                    'frame_obs',
+                    'frame_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('frame')?.value === 'observation'"
+                formControlName="frame_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <div *ngIf="form.get('frame')?.value === 'nil'">SAT</div>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">15.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Operate the winch using the manual lever and rotate for downward
+              movement of the screen
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="downward"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'downward',
+                    'downward_obs',
+                    'downward_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('downward')?.value === 'observation'"
+                formControlName="downward_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <span
+                *ngIf="form.get('downward')?.value === 'nil'"
+                class="font-medium"
+              >
+                SAT
+              </span>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">15.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Operate the winch unite the screen reaches its maximum position
+              towards the shipside
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-select
+                formControlName="max_pos"
+                [searchable]="false"
+                [options]="[
+                    { label: 'Nil', value: 'nil' },
+                    { label: 'Observation', value: 'observation' }
+                  ]"
+                placeholder="Select"
+                (selectionChange)="handleObservation(
+                    'max_pos',
+                    'max_pos_obs',
+                    'max_pos_remarks'
+                  )"
+              >
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 text-xs" colspan="2">
+              <app-input
+                *ngIf="form.get('max_pos')?.value === 'observation'"
+                formControlName="max_pos_obs"
+                placeholder="Enter observation"
+                class="input-field"
+              >
+              </app-input>
+
+              <app-select
+                *ngIf="form.get('max_pos')?.value === 'nil'"
+                formControlName="max_pos_remarks"
+                [searchable]="false"
+                [options]="[
+              { label: 'SAT', value: 'SAT' }
+            ]"
+                placeholder="Select"
+              >
+              </app-select>
+            </td>
+          </tr>
+
+          <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 p-2" colspan="5">
+              16. Operating Time (Electric and Manual Mode)
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">16.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Open Time (Electric) 120 sec
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="open_time_electric"
+                  class="input-field"
+                  (input)="onTimeCheck('open_time_electric','open_time_electric_remark',120)"
+                ></app-input>
+                <span class="text-xs">Sec</span>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="2">
+              <app-input
+                formControlName="open_time_electric_remark"
+                class="input-field"
+                readonly
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">16.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Closing Time (Electric) 120 sec
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="closing_time_electric"
+                  class="input-field"
+                  (input)="onTimeCheck('closing_time_electric','closing_time_electric_remark',120)"
+                ></app-input>
+                <span class="text-xs">Sec</span>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="2">
+              <app-input
+                formControlName="closing_time_electric_remark"
+                class="input-field"
+                readonly
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">16.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Open Time (Manual) 300 sec
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="open_time_manual"
+                  class="input-field"
+                  (input)="onTimeCheck('open_time_manual','open_time_manual_remark',300)"
+                ></app-input>
+                <span class="text-xs">Sec</span>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="2">
+              <app-input
+                formControlName="open_time_manual_remark"
+                class="input-field"
+                readonly
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">16.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              Closing Time (Manual) 300 sec
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <div class="flex items-center gap-2">
+                <app-input
+                  type="number"
+                  formControlName="closing_time_manual"
+                  class="input-field"
+                  (input)="onTimeCheck('closing_time_manual','closing_time_manual_remark',300)"
+                />
+                <span class="text-xs">Sec</span>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2" colspan="2">
+              <app-input
+                formControlName="closing_time_manual_remark"
+                class="input-field"
+                readonly
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">17.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Any other Observations</td>
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">
+              <app-input
+                formControlName="any_other_observations"
+                rows="3"
+                class="input-field"
+                placeholder="Enter observations (alphanumeric)"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">18</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2">Overall Remarks</td>
+            <!-- Dropdown -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 p-2 space-y-2" colspan="4">
+              <app-select
+                formControlName="overall_remark"
+                [searchable]="false"
+                [options]="[
+                { label: 'SAT', value: 'SAT' },
+                { label: 'SAT with observation', value: 'SAT_OBS' },
+                { label: 'UNSAT', value: 'UNSAT' }
+              ]"
+                placeholder="Select"
+              >
+              </app-select>
+
+              <!-- <app-input *ngIf="form.get('overall_remark')?.value === 'SAT_OBS'" formControlName="overall_remark_details"
+                rows="2" class="input-field" placeholder="Enter observation details">
+              </app-input> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+  <!-- <app-editor [height]="200"></app-editor> -->
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

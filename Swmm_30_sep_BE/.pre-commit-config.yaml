@@ -1,0 +1,53 @@
+repos:
+  # ----------------------------------------------------------
+  # Generic repository checks
+  # ----------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+        exclude: |
+          (?x)^(
+            frontend/tsconfig\.json|
+            frontend/tsconfig\.app\.json|
+            frontend/tsconfig\.spec\.json
+          )$
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: detect-private-key
+
+  # ----------------------------------------------------------
+  # Python (Backend)
+  # ----------------------------------------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.3
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+        files: ^backend/.*\.py$
+
+      - id: ruff-format
+        files: ^backend/.*\.py$
+
+  # ----------------------------------------------------------
+  # Frontend (Angular)
+  # ----------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: frontend-eslint
+        name: Frontend ESLint
+        language: system
+        entry: python
+        args: [scripts/frontend_lint.py]
+        pass_filenames: false
+        files: ^frontend/src/
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        files: ^frontend/src/

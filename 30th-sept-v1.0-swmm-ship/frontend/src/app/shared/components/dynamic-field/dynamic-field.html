@@ -1,0 +1,78 @@
+<div class="dyn-field">
+  <div class="dyn-field-head">
+    <span class="dyn-field-label">
+      {{ spec().label }}
+      @if (spec().required) {
+        <span class="dyn-field-star">*</span>
+      }
+      @if (spec().hint) {
+        <span class="dyn-field-hint">{{ spec().hint }}</span>
+      }
+    </span>
+    @if (spec().badge) {
+      <span class="dyn-field-badge" [style.color]="badgeColor()">{{ spec().badge }}</span>
+    }
+  </div>
+
+  @switch (spec().kind) {
+    @case ("select") {
+      <app-select-input
+        [options]="spec().options ?? []"
+        [placeholder]="spec().placeholder ?? ('Select ' + spec().label)"
+        [required]="!!spec().required"
+        [error]="invalid()"
+        [readonly]="!!spec().readonly"
+        [formControl]="control()"
+      />
+    }
+    @case ("radio") {
+      <div class="dyn-field-radio-group">
+        @for (opt of radioOptions(); track opt) {
+          <label class="dyn-field-radio" [class.dyn-field-radio--selected]="control().value === opt">
+            <input
+              type="radio"
+              class="dyn-field-radio-input"
+              [name]="spec().key"
+              [value]="opt"
+              [checked]="control().value === opt"
+              [disabled]="!!spec().readonly"
+              (change)="pickRadio(opt)"
+            />
+            <span class="dyn-field-radio-outer"><span class="dyn-field-radio-dot"></span></span>
+            {{ opt }}
+          </label>
+        }
+      </div>
+    }
+    @case ("editor") {
+      <app-rich-text-editor [placeholder]="spec().placeholder ?? ('Enter ' + spec().label)" [readonly]="!!spec().readonly" [formControl]="control()" />
+    }
+    @case ("file") {
+      <app-file-input [placeholder]="spec().placeholder ?? 'Attach Word / PDF / image / audio'" [readonly]="!!spec().readonly" [formControl]="control()" />
+    }
+    @case ("auto") {
+      <div class="dyn-field-auto">
+        <span>{{ spec().displayValue || control().value || "—" }}</span>
+        <app-icon name="lock" [size]="13" variant="muted" />
+      </div>
+    }
+    @default {
+      <app-input-field
+        [type]="inputType()"
+        [placeholder]="spec().placeholder ?? ('Enter ' + spec().label)"
+        [required]="!!spec().required"
+        [invalid]="invalid()"
+        [readonly]="!!spec().readonly"
+        [min]="spec().minDate ?? ''"
+        [formControl]="control()"
+      />
+    }
+  }
+
+  @if (invalid()) {
+    <span class="dyn-field-error">
+      <app-icon name="circle-alert" [size]="12" variant="danger" />
+      {{ spec().label }} is required
+    </span>
+  }
+</div>

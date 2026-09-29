@@ -1,0 +1,790 @@
+<app-toast></app-toast>
+<app-form-card title="ACCOMMODATION LADDER " [showPreviousReport]="true" [showBackButton]="true" [showPaginator]="true"
+  [previewMode]="true" [pageScroll]="true">
+  <div previewHeader class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]">
+    <button *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment" type="button" (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)">
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'">
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-'
+        }}
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="bdcForm" class="p-0">
+    <div class="grid grid-cols-4 gap-3">
+      <app-select [label]="'PORT/STBD*'" formControlName="port_stbd" [options]="port_stbd_options" [searchable]="false"
+        placeholder="--Select--" class="w-full">
+      </app-select>
+      <app-input [label]="'Ship*'" formControlName="ship" class="w-full"> </app-input>
+      <app-calendar [label]="'Date of Conduct of Trials*'" formControlName="date_of_inspection"></app-calendar>
+      <app-select [label]="'Place of Conduct of Trials*'" formControlName="place_of_conduct_of_trials"
+        [options]="placesOptions" placeholder="--Select--" class="w-full">
+      </app-select>
+      <app-select [label]="'Occasion for Conduct of Trials*'" formControlName="occasion_for_conduct_of_trials"
+        [options]="ocationofconduct" placeholder="--Select--" class="w-full">
+      </app-select>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input label="Corespondence(fax/letter,etc)*" formControlName="authority">
+        </app-input>
+
+        <app-calendar label="Date*" formControlName="authority_date"
+          [max]="bdcForm.get('date_of_conduct_trail')?.value">
+        </app-calendar>
+
+
+        <app-file-upload [label]="'Upload doc*'" formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)">
+        </app-file-upload>
+
+
+      </div>
+    </app-parameter-card>
+
+
+
+    <!-- table -->
+
+    <div class="overflow-x-auto mt-5">
+
+      <table class="w-full border-collapse text-sm">
+
+        <!-- HEADER -->
+        <thead>
+          <tr>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 w-10" width="5%">Ser</th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" width="25%">Parameter </th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" width="25%">Checks </th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" width="25%">Observation </th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" width="20%">Remarks </th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- 1 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">1.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Type of Ladder</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2"><app-input formControlName="type_of_ladder"
+                class="w-full">
+              </app-input></td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+          </tr>
+
+          <!-- 2 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Make</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2"><app-input formControlName="manufacturer_name"
+                 class="w-full">
+              </app-input></td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+
+            </td>
+
+
+          </tr>
+
+          <!-- 3 -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Year of Manufacture</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input formControlName="year_of_manufacture" 
+                class="w-full" type="date">
+              </app-input>
+
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+
+            </td>
+
+
+          </tr>
+
+          <!-- 4 -->
+          <!-- Update these rows in your HTML -->
+
+          <!-- Row 4 - Load Testing -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">4.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Load Testing</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of last load test (Not to exceed 27 months)</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar formControlName="load_test_date" placeholder="Select Date"></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="load_test_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 5 - Serviceability -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Serviceability Checks / Visual Survey of Rope</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of last visual survey. Check rope wear, corrosion, defects.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar formControlName="survey_date" placeholder="Select Date"></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="survey_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 6 - Destruction test certificate -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Destruction test certificate</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Check date of destruction test</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar formControlName="destruction_test_date" placeholder="Select Date"></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="destruction_test_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 7 - Wire Rope -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">7.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Wire Rope</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Date of fitment.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar formControlName="date_of_fitment" placeholder="Select Date"></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="date_of_fitment_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 8a - JB Electrical -->
+          <tr>
+            <td rowspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">8.</td>
+            <td rowspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Condition of JB / Control</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Electrical hygiene, condition of connector lugs...</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="jb_electrical" [searchable]="false" [options]="condition_observationOptions1"
+                placeholder="--Select--"></app-select>
+
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="jb_electrical_observation" [searchable]="false" [options]="statusOptions1"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('jb_electrical')?.value === 'Observation'">
+                <app-input formControlName="bdc_8_remark2" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 8b - Switches -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Status of Switches</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="jb_switches" [searchable]="false" [options]="condition_observationOptions1"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="jb_switches_observation" [searchable]="false" [options]="statusOptions1"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('jb_switches')?.value === 'Observation'">
+                <app-input formControlName="bdc_8b_remark2" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 8c - Indicators -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Status of Indicators</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="jb_indicators" [searchable]="false" [options]="condition_observationOptions1"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="jb_indicators_observation" [searchable]="false" [options]="statusOptions1"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('jb_indicators')?.value === 'Observation'">
+                <app-input formControlName="bdc_8c_remark2" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 9 - Foundations -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">9.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Condition of Foundations</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Corrosion / Pitting / Unpainted / Condition of Bond Strap</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="foundation_observation" [searchable]="false" [options]="foundationOptions"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('foundation_observation')?.value === 'Observation'">
+                <div class="mt-1 flex flex-col gap-1">
+                  <app-select formControlName="deck_plating_corrosion"
+                    [options]="[{label:'Corrosion',value:'Corrosion'}]" placeholder="Corrosion">
+                  </app-select>
+                  <app-select formControlName="deck_plating_pitting" [options]="[{label:'Pitting',value:'Pitting'}]"
+                    placeholder="Pitting">
+                  </app-select>
+                  <app-select formControlName="deck_plating_unpainted"
+                    [options]="[{label:'Unpainted',value:'Unpainted'}]" placeholder="Unpainted">
+                  </app-select>
+                  <app-select formControlName="deck_plating_others" [options]="[{label:'Others',value:'Others'}]"
+                    placeholder="Others">
+                  </app-select>
+                </div>
+              </ng-container>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="foundation_status" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('foundation_observation')?.value === 'Observation'">
+                <div class="mt-1 flex flex-col gap-1">
+                  <app-input formControlName="deck_plating_corrosion_remark" placeholder="Corrosion remark"
+                    class="w-full"></app-input>
+                  <app-input formControlName="deck_plating_pitting_remark" placeholder="Pitting remark"
+                    class="w-full"></app-input>
+                  <app-input formControlName="deck_plating_unpainted_remark" placeholder="Unpainted remark"
+                    class="w-full"></app-input>
+                  <app-input formControlName="deck_plating_others_remark" placeholder="Others remark"
+                    class="w-full"></app-input>
+                </div>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 10 - Lubrication -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">10.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Lubrication of Mechanical Part</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Check application of grease on mechanical/moving parts</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="lubrication" [searchable]="false" [options]="lubOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="lubrication_status" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('lubrication')?.value === 'Others'">
+                <app-input formControlName="bdc_10_remark" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 11 - Lubrication Points -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">11.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Lubrication Points</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Condition of greasing points, nipples – clean / painted/ chocked</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="lubrication_points" [searchable]="false" [options]="lubOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="lubrication_points_status" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('lubrication_points')?.value === 'Others'">
+                <app-input formControlName="bdc_11_remark" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 12 - Drive -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">12.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Drive</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Check for excessive noise during operation</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="drive" [searchable]="false" [options]="condition_observationOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="drive_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('drive')?.value === 'Noise Observed'">
+                <app-input formControlName="bdc_12_remark" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 13 - Limit Switch -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">13.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Limit Switch / Sensor</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Functioning of limit switches</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="limit_switch" [searchable]="false" [options]="condition_observationOptions1"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="limit_switch_observation" [searchable]="false" [options]="statusOptions1"
+                placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('limit_switch')?.value === 'Observation'">
+                <app-input formControlName="bdc_13_remark" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <!-- Row 14 - Insulation Motor -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">14.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Insulation Motor</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">&gt; 2 M Ohms</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="insulation_value" type="number"
+                placeholder="Enter value in M Ohms"></app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="insulation_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 15 - Operational Trials -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">15.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Operational Trials at SWL</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Hoisting/lowering/Slew/Slide (in-out) -- Electrical mode</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="operational_trials" [searchable]="false"
+                [options]="condition_observationOptions1" placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="operational_trials_observation" [searchable]="false"
+                [options]="statusOptions1" placeholder="--Select--"></app-select>
+              <ng-container *ngIf="bdcForm.get('operational_trials')?.value === 'Observation'">
+                <app-input formControlName="bdc_15_remark" placeholder="Enter details" class="mt-1"></app-input>
+              </ng-container>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">
+              CBPM PARAMETERS
+            </td>
+          </tr>
+
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Lubrication Oil Status
+            </td>
+          </tr>
+          <!-- Row 16 - Oil Level -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">16.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Oil Level in Gear Box</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Oil level between max and min marking</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="oil_level" [searchable]="false" [options]="oilOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="oil_level_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 17 - Oil being used -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">17.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Oil being used in Gear Box</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="oil_type" [searchable]="false" [options]="gearboxOilOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="oil_type_observation" [searchable]="false" [options]="yesnoOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="bdc_17_remark" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <!-- Row 18 - Oil Change -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">18.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Change of Oil (in Drum and Gear Box)</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Last date of oil change</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar formControlName="oil_change_date" placeholder="Select Date"></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="oil_change_observation" [searchable]="false" [options]="statusOptions"
+                placeholder="--Select--"></app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td rowspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">19.</td>
+
+            <!-- Parameter -->
+            <td rowspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">
+              Lub oil analysis parameter
+            </td>
+
+            <!-- Checks -->
+            <td rowspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Lab Test (report to be enclosed)
+            </td>
+
+            <!-- Sub Parameter -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Water content</td>
+
+            <!-- Observation -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="water_content" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Viscosity</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="viscosity" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Base Number</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="base_number" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Acid Number</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="acid_number" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Metal traces</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="metal_traces" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+
+          </tr>
+
+
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">21.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">SPM Check of Motor
+              (For Motor Vibration)
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">0-20 dbm
+              Green/ Yellow/ Red
+              (0-20/ 20-35/ >35)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="spm_check" [searchable]="false" [options]="spmOptions"
+                placeholder="--Select--" class="w-full">
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="spm_check_observation" [searchable]="false" [options]="spmStatusOptions"
+                placeholder="--Select--" class="w-full">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Current / Load Checks
+            </td>
+          </tr>
+
+          <!-- HEADER -->
+          <tr class="text-center font-semibold">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-bold">Reference</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-bold">Measured</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+          </tr>
+
+          <!-- ================= 22 ================= -->
+          <tr>
+            <td rowspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">22.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Starting current</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="starting_current" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_26_1" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Slide In/Out</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="slideinout" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_26_2" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Tilt In/Out</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="tiltinout" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_26_3" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Lowering/Hoisting</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="loweringhoisting" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_26_4" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+
+          <!-- ================= 27 ================= -->
+          <tr>
+            <td rowspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">23.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Running Current</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"> <app-input formControlName="runningcurrent" type="alphanumeric"
+                placeholder="Enter value">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_27_1" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Slide In/Out</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"> <app-input formControlName="slideinout" type="alphanumeric"
+                placeholder="Enter value">
+              </app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_27_2" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Tilt In/Out</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="tiltinout" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_27_3" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Lowering/Hoisting</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">As per masters</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input formControlName="loweringhoisting" type="alphanumeric" placeholder="Enter value">
+              </app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_27_4" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+
+          <!-- ================= 28 ================= -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">24.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Log book exist</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Yes / No
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="log_measured" [searchable]="false" [options]="yesnoOptions"
+                placeholder="--Select--" class="w-full">
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_28" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+
+          <!-- ================= 29 ================= -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">25.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">
+              Periodicity of measurement
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Monthly / Quarterly
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="periodicity" [searchable]="false" [options]="periodicityOptions"
+                placeholder="--Select--" class="w-full">
+              </app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_29" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+
+          <!-- ================= 30 ================= -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">26.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">
+              SPM Check of Motor (For Motor Vibration)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              0–20 dbm (Green) / 20–35 (Yellow) / &gt;35 (Red)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="spm_check_motor" [searchable]="false" [options]="spmcheckmoterOptions"
+                placeholder="--Select--" class="w-full">
+              </app-select>
+
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select formControlName="status_30" [searchable]="false" [options]="statusOptions">
+              </app-select>
+            </td>
+          </tr>
+
+
+          <!-- ================= 31 ================= -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">27.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">
+              Any other observations
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-input formControlName="other_observations" placeholder="Enter observations">
+              </app-input>
+            </td>
+          </tr>
+          <!-- ================= 32 ================= -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">28.</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">
+              Overall Remarks
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-select formControlName="status_32" [searchable]="false" [options]="statusOptions2">
+              </app-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+
+</app-form-card>
+
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''" [context]="formApiService.context" [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

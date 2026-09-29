@@ -1,0 +1,23 @@
+<app-help-guidance />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>{{ title }}</h3>
+    @if (primaryButtonLabel) {
+      <app-button type="button" class="btn-primary" (click)="runPrimaryAction()">{{ primaryButtonLabel }}</app-button>
+    }
+  </div>
+
+  @if (fields.length) {
+    <form [formGroup]="form" class="mo-stub-fields">
+      @for (field of fields; track field.key) {
+        <app-dynamic-field [spec]="field" [control]="getControl(field.key)" />
+      }
+      <div class="mo-stub-fields__actions">
+        <app-button type="button" class="btn-secondary" (click)="clear()">Clear</app-button>
+      </div>
+    </form>
+  }
+
+  <app-data-grid [rowData]="rows()" [columnDefs]="columnDefs" height="380px" />
+</div>

@@ -1,0 +1,766 @@
+{
+  "formId": "nec_emi_emc_post_refit_survey",
+  "title": "EMI/EMC POST REFIT SURVEY PROFORMA",
+  "sourceFile": "nec_emi_emc_post_refit_survey.html",
+  "sections": [
+    {
+      "id": "survey_details_part_1",
+      "title": "Survey Details - Part 1",
+      "sectionType": "fields",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship ",
+            "type": "input",
+            "inputType": "text",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource":"context.ship_name"
+          },
+          {
+            "type": "date",
+            "name": "pre_refit_survey_date",
+            "label": "Date of Pre-refit Survey ",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "value": ""
+          },
+          {
+            "type": "select",
+            "name": "refit_type",
+            "label": "Type of Refit ",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "NR",
+                "value": "NR"
+              },
+              {
+                "label": "MR",
+                "value": "MR"
+              },
+              {
+                "label": "NR-MLU",
+                "value": "NR_MLU"
+              },
+              {
+                "label": "MR-MLU",
+                "value": "MR_MLU"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "type": "date",
+            "name": "field_5",
+            "label": "Proposed / Tentative Dates of Post-refit Survey",
+            "required": false,
+            "placeholder": "",
+            "value": ""
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "survey_details_table_1",
+            "sectionType": "simpleTable",
+            "title": "1. It is confirmed that all electrical / electronic equipment fitted onboard is operational.A list of equipment non-operational is attached herewith.",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "EQUIPMENT FROM SFD",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "OPS / NON-OPS",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          },
+          {
+            "id": "survey_details_table_2",
+            "sectionType": "simpleTable",
+            "title": "2. It is confirmed that SWT and HATS of all equipment fitted onboard has been completed and cleared. List of equipment for which HATS has not been successfully cleared is enclosed herewith.",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "EQUIPMENT FROM SFD",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "SWT",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "HATS",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_5",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_2_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_2_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_2_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_2_row_1_cell_3_swt_clearance_status_1",
+                    "key": "swt_clearance_status_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "CLEARED",
+                        "value": "cleared"
+                      },
+                      {
+                        "label": "NOT CLEARED",
+                        "value": "not_cleared"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_2_row_1_cell_4_hats_clearance_status_1",
+                    "key": "hats_clearance_status_1",
+                    "type": "radio",
+                    "value": "",
+                    "required": true,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "CLEARED",
+                        "value": "cleared"
+                      },
+                      {
+                        "label": "NOT CLEARED",
+                        "value": "not_cleared"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_2_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          },
+          {
+            "id": "survey_details_table_3",
+            "sectionType": "simpleTable",
+            "title": "3. The following portable / mobile transmitter (WLAN handsets / headsets, FDCS headsets / handsets, Walkie-Talkies, Magloop headsets, Hydra handsets etc.) are available / used onboard.",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "PORTABLE / MOBILE TRANSMITTER UNIT",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "LOCATION / AREAS OF SHIP WHERE USED",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "MAX POWER O/P",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_5",
+                "label": "FREQUENCY",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_6",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_3_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_3_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_3_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_3_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_3_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_3_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_3_row_1_cell_6_field_6",
+                    "key": "field_6",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type": "radio",
+            "name": "duration_of_trials_confirmation",
+            "label": "4. It is confirmed that ships own power supply is available for the duration of the trials.",
+            "required": true,
+            "disabled": false,
+            "align":"left",
+            "placeholder": "",
+            "value": "",
+            "options": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              },
+              {
+                "label": "No",
+                "value": "no"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "survey_details_table_4",
+            "sectionType": "simpleTable",
+            "title": "5. The following blanking / interference suppression units are installed onboard and it is confirmed that they are operational and interfaced with the concerned Txs / Rxs as per design (give names of blanking units). Further give scheme / matrix of blanking i.e. Receiver blanked & names of transmitters whose pulses have been used to blank that Receiver.",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "NAME OF RECEIVER",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "BLANKED TRANSMITTERS USED",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_6",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_4_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_4_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_4_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_4_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_4_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [],
+        "tables_3": [
+          {
+            "id": "survey_details_table_6",
+            "sectionType": "simpleTable",
+            "title": "6. Results of HATS on RF Txs & Rxs.",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "NAME OF RF Tx OR Rx (ALL COMMUNICATION, EW, RADAR, DF EQUIPMENT)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "IF Rx, THEN SENSITIVITY (dBM OR uV) IF Tx, THEN MAX POWER OUTPUT (dBM OR WATTS) (AS MEASURED DURING HATS)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_6_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_6_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_6_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_6_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_6_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          },
+          {
+            "id": "survey_details_table_7",
+            "sectionType": "simpleTable",
+            "title": "7. If frequencies of RF receivers are as follows",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "NAME OF RF Tx OR Rx (ALL COMMUNICATION, EW, RADAR, DF EQUIPMENT)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "IF FREQUENCY (MHz) (IF MORE THAN ONE IF STAGE USED, PLEASE LIST ALL IFs)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_7_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_7_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_7_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_7_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "survey_details_table_7_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          },
+          {
+            "id": "survey_details_table_8",
+            "sectionType": "simpleTable",
+            "title": "8. The list of known EMI problems (if any) are as follows.",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "REMARKS",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "survey_details_table_8_row_1",
+                "cells": [
+                  {
+                    "_id": "survey_details_table_8_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "survey_details_table_8_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ]
+      },
+      "fields": [],
+      "tables": []
+    }
+  ]
+}

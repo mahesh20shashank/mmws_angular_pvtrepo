@@ -1,0 +1,128 @@
+
+<app-form-card title="WATER TIGHT DOORS" [showPreviousReport]="true" [showBackButton]="true" [showPaginator]="true"
+    [previewMode]="true">
+     <div
+        previewHeader
+        class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+    >
+        <button
+            *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+            type="button"
+            (click)="setActiveTab(tab)"
+            class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+            [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+        >
+            <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+                {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+            </span>
+
+            <span
+                class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+                [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+            >
+                {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+            </span>
+        </button>
+    </div>
+    <!-- FORM CONTENT -->
+    <form [formGroup]="form" class="p-0">
+        <!-- ROW 1 -->
+        <div class="grid grid-cols-2 gap-3">
+            <!-- SHIP STATUS -->
+            <div class="flex flex-col gap-1">
+      
+                <app-input [label]="'Ship*'" formControlName="ship" class="w-full">
+                </app-input>
+            </div>
+
+            <!-- Date of conduct of trials  -->
+            <app-calendar label="Date of conduct of trials*" formControlName="date_of_conduct_trail"></app-calendar>
+            <!--Place of conduct of trials  -->
+            <div class="flex flex-col gap-1">
+                <app-select [label]="'Place of conduct of trials*'" formControlName="place_of_conduct_trail"
+                    [options]="placesOptions" placeholder="--Select--" class="w-full">
+                </app-select>
+            </div>
+
+            <!-- Occasion for conduct of Trials -->
+            <div class="flex flex-col gap-1">
+
+                <app-select [label]="'Occasion for conduct of Trials*'" formControlName="occasion_of_conduct_trail"
+                    [searchable]="false" [options]="occasionOptions" placeholder="--Select--" class="w-full">
+                </app-select>
+            </div>
+        </div>
+
+        <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+        <app-parameter-card serial="" title="Authority for conduct of Trials">
+            <div class="grid grid-cols-3 gap-3 mt-3">
+                <!-- Occasion for conduct of Trials -->
+                <app-input label="Corespondence(fax/letter,etc)*" formControlName="authority">
+                </app-input>
+                <app-calendar label="Date*" formControlName="authority_date"
+                    [max]="form.get('date_of_conduct_trail')?.value">
+                </app-calendar>
+                <div class="file-upload-field gap-1">
+                    <app-file-upload [label]="'Upload doc*'" (fileSelected)="handleFile($event)"
+                        formControlName="authority_doc">
+                    </app-file-upload>
+
+                </div>
+
+            </div>
+        </app-parameter-card>
+
+        <!-- Main Docking Details Table -->
+        <div class="col-span-2 mt-5">
+            <div class="overflow-x-auto w-full">
+                <app-reusable-input-table [data]="dockingDetailsData" [columns]="dockingDetailsColumns"
+                    [enableRowActions]="true">
+                </app-reusable-input-table>
+            </div>
+        </div>
+    </form>
+    <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+
+
+</app-form-card>
+
+<app-reusable-delete-dialog-dynamic-content [open]="tableRowDeleteDialogOpen" title="Delete Row"
+    (close)="closeDeleteDialog()" (confirm)="confirmDelete()">
+
+    <p>Are you sure you want to delete this row?</p>
+    <p class="text-sm">This action cannot be undone.</p>
+
+</app-reusable-delete-dialog-dynamic-content>
+
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''" [context]="formApiService.context" [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

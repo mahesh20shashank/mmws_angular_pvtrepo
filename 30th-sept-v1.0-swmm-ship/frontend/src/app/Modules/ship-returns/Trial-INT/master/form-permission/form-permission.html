@@ -1,0 +1,15 @@
+<div class="p-2 sm:p-3">
+  <app-paginate-table #subGroupTable title="Permission Manager" description="Manage sub group permissions"
+    [showHeaderSection]="true" [addButtons]="addButtons" (addButtonClick)="handleAddButtonClick($event)" [url]="listUrl"
+    [columnDefs]="columnDefs" [showPagination]="true" [showSearch]="true">
+  </app-paginate-table>
+</div>
+
+<app-add-form *ngIf="isFormOpen" width="60vw" [open]="isFormOpen" [formConfig]="formConfig" [formData]="editFormData"
+  [isEditMode]="isEditMode" (onFieldChange)="onFieldChange($event)" (onSubmit)="handleSubmit($event)"
+  (onOpenChange)="onFormOpenChange($event)" [fromTitle]="isEditMode ? 'Edit Sub Group' : 'Create Sub Group'">
+</app-add-form>
+
+<app-reusable-delete-dialog [open]="showDeleteDialog" [id]="deleteId" [name]="deleteName" entityType="Sub Group"
+  [loading]="deleteLoading" (confirm)="confirmDelete()" (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>

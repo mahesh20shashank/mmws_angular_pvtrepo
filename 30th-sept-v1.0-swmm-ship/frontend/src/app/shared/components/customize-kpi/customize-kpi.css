@@ -1,0 +1,297 @@
+/* The panel is a fixed-position overlay (or nothing when closed), so the host
+   element must not take a slot in the parent's layout. Without this, a parent
+   using flex/grid `gap` applies spacing on both sides of the empty host,
+   producing a phantom gap after the content it follows (e.g. the KPI grid). */
+:host {
+  display: contents;
+}
+
+/* ===============================
+   Overlay (click-catcher)
+================================= */
+.kpi-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: transparent;
+}
+
+/* ===============================
+   Popup Card
+================================= */
+.popup-card {
+  position: fixed;
+  width: 420px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 120px);
+  padding: 24px;
+  border-radius: 15px;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(36px) saturate(1.3);
+  -webkit-backdrop-filter: blur(36px) saturate(1.3);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  z-index: 1001;
+}
+
+/* ===============================
+   Header
+================================= */
+.popup-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.popup-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.popup-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.popup-close {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.popup-close:hover {
+  background: var(--bg-icon-btn);
+}
+
+/* ===============================
+   Limit warning
+================================= */
+.popup-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  /* Opaque, not the previous low-opacity tint — SonarQube (css:S7924) measured this under
+     4.5:1 once composited over the real background. */
+  background: #1c0406;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.popup-warning svg {
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .popup-warning {
+  background: #fde8e8;
+  border-color: rgba(222, 31, 31, 0.35);
+  color: #b42318;
+}
+
+/* ===============================
+   KPI List
+================================= */
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-bottom: 16px;
+}
+
+.kpi-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.kpi-item:hover {
+  background: var(--bg-icon-btn);
+}
+
+.kpi-item--selected {
+  background: rgba(29, 150, 233, 0.1);
+  border-color: rgba(29, 150, 233, 0.45);
+}
+
+.kpi-item--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.kpi-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.kpi-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.kpi-checkbox:checked {
+  background: #1d96e9;
+  border-color: #1d96e9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.kpi-checkbox:disabled {
+  cursor: not-allowed;
+}
+
+.kpi-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.kpi-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.kpi-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.kpi-trend {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Opaque, near-black tinted backgrounds below (not the previous low-opacity rgba tints) —
+   SonarQube (css:S7924) measured both under 4.5:1 once composited over the real background. */
+.kpi-trend--up {
+  color: #4ade80;
+  background: #0b2818;
+}
+
+.kpi-trend--down {
+  color: #f87171;
+  background: #1c0406;
+}
+
+[data-theme="light"] .kpi-trend--up {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+[data-theme="light"] .kpi-trend--down {
+  color: #b42318;
+  background: #fde8e8;
+}
+
+/* ===============================
+   Footer
+================================= */
+.popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-primary);
+}
+
+.popup-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.popup-count b {
+  color: var(--icon-accent);
+  font-weight: 600;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  min-width: 72px;
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.btn-cancel {
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  color: var(--text-primary);
+}
+
+.btn-cancel:hover {
+  background: var(--bg-icon-btn);
+}
+
+.btn-apply {
+  background: linear-gradient(180deg, #1aa3f2, #0b6bb5);
+  border: 1px solid transparent;
+  font-weight: 600;
+  color: #fff;
+}
+
+.btn-apply:hover {
+  background: linear-gradient(180deg, #24aefc, #0c76c4);
+}

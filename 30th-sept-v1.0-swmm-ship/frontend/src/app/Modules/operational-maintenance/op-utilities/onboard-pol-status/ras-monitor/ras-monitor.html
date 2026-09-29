@@ -1,0 +1,124 @@
+<app-master-card cardTitle="RAS Monitor" cardHeight="auto">
+  <div class="flex items-center justify-between mb-4 pt-4">
+    <div class="flex items-end gap-3">
+      <div>
+        <label for="ras-monitor-location-filter" class="text-white/60 text-xs mb-1 block">Fuelling Location</label>
+        <select id="ras-monitor-location-filter" [(ngModel)]="locationFilter" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option value="">-- All --</option>
+          <option value="AT_SEA">At Sea</option>
+          <option value="AT_HARBOUR">At Harbour</option>
+        </select>
+      </div>
+      <div>
+        <label for="ras-monitor-start-date-from" class="text-white/60 text-xs mb-1 block">Start Date From</label>
+        <input id="ras-monitor-start-date-from" type="date" [(ngModel)]="startDateFrom" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="ras-monitor-start-date-to" class="text-white/60 text-xs mb-1 block">Start Date To</label>
+        <input id="ras-monitor-start-date-to" type="date" [(ngModel)]="startDateTo" class="w-40 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <app-button type="button" (click)="clearFilters()" class="h-10 px-4 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+        Clear
+      </app-button>
+    </div>
+    <app-button type="button" (click)="openCreateModal()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center gap-2">
+      <app-icon name="plus" [size]="14" />
+      Create RAS Monitor
+    </app-button>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredRows()"
+    [columnDefs]="columnDefs"
+    [pagination]="true"
+    [pageSize]="10"
+    height="460px">
+  </app-data-grid>
+</app-master-card>
+
+@if (showCreateModal) {
+  <app-modal size="lg" (closeModal)="closeCreateModal()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Create RAS Monitor</h3>
+      <app-button type="button" (click)="closeCreateModal()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <div>
+        <label for="ras-monitor-fuelling-location" class="text-white/60 text-xs mb-1 block">Fuelling Location *</label>
+        <select id="ras-monitor-fuelling-location" [(ngModel)]="fuellingLocation" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option value="">-- Select --</option>
+          <option value="AT_SEA">At Sea</option>
+          <option value="AT_HARBOUR">At Harbour</option>
+        </select>
+      </div>
+      <div>
+        <label for="ras-monitor-fuelling-start-date" class="text-white/60 text-xs mb-1 block">Fuelling Start Date *</label>
+        <input id="ras-monitor-fuelling-start-date" type="date" [(ngModel)]="startDate" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="ras-monitor-fuelling-start-time" class="text-white/60 text-xs mb-1 block">Fuelling Start Time *</label>
+        <input id="ras-monitor-fuelling-start-time" type="time" [(ngModel)]="startTime" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="ras-monitor-fuelling-stop-date" class="text-white/60 text-xs mb-1 block">Fuelling Stop Date</label>
+        <input id="ras-monitor-fuelling-stop-date" type="date" [(ngModel)]="stopDate" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="ras-monitor-fuelling-stop-time" class="text-white/60 text-xs mb-1 block">Fuelling Stop Time</label>
+        <input id="ras-monitor-fuelling-stop-time" type="time" [(ngModel)]="stopTime" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="ras-monitor-fuelling-duration" class="text-white/60 text-xs mb-1 block">Fuelling Duration</label>
+        <input id="ras-monitor-fuelling-duration" type="text" [value]="durationDisplay" disabled class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+      </div>
+      <div>
+        <label for="ras-monitor-tank-category" class="text-white/60 text-xs mb-1 block">Tank Category *</label>
+        <select id="ras-monitor-tank-category" [(ngModel)]="tankCategory" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option [ngValue]="null">-- Select --</option>
+          @for (cat of tankCategories; track cat.id) {
+            <option [ngValue]="cat.id">{{ cat.tank_category }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="ras-monitor-fluid-in-tank" class="text-white/60 text-xs mb-1 block">Fluid in Tank *</label>
+        <input id="ras-monitor-fluid-in-tank" type="text" [(ngModel)]="fluidInTank" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      @if (fuellingLocation === 'AT_HARBOUR') {
+        <div>
+          <label for="ras-monitor-received-at-station" class="text-white/60 text-xs mb-1 block">Fuel Received at Station</label>
+          <input id="ras-monitor-received-at-station" type="text" [(ngModel)]="receivedAtStation" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+      }
+      @if (fuellingLocation === 'AT_SEA') {
+        <div>
+          <label for="ras-monitor-ras-ship-name" class="text-white/60 text-xs mb-1 block">RAS Ship Name</label>
+          <input id="ras-monitor-ras-ship-name" type="text" [(ngModel)]="rasShipName" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+        </div>
+      }
+
+      <div>
+        <label for="ras-monitor-received-through" class="text-white/60 text-xs mb-1 block">Received Through</label>
+        <input id="ras-monitor-received-through" type="text" [(ngModel)]="receivedThrough" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+
+      <div class="col-span-3">
+        <label for="ras-monitor-remarks" class="text-white/60 text-xs mb-1 block">Remarks</label>
+        <textarea id="ras-monitor-remarks" [(ngModel)]="remarks" rows="2" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-white text-sm"></textarea>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+      <app-button type="button" (click)="openCreateModal()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+        Reset
+      </app-button>
+      <app-button type="button" (click)="createRasMonitor()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">
+        Create RAS Monitor
+      </app-button>
+    </div>
+  </app-modal>
+}

@@ -1,0 +1,437 @@
+@if(isLoaded()) {
+<div class="landing-page min-h-screen text-white">
+
+    <app-sidebar [activeSection]="activeSection()" (sectionClicked)="scrollToSection($event)"></app-sidebar>
+
+    <header class="app-header">
+        <div class="header-section header-left">
+            <img loading="lazy" decoding="async" src="assests/images/mad-cdf-logo.png" alt="MAT CDF"
+                class="header-logo">
+        </div>
+        <div class="header-section header-center">
+            <app-button (click)="openShip()" class="header-link"> Know your Ship </app-button>
+        </div>
+        <div class="header-section header-center">
+            <app-button (click)="openInfo()" class="header-link"> Know About SWMM </app-button>
+        </div>
+        <div class="header-section header-right">
+            <app-button (click)="openLogin()" class="button">Login</app-button>
+        </div>
+    </header>
+
+    <!-- ==== SECTION 1 -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content-container">
+            <div class="hero-title-wrapper">
+                <!-- Developed with Understanding: this ship's display name only (D23). The heading is left out entirely until HR CDF Step 1 sets the name. -->
+                @if (thisShip.displayName(); as shipName) {
+                <h2 class="hero-title"> {{shipName}} </h2>
+                }
+            </div>
+            <div class="hero-subtitle">
+                <span>SINGLE</span>
+                <span>WINDOW</span>
+                <span>MATERIEL</span>
+                <span>MANAGEMENT</span>
+            </div>
+            <div #shipContainer class="hero-ship-wrapper group">
+                <img loading="lazy" decoding="async" src="assests/images/svg-files/SWMM.svg" alt="SWMM Logo"
+                    class="swmm-logo">
+                <div class="ship-animated-container">
+                    <div class="ship-floating-container">
+                        <app-button type="button" class="contents appearance-none bg-transparent border-none p-0 m-0 outline-none cursor-pointer"
+                            (click)="openShip()" (keyup.enter)="openShip()"
+                            (mousemove)="onMouseMove($event, shipContainer)" (mouseenter)="isHovered = true"
+                            (mouseleave)="isHovered = false">
+                            <!-- Developed with Understanding: alt is the display name only, else a generic "Know your ship" so the button keeps an accessible name without showing any other ship name. -->
+                            <img loading="lazy" decoding="async" [src]="shipImageSrc()"
+                                [alt]="thisShip.displayName() || 'Know your ship'" class="ship-image"
+                                (error)="onShipImageError()" (load)="onShipImageLoad($event)">
+                        </app-button>
+                    </div>
+                </div>
+                <div [style.transform]="'translate3d(' + tooltipX +'px, '+tooltipY +'px, 0)'                "
+                    class="ship-tooltip" [class.tooltip-visible]="isHovered">
+                    <span>Know your ship</span>
+                    <app-icon name="info" [size]="12" [strokeWidth]="2"
+                        class="tooltip-icon" variant="inherit" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==== SECTION 2 -->
+    <div id="gallery" class="gallery-section section">
+
+        <!-- Heading -->
+        <div class="gallery-header">
+            <div class="section-heading">
+                <div class="section-heading-glow"></div>
+                <h2 class="gallery-title"> Photo Gallery </h2>
+                <span class="section-heading-divider"></span>
+            </div>
+        </div>
+        <!-- Carousel -->
+        <div class="gallery-carousel" (mouseenter)="pauseAutoPlay()" (mouseleave)="resumeAutoPlay()">
+
+
+            @for (slide of data.gallery; track $index; let i = $index) {
+            <app-button type="button" (click)="onSlideClick(i)" [ngStyle]="getSlideStyles(i)"
+                class="gallery-slide appearance-none bg-transparent text-left outline-none p-0 m-0">
+                <img loading="lazy" decoding="async" [src]="slide.image" alt="Gallery Slide" class="gallery-image" />
+                <!-- Dark Overlay -->
+                <div class="slide-overlay" [class.opacity-0]="activeSlide() === i"></div>
+                <!-- Left Gradient -->
+                <div class="slide-gradient-left" [class.opacity-100]="getSlidePosition(i) === -1"
+                    [class.opacity-0]="getSlidePosition(i) !== -1"></div>
+                <!-- Right Gradient -->
+                <div class="slide-gradient-right" [class.opacity-100]="getSlidePosition(i) === 1"
+                    [class.opacity-0]="getSlidePosition(i) !== 1"></div>
+            </app-button>
+            }
+        </div>
+        <!-- Indicators -->
+        <div class="gallery-indicators">
+
+            @for (slide of data.gallery; track $index; let i = $index) {
+            <app-button (click)="selectSlide(i)" [class.active-indicator]="activeSlide() === i"
+                [class.inactive-indicator]="activeSlide() !== i" [attr.aria-label]="'Go to slide ' + (i + 1)">
+            </app-button>
+            }
+
+        </div>
+    </div>
+
+    <!-- ==== SECTION 3 -->
+    <div id="info" class="ship-info-section section">
+        <!-- Heading -->
+        <div class="section-header">
+            <div class="section-heading">
+                <div class="section-glow"></div>
+                <h2 class="section-title"> Ship Information </h2>
+                <span class="section-heading-divider"></span>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="ship-info-grid">
+            <!-- Ship Role -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <app-icon name="lightbulb" [size]="24" [strokeWidth]="2" />
+                        Ship's Role
+                    </h3>
+                    <span class="card-divider"></span>
+                </div>
+                <div class="card-content">
+                    @if(data.shipRoles && data.shipRoles.length > 0) {
+                        @for(role of data.shipRoles; track role.id) {
+                            <div class="role-item">
+                                <h4 class="role-title">{{role.role_title}}</h4>
+                                <p class="role-text">{{role.current_text}}</p>
+                                @if(role.images && role.images.length > 0) {
+                                    <div class="role-images">
+                                        @for(img of role.images; track img.id) {
+                                            <img [src]="img.image" alt="{{role.role_title}}" class="role-image" />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    } @else {
+                        <p>
+                            {{data.knowYourShip.ship_description}}
+                        </p>
+                    }
+                </div>
+            </div>
+            <!-- Commander Message -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <app-icon name="message-square-text" [size]="24" [strokeWidth]="2" />
+                        Message From Command
+                    </h3>
+                    <span class="card-divider"></span>
+                </div>
+                <div class="card-content">
+                    @for (item of data.coMessages; track $index) {
+                        <div class="role-item">
+                            <p class="role-text">{{ item.message }}</p>
+                            <div class="message-footer">
+                                <span class="footer-label">Message Published on : </span>
+                                <strong class="footer-date">{{ (item.uploaded_date | date:'dd MMM yyyy') || item.uploaded_date }}</strong>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==== SECTION 4 -->
+    <div id="usefulness" class="quick-info-section section">
+        <div class="section-header">
+            <div class="section-heading">
+                <div class="section-glow"></div>
+                <h2 class="section-title"> Quick Info </h2>
+                <span class="section-heading-divider"></span>
+            </div>
+        </div>
+        <div class="quick-info-grid">
+            <!-- Daily Orders -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="info-title-group">
+                        <app-icon name="clipboard-list" [size]="24" [strokeWidth]="2" />
+                        <h3 class="info-title"> Daily Orders </h3>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <app-button
+                            class="glass-btn text-sm flex items-center gap-1.5 px-3 py-1.5 text-blue-400 hover:text-blue-300 transition-colors"
+                            (click)="openHistory()">
+                            <app-icon name="clock" [size]="16" [strokeWidth]="2" />
+                            View More
+                        </app-button>
+                    </div>
+                </div>
+                <div class="table-header">
+                    <span>D/O Date</span>
+                    <span>View</span>
+                </div>
+
+                <div class="list-container" (scroll)="hideTooltip()">
+                    @for (order of data.dailyOrders; track $index) {
+                    <div class="list-row">
+                        <span class="date-pill">{{ order.date }}</span>
+                        <span class="list-icons flex items-center gap-2">
+                            <app-icon (click)="openPdf(order.pdf_path)" tabindex="0" (keyup.enter)="openPdf(order.pdf_path)" name="file-text" [size]="20" [strokeWidth]="2"
+                                class="cursor-pointer hover:opacity-80 transition-opacity" variant="danger" />
+                            <div class="flex items-center">
+                                <app-icon name="info" [size]="20" [strokeWidth]="2"
+                                    class="cursor-pointer hover:opacity-80 transition-opacity" variant="accent"
+                                    (mouseenter)="showTooltip($event, order)" (mouseleave)="hideTooltip()" />
+                            </div>
+                        </span>
+                    </div>
+                    }
+                </div>
+
+            </div>
+            <!-- Birthdays -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="info-title-group">
+                        <app-icon name="cake" [size]="24" [strokeWidth]="2" />
+                        <h3 class="info-title"> Upcoming Birthday/Anniversary </h3>
+                    </div>
+                </div>
+                <div class="table-header">
+                    <span>Member Details</span>
+                    <span>Birthday/Anniversary</span>
+                </div>
+                <div class="list-container">
+                    @for (event of data.birthdays; track $index) {
+
+                    <div class="event-row">
+                        <span>{{ event.full_name }}</span>
+                        <span>{{ event.date_of_birth }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+            <!-- Events -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="info-title-group">
+                        <app-icon name="calendar" [size]="24" [strokeWidth]="2" />
+                        <h3 class="info-title"> Upcoming Event </h3>
+                    </div>
+                </div>
+                <div class="table-header">
+                    <span>Event Name</span>
+                    <span>Event Date</span>
+                    <span>View</span>
+                </div>
+                <div class="list-container">
+                    @for (event of data.events; track $index) {
+
+                    <div class="event-row">
+                        <span>{{ event.description }}</span>
+                        <span>{{ event.date }}</span>
+                        <span>—</span>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==== SECTION 5: Organisation Hierarchy ==== -->
+    <section id="integration" class="org-section section">
+        <div class="org-container">
+            <div class="section-header">
+                <div class="section-heading">
+                    <div class="section-glow"></div>
+                    <h2 class="section-title">Know Your Organisation </h2>
+                    <span class="section-heading-divider"></span>
+                </div>
+            </div>
+            <p class="org-description">
+                SWMM streamlines ship management by integrating all operations into a
+                single, unified system.
+            </p>
+            @if(leader){
+            <div class="leader-wrapper w-full flex justify-center items-center">
+                <div class="leader-card">
+                    <img loading="lazy" decoding="async"
+                        [src]="leader.photo && leader.photo !== 'null' ? leader.photo : 'assests/images/dummyuser.avif'"
+                        alt="Leader" class="profile-image" />
+                    <app-icon class="absolute top-2 right-2 z-20 cursor-pointer hover:opacity-80 transition-opacity bg-black/40 rounded-full" [style.display]="'none'" (click)="openPerson()" tabindex="0" (keyup.enter)="openPerson()" name="info" [size]="24" [strokeWidth]="2" />
+                    <div class="profile-content">
+                        <h3 class="profile-name">{{ (leader.rank ? leader.rank + ' ' : '') + (leader.name || leader.division_name || '') }}</h3>
+                        <p class="profile-rank">{{ leader.designation || leader.node_type }}</p>
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div class="org-scroll-container overflow-x-auto overflow-y-hidden w-full pb-8">
+                <div class="org-tree-wrapper min-w-full w-fit mx-auto flex flex-col items-center px-4">
+
+                    @if (members.length > 0) {
+                    <div class="lines hidden md:block"
+                        [style.width.px]="members.length > 1 ? (members.length - 1) * 200 : 0">
+                        <div class="start-line"></div>
+
+                        <!-- Top horizontal line (only if > 1 member) -->
+                        @if (members.length > 1) {
+                        <div class="absolute top-0 left-0 right-0 h-px bg-white/30"></div>
+                        }
+
+                        <!-- Dynamic Markers -->
+                        @for (member of members; track member.id; let i = $index) {
+                        <div class="absolute top-0 w-px h-8 bg-white/30"
+                            [style.left]="members.length === 1 ? '50%' : ((i / (members.length - 1)) * 100) + '%'">
+                        </div>
+                        }
+                    </div>
+                    }
+
+                    <!-- Members -->
+                    <div class="member-grid">
+                        @for (member of members; track member.id) {
+                        <div class="member-card">
+                            <img loading="lazy" decoding="async"
+                                [src]="member.photo && member.photo !== 'null' ? member.photo : 'assests/images/dummyuser.avif'"
+                                [alt]="member.name || member.division_name || 'Member'" class="profile-image" />
+                            <app-icon class="absolute top-2 right-2 z-20 cursor-pointer hover:opacity-80 transition-opacity bg-black/40 rounded-full" [style.display]="'none'" (click)="openPerson()" tabindex="0" (keyup.enter)="openPerson()" name="info" [size]="24" [strokeWidth]="2" />
+                            <div class="profile-content">
+                                <h4 class="profile-name">
+                                    {{ (member.rank ? member.rank + ' ' : '') + (member.name || member.division_name || '') }}
+                                </h4>
+                                <p class="profile-rank">
+                                    {{ member.designation || member.node_type }}
+                                </p>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="app-footer">
+        <!-- Left -->
+        <div class="footer-info">
+            @if (showLastSync) {
+            <app-button type="button" class="sync-badge appearance-none outline-none bg-transparent text-left p-0 m-0" (click)="openSync()">
+                <app-icon name="clock" [size]="14" [strokeWidth]="2" variant="muted" />
+                <span>Last Sync</span>
+            </app-button>
+
+            @if(isSyncOpen()){
+            <div class="absolute bottom-full left-0 mb-4 z-50">
+                <app-sync-modal (closeModal)="closeSync()"></app-sync-modal>
+            </div>
+            }
+            }
+
+            <span class="footer-meta">
+                @if (showLastSync) { 18 May 2026, 06:27 PM &nbsp; }
+                Version : {{ appInfo()?.version ?? 'V1.0 Beta' }}
+            </span>
+        </div>
+        <!-- Right -->
+        <div class="footer-copyright"> {{ appInfo()?.copyright_text ?? 'Copyright @2026 | Powered by Mat-Cdf' }} </div>
+    </footer>
+
+    <!-- Login Modal -->
+    @if (isLoginOpen()) { <app-modal (closeModal)="closeLogin()" size="sm" [allowOverflow]="true">
+        <app-login-modal [shipData]=data.knowYourShip (closeModal)="closeLogin()"
+            (switchToSignup)="openSignup()"></app-login-modal>
+    </app-modal> }
+
+    <!-- Sign Up Modal -->
+    @if (isSignupOpen()) { <app-modal (close)="closeSignup()" size="md" customBg="transparent">
+        <app-signup-modal (closeModal)="closeSignup()" (switchToLogin)="openLogin()"></app-signup-modal>
+    </app-modal> }
+
+    <!-- Know Your Ship Modal -->
+    @if (isShipOpen()) { <app-modal (close)="closeShip()" size="lg" [compact]="true">
+        <app-ship-modal [shipData]=data.knowYourShip (closeModal)="closeShip()"></app-ship-modal>
+    </app-modal> }
+    <!-- Info Modal -->
+    @if (isInfoOpen()) { <app-modal (close)="closeInfo()" size="lg"
+        >
+        <app-info-modal (closeModal)="closeInfo()"></app-info-modal>
+    </app-modal> }
+
+    <!-- Person Modal -->
+    @if (isPersonOpen()) { <app-modal (close)="closePerson()" size="lg">
+        <app-person-modal (closeModal)="closePerson()"></app-person-modal>
+    </app-modal> }
+
+</div>
+
+
+
+<!-- Daily Orders History Modal -->
+@if (isHistoryOpen()) { <app-modal (closeModal)="closeHistory()" size="lg">
+    <app-daily-orders-history-modal (closeModal)="closeHistory()"
+        [dailyOrders]="data.dailyOrders"
+        (orderHover)="showTooltip($event.event, $event.order)"
+        (orderLeave)="hideTooltip()"></app-daily-orders-history-modal>
+</app-modal> }
+
+<!-- Add Daily Order Modal -->
+@if (isAddOrderOpen()) { <app-modal (closeModal)="closeAddOrder()" size="lg">
+    <app-add-daily-order-modal (closeModal)="closeAddOrder()"></app-add-daily-order-modal>
+</app-modal> }
+}
+
+@if(activeDailyOrderTooltip){
+
+<div class="fixed z-[9999] w-[320px] max-w-[calc(100vw-24px)] !p-4 glass-card shadow-2xl text-left pointer-events-none"
+    [style.left.px]="dailyOrderTooltipX" [style.top.px]="dailyOrderTooltipY"
+    [style.transform]="dailyOrderTooltipPlacement === 'bottom' ? 'translate(-50%, 0)' : 'translate(-50%, -100%)'">
+    <div class="mb-2">
+        <span class="text-[#0ea5e9] font-medium text-[13px]">Description :</span>
+        <p class="text-white text-[13px] mt-0.5 leading-tight">{{ activeDailyOrderTooltip.description || 'Daily Order'
+            }}</p>
+    </div>
+    <div class="mb-2">
+        <span class="text-[#0ea5e9] font-medium text-[13px]">Officer of the day :</span>
+        <p class="text-white text-[13px] mt-0.5 leading-tight">{{ activeDailyOrderTooltip.officer_details || 'N/A' }}
+        </p>
+    </div>
+    <div>
+        <span class="text-[#0ea5e9] font-medium text-[13px]">Routine of the day :</span>
+        <p class="text-white text-[13px] mt-0.5 leading-tight">{{ activeDailyOrderTooltip.routine_details || 'N/A' }}
+        </p>
+    </div>
+</div>
+}

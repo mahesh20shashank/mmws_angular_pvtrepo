@@ -1,0 +1,181 @@
+<div class="form-card-shell flex min-h-0 flex-col overflow-hidden rounded-2xl bg-[var(--bg-card)]"
+  [class.form-card--preview]="previewMode" [class.form-card-shell--page-scroll]="pageScroll"
+  [class.flex-1]="!pageScroll" [style.height]="previewMode && !pageScroll ? '100%' : null"
+  [style.max-height]="!pageScroll ? '100%' : null">
+  <!-- ================= TOP BAR ================= -->
+  <div *ngIf="showTopBar && (previewMode || showPreviousReport)"
+    class="form-card-header z-40 shrink-0 px-6 py-2 max-xl:px-4 header-poppins">
+    <div class="relative z-[1] mx-auto grid max-w-[1680px] items-center gap-4" [ngClass]="
+        previewMode
+          ? 'grid-cols-[minmax(180px,1fr)_minmax(520px,2.4fr)_minmax(220px,1fr)] max-xl:grid-cols-1'
+          : 'grid-cols-[auto_1fr] max-xl:grid-cols-1'
+      ">
+      <!-- LEFT -->
+      <div class="flex items-center justify-start gap-2 max-xl:justify-center">
+        <button *ngIf="showPreviousReport" type="button" (click)="onPreviousReport()"
+          class="form-card-btn form-card-btn--default inline-flex h-9 items-center justify-center gap-2 rounded-full px-5 text-[11px] font-semibold uppercase tracking-wide transition">
+          <app-icon name="history" [size]="14" variant="inherit" class="form-card-btn__icon"></app-icon>
+          <span>{{ previousReportLabel }}</span>
+        </button>
+      </div>
+
+
+      <!-- CENTER ONLY FOR PREVIEW MODE -->
+      <div *ngIf="previewMode" class="min-w-0">
+        <div
+          class="form-card-preview-header-wrap mx-auto flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-full p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ng-content select="[previewHeader]"></ng-content>
+        </div>
+      </div>
+
+      <!-- RIGHT ACTIONS -->
+      <div class="flex items-center justify-end gap-2 max-xl:flex-wrap max-xl:justify-center"
+        [class.col-start-2]="!previewMode">
+        <button type="button" (click)="onAction()"
+          class="form-card-btn form-card-btn--default inline-flex h-9 items-center justify-center gap-2 rounded-full px-5 text-[11px] font-semibold uppercase tracking-wide transition">
+          <app-icon name="user" [size]="14" variant="inherit" class="form-card-btn__icon"></app-icon>
+          <span>User Action</span>
+        </button>
+
+        <button *ngIf="canShowAddTrialPass" type="button" (click)="onTrialPassDialogChange(true)"
+          class="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-5 text-[11px] font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300 transition hover:bg-emerald-500/25">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span> Trial Pass</span>
+        </button>
+
+        <button *ngIf="showSecondaryAction" type="button" (click)="onSecondaryAction()"
+          class="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-5 text-[11px] font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300 transition hover:bg-emerald-500/25">
+          <span>{{ secondaryActionLabel }}</span>
+        </button>
+
+        <button *ngIf="canShowTrialTypes" type="button" (click)="onTrialTypes()"
+          class="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-5 text-[11px] font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300 transition hover:bg-emerald-500/25">
+          <app-icon name="list" [size]="14" variant="inherit"></app-icon>
+          <span>Accept/Reject</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= NORMAL HEADER ================= -->
+  <div *ngIf="!previewMode" class="form-card-header shrink-0 px-6 py-3 flex items-center justify-between">
+    <div>
+      <div class="form-card-normal-title text-[16px] font-semibold uppercase tracking-[1.4px]">
+        {{ title }}
+      </div>
+      <div *ngIf="smallTitle" class="form-card-normal-subtitle mt-0.5 text-[11px] font-medium uppercase tracking-[1.2px]">
+        {{ smallTitle }}
+      </div>
+    </div>
+    <button type="button" (click)="onBack()" class="form-card-btn form-card-btn--default inline-flex h-9 items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold uppercase tracking-wide transition">
+      <app-icon name="arrow-left" [size]="14" variant="inherit"></app-icon>
+      <span>Back</span>
+    </button>
+  </div>
+
+  <!-- ================= MAIN CONTENT - ONLY ONE NG-CONTENT ================= -->
+  <div class="form-card-content" [ngClass]="
+      previewMode
+        ? (pageScroll
+            ? 'max-md:px-3'
+            : 'min-h-0 flex-1 overflow-y-auto max-md:px-3')
+        : 'p-3'
+    " [class.min-h-0]="!pageScroll" [class.flex-1]="!pageScroll" [class.overflow-y-auto]="!pageScroll">
+    <div [ngClass]="
+        previewMode
+          ? 'mx-auto w-full py-3'
+          : ''
+      ">
+      <div [ngClass]="
+          previewMode
+            ? 'min-h-full px-5'
+            : ''
+        ">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER - ONLY ONE FORM FOOTER SLOT ================= -->
+  <div *ngIf="showFormFooter" class="form-card-footer z-40 w-full shrink-0"
+    [ngClass]="
+      previewMode
+        ? 'header-poppins px-6 py-2 max-md:px-3'
+        : 'px-4 py-2'
+    ">
+    <div class="mx-auto items-center gap-4" [ngClass]="
+        previewMode
+          ? 'relative z-[1] grid max-w-[1680px] grid-cols-[minmax(220px,1fr)_auto_minmax(220px,1fr)] max-xl:grid-cols-1'
+          : 'flex max-w-8xl flex-wrap justify-between'
+      ">
+      <!-- LEFT BACK -->
+      <div [ngClass]="
+          previewMode
+            ? 'flex items-center justify-start gap-2 max-xl:flex-wrap max-xl:justify-center'
+            : 'w-24'
+        ">
+        <button *ngIf="showBackButton" type="button" (click)="onBack()"
+          class="form-card-btn form-card-btn--default inline-flex h-9 items-center justify-center gap-2 rounded-full px-5 text-[11px] font-semibold uppercase tracking-wide transition"
+          [class.max-md:w-full]="previewMode"
+          [class.w-full]="!previewMode">
+          <ng-container *ngIf="previewMode; else normalBackIcon">
+            <span>←</span>
+            <span>{{ backLabel }}</span>
+          </ng-container>
+
+          <ng-template #normalBackIcon>
+            <app-icon name="arrow-left" [size]="14" variant="inherit" class="mr-2"></app-icon>
+            {{ backLabel }}
+          </ng-template>
+        </button>
+      </div>
+
+      <!-- CENTER PAGINATION -->
+      <div *ngIf="showPaginator"
+        class="form-card-paginator-wrap mx-auto flex items-center gap-1 rounded-full p-1 max-md:w-full max-md:flex-wrap max-md:justify-center">
+        <button type="button" (click)="onFirstPage()" [disabled]="currentPage <= 1"
+          class="form-card-page-btn flex h-8 w-8 items-center justify-center rounded-lg text-base font-semibold transition disabled:cursor-not-allowed disabled:opacity-40">
+          «
+        </button>
+
+        <div [ngClass]="
+            previewMode
+              ? 'flex items-center gap-1 max-[480px]:max-w-[180px] max-[480px]:overflow-x-auto max-[480px]:[scrollbar-width:none] max-[480px]:[&::-webkit-scrollbar]:hidden'
+              : 'flex items-center gap-1 rounded-full p-1'
+          ">
+          <button *ngFor="let page of pageNumbers" type="button" (click)="onPageClick(page)"
+            class="form-card-page-btn flex h-8 w-8 items-center justify-center rounded-lg text-[11px] font-semibold transition"
+            [class.form-card-page-btn--active]="page === currentPage">
+            {{ page }}
+          </button>
+        </div>
+
+        <button type="button" (click)="onLastPage()" [disabled]="currentPage >= totalPages"
+          class="form-card-page-btn flex h-8 w-8 items-center justify-center rounded-lg text-base font-semibold transition disabled:cursor-not-allowed disabled:opacity-40">
+          »
+        </button>
+
+        <ng-content select="[formPaginator]"></ng-content>
+      </div>
+
+      <!-- RIGHT FOOTER ACTIONS -->
+      <div [ngClass]="
+          previewMode
+            ? 'col-start-3 flex items-center justify-end gap-2 max-xl:col-start-auto max-xl:flex-wrap max-xl:justify-center header-poppins'
+            : 'flex items-center justify-end gap-2'
+        ">
+        <ng-content select="[formFooter]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-approval-work-flow *ngIf="shouldShowUserPopup" [showUserPopuphead]="shouldShowUserPopup" [context]="formContext || context"
+  [isSubmitTime]="isSubmitTimes"
+  (showUserPopupChange)="shouldShowUserPopup = $event; isSubmitTimes = $event"></app-approval-work-flow>
+
+<!-- <app-add-trial-pass *ngIf="showTrialPassLayout" [context]="context" [showTrialPassLayout]="showTrialPassLayout"
+  (showTrialPassLayoutChange)="onTrialPassDialogChange($event)"></app-add-trial-pass> -->
+<!--
+<app-trial-types *ngIf="istrialTypesOpen" [open]="istrialTypesOpen"
+  (closed)="istrialTypesOpen = false"></app-trial-types> -->

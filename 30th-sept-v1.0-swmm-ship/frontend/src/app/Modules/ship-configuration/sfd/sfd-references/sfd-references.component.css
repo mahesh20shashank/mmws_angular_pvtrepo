@@ -1,0 +1,379 @@
+.ref-layout {
+  font-family: "Poppins", sans-serif;
+}
+
+.step-lock-hint {
+  margin-bottom: 12px;
+}
+
+.step-recheck-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #4aa8ff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ship-confirm-warning {
+  font-size: 11px;
+  font-weight: 600;
+  color: #F82C36;
+  text-transform: none;
+}
+
+.ship-confirm-message {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary, #e5edf5);
+}
+
+.sync-card {
+  padding: 18px;
+}
+
+.sync-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.sync-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #e5edf5);
+}
+
+.step0-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.step0-hint {
+  font-size: 12px;
+  color: var(--text-secondary, #9db6cc);
+}
+
+.step0-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.step0-btn-wrap {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.step0-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary, #e5edf5);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.step0-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.step0-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.step0-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.step0-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  flex: 1 1 420px;
+  max-width: 520px;
+}
+
+.step0-lock-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #22C55E;
+  white-space: nowrap;
+}
+
+.step0-active {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #22C55E;
+  white-space: nowrap;
+}
+
+.step0-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 18px;
+}
+
+/* Two-column body: synchronisation steps on the left, process log on the right. Each side is
+   its own bordered card (`.steps-panel`/`.log-panel`) so the split reads clearly instead of
+   the two heads (steps-panel__head's "No sync run..." text vs. log-head) running into each
+   other on one visual line. */
+.sync-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.steps-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.steps-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #9db6cc);
+}
+
+.steps-panel__status {
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary, #e5edf5);
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.step-item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.step-item--disabled,
+.step-item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.step-item__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-item__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.step-item__status {
+  flex-shrink: 0;
+}
+
+.progress-block {
+  margin-bottom: 4px;
+}
+
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4AA8FF, #22C55E);
+  transition: width 0.2s ease;
+}
+
+.log-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.log-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary, #e5edf5);
+}
+
+.log-console {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #0b1622;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Consolas", "Menlo", monospace;
+  font-size: 12px;
+}
+
+.log-line {
+  padding: 2px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.log-empty {
+  color: #5a7086;
+}
+
+.tone-success { color: #22C55E; }
+.tone-update { color: #F5B94B; }
+.tone-skipped { color: #4AA8FF; }
+.tone-error { color: #F82C36; }
+.tone-info { color: #9db6cc; }
+
+/* Per-step record tallies, shown above the progress bar once a step finishes. */
+/* Reserved for up to 5 summary lines (one per sync step) so the steps card never
+   resizes as steps complete during a run — height stays constant from 0 to 5 lines. */
+.summary-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  min-height: calc(5 * 17px + 4 * 4px + 16px);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.summary-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.summary-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.summary-step {
+  flex: 0 0 auto;
+  font-weight: 700;
+  color: #9db6cc;
+  letter-spacing: 0.03em;
+}
+
+.summary-title {
+  flex: 0 0 auto;
+  font-weight: 600;
+  color: var(--text-primary, #e5edf5);
+}
+
+.summary-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #22C55E;
+  font-family: "Consolas", "Menlo", monospace;
+}
+
+.summary-failed .summary-text {
+  color: #F82C36;
+}
+
+@media (max-width: 860px) {
+  .sync-body {
+    grid-template-columns: 1fr;
+  }
+
+  .step0-filters {
+    max-width: none;
+  }
+}

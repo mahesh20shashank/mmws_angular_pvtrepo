@@ -1,0 +1,21 @@
+pre-commit-check:
+  extends:
+    - .offline_deploy_job
+    - .default_mr_rules
+
+  stage: precheck
+
+  allow_failure: true
+
+  before_script: Foto head, subking चल रहा है, दुबरा बना रहे सारा जो है ना, सारा का सारा स्क्रीन शॉट के साथ fhoto live racabne, Sabs me Ishura, kera Ishu, you are philip no bay, kitchen, fenceker persuaves,high ghitleb up, baking filter vaplo, and lock that bas I phyn't uning bals night, char ping out, I pic set a team, chuthia barth, cains photo shara me begha, meil to shara no fhoto, mega, mail shirt settingsina mail me छड़ देगा, टोक जल्दी इंटरनेट, इंटरनेट का ही नहीं फोन सा कर रहा हूँ इन्वर्समेंट पैंतीस सौ रुपयर चार पीस पांच सौ ही दे नहीं देगा, सर, जब वहाँ जा रहे हैं, एक जगह दूसरी वजह भेज नहीं पा रहा, मेरा, मैं तुम्हें दिन चला गया, अभी तक एक रुपया नहीं आया, mus shirt khuyers, panch shirets, you fetch a fetch, you gel third set of चल रहा, स्कोटी ठाईंग, पुशमेंशन वाला जो पाठक कैसे intercactivity करना, वो सब हम लोग कर लेंगे ताकि वहाँ पे क्या करेगा, फिर काम बचा हुआजहाँ का I phy ढूंढ के छूट सकता है, मैं तेरे को ही फोन करूंगा, तू यहाँ कर रहा हूँ, तेरे को Idia रखना, टू कम चैटी बी टी सी, वो सब चीज ढूंढ के आई पी डी ए चाहिए, इस लोकेशन पर जा सीडी के अंदर नहीं, ईटीसी के अंदर में या पड़ा, I p change to all the IP happening, why chuckal you I p regarda, so it's drind enough, if set up shala unorganized clotter huge setup lunch, harvaring charge, चल रहा, यू आई व सॉरियप वाला ही के साथ सिम सेटअप अगर वो देना कैसे देख or Us and password check, neck to us install d p नहीं so, mail करना है विथ एन्शन की सिद्धांत वेस्ट हुआ, ठीक है, तो मैं वेस्ट नहीं हुआ है, मैं दिखा गए, ये दिखाऊंगा, मैं फैसिम, इनका यू वेल सोर्स नहीं मानता हूँ, यू वी कहाँ से access कर रहा, सो फोन पता यू आई कहाँ से एस पी एन निकलते mushway, User name, password no, I physic.' Tray to car, noya to reason है nora R D P,Rome Shardi, you command package installing on cap d pen, is cavo, capital mara, Ubuntu cora, photo, noing, a gugs, चल रहा, R d plana severe basic requirements, RDP khulna chubtu का यू आई देखना चाहिए, और फिर इंटर मारेगा, टू यूजर ने पासवर्ड देगा, वी एम का यूजर नेम पासवर्ड सर्विस फोटो भेज, वाला हटा देना, ये स्पीड मत रख, ये दिखेगा ना कि ये तो चल रहा है, नीचे ऐसे बोलेगा, चेक कर ले, बट एक फोटो हो गया, नहीं, अरे वो होगा, बट सी एल आई पे चल रहा हूँ, नहीं, समझा, जी यू आई वाला चीज प्लेक्टली नहीं चल रहा है, क्योंकि जी वगैरह है, उसपे तो आर डी पी आना चाहिए, basic spams ruke in the chart, is it photo le lead, so in khamak history story story, story story.' Second hand, me, second hand, third hand, d capitalism mamate, story, salary place no use bar salary place, making new le square just launch hua note ninety models model, cherin second, fridge mahe show on dilog match meat maybe second
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install \
+      --index-url http://172.16.50.12:8081/repository/pypi-group-prod/simple/ \
+      pre-commit
+    - cd frontend
+    - npm ci
+    - cd ..
+
+  script:
+    - pre-commit run --all-files

@@ -1,0 +1,135 @@
+<app-help-guidance />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>Masters</h3>
+  </div>
+
+  <div class="mo-tabs-row">
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'mapping'" (click)="selectTab('mapping')">
+      Ship Inventory to MO Inventory Mapping
+    </app-button>
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'get-data'" (click)="selectTab('get-data')">
+      Get Data From MO
+    </app-button>
+    <app-button type="button" class="mo-tab-btn" [class.mo-tab-btn--active]="activeTab() === 'import'" (click)="selectTab('import')">
+      Import Data
+    </app-button>
+  </div>
+
+  @if (activeTab() === "mapping") {
+    <form [formGroup]="mapForm" class="mo-form-grid">
+      <div class="mo-form-grid__field">
+        <app-select-input label="Vendor Code *" formControlName="vendorCode" [options]="vendorOptions()" />
+        @if (mapForm.controls.vendorCode.invalid && mapForm.controls.vendorCode.touched) {
+          <span class="form-error">Vendor Code is required.</span>
+        }
+      </div>
+      <div class="mo-form-grid__field">
+        <app-select-input label="MO Item Code *" formControlName="itemCode" [options]="itemOptions()" />
+        @if (mapForm.controls.itemCode.invalid && mapForm.controls.itemCode.touched) {
+          <span class="form-error">MO Item Code is required.</span>
+        }
+      </div>
+      <div class="mo-form-grid__field">
+        <app-select-input label="INSMA Equipment Name *" formControlName="equipmentId" [options]="equipmentOptions()" />
+        @if (mapForm.controls.equipmentId.invalid && mapForm.controls.equipmentId.touched) {
+          <span class="form-error">INSMA Equipment Name is required.</span>
+        }
+      </div>
+      <div class="mo-form-grid__actions">
+        <app-button type="button" class="btn-primary" [disabled]="mapping() || mapForm.invalid" (click)="submitMap()">
+          {{ mapping() ? "Mapping..." : "Map" }}
+        </app-button>
+      </div>
+    </form>
+
+    <h4 class="mo-subheading">Mapped List</h4>
+    <app-data-grid [rowData]="mappedRows()" [columnDefs]="columnDefs" height="320px" />
+  }
+
+  @if (activeTab() === "get-data") {
+    <app-button type="button" class="btn-primary" [disabled]="syncing()" (click)="getDataFromMo()">
+      {{ syncing() ? "Fetching..." : "Get Data from MO" }}
+    </app-button>
+  }
+
+  @if (activeTab() === "import") {
+    <form [formGroup]="importForm" class="mo-form-grid">
+      <app-select-input label="Master" formControlName="kind" [options]="importKindOptions" />
+      <app-file-input
+        label="Excel File (.xlsx)"
+        accept=".xlsx"
+        [outsideLabel]="true"
+        [enablePreview]="false"
+        formControlName="file"
+      />
+    </form>
+
+    <div class="mo-import-actions">
+      <app-button type="button" class="btn-secondary" [disabled]="downloadingTemplate()" (click)="downloadImportTemplate()">
+        {{ downloadingTemplate() ? "Downloading..." : "Download Template" }}
+      </app-button>
+      <app-button
+        type="button"
+        class="btn-secondary"
+        [disabled]="!importFile() || validating() || importing()"
+        (click)="validateImportFile()"
+      >
+        {{ validating() ? "Checking..." : "Validate (Dry Run)" }}
+      </app-button>
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!validatedForImport() || importing() || validating()"
+        (click)="submitImportFile()"
+      >
+        {{ importing() ? "Importing..." : "Import" }}
+      </app-button>
+    </div>
+
+    @if (importResult(); as result) {
+      <div class="mo-import-result">
+        @if (result.status === "column_error") {
+          <p class="mo-import-result__error">{{ result.headerErrors[0] }}</p>
+          @if (result.allowedColumns.length) {
+            <p class="mo-import-result__hint">Allowed columns: {{ result.allowedColumns.join(", ") }}</p>
+          }
+        } @else if (result.status === "row_limit_error") {
+          <p class="mo-import-result__error">{{ result.headerErrors[0] }}</p>
+        } @else {
+          <div class="mo-import-result__stats">
+            @if (result.status === "dry_run") {
+              <span>Valid rows: {{ result.validRows }}</span>
+            } @else {
+              <span>Imported: {{ result.imported }}</span>
+            }
+            <span>Invalid rows: {{ result.invalidRows }}</span>
+          </div>
+          @if (result.errors.length) {
+            <table class="mo-import-result__errors">
+              <thead>
+                <tr>
+                  <th>Row</th>
+                  <th>Errors</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (rowError of result.errors; track rowError.row) {
+                  <tr>
+                    <td>{{ rowError.row }}</td>
+                    <td>
+                      @for (field of errorFields(rowError.errors); track field) {
+                        <div>{{ field }}: {{ rowError.errors[field].join(", ") }}</div>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        }
+      </div>
+    }
+  }
+</div>

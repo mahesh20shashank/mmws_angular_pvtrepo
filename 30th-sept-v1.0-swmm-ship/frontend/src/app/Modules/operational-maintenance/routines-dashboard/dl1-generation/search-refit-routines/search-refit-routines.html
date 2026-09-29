@@ -1,0 +1,64 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<app-master-card cardTitle="Search Refit Routines">
+  <form [formGroup]="searchForm" class="grid grid-cols-5 gap-4 p-4 mt-4 rounded-xl border border-white/10 bg-white/[0.02] mb-4">
+    <app-select-input
+      label="Sub Department"
+      formControlName="section"
+      [options]="sectionOptions()">
+    </app-select-input>
+
+    <div class="flex flex-col gap-2">
+      <label for="equipment" class="text-[13px] font-medium block" style="color: var(--text-muted)">Equipment</label>
+      <input
+        id="equipment"
+        type="text"
+        formControlName="equipment"
+        placeholder="Equipment name"
+        class="w-full h-[45px] rounded-lg px-3 text-sm outline-none"
+        style="background: var(--bg-input); border: 1px solid var(--border-input); color: var(--text-primary)" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="routineName" class="text-[13px] font-medium block" style="color: var(--text-muted)">Routine Name</label>
+      <input
+        id="routineName"
+        type="text"
+        formControlName="routineName"
+        placeholder="Routine name"
+        class="w-full h-[45px] rounded-lg px-3 text-sm outline-none"
+        style="background: var(--bg-input); border: 1px solid var(--border-input); color: var(--text-primary)" />
+    </div>
+
+    <app-select-input
+      label="Converted"
+      formControlName="converted"
+      [options]="convertedOptions">
+    </app-select-input>
+
+    <div class="flex flex-col gap-2">
+      <!-- Invisible label matching the other columns' label+gap so this column has the
+           same top offset as them — without it, this cell (having no label at all) would
+           get flex-stretched to the row's tallest column (the 45px-high app-select-input
+           triggers) and bottom-align there via items-end, landing a few px lower than the
+           neighboring 45px text inputs instead of level with them. -->
+      <label class="text-[13px] font-medium block invisible" aria-hidden="true">Clear Filter</label>
+      <div class="flex justify-end">
+        <app-button type="button" (click)="clearFilters()" class="h-[45px] px-4 rounded-lg bg-white/10 border border-white/10 text-white text-sm whitespace-nowrap">
+          Clear Filter
+        </app-button>
+      </div>
+    </div>
+  </form>
+
+  <div class="fuss-grid-wrapper w-full">
+    <app-data-grid
+      [columnDefs]="columnDefs"
+      [rowData]="rows()"
+      [pageSize]="10"
+      [height]="'440px'"
+      [loading]="isLoading()"
+      (rowClicked)="onRowClicked($event)">
+    </app-data-grid>
+  </div>
+</app-master-card>

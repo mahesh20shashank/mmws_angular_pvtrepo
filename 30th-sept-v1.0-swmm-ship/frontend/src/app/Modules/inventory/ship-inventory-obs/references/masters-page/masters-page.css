@@ -1,0 +1,839 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+/* the heading and the Clear OBS Spares control sit on one line, the
+   control pushed to the far right. `flex-wrap` so a narrow window drops the button under the
+   heading rather than squeezing its label. */
+.obs-panel__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.obs-panel__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.obs-panel__header-action {
+  margin-left: auto;
+}
+
+/* Matches the underline-tab style already established in this module's history-page.css —
+   same class names, flat + bottom-border indicator instead of a bordered pill/button. */
+.obs-tabs-row {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.obs-tab-btn {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.6rem 0.1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.obs-tab-btn--active {
+  color: var(--accent-blue, #1d96e9);
+  border-bottom-color: var(--accent-blue, #1d96e9);
+  font-weight: 600;
+}
+
+/* THE FULL-WIDTH SETUP REGION.
+   This was a `1.15fr 1fr` split - the form down the left, the read-only panels down the right.
+   It was an improvement on the 720px strip before it, and it was still wrong: the form is the
+   whole task, and it was being given half a window while the column beside it held two small
+   panels and, on a department whose templates could not be resolved, nothing at all.
+   Everything now spans the full width, and the form's own auto-fit grid uses it - the same
+   fields lay out across the window instead of stacking down a half-width column.
+   `minmax(0, 1fr)`, not `1fr` - a grid item's default `min-width: auto` would otherwise let
+   the working table's own wide content stretch the region past the window. */
+.obs-import-setup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* The read-only panels - the ship's MO customer code and the template downloads - now sit in a
+   ROW beneath the form rather than a column beside it, each taking an equal share of the width
+   and wrapping onto its own line when there is no room for two. Their DOM order is unchanged,
+   so the reading order is what it always was. */
+.obs-import-setup__aside {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.obs-import-setup__aside > * {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.obs-import-setup__main {
+  min-width: 0;
+}
+
+/* THE SHIP'S MO CUSTOMER CODE panel. First in the aside, because it is the
+   one value the operator has to get right in the workbook before the rest of this screen can help
+   them - and until this panel existed the only way to learn it was to trigger a refusal. */
+.obs-customer-code {
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+}
+
+.obs-customer-code__label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.obs-customer-code__value {
+  margin: 0.15rem 0 0.4rem;
+  color: var(--text-primary);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Not-yet-adopted is a normal first-run state, not a fault, so it is stated in the muted voice
+   and never in the warning one. */
+.obs-customer-code__value--unset {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.obs-customer-code__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.obs-customer-code__reset {
+  margin-top: 0.75rem;
+}
+
+/* `align-items: start`, and the change is the fix for a real
+   misalignment rather than a preference.
+   It was `end`, which lines the BOTTOMS of the cells up. Several fields carry a hint or an
+   error beneath the input - "The sheet is tagged to your own department", the Executive
+   sub-department note - and those cells are taller. Bottom-aligning them pushed the plainer
+   controls beside them DOWN by the height of their neighbour's hint: Login Password sat
+   visibly lower than Select Department, on the same row, for no reason a reader could see.
+   Aligning to the start puts every label and every input on one line and lets the hints hang
+   below their own field, where they belong. */
+.obs-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+/* Spans every column so the submit button gets its own line under the fields. Under
+   `align-items: start` it would otherwise sit at the TOP of a field-height cell, level with
+   the labels rather than with the controls. */
+.obs-form-grid__actions {
+  display: flex;
+  grid-column: 1 / -1;
+}
+
+/* ONE CONTROL HEIGHT ACROSS THE ROW.
+   Three different shared controls sit side by side here - `app-select-input` for Department and
+   Import Authority, `app-input-field` for Login Password, `app-file-input` for the workbook. All
+   three already agree on the label (13px, 500, 8px above the box), and two of the three already
+   agree on the box at 45px. `app-input-field` alone is 42px, so the password box ended up three
+   pixels short of the fields either side of it and its bottom edge did not line up with theirs.
+
+   Corrected HERE and not in `input-field.css`, deliberately: that control is on dozens of screens
+   and none of them asked for a taller box. `::ng-deep` is the only way a page's styles reach into
+   a child component's template under emulated encapsulation, and it is scoped to this grid so it
+   cannot escape - the same technique this file already uses for the grid's pagination bar. */
+.obs-form-grid ::ng-deep app-input-field .input-container {
+  height: 45px;
+}
+
+/* ------------------------------------------------------------------
+   The mode chooser and the hand-entry controls it reveals.
+   Requirement 3.3. Every colour is a theme token, so both themes are carried without a
+   `[data-theme="light"]` block.
+   ------------------------------------------------------------------ */
+
+/* Sits above the form and spans it, because it decides what the form below is asking for.
+   Grouped by a common region and spacing rather than by a border - Gestalt, and Tufte on
+   non-data ink. */
+.obs-mode-chooser {
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+}
+
+.obs-mode-chooser__hint {
+  margin: 0.6rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* The batch equipment class spans the form grid, because the instruction beneath it is a
+   sentence and not a field label - it needs the width to read as one. */
+.obs-equipment-class-field {
+  grid-column: 1 / -1;
+}
+
+.obs-equipment-class-field__instruction {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--text-primary);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+/* Add Row is the primary action of this mode, so it sits above the table where the eye
+   starts rather than in the toolbar beside a search box. */
+.obs-hand-entry-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+/* The `+`. Square, so a one-character label does not read as a truncated word. */
+.obs-hand-entry-bar__add {
+  min-width: 2.5rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.obs-hand-entry-bar__count {
+  flex: 1 1 260px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* the destructive button, and the only one on this screen. Clearing OBS
+   spares and clearing the ship's adopted MO customer code are the two acts here that a user
+   cannot take back, so they are the two that do not look like every other button.
+   `--error-color` is the token this file already uses for the CPIL import failure text, with the
+   same literal fallback, so no new colour is introduced. */
+.btn-danger {
+  background: var(--error-color, #dc3545);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* The D787J caution sits inside .obs-form-grid, so it spans every column
+   rather than taking a single field's cell. The slot itself is always present and empty when no
+   caution is showing, so aria-live has a stable node to announce into and the grid does not
+   reflow the controls around it. */
+.obs-d787j-caution-slot {
+  grid-column: 1 / -1;
+}
+
+.obs-d787j-caution {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--icon-danger, #f82c36);
+  background: rgba(248, 44, 54, 0.08);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+/* The template download bar - rounded, tinted, bordered in the accent, the
+   informational-panel language this tab already uses. It lives in the aside now, so its own
+   `max-width` is gone: the column caps it, and a second cap inside a capped column only made it
+   narrower than the panel beside it. `flex-basis: 100%` on the text so the buttons drop under
+   the sentence in the narrow column rather than beside it. */
+.obs-template-download {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: rgba(29, 150, 233, 0.08);
+  border: 1px solid rgba(29, 150, 233, 0.3);
+}
+
+.obs-template-download__text {
+  flex: 1 1 320px;
+}
+
+.obs-template-download__title {
+  margin: 0 0 0.25rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.obs-template-download__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.obs-template-download__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.obs-pil-import-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 1.5rem;
+}
+
+.obs-pil-import-result {
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--bg-card);
+  max-width: 720px;
+}
+
+.obs-pil-import-result__error {
+  margin: 0 0 0.5rem;
+  color: var(--error-color, #dc3545);
+  font-size: 0.85rem;
+}
+
+.obs-pil-import-result__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.obs-pil-import-result__stats {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.obs-pil-import-result__errors {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.obs-pil-import-result__errors th,
+.obs-pil-import-result__errors td {
+  border: 1px solid var(--border-primary);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.obs-pil-import-result__errors th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* `.obs-import-ready` itself is gone - it was a dead rule. The panel it
+   styled was removed from the template when the results region was rewritten, and only its
+   `__actions` child is still rendered, on the Save bar below the working table. Deleting it also
+   removes one of the six `max-width: 720px` caps that kept this page in a strip down the left of
+   the window. */
+.obs-import-ready__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.obs-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.obs-stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 110px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+}
+
+.obs-stat-tile--warn {
+  border-color: rgba(248, 44, 54, 0.35);
+  background: rgba(248, 44, 54, 0.06);
+}
+
+.obs-stat-tile__value {
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.obs-stat-tile__label {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.obs-tabs-row--validation {
+  margin-top: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.obs-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.3rem;
+  margin-left: 0.35rem;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.2);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* The search box and the Clear Table control share the toolbar row, so
+   the two things that act on the whole table sit together and neither reads as a row action. */
+.obs-validation-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* the whole-table controls, kept together on the right.
+   The toolbar is `space-between`, which pins the first child left and the last child right - so
+   with the search box and TWO buttons as three loose children, the delete button would have
+   floated into the middle of the row. Wrapping the pair makes them one child again, and the
+   delete button appears and disappears with the selection without the Clear Table button moving
+   under it. */
+.obs-validation-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The hand-written twenty-column table, its Prev/Next pagination and its
+   three hand-rolled status pills are gone. The pills carried six raw colour values chosen for a
+   dark ground and had no light-theme block at all - they are `status-chip` through the shared
+   `grid-status-chip-renderer` now, and every colour below is a theme token defined in BOTH
+   theme blocks of styles.css. */
+
+.obs-working-grid {
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ROW, STATUS and ACTION are narrowed in `masters-page.ts` - see the comment on the `row`
+   column definition - which leaves `data-grid`'s shared 16px cell padding disproportionate on
+   a column that is now 64-130px wide rather than 120-380px. Cut in half here, scoped to this
+   grid only, so every other screen using the shared component keeps its own spacing. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--compact {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-header-cell.obs-header--compact {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* ROW's row number and ACTION's single delete icon both read better centred in a narrow
+   column than left-aligned against a wall of white space - STATUS keeps the shared
+   left-alignment because its chip already carries its own internal padding. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--center {
+  justify-content: center;
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-header-cell.obs-header--center .ag-header-cell-label {
+  justify-content: center;
+}
+
+/* Smoother, more discoverable scrolling on a table wide enough (twenty-odd columns) that
+   horizontal scrolling is the normal way to read it, not an edge case. `scroll-behavior:
+   smooth` covers any scroll ag-grid triggers programmatically (e.g. scrolling a newly-edited
+   cell into view); trackpad/wheel scrolling was already smooth at the OS level. The touch
+   rule keeps the same momentum feel on a tablet, which this table's own two-finger-drag
+   volume of columns makes worth having. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* `data-grid.css` styles the thumb and the track (`::-webkit-scrollbar-thumb` /
+   `-track`) but never the STEP BUTTONS at each end, which Chrome/Edge render at their own
+   native size by default whenever only the thumb and track are customised. That is what the
+   pair of triangular arrows either side of the thumb was - the browser's own default button,
+   sitting next to a thin custom bar it does not match. Sized to 0 and hidden outright: this
+   table's rows and columns already scroll on drag/wheel/keyboard, so the buttons are a second,
+   fussier way to do what one drag already does, and removing them is what makes the bar read
+   as one deliberate control rather than two different scrollbars glued together.
+
+   The explicit width/height repeated here (matching `data-grid.css`'s own 6px) is what stops
+   the FLICKER: some Chromium builds momentarily reserve the native button's box before this
+   rule paints over it, which showed as a one-frame jump every time the pointer crossed into the
+   scroll track. Declaring the same fixed size up front, rather than leaving it to shrink from a
+   default, removes the resize there is otherwise a flicker between. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-button,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* A hover step on the thumb itself - the one piece of feedback the arrow buttons were
+   incidentally providing (a visible reaction to the pointer being over the scroll area) - so
+   removing them does not make the bar feel inert. The transition is on colour only, never on
+   any sizing property, which is what keeps this hover state from being a second source of the
+   same flicker the buttons caused. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb {
+  transition: background-color 0.15s ease;
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb:hover,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue);
+}
+
+/* `data-grid` renders its pagination footer unconditionally - the `@if`
+   that used to guard it is commented out in `data-grid.html` - so with `[pagination]="false"`
+   it would show an "Entries per page" selector and page buttons over a grid that has no pages.
+   It is hidden here rather than fixed there, because the fix is a change to a shared component
+   twelve call sites use and this change is not authorised to make one. Recorded as an
+   observation with its one-line fix in the Change Impact Map. */
+.obs-working-grid ::ng-deep .pagination-container {
+  display: none;
+}
+
+/* ------------------------------------------------------------------
+   The four visual states of the working table.
+   Every value is a theme token. Nothing here is conveyed by colour alone:
+   the row tint is spelled out by the STATUS column's chip, the orange cell
+   carries the workbook's own value on a second line, and the red pattern
+   number's reason is named in words in the ERRORS column.
+   ------------------------------------------------------------------ */
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--row-valid {
+  background-color: var(--row-status-valid-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-valid-border);
+}
+
+/* THE CHECKBOX COLUMN TAKES THE ROW'S TINT TOO.
+   The row tint is applied per CELL, through each column's own `cellClass`. The checkbox column
+   is not one of this page's columns - `app-data-grid` prepends it itself and gives it only
+   `grid-select-cell` - so without this it renders as an untinted 48px gutter beside a row that
+   is pale green or pink, and the row reads as though it begins at Row rather than at its own
+   left edge.
+
+   Matched with `:has()` on the cell's siblings rather than by adding a class, because adding one
+   would mean changing the shared grid. ag-grid renders the pinned-left cells in their own
+   `.ag-row`, and Row and Status are pinned left and DO carry the status class, so the sibling
+   this looks for is always there. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-row:has(.obs-cell--row-valid) .grid-select-cell {
+  background-color: var(--row-status-valid-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-valid-border);
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-row:has(.obs-cell--row-invalid) .grid-select-cell {
+  background-color: var(--row-status-invalid-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-invalid-border);
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-row:has(.obs-cell--row-duplicate) .grid-select-cell {
+  background-color: var(--row-status-duplicate-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-duplicate-border);
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--row-invalid {
+  background-color: var(--row-status-invalid-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-invalid-border);
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--row-duplicate {
+  background-color: var(--row-status-duplicate-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-duplicate-border);
+}
+
+/* The two rows that will not be committed and broke no rule - a pattern
+   number no source of truth recognises, and a master value the Head of Department has still to
+   confirm. Written as two more entries in this same list, and not as a modifier on the invalid
+   tint, because they are not degrees of invalid: one is a lookup the storekeeper has still to
+   do and the other is a question the ship has still to answer. The STATUS column says which in
+   words - PATTERN NOT FOUND and NEEDS CONFIRMATION - so neither is signalled by colour alone. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--row-pattern-only {
+  background-color: var(--row-status-pattern-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-pattern-border);
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--row-needs-confirmation {
+  background-color: var(--row-status-confirm-bg);
+  box-shadow: inset 0 -1px 0 var(--row-status-confirm-border);
+}
+
+/* A value the application replaced from ILMS or WLMS. The workbook's own value is on the cell's
+   tooltip - see `cellTooltip` - since the second line that used to carry it stopped rendering
+   when the table became editable. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--corrected {
+  color: var(--cell-corrected-text);
+  font-weight: 600;
+}
+
+/* `overflow: visible` and `text-overflow: clip` ARE GONE from this rule.
+   ag-grid gives every cell a fixed width, so telling its inner `.ag-cell-value` to overflow
+   visibly is a licence to paint across the neighbouring column - and a corrected DESCRIPTION,
+   which is one of the two cells the source of truth most often rewrites, is exactly long enough
+   to do it. They were here to make room for a second line that no longer renders. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--corrected .ag-cell-value {
+  white-space: pre-line;
+  line-height: 1.25;
+}
+
+/* Clause 5.1 - a pattern number that matched no source of truth. The underline is a second,
+   non-colour marker on the same cell, and the reason is stated in the ERRORS column. */
+/* `.ag-cell-value` is named alongside the cell itself, and it is the
+   whole reason this treatment did not show. ag-grid wraps every cell's text in an inner
+   `.ag-cell-value` span that carries its own `color` from the theme, and a colour set on the
+   parent cannot be inherited past a child that sets its own. So the pattern number came out
+   BOLD and DOTTED-UNDERLINED - the two properties nothing else was setting - and stubbornly
+   black, which is the one property that actually says "this is wrong". */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--unmatched,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--unmatched .ag-cell-value {
+  color: var(--cell-unmatched-text);
+  font-weight: 600;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+/* and the same for an inline-EDITED pattern number cell. The editable
+   columns render a `GridTextCell`, whose `<input>` is a form control and takes neither the
+   cell's colour nor the theme's - browsers give an input its own. Without this the red survives
+   on a read-only cell and vanishes the moment the column becomes typeable, which is precisely
+   when the operator is looking at it to correct it. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--unmatched input {
+  color: var(--cell-unmatched-text);
+  font-weight: 600;
+}
+
+/* the other half of clause 5.1 - a pattern number a source of truth
+   CONFIRMED. It had no treatment, so a resolved code and one nobody had checked read the same.
+   No underline: the dotted one on the red is what distinguishes the two without colour at the
+   cell, and repeating it here would say "look at this" about the state that needs no action. The
+   non-colour signal for the green is the tooltip, which names the source that answered.
+
+   `.ag-cell-value` and `input` are both named for the same reason the red names them: ag-grid
+   wraps the text in a span that sets its own colour, and the editable cell replaces it with an
+   `<input>` that sets its own again. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--matched,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--matched .ag-cell-value,
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--matched input {
+  color: var(--cell-matched-text);
+  font-weight: 600;
+}
+
+/* The same inheritance point for a corrected cell, for the same reason. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--corrected .ag-cell-value {
+  color: var(--cell-corrected-text);
+}
+
+/* Every broken rule on its own line. The default cell rule clips to one line with an
+   ellipsis, which would hide the one thing on the row the reader has to act on. */
+/* `overflow: visible` is gone from both halves of this rule too, and it
+   was never needed here. The column already carries `wrapText: true, autoHeight: true`, so
+   ag-grid GROWS THE ROW to fit the message - `pre-line` gives it its line breaks and nothing has
+   to escape the cell to be readable. What the overflow actually did was let a long message run
+   underneath the pinned ACTION column beside it. */
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--errors {
+  align-items: flex-start !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.obs-working-grid ::ng-deep .ag-theme-custom .ag-cell.obs-cell--errors .ag-cell-value {
+  white-space: pre-line;
+  line-height: 1.35;
+}
+
+/* ------------------------------------------------------------------
+   The three states the results region can be in besides populated,
+   and the two panels that explain a refusal.
+   ------------------------------------------------------------------ */
+
+/* the `max-width: 720px` is gone. On the Import Data tab these panels now
+   live inside `.obs-import-setup__aside`, whose own column already bounds them, and a second cap
+   inside a capped column only made them narrower than the panel above them. The Equipment Classes
+   tab renders them full width, which is where they belong on a full-width tab. */
+.obs-empty-state,
+.obs-inline-error {
+  margin-top: 0;
+  padding: 1rem 1.1rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+}
+
+.obs-inline-error {
+  border-color: var(--icon-danger);
+}
+
+.obs-empty-state__title,
+.obs-inline-error__title {
+  margin: 0 0 0.3rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.obs-empty-state__text,
+.obs-inline-error__text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------
+   The Equipment Classes tab's list.
+
+   Spacing only. The grid brings its own surface, its own header treatment and its own focus
+   ring from the shared `data-grid` component and the ag-grid Quartz theme, so there is nothing
+   here to colour - which is why this block introduces no token and no raw value, and why the
+   tab needs no `[data-theme="light"]` block of its own. `.obs-equipment-class-field` and its
+   `__instruction` above are reused as they stand, from the hand-entry batch control.
+   ------------------------------------------------------------------ */
+.obs-equipment-class-grid {
+  margin-top: 1.25rem;
+}
+
+.obs-correction-summary {
+  max-width: 900px;
+  margin: 0.9rem 0 0;
+  color: var(--cell-corrected-text);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.obs-submit-blocked {
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------
+   The two confirmations, inside the shared modal.
+
+   The Edit dialogue's own styles moved out with the dialogue, into
+   `import-row-editor/import-row-editor.css`. A projected node carries the child component's
+   style scope, not this page's, so they had to travel with it. `.obs-edit-modal__actions`
+   stays here because the two confirmations below still use it.
+   ------------------------------------------------------------------ */
+
+.obs-confirm__text {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* The master-value confirmation's list of what would be added. One value
+   per line, because the reader is being asked to judge each of them separately and a
+   comma-joined sentence would hide the third one in the middle of a paragraph. Shares
+   `.obs-confirm__text`'s size and colour so the list and the sentences around it read as one
+   block, with the value itself in the body colour so it stands out from its own explanation. */
+.obs-confirm__list {
+  margin: 0 0 0.75rem;
+  padding-left: 1.1rem;
+  list-style: disc;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.obs-confirm__list strong {
+  color: var(--text-primary);
+}
+
+.obs-edit-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}

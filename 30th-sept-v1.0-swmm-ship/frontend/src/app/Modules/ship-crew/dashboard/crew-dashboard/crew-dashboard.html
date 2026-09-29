@@ -1,0 +1,74 @@
+<div class="crew-page">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <div class="kpi-row">
+    @for (tile of tiles(); track tile.title) {
+    <app-kpi-card cardHeight="auto" [title]="tile.title" [description]="today" [count]="tile.count"
+      [iconName]="tile.icon" [iconColor]="tile.iconColor" [iconBg]="tile.iconBg" [accentColor]="tile.iconColor"
+      iconPosition="right" [showTimelineTab]="false" [showTrends]="false" [showViewMore]="true"
+      viewMoreLabel="View more →" (detailClick)="viewMore(tile.statusTab)" />
+    }
+  </div>
+
+  <div class="glass-card crew-panel">
+    <div class="crew-panel__header">
+      <h3>Personnel borne as on {{ today }}</h3>
+      <div class="crew-panel__actions">
+        <app-button type="button" class="btn-secondary" [disabled]="!filteredRows().length" (click)="downloadCsv()">
+          <app-icon name="download" [size]="14" variant="inherit" /> Download CSV
+        </app-button>
+        <app-button type="button" class="btn-secondary" [disabled]="!filteredRows().length" (click)="downloadPdf()">
+          <app-icon name="printer" [size]="14" variant="inherit" /> Download PDF
+        </app-button>
+      </div>
+    </div>
+
+    <div class="crew-filters">
+      <div class="crew-filters__group">
+        <span class="crew-filters__label">Category</span>
+        <div class="crew-pill-group">
+          <app-button type="button" class="crew-pill" [class.crew-pill--active]="category() === 'all'"
+            (click)="setCategory('all')">All</app-button>
+          <app-button type="button" class="crew-pill" [class.crew-pill--active]="category() === 'officer'"
+            (click)="setCategory('officer')">Officer</app-button>
+          <app-button type="button" class="crew-pill" [class.crew-pill--active]="category() === 'sailor'"
+            (click)="setCategory('sailor')">Sailor</app-button>
+        </div>
+      </div>
+
+      <div class="crew-filters__group crew-filters__group--dept">
+        <span class="crew-filters__label">Department</span>
+        <app-select-input placeholder="All departments" [options]="departmentOptions()"
+          [ngModel]="deptFilter()" (ngModelChange)="onDeptChange($event)" />
+      </div>
+
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">
+        <app-icon name="x" [size]="14" variant="inherit" /> Clear filters
+      </app-button>
+    </div>
+
+    <app-data-grid [rowData]="filteredRows()" [columnDefs]="columnDefs" height="380px" />
+  </div>
+</div>
+
+@if (statusModalTarget(); as target) {
+<app-status-leave-modal [personnel]="target.personnel" [leaveType]="target.leaveType" (closed)="onStatusModalClosed()"
+  (submitted)="onStatusModalSubmitted()" />
+}
+
+@if (presentConflict(); as ctx) {
+<app-modal size="sm" (closeModal)="cancelPresentConflict()">
+  <h3 class="crew-modal__title">Shorten Active Leave?</h3>
+  <p class="crew-modal__message">
+    {{ ctx.row.firstName }} {{ ctx.row.lastName }} is on {{ ctx.conflict.leaveType }} from
+    {{ ctx.conflict.startDate }} to {{ ctx.conflict.endDate }}.
+  </p>
+  <p class="crew-modal__message">
+    Marking them as Present today will shorten the leave end date to {{ ctx.conflict.newEndDate }}.
+  </p>
+  <div class="crew-modal__actions">
+    <app-button type="button" class="btn-secondary" (click)="cancelPresentConflict()">Cancel</app-button>
+    <app-button type="button" class="btn-primary" (click)="confirmPresentConflict()">Proceed</app-button>
+  </div>
+</app-modal>
+}

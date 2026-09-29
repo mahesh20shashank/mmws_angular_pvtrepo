@@ -1,0 +1,422 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="flex items-between gap-2 shrink-0 header-cotainer">
+
+  <div>
+    <h3 class="heading-text mt-1">
+      Defect / DART Management
+    </h3>
+
+    <p class="text-[11px] text-white/50 mt-0.5">
+      All DARTs raised by HMS Daring D32 — open, closed and hidden
+    </p>
+  </div>
+
+  <!-- Open DARTs - Defects -->
+
+  <div class="btn-container-def">
+    <app-button type="button" (click)="selectTab('defects')" [ngClass]="
+              activeTab === 'defects'
+                ? 'bg-white/15 border-sky-500 text-white'
+                : 'bg-white/5 border-white/10 text-white/70'
+            "
+      class="flex items-center gap-2 px-4 h-10 rounded-lg border text-sm font-medium whitespace-nowrap transition-colors">
+      <app-icon name="file-text" [size]="14" />
+      <span>Open DARTs - Defects</span>
+    </app-button>
+
+    <!-- Open DARTs - DLIII -->
+    <app-button type="button" (click)="selectTab('dliii')" [ngClass]="
+              activeTab === 'dliii'
+                ? 'bg-white/15 border-sky-500 text-white'
+                : 'bg-white/5 border-white/10 text-white/70'
+            "
+      class="flex items-center gap-2 px-4 h-10 rounded-lg border text-sm font-medium whitespace-nowrap transition-colors">
+      <app-icon name="file-text" [size]="14" />
+      <span>Open DARTs - DLIII</span>
+    </app-button>
+
+    <!-- Add Defect / DART -->
+    <app-button type="button" (click)="goToCreateDefect()"
+      class="od-solid-btn flex items-center gap-2 px-4 h-10 rounded-lg bg-sky-600 text-sm font-medium whitespace-nowrap hover:bg-sky-500 transition-colors">
+      <span class="text-base leading-none">+</span>
+      <span>Add Defect / DART</span>
+    </app-button>
+  </div>
+
+</div>
+<app-master-card>
+
+
+
+
+  @if (activeTab === 'defects') { <div>
+
+    <!-- Search + Actions -->
+    <div class="flex items-center  mt-4 w-full overflow-hidden">
+      <!-- Search -->
+      <div class="relative flex-1 min-w-0">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10">
+          <app-icon name="search" [size]="16" [strokeWidth]="2" color="currentColor" />
+        </div>
+
+        <input type="text" id="" (input)="onSearch($event)" placeholder="Search"
+          class="w-50 h-10 rounded-[10px] bg-white/[0.04] border border-white/10 pl-10 pr-3 text-white placeholder:text-white/40 outline-none focus:border-white/20" />
+
+
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 shrink-0">
+
+        <app-button type="button" (click)="showFilters = !showFilters" class="flex items-center gap-2 h-10 px-4 rounded-lg
+                               border border-white/20
+                               bg-white/5
+                               text-white
+                               hover:bg-white/10
+                               transition-colors">
+          <app-icon name="filter" [size]="15" [strokeWidth]="2" />
+
+          <span>Filter</span>
+
+          <app-icon name="chevron-down" [size]="14" [strokeWidth]="2" [class.rotate-180]="showFilters"
+            class="transition-transform duration-200" />
+        </app-button>
+
+        <!-- Reset Filters -->
+        <app-button type="button" (click)="clearFilters()" class="flex items-center gap-2 h-10 px-4 rounded-lg
+                               border border-white/10
+                               bg-white/5
+                               text-white/70
+                               hover:bg-white/10
+                               hover:text-white
+                               transition-colors">
+          <app-icon name="refresh-cw" [size]="14" [strokeWidth]="2" />
+
+          <span>Reset Filters</span>
+        </app-button>
+
+
+        <app-button type="button" (click)="goToCreateRA()"
+          class="od-solid-btn px-4 h-10 rounded-lg bg-[#008F4C] whitespace-nowrap">
+          Raise RA
+        </app-button>
+
+        <app-button type="button" (click)="goToCreateDLII()"
+          class="od-solid-btn flex items-center gap-2 px-4 h-10 rounded-lg bg-sky-600 text-sm font-medium whitespace-nowrap hover:bg-sky-500 transition-colors">
+          Create DLII
+        </app-button>
+        <app-button type="button" (click)="syncWithCMMS()" [disabled]="syncingCmms()"
+          class="od-solid-btn flex items-center gap-2 px-4 h-10 rounded-lg bg-yellow-400 text-sm font-medium whitespace-nowrap hover:bg-sky-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+          {{ syncingCmms() ? 'Syncing...' : 'Sync With CMMS' }}
+        </app-button>
+      </div>
+
+
+    </div>
+
+    @if(showFilters){
+    <form [formGroup]="form">
+      <div class="flex items-end gap-4 mt-4">
+        <div class="flex-1">
+          <app-select-input label="Department" [options]="departmentOptions" formControlName="department">
+          </app-select-input>
+        </div>
+
+        <div class="flex-1">
+          <app-select-input label="Sub-department" [options]="subDepartmentOptions" formControlName="subDepartment">
+          </app-select-input>
+        </div>
+
+        <div class="flex-1">
+          <app-select-input label="Maintenance Period" [options]="maintenancePeriodOptions"
+            formControlName="maintenancePeriod">
+          </app-select-input>
+        </div>
+
+        <div class="flex-1">
+          <app-select-input label="DART Occasion" [options]="dartOccasionOptions" formControlName="dartOccasion">
+          </app-select-input>
+        </div>
+
+        <div class="flex-1">
+          <app-select-input label="Eqpt. Nomenclature" [options]="nomenclatureOptions" formControlName="nomenclature">
+          </app-select-input>
+        </div>
+
+        <div class="flex-1">
+          <app-select-input label="Defect Date Range" [options]="dateRangeOptions" formControlName="dateRange">
+          </app-select-input>
+        </div>
+
+        <app-button type="button" (click)="clearFilters()"
+          class="h-[45px] px-5 rounded-xl border border-white/10 bg-white/10 text-white">
+          Clear
+        </app-button>
+      </div>
+      @if (form.get('dateRange')?.value === 'custom') { <div class="flex gap-4 mt-4">
+        <div>
+          <app-input-field label="From Date" type="date" formControlName="fromDate">
+          </app-input-field>
+        </div>
+
+        <div>
+          <app-input-field label="To Date" type="date" formControlName="toDate">
+          </app-input-field>
+        </div>
+      </div> }
+    </form>
+
+    }
+
+    <!-- Table -->
+    <div class="fuss-grid-wrapper w-full mt-4">
+      <app-data-grid [columnDefs]="defectColumnDefs" [rowData]="openDefectsData()" [pageSize]="10" height="440px"
+        [showCheckboxes]="true" [suppressRowClickSelection]="true" [getRowId]="rowId" [loading]="isLoading()"
+        (selectionChanged)="onSelectionChanged($event)" (gridReady)="onDefectsGridReady($event)">
+      </app-data-grid>
+    </div>
+  </div> }
+
+  <!-- ========================= -->
+  <!-- DLIII TAB -->
+  <!-- ========================= -->
+
+  @if (activeTab === 'dliii') { <div>
+    <div class="flex justify-start items-center mt-4 mb-4">
+      <div class="relative w-[83%] shrink-0">
+        <!-- Search Icon -->
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none z-10">
+          <app-icon name="search" [size]="16" [strokeWidth]="2" color="currentColor" />
+        </div>
+
+        <!-- Input -->
+        <input type="text" id="" placeholder="Search"
+          class="w-50 h-10 rounded-[10px] bg-white/[0.04] border border-white/10 pl-10  content text-white placeholder:text-white/40 outline-none focus:border-white/20" />
+      </div>
+
+    </div>
+    <div class="fuss-grid-wrapper w-full mt-4">
+      <app-data-grid [columnDefs]="dl3ColumnDefs" [rowData]="dl3DefectsData()" [pageSize]="10" height="440px" [loading]="isLoading()">
+      </app-data-grid>
+    </div>
+  </div> }
+</app-master-card>
+
+<!-- Popup -->
+@if (showPopup) { <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+  <div class="glass-card w-[80rem] max-w-[70vw] border border-[var(--border-primary)] rounded-2xl overflow-hidden">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border-primary)]">
+      <h2 class="text-white text-lg font-medium">
+        DART Detail View {{ selectedDefect?.dart_number ?? "" }}
+      </h2>
+
+      <app-button (click)="closePopup()" class="text-white/80 hover:text-white transition">
+        <span class="text-3xl leading-none">×</span>
+      </app-button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 max-h-[75vh] overflow-y-auto">
+      <form [formGroup]="popupForm" class="space-y-6">
+        <!-- Basic Details -->
+        <div class="rounded-xl border border-[var(--border-primary)] overflow-hidden">
+          <div class="px-5 py-3 border-b border-[var(--border-primary)] text-white text-lg font-medium">
+            Basic Details
+          </div>
+
+          <div class="p-5">
+            <div class="grid grid-cols-4 gap-6">
+              <div>
+                <label for="dart_number" class="text-white/60 text-xs mb-1 block">DART No.</label>
+                <input id="dart_number" type="text" readonly formControlName="dart_number"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="dart_date" class="text-white/60 text-xs mb-1 block">DART Date</label>
+                <input id="dart_date" type="text" readonly formControlName="dart_date"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="occasion" class="text-white/60 text-xs mb-1 block">DART Occasion</label>
+                <input id="occasion" type="text" readonly formControlName="occasion"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="maintenance_period" class="text-white/60 text-xs mb-1 block">Maintenance Period</label>
+                <input id="maintenance_period" type="text" readonly formControlName="maintenance_period"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Equipment Details -->
+        <div class="rounded-xl border border-[var(--border-primary)] overflow-hidden">
+          <div class="px-5 py-3 border-b border-[var(--border-primary)] text-white text-lg font-medium">
+            Equipment Details
+          </div>
+
+          <div class="p-5">
+            <div class="grid grid-cols-4 gap-6">
+              <div>
+                <label for="nomenclature" class="text-white/60 text-xs mb-1 block">Eqpt. Nomenclature</label>
+                <input id="nomenclature" type="text" readonly formControlName="nomenclature"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="equipment_code" class="text-white/60 text-xs mb-1 block">Eqpt. Name/Code</label>
+                <input id="equipment_code" type="text" readonly formControlName="equipment_code"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="sub_dept" class="text-white/60 text-xs mb-1 block">Sub-Department</label>
+                <input id="sub_dept" type="text" readonly formControlName="sub_dept"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="department" class="text-white/60 text-xs mb-1 block">Department</label>
+                <input id="department" type="text" readonly formControlName="department"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="serial_no" class="text-white/60 text-xs mb-1 block">Eqpt. Serial No.</label>
+                <input id="serial_no" type="text" readonly formControlName="serial_no"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="location" class="text-white/60 text-xs mb-1 block">OnBoard Location</label>
+                <input id="location" type="text" readonly formControlName="location"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="previous_dart_no" class="text-white/60 text-xs mb-1 block">Previous Dart No.</label>
+                <input id="previous_dart_no" type="text" readonly formControlName="previous_dart_no"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="rha_defect" class="text-white/60 text-xs mb-1 block">RHA for the Defect</label>
+                <input id="rha_defect" type="text" readonly formControlName="rha_defect"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+              <div>
+                <label for="created_date" class="text-white/60 text-xs mb-1 block">DART Entry Creation Date</label>
+                <input id="created_date" type="text" readonly formControlName="created_date"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Defect Details -->
+        <div class="rounded-xl border border-[var(--border-primary)] overflow-hidden">
+          <div class="px-5 py-3 border-b border-[var(--border-primary)] text-white text-lg font-medium">
+            Defect Details
+          </div>
+
+          <div class="p-5">
+            <div class="grid grid-cols-4 gap-6">
+              <div>
+                <label for="rectification_date" class="text-white/60 text-xs mb-1 block">Tentative Defect Resolution By(DART Closing)</label>
+                <input id="rectification_date" type="text" readonly formControlName="rectification_date"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="symptoms" class="text-white/60 text-xs mb-1 block">Symptoms</label>
+                <input id="symptoms" type="text" readonly formControlName="symptoms"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="severity" class="text-white/60 text-xs mb-1 block">Severity</label>
+                <input id="severity" type="text" readonly formControlName="severity"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="assistance" class="text-white/60 text-xs mb-1 block">Required Assistance for</label>
+                <input id="assistance" type="text" readonly formControlName="assistance"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="defective_component" class="text-white/60 text-xs mb-1 block">Defective Component</label>
+                <input id="defective_component" type="text" readonly formControlName="defective_component"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="resolved_by" class="text-white/60 text-xs mb-1 block">SS Remark (Resolved By)</label>
+                <input id="resolved_by" type="text" readonly formControlName="resolved_by"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="trial_required" class="text-white/60 text-xs mb-1 block">Trial Required?</label>
+                <input id="trial_required" type="text" readonly formControlName="trial_required"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+
+              <div>
+                <label for="trial_agency" class="text-white/60 text-xs mb-1 block">Trail Agency</label>
+                <input id="trial_agency" type="text" readonly formControlName="trial_agency"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <label for="description" class="text-white/60 text-xs mb-1 block">Defect Description</label>
+              <textarea id="description" rows="3" readonly formControlName="description"
+                class="w-full rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 py-2 text-[var(--text-muted)] text-sm"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spares Requirement -->
+        <div class="rounded-xl border border-[var(--border-primary)] overflow-hidden">
+          <div class="px-5 py-3 border-b border-[var(--border-primary)] text-white text-lg font-medium">
+            Spares Requirement
+          </div>
+
+          <div class="p-5">
+            <div class="grid grid-cols-4 gap-6">
+              <div>
+                <label for="sapres_required" class="text-white/60 text-xs mb-1 block">Spares Required?</label>
+                <input id="sapres_required" type="text" readonly formControlName="sapres_required"
+                  class="w-full h-10 rounded-lg bg-[var(--bg-input-disabled)] border border-dashed border-[var(--border-primary)] px-3 text-[var(--text-muted)] text-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Spares Required -->
+        <div class="rounded-xl border border-[var(--border-primary)] overflow-hidden">
+          <div class="px-5 py-3 border-b border-[var(--border-primary)] text-white text-lg font-medium">
+            Spares Required
+          </div>
+          <div class="p-3">
+            <app-data-grid [columnDefs]="sparesColumnDefs" [rowData]="sparesData" [pageSize]="10" [autoHeight]="true">
+            </app-data-grid>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex justify-end px-6 py-4 border-t border-[var(--border-primary)] bg-[var(--bg-card)] flex-shrink-0">
+      <app-button type="button" (click)="closePopup()" title="Close"
+        class="p-2 rounded-lg border border-[var(--border-primary)] text-white hover:bg-white/10 transition">
+        <app-icon name="x" [size]="16" variant="inherit" />
+      </app-button>
+    </div>
+  </div>
+</div> }

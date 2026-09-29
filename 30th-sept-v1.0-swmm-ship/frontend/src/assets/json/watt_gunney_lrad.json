@@ -1,0 +1,1077 @@
+{
+  "formId": "lrad",
+  "title": "LRAD (PORT & STBD)",
+  "sourceFile": "lrad.html",
+  "sections": [
+    {
+      "id": "basic_information",
+      "title": "Basic Information",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "select",
+          "name": "lrad_ship_name",
+          "label": "SHIP",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [],
+          "isDynamic": true,
+          "lookupKey": "ship_id",
+          "prefill": true,
+          "prefillSource": "context.lrad_ship_name",
+          "tree": false
+        },
+        {
+          "type": "select",
+          "name": "lrad_department",
+          "label": "DEPARTMENT",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "-- Select --",
+              "value": "-- Select --"
+            },
+            {
+              "label": "GUN",
+              "value": "GUN"
+            },
+            {
+              "label": "GUNNERY",
+              "value": "GUNNERY"
+            },
+            {
+              "label": "ASW",
+              "value": "ASW"
+            },
+            {
+              "label": "COMM",
+              "value": "COMM"
+            },
+            {
+              "label": "ND",
+              "value": "ND"
+            }
+          ],
+          "isDynamic": false
+        },
+        {
+          "type": "input",
+          "name": "lrad_equipment",
+          "label": "EQUIPMENT",
+          "required": true,
+          "disabled": true,
+          "placeholder": "",
+          "value": "LRAD (PORT & STBD)",
+          "inputType": "text",
+          "prefill": true,
+          "prefillSource": "equipment.nomenclature"
+        },
+        {
+          "type": "date",
+          "name": "lrad_date",
+          "label": "DATE",
+          "required": false,
+          "disabled": false,
+          "placeholder": "",
+          "value": ""
+        },
+        {
+          "type": "select",
+          "name": "lrad_nature_of_trials",
+          "label": "NATURE OF TRIAL",
+          "required": true,
+          "disabled": false,
+          "placeholder": "",
+          "value": "",
+          "options": [
+            {
+              "label": "--Select--",
+              "value": "--Select--"
+            },
+            {
+              "label": "SATs",
+              "value": "SATs"
+            },
+            {
+              "label": "HATs",
+              "value": "HATS"
+            },
+            {
+              "label": "OP - CHECKS",
+              "value": "OP CHECKS"
+            },
+            {
+              "label": "IIs",
+              "value": "IIS"
+            }
+          ],
+          "isDynamic": false
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "section_2",
+      "title": "Section 2",
+      "sectionType": "matrixTable",
+      "fields": [],
+      "tables": [
+        {
+          "id": "section_2_matrix_1",
+          "sectionType": "matrixTable",
+          "title": "Section 2",
+          "topHeaders": [
+            [
+              {
+                "label": "Ser",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "OBSERVATIONS",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "RESULT",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              },
+              {
+                "label": "REMARKS",
+                "colspan": 1,
+                "rowspan": 1,
+                "align": "center"
+              }
+            ]
+          ],
+          "columns": [
+            {
+              "key": "ser",
+              "label": "Ser",
+              "type": "serial",
+              "align": "center"
+            },
+            {
+              "key": "observations",
+              "label": "OBSERVATIONS",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "result",
+              "label": "RESULT",
+              "type": "label",
+              "align": "left"
+            },
+            {
+              "key": "remarks",
+              "label": "REMARKS",
+              "type": "label",
+              "align": "left"
+            }
+          ],
+          "rows": [
+            {
+              "_id": "section_2_matrix_1_row_1",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_1_cell_1_lrad_embark_time_part_1",
+                  "key": "lrad_embark_time_part_1",
+                  "type": "input",
+                  "label": "Trials team embarked onboard at on for Op Checks of LRAD as per approved schedule, BR 4050 and CNO 07/10. Following observed: -",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "inputType": "text",
+                  "options": [],
+                  "colspan": 4,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_1_cell_2_lrad_embark_date_part_2",
+                  "key": "lrad_embark_date_part_2",
+                  "type": "date",
+                  "label": "Trials team embarked onboard at on for Op Checks of LRAD as per approved schedule, BR 4050 and CNO 07/10. Following observed: -",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_2",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_1_static",
+                  "type": "serial",
+                  "value": "1.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_2_static",
+                  "type": "label",
+                  "value": "Control overview",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_4_lrad_status_1_part_1",
+                  "key": "lrad_status_1_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_2_cell_5_lrad_status_1_part_2",
+                  "key": "lrad_status_1_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_3",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_3_cell_1_static",
+                  "type": "serial",
+                  "value": "2.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_3_cell_2_static",
+                  "type": "label",
+                  "value": "Built in test",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_3_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_3_cell_4_lrad_status_2_part_1",
+                  "key": "lrad_status_2_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_3_cell_5_lrad_status_2_part_2",
+                  "key": "lrad_status_2_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_4",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_4_cell_1_static",
+                  "type": "serial",
+                  "value": "3.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_4_cell_2_static",
+                  "type": "label",
+                  "value": "Test for warning range up to 1000 mtr in voice mode",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_4_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_4_cell_4_lrad_status_3_part_1",
+                  "key": "lrad_status_3_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_4_cell_5_lrad_status_3_part_2",
+                  "key": "lrad_status_3_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_5",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_5_cell_1_static",
+                  "type": "serial",
+                  "value": "4.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_5_cell_2_static",
+                  "type": "label",
+                  "value": "Test for direction acoustic energy with ration of back to front energy output",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_5_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_5_cell_4_lrad_status_4_part_1",
+                  "key": "lrad_status_4_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_5_cell_5_lrad_status_4_part_2",
+                  "key": "lrad_status_4_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_6",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_6_cell_1_static",
+                  "type": "serial",
+                  "value": "5.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_6_cell_2_static",
+                  "type": "label",
+                  "value": "Test for direction acoustic energy within a beam of + 20°",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_6_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_6_cell_4_lrad_status_5_part_1",
+                  "key": "lrad_status_5_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_6_cell_5_lrad_status_5_part_2",
+                  "key": "lrad_status_5_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_7",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_7_cell_1_static",
+                  "type": "serial",
+                  "value": "6.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_7_cell_2_static",
+                  "type": "label",
+                  "value": "Test for configurable power output",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_7_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_7_cell_4_lrad_status_6_part_1",
+                  "key": "lrad_status_6_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_7_cell_5_lrad_status_6_part_2",
+                  "key": "lrad_status_6_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_8",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_8_cell_1_static",
+                  "type": "serial",
+                  "value": "7.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_8_cell_2_static",
+                  "type": "label",
+                  "value": "Checks for interfaces with microphone",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_8_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_8_cell_4_lrad_status_7_part_1",
+                  "key": "lrad_status_7_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_8_cell_5_lrad_status_7_part_2",
+                  "key": "lrad_status_7_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_9",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_9_cell_1_static",
+                  "type": "serial",
+                  "value": "8.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_9_cell_2_static",
+                  "type": "label",
+                  "value": "Checks for 12/24 V Battery operation",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_9_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_9_cell_4_lrad_status_8_part_1",
+                  "key": "lrad_status_8_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_9_cell_5_lrad_status_8_part_2",
+                  "key": "lrad_status_8_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_10",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_10_cell_1_static",
+                  "type": "serial",
+                  "value": "9.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_10_cell_2_static",
+                  "type": "label",
+                  "value": "Test for stand by state for 24x7",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_10_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_10_cell_4_lrad_status_9_part_1",
+                  "key": "lrad_status_9_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_10_cell_5_lrad_status_9_part_2",
+                  "key": "lrad_status_9_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_11",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_11_cell_1_static",
+                  "type": "serial",
+                  "value": "10.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_11_cell_2_static",
+                  "type": "label",
+                  "value": "Checks for conversion of English phrases/Command to at least more than 30 national/international languages",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_11_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_11_cell_4_lrad_status_10_part_1",
+                  "key": "lrad_status_10_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_11_cell_5_lrad_status_10_part_2",
+                  "key": "lrad_status_10_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            },
+            {
+              "_id": "section_2_matrix_1_row_12",
+              "cells": [
+                {
+                  "_id": "section_2_matrix_1_row_12_cell_1_static",
+                  "type": "serial",
+                  "value": "11.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_12_cell_2_static",
+                  "type": "label",
+                  "value": "Test for various pre-recorded multilingual nautical commands (more than 50)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_12_cell_3_static",
+                  "type": "label",
+                  "value": "",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_12_cell_4_lrad_status_11_part_1",
+                  "key": "lrad_status_11_part_1",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                },
+                {
+                  "_id": "section_2_matrix_1_row_12_cell_5_lrad_status_11_part_2",
+                  "key": "lrad_status_11_part_2",
+                  "type": "radio",
+                  "label": "SAT",
+                  "value": "",
+                  "required": false,
+                  "disabled": false,
+                  "placeholder": "",
+                  "options": [
+                    {
+                      "label": "SAT",
+                      "value": "SAT"
+                    },
+                    {
+                      "label": "UNSAT",
+                      "value": "UNSAT"
+                    }
+                  ],
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "left"
+                }
+              ]
+            }
+          ],
+          "showRowActions": false,
+          "minRows": 1
+        }
+      ]
+    },
+    {
+      "id": "authority",
+      "title": "Authority",
+      "sectionType": "fields",
+      "fields": [
+        {
+          "type": "input",
+          "name": "presenting_authority",
+          "label": "Presenting Authority",
+          "required": false,
+          
+          "placeholder": "",
+          "value": "Ship's staff",
+          "inputType": "text"
+        },
+        {
+          "type": "input",
+          "name": "inspecting_authority",
+          "label": "Inspecting Authority",
+          "required": false,
+          
+          "placeholder": "",
+          "value": "WATT",
+          "inputType": "text"
+        }
+      ],
+      "tables": []
+    }
+  ]
+}

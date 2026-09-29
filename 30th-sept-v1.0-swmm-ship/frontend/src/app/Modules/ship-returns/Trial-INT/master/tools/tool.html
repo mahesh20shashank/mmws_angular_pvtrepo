@@ -1,0 +1,40 @@
+<div class="p-2 sm:p-3">
+  <app-paginate-table
+        title="Tool"
+        description="Manage tools"
+        [showHeaderSection]="true"
+        [addButtons]="addButtons"
+        (addButtonClick)="handleAddButtonClick($event)"
+        [rowData]="rowData"
+        [url]="'/master/tools/'"
+        [columnDefs]="columnToolData"
+        [showPagination]="true"
+        [tableLoading]="tableLoading"
+        [showSearch]="true"
+      >
+      </app-paginate-table>
+</div>
+
+<app-add-form
+  *ngIf="showCreateLayout"
+  width="40vw"
+  [open]="showCreateLayout"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="editFormData"
+  [isEditMode]="isEditMode"
+  (onSubmit)="handleSubmit($event)"
+  (onFieldChange)="onFieldChange($event)"
+  (onOpenChange)="onFormOpenChange($event)"
+  [fromTitle]="isEditMode ? 'EDIt TOOL' : 'Add TOOL'">
+</app-add-form>
+
+<!-- Reusable Delete Dialog -->
+<app-reusable-delete-dialog
+  [open]="showDeleteDialog"
+  [id]="deleteId"
+  [name]="deleteName"
+  [entityType]="'Tool'"
+  [loading]="deleteLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>

@@ -1,0 +1,15 @@
+<div class="sidebar-nav">
+
+    @for(item of navItems; track $index){
+
+    <app-button (click)="changeSection(item.id)" class="nav-btn" [class.nav-btn-active]="activeSection === item.id"
+        [attr.aria-label]="item.label">
+
+        <app-icon [name]="item.icon" [size]="24" color="#fff" />
+
+        <span class="nav-tooltip">{{ item.label }}</span>
+
+    </app-button>
+    }
+
+</div>

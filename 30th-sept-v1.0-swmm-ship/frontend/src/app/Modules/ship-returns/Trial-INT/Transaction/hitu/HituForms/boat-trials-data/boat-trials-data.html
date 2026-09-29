@@ -1,0 +1,1067 @@
+<app-form-card
+  title="SHIP BORNE BOAT TRIALS"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="form" class="p-0">
+    <div class="grid grid-cols-4 gap-3">
+      <app-input
+        label="Ship*"
+        formControlName="ship"
+        placeholder="Ship name"
+        class="w-full"
+      ></app-input>
+
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+
+      <app-select
+        [label]="'Place of conduct of trials*'"
+        formControlName="place_of_conduct_trail"
+        [options]="locationOptions"
+        placeholder="--Select--"
+        class="w-full"
+      ></app-select>
+
+      <app-select
+        [label]="'Occasion for conduct of Trials*'"
+        formControlName="occasion_of_conduct_trail"
+        [searchable]="false"
+        [options]="occasionOptions"
+        placeholder="--Select--"
+        class="w-full"
+      ></app-select>
+    </div>
+
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload
+          [label]="'Upload doc*'"
+          formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)"
+        >
+        </app-file-upload>
+        <!-- </div> -->
+      </div>
+    </app-parameter-card>
+
+    <div class="mt-5 overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85 w-10">Ser No</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Parameter</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Observation</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              1. General Inspection and Documentation Checks
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Boat log book iaw Appendix 'C' of NO 03/18
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="boat_log_book_status"
+                [searchable]="false"
+                [searchable]="false"
+                [options]="heldOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Records of inspection and maintenance of boat and lifting
+              arrangements carried out iaw NO 03/18
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="inspection_records"
+                [searchable]="false"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              1.3 Record of weighing of boat iaw NO 03/18
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="boat_weighing_status"
+                [searchable]="false"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                label="Present weight of boat"
+                formControlName="boat_weight"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Boat log book folder be also scrutinised iaw Part II of Appendix
+              'C' of NO 03/18
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="log_book_folder_check"
+                [searchable]="false"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85"></td>
+          </tr>
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="4" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              2. Lowering / Hoisting Test
+            </td>
+          </tr>
+          <tr>
+            <td td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Representatives</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input label="Place" formControlName="place"></app-input>
+                <app-calendar
+                  label="Date"
+                  formControlName="date"
+                ></app-calendar>
+                <app-select
+                  label="Boat Type"
+                  formControlName="boat_type"
+                  [searchable]="false"
+                  [searchable]="false"
+                  [options]="boatTypeOptions"
+                ></app-select>
+                <app-input
+                  label="Boat Regn No"
+                  formControlName="boat_regn_no"
+                ></app-input>
+                <app-select
+                  label="Ship Representative"
+                  formControlName="ship_rep"
+                  [searchable]="false"
+                  [searchable]="false"
+                  [options]="shipOfficerOptions"
+                ></app-select>
+                <app-select
+                  label="Trial Teams"
+                  formControlName="trial_teams"
+                  [searchable]="false"
+                  [searchable]="false"
+                  [options]="trialTeamOptions"
+                ></app-select>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ---------------------------------------------- -->
+          <tr>
+            <td td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              In-date load test certificate for Davit
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-3 gap-2">
+                  <app-select
+                    formControlName="davit_cert_status"
+                    [searchable]="false"
+                    [options]="SatUnsatOptions"
+                  ></app-select>
+                  <app-calendar
+                    formControlName="davit_cert_date"
+                  ></app-calendar>
+                </div>
+                <app-file-upload
+                  formControlName="davit_cert_upload"
+                ></app-file-upload>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              In-date test certificate for ARH
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-3 gap-2">
+                  <app-select
+                    formControlName="arh_cert_status"
+                    [searchable]="false"
+                    [options]="SatUnsatOptions"
+                  ></app-select>
+                  <app-calendar formControlName="arh_cert_date"></app-calendar>
+                </div>
+                <app-file-upload
+                  formControlName="arh_cert_upload"
+                ></app-file-upload>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Lifting sling load test report and visual inspection of lifting
+              eyes/hooks
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-2 gap-2">
+                  <app-select
+                    formControlName="lifting_sling_status"
+                    [searchable]="false"
+                    [options]="SatUnsatOptions"
+                  ></app-select>
+                </div>
+                <app-file-upload
+                  formControlName="lifting_sling_upload"
+                ></app-file-upload>
+              </div>
+            </td>
+          </tr>
+
+          <!-- -------------------------------------------------- -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.5</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              General inspection post hoisting of boat
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-1 gap-3">
+                <app-select
+                  label="5.1 Condition of hull, appendages and rubber collar"
+                  formControlName="hull_condition"
+                  [searchable]="false"
+                  [options]="SatObsUnsatOptions"
+                ></app-select>
+                <app-input
+                  *ngIf="isSatObs('hull_condition')"
+                  label="Hull remarks"
+                  formControlName="paint_remark"
+                ></app-input>
+                <app-select
+                  label="5.2 Condition of paint"
+                  formControlName="paint_condition"
+                  [searchable]="false"
+                  [options]="SatObsUnsatOptions"
+                ></app-select>
+                <app-input
+                  *ngIf="isSatObs('paint_condition')"
+                  label="Paint remarks"
+                  formControlName="paint_remark"
+                >
+                </app-input>
+                <app-select
+                  label="5.3 Condition of hull fittings"
+                  formControlName="hull_fittings"
+                  [options]="SatObsUnsatOptions"
+                ></app-select>
+                <app-input
+                  *ngIf="isSatObs('hull_fittings')"
+                  label="Hull fitting remarks"
+                  formControlName="hull_fittings_remark"
+                ></app-input>
+                <app-select
+                  label="5.4 Condition of lifting arrangement fitted on boat"
+                  formControlName="lifting_arrangement"
+                  [searchable]="false"
+                  [options]="SatObsUnsatOptions"
+                ></app-select>
+                <app-input
+                  *ngIf="isSatObs('lifting_arrangement')"
+                  label="Lifting arrangement remarks"
+                  formControlName="lifting_arrangement_remark"
+                ></app-input>
+                <app-select
+                  label="5.5 Inspect record of lifting slings / FSWR"
+                  formControlName="lifting_sling_record"
+                  [searchable]="false"
+                  [options]="SatObsUnsatOptions"
+                ></app-select>
+                <app-input
+                  *ngIf="isSatObs('lifting_sling_record')"
+                  label="Lifting sling remarks"
+                  formControlName="lifting_sling_record_remark"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.6</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Inspection of webbing sling</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-select
+                  label="6.1 Visual survey of webbing sling"
+                  formControlName="webbing_visual"
+                  [searchable]="false"
+                  [options]="SatObsUnsatOptions"
+                ></app-select>
+                <app-input
+                  *ngIf="isSatObs('webbing_visual')"
+                  label="Webbing sling remarks"
+                  formControlName="webbing_visual_remark"
+                ></app-input>
+                <app-calendar
+                  label="6.2 Year of manufacturing"
+                  formControlName="webbing_year"
+                ></app-calendar>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="4" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              3. Harbour Checks
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Place and date</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Place"
+                  formControlName="harbour_place"
+                ></app-input>
+                <app-calendar
+                  label="Date"
+                  formControlName="harbour_date"
+                ></app-calendar>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Boat type and registration</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-select
+                  label="Boat Type"
+                  formControlName="harbour_boat_type"
+                  [searchable]="false"
+                  [options]="boatTypeOptions"
+                ></app-select>
+                <app-input
+                  label="Boat Regn No"
+                  formControlName="harbour_boat_regn"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Representatives</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-select
+                  label="Ship Representative"
+                  formControlName="harbour_ship_rep"
+                  [searchable]="false"
+                  [options]="shipOfficerOptions"
+                ></app-select>
+                <app-select
+                  label="Trial Teams"
+                  formControlName="harbour_trial_teams"
+                  [searchable]="false"
+                  [options]="trialTeamOptions"
+                ></app-select>
+              </div>
+            </td>
+          </tr>
+          <!-- /============================================== -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">General inspection</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                label="Condition of hull, appendages and rubber collar"
+                formControlName="harbour_hull_condition"
+                [searchable]="false"
+                [options]="SatObsUnsatOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="isSatObs('harbour_hull_condition')"
+                label="Harbour hull remarks"
+                formControlName="harbour_hull_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <!-- -------------------------------------------------------------------- -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="8">3.5</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="3">
+              Machinery fitted
+            </td>
+          </tr>
+          <!-- ----------------------------- -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Main Engines - Make and Power
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Main Engines - Make"
+                  formControlName="main_engine_make"
+                ></app-input>
+
+                <app-input
+                  label="Main Engines - Power"
+                  formControlName="main_engine_power"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Drive Units : Make and serial no
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Drive Units Make"
+                  formControlName="drive_units_make"
+                ></app-input>
+
+                <app-input
+                  label="Drive Units Serial"
+                  formControlName="drive_units_serial"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Transom Shield : Make and Serial No
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Transom Shield - Make"
+                  formControlName="transom_shield_make"
+                ></app-input>
+
+                <app-input
+                  label="Transom Shield - Serial No"
+                  formControlName="transom_shield_serial"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Bilge Pump : Make and Capacity
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Bilge Pump - Make"
+                  formControlName="bilge_pump_make"
+                ></app-input>
+
+                <app-input
+                  label="Bilge Pump - Capacity"
+                  formControlName="bilge_pump_capacity"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Batteries : Make and Model</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Batteries - Make"
+                  formControlName="batteries_make"
+                ></app-input>
+
+                <app-input
+                  label="Batteries - Model"
+                  formControlName="batteries_model"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">DG Set : Make and Mode</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="DG Set - Make"
+                  formControlName="dg_set_make"
+                ></app-input>
+
+                <app-input
+                  label="DG Set - Model"
+                  formControlName="dg_set_model"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+            <app-input
+              label="Additional remarks"
+              formControlName="harbour_additional_remarks"
+            ></app-input>
+          </td>
+          <!-- --------------------------------------------------- -->
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="4" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              4. Sub-Component Checks
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85 w-10">Ser No</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Sub-Components</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">(SAT / UNSAT)</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks / Observations</th>
+          </tr>
+
+          <tr
+            *ngFor="let item of subComponentChecks; let i = index"
+            []="i % 2 === 1"
+          >
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">{{ item.label }}</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                [formControlName]="item.status"
+                [searchable]="false"
+                [options]="SatUnsatNaOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="needsObservation(item.status)"
+                [formControlName]="item.remark"
+                placeholder="Enter remarks / observations"
+              ></app-input>
+              <!-- <span *ngIf="!needsObservation(item.status)" class="text-white/60 text-xs italic">
+                        If UNSAT / SAT with obs — enter alphanumeric data
+                      </span> -->
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">21</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Result of Harbour Checks</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="harbour_check_status"
+                [searchable]="false"
+                [options]="SatObsUnsatOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="needsObservation('harbour_check_status')"
+                label="Result remarks"
+                formControlName="harbour_check_remark"
+              ></app-input>
+              <!-- <span *ngIf="!needsObservation('harbour_check_status')">If UNSAT/SAT with observations, enter alphanumeric data.</span> -->
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              5. SHIP BORNE BOAT - SEA TRIALS
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Place and Date</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Place"
+                  formControlName="sea_place"
+                ></app-input>
+                <app-calendar
+                  label="Date"
+                  formControlName="sea_date"
+                ></app-calendar>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Wind sea state</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-input
+                  label="Wind (Knots)"
+                  type="number"
+                  formControlName="sea_wind"
+                ></app-input>
+                <app-select
+                  label="Sea State"
+                  formControlName="sea_state"
+                  [searchable]="false"
+                  [options]="seaStateOptions"
+                ></app-select>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Boat type and Boat Regn no</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-select
+                  label="Boat Type"
+                  formControlName="sea_boat_type"
+                  [searchable]="false"
+                  [options]="boatTypeOptions"
+                ></app-select>
+                <app-input
+                  label="Boat Regn No"
+                  formControlName="sea_boat_regn"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Distance</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                label="Distance"
+                formControlName="sea_distance"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.5</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Representative</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-3">
+                <app-select
+                  label="Ship Representative"
+                  formControlName="sea_ship_rep"
+                  [searchable]="false"
+                  [options]="shipOfficerOptions"
+                ></app-select>
+                <app-select
+                  label="Trial Teams"
+                  formControlName="sea_trial_teams"
+                  [searchable]="false"
+                  [options]="trialTeamOptions"
+                ></app-select>
+              </div>
+            </td>
+            <!-- <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Sea state: Calm sea / SS 1 / SS 2 / SS 3 / SS 4.</td> -->
+          </tr>
+          <!-- --------------------------------------------------- -->
+          <tr>
+            <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div>1. Light Load Condition</div>
+              <div>
+                Three to four crew, fuel tank half filled (50% of the fuel
+                required for designed endurance) and all basic equipment i.e.
+                ropes, anchor, paddles, signal flags, torches, communication
+                set, boat hooks, etc.
+                <span>Power regimes are as follows:</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <ng-container
+                *ngTemplateOutlet="powerTrials; context: { rows50: power50Rows, rows85: power85Rows, rows100: power100Rows, prefix: '1' }"
+              ></ng-container>
+              <div class="mt-4">
+                <label class="form-label">Remarks</label>
+                <div>
+                  <span>{{ buildSeaTrialRemarks(power100Rows) }}</span>
+                  <span>
+                    <span>All obtained parameters were found to be</span>
+                    <app-select
+                      formControlName="light_load_result_status"
+                      [searchable]="false"
+                      [options]="SatObsUnsatOptions"
+                      placeholder="--Select--"
+                      class="w-56"
+                    ></app-select>
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div>2. Full Load Condition</div>
+              <div>
+                Trials to be undertaken at full load displacement with 100%
+                fuel, 09 men onboard including crew and all basic equipment.
+                <span>Power regimes are as follows:</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <ng-container
+                *ngTemplateOutlet="powerTrials; context: { rows50: fullLoad50Rows, rows85: fullLoad85Rows, rows100: fullLoad100Rows, prefix: '2' }"
+              ></ng-container>
+              <div class="mt-4">
+                <label class="form-label">Remarks</label>
+                <div>
+                  <span>{{ buildSeaTrialRemarks(fullLoad100Rows) }}</span>
+                  <span>
+                    <span>Speed in full load condition achieved is</span>
+                    <app-input
+                      formControlName="full_load_result_status"
+                      placeholder=""
+                      class="w-56"
+                    ></app-input>
+                  </span>
+                </div>
+              </div>
+              <div class="mt-3">
+                <app-input
+                  label="Speed in full load condition achieved (Knots)"
+                  formControlName="full_load_speed"
+                  placeholder="Enter speed in knots"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Operational Checks of Navigation and Communication Equipment
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-select
+                formControlName="nav_comm_status"
+                [searchable]="false"
+                [options]="SatObsUnsatOptions"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Overall Trials Report</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="overall_status"
+                [searchable]="false"
+                [options]="SatObsUnsatOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="needsObservation('overall_status')"
+                label="Observations"
+                formControlName="overall_remark"
+              ></app-input>
+              <div class="grid grid-cols-2 gap-3 mt-3">
+                <app-input
+                  label="Maximum speed achieved (Knots)"
+                  formControlName="achieved_speed"
+                ></app-input>
+                <app-input
+                  label="Reference speed (Knots)"
+                  formControlName="reference_speed"
+                ></app-input>
+              </div>
+              <div class="text-xs text-white/70 mt-2">
+                The maximum speed achieved was entered in full load condition as
+                against reference speed as per NCD 4003 Issue 7 / PDI /
+                Reference document.
+              </div>
+              <app-file-upload
+                class="mt-3 block"
+                [multiple]="true"
+                formControlName="reference_document"
+              ></app-file-upload>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">4.1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Harbour Checks</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-select
+                formControlName="harbour_check_status"
+                [searchable]="false"
+                [options]="SatObsUnsatOptions"
+              ></app-select>
+            </td>
+            <!-- <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input *ngIf="needsObservation('harbour_check_status')" label="Harbour check observations"
+                formControlName="harbour_check_remark"></app-input>
+              <span *ngIf="!needsObservation('harbour_check_status')">SAT / UNSAT / SAT with observations.</span>
+            </td> -->
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">4.2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Sea Checks</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-select
+                formControlName="sea_check_status"
+                [searchable]="false"
+                [options]="SatObsUnsatOptions"
+              ></app-select>
+            </td>
+            <!-- <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input *ngIf="needsObservation('sea_check_status')" label="Sea check observations"
+                formControlName="sea_check_remark"></app-input>
+              <span *ngIf="!needsObservation('sea_check_status')">SAT / UNSAT / SAT with observations.</span>
+            </td> -->
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">4.3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Supporting Documents</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <div class="grid grid-cols-2 gap-4">
+                <app-file-upload
+                  label="PDI Report"
+                  formControlName="pdi_report"
+                ></app-file-upload>
+                <app-file-upload
+                  label="Weigh Report"
+                  formControlName="weigh_report"
+                ></app-file-upload>
+                <app-file-upload
+                  label="Load Test Certificate"
+                  formControlName="load_test_certificate"
+                ></app-file-upload>
+                <app-file-upload
+                  label="ARH Certificate"
+                  formControlName="arh_certificate"
+                ></app-file-upload>
+                <app-file-upload
+                  label="BHS Certificate"
+                  formControlName="bhs_certificate"
+                ></app-file-upload>
+                <app-file-upload
+                  label="Webbing Slings Certificate"
+                  formControlName="webbing_slings_certificate"
+                ></app-file-upload>
+              </div>
+              <div class="text-xs text-red-500 mt-3">
+                Provision to upload PDI / Weigh report / Load test certificates
+                / ARH certificates / BHS / Webbing slings certificate.
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <ng-template
+    #powerTrials
+    let-rows50="rows50"
+    let-rows85="rows85"
+    let-rows100="rows100"
+    let-prefix="prefix"
+  >
+    <div class="grid grid-cols-1 gap-5">
+      <ng-container
+        *ngTemplateOutlet="powerTable; context: { title: prefix + '.1 50% Power', rows: rows50 }"
+      ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="powerTable; context: { title: prefix + '.2 85% Power', rows: rows85 }"
+      ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="powerTable; context: { title: prefix + '.3 100% Power', rows: rows100 }"
+      ></ng-container>
+    </div>
+  </ng-template>
+
+  <ng-template #powerTable let-title="title" let-rows="rows">
+    <div>
+      <div class="font-semibold mb-2">{{ title }}</div>
+      <table class="w-full border-collapse text-center text-xs">
+        <thead>
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Ser No</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Run</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Engine Speed RPM</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">Parameters</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">
+              Speed by GPS (Knots)
+            </th>
+          </tr>
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Coolant Temp (F/C)</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">LO Pressure (bar)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows; let i = index">
+            <td class="border border-white/15 px-2 py-2">{{ i + 1 }}</td>
+            <td class="border border-white/15 px-2 py-2">{{ row.run }}</td>
+            <td class="border border-white/15 px-2 py-2">
+              <app-input
+                type="number"
+                [(ngModel)]="row.engineSpeed"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-2 py-2">
+              <app-input
+                type="number"
+                [(ngModel)]="row.coolantTemp"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-2 py-2">
+              <app-input
+                type="number"
+                [(ngModel)]="row.loPressure"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-2 py-2">
+              <app-input
+                type="number"
+                [(ngModel)]="row.speed"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="onSpeedChange()"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-3">
+        <div>
+          <span>Average Speed recorded =</span> {{ getAverageData(rows).avg }}
+          Knots
+        </div>
+        <div>
+          <span>Sum of Speed (GPS) =</span> {{ getAverageData(rows).sum }}
+        </div>
+        <div>
+          <span>Sum Speed / {{ rows.length }} =</span> {{
+          getAverageData(rows).avg }} Knots
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

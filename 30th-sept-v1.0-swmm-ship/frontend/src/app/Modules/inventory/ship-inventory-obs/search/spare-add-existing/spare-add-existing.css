@@ -1,0 +1,130 @@
+.obs-panel {
+  padding: 1.25rem;
+}
+
+.obs-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.obs-panel__header h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+.obs-panel__header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.spare-existing-form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.spare-existing-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Banded field group — mirrors the reference app's "SPARE DETAILS" band and the
+   `.obs-band`/legend convention used in the shared spare-form component. */
+.obs-band {
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 1rem 1.1rem 1.1rem;
+  margin: 0 0 1.25rem;
+}
+
+.obs-band-title {
+  padding: 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.obs-help-block {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.obs-help-block--lead {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.spare-existing-detail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .spare-existing-detail {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+.spare-existing-detail__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.spare-existing-detail__row strong {
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.spare-existing-hint {
+  margin: -0.5rem 0 1rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  background: rgba(217, 119, 6, 0.1);
+  border: 1px solid rgba(217, 119, 6, 0.35);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}

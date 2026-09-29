@@ -1,0 +1,58 @@
+<div class="overlay">
+
+  <div class="glass-popup">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h3>Select Date</h3>
+
+      <app-button class="close-btn" (click)="close()">
+        ✕
+      </app-button>
+    </div>
+
+    <!-- PICKERS -->
+    <div class="pickers">
+
+      <div class="picker-wrapper">
+        <ion-datetime
+          class="wheel-picker"
+          presentation="date"
+          prefer-wheel="true"
+          [(ngModel)]="fromDate">
+        </ion-datetime>
+      </div>
+
+      <div class="to-text">to</div>
+
+      <div class="picker-wrapper">
+        <ion-datetime
+          class="wheel-picker"
+          presentation="date"
+          prefer-wheel="true"
+          [(ngModel)]="toDate">
+        </ion-datetime>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+
+      <app-button
+        class="footer-btn secondary"
+        (click)="close()">
+        Close
+      </app-button>
+
+      <app-button
+        class="footer-btn primary"
+        (click)="applyDateRange()">
+        Select
+      </app-button>
+
+    </div>
+
+  </div>
+
+</div>

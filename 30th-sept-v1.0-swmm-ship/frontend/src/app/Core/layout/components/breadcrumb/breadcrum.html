@@ -1,0 +1,64 @@
+<div class="breadcrumb-wrapper">
+  <!-- Left Section -->
+  <div class="breadcrumb-left">
+    <!-- Breadcrumb Icon -->
+    <div class="breadcrumb-icon">
+      <app-icon name="wrench" [size]="13" variant="inherit" />
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb-list">
+      @for (breadcrumb of breadcrumbs(); track breadcrumb.url; let last = $last) {
+        <app-button
+          class="breadcrumb-item head4"
+          [ngClass]="{
+            'breadcrumb-active': breadcrumb.isLast,
+            'breadcrumb-link': !breadcrumb.isLast,
+          }"
+           (click)="navigate(breadcrumb.url, breadcrumb.isLast)"
+          
+        >
+          {{ breadcrumb.label }}
+        </app-button>
+
+        @if (!last) {
+          <span class="breadcrumb-separator">/</span>
+        }
+      }
+    </div>
+  </div>
+
+  @if (showKpiButton) {
+    <div>
+      <app-button
+        #kpiBtn
+        class="button standard-button !flex !flex-row items-center gap-2"
+        [disabled]="kpiPanel.disabled()"
+        [title]="kpiPanel.disabled() ? 'This page shows a fixed set of KPIs' : ''"
+       
+      >
+        <app-icon name="settings" [size]="16" [strokeWidth]="1.8" variant="inherit" />
+
+        <span>Customize KPIs</span>
+      </app-button>
+    </div>
+  }
+
+  @if (showSendButton && isStaff()) {
+    <div>
+      <app-button
+        class="button standard-button !flex !flex-row items-center gap-2"
+       
+      >
+        <app-icon name="plus" [size]="16" [strokeWidth]="1.8" variant="inherit" />
+        <span>Send Notification</span>
+      </app-button>
+    </div>
+  }
+</div>
+
+@if (showSendModal) {
+<app-modal size="sm" (closeModal)="closeSendModal()">
+  <app-send-notification-modal (closed)="closeSendModal()"></app-send-notification-modal>
+</app-modal>
+}

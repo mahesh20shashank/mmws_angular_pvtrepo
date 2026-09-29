@@ -1,0 +1,448 @@
+:host {
+  display: block;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+:host(:has(.dropdown-menu.open)) {
+  z-index: 1000000 !important;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.required {
+  color: var(--error-color, #de1f1f);
+}
+
+/* ================= FIELD ================= */
+
+.dropdown-trigger {
+  position: relative;
+  box-sizing: border-box;
+
+  height: 45px;
+  width: 100%;
+  min-width: 0;
+  border-radius: 10px;
+  border: 1px solid var(--border-input);
+
+  background: var(--bg-input);
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 16px;
+
+  cursor: pointer;
+  overflow: hidden;
+
+  transition:
+    border-color .25s ease,
+    background .25s ease,
+    box-shadow .25s ease;
+}
+
+.dropdown-trigger.active {
+  border-color: var(--text-muted);
+}
+
+.dropdown-trigger.error {
+  border-color: var(--error-color, #de1f1f);
+  outline: 1px solid var(--error-color, #de1f1f);
+  outline-offset: -1px;
+}
+
+.dropdown-trigger.error .placeholder-text {
+  color: var(--error-color, #de1f1f);
+}
+
+/* Live "required & blank" hint (pre-submit) — same red hue as .error but softer/muted,
+   distinct from the full-strength red that only appears after a failed Submit. Opaque (not the
+   previous 0.65-alpha) — the translucent version measured well under 4.5:1 once composited over
+   the real dark background (SonarQube css:S7924); this is that same rgb(229,135,127) at full
+   opacity instead. */
+.dropdown-trigger.placeholder-error .placeholder-text {
+  color: #e5877f;
+}
+
+
+
+/* ================= PLACEHOLDER ================= */
+
+.placeholder-text,
+.selected-value {
+  font-size: 12px;
+  font-weight: 400;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selected-value {
+  color: var(--text-primary);
+}
+
+.placeholder-text {
+  color: var(--text-muted);
+}
+
+/* ================= INPUT ================= */
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: var(--text-primary);
+
+  font-size: 12px;
+  font-weight: 400;
+
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ================= ARROW ================= */
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 16px;
+  transition: transform .25s ease;
+}
+
+.arrow.rotate {
+  transform: rotate(180deg);
+}
+
+/* ================= MENU ================= */
+
+.dropdown-menu {
+  /* Positioned via [style.top]/[style.left]/[style.width] bindings (select-input.ts),
+     computed from the trigger's real viewport rect — the menu is moved to <body> while
+     open so `position: fixed` here is never clipped by a scrollable/overflow ancestor
+     (a table wrapper, a modal body, a page-level scroll panel, ...). Default 0/0/100%
+     below only matter for the brief moment before the first reposition runs. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  background: var(--bg-dropdown);
+
+  border: 1px solid var(--border-dropdown);
+  border-radius: 10px;
+
+  max-height: 180px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Prevents scrolling to the end of this list from "chaining" into whatever
+     scrollable container the trigger happens to sit in. */
+  overscroll-behavior: contain;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(-8px);
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease,
+    visibility .2s ease;
+
+  /* Once open, this menu is moved to <body> (see select-input.ts openMenu()), so it
+     becomes a body-level sibling of whatever modal/overlay it's opened inside — its
+     z-index has to beat the highest overlay z-index in the app (form-modal's
+     `.open-modal` at 999999) or that overlay's own backdrop/card paints over it. */
+  z-index: 1000000;
+}
+
+.dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ================= OPTIONS ================= */
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+
+  padding: 10px 16px;
+
+  color: var(--text-primary);
+
+  font-size: 14px;
+  font-weight: 400;
+
+  cursor: pointer;
+
+  transition: background .15s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--bg-select-option);
+}
+
+.dropdown-item:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.dropdown-item:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+.empty-state {
+  padding: 14px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Developed with Understanding: the opt-in search box at the top of the open menu
+   (searchInMenu). It sticks while the options scroll and uses theme tokens only. */
+.menu-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px;
+  padding: 0 10px;
+  height: 36px;
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  background: var(--bg-dropdown);
+  color: var(--text-muted);
+}
+
+.menu-search:focus-within {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue) 35%, transparent);
+}
+
+.menu-search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.menu-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ================= SCROLLBAR ================= */
+
+.dropdown-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--bg-scrollbar-thumb);
+  border-radius: 20px;
+}
+
+:host(.glass-popup) .dropdown-trigger {
+  height: 56px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.30);
+  background: rgba(255,255,255,.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.03),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+:host(.glass-popup) .dropdown-trigger.active {
+  border-color: var(--text-muted);
+}
+
+
+
+:host(.glass-popup) .selected-value,
+:host(.glass-popup) .search-input {
+  color: var(--text-primary);
+}
+
+:host(.glass-popup) .search-input {
+  padding-top: 20px;
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+:host(.glass-popup) .arrow {
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+:host(.glass-popup) .dropdown-menu {
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.38),
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+:host(.glass-popup) .dropdown-item {
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,.045);
+  font-weight: 500;
+  transition: background .15s ease, transform .12s ease, color .15s ease;
+}
+
+:host(.glass-popup) .dropdown-item + .dropdown-item {
+  margin-top: 8px;
+}
+
+:host(.glass-popup) .dropdown-item:hover {
+  background: rgba(255,255,255,.08);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+:host(.glass-popup) .dropdown-item:first-child {
+  border-radius: 10px;
+}
+
+:host(.glass-popup) .dropdown-item:last-child {
+  border-radius: 10px;
+}
+
+:host(.glass-popup) .selected-value,
+:host(.glass-popup) .placeholder-text {
+  margin-top: 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+:host(.glass-popup) .selected-value {
+  color: var(--text-primary);
+}
+
+:host(.glass-popup) .placeholder-text {
+  color: var(--text-muted);
+}
+
+
+.dropdown-trigger.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  /* Matches app-input-field's readonly-field treatment: brighter/thicker than the default 1px
+     border so the dashes read as crisp, deliberate marks instead of a faint, blurred line
+     (matches the reference design's own --sfd-dashed token) — clearly non-interactive rather
+     than looking almost identical to an editable dropdown. */
+  background: var(--bg-input-disabled);
+  border: 1.5px dashed var(--border-input) !important;
+}
+
+.dropdown-trigger.disabled .arrow {
+  opacity: 0.5;
+}
+
+.dropdown-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.clear-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+}
+
+
+.dropdown-trigger.readonly {
+  cursor: not-allowed;
+  background: var(--bg-input-disabled);
+  opacity: 0.8;
+  border: 1.5px dashed var(--border-input)
+}
+
+.dropdown-trigger.readonly .arrow {
+  opacity: 0.5;
+}
+
+.dropdown-trigger.readonly .selected-value,
+.dropdown-trigger.readonly .placeholder-text {
+  cursor: not-allowed;
+}
+
+.required-placeholder {
+  /* Opaque, not the previous 0.65-alpha — see the matching note on
+     .dropdown-trigger.placeholder-error .placeholder-text above (SonarQube css:S7924). */
+  color: #e5877f;
+  /* red */
+}
+
+/* select-input.html applies `.required-placeholder` purely off `required()` — it has no idea
+   whether the field is actually editable, so a locked-but-blank Old Equipment Info field (e.g.
+   CMMS genuinely has no Compartment Name/Location on record for this equipment) rendered the same
+   "fix this now" red as a field the operator can actually go fix, even though there's nothing to
+   click here. Same "locked wins over needs-fixing" fix as .dropdown-trigger.disabled.error /
+   app-input-field's readonly+invalid combo / app-date-picker's --disabled--invalid combo — just
+   keyed off the placeholder-text's own class instead of a border/outline property this time. */
+.dropdown-trigger.readonly .placeholder-text.required-placeholder,
+.dropdown-trigger.disabled .placeholder-text.required-placeholder {
+  color: var(--text-muted);
+}

@@ -1,0 +1,27 @@
+<div class="donut-wrapper" [style.width.px]="width" [style.height.px]="height">
+
+  <div echarts [options]="chartOption" class="donut-canvas"></div>
+
+  @if (chartType !== 'line') {
+    <div class="center-content">
+
+      <div class="percentage">
+        {{ centerValue }}
+      </div>
+
+      @if (centerLabel) {
+        <div class="label">
+          {{ centerLabel }}
+        </div>
+      }
+
+      @if (centerDescription) {
+        <div class="desc">
+          {{ centerDescription }}
+        </div>
+      }
+
+    </div>
+  }
+
+</div>

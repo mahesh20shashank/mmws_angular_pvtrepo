@@ -1,0 +1,355 @@
+<!-- Developed with Understanding: HR CDF Synchronization page (CP-D). Built only from shared
+     components, Tailwind utilities and theme tokens. The DOM order is the keyboard order - header,
+     configuration notice, Step 1, Step 2, Step 3, Personnel. Developed with Understanding: the
+     run console sits at the foot of the step that started the run, so it follows that step in
+     the keyboard order. -->
+<div class="flex flex-col gap-5">
+
+  <!-- Developed with Understanding: page header with the Configured or Not configured chip. -->
+  <app-page-header-bar icon="database" title="HR CDF Synchronization">
+    <app-status-chip [text]="headerChip().text" [tone]="headerChip().tone" [dot]="true" />
+    @if (configured()) {
+    <p below class="px-1 pt-2 text-xs text-[var(--text-muted)]">
+      HRCDF host {{ readiness()?.host }}{{ readiness()?.users_path }}
+    </p>
+    }
+  </app-page-header-bar>
+
+  <!-- Developed with Understanding: readiness loading and error states. -->
+  @if (readinessState() === "loading") {
+  <p class="text-sm text-[var(--text-muted)]" role="status">Checking the HRCDF sync status.</p>
+  } @else if (readinessState() === "error") {
+  <app-panel-card title="Sync status could not be read" icon="triangle-alert" iconColor="var(--icon-danger)">
+    <div class="flex flex-wrap items-center gap-3">
+      <p class="text-sm text-[var(--text-primary)]">{{ readinessError() }}</p>
+      <app-button variant="outline" size="sm" (click)="retryReadiness()">Try again</app-button>
+    </div>
+  </app-panel-card>
+  }
+
+  <!-- Developed with Understanding: the not-configured notice. The steps below stay visible, and
+       the Step 2 and Step 3 buttons say beside them why they are unavailable. -->
+  @if (notConfigured()) {
+  <app-panel-card title="Not configured on this server"
+    subtitle="The sync cannot run on this server until the HRCDF address is set" icon="triangle-alert"
+    iconColor="var(--icon-warning)">
+    <div class="flex flex-col gap-2 text-sm text-[var(--text-primary)]">
+      <p>This server has no HRCDF address, so Step 2 and Step 3 cannot run. Step 1 still works with the ship list
+        bundled with the application.</p>
+      <p>
+        Set
+        <code class="rounded bg-[var(--bg-input)] px-1.5 py-0.5 font-mono text-[var(--text-primary)]">{{ hostKey }}</code>
+        in the swmm service environment to the HRCDF address, in the form https://host:port, then restart the swmm
+        service and its background worker.
+      </p>
+    </div>
+  </app-panel-card>
+  }
+
+  <!-- Developed with Understanding: STEP 1 - the Step 0 confirm-and-lock pattern (R1 C2). Picking a
+       ship only stages it. Confirm this ship opens the dialog, and only Confirm there locks it. -->
+  <app-panel-card title="Step 1 - Select this ship"
+    subtitle="Pick the ship this installation serves. The choice is locked once confirmed." icon="ship">
+    <div panelActions>
+      <app-status-chip [text]="shipLocked() ? 'Locked' : 'Not confirmed'" [tone]="shipLocked() ? 'success' : 'warning'" />
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <form [formGroup]="shipForm" class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <!-- Developed with Understanding: both selects show a search box inside the open list
+             (searchInMenu), and Command defaults to ALL. -->
+        <app-select-input label="Command (optional filter)" placeholder="Select a command" [options]="commandOptions()"
+          [searchInMenu]="true" searchPlaceholder="Search commands" formControlName="command"></app-select-input>
+
+        <div class="flex flex-col gap-1">
+          <app-select-input label="Ship Name" placeholder="Select the ship name" [options]="unitOptions()"
+            [searchInMenu]="true" searchPlaceholder="Search ship name or code"
+            [error]="homeUnitError() !== ''" formControlName="unit"></app-select-input>
+          @if (homeUnitError()) {
+          <p class="flex items-start gap-1.5 text-sm text-[var(--text-primary)]" role="alert">
+            <app-icon name="circle-alert" [size]="16" variant="danger" />
+            <span><span class="font-semibold">Not saved.</span> {{ homeUnitError() }}</span>
+          </p>
+          }
+          @if (hintApplied()) {
+          <p class="text-xs text-[var(--text-muted)]">
+            Pre-selected because its name matches the ship chosen in Ship Configuration. Check it before you confirm.
+          </p>
+          }
+        </div>
+      </form>
+
+      @if (unitsState() === "loading") {
+      <p class="text-sm text-[var(--text-muted)]" role="status">Loading the ship list.</p>
+      } @else if (unitsState() === "error") {
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="text-sm text-[var(--text-primary)]">The ship list could not be loaded. {{ unitsError() }}</p>
+        <app-button variant="outline" size="sm" (click)="loadUnits()">Try again</app-button>
+      </div>
+      } @else if (units().length === 0) {
+      <p class="text-sm text-[var(--text-primary)]">No ship names are loaded yet. Use Get Ship Names from HRCDF to load
+        them.</p>
+      }
+
+      @if (homeUnit(); as home) {
+      <div class="flex flex-wrap items-center gap-2">
+        <p #lockedShip tabindex="-1" class="text-sm text-[var(--text-primary)]">
+          This ship is <span class="font-semibold">{{ home.name }} ({{ home.code }})</span>. Changing it needs an
+          administrator.
+        </p>
+        <app-status-chip text="Locked" tone="success" />
+      </div>
+      }
+      <p class="text-sm text-[var(--text-muted)]" role="status">{{ homeUnitNotice() }}</p>
+
+      <div class="flex flex-col gap-4 md:flex-row md:flex-wrap md:items-start">
+        <div class="flex max-w-md flex-col gap-1">
+          <app-button variant="outline" size="sm" [disabled]="refreshBusy() || refreshBlockReason() !== ''"
+            (click)="refreshUnits()">
+            <app-icon name="refresh-cw" [size]="14" variant="inherit" />
+            <span>{{ refreshBusy() ? "Getting ship names from HRCDF" : "Get Ship Names from HRCDF" }}</span>
+          </app-button>
+          <p class="text-xs text-[var(--text-muted)]">Run this only if your ship is missing from the Ship Name list.</p>
+          @if (refreshBlockReason()) {
+          <p class="text-xs text-[var(--text-primary)]">{{ refreshBlockReason() }}</p>
+          }
+          <p class="text-xs text-[var(--text-primary)]" role="status">{{ refreshMessage() }}</p>
+          @if (refreshError()) {
+          <p class="flex items-start gap-1.5 text-xs text-[var(--text-primary)]" role="alert">
+            <app-icon name="circle-alert" [size]="14" variant="danger" />
+            <span><span class="font-semibold">Not completed.</span> {{ refreshError() }}</span>
+          </p>
+          }
+        </div>
+
+        @if (!shipLocked()) {
+        <div class="flex max-w-md flex-col gap-1">
+          <app-button variant="primary" size="sm" [disabled]="confirmBlockReason() !== '' || savingHomeUnit()"
+            (click)="openConfirm()">
+            <app-icon name="lock" [size]="14" variant="inherit" />
+            <span>Confirm this ship</span>
+          </app-button>
+          @if (confirmBlockReason()) {
+          <p class="text-xs text-[var(--text-primary)]">{{ confirmBlockReason() }}</p>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Developed with Understanding: the Get Ship Names console, under Step 1 only. -->
+      @if (activeStep() === "ship") {
+      <ng-container [ngTemplateOutlet]="stepConsole"></ng-container>
+      }
+    </div>
+  </app-panel-card>
+
+  <!-- Developed with Understanding: STEP 2 - own-ship run, available once the ship is locked. -->
+  <app-panel-card title="Step 2 - Get this ship's personnel from HRCDF"
+    subtitle="Reads this ship's crew from HRCDF and updates the crew list" icon="user">
+    <div panelActions>
+      <app-status-chip [text]="ownLastRun()?.chipText ?? 'Not run'" [tone]="ownLastRun()?.tone ?? 'neutral'" />
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <app-button variant="primary" size="sm" [disabled]="ownBlockReason() !== ''" (click)="startRun('own')">
+          <app-icon name="users" [size]="14" variant="inherit" />
+          <span>Get this ship's personnel from HRCDF</span>
+        </app-button>
+        @if (ownBlockReason()) {
+        <p class="text-sm text-[var(--text-primary)]">{{ ownBlockReason() }}</p>
+        }
+      </div>
+      <p class="text-xs text-[var(--text-muted)]">
+        People HRCDF now places in another unit are marked as having left this ship. No record is deleted.
+      </p>
+      @if (ownLastRun(); as last) {
+      <div class="flex flex-col gap-1 text-sm">
+        <p class="text-[var(--text-muted)]">Last run: {{ last.detail }}</p>
+        @if (last.message) {
+        <p class="text-[var(--text-primary)]">{{ last.message }}</p>
+        }
+      </div>
+      } @else {
+      <p class="text-sm text-[var(--text-muted)]">This step has not been run yet.</p>
+      }
+
+      <!-- Developed with Understanding: the own-ship run console, under Step 2 only. -->
+      @if (activeStep() === "own") {
+      <ng-container [ngTemplateOutlet]="stepConsole"></ng-container>
+      }
+    </div>
+  </app-panel-card>
+
+  <!-- Developed with Understanding: STEP 3 - other-units run, available once the ship is locked and
+       an own-ship run has finished at least once. -->
+  <app-panel-card title="Step 3 - Get other units' personnel from HRCDF"
+    subtitle="Reads the personnel of every other unit from HRCDF" icon="users">
+    <div panelActions>
+      <app-status-chip [text]="othersLastRun()?.chipText ?? 'Not run'" [tone]="othersLastRun()?.tone ?? 'neutral'" />
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <app-button variant="primary" size="sm" [disabled]="othersBlockReason() !== ''" (click)="startRun('others')">
+          <app-icon name="users" [size]="14" variant="inherit" />
+          <span>Get other units' personnel from HRCDF</span>
+        </app-button>
+        @if (othersBlockReason()) {
+        <p class="text-sm text-[var(--text-primary)]">{{ othersBlockReason() }}</p>
+        }
+      </div>
+      <p class="text-xs text-[var(--text-muted)]">
+        This reads the whole Navy roster and can take a long time. It also marks as having left this ship anyone
+        HRCDF now places in another unit.
+      </p>
+      @if (othersLastRun(); as last) {
+      <div class="flex flex-col gap-1 text-sm">
+        <p class="text-[var(--text-muted)]">Last run: {{ last.detail }}</p>
+        @if (last.message) {
+        <p class="text-[var(--text-primary)]">{{ last.message }}</p>
+        }
+      </div>
+      } @else {
+      <p class="text-sm text-[var(--text-muted)]">This step has not been run yet.</p>
+      }
+
+      <!-- Developed with Understanding: the other-units run console, under Step 3 only. -->
+      @if (activeStep() === "others") {
+      <ng-container [ngTemplateOutlet]="stepConsole"></ng-container>
+      }
+    </div>
+  </app-panel-card>
+
+  <!-- Developed with Understanding: THE STEP CONSOLE - one template, drawn under whichever step
+       started or owns the current run, so only one console exists at a time and the logBox
+       reference always points at it. The header row, bar, status text and counters sit on the
+       card surface in theme tokens; the process log below them is the black terminal-style box,
+       black in both themes, drawn only in the --console-* tokens. -->
+  <ng-template #stepConsole>
+    <section class="flex flex-col gap-3 border-t border-[color:var(--border-primary)] pt-4"
+      aria-label="Run console">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <h3 class="flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
+          <app-icon name="activity" [size]="16" variant="inherit" />
+          <span>Run console</span>
+        </h3>
+        <app-status-chip [text]="runChip().text" [tone]="runChip().tone" />
+      </div>
+
+      @if (showProgress()) {
+      <div class="flex flex-col gap-2">
+        <app-progress-bar [value]="barValue()" label="HRCDF sync progress" describedBy="hrcdf-run-status" />
+        <p id="hrcdf-run-status" class="text-sm text-[var(--text-primary)]">{{ runStatusText() }}</p>
+        @if (run()?.message) {
+        <p class="text-sm text-[var(--text-muted)]">{{ run()?.message }}</p>
+        }
+        @if (pollLostMessage()) {
+        <p class="flex items-start gap-1.5 text-sm text-[var(--text-primary)]" role="alert">
+          <app-icon name="triangle-alert" [size]="16" variant="warning" />
+          <span>{{ pollLostMessage() }}</span>
+        </p>
+        }
+      </div>
+
+      <ul class="flex flex-wrap gap-2" aria-label="Run counters">
+        @for (counter of counters(); track counter.key) {
+        <li><app-status-chip [text]="counter.text" [tone]="counter.tone" /></li>
+        }
+      </ul>
+      }
+
+      <!-- Developed with Understanding: the process log - black, font-mono, a polite live region,
+           every line led by its level in words. Focusable so it can be scrolled from the keyboard.
+           The level word, time and warn or error colours come from component CSS on the same
+           tokens, because a global light-theme rule would otherwise reset span colours. -->
+      <div #logBox
+        class="hrcdf-log max-h-[400px] min-h-[220px] overflow-y-auto rounded-lg border border-[color:var(--console-border)] bg-[var(--console-bg)] p-3 font-mono text-xs leading-relaxed text-[var(--console-text)]"
+        role="log" aria-live="polite" aria-relevant="additions" aria-label="Process log" tabindex="0">
+        @for (line of logLines(); track line.seq) {
+        <p class="hrcdf-log__line whitespace-pre-wrap break-words">
+          <span class="hrcdf-log__word font-semibold" [class.hrcdf-log__word--warn]="line.level === 'warn'"
+            [class.hrcdf-log__word--error]="line.level === 'error'">{{ line.word }}</span>
+          <span class="hrcdf-log__time">{{ line.time }}</span>
+          {{ line.text }}
+        </p>
+        } @empty {
+        <p class="hrcdf-log__line">Waiting for the first line from the server.</p>
+        }
+      </div>
+    </section>
+  </ng-template>
+
+  <!-- Developed with Understanding: PERSONNEL - two tabs on the shared pill toggle, reflected in the
+       URL query parameter tab, over the shared data grid in server mode. -->
+  <app-panel-card title="Personnel" [subtitle]="personnelSubtitle()" icon="list">
+    <div class="flex flex-col gap-4">
+      <div role="group" aria-label="Personnel list">
+        <app-pill-toggle [options]="tabLabels" [value]="activeTabLabel()" (valueChange)="onTabLabel($event)" />
+      </div>
+
+      <div class="grid-toolbar">
+        <app-toolbar-search placeholder="Search by name or personal number" [value]="searchText()"
+          (valueChange)="onSearchInput($event)" />
+        <form [formGroup]="personnelFilters" class="flex flex-wrap items-end gap-3">
+          @if (activeTab() === "own") {
+          <div class="w-44">
+            <app-select-input label="Status" placeholder="All" [options]="ownStatusOptions"
+              formControlName="status"></app-select-input>
+          </div>
+          } @else {
+          <div class="w-56">
+            <app-select-input label="Command" placeholder="All commands" [options]="personnelCommandOptions()"
+              formControlName="command"></app-select-input>
+          </div>
+          <div class="w-64">
+            <app-select-input label="Unit" placeholder="All units" [options]="personnelUnitOptions()"
+              formControlName="unit"></app-select-input>
+          </div>
+          }
+        </form>
+      </div>
+
+      @if (personnelState() === "error") {
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="flex items-start gap-1.5 text-sm text-[var(--text-primary)]" role="alert">
+          <app-icon name="circle-alert" [size]="16" variant="danger" />
+          <span>The personnel list could not be loaded. {{ personnelError() }}</span>
+        </p>
+        <app-button variant="outline" size="sm" (click)="retryPersonnel()">Try again</app-button>
+      </div>
+      } @else if (showPersonnelGrid()) {
+      <app-data-grid [columnDefs]="personnelColumns" [rowData]="personnelRows()" [totalRowCount]="personnelTotal()"
+        [pageSize]="personnelPageSize" [resetKey]="personnelResetKey()" [loading]="personnelState() === 'loading'"
+        height="440px" (pageRequested)="onPageRequested($event)"></app-data-grid>
+      } @else {
+      <p class="text-sm text-[var(--text-primary)]">{{ personnelEmptyText() }}</p>
+      }
+    </div>
+  </app-panel-card>
+</div>
+
+<!-- Developed with Understanding: the confirm-and-lock dialog. It names the ship and says plainly
+     that the choice is locked and needs an administrator to change. Cancel comes first and takes
+     focus on open. Escape closes it. Focus returns to Confirm this ship on close. -->
+@if (confirmOpen()) {
+<app-modal size="sm" (closeModal)="cancelConfirm()">
+  <div #confirmBody class="flex flex-col gap-4 text-[var(--text-primary)]">
+    <h2 class="text-base font-semibold">Confirm this ship</h2>
+    <p class="text-sm">
+      You are about to set
+      <span class="font-semibold">{{ stagedUnit()?.name }} ({{ stagedUnit()?.code }})</span>,
+      command {{ stagedCommandText() }}, as this ship.
+    </p>
+    <p class="text-sm">
+      This choice is locked once confirmed. Only an administrator can change it later.
+    </p>
+    <div class="flex justify-end gap-3 pt-2">
+      <app-button variant="outline" size="sm" [disabled]="savingHomeUnit()" (click)="cancelConfirm()">Cancel</app-button>
+      <app-button variant="primary" size="sm" [disabled]="savingHomeUnit()" (click)="confirmHomeUnit()">
+        {{ savingHomeUnit() ? "Confirming" : "Confirm" }}
+      </app-button>
+    </div>
+  </div>
+</app-modal>
+}

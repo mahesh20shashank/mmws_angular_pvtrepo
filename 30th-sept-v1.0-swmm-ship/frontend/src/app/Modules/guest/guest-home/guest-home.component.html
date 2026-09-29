@@ -1,0 +1,50 @@
+<!-- Developed with Understanding: Guest Home (CP-M, D30). One page header and one panel card, built
+     from shared components, Tailwind utilities and theme tokens only. The DOM order is the keyboard
+     order - the only focusable control on the page is the Try again or Go to Home button. -->
+<div class="flex flex-col gap-5">
+  <app-page-header-bar icon="id-card" title="Guest Home" />
+
+  @switch (state()) {
+  @case ("loading") {
+  <!-- Developed with Understanding: loading state. -->
+  <p class="text-sm text-[var(--text-muted)]" role="status">Reading your unit status.</p>
+  }
+  @case ("error") {
+  <!-- Developed with Understanding: error state - the unit-status read failed. -->
+  <app-panel-card title="Your unit status could not be read" icon="triangle-alert" iconColor="var(--icon-danger)">
+    <div class="flex flex-wrap items-center gap-3" role="alert">
+      <p class="text-sm text-[var(--text-primary)]">Check the connection to the ship server, then try again.</p>
+      <app-button variant="outline" size="sm" (click)="retry()">Try again</app-button>
+    </div>
+  </app-panel-card>
+  }
+  @case ("own-ship") {
+  <!-- Developed with Understanding: empty state - this login is from this ship, so there is no
+       guest restriction to show. It offers the way back to Home. -->
+  <app-panel-card title="You are logged in from this ship" icon="house">
+    <div class="flex flex-wrap items-center gap-3">
+      <p class="text-sm text-[var(--text-primary)]">No guest restriction applies to your login. Your modules are in the sidebar.</p>
+      <app-button variant="outline" size="sm" (click)="goHome()">Go to Home</app-button>
+    </div>
+  </app-panel-card>
+  }
+  @case ("guest") {
+  <!-- Developed with Understanding: populated state - who is signed in, from which unit, and the
+       guest statement. The chip carries the word GUEST, so nothing depends on its colour. -->
+  <app-panel-card title="Guest access" icon="id-card">
+    <app-status-chip panelActions text="GUEST" tone="info" />
+    <div class="flex flex-col gap-4">
+      <dl class="grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-[max-content_1fr]">
+        <dt class="text-[var(--text-muted)]">Full name</dt>
+        <dd class="text-[var(--text-primary)]">{{ fullName() }}</dd>
+        <dt class="text-[var(--text-muted)]">Personal number</dt>
+        <dd class="text-[var(--text-primary)]">{{ personalNumber() }}</dd>
+        <dt class="text-[var(--text-muted)]">Unit name</dt>
+        <dd class="text-[var(--text-primary)]">{{ unitName() }}</dd>
+      </dl>
+      <p class="text-sm text-[var(--text-primary)]">{{ statement() }}</p>
+    </div>
+  </app-panel-card>
+  }
+  }
+</div>

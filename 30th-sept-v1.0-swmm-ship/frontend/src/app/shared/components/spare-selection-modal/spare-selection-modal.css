@@ -1,0 +1,164 @@
+.open-modal {
+  @apply fixed inset-0 z-[999999999];
+  @apply flex items-center justify-center;
+  @apply p-4;
+
+  background: rgba(0, 0, 0, 0.7);
+
+
+  /* backdrop-filter: blur(12px); */
+  /* -webkit-backdrop-filter: blur(12px); */
+}
+
+.modal-card {
+  width: 95%;
+  max-width: 1400px;
+
+  height: 85vh;
+
+  overflow: hidden;
+  background: var(--bg-card);
+  border-radius: 16px;
+
+}
+
+.spare-modal {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  @apply flex items-center justify-between;
+
+  @apply px-5 py-4;
+
+  border-bottom: 1px solid var(--border-primary);
+
+  h2 {
+    @apply text-sm font-medium;
+    color: var(--text-primary);
+  }
+}
+
+.close-btn {
+  @apply flex items-center justify-center;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 8px;
+
+  color: var(--text-primary);
+}
+
+.modal-body {
+  flex: 1;
+
+  padding: 16px;
+
+  overflow: auto;
+}
+
+.footer {
+  @apply flex justify-end gap-3;
+
+  padding: 16px;
+
+  border-top: 1px solid var(--border-primary);
+}
+
+.btn-cancel {
+  @apply rounded-lg px-5 py-2;
+
+  color: var(--text-primary);
+  background: var(--bg-input-disabled);
+}
+
+.btn-save {
+  @apply rounded-lg px-5 py-2;
+
+  color: #ffffff;
+  background: var(--icon-success, #15803d);
+}
+
+
+.tabs-container {
+  flex: 0 0 56px;
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.tab-btn {
+  position: relative;
+
+  background: transparent;
+  border: none;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  padding: 1rem 0;
+
+  transition: .3s;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: var(--text-primary);
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 12px;
+  width: 100%;
+  height: 4px;
+
+  background: var(--accent-blue);
+  box-shadow: 0 0 8px rgba(29, 150, 233, 0.5);
+}
+
+/* Dynamic Content */
+
+.tab-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+}
+
+.search-section {
+  margin: 1rem;
+
+}
+
+.search-section input {
+  width: 350px;
+  height: 40px;
+  color: var(--text-primary);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+
+  padding: 0 14px;
+  background: var(--bg-input);
+
+  outline: none;
+}
+
+.search-section input:focus {
+  border-color: var(--accent-blue);
+}

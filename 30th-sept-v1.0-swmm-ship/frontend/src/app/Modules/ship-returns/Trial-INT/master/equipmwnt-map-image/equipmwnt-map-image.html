@@ -1,0 +1,41 @@
+<div class="p-2 sm:p-3">
+  <app-paginate-table
+        title="Equipment's Image"
+        description="Manage equipment image mappings"
+        [showHeaderSection]="true"
+        [addButtons]="addButtons"
+        (addButtonClick)="handleAddButtonClick($event)"
+        [rowData]="rowData"
+        [url]="'/master/equipment-image-mappings/'"
+        [columnDefs]="columnOilData"
+        [showPagination]="true"
+        [tableLoading]="tableLoading"
+        [showSearch]="true"
+      >
+      </app-paginate-table>
+</div>
+
+
+<!-- <app-add-form *ngIf="showCreateLayout" [open]="showCreateLayout" [formConfig]="formConfigForNewDetails" [formData]="editFormData" [isEditMode]="isEditMode" (onSubmit)="handleSubmit($event)" (onOpenChange)="showCreateLayout = $event" [fromTitle]="title"></app-add-form> -->
+<app-add-form
+  *ngIf="showCreateLayout"
+  width="40vw"
+  [open]="showCreateLayout"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="editFormData"
+  [isEditMode]="isEditMode"
+  (onSubmit)="handleSubmit($event)"
+  (onFieldChange)="onFieldChange($event)"
+  (onOpenChange)="showCreateLayout = $event"
+  [fromTitle]="isEditMode ? 'EDIt EQUIPMENT IMAGE' : 'Add EQUIPMENT IMAGE'">
+</app-add-form>
+
+<!-- Reusable Delete Dialog -->
+<app-reusable-delete-dialog
+  [open]="showDeleteDialog"
+  [name]="deleteName"
+  entityType="Equipment Image"
+  [loading]="deleteLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>

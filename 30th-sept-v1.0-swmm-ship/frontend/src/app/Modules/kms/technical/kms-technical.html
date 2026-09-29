@@ -1,0 +1,157 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="kms-page">
+  <app-page-header-bar icon="folder-open" title="Technical Manuals" badgeText="Equipment Documentation">
+    <app-button type="button" class="kms-btn-primary" (click)="openAddEquipmentModal()">
+      <app-icon name="plus" [size]="15" color="#ffffff" />
+      Add Equipment Category
+    </app-button>
+  </app-page-header-bar>
+
+  <div class="kms-layout kms-layout--wide-sidebar">
+    <!-- Equipment sidebar -->
+    <div class="glass-card kms-panel">
+      <div class="kms-panel__heading">
+        Equipment Categories ({{ equipmentCategories().length }})
+      </div>
+      <div class="kms-search">
+        <app-icon name="search" [size]="15" variant="muted" class="kms-search__icon" />
+        <input
+          type="text"
+          placeholder="Search equipment..."
+          class="kms-search__input"
+          [value]="equipmentSearch()"
+          (input)="equipmentSearch.set($any($event.target).value)"
+        />
+      </div>
+      <div class="kms-list kms-list--scroll">
+        @for (eq of filteredEquipment(); track eq.id) {
+          <app-button
+            type="button"
+            class="kms-list-item"
+            [title]="'Click to add documents for ' + eq.equipmentName"
+            (click)="openAddDocumentModal(eq.id)"
+          >
+            <span>{{ eq.equipmentName }}</span>
+            <app-icon name="plus" [size]="14" variant="muted" />
+          </app-button>
+        } @empty {
+          <p class="kms-empty-hint">
+            No equipment categories found.
+            <br />
+            <app-button type="button" class="kms-link" (click)="openAddEquipmentModal()">
+              click here to add equipment category
+            </app-button>
+          </p>
+        }
+      </div>
+    </div>
+
+    <!-- Documents table -->
+    <div class="glass-card kms-panel">
+      <div class="kms-toolbar">
+        <div class="kms-search kms-search--toolbar">
+          <app-icon name="search" [size]="15" variant="muted" class="kms-search__icon" />
+          <input
+            type="text"
+            placeholder="Search documents..."
+            class="kms-search__input"
+            [value]="documentSearch()"
+            (input)="documentSearch.set($any($event.target).value)"
+          />
+        </div>
+        <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredDocuments().length === 0" (exportRequested)="onExport($event)" />
+      </div>
+
+      @if (filteredDocuments().length > 0) {
+        <app-data-grid [rowData]="filteredDocuments()" [columnDefs]="columnDefs" height="500px">
+        </app-data-grid>
+      } @else {
+        <p class="kms-empty-hint kms-empty-hint--table">
+          No documents added. Click on equipment category to add document or
+          <app-button type="button" class="kms-link" (click)="openAddEquipmentModal()">
+            click here to add equipment category
+          </app-button>
+        </p>
+      }
+    </div>
+  </div>
+</div>
+
+@if (showAddEquipmentModal()) {
+  <app-modal size="sm" title="Add Equipment Category" [compact]="true" (closeModal)="closeAddEquipmentModal()">
+    <div class="kms-modal-form kms-modal-form--sm">
+      <app-select-input
+        label="Select Equipment from SFD"
+        placeholder="Search SFD equipment..."
+        [options]="equipmentOptions()"
+        [ngModel]="selectedSfdEquipmentName()"
+        (ngModelChange)="selectedSfdEquipmentName.set($event)"
+      />
+      <div class="text-center text-[11px] text-[var(--text-muted)]">— OR —</div>
+      <app-input-field
+        label="Add Equipment Manually"
+        placeholder="Enter equipment name"
+        [ngModel]="manualEquipmentName()"
+        (ngModelChange)="manualEquipmentName.set($event)"
+      />
+      <div class="kms-modal-actions">
+        <app-button type="button" class="kms-btn-secondary" (click)="closeAddEquipmentModal()">
+          Cancel
+        </app-button>
+        <app-button type="button" class="kms-btn-primary" (click)="saveEquipmentCategory()">
+          Save Equipment
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (showAddDocumentModal()) {
+  <app-modal size="md" title="Add Document" [compact]="true" (closeModal)="closeAddDocumentModal()">
+    <form [formGroup]="documentForm" (ngSubmit)="saveDocument()" class="kms-modal-form">
+      <app-select-input label="Document Type" [options]="documentTypeOptions" formControlName="documentType" [required]="true" />
+      @if (showCustomDocType()) {
+        <app-input-field label="Enter document type" placeholder="Enter document type" formControlName="customDocType" />
+      }
+      <app-input-field label="Document Name" placeholder="Enter document name" formControlName="documentName" [required]="true" />
+      <app-file-input label="Upload Document File" formControlName="attachment"
+        accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+      <p class="kms-file-hint">Accepted formats: PDF, DOC, DOCX, XLS, XLSX</p>
+      <div class="kms-modal-actions">
+        <app-button type="button" class="kms-btn-secondary" (click)="closeAddDocumentModal()">
+          Cancel
+        </app-button>
+        <app-button type="submit" class="kms-btn-primary">
+          Save Document
+        </app-button>
+      </div>
+    </form>
+  </app-modal>
+}
+
+@if (showDetailModal() && activeDocument(); as doc) {
+  <app-modal size="sm" [title]="doc.documentName" [compact]="true" (closeModal)="closeDetailModal()">
+    <div class="kms-modal-form kms-modal-form--sm">
+      <div class="kms-file-preview">
+        <app-icon [name]="getFileIcon(doc.attachmentName).iconName" [size]="40" [class]="getFileIcon(doc.attachmentName).colorClass" />
+        <span class="kms-file-preview__name">{{ doc.attachmentName }}</span>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="kms-detail-row"><span>Document Type</span><span>{{ doc.documentType }}</span></div>
+        <div class="kms-detail-row"><span>Uploaded Date</span><span>{{ doc.uploadedDate }}</span></div>
+        <div class="kms-detail-row"><span>Equipment</span><span>{{ doc.equipmentName }}</span></div>
+      </div>
+      <div class="kms-modal-actions">
+        <app-button type="button" class="kms-btn-primary" (click)="viewFile(doc)">
+          <app-icon name="eye" [size]="15" color="#ffffff" />
+          View File
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (pendingDelete()) {
+  <app-confirm-delete-modal (confirmed)="confirmDelete()" (cancelled)="cancelDelete()" />
+}

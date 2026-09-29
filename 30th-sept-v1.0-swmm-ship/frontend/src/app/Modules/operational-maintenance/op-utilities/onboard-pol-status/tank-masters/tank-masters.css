@@ -1,0 +1,19 @@
+/* The shared sidebar defaults to viewport-filling height (for full-page nav use);
+   here it's nested inside a master-card, so size it to its own content instead. */
+:host ::ng-deep .tank-masters-nav .collapsible-sidebar {
+  height: auto;
+}
+
+/* No title/collapse affordance needed for this fixed 4-item nav. */
+:host ::ng-deep .tank-masters-nav .sidebar__head {
+  display: none;
+}
+
+/* Match the app's glass-card sheen (frosted highlight + blur) on the active item. */
+:host ::ng-deep .tank-masters-nav .sidebar__item--active {
+  background: rgba(29, 150, 233, 0.16);
+  border-color: rgba(29, 150, 233, 0.45);
+  box-shadow: inset 0 1px #ffffff4d, inset 0 -1px #ffffff0d;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}

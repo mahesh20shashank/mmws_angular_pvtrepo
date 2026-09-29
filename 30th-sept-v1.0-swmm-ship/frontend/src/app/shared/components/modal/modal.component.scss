@@ -1,0 +1,72 @@
+.modal-card-sm {
+  transform: translateY(34px);
+}
+
+/* Without a height cap, a card taller than its content naturally sizes to fit that content —
+   `.modal-card__body`'s own `overflow-y: auto` below never actually engages, so a modal with
+   enough form fields (e.g. Leave/TY Duty's "Input details for Leave Forecast") just grows past
+   the viewport and gets clipped top/bottom by the backdrop, worse at lower zoom/smaller viewports.
+   Capped to the backdrop's own `p-4` (1rem each side) so the body scrolls instead. */
+.modal-card {
+  max-height: calc(100vh - 2rem);
+}
+
+
+.modal-card--sm {
+  width: min(420px, calc(100vw - 2rem));
+}
+
+.modal-card--md {
+  width: min(560px, calc(100vw - 2rem));
+}
+
+.modal-card--lg {
+  width: min(720px, calc(100vw - 2rem));
+}
+
+.modal-card--xl {
+  width: min(960px, calc(100vw - 2rem));
+}
+
+.modal-card__body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+/* `allowOverflow` (e.g. the login card's logo, deliberately positioned above its own bounds via
+   negative top + position:absolute) means the content manages its own size/overflow — the
+   responsive width cap and body scroll clipping added above are for content-driven modals and
+   must not fight a caller that already opted out of clipping. */
+.modal-card.overflow-visible {
+  width: auto;
+  max-width: none;
+}
+
+.modal-card__body.overflow-visible {
+  overflow: visible;
+}
+
+.modal-card__header-title {
+  color: var(--text-primary);
+}
+
+.modal-card__header-close svg {
+  color: var(--text-primary);
+}
+
+/* Light theme: header should read as a clean background bar with theme text/icon, regardless of
+   the (often dark-gradient) titleBg passed in by callers — those values are tuned for
+   dark theme only. */
+[data-theme="light"] .modal-card__header {
+  background: var(--bg-card) !important;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+[data-theme="light"] .modal-card__header-title {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .modal-card__header-close svg {
+  color: var(--text-primary) !important;
+}

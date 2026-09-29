@@ -1,0 +1,88 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm ">
+
+    <div class="w-full max-w-2xl rounded-2xl sfd-modal-bg  shadow-2xl glass-card">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between px-4 py-2 model-border-header">
+            <div class="flex items-center gap-3">
+                <app-icon name="user" color="#22C55E"  [size]="22" [strokeWidth]="2"></app-icon>
+                <h2 class="box-container-heading">
+
+                    {{ isEditMode() ? 'Edit' : 'Add' }} Sub Department
+                </h2>
+            </div>
+
+            <app-button (click)="closeModal()"
+                class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input hover:">
+                ✕
+            </app-button>
+
+        </div>
+
+        <!-- Body -->
+        <form action="" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="space-y-5 p-6 model-border-header">
+
+                <!-- Compartment Name -->
+                <div class="form-field">
+                    <label for="subd" class="form-label">
+                        Sub-Department Name
+                        <span class="required">*</span>
+                    </label>
+                    <input id="subd" type="text" formControlName="subdepartmentName" class="form-control required-placeholder"
+                        placeholder="Enter subdepartment name"  [class.error]="
+      form.controls.subdepartmentName.invalid &&
+      form.controls.subdepartmentName.touched
+    " />
+
+                    @if (form.controls.subdepartmentName.touched &&
+                    form.controls.subdepartmentName.hasError('required')) {
+                    <p class="form-error">
+                        Sub-Department Name is required.
+                    </p>
+                    }
+
+                </div>
+
+                <div class="section-container">
+                    <div class="form-field">
+
+                        <app-select-input formControlName="department" [required]="true" [options]="departments()" placeholder="Select Department" label="Department"
+                             [error]="
+                                    form.controls.department.invalid &&
+                                    form.controls.department.touched
+                                "
+                        >
+
+                        </app-select-input>
+
+                        @if (form.controls.department.touched &&
+                        form.controls.department.hasError('required')) {
+                        <p class="form-error">
+                            Department is required.
+                        </p>
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="flex justify-end gap-3 px-6 py-4">
+                <app-button (click)="closeModal()"
+                    class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input">
+                    Cancel
+                </app-button>
+
+                <app-button class="submit-btn" type="submit">
+                    Save
+                </app-button>
+
+            </div>
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,148 @@
+<div class="page">
+  <div class="top-layout">
+    <!-- PROFILE CARD -->
+    <div class="glass-card profile-card">
+      <h1 class="profile-name">
+        {{ profile().name || "User Name" }}
+      </h1>
+
+      <div class="profile-content">
+        <div class="profile-image-wrapper">
+          <img
+            [src]="profile().image || 'assets/images/default-user.png'"
+            alt="Profile"
+            class="profile-image"
+          />
+        </div>
+
+        <div class="profile-details">
+          <div class="fields-grid">
+            <div class="field">
+              <label for="label">Personal Number</label>
+              <div class="value">
+                {{ profile().personalNumber || "--" }}
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="label">Designation</label>
+              <div class="value">
+                {{ profile().role || "--" }}
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="label">Rank</label>
+              <div class="value">
+                {{ profile().rank || "--" }}
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="label">NUD Mail ID</label>
+              <div class="value">
+                {{ profile().nudMail || "--" }}
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="label">Phone Number</label>
+              <div class="value">
+                {{ profile().mobile || "--" }}
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="label">Email ID</label>
+              <div class="value">
+                <!-- {{ profile().nudMail || "--" }} -->
+                --
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-box">
+          <label for="label">Summary</label>
+          {{ profile().summary || "No summary available" }}
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM MEMBERS -->
+
+    <div class="glass-card members-card">
+      <h2 class="members-title">Team Members</h2>
+
+      @for (member of teamMembers(); track member.name) {
+        <div class="member-item">
+          <img
+            [src]="member.image || '/assests/images/dummyuser.avif'"
+            alt=""
+            class="member-image"
+          />
+
+          <div class="member-info">
+            <div class="member-name">
+              {{ member.name }}
+            </div>
+
+            <div class="member-rank">
+              <span> {{ member.rank }}</span>
+              <div class="icon-container">
+                <app-icon
+                  name="phone"
+                  [size]="18"
+                  variant="inherit"
+                  class="text-icon"
+                  [title]="'Mobile: ' + member.mobile"
+                />
+
+                <app-icon
+                  name="phone-call"
+                  [size]="18"
+                  variant="inherit"
+                  class="text-icon"
+                  [title]="'Landline: ' + member.landline"
+                />
+
+                <app-icon
+                  name="mail"
+                  [size]="18"
+                  variant="inherit"
+                  class="text-icon"
+                  title="Send Email"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- TICKETS -->
+
+  <div class="glass-card tickets-card">
+    <h2 class="tickets-title">My Tickets</h2>
+
+    <div class="tickets-grid">
+      @for (ticket of tickets; track ticket.title) {
+        <div class="ticket">
+          <div class="ticket-content">
+            <h3>{{ ticket.count }}</h3>
+
+            <p>{{ ticket.title }}</p>
+          </div>
+
+          <div
+            class="ticket-decoration"
+            [style.--ticket-color]="ticket.color"
+          ></div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

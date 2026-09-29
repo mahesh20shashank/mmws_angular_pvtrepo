@@ -1,0 +1,274 @@
+<div class="admin-dashboard-container">
+
+  <!-- Help & Overview Guidance -->
+  <app-help-guidance [bodyHtml]="helpHtml" class="mb-4 block" />
+
+  <!-- Metric KPI Cards -->
+  <div class="stats-grid mb-4">
+    <app-kpi-card title="Total Registration Requests" [count]="totalCount()" iconName="users"
+      iconBg="rgba(74, 168, 255, 0.16)" iconColor="#4AA8FF" accentColor="#4AA8FF" iconPosition="right" cardHeight="100%"
+      [showTimelineTab]="false" [showTrends]="false" (click)="statusFilter.set('all')"
+      [class.stat-card--active]="statusFilter() === 'all'" class="cursor-pointer transition-all" />
+
+    <app-kpi-card title="Pending Approval" [count]="pendingCount()" iconName="clock" iconBg="rgba(251, 191, 36, 0.16)"
+      iconColor="#fbbf24" accentColor="#fbbf24" iconPosition="right" cardHeight="100%" [showTimelineTab]="false"
+      [showTrends]="false" (click)="statusFilter.set('pending')"
+      [class.stat-card--active]="statusFilter() === 'pending'" class="cursor-pointer transition-all" />
+
+    <app-kpi-card title="Approved Users" [count]="approvedCount()" iconName="circle-check-big"
+      iconBg="rgba(74, 222, 128, 0.16)" iconColor="#4ade80" accentColor="#4ade80" iconPosition="right" cardHeight="100%"
+      [showTimelineTab]="false" [showTrends]="false" (click)="statusFilter.set('approved')"
+      [class.stat-card--active]="statusFilter() === 'approved'" class="cursor-pointer transition-all" />
+
+    <app-kpi-card title="Disapproved / Rejected" [count]="rejectedCount()" iconName="circle-x"
+      iconBg="rgba(248, 113, 113, 0.16)" iconColor="#f87171" accentColor="#f87171" iconPosition="right"
+      cardHeight="100%" [showTimelineTab]="false" [showTrends]="false" (click)="statusFilter.set('rejected')"
+      [class.stat-card--active]="statusFilter() === 'rejected'" class="cursor-pointer transition-all" />
+  </div>
+
+  <!-- Main Card: Registration Requests Table -->
+  <div class="card glass-card main-table-card">
+    <div class="card-header-flex mb-3">
+      <div class="header-title-group">
+        <h5 class="card-title mb-0">
+          {{ pageTitle() }}
+          @if (userDepartment()) {
+          <span class="badge bg-secondary ms-2 text-white font-normal" style="font-size: 0.75rem;">
+            {{ userDepartment() }}
+          </span>
+          }
+          @if (pendingCount() > 0) {
+          <span class="badge bg-warning text-dark ms-2">
+            {{ pendingCount() }} Pending
+          </span>
+          }
+        </h5>
+        <p class="header-subtitle">Review incoming accounts, grant department access and roles</p>
+      </div>
+    </div>
+
+    <!-- Controls: Filter tabs & Search bar -->
+    <div class="header-controls">
+        <div class="filter-pills">
+          <app-button variant="pill" [customClass]="statusFilter() === 'all' ? 'filter-pill filter-pill--active' : 'filter-pill'"
+            (click)="statusFilter.set('all')">
+            All ({{ totalCount() }})
+          </app-button>
+          <app-button variant="pill"
+            [customClass]="statusFilter() === 'pending' ? 'filter-pill filter-pill--pending filter-pill--active' : 'filter-pill filter-pill--pending'" (click)="statusFilter.set('pending')">
+            Pending ({{ pendingCount() }})
+          </app-button>
+          <app-button variant="pill"
+            [customClass]="statusFilter() === 'approved' ? 'filter-pill filter-pill--approved filter-pill--active' : 'filter-pill filter-pill--approved'" (click)="statusFilter.set('approved')">
+            Approved ({{ approvedCount() }})
+          </app-button>
+          <app-button variant="pill"
+            [customClass]="statusFilter() === 'rejected' ? 'filter-pill filter-pill--rejected filter-pill--active' : 'filter-pill filter-pill--rejected'" (click)="statusFilter.set('rejected')">
+            Rejected ({{ rejectedCount() }})
+          </app-button>
+        </div>
+
+        <div class="search-bar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input type="text" placeholder="Search by username, name, department..." [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)" />
+          @if (searchQuery()) {
+          <app-button type="button" class="btn-clear-search" (click)="searchQuery.set('')" aria-label="Clear search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </app-button>
+          }
+        </div>
+    </div>
+
+    <!-- Data Grid Component -->
+    <div class="data-grid-wrapper mt-3">
+      <app-data-grid [rowData]="filteredUsers()" [columnDefs]="userColumnDefs" [pageSize]="10"
+        (cellClicked)="onGridCellClicked($event)" [autoHeight]="true"></app-data-grid>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit User Profile -->
+@if (showEditModal()) {
+<app-modal (closeModal)="showEditModal.set(false)" title="Edit User Profile" size="lg">
+  <div class="edit-modal-card-inner">
+
+    <!-- Section 1: Personal & Role Information -->
+    <fieldset class="edit-fieldset">
+      <legend class="edit-legend">PERSONAL & ROLE INFORMATION</legend>
+
+      <div class="form-grid-3 mb-3">
+        <div class="form-col">
+          <label for="dashFirstName" class="form-label">Firstname</label>
+          <input type="text" class="form-control" id="dashFirstName" [ngModel]="editForm().firstName"
+            (ngModelChange)="updateFormField('firstName', $event)" placeholder="Firstname" />
+        </div>
+        <div class="form-col">
+          <label for="dashLastName" class="form-label">Lastname</label>
+          <input type="text" class="form-control" id="dashLastName" [ngModel]="editForm().lastName"
+            (ngModelChange)="updateFormField('lastName', $event)" placeholder="Lastname" />
+        </div>
+        <div class="form-col">
+          <label for="dashPersonalNumber" class="form-label">Personal number</label>
+          <input type="text" class="form-control" id="dashPersonalNumber" [ngModel]="editForm().personalNumber"
+            (ngModelChange)="updateFormField('personalNumber', $event)" placeholder="Personal number" />
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-col">
+          <label for="dashDesignationMaster" class="form-label">Designation master</label>
+          <select class="form-select" id="dashDesignationMaster" [ngModel]="editForm().designationMaster"
+            (ngModelChange)="updateFormField('designationMaster', $event)">
+            <option [ngValue]="null">---------</option>
+            @for (desig of designations(); track desig.id) {
+            <option [ngValue]="desig.id">{{ desig.designation_name }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="dashRank" class="form-label">Rank</label>
+          <select class="form-select" id="dashRank" [ngModel]="editForm().rank"
+            (ngModelChange)="updateFormField('rank', $event)">
+            <option [ngValue]="''">---------</option>
+            @for (rnk of ranks(); track rnk.id) {
+            <option [ngValue]="rnk.name">{{ rnk.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Section 2: Assignment -->
+    <fieldset class="edit-fieldset">
+      <legend class="edit-legend">ASSIGNMENT</legend>
+
+      <div class="form-grid-3">
+        <div class="form-col">
+          <label for="dashDepartment" class="form-label">Department</label>
+          <select class="form-select" id="dashDepartment" [ngModel]="editForm().department"
+            (ngModelChange)="updateFormField('department', $event)">
+            <option [ngValue]="''">-- Select Department --</option>
+            @for (dept of departments(); track dept.id) {
+            <option [ngValue]="dept.name">{{ dept.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="dashSubDepartment" class="form-label">
+            {{ editForm().department ? (editForm().department | titlecase) + ' Sub Department' : 'Sub Department' }}
+          </label>
+          <select class="form-select" id="dashSubDepartment" [ngModel]="editForm().subDepartment"
+            (ngModelChange)="updateFormField('subDepartment', $event)">
+            <option [ngValue]="null">-- Select Sub Department --</option>
+            @for (sub of currentSubDepartments(); track sub) {
+            <option [ngValue]="sub">{{ sub }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="dashAssignRole" class="form-label">Assign Role</label>
+          <select class="form-select" id="dashAssignRole" [ngModel]="editForm().roleId"
+            (ngModelChange)="updateFormField('roleId', $event)">
+            <option [ngValue]="null">Select Role</option>
+            @for (role of roles(); track role.id) {
+            <option [ngValue]="role.id">{{ role.role_name | titlecase }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Section 3: Account Status & Permissions -->
+    <fieldset class="edit-fieldset">
+      <legend class="edit-legend">ACCOUNT STATUS & PERMISSIONS</legend>
+      <div class="form-grid-2 align-items-center">
+        <div class="form-col">
+          <label for="dashUsername" class="form-label">Username</label>
+          <input type="text" class="form-control" id="dashUsername" [ngModel]="editForm().username"
+            (ngModelChange)="updateFormField('username', $event)" placeholder="Username" />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Modal Actions -->
+    <div class="edit-modal-actions">
+      <app-button type="button" class="btn btn-modal-cancel" (click)="showEditModal.set(false)">
+        Cancel
+      </app-button>
+      <app-button type="button" class="btn btn-modal-save" [disabled]="isSaving()" (click)="saveUserChanges()">
+        @if (isSaving()) {
+        <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Approve
+      </app-button>
+    </div>
+
+  </div>
+</app-modal>
+}
+
+<!-- Modal: Action Confirmation (Approve / Disapprove) -->
+@if (confirmModalState().isOpen) {
+<app-modal (closeModal)="closeConfirmModal()" size="md">
+  <div class="confirm-modal-card">
+    <div class="confirm-modal-header" [class.confirm-header-approve]="confirmModalState().type === 'approve'"
+      [class.confirm-header-reject]="confirmModalState().type === 'disapprove'">
+      <div class="confirm-modal-icon">
+        @if (confirmModalState().type === 'approve') {
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+        } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="15" y1="9" x2="9" y2="15" />
+          <line x1="9" y1="9" x2="15" y2="15" />
+        </svg>
+        }
+      </div>
+      <h5 class="confirm-modal-title mb-0">{{ confirmModalState().title }}</h5>
+      <app-button type="button" class="btn-close-modal" (click)="closeConfirmModal()" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </app-button>
+    </div>
+
+    <div class="confirm-modal-body">
+      <p class="confirm-modal-message" [innerHTML]="confirmModalState().message"></p>
+      @if (confirmModalState().type === 'approve' && confirmModalState().roleName) {
+      <div class="confirm-role-preview">
+        <span class="preview-label">Role to Grant:</span>
+        <span class="preview-value">{{ confirmModalState().roleName }}</span>
+      </div>
+      }
+    </div>
+
+    <div class="confirm-modal-actions">
+      <app-button type="button" class="btn btn-modal-cancel" (click)="closeConfirmModal()">
+        Cancel
+      </app-button>
+      <app-button [variant]="confirmModalState().type === 'approve' ? 'success' : 'danger'" [disabled]="isSaving()"
+        (click)="executeConfirmedAction()">
+        @if (isSaving()) {
+        <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        {{ confirmModalState().type === 'approve' ? 'Yes, Approve User' : 'Yes, Disapprove' }}
+      </app-button>
+    </div>
+  </div>
+</app-modal>
+}

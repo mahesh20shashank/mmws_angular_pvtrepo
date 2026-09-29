@@ -1,0 +1,562 @@
+.grid-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Allow parent to control height; ensure child can shrink for proper scrolling */
+  min-height: 0;
+  position: relative;
+}
+
+.grid-hidden {
+  display: none !important;
+}
+
+/* Skeleton loading state — shown in place of the grid while data is being fetched.
+   Sits over the grid area (header + rows) so the pagination footer below stays put. */
+.grid-skeleton {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-skeleton-header,
+.grid-skeleton-row {
+  display: flex;
+  gap: 16px;
+  padding: 0 16px;
+  height: 40px;
+  align-items: center;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.grid-skeleton-header {
+  height: 50px;
+  background: var(--ag-header-bg, var(--bg-input));
+}
+
+.grid-skeleton-cell {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--bg-input-disabled, rgba(128, 128, 128, 0.15));
+}
+
+.grid-skeleton-header .grid-skeleton-cell {
+  height: 10px;
+  opacity: 0.7;
+}
+
+/* Shimmer sweep */
+.grid-skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  animation: grid-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes grid-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+ag-grid-angular {
+  display: block;
+  width: 100%;
+  /* Fill available space from .grid-wrapper */
+  height: 100%;
+  flex: 1 1 auto;
+  padding: 6px;
+  --ag-background-color: transparent !important;
+  --ag-data-background-color: transparent !important;
+  --ag-foreground-color: var(--text-primary) !important;
+  --ag-data-color: var(--text-primary) !important;
+  --ag-header-background-color: var(--ag-header-bg) !important;
+  --ag-header-foreground-color: var(--text-primary) !important;
+  /* Was the raw rgba(52, 152, 219, 0.12), theme-blind, and the only hover cue this grid had.
+     Now the token, defined per theme in styles.css. The accent rule under `.ag-row-hover` below
+     is the other half of the emphasis. */
+  --ag-row-hover-color: var(--row-hover-bg) !important;
+  --ag-border-color: var(--border-primary) !important;
+  --ag-secondary-border-color: var(--border-primary) !important;
+  --ag-border-radius: 12px;
+  --ag-row-border-color: var(--border-primary) !important;
+  /* No vertical column separators — matches the clean SFD table design. */
+  --ag-cell-horizontal-border: none;
+  --ag-font-size: 12px;
+  --ag-font-family: Inter, sans-serif;
+  --ag-odd-row-background-color: transparent !important;
+  --ag-even-row-background-color: transparent !important;
+  --ag-modal-overlay-background-color: transparent !important;
+  --ag-control-panel-background-color: transparent !important;
+
+
+  --ag-selected-row-background-color: rgba(52, 152, 219, 0.15) !important;
+  --ag-checkbox-checked-color: #4da3ff;
+  --ag-checkbox-unchecked-color: var(--text-muted);
+  --ag-pagination-panel-height: 48px;
+  overflow: hidden;
+}
+
+
+
+::ng-deep .ag-theme-custom .ag-root-wrapper,
+::ng-deep .ag-theme-custom .ag-root-wrapper-body,
+::ng-deep .ag-theme-custom .ag-body-viewport,
+::ng-deep .ag-theme-custom .ag-center-cols-viewport,
+::ng-deep .ag-theme-custom .ag-center-cols-clipper,
+::ng-deep .ag-theme-custom .ag-body-horizontal-scroll,
+::ng-deep .ag-theme-custom .ag-overlay-wrapper,
+::ng-deep .ag-theme-custom .ag-overlay-no-rows-wrapper,
+::ng-deep .ag-theme-custom .ag-overlay-panel {
+  background-color: transparent !important;
+}
+
+::ng-deep .ag-theme-custom .ag-root-wrapper {
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  background: transparent;
+  /* Without this, the header's solid background rectangle pokes past the
+     rounded corners above instead of being clipped to them. */
+  overflow: hidden;
+  /* With [autoHeight]="true" and zero rows, ag-grid sizes the grid down to just the
+     header row, leaving the "No Rows To Show" overlay squashed/clipped against the
+     pagination footer below it (min-height always wins over the `height` this — or
+     autoHeight's own inline style — computes, so this only ever adds room, never
+     shrinks a grid that already has enough rows to need more). */
+  min-height: 160px;
+}
+
+/* Ensure AG Grid's internal root fills the host so scrolling works correctly */
+::ng-deep .ag-theme-custom .ag-root-wrapper,
+::ng-deep .ag-theme-custom .ag-root,
+::ng-deep .ag-theme-custom .ag-body-viewport,
+::ng-deep .ag-theme-custom .ag-center-cols-clipper {
+  height: 100% !important;
+  min-height: 0;
+}
+
+::ng-deep .ag-theme-custom .ag-header {
+  border-bottom: 1px solid var(--border-primary);
+  background-color: transparent !important;
+}
+
+::ng-deep .ag-theme-custom .ag-header-row {
+  background-color: var(--ag-header-bg) !important;
+}
+
+::ng-deep .ag-theme-custom .ag-overlay-loading-wrapper,
+::ng-deep .ag-theme-custom .ag-overlay-no-rows-center,
+::ng-deep .ag-theme-custom .ag-overlay-loading-center {
+  color: var(--text-muted) !important;
+  background: transparent !important;
+}
+
+
+::ng-deep .ag-theme-custom .ag-header-cell {
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+  color: var(--text-primary);
+  font-weight: 700;
+  display: flex;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+::ng-deep .ag-theme-custom .ag-header-cell-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+::ng-deep .ag-theme-custom .ag-row {
+  border-bottom: 1px solid var(--border-primary);
+  background-color: transparent;
+}
+
+::ng-deep .ag-theme-custom .ag-cell {
+  display: flex;
+  align-items: center !important;
+  padding-left: 16px;
+  padding-right: 16px;
+  overflow: hidden;
+}
+
+::ng-deep .ag-theme-custom .ag-cell-value,
+::ng-deep .ag-theme-custom .ag-cell-wrapper {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+::ng-deep .ag-theme-custom .ag-paging-panel {
+  border-top: 1px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   OPT-IN TEXT WRAPPING — `.grid-cell-wrap`
+   ============================================================
+   Wrapping was not merely absent from this grid, it was suppressed in three places at once -
+   the nowrap/ellipsis pair above (`.ag-cell-value`/`.ag-cell-wrapper`), `overflow: hidden` in
+   `defaultColDef.cellStyle`, and the fixed `[rowHeight]="40"`. A caller setting ag-grid's own
+   `wrapText` was defeated by all three.
+
+   This is the escape, and it is OPT-IN by a cell class rather than by `wrapText`, deliberately:
+   honouring the bare `wrapText` flag would have silently started every existing grid wrapping,
+   and every grid that does not ask for this must look exactly as it does today. A column that
+   sets neither the class nor `autoHeight` is untouched by everything here.
+
+   WHAT A CALLER WRITES, in its own `columnDefs` - two properties, no change to this component:
+     { field: "remarks", headerName: "Remarks", width: 200,
+       autoHeight: true, cellClass: "grid-cell-wrap" }
+   `autoHeight` is ag-grid's own per-column row auto-height, which makes the row measure its
+   content instead of taking `[rowHeight]`. The class is what lets the content be more than one
+   line in the first place. Both are needed - either alone does nothing useful.
+
+   The clamp is TWO lines. Past that the row starts costing more vertical space than the value
+   is worth on a dense operational grid, and the third line is where a column stops being
+   scannable. The full value stays reachable wherever the screen already exposes it.
+
+   `align-items` and the padding follow the precedent this application already set for the same
+   problem at `masters-page.css` `.obs-cell--errors` - a multi-line cell tops out rather than
+   centring, so its first line sits on the same reading line as its single-line neighbours. The
+   `!important` is the only way to beat `defaultColDef.cellStyle`, which ag-grid writes as an
+   inline style attribute. */
+::ng-deep .ag-theme-custom .ag-cell.grid-cell-wrap {
+  align-items: flex-start !important;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+::ng-deep .ag-theme-custom .ag-cell.grid-cell-wrap .ag-cell-value,
+::ng-deep .ag-theme-custom .ag-cell.grid-cell-wrap .ag-cell-wrapper {
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  line-height: 1.35;
+}
+
+/* ============================================================
+   FLOATING FILTER ROW
+   ============================================================
+   `headerHeight` is pinned to 50 and no floating-filter height was ever set, so on the screens
+   that do enable a per-column filter the filter row took whatever ag-grid defaulted to and the
+   input inside it had no styling from this design system at all - it fell back to the vendor
+   stylesheet's own colours, which are not theme aware. The height is now set explicitly on the
+   grid element (see `floatingFiltersHeight` in data-grid.ts) and the input is given the same
+   surface, border and focus treatment every other control in this application uses. All of it
+   is inert on a grid where no column sets `floatingFilter: true`, because ag-grid does not
+   render the row at all in that case. */
+::ng-deep .ag-theme-custom .ag-floating-filter {
+  padding-left: 16px;
+  padding-right: 16px;
+  border-top: 1px solid var(--border-primary);
+}
+
+::ng-deep .ag-theme-custom .ag-floating-filter .ag-input-field-input {
+  height: 28px;
+  min-height: 28px;
+  padding: 0 8px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+}
+
+::ng-deep .ag-theme-custom .ag-floating-filter .ag-input-field-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* A visible focus ring, because the vendor default is a colour change the eye can miss on a
+   dense header - WCAG 2.4.7. */
+::ng-deep .ag-theme-custom .ag-floating-filter .ag-input-field-input:focus,
+::ng-deep .ag-theme-custom .ag-floating-filter .ag-input-field-input:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 1px;
+  border-color: var(--accent-blue);
+}
+
+/* Thin, rounded scrollbar (matches the sidebar nav's scrollbar) for both the vertical
+   and horizontal scroll viewports — applies to every grid using this shared component
+   (SFD Actions grid, Approval Status grid, etc), in both themes.
+   NOTE: AG Grid's own base stylesheet forces `.ag-body-viewport`/`.ag-center-cols-viewport`
+   to `scrollbar-width: none !important` / `::-webkit-scrollbar { display: none !important }`
+   — those two are never the elements that actually paint a visible scrollbar. The real
+   scrolling elements are `.ag-body-horizontal-scroll-viewport` (horizontal) and
+   `.ag-body-vertical-scroll-viewport` (vertical), so those are the only ones worth styling. */
+::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport,
+::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-scrollbar-thumb) var(--bg-scrollbar-track);
+}
+
+::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport::-webkit-scrollbar,
+::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-thumb,
+::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport::-webkit-scrollbar-thumb {
+  background: var(--bg-scrollbar-thumb);
+  border-radius: 99px;
+}
+
+/* A visible (not fully transparent) track so the thumb reads as a scroll handle sitting
+   on a rail, instead of a solid color bar spanning the full width/height. */
+::ng-deep .ag-theme-custom .ag-body-horizontal-scroll-viewport::-webkit-scrollbar-track,
+::ng-deep .ag-theme-custom .ag-body-vertical-scroll-viewport::-webkit-scrollbar-track {
+  background: var(--bg-scrollbar-track);
+}
+
+/* Search + Save bar */
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.toolbar textarea,
+.toolbar input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 10px 14px;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+
+.toolbar textarea::placeholder,
+.toolbar input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn-save {
+  background: #1a6b3c;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-save:hover {
+  background: #1f8048;
+}
+
+::ng-deep .ag-theme-custom .ag-selection-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The checkbox-selection column is only 48px wide — the shared 16px/16px cell and header
+   padding above would leave almost no room for the checkbox itself and clip it. Give this
+   column its own tighter, centered padding instead of widening every cell. */
+::ng-deep .ag-theme-custom .ag-cell.grid-select-cell,
+::ng-deep .ag-theme-custom .ag-header-cell.grid-select-cell {
+  padding-left: 8px;
+  padding-right: 8px;
+  justify-content: center;
+}
+
+
+::ng-deep .ag-theme-custom .ag-row-selected {
+  background-color: rgba(52, 152, 219, 0.18) !important;
+}
+
+::ng-deep .ag-theme-custom .ag-row-selected .ag-cell,
+::ng-deep .ag-theme-custom .ag-row-selected:hover .ag-cell {
+  background-color: transparent !important;
+}
+
+/* A selected row used to share the exact same declaration as selected:hover, so hovering one
+   changed nothing at all - the operator lost the "which row am I on" cue on precisely the rows
+   they had just picked out. Selected-and-hovered now gets its own stronger step in the same
+   hue, per theme. */
+::ng-deep .ag-theme-custom .ag-row-selected:hover {
+  background-color: var(--row-selected-hover-bg) !important;
+}
+
+/* The hovered row's emphasis, and the part that carries WCAG 1.4.11's 3:1 - the tint alone
+   cannot, because a wash strong enough to clear 3:1 against the row it sits on would swamp the
+   body text on top of it.
+
+   A 2px accent rule under the row, drawn as an INSET box-shadow so it costs no layout: it adds
+   no height, so no row shifts and no cell re-flows on hover. It is a horizontal rule, so it
+   runs unbroken from the pinned-left container across the centre container - a left-edge bar
+   would have been painted twice on any grid with a pinned column, once at the far left and
+   again at the pinned boundary.
+
+   It reads as emphasis by weight as well as by colour - the row's ordinary base line is 1px of
+   --border-primary and this is 2px of the accent - so the cue is not carried by colour alone.
+   It also lands on a selected-and-hovered row, which is the one state that previously had no
+   hover feedback at all. */
+::ng-deep .ag-theme-custom .ag-row-hover {
+  box-shadow: inset 0 -2px 0 0 var(--accent-blue);
+}
+
+
+::ng-deep .ag-theme-custom .ag-header-cell-label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+::ng-deep .ag-header-cell-label {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center;
+  width: 100%;
+}
+
+/* ============================================================
+   PINNED COLUMNS
+   ============================================================
+   A pinned column stays parked against its edge while the data columns scroll underneath it,
+   so it is the one part of this grid that cannot be transparent — see --ag-pinned-bg. The
+   containers are painted rather than the cells, so a row's own hover/selection background
+   still paints on top of it and a pinned row highlights with the rest of its row.
+
+   The divider is what tells the reader the column is pinned rather than merely last; the
+   shadow gives it the same "floating above" cue the rest of the application uses for a
+   surface that overlaps scrolling content. */
+::ng-deep .ag-theme-custom .ag-pinned-left-cols-container,
+::ng-deep .ag-theme-custom .ag-pinned-left-header,
+::ng-deep .ag-theme-custom .ag-pinned-right-cols-container,
+::ng-deep .ag-theme-custom .ag-pinned-right-header {
+  background-color: var(--ag-pinned-bg) !important;
+}
+
+::ng-deep .ag-theme-custom .ag-pinned-left-header,
+::ng-deep .ag-theme-custom .ag-pinned-right-header {
+  /* The header strip keeps its own tint, laid over the opaque base above, so a pinned header
+     cell matches the scrolling header cells beside it instead of reading as a lighter gap. */
+  background-image: linear-gradient(var(--ag-header-bg), var(--ag-header-bg)) !important;
+}
+
+/* Shadow only — quartz already draws the divider itself off --ag-pinned-column-border (which
+   resolves through --ag-border-color to --border-primary above), so a border here would sit
+   beside that one as a second line rather than replacing it. */
+::ng-deep .ag-theme-custom .ag-pinned-right-cols-container,
+::ng-deep .ag-theme-custom .ag-pinned-right-header {
+  box-shadow: -6px 0 12px -6px rgba(0, 0, 0, 0.28);
+}
+
+::ng-deep .ag-theme-custom .ag-pinned-left-cols-container,
+::ng-deep .ag-theme-custom .ag-pinned-left-header {
+  box-shadow: 6px 0 12px -6px rgba(0, 0, 0, 0.28);
+}
+
+
+
+/* styling for pagination  */
+
+
+.pagination-container {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 24px;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.page-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-size select {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.pagination-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-info {
+  min-width: 80px;
+  text-align: center;
+}
+
+.pagination-center button {
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text-primary);
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.pagination-center button:hover {
+  background: var(--bg-input-disabled);
+  border-radius: 4px;
+}
+
+.pagination-center button:hover:not(:disabled) {
+  background: var(--bg-icon-btn);
+}
+
+.pagination-center button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-center lucide-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.first-page-icon {
+  transform: rotate(180deg);
+}

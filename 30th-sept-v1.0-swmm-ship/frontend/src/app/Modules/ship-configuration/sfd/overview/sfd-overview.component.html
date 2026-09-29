@@ -1,0 +1,380 @@
+<app-help-guidance [bodyHtml]="helpGuidanceHtml" />
+
+<div class="ov">
+  <!-- ============ KPI GRID ============ -->
+  <section class="ov-kpis">
+    @for (kpi of visibleKpis(); track kpi.key) {
+      <div class="ov-kpi">
+        <app-button
+          type="button"
+          class="ov-drill"
+          title="View breakdown"
+          (click)="openDetail(kpi)"
+        >
+          <app-icon name="arrow-up-right" [size]="14" [strokeWidth]="2" />
+        </app-button>
+        <app-kpi-card
+          [title]="kpi.title"
+          [count]="kpi.count"
+          [displayValue]="kpi.displayValue"
+          [iconColor]="kpi.iconColor"
+          [iconBg]="kpi.iconBg"
+          [iconPath]="kpi.iconPath"
+          [trendUp]="kpi.trendUp"
+          [trendData]="kpi.trendData"
+          [selectedPeriod]="kpi.selectedPeriod"
+          [accentPills]="true"
+          cardHeight="auto"
+          (periodChange)="onPeriodChange(kpi.key, $event)"
+        />
+      </div>
+    }
+  </section>
+
+  <!-- ============ ALERTS + QUICK ACTIONS ============ -->
+  <section class="ov-row ov-row--alerts">
+    <app-panel-card
+      icon="triangle-alert"
+      iconColor="#F59E0B"
+      iconBg="rgba(245,158,11,0.16)"
+      title="Alerts"
+    >
+      <div class="alerts">
+        @for (a of alerts(); track a.text) {
+          <app-button
+            type="button"
+            class="alert"
+            [style.borderLeftColor]="a.color"
+            (click)="openAlert(a)"
+          >
+            <span class="alert-dot" [style.background]="a.color"></span>
+            <span class="alert-text">{{ a.text }}</span>
+            <span class="alert-tag" [style.color]="a.color">{{ a.tag }}</span>
+            <app-icon
+              name="chevron-right"
+              [size]="15"
+              [strokeWidth]="2"
+              variant="muted"
+            />
+          </app-button>
+        }
+      </div>
+    </app-panel-card>
+
+    <app-panel-card
+      icon="zap"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      title="Quick Actions"
+    >
+      <div class="qa-grid">
+        <!-- Primary: Add / Update SFD — dropdown (Transaction Type → Category) -->
+        <div class="qa-dd">
+          <app-button
+            type="button"
+            class="qa-btn qa-btn--primary"
+            (click)="$event.stopPropagation(); toggleQaMenu()"
+          >
+            <app-icon
+              name="plus"
+              [size]="17"
+              [strokeWidth]="1.8"
+              variant="accent"
+            />
+            Add / Update SFD
+            <span class="qa-spacer"></span>
+            <app-icon
+              name="chevron-down"
+              [size]="15"
+              [strokeWidth]="1.9"
+              variant="accent"
+            />
+          </app-button>
+
+          @if (qaOpen()) {
+            <div class="qa-menu">
+              @for (t of qaTypes; track t.title) {
+                <div
+                  class="qa-menu-item-wrap"
+                  (mouseenter)="openQaType(t.title)"
+                >
+                  <app-button
+                    type="button"
+                    class="qa-menu-item"
+                    (click)="$event.stopPropagation(); openQaType(t.title)"
+                  >
+                    <app-icon
+                      [name]="t.icon"
+                      [size]="16"
+                      [strokeWidth]="1.8"
+                      variant="muted"
+                    />
+                    {{ t.title }}
+                    <span class="qa-spacer"></span>
+                    <app-icon
+                      name="chevron-right"
+                      [size]="15"
+                      [strokeWidth]="1.9"
+                      variant="muted"
+                    />
+                  </app-button>
+
+                  @if (qaOpenType() === t.title) {
+                    <div class="qa-flyout">
+                      @for (c of qaCategories; track c.slug) {
+                        <app-button
+                          type="button"
+                          class="qa-flyout-item"
+                          (click)="
+                            $event.stopPropagation();
+                            selectSfdCategory(t.title, c.slug)
+                          "
+                        >
+                          <span
+                            class="qa-dot"
+                            [style.background]="c.color"
+                          ></span>
+                          {{ c.label }}
+                        </app-button>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Remaining quick actions -->
+        @for (q of quickActions; track q.label) {
+          <app-button type="button" class="qa-btn" (click)="onQuickAction(q)">
+            <app-icon
+              [name]="q.icon"
+              [size]="17"
+              [strokeWidth]="1.8"
+              variant="muted"
+            />
+            {{ q.label }}
+          </app-button>
+        }
+      </div>
+    </app-panel-card>
+  </section>
+
+  <!-- ============ DEPT DISTRIBUTION (drill-down) + INSTALLATION TREND ============ -->
+  <section class="ov-row ov-row--charts">
+    <app-panel-card
+      icon="chart-column"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      [title]="distTitle()"
+    >
+      <app-select-input
+        panelActions
+        class="dist-select"
+        [options]="distDeptOpts()"
+        [ngModel]="distDeptValue()"
+        (ngModelChange)="onDistDeptChange($event)"
+      />
+      <app-bar-chart
+        [data]="distData()"
+        [xAxisTitle]="distXAxis()"
+        yAxisTitle="Number of Equipment"
+      />
+    </app-panel-card>
+
+    <app-panel-card
+      icon="chart-line"
+      iconColor="var(--icon-accent)"
+      iconBg="rgba(0,136,255,0.16)"
+      title="Equipment Installation Trend"
+    >
+      <app-line-chart
+        [series]="installSeries()"
+        [labels]="installLabels()"
+        xAxisTitle="Month"
+        yAxisTitle="Number of Installations"
+      />
+      <app-chart-legend
+        [items]="installLegend()"
+        markerShape="line"
+        layout="inline"
+        class="trend-legend-bottom"
+      />
+    </app-panel-card>
+  </section>
+
+  <!-- ============ OPERATIONAL INSIGHTS ============ -->
+  <section class="ov-oi">
+    <app-panel-card
+      icon="upload"
+      iconColor="#22C55E"
+      iconBg="rgba(34,197,94,0.16)"
+      title="Recently Added, Updated or Removed Equipment"
+    >
+      <app-pill-toggle
+        panelActions
+        [options]="periodOpts"
+        [value]="actPeriod()"
+        (valueChange)="setActPeriod($event)"
+      />
+      <app-data-grid
+        [columnDefs]="activityColDefs"
+        [rowData]="activityPageRows()"
+        [totalRowCount]="activityTotalCount()"
+        [pageSize]="activityPageSize()"
+        height="440px"
+        (pageRequested)="onActivityPageRequested($event)"
+      />
+    </app-panel-card>
+  </section>
+
+  <!-- ============ KPI DETAIL DRAWER (reusable) ============ -->
+  @if (activeKpi(); as kpi) {
+    <app-detail-drawer
+      [open]="drawerOpen()"
+      [label]="kpi.title"
+      [value]="kpi.displayValue"
+      [subtitle]="kpi.drawerSubtitle"
+      [iconPath]="kpi.iconPath"
+      [iconColor]="kpi.iconColor"
+      [iconBg]="kpi.iconBg"
+      [stats]="activeKpiStats()"
+      [sectionTitle]="kpi.sectionTitle"
+      [sectionHint]="kpi.sectionHint"
+      (closed)="closeDetail()"
+    >
+      @if (kpi.mode === "breakdown") {
+        <div class="breakdown">
+          @for (b of kpi.breakdown ?? []; track b.name) {
+            <div class="breakdown-dept" [class.breakdown-dept--open]="isDeptExpanded(b.name)">
+              <app-button
+                type="button"
+                class="breakdown-dept-head"
+                (click)="toggleDept(b.name)"
+              >
+                <app-icon
+                  name="chevron-down"
+                  [size]="16"
+                  [strokeWidth]="2"
+                  variant="muted"
+                  class="breakdown-dept-chevron"
+                />
+                <span class="breakdown-dept-name">{{ b.name }}</span>
+                <span class="breakdown-dept-count">{{ (b.equipments ?? []).length }} items</span>
+              </app-button>
+
+              @if (isDeptExpanded(b.name)) {
+                <div class="breakdown-equip-list">
+                  @for (e of b.equipments ?? []; track e.name) {
+                    <div class="breakdown-equip-row">
+                      <span class="breakdown-equip-name">{{ e.name }}</span>
+                      @if (e.shelfLife) {
+                        <span class="breakdown-equip-shelf">Shelf Life {{ e.shelfLife }}</span>
+                      }
+                      <span
+                        class="breakdown-equip-status"
+                        [style.color]="e.statusColor || '#22C55E'"
+                        [style.background]="(e.statusColor || '#22C55E') + '22'"
+                        [style.borderColor]="(e.statusColor || '#22C55E') + '44'"
+                      >
+                        {{ e.status }}
+                      </span>
+                    </div>
+                  } @empty {
+                    <div class="breakdown-equip-empty">No equipment records available</div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="dlist">
+          @for (r of kpi.listRows ?? []; track r.title) {
+            <div class="dlist-row">
+              <span class="dlist-dot" [style.background]="r.dotColor"></span>
+              <div class="dlist-body">
+                <div class="dlist-title">{{ r.title }}</div>
+                <div class="dlist-sub">{{ r.sub }}</div>
+              </div>
+              <div class="dlist-side">
+                <span
+                  class="dlist-tag"
+                  [style.color]="r.tagColor"
+                  [style.background]="r.tagColor + '22'"
+                  [style.borderColor]="r.tagColor + '44'"
+                >
+                  {{ r.tag }}
+                </span>
+                <span class="dlist-meta">{{ r.meta }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </app-detail-drawer>
+  }
+
+  <!-- ============ ALERT DETAIL DRAWER ============ -->
+  @if (activeAlert(); as alert) {
+    <app-detail-drawer
+      [open]="alertDrawerOpen()"
+      [label]="alert.text"
+      [titleMode]="true"
+      [iconName]="activeAlertIcon()"
+      [iconColor]="alert.color"
+      [iconBg]="activeAlertIconBg()"
+      [badgeText]="alert.tag"
+      badgePosition="above-title"
+      [badgeColor]="alert.color"
+      (closed)="closeAlert()"
+    >
+      <p class="alert-detail-desc">{{ activeAlertDescription() }}</p>
+
+      @if (alert.meta?.length) {
+        <div class="alert-meta">
+          @for (m of alert.meta; track m.label) {
+            <div class="alert-meta-row">
+              <span class="alert-meta-label">{{ m.label }}</span>
+              <span class="alert-meta-value">{{ m.value }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      @if (alert.related?.length) {
+        <div class="alert-items">
+          <span class="alert-items-label">{{ alert.tag }} Records</span>
+          <div class="alert-items-box">
+            @for (r of alert.related; track r.title) {
+              @if (isAlertActionable(alert)) {
+                <app-button
+                  type="button"
+                  class="alert-item-row alert-item-row--clickable"
+                  (click)="runAlertAction(alert)"
+                >
+                  <span class="alert-item-dot" [style.background]="r.dotColor"></span>
+                  <span class="alert-item-text">{{ r.title }}</span>
+                  <app-icon name="chevron-right" [size]="14" [strokeWidth]="2" variant="muted" />
+                </app-button>
+              } @else {
+                <div class="alert-item-row">
+                  <span class="alert-item-dot" [style.background]="r.dotColor"></span>
+                  <span class="alert-item-text">{{ r.title }}</span>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+
+      @if (isAlertActionable(alert)) {
+        <app-button type="button" class="alert-action-btn" (click)="runAlertAction(alert)">
+          <app-icon name="circle-check-big" [size]="17" [strokeWidth]="2" variant="inherit" />
+          View Approval Queue
+        </app-button>
+      }
+    </app-detail-drawer>
+  }
+</div>

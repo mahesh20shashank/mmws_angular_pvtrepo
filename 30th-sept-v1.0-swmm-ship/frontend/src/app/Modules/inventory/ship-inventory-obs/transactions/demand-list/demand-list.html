@@ -1,0 +1,86 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Results - To Be Demanded</h3>
+    <div class="obs-panel__actions">
+      <!-- the bulk enable rule now matches the per-row rule exactly - every
+           selected row must still be pending a DART. Not moved, not restyled, not relabelled. -->
+      <app-button type="button" class="btn-secondary" [disabled]="!canRaiseDart" (click)="raiseDart()">
+        Raise DART - Multiple
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="!canSendToCart" (click)="openCartModal()">
+        Send to Cart (MO/WED) - Multiple
+      </app-button>
+    </div>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredEntries().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <div class="obs-filter-row">
+    <label class="obs-checkbox">
+      <input type="checkbox" [checked]="criticalOnly()" (change)="criticalOnly.set(!criticalOnly())" />
+      Critical
+    </label>
+    <label class="obs-checkbox">
+      <input type="checkbox" [checked]="notIncattedOnly()" (change)="notIncattedOnly.set(!notIncattedOnly())" />
+      INcatting Status (No)
+    </label>
+    <div class="obs-filter-row__categories">
+      <span class="obs-filter-row__label">Category</span>
+      @for (option of categoryFilterOptions; track option.key) {
+        <label class="obs-checkbox">
+          <input type="checkbox" [checked]="categoryFilters()[option.key]" (change)="toggleCategory(option.key)" />
+          {{ option.label }}
+        </label>
+      }
+    </div>
+    <!-- Clear, built and labelled exactly as the Item Search and History
+         screens already build and label theirs, and identically to Due for Survey's. -->
+    <app-button type="button" class="btn-secondary" (click)="clearFilters()">Clear</app-button>
+  </div>
+
+  <!-- `[isRowSelectable]` applies the IIF gate to the row checkbox,
+       through the shared grid's own existing per-row selectability input. A row awaiting
+       INcatting cannot be ticked, so it cannot reach either bulk action. Nothing else about
+       this grid changes. -->
+  <app-data-grid
+    [rowData]="filteredEntries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    [isRowSelectable]="isRowSelectable"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+  />
+</div>
+
+@if (cartModalOpen()) {
+  <app-modal size="sm" (closeModal)="closeCartModal()">
+    <h3 class="obs-modal__title">Select Parent Inventory</h3>
+    <!-- names the one row a single-row send is about, exactly as Due for
+         Survey's modal already does. It appears ONLY in the single-row state, which is a state
+         this screen did not have before the row action was added - the bulk send this modal used
+         to serve renders exactly as it did. -->
+    @if (singleCartTarget(); as target) {
+      <p class="obs-modal__subtitle">Sending "{{ target.patternNumber }}" to cart.</p>
+    }
+    <form [formGroup]="cartForm" class="obs-modal__form">
+      <app-select-input
+        label="Parent Inventory"
+        formControlName="parentInventory"
+        [options]="parentInventoryOptions"
+      />
+    </form>
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeCartModal()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" [disabled]="saving()" (click)="confirmSendToCart()">
+        {{ saving() ? "Sending..." : "Confirm" }}
+      </app-button>
+    </div>
+  </app-modal>
+}

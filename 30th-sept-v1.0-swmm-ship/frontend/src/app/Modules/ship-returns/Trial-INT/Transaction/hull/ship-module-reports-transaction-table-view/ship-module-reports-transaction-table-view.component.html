@@ -1,0 +1,24 @@
+<app-toast></app-toast>
+
+<div class="mb-4">
+  <!-- Tabs -->
+  <app-transaction-table-tabs [tabs]="tabList" [activeTab]="currentTab" (tabChange)="onTabChange($any($event))">
+  </app-transaction-table-tabs>
+</div>
+
+<!-- Paginate Table -->
+<app-paginate-table
+  [title]="config?.title"
+  [description]="config?.description"
+  [showHeaderSection]="true"
+  [showSearch]="true"
+  [addButtons]="addButtons"
+  (addButtonClick)="handleAdd()"
+  [showImport]="false"
+  [showExport]="false"
+  [rowData]="rowData"
+  [columnDefs]="columnDefs"
+  [showPagination]="true"
+  [tableLoading]="isLoading"
+  (pageChange)="onPageChange($any($event))">
+</app-paginate-table>

@@ -1,0 +1,1446 @@
+{
+  "formId": "nec_ew_system_audit_proforma",
+  "title": "EW SYSTEM AUDIT PROFORMA",
+  "sourceFile": "nec_ew_system_audit_proforma.html",
+  "sections": [
+    {
+      "id": "section_1_part_1",
+      "title": "EW Audit Ship’s Proforma",
+      "sectionType": "hybrid",
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship ",
+            "type": "input",
+            "inputType": "text",
+            "value": "",
+            "colSpan": 4,
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "type": "input",
+            "name": "ew_system",
+            "label": "EW System",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "value": "",
+            "isDynamic": false,
+            "lookupKey": "",
+            "prefill": false,
+            "prefillSource": "",
+            "colSpan": 4
+          },
+          {
+            "type": "date",
+            "name": "audit_date",
+            "label": "Date Proposed for Audit",
+            "required": true,
+            "colSpan": 4,
+            "value": ""
+          },
+          {
+            "type": "textarea",
+            "name": "audit_reason",
+            "label": "Reason for Proposed Audit",
+            "placeholder": "Please provide the reason for proposing this audit date",
+            "rows": 3,
+            "colSpan": 12,
+            "value": "",
+            "showIf": {
+              "field": "audit_date",
+              "operator": "exists"
+            }
+          },
+          {
+            "type": "date",
+            "name": "audit_date_last",
+            "label": "Date of Last Audit",
+            "required": true,
+            "disabled": false,
+            "colSpan": 4,
+            "placeholder": "",
+            "value": "",
+            "isDynamic": false,
+            "lookupKey": "",
+            "prefill": false,
+            "prefillSource": ""
+          },
+          {
+            "type": "date",
+            "name": "audit_date_completion_hat",
+            "label": "Date of Completion of HATs",
+            "required": true,
+            "disabled": false,
+            "colSpan": 4,
+            "placeholder": "",
+            "value": "",
+            "isDynamic": false,
+            "lookupKey": "",
+            "prefill": false,
+            "prefillSource": "",
+            "showIf": {
+              "field": "audit_date_last_hat_check",
+              "value": true,
+              "operator": "notEquals"
+            }
+          },
+          {
+            "type": "date",
+            "name": "audit_date_last",
+            "label": "Date of Completion of SATs",
+            "required": true,
+            "disabled": false,
+            "colSpan": 4,
+            "placeholder": "",
+            "value": "",
+            "isDynamic": false,
+            "lookupKey": "",
+            "prefill": false,
+            "prefillSource": "",
+            "showIf": {
+              "field": "audit_date_last_sat_check",
+              "value": true,
+              "operator": "notEquals"
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "audit_date_last_hat_check",
+            "label": "HATs Pending",
+            "colSpan": 4,
+            "value": false
+          },
+          {
+            "type": "checkbox",
+            "name": "audit_date_last_sat_check",
+            "label": "SATs Pending",
+            "colSpan": 2,
+            "value": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "section_1_table_2",
+            "sectionType": "simpleTable",
+            "title": "(I)    Outstanding Defects:",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Date Defect Occurred",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Description of Defect",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Limitation in system / sub-system",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_5",
+                "label": "Expected System Downtime",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_6",
+                "label": "Similar defect last occurred",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_7",
+                "label": "Remarks (DART No., OPDEF DTG, signal RA DTG, etc)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "section_1_table_2_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_2_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_1_cell_2_od_date_occurred_row_1",
+                    "key": "od_date_occurred_row_1",
+                    "type": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_1_cell_3_od_description_row_1",
+                    "key": "od_description_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_1_cell_4_od_limitation_row_1",
+                    "key": "od_limitation_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_1_cell_5_od_downtime_row_1",
+                    "key": "od_downtime_row_1",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_1_cell_6_od_similar_last_row_1",
+                    "key": "od_similar_last_row_1",
+                    "type": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_1_cell_7_od_remarks_row_1",
+                    "key": "od_remarks_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_2_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_2_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_2_cell_2_od_date_occurred_row_2",
+                    "key": "od_date_occurred_row_2",
+                    "type": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_2_cell_3_od_description_row_2",
+                    "key": "od_description_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_2_cell_4_od_limitation_row_2",
+                    "key": "od_limitation_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_2_cell_5_od_downtime_row_2",
+                    "key": "od_downtime_row_2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_2_cell_6_od_similar_last_row_2",
+                    "key": "od_similar_last_row_2",
+                    "type": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_2_cell_7_od_remarks_row_2",
+                    "key": "od_remarks_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_2_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_2_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_3_cell_2_od_date_occurred_row_3",
+                    "key": "od_date_occurred_row_3",
+                    "type": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_3_cell_3_od_description_row_3",
+                    "key": "od_description_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_3_cell_4_od_limitation_row_3",
+                    "key": "od_limitation_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_3_cell_5_od_downtime_row_3",
+                    "key": "od_downtime_row_3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_3_cell_6_od_similar_last_row_3",
+                    "key": "od_similar_last_row_3",
+                    "type": "date",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_2_row_3_cell_7_od_remarks_row_3",
+                    "key": "od_remarks_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          },
+          {
+            "id": "section_1_table_3",
+            "sectionType": "simpleTable",
+            "title": "(I) Material Deficiency (System Fitted/OBS):",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Item Description",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Part No",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "Quantity Deficient",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_5",
+                "label": "Demand details",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_6",
+                "label": "Repair details (landed since, agency)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_7",
+                "label": "Remarks (Critical / PTS / OPDEM, etc.)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "section_1_table_3_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_3_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_2_md_item_desc_row_1",
+                    "key": "md_item_desc_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_3_md_part_no_row_1",
+                    "key": "md_part_no_row_1",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_4_md_qty_deficient_row_1",
+                    "key": "md_qty_deficient_row_1",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_5_md_demand_details_row_1",
+                    "key": "md_demand_details_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_6_md_repair_details_row_1",
+                    "key": "md_repair_details_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_7_md_remarks_row_1",
+                    "key": "md_remarks_row_1",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_3_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_3_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_2_md_item_desc_row_2",
+                    "key": "md_item_desc_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_3_md_part_no_row_2",
+                    "key": "md_part_no_row_2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_4_md_qty_deficient_row_2",
+                    "key": "md_qty_deficient_row_2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_5_md_demand_details_row_2",
+                    "key": "md_demand_details_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_6_md_repair_details_row_2",
+                    "key": "md_repair_details_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_7_md_remarks_row_2",
+                    "key": "md_remarks_row_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_3_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_3_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_3_cell_2_md_item_desc_row_3",
+                    "key": "md_item_desc_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_3_cell_3_md_part_no_row_3",
+                    "key": "md_part_no_row_3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_3_cell_4_md_qty_deficient_row_3",
+                    "key": "md_qty_deficient_row_3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_3_cell_5_md_demand_details_row_3",
+                    "key": "md_demand_details_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_3_cell_6_md_repair_details_row_3",
+                    "key": "md_repair_details_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_3_cell_7_md_remarks_row_3",
+                    "key": "md_remarks_row_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type": "textarea",
+            "name": "(V)   Issues to be taken up with OEM / IN Agencies (if any)",
+            "label": "(V)   Issues to be taken up with OEM / IN Agencies (if any)",
+            "required": false,
+            "disabled": false,
+            "placeholder": "Enter issues to be taken up with OEM / IN Agencies (if any)\u2026",
+            "value": "",
+            "colSpan": 12,
+            "rows": 5
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "section_1_table_4",
+            "sectionType": "simpleTable",
+            "title": "(I)    Maintenance Checks :",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "Check Type",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "Remarks / Description / Details",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "section_1_table_4_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_1_cell_1_static",
+                    "type": "label",
+                    "value": "Blanking Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_1_cell_2_mc_blanking",
+                    "key": "mc_blanking",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_1_cell_3_mc_blanking_remarks",
+                    "key": "mc_blanking_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_2_cell_1_static",
+                    "type": "label",
+                    "value": "External System Interface",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_2_cell_2_mc_external_interface",
+                    "key": "mc_external_interface",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_2_cell_3_mc_external_interface_remarks",
+                    "key": "mc_external_interface_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_3_cell_1_static",
+                    "type": "label",
+                    "value": "BITE Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_3_cell_2_mc_bite",
+                    "key": "mc_bite",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_3_cell_3_mc_bite_remarks",
+                    "key": "mc_bite_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_4",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_4_cell_1_static",
+                    "type": "label",
+                    "value": "Visual Inspection Checks",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_4_cell_2_mc_visual",
+                    "key": "mc_visual",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_4_cell_3_mc_visual_remarks",
+                    "key": "mc_visual_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_5",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_5_cell_1_static",
+                    "type": "label",
+                    "value": "Documentation",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_5_cell_2_mc_documentation",
+                    "key": "mc_documentation",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "SAT"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "UNSAT"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_5_cell_3_mc_documentation_remarks",
+                    "key": "mc_documentation_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_6",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_6_cell_1_static",
+                    "type": "label",
+                    "value": "FUSS Raised",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_6_cell_2_mc_fuss",
+                    "key": "mc_fuss",
+                    "type": "radio",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "options": [
+                      {
+                        "label": "YES",
+                        "value": "YES"
+                      },
+                      {
+                        "label": "NO",
+                        "value": "NO"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_6_cell_3_mc_fuss_remarks",
+                    "key": "mc_fuss_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "section_1_table_5",
+            "sectionType": "simpleTable",
+            "title": "(I)    Performance Checks :",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "col_1",
+                "label": "Parameter",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_2",
+                "label": "0.175 - 0.5",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_3",
+                "label": "0.5 - 2",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_4",
+                "label": "2 - 6",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_5",
+                "label": "6 - 18",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_6",
+                "label": "18 - 40",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "col_8",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "section_1_table_5_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_5_row_1_cell_1_static",
+                    "type": "label",
+                    "value": "DoA",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_2_pc_doa_val1",
+                    "key": "pc_doa_val1",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_3_pc_doa_val2",
+                    "key": "pc_doa_val2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_4_pc_doa_val3",
+                    "key": "pc_doa_val3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_5_pc_doa_val4",
+                    "key": "pc_doa_val4",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_6_pc_doa_val5",
+                    "key": "pc_doa_val5",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_8_pc_doa_remarks",
+                    "key": "pc_doa_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_5_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_5_row_2_cell_1_static",
+                    "type": "label",
+                    "value": "RAF",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_2_pc_raf_val1",
+                    "key": "pc_raf_val1",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_3_pc_raf_val2",
+                    "key": "pc_raf_val2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_4_pc_raf_val3",
+                    "key": "pc_raf_val3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_5_pc_raf_val4",
+                    "key": "pc_raf_val4",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_6_pc_raf_val5",
+                    "key": "pc_raf_val5",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_8_pc_raf_remarks",
+                    "key": "pc_raf_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_5_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_5_row_3_cell_1_static",
+                    "type": "label",
+                    "value": "ECM",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_3_cell_2_pc_ecm_val1",
+                    "key": "pc_ecm_val1",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_3_cell_3_pc_ecm_val2",
+                    "key": "pc_ecm_val2",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_3_cell_4_pc_ecm_val3",
+                    "key": "pc_ecm_val3",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_3_cell_5_pc_ecm_val4",
+                    "key": "pc_ecm_val4",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_3_cell_6_pc_ecm_val5",
+                    "key": "pc_ecm_val5",
+                    "type": "input",
+                    "value": "",
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_3_cell_8_pc_ecm_remarks",
+                    "key": "pc_ecm_remarks",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ]
+      },
+      "fields": [],
+      "tables": []
+    }
+  ]
+}

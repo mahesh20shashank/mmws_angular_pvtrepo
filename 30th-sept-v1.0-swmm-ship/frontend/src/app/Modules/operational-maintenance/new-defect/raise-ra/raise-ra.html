@@ -1,0 +1,142 @@
+<div class="rra">
+  <app-button type="button" class="rra-back" (click)="cancel()">
+    <app-icon name="arrow-left" [size]="14" variant="inherit" />
+    Back
+  </app-button>
+
+  <div class="glass-card rra-card">
+    <div class="rra-card-head">
+      <span class="rra-card-title">Selected DARTs for this RA</span>
+      <span class="rra-pill"
+        >{{ selectedDarts().length }} DART{{ selectedDarts().length === 1 ? "" : "s" }} selected</span
+      >
+    </div>
+
+    <div class="rra-table-wrap">
+      <table class="rra-table">
+        <thead>
+          <tr>
+            <th>DART No.</th>
+            <th>Equipment / Service</th>
+            <th>Reason</th>
+            <th>Defect Rectified</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Severity</th>
+            <th>Shore sync</th>
+            <th>Additional Remarks</th>
+            <th>Ship Remarks <span class="rra-star">*</span></th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of selectedDarts(); track row.id) {
+            <tr>
+              <td class="rra-cell-accent">{{ row.dartNo }}</td>
+              <td>{{ row.equipmentService }}</td>
+              <td>{{ row.reason }}</td>
+              <td>{{ row.defectRectified }}</td>
+              <td><span class="rra-badge rra-badge--open">{{ row.status }}</span></td>
+              <td>{{ row.date }}</td>
+              <td><span class="rra-badge rra-badge--severity">{{ row.severity }}</span></td>
+              <td>
+                @if (row.syncedToShore) {
+                  <span class="rra-sync-pill">
+                    <app-icon name="lock" [size]="11" variant="inherit" />
+                    Synced to shore
+                  </span>
+                }
+              </td>
+              <td class="rra-cell-input">
+                <app-input-field
+                  placeholder="Optional details"
+                  [ngModel]="row.additionalRemarks"
+                  (ngModelChange)="updateRemarks(row.id, $event)"
+                />
+              </td>
+              <td class="rra-cell-select">
+                <app-select-input
+                  placeholder="Please select"
+                  [options]="shipRemarksOptions"
+                  [ngModel]="row.shipRemarks"
+                  (ngModelChange)="updateShipRemarks(row.id, $event)"
+                />
+              </td>
+              <td>
+                <app-button type="button" class="rra-delete-btn" (click)="removeDart(row.id)" aria-label="Remove DART">
+                  <app-icon name="trash-2" [size]="14" variant="inherit" />
+                </app-button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="11" class="rra-empty">No DARTs selected.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="glass-card rra-card">
+    <span class="rra-card-title">Select RA Type</span>
+    <p class="rra-card-desc">The RA type determines the form content and the routing that follows.</p>
+
+    <div class="rra-type-grid">
+      @for (opt of raTypeOptions; track opt.value) {
+        <button
+          type="button"
+          class="rra-type-card"
+          [class.rra-type-card--active]="raType() === opt.value"
+          (click)="pickRaType(opt.value)"
+        >
+          <span class="rra-type-head">
+            <span class="rra-type-radio" [class.rra-type-radio--on]="raType() === opt.value"></span>
+            <span class="rra-type-label">{{ opt.label }}</span>
+          </span>
+          <span class="rra-type-desc">{{ opt.description }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="rra-yard-field">
+      <app-select-input
+        label="Select Yard Name"
+        [required]="true"
+        [options]="yardOptions"
+        [ngModel]="yardName()"
+        (ngModelChange)="yardName.set($event)"
+      />
+    </div>
+
+    <div class="rra-routing">
+      <div class="rra-routing-head">
+        <span class="rra-routing-dot"></span>
+        <span class="rra-routing-title">Routing after submission</span>
+        <span class="rra-routing-sub">— where this RA travels once sent</span>
+      </div>
+      <div class="rra-routing-steps">
+        @for (step of routingSteps; track step; let i = $index; let last = $last) {
+          <span class="rra-routing-step" [class.rra-routing-step--active]="i === 0">
+            {{ i + 1 }} {{ step }}
+          </span>
+          @if (!last) {
+            <app-icon name="chevron-right" [size]="14" variant="muted" />
+          }
+        }
+      </div>
+    </div>
+
+    <div class="rra-actions">
+      <app-button type="button" class="rra-btn rra-btn--ghost" (click)="cancel()">Cancel</app-button>
+      <app-button type="button" class="rra-btn rra-btn--secondary" (click)="save()">
+        <app-icon name="save" [size]="14" variant="inherit" />
+        Save
+      </app-button>
+      <app-button type="button" class="rra-btn rra-btn--primary" (click)="submit()">
+        <app-icon name="send" [size]="14" variant="inherit" />
+        Send to NavYojana
+      </app-button>
+    </div>
+  </div>
+</div>

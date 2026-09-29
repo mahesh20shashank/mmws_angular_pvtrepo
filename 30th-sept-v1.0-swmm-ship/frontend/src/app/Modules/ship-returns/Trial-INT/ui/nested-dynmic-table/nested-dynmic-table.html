@@ -1,0 +1,359 @@
+
+<ng-container *ngFor="let table of tables; let tableIndex = index; trackBy: trackByTableId">
+
+  <div class="mb-5 w-full">
+
+    <ng-container *ngIf="table">
+      <ng-container *ngIf="!table._editingTitle; else editTitle">
+        <h3
+          *ngIf="table.title"
+           class="mb-2 text-lg font-bold text-[#61C2FF]"
+          (dblclick)="table._editingTitle = true">
+          {{ table.title }}
+        </h3>
+      </ng-container>
+      <ng-template #editTitle>
+        <app-textarea
+          [label]="''"
+          [rows]="1"
+          [ngModel]="table.title"
+          (ngModelChange)="table.title = $event"
+          (focusout)="table._editingTitle = false"
+          autofocus
+          class="mb-2 border-b border-white/20 bg-white/10 text-lg font-bold text-white outline-none">
+        </app-textarea>
+      </ng-template>
+
+      <ng-container *ngIf="!table._editingSubtitle; else editSubtitle">
+        <p
+          *ngIf="table.subtitle"
+          class="mb-2 text-sm italic"
+          (dblclick)="table._editingSubtitle = true">
+          {{ table.subtitle }}
+        </p>
+      </ng-container>
+      <ng-template #editSubtitle>
+        <app-textarea
+          [label]="''"
+          [rows]="1"
+          [ngModel]="table.subtitle"
+          (ngModelChange)="table.subtitle = $event"
+          (focusout)="table._editingSubtitle = false"
+          autofocus
+          class="mb-2 border-b border-white/20 bg-white/10 text-sm italic text-white outline-none">
+        </app-textarea>
+      </ng-template>
+    </ng-container>
+
+      <table class="w-full border-collapse border border-white/20 bg-[#0a1929] text-sm text-white [&_th]:border [&_th]:border-white/20 [&_th]:bg-white/10 [&_td]:border [&_td]:border-white/15">
+
+      <thead>
+        <tr>
+          <th
+            *ngFor="let column of table.columns"
+            class="border border-white/15 bg-white/10 px-2 py-2 text-center font-bold"
+            [style.width]="column.width">
+            <ng-container *ngIf="!column._editingLabel; else editColumnLabel">
+              <span
+                class="block min-h-5 whitespace-pre-line"
+                (dblclick)="!readonly && (column._editingLabel = true)">
+                {{ column.label }}
+              </span>
+            </ng-container>
+
+            <ng-template #editColumnLabel>
+              <app-textarea
+                [label]="''"
+                [rows]="1"
+                [disabled]="readonly"
+                (ngModelChange)="emitTableChange(table)"
+                (focusout)="column._editingLabel = false"
+                [(ngModel)]="column.label">
+              </app-textarea>
+            </ng-template>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- TYPE 1: NORMAL CHECKLIST TABLE -->
+        <ng-container *ngIf="table.type === 'checklist'">
+
+          <tr *ngFor="let row of table.rows; let rowIndex = index">
+
+            <td class="border border-white/15 px-2 py-2 text-center align-top">
+              {{ getSerial(table, rowIndex) }}
+            </td>
+
+            <td class="border border-white/15 px-2 py-2 align-top">
+              <app-textarea
+                [label]="''"
+                [rows]="2"
+                [disabled]="readonly"
+                (ngModelChange)="emitTableChange(table)"
+                [(ngModel)]="row.description">
+              </app-textarea>
+            </td>
+
+            <td class="border border-white/15 px-2 py-2 align-top">
+              <app-input
+                [label]="''"
+                type="text"
+                [disabled]="readonly"
+                (ngModelChange)="emitTableChange(table)"
+                [(ngModel)]="row.value">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-2 py-2 text-right align-top">
+              <ng-container *ngIf="showControls">
+                <span class="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/10 p-0.5">
+                  <button
+                    type="button"
+                     class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/20 bg-white/10 font-bold text-white transition hover:bg-white/15"
+                    title="Add row"
+                    (click)="addRow(rowIndex, table)">
+                    +
+                  </button>
+                  <button
+                    type="button"
+                     class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-red-400/40 bg-red-500/15 font-bold text-red-300 transition hover:bg-red-500/25"
+                    title="Remove row"
+                    (click)="removeRow(rowIndex, table)">
+                    -
+                  </button>
+                </span>
+              </ng-container>
+            </td>
+
+          </tr>
+
+        </ng-container>
+
+
+        <!-- TYPE 2: EQUIPMENT TABLE -->
+        <ng-container *ngIf="table.type === 'equipment'">
+          <ng-container *ngFor="let _ of [table._renderKey || 0]">
+
+            <ng-container *ngFor="let equipmentRow of getEquipmentRows(table); let equipmentRowIndex = index">
+            <ng-container *ngFor="let group of equipmentRow.groups; let groupIndex = index">
+
+            <tr>
+
+              <td
+                *ngIf="groupIndex === 0"
+                class="border border-white/15 px-2 py-2 text-center align-middle"
+                [attr.rowspan]="getEquipmentRowSpan(table, equipmentRow)">
+                {{ getSerial(table, equipmentRowIndex) }}
+              </td>
+
+              <td
+                *ngIf="groupIndex === 0"
+                class="border border-white/15 px-2 py-2 align-top"
+                [attr.rowspan]="getEquipmentRowSpan(table, equipmentRow)">
+                <app-textarea
+                  [label]="''"
+                  [rows]="3"
+                  [disabled]="readonly"
+                  [ngModel]="equipmentRow.description"
+                  (ngModelChange)="updateEquipmentRowDescription(table, equipmentRow, $event)">
+                </app-textarea>
+              </td>
+
+              <td class="border border-white/15 px-2 py-2 font-semibold text-[#61C2FF]">
+                <app-textarea
+                  [label]="''"
+                  [rows]="1"
+                  [disabled]="readonly"
+                  (ngModelChange)="emitTableChange(table)"
+                  [(ngModel)]="group.name">
+                </app-textarea>
+              </td>
+
+            <td class="border border-white/15 px-2 py-2">
+                <app-input
+                  [label]="''"
+                  type="text"
+                  [disabled]="readonly"
+                  (ngModelChange)="emitTableChange(table)"
+                  [(ngModel)]="group.value">
+                </app-input>
+              </td>
+
+            </tr>
+
+            <tr *ngIf="showControls">
+
+              <td
+                colspan="2"
+                class="border border-white/15 bg-black/10 px-3 py-2 text-right">
+
+                <span class="inline-flex items-center gap-2">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/10 p-0.5"
+                    [title]="getEquipmentAddLabel(table, group)">
+                    <button
+                      type="button"
+                       class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-emerald-400/40 bg-emerald-500/15 font-bold text-emerald-300 transition hover:bg-emerald-500/25"
+                      [title]="getEquipmentAddLabel(table, group)"
+                      (click)="addEquipment(table, groupIndex, equipmentRow)">
+                      +
+                    </button>
+                    <button
+                      type="button"
+                       class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-red-400/40 bg-red-500/15 font-bold text-red-300 transition hover:bg-red-500/25"
+                      [title]="'Remove ' + group.name"
+                      (click)="removeEquipment(table, groupIndex, equipmentRow)">
+                      -
+                    </button>
+                  </span>
+
+                  <span
+                    *ngIf="hasEquipmentRowActions(table) && groupIndex === 0"
+                    class="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/10 p-0.5"
+                    [attr.title]="getEquipmentRowAddLabel(table)">
+                    <button
+                      type="button"
+                       class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/20 bg-white/10 font-bold text-white transition hover:bg-white/15"
+                      [title]="getEquipmentRowAddLabel(table)"
+                      (click)="addEquipmentRow(table, equipmentRowIndex)">
+                      +
+                    </button>
+                    <button
+                      type="button"
+                       class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-red-400/40 bg-red-500/15 font-bold text-red-300 transition hover:bg-red-500/25"
+                      title="Remove full row"
+                      (click)="removeEquipmentRow(table, equipmentRowIndex)">
+                      -
+                    </button>
+                  </span>
+                </span>
+
+              </td>
+
+            </tr>
+
+            </ng-container>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+
+
+        <!-- TYPE 3: NESTED GROUP TABLE -->
+        <ng-container *ngIf="table.type === 'nested'">
+          <ng-container *ngFor="let _ of [table._renderKey || 0]">
+
+            <ng-container *ngFor="let group of table.groups; let groupIndex = index">
+
+              <tr *ngFor="let row of group.rows; let childIndex = index">
+
+                <td
+                  *ngIf="groupIndex === 0 && childIndex === 0"
+                class="border border-white/15 px-2 py-2 text-center align-middle"
+                  [attr.rowspan]="getNestedRowSpan(table)">
+                  {{ getSerial(table, 0) }}
+                </td>
+
+                <td
+                  *ngIf="groupIndex === 0 && childIndex === 0"
+                class="border border-white/15 px-2 py-2 align-top"
+                [attr.rowspan]="getNestedRowSpan(table)">
+                  <app-textarea
+                    [label]="''"
+                    [rows]="3"
+                    [disabled]="readonly"
+                    (ngModelChange)="emitTableChange(table)"
+                    [(ngModel)]="table.description">
+                  </app-textarea>
+              </td>
+
+                <td class="border border-white/15 px-2 py-2 font-semibold text-[#61C2FF]">
+                  <app-textarea
+                    [label]="''"
+                    [rows]="1"
+                    [disabled]="readonly"
+                    (ngModelChange)="emitTableChange(table)"
+                    [(ngModel)]="row.displayLabel">
+                  </app-textarea>
+                </td>
+
+                <td class="border border-white/15 px-2 py-2">
+                  <app-input
+                    [label]="''"
+                    type="text"
+                    [disabled]="readonly"
+                    (ngModelChange)="emitTableChange(table)"
+                    [(ngModel)]="row.value">
+                  </app-input>
+                </td>
+
+              </tr>
+
+              <tr *ngIf="showControls">
+
+                <td
+                  colspan="2"
+                  class="border border-white/15 bg-black/10 px-3 py-2 text-right">
+
+                  <span class="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/10 p-0.5">
+                    <button
+                      type="button"
+                 class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/20 bg-white/10 font-bold text-white transition hover:bg-white/15"
+                      [title]="'Add another ' + group.name"
+                      (click)="addNestedGroup(table)">
+                      +
+                    </button>
+                    <button
+                      type="button"
+                 class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-red-400/40 bg-red-500/15 font-bold text-red-300 transition hover:bg-red-500/25"
+                      [title]="'Remove ' + group.name"
+                      (click)="removeNestedGroup(table, groupIndex)">
+                      -
+                    </button>
+                  </span>
+
+                </td>
+
+              </tr>
+
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+
+
+        <!-- BOTTOM FULL TABLE ADD / REMOVE BAR -->
+        <tr *ngIf="showControls">
+          <td
+            [attr.colspan]="table.columns.length"
+              class="border border-white/15 bg-black/10 px-3 py-3 text-right">
+
+            <span class="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/10 p-0.5">
+              <button
+                type="button"
+                 class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-white/20 bg-white/10 font-bold text-white transition hover:bg-white/15"
+                title="Add a copy of this table"
+                (click)="copyFullTable(table, tableIndex)">
+                +
+              </button>
+              <button
+                type="button"
+                 class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-red-400/40 bg-red-500/15 font-bold text-red-300 transition hover:bg-red-500/25"
+                title="Remove this entire table"
+                (click)="removeFullTable(table)">
+                -
+              </button>
+            </span>
+
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</ng-container>

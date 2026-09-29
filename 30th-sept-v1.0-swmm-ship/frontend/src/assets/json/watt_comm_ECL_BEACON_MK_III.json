@@ -1,0 +1,1169 @@
+{
+  "formId": "ecl_beacon_mk_iii",
+  "title": "ECL BEACON MK III \u2014 CHECK OFF LIST (716102)",
+  "sourceFile": "ECL_BEACON_MK_III.html",
+  "sections": [
+    {
+      "id": "trial_header_information",
+      "title": "ECL BEACON MK III — CHECK OFF LIST (716102)",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type":"label",
+            "value" : "Basic Infromation",
+            "colSpan" : 12
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Name of Ship",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name",
+            "colSpan": 4
+          },
+          {
+            "_id": "equipment",
+            "key": "equipment",
+            "name": "equipment",
+            "label": "Equipment",
+            "type": "input",
+            "value": "ECL Beacon MK III",
+            "required": false,
+            "disabled": true,
+            "placeholder": " ",
+            "inputType": "text",
+             "colSpan": 4,
+            "prefill": true,
+            "prefillSource": "equipment.nomenclature"
+          },
+          {
+            "_id": "sno",
+            "key": "sno",
+            "name": "sno",
+            "label": "SNo.",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+             "colSpan": 4
+          },
+          {
+            "_id": "trial_date",
+            "key": "trial_date",
+            "name": "trial_date",
+            "label": "Date*",
+            "type": "date",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "date",
+             "colSpan": 4
+          },
+          {
+            "_id": "department",
+            "key": "department",
+            "name": "department",
+            "label": "Department",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+             "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select Department --",
+                "value": ""
+              },
+              {
+                "label": "ND",
+                "value": "ND"
+              },
+              {
+                "label": "Gunnery",
+                "value": "Gunnery"
+              },
+              {
+                "label": "Communication",
+                "value": "Communication"
+              },
+              {
+                "label": "ASW",
+                "value": "ASW"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "nature_of_trials",
+            "key": "nature_of_trials",
+            "name": "nature_of_trials",
+            "label": "Nature of Trials",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+             "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select Nature of Trials --",
+                "value": ""
+              },
+              {
+                "label": "lls",
+                "value": "lls"
+              },
+              {
+                "label": "SATs",
+                "value": "SATs"
+              },
+              {
+                "label": "HATs",
+                "value": "HATs"
+              },
+              {
+                "label": "OP Checks",
+                "value": "OP Checks"
+              }
+            ],
+            "isDynamic": false
+          }
+        ],
+        "tables_1": [
+          {
+            "id": "physical_checks_table_1",
+            "sectionType": "simpleTable",
+            "title": "Physical Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks (Sat / Unsat)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width":"200px"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "checks",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "observations",
+                "label": "Observations",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remarks_sat_unsat",
+                "label": "Remarks (Sat / Unsat)",
+                "type": "label",
+                "align": "center",
+                "width":"200px"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "physical_checks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "physical_checks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Check all Items / accessories as per supply voucher held.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_1_cell_3_phys_1_rmk",
+                    "key": "phys_1_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "physical_checks_table_1_row_2",
+                "cells": [
+                  {
+                    "_id": "physical_checks_table_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Connect equipment to AC mains and then switch ON. AC LED on the front panel should glow and prompt for the power-on P/W.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_2_cell_3_phys_2_rmk",
+                    "key": "phys_2_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "physical_checks_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "physical_checks_table_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Connect equipment to +24V DC supply and then switch it ON. DC LED on the front should glow and prompt for the power-On P/W.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_3_cell_3_phys_3_rmk",
+                    "key": "phys_3_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "physical_checks_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "physical_checks_table_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Connect both AC mains and +24V DC supply to equipment. Switch ON the equipment. The equipment should work on AC.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_4_cell_3_phys_4_rmk",
+                    "key": "phys_4_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "physical_checks_table_1_row_5",
+                "cells": [
+                  {
+                    "_id": "physical_checks_table_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "5.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Switch off AC supply, equipment should shift on DC supply automatically without rebooting.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "physical_checks_table_1_row_5_cell_3_phys_5_rmk",
+                    "key": "phys_5_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "functional_checks_configurations_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "Functional Checks / Configurations",
+            "topHeaders": [
+              [
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks (Sat / Unsat)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "BITE test.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_1_cell_3_func_1_rmk",
+                    "key": "func_1_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "USB connectivity between PC and ECL Beacon MK III on clear side .",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_2_cell_3_func_2_rmk",
+                    "key": "func_2_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "USB connectivity between PC and ECL Beacon MK III on Crypt side .",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_3_cell_3_func_3_rmk",
+                    "key": "func_3_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Loading of Keys from SKG to ECL Beacon MK III.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_4_cell_3_func_4_rmk",
+                    "key": "func_4_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "5.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Display of failure codes on screen when keys have been erased from equipment.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_5_cell_3_func_5_rmk",
+                    "key": "func_5_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "6.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "\"OFFLINE\" mode message encryption and decryption.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_6_cell_3_func_6_rmk",
+                    "key": "func_6_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "functional_checks_configurations_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "7.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "\"OFFLINE\" mode file encryption and decryption.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "functional_checks_configurations_matrix_1_row_7_cell_3_func_7_rmk",
+                    "key": "func_7_rmk",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "--",
+                        "value": ""
+                      },
+                      {
+                        "label": "Sat",
+                        "value": ""
+                      },
+                      {
+                        "label": "Unsat",
+                        "value": ""
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+  "_id": "functional_checks_row_8",
+  "cells": [
+    {
+      "_id": "functional_checks_row_8_cell_1_static",
+      "type": "serial",
+      "value": "8.",
+      "colspan": 1,
+      "rowspan": 2,
+      "align": "center"
+    },
+    {
+      "_id": "functional_checks_row_8_cell_2_label_top",
+      "type": "label",
+      "value": "\"ONLINE\" mode Message communication using Ethernet / PSTN / RS232 with Equipment / System Name",
+      "colspan": 1,
+      "rowspan": 1,
+      "align": "left"
+    },
+    {
+      "_id": "functional_checks_row_8_cell_3_remarks",
+      "key": "online_msg_comm_remarks",
+      "type": "select",
+      "options": [
+        { "label": "--", "value": "" },
+        { "label": "Sat", "value": "SAT" },
+        { "label": "Unsat", "value": "UNSAT" }
+      ],
+      "colspan": 1,
+      "rowspan": 2,
+      "align": "center"
+    }
+  ]
+},
+{
+  "_id": "functional_checks_row_8_input_row",
+  "cells": [
+    {
+      "_id": "functional_checks_row_8_cell_input",
+      "key": "online_msg_comm_equipment_name",
+      "type": "input",
+      "inputType": "text",
+      "placeholder": "Enter Equipment / System Name here",
+      "colspan": 1,
+      "rowspan": 1,
+      "align": "left"
+    }
+  ]
+},
+              {
+  "_id": "functional_checks_row_9",
+  "cells": [
+    {
+      "_id": "functional_checks_row_9_cell_1_static",
+      "type": "serial",
+      "value": "9.",
+      "colspan": 1,
+      "rowspan": 2,
+      "align": "center"
+    },
+    {
+      "_id": "functional_checks_row_9_cell_2_label_top",
+      "type": "label",
+      "value": "\"ONLINE\" mode File transfer using Ethernet / PSTN / RS232 with Equipment / System Name",
+      "colspan": 1,
+      "rowspan": 1,
+      "align": "left"
+    },
+    {
+      "_id": "functional_checks_row_9_cell_3_remarks",
+      "key": "online_file_transfer_remarks",
+      "type": "select",
+      "options": [
+        { "label": "--", "value": "" },
+        { "label": "Sat", "value": "SAT" },
+        { "label": "Unsat", "value": "UNSAT" }
+      ],
+      "colspan": 1,
+      "rowspan": 2,
+      "align": "center"
+    }
+  ]
+},
+{
+  "_id": "functional_checks_row_9_input_row",
+  "cells": [
+    {
+      "_id": "functional_checks_row_9_cell_input",
+      "key": "online_file_transfer_equipment_name",
+      "type": "input",
+      "inputType": "text",
+      "placeholder": "Enter Equipment / System Name here",
+      "colspan": 1,
+      "rowspan": 1,
+      "align": "left"
+    }
+  ]
+}
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "remarks_table_1",
+            "sectionType": "simpleTable",
+            "title": "Remarks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Observations",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "SS Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "sr_no",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "observations",
+                "label": "Observations",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "ss_remarks",
+                "label": "SS Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "remarks_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "remarks_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "remarks_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          }
+        ],
+        "fields_2": [
+          {
+            "type":"label",
+            "value" : "Presenting Authority",
+            "colSpan" : 12
+          },
+          {
+            "_id": "dmr_16a_presenting_authority",
+            "key": "dmr_16a_presenting_authority",
+            "name": "dmr_16a_presenting_authority",
+            "label": "Presenting Authority",
+            "type": "select",
+            "value": "",
+            "colSpan":12,
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "--Select--",
+                "value": ""
+              },
+              {
+                "label": "Dockyard",
+                "value": "dockyard"
+              },
+              {
+                "label": "Shipstaff",
+                "value": "shipstaff"
+              },
+              {
+                "label": "OEM",
+                "value": "oem"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "dmr_16a_watt",
+            "key": "dmr_16a_watt",
+            "name": "dmr_16a_watt",
+            "label": "WATT",
+            "type": "input",
+            "value": "VZG",
+            "colSpan":12,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "text"
+          }
+        ],
+        "tables_2": []
+      }
+    }
+
+  ]
+}

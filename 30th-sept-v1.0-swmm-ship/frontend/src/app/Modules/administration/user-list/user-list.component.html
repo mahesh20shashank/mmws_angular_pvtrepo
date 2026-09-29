@@ -1,0 +1,265 @@
+<div class="user-list-container">
+
+  <div class="user-list-top-bar">
+    <app-button variant="danger" customClass="admin-db-reset-btn" title="Permanently reset the database"
+      (click)="openResetConfirm()">
+      <app-icon name="database" [size]="13" [strokeWidth]="1.8" variant="inherit" />
+      <span>Reset SWMM</span>
+    </app-button>
+  </div>
+
+  <app-help-guidance [bodyHtml]="helpHtml" class="mb-4 block" />
+  <!-- Pending Role Requests Card -->
+  <div class="card glass-card mb-4">
+    <div class="card-header-flex mb-3">
+      <h5 class="card-title mb-0">
+        Pending Role Requests
+        @if(pendingRequests().length > 0){
+        <span class="badge bg-danger ms-2">
+          {{ pendingRequests().length }}
+        </span>
+        }
+      </h5>
+    </div>
+
+
+    <div class="grid-container" style="height: 280px;">
+      <app-data-grid [rowData]="pendingRequests()" [columnDefs]="pendingRequestColumnDefs" [pageSize]="5"
+        (cellClicked)="onPendingCellClicked($event)" (rowClicked)="onPendingCellClicked($event)">
+      </app-data-grid>
+    </div>
+
+  </div>
+
+  <!-- User Accounts Directory Card -->
+  <div class="card glass-card">
+    <div class="card-header-flex mb-3">
+      <h5 class="card-title mb-0">Registered Users Directory</h5>
+      <div class="search-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input type="text" placeholder="Search by name, number, department..." [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)" />
+      </div>
+    </div>
+
+    <div class="grid-container" style="height: 480px;">
+      <app-data-grid [rowData]="filteredUsers()" [columnDefs]="userColumnDefs" [pageSize]="10"
+        (cellClicked)="onUserCellClicked($event)" (rowClicked)="onUserRowClicked($any($event))">
+      </app-data-grid>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit User Profile -->
+@if(showEditModal()){
+<app-modal (closeModal)="showEditModal.set(false)" title="Edit User Profile" size="xl">
+  <div class="edit-modal-card-inner">
+
+    <!-- Section 1: Personal & Role Information -->
+    <fieldset class="edit-fieldset">
+      <legend class="edit-legend">PERSONAL & ROLE INFORMATION</legend>
+
+      <!-- Row 1: 3 columns (Firstname, Lastname, Personal number) -->
+      <div class="form-grid-3 mb-3">
+        <div class="form-col">
+          <label for="firstName" class="form-label">Firstname</label>
+          <input type="text" class="form-control" id="firstName" [ngModel]="editForm().firstName"
+            (ngModelChange)="updateFormField('firstName', $event)" placeholder="Firstname">
+        </div>
+        <div class="form-col">
+          <label for="lastName" class="form-label">Lastname</label>
+          <input type="text" class="form-control" id="lastName" [ngModel]="editForm().lastName"
+            (ngModelChange)="updateFormField('lastName', $event)" placeholder="Lastname">
+        </div>
+        <div class="form-col">
+          <label for="personalNumber" class="form-label">Personal number</label>
+          <input type="text" class="form-control" id="personalNumber" [ngModel]="editForm().personalNumber"
+            (ngModelChange)="updateFormField('personalNumber', $event)" placeholder="Personal number">
+        </div>
+      </div>
+
+      <!-- Row 2: 2 columns (Designation master, Rank) -->
+      <div class="form-grid-2">
+        <div class="form-col">
+          <label for="designationMaster" class="form-label">Designation master</label>
+          <select class="form-select" id="designationMaster" [ngModel]="editForm().designationMaster"
+            (ngModelChange)="updateFormField('designationMaster', $event)">
+            <option [ngValue]="null">---------</option>
+            @for(desig of designations(); track desig.id){
+            <option [ngValue]="desig.id">{{ desig.designation_name }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="rank" class="form-label">Rank</label>
+          <input type="text" class="form-control" id="rank" [ngModel]="editForm().rank"
+            (ngModelChange)="updateFormField('rank', $event)" placeholder="Rank">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Section 2: Assignment -->
+    <fieldset class="edit-fieldset">
+      <legend class="edit-legend">ASSIGNMENT</legend>
+
+      <!-- Row 1: 3 columns (Department, Sub Department, Assign Role) -->
+      <div class="form-grid-3 mb-3">
+        <div class="form-col">
+          <label for="department" class="form-label">Department</label>
+          <select class="form-select" id="department" [ngModel]="editForm().department"
+            (ngModelChange)="updateFormField('department', $event)">
+            <option [ngValue]="''">-- Select Department --</option>
+            @for(dept of departments(); track dept.id){
+            <option [ngValue]="dept.name">{{ dept.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="subDepartment" class="form-label">{{ editForm().department ? (editForm().department | titlecase) +
+            ' Sub Department' : 'Executive Sub Department' }}</label>
+          <select class="form-select" id="subDepartment" [ngModel]="editForm().subDepartment"
+            (ngModelChange)="updateFormField('subDepartment', $event)">
+            <option [ngValue]="null">-- Select Sub Department --</option>
+            @for(sub of currentSubDepartments(); track sub){
+            <option [ngValue]="sub">{{ sub }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="assignRole" class="form-label">Assign Role</label>
+          <select class="form-select" id="assignRole" [ngModel]="editForm().roleId"
+            (ngModelChange)="updateFormField('roleId', $event)">
+            <option [ngValue]="null">Select Role</option>
+            @for(role of roles(); track role.id){
+            <option [ngValue]="role.id">{{ role.role_name | titlecase }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Row 2: 3 columns (Is OOD, Is Regulator, Empty) -->
+      <div class="form-grid-3">
+        <div class="form-col">
+          <label for="isOod" class="form-label">Is OOD</label>
+          <select class="form-select" id="isOod" [ngModel]="editForm().isOod"
+            (ngModelChange)="updateFormField('isOod', $event)">
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Yes</option>
+          </select>
+        </div>
+        <div class="form-col">
+          <label for="isRegulator" class="form-label">Is Regulator</label>
+          <select class="form-select" id="isRegulator" [ngModel]="editForm().isRegulator"
+            (ngModelChange)="updateFormField('isRegulator', $event)">
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Yes</option>
+          </select>
+        </div>
+        <div class="form-col"></div>
+      </div>
+    </fieldset>
+
+    <!-- Section 3: Account Status & Permissions -->
+    <fieldset class="edit-fieldset">
+      <legend class="edit-legend">ACCOUNT STATUS & PERMISSIONS</legend>
+      <div class="form-grid-2 align-items-center">
+        <div class="form-col">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" [ngModel]="editForm().username"
+            (ngModelChange)="updateFormField('username', $event)" placeholder="Username">
+        </div>
+        <div class="form-col pt-1">
+          <div class="toggle-container mb-1">
+            <label for="accountActiveToggle" class="toggle-switch">
+              <input type="checkbox" id="accountActiveToggle" [checked]="editForm().isActive"
+                (change)="updateFormField('isActive', $any($event.target).checked)">
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-label" for="accountActiveToggle">Account Active</label>
+          </div>
+          <div class="status-help-text">
+            A deactivated account cannot sign in, and is signed out of any session it already has on its next action.
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Bottom Actions -->
+    <div class="edit-modal-actions">
+      <app-button type="button" variant="outline" (click)="showEditModal.set(false)">
+        Cancel
+      </app-button>
+      <app-button type="button" variant="primary"
+        [disabled]="isSaving() || !editForm().firstName.trim() || !editForm().roleId || !editForm().lastName.trim()"
+        (click)="saveUserChanges()">
+        @if(isSaving()){
+        <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Save Changes
+      </app-button>
+    </div>
+
+  </div>
+</app-modal>
+}
+
+<!-- Modal: Action Confirmation (Approve / Reject) -->
+@if(confirmModalState().isOpen){
+<app-modal [title]="confirmModalState().title" size="md" (closeModal)="closeConfirmModal()">
+  <div class="space-y-4">
+    <p class="text-[15px] font-medium text-[var(--text-primary)]" [innerHTML]="confirmModalState().message"></p>
+    @if(confirmModalState().type === 'approve' && confirmModalState().roleName){
+    <div
+      class="p-3 text-xs rounded-lg border border-sky-500/20 bg-sky-500/10 text-[var(--text-muted)] flex items-center justify-between">
+      <span class="font-medium text-[var(--text-muted)]">Role to Grant:</span>
+      <span class="font-bold text-[var(--accent-light,#61c2ff)] text-sm">{{ confirmModalState().roleName }}</span>
+    </div>
+    }
+  </div>
+
+  <div class="flex items-center justify-end gap-3 pt-4 mt-4 border-t border-[var(--border-primary)]">
+    <app-button type="button" variant="outline" (click)="closeConfirmModal()">
+      Cancel
+    </app-button>
+    <app-button [variant]="confirmModalState().type === 'approve' ? 'success' : 'danger'" [disabled]="isSaving()"
+      (click)="executeConfirmedAction()">
+      @if(isSaving()){
+      <span class="spinner-border spinner-border-sm me-1"></span>
+      }
+      {{ confirmModalState().type === 'approve' ? 'Yes, Approve' : 'Yes, Reject' }}
+    </app-button>
+  </div>
+</app-modal>
+}
+
+<!-- Modal: Reset SWMM confirmation — type RESET to enable the button -->
+@if (showResetConfirm()) {
+<app-modal (closeModal)="closeResetConfirm()" size="sm" title="Reset Database" titleBg="#DC2626">
+  <div class="admin-reset-confirm">
+    <p class="admin-reset-confirm__warning">
+      This will permanently reset the database. <strong>This action cannot be undone.</strong>
+    </p>
+    <label for="dbResetConfirmInput" class="admin-reset-confirm__label">
+      Type <strong>RESET</strong> to confirm
+    </label>
+    <input id="dbResetConfirmInput" type="text" class="admin-reset-confirm__input" placeholder="RESET"
+      [ngModel]="resetConfirmText()" (ngModelChange)="resetConfirmText.set($event)" autocomplete="off" />
+    <div class="admin-reset-confirm__actions">
+      <app-button type="button" variant="outline" [disabled]="isResetting()" (click)="closeResetConfirm()">
+        Cancel
+      </app-button>
+      <app-button variant="danger" customClass="admin-db-reset-confirm-btn"
+        [disabled]="resetConfirmText() !== 'RESET' || isResetting()" (click)="confirmDatabaseReset()">
+        @if (isResetting()) {
+        <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Reset Database
+      </app-button>
+    </div>
+  </div>
+</app-modal>
+}

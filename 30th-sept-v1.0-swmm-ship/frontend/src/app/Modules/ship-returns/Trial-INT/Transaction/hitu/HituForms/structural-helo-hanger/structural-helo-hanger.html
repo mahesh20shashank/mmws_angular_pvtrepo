@@ -1,0 +1,935 @@
+<app-form-card
+  title="STRUCTURAL SOUNDNESS OF HELO HANGAR "
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <!-- ROW 1 -->
+    <div class="grid grid-cols-2 gap-3">
+      <app-input
+        [label]="'Ship*'"
+        formControlName="ship"
+        placeholder="ship name"
+        class="w-full"
+      >
+      </app-input>
+      <!-- Date of conduct of trials  -->
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+      <!--Place of conduct of trials  -->
+
+      <app-select
+        [label]="'Place of conduct of trials*'"
+        formControlName="place_of_conduct_trail"
+        [options]="placesOptions"
+        placeholder="--Select--"
+        class="w-full"
+      >
+      </app-select>
+      <app-select
+        [label]="'Occasion for conduct of Trials '"
+        formControlName="occasion_of_conduct_trail"
+        [searchable]="false"
+        [options]="occasionOptions"
+        placeholder="--Select--"
+        class="w-full"
+      >
+      </app-select>
+
+      <app-select
+        [label]="'Reps Present*'"
+        formControlName="reps_present"
+        [options]="reps_present_options"
+        placeholder="--Select--"
+        [searchable]="false"
+        class="w-full"
+      >
+      </app-select>
+
+      <div
+        *ngIf="usersList.length > 0 && form.get('reps_present')?.value !== 'Others'"
+      >
+        <app-multiselect
+          [label]="'Select User'"
+          formControlName="reps_present_user"
+          [options]="usersList"
+          placeholder="--Select--"
+        ></app-multiselect>
+      </div>
+
+      <div *ngIf="form.get('reps_present')?.value === 'Others'">
+        <app-input
+          [label]="'Enter User'"
+          formControlName="reps_present_other_user"
+          placeholder="Enter name"
+        ></app-input>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload
+          [label]="'Upload doc*'"
+          formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)"
+        >
+        </app-file-upload>
+        <!-- </div> -->
+      </div>
+    </app-parameter-card>
+
+    <table class="w-full border-collapse text-sm mt-5">
+      <!-- HEADER -->
+      <thead>
+        <tr>
+          <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 w-10" colspan="1">Ser</th>
+          <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="2">Description</th>
+          <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="2">Observations</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Visual Inspection</td>
+        </tr>
+
+        <!-- 1 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" colspan="=1">1</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">Deck Head</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="deck_head"
+              placeholder="Enter deck head details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 2 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" colspan="1">2</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">Hangar Top</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="hangar_top"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 3 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" colspan="1">3</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            Bulkheads (Fwd, C/L & Ship Side / Superstructure side)
+          </td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="bulkhead"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 4 -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" colspan="1">4</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            Deck and Dadoes Areas
+          </td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="deck_dadoes"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Hanger Door</td>
+        </tr>
+
+        <!-- 5 Make -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">5</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Make</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="make_cmms"
+              [searchable]="false"
+              [options]="makeCmmsOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 6 Model -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">6</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Model</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="model_cmms"
+              [searchable]="false"
+              [options]="modelCmmsOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 7 Normal Mode -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">7</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Normal Mode</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+            <app-select
+              formControlName="normal_mode"
+              [searchable]="false"
+              [options]="naApplicableOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-select
+              *ngIf="form.get('normal_mode')?.value === 'Applicable'"
+              formControlName="normal_mode_status"
+              [options]="opsStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 8 Emergency Mode -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">8</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Emergency Mode</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+            <app-select
+              formControlName="emergency_mode_1"
+              [searchable]="false"
+              [options]="naApplicableOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-select
+              *ngIf="form.get('emergency_mode_1')?.value === 'Applicable'"
+              formControlName="emergency_mode_status_1"
+              [searchable]="false"
+              [options]="opsStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 9 Emergency Mode 
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">9</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Manual Mode</td>
+
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+
+              <app-select
+                formControlName="manual_mode"
+                [options]="naApplicableOptions"
+                placeholder="--Select--"
+              ></app-select>
+
+              <app-select
+                *ngIf="form.get('manual_mode')?.value === 'Applicable'"
+                formControlName="manual_mode_status"
+                [options]="opsStatusOptions"
+                placeholder="--Select--"
+              ></app-select>
+
+            </td>
+
+
+          </tr>-->
+
+        <!-- 10 Observations -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">9</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Defects / Observations</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="defects_obs"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 11 Remarks -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">10</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Remarks</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="final_remark_1"
+              [searchable]="false"
+              [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with observations', value: 'SAT_OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+            >
+            </app-select>
+
+            <textarea
+              *ngIf="form.get('final_remark_1')?.value === 'SAT_OBS'"
+              formControlName="final_remark_1_obs"
+              class="input-field"
+            >
+            </textarea>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            Helo Traversing System
+          </td>
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">11</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Make</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="helo_make_cmms"
+              [searchable]="false"
+              [options]="makeCmmsOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 12 Model -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">12</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Model</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="helo_model_cmms"
+              [searchable]="false"
+              [options]="modelCmmsOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 13 Normal Mode -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">13</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Normal Mode</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+            <app-select
+              formControlName="normal_mode_1"
+              [searchable]="false"
+              [options]="naApplicableOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-select
+              *ngIf="form.get('normal_mode_1')?.value === 'Applicable'"
+              formControlName="normal_mode_status_1"
+              [options]="opsStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 14 Emergency Mode -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">14</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Emergency Mode</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+            <app-select
+              formControlName="emergency_mode"
+              [searchable]="false"
+              [options]="naApplicableOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-select
+              *ngIf="form.get('emergency_mode')?.value === 'Applicable'"
+              formControlName="emergency_mode_status"
+              [options]="opsStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+
+          <!--</tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">13</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Manual Mode</td>
+
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-select
+                formControlName="manual_mode_2"
+                [options]="naApplicableOptions"
+                placeholder="--Select--"
+              ></app-select>
+
+              <app-select
+                *ngIf="form.get('manual_mode_2')?.value === 'Applicable'"
+                formControlName="manual_mode_status_2"
+                [options]="opsStatusOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>-->
+        </tr>
+
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" rowspan="2">15</td>
+
+          <!-- Parameter -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-medium" rowspan="2">
+            Load test undertaken on
+          </td>
+
+          <!-- Checks (Port) -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Port</td>
+
+          <!-- Observations -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2">
+            <app-select
+              formControlName="port_test"
+              [searchable]="false"
+              [options]="yesNoOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-calendar
+              *ngIf="form.get('port_test')?.value === 'yes'"
+              formControlName="port_date"
+            ></app-calendar>
+
+            <input
+              *ngIf="form.get('port_test')?.value === 'yes'"
+              type="file"
+              accept="application/pdf"
+              (change)="handleFile($any($event.target)?.files?.[0] ?? null, 'port')"
+              class="w-full border border-white/20 p-1 bg-white/[0.06] rounded"
+            />
+          </td>
+        </tr>
+
+        <!-- STBD -->
+        <tr>
+          <!-- Checks -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 pl-6">Stbd</td>
+
+          <!-- Observations -->
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2">
+            <app-select
+              formControlName="stbd_test"
+              [searchable]="false"
+              [options]="yesNoOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-calendar
+              *ngIf="form.get('stbd_test')?.value === 'yes'"
+              formControlName="stbd_date"
+            ></app-calendar>
+
+            <input
+              *ngIf="form.get('stbd_test')?.value === 'yes'"
+              type="file"
+              accept="application/pdf"
+              (change)="handleFile($any($event.target)?.files?.[0] ?? null, 'stbd')"
+              class="w-full border border-white/20 p-1 bg-white/[0.06] rounded"
+            />
+          </td>
+        </tr>
+        <!-- 16 Observations -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">16</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Defects / Observations</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="defects_extra"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 17 Remarks -->
+        <tr class="">
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">17</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Remarks</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="final_remark"
+              [searchable]="false"
+              [options]="[
+              { label: 'SAT', value: 'SAT' },
+              { label: 'SAT with observations', value: 'SAT_OBS' },
+              { label: 'UNSAT', value: 'UNSAT' }
+            ]"
+            >
+            </app-select>
+
+            <textarea
+              *ngIf="form.get('final_remark')?.value === 'SAT_OBS'"
+              formControlName="final_remark_obs"
+              class="input-field"
+            >
+            </textarea>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Lashing Points</td>
+        </tr>
+
+        <!-- 18 Visual Inspection -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">18</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Visual Inspection</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="visual_inspection"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 19 Load Test Date + Qty -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">19</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Load Test Date</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <div formArrayName="load_tests" class="flex flex-col gap-3">
+              <div
+                *ngFor="let group of loadTests.controls; let i = index"
+                [formGroupName]="i"
+                class="flex items-center gap-3"
+              >
+                <app-calendar
+                  formControlName="load_test_date"
+                  class="w-28"
+                ></app-calendar>
+
+                <div class="flex items-center gap-1">
+                  <app-input
+                    type="number"
+                    formControlName="load_test_qty"
+                    placeholder="Qty"
+                    class="w-24"
+                  ></app-input>
+                  <span class="text-xs text-white/60">*Nos</span>
+                </div>
+
+                <!-- Remove -->
+                <button
+                  type="button"
+                  (click)="removeLoadTest(i)"
+                  class="w-8 h-8 flex items-center justify-center border border-white/15 rounded-sm bg-white/[0.06] hover:bg-red-100 hover:border-red-300"
+                >
+                  −
+                </button>
+              </div>
+
+              <!-- Add Button -->
+              <div class="flex justify-end mt-1">
+                <button
+                  type="button"
+                  (click)="addLoadTest()"
+                  class="w-8 h-8 flex items-center justify-center border border-white/15 rounded-sm bg-white/[0.06] hover:bg-green-100"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 20 Load Test Certificate -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">20</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Load Test Certificate</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-file-upload
+              formControlName="lashing_load_test_certificate"
+              (filesUploaded)="handleLashingLoadTestCertificateUploaded($event)"
+            >
+            </app-file-upload>
+          </td>
+        </tr>
+
+        <!-- SECTION -->
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Helo Safety Nets</td>
+        </tr>
+
+        <!-- 21 Qty -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">21</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Qty (Nos)</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-input type="number" formControlName="helo_qty"></app-input>
+          </td>
+        </tr>
+
+        <!-- 22 Load Tested On -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">22</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Load Tested On</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-calendar formControlName="helo_load_date"></app-calendar>
+          </td>
+        </tr>
+
+        <!-- 23 Certificate -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">23</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Load Test Certificate</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-file-upload
+              formControlName="helo_load_test_certificate"
+              (filesUploaded)="handleHeloLoadTestCertificateUploaded($event)"
+            >
+            </app-file-upload>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Harpoon Grid</td>
+        </tr>
+
+        <!-- Harpoon Grid -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="4">
+            <app-select
+              formControlName="harpoon_grid_status"
+              [searchable]="false"
+              [options]="harpoonGridStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-select
+              *ngIf="form.get('harpoon_grid_status')?.value === 'Fitted'"
+              formControlName="harpoon_grid_ops"
+              [options]="opsStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            Helo/ Aircraft Lifts/ Turntable
+          </td>
+        </tr>
+
+        <!-- Helo/ Aircraft Lifts/ Turntable -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="4">
+            <app-input
+              formControlName="helo_lifts_turntable_remark"
+              placeholder="Enter details"
+            ></app-input>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+            Preservation of Helo/ Hangar Deck
+          </td>
+        </tr>
+
+        <!-- 24 Paint Scheme -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">24</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Paint Scheme</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="paint_scheme"
+              [searchable]="false"
+              [options]="paintSchemeOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <!-- 25 Full Paint Scheme Renewed -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">25</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Full Paint Scheme Renewed on</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-calendar formControlName="paint_renewed_date"></app-calendar>
+          </td>
+        </tr>
+
+        <!-- 26 Present Paint Condition -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">26</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Present Paint Condition</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="paint_condition"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 27 Friction Test -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">27</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Friction Test Undertaken on</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-calendar formControlName="friction_test_date"></app-calendar>
+          </td>
+        </tr>
+
+        <!-- 28 Remarks -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">28</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Remarks</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="paint_final_sel_remark"
+              [searchable]="false"
+              [options]="[
+                { label: 'SAT', value: 'SAT' },
+                { label: 'SAT with observations', value: 'SAT_OBS' },
+                { label: 'UNSAT', value: 'UNSAT' }
+              ]"
+            >
+            </app-select>
+
+            <textarea
+              *ngIf="form.get('paint_final_sel_remark')?.value === 'SAT_OBS'"
+              formControlName="paint_final_remark"
+              class="input-field"
+            ></textarea>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Drainage</td>
+        </tr>
+
+        <!-- 29 Helo Deck -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">29</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Helo Deck</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-select
+              formControlName="helo_deck"
+              [searchable]="false"
+              [options]="[
+                  { label: 'SAT', value: 'SAT' },
+                  { label: 'SAT with observations', value: 'SAT_OBS' },
+                  { label: 'UNSAT', value: 'UNSAT' }
+                ]"
+            >
+            </app-select>
+
+            <textarea
+              *ngIf="form.get('helo_deck')?.value === 'SAT_OBS'"
+              formControlName="helo_deck_remark"
+              class="input-field"
+            >
+            </textarea>
+          </td>
+        </tr>
+
+        <!-- 30 Hangar -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">30</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Hangar</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+            <app-select
+              formControlName="hangar_mode"
+              [searchable]="false"
+              [options]="naApplicableOptions"
+              placeholder="--Select--"
+            ></app-select>
+
+            <app-select
+              *ngIf="form.get('hangar_mode')?.value === 'Applicable'"
+              formControlName="hangar_status"
+              [searchable]="false"
+              [options]="hangarStatusOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+
+        <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+          <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">Final Observation</td>
+        </tr>
+
+        <!-- 31 Other Observations -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">31</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Other Observations, if any</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <app-dynamic-textarea
+              [form]="form"
+              controlName="other_observations"
+              placeholder="Enter details"
+            >
+            </app-dynamic-textarea>
+          </td>
+        </tr>
+
+        <!-- 32 Overall Remarks -->
+        <tr>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">32</td>
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold">Overall Remarks</td>
+
+          <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+            <!-- <app-dynamic-select-textarea
+                  [form]="form"
+                  selectControl="overall_sel_remark"
+                  textareaControl="overall_remark"
+                  triggerValue="SAT_OBS"
+                  [options]="[
+                    { label: 'SAT', value: 'SAT' },
+                    { label: 'SAT with observations', value: 'SAT_OBS' },
+                    { label: 'UNSAT', value: 'UNSAT' }]" >
+              </app-dynamic-select-textarea> -->
+            <app-select
+              formControlName="overall_remark"
+              [searchable]="false"
+              [options]="overAllOptions"
+              placeholder="--Select--"
+            ></app-select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

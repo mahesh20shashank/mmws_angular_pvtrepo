@@ -1,0 +1,651 @@
+.quarterly-report-container {
+  padding: 16px;
+
+  background: #fff;
+
+  overflow-x: auto;
+}
+
+.report-top-bar {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 16px;
+
+  margin-bottom: 16px;
+}
+
+.report-main-title {
+  font-size: 20px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  text-align: center;
+}
+
+.report-sub-title {
+  font-size: 14px;
+
+  font-weight: 600;
+
+  margin-top: 4px;
+}
+
+.download-btn {
+  background: #2563eb;
+
+  color: #fff;
+
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.download-btn:hover {
+  background: #1d4ed8;
+}
+
+.top-details-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(250px, 1fr));
+
+  border: 1px solid #000;
+
+  margin-bottom: 16px;
+}
+
+.top-detail-item {
+  border-right: 1px solid #000;
+
+  padding: 10px;
+
+  font-size: 13px;
+
+  min-height: 45px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.top-detail-item:last-child {
+  border-right: none;
+}
+
+.detail-label {
+  font-weight: 700;
+}
+
+.quarterly-report-table {
+  border-collapse: collapse;
+
+  /* width: max-content; */
+
+  table-layout: fixed;
+
+  font-size: 11px;
+}
+
+.quarterly-report-table th,
+.quarterly-report-table td {
+  border: 1px solid #000;
+
+  padding: 6px 8px;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  word-break: break-word;
+
+  min-width: 70px;
+}
+
+.quarterly-report-table thead th {
+  background: #f3f4f6;
+
+  font-weight: 700;
+}
+
+.quarterly-report-table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+@media print {
+  .download-btn {
+    display: none;
+  }
+
+  .quarterly-report-container {
+    overflow: visible;
+  }
+
+  .quarterly-report-table {
+    font-size: 8px;
+  }
+
+  .quarterly-report-table th,
+  .quarterly-report-table td {
+    padding: 4px;
+  }
+}
+
+/* ── Base container ─────────────────────────────────────────── */
+
+.report-container {
+  padding: 16px;
+  background: #fff;
+  height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+/* ── Titles ──────────────────────────────────────────────────── */
+.report-title {
+  text-align: center;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.report-sub-title {
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+/* ── Details grid ────────────────────────────────────────────── */
+.details-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 24px;
+  margin-bottom: 20px;
+  border: 1px solid #000;
+  padding: 10px 14px;
+}
+
+.details-section-two-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 24px;
+  margin-bottom: 20px;
+  border: 1px solid #000;
+  padding: 10px 14px;
+}
+
+.details-section-border {
+  border: 1px solid #000;
+  padding: 10px 14px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-key {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.detail-value {
+  font-weight: 400;
+}
+
+.table-scroll-wrapper {
+  /* width: 100%; */
+  overflow-x: auto;
+  /* -webkit-overflow-scrolling: touch; smooth scroll on iOS */
+  /* border: 1px solid #000;            optional: wraps the scroll area */
+}
+
+/* ── Table ───────────────────────────────────────────────────── */
+.report-table {
+  border-collapse: collapse;
+  font-size: 11px;
+  table-layout: fixed;
+  min-width: 1200px;
+  width: max-content;
+}
+
+.report-table th,
+.report-table td {
+  border: 1px solid #000;
+  padding: 5px 6px;
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+  white-space: normal;
+}
+/* Wider columns for text-heavy cells */
+.report-table td:nth-child(3),   /* Compartment Name */
+.report-table td:nth-child(8),   /* Extent of Corrosion */
+.report-table td:nth-child(15),  /* Location of Defect */
+.report-table td:nth-child(20),  /* SM Name */
+.report-table td:nth-child(21) {
+  /* SM Description */
+  max-width: 160px;
+}
+
+/* ── Header cells ────────────────────────────────────────────── */
+.report-table-header {
+  text-align: center;
+  color: #000 !important;
+  background-color: #f3f3f3 !important;
+  padding: 8px 6px;
+  font-weight: 600;
+  font-size: 10px; /* slightly smaller for narrow headers */
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: normal; /* allow wrapping in header cells */
+  /* min-width:40px; */
+  max-width: 30px;
+}
+
+.report-table-header-s-no {
+  text-align: center;
+  color: #000 !important;
+  background-color: #f3f3f3 !important;
+  padding: 8px 6px;
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: normal;
+  width: 60px;
+  max-width: 110px;
+}
+/* Group / span headers get a slightly darker background */
+.report-table th.group-header {
+  background-color: #e0e0e0 !important;
+  font-size: 11px;
+  color: #000;
+}
+
+/* ── Print / PDF styles ──────────────────────────────────────── */
+@media print {
+  .report-container {
+    padding: 8px;
+  }
+
+  /* Hide the download button when printing */
+  .flex.justify-end {
+    display: none !important;
+  }
+
+  .report-table {
+    font-size: 8px;
+  }
+
+  .report-table th,
+  .report-table td {
+    padding: 3px 4px;
+  }
+
+  /* Force landscape + A3 from the browser print dialog */
+  @page {
+    size: A3 landscape;
+    margin: 10mm;
+  }
+}
+
+
+
+/* ── Top Bar ─────────────────────────────────────────────── */
+.ber-top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.ber-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ber-download-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ── Titles ──────────────────────────────────────────────── */
+.ber-title {
+  text-align: center;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.ber-subtitle {
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #000;
+}
+
+/* ── Details Section ─────────────────────────────────────── */
+.ber-details-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 24px;
+  margin-bottom: 20px;
+  border: 1px solid #000;
+  padding: 10px 14px;
+}
+
+.ber-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.ber-detail-key {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ber-detail-value {
+  font-weight: 400;
+}
+
+/* ── Table Wrapper ───────────────────────────────────────── */
+.ber-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ber-table {
+  width: 100%;
+}
+
+/* ── Table ───────────────────────────────────────────────── */
+/* .ber-table td:first-child,
+    .ber-table th:first-child {
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+      text-align: center;
+    }
+ 
+    .ber-table td:last-child,
+    .ber-table th:last-child {
+      width: auto;
+    } */
+
+.ber-table th,
+.ber-table td {
+  border: 1px solid #000;
+  padding: 6px 8px;
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* ── Header Cells ────────────────────────────────────────── */
+.ber-table thead th {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #000;
+  padding: 8px 6px;
+}
+
+.ber-table thead th.group-header {
+  background-color: #f3f3f3 !important;
+  font-size: 12px;
+  color: #000 !important;
+}
+
+.ber-table .label-col {
+  width: 40%;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* ── Body Rows ───────────────────────────────────────────── */
+.ber-table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.ber-table tbody tr:hover {
+  background: #f0f4ff;
+}
+
+/* ── Authority Row ───────────────────────────────────────── */
+.ber-table .authority-row td {
+  height: 120px;
+  vertical-align: middle;
+}
+
+.seal-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px dashed #aaa;
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ── Print Styles ────────────────────────────────────────── */
+@media print {
+  .ber-top-bar {
+    display: none !important;
+  }
+
+
+  .ber-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    table-layout: auto;
+    min-width: 500px;
+  }
+
+  .ber-table th,
+  .ber-table td {
+    padding: 4px;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+}
+
+.inner-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.inner-table th,
+.inner-table td {
+  border: 1px solid #000;
+  padding: 6px;
+  font-size: 12px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ─────────────────────────────────────
+   Nested Engine Table
+───────────────────────────────────── */
+
+.nested-table-cell {
+  padding: 6px !important;
+  background: #fff;
+}
+
+.engine-inner-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 11px;
+}
+
+.engine-inner-table th,
+.engine-inner-table td {
+  border: 1px solid #000;
+  padding: 8px 6px;
+  text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.engine-inner-table thead th {
+  background-color: #f3f3f3;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.2;
+  color: #000000 !important;
+}
+
+/* Column widths matching image */
+
+.engine-inner-table th:nth-child(1),
+.engine-inner-table td:nth-child(1) {
+  width: 6%;
+}
+
+.engine-inner-table th:nth-child(2),
+.engine-inner-table td:nth-child(2) {
+  width: 23%;
+}
+
+.engine-inner-table th:nth-child(3),
+.engine-inner-table td:nth-child(3) {
+  width: 23%;
+}
+
+.engine-inner-table th:nth-child(4),
+.engine-inner-table td:nth-child(4) {
+  width: 23%;
+}
+
+.engine-inner-table th:nth-child(5),
+.engine-inner-table td:nth-child(5) {
+  width: 23%;
+}
+
+.no-data {
+  text-align: center;
+  font-weight: 600;
+  padding: 10px;
+}
+
+/* ─────────────────────────────────────
+   Signature Table
+───────────────────────────────────── */
+/* KEEP only this one */
+.signature-table-cell {
+  padding: 0 !important;
+  border: 1px solid #000;
+  width: 100% !important;
+}
+
+.signature-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse;
+}
+
+.signature-table th,
+.signature-table td {
+  width: 25% !important;
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.signature-table thead th,
+.signature-table-col-header {
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  background-color: #f3f3f3;
+  color: #000000 !important;
+}
+
+.signature-table tbody td {
+  height: 80px;
+  color: #000000 !important;
+}
+
+.part-header {
+  background-color: #cfcfcf;
+  padding: 5px 10px;
+}
+
+/* ─────────────────────────────────────
+   Report Footer Status & Document Link
+───────────────────────────────────── */
+.report-status-footer {
+  margin-top: 16px;
+  padding: 10px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  border-top: 1px dashed #ccc;
+  color: #1f2937;
+}
+
+.report-status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  margin-left: 6px;
+  border-radius: 4px;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+  font-size: 13px;
+  border: 1px solid #bae6fd;
+}
+
+.doc-url-link {
+  color: #2563eb;
+  text-decoration: underline;
+  word-break: break-all;
+  font-weight: 500;
+}
+
+.doc-url-link:hover {
+  color: #1d4ed8;
+}
+

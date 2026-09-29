@@ -1,0 +1,2216 @@
+{
+  "formId": "ecbpmvibration",
+  "title": "E-Vibration",
+  "sourceFile": "e-cbpm-vibration.component.html",
+  "sections": [
+    {
+      "id": "section_1",
+      "title": "E-Vibration",
+      "sectionType": "mixed",
+      "sectionGroup": {
+        "tables_1": [
+          {
+            "id": "section_1_table_1",
+            "sectionType": "matrixTable",
+            "topHeaders": [],
+            "rows": [
+              {
+                "_id": "section_1_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_1_cell_1_static",
+                    "key": "ship",
+                    "type": "label",
+                    "value": "Ship:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_1_cell_2_ship",
+                    "key": "ship_name",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": true,
+                    "lookupKey": "ship_name",
+                    "prefill": true,
+                    "prefillSource": "context.ship_name",
+                    "lockAfterPrefill": false,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_3_cell_1_static",
+                    "key": "date",
+                    "type": "label",
+                    "value": "Date: ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_3_cell_2_date",
+                    "key": "date",
+                    "type": "input",
+                    "value": "",
+                    "placeholder": "MM/DD/YYYY",
+                    "inputType": "date",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_4_cell_1_static",
+                    "key": "equipment_status",
+                    "type": "label",
+                    "value": "Equipment Status: ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_4_cell_2_equipmentStatusOpsNonopsVib",
+                    "key": "equipmentStatusOpsNonopsVib",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "Ops",
+                        "value": "ops"
+                      },
+                      {
+                        "label": "Non Ops",
+                        "value": "non_ops"
+                      }
+                    ],
+                    "colspan": 3,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_5",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_5_cell_1_static",
+                    "key": "occasion",
+                    "type": "label",
+                    "value": "Occasion: ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_5_cell_2_occasion",
+                    "key": "occasion",
+                    "type": "select",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "Monthly",
+                        "value": "Monthly"
+                      },
+                      {
+                        "label": "Quarterly",
+                        "value": "Quarterly"
+                      },
+                      {
+                        "label": "Surprise",
+                        "value": "Surprise"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_1_row_6",
+                "cells": [
+                  {
+                    "_id": "section_1_table_1_row_6_cell_1_static",
+                    "key": "cmms_code",
+                    "type": "label",
+                    "value": "CMMS Code: ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_1_row_6_cell_2_cMMSCode",
+                    "key": "cMMSCode",
+                    "type": "input",
+                    "value": "",
+                    "placeholder": "",
+                    "inputType": "text",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "prefill": true,
+                    "prefillSource": "equipment.sfd_code",
+                    "disabled": true
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "section_1_table_3",
+            "sectionType": "matrixTable",
+            "title": "1. Overall Vibration Values",
+            "topHeaders": [
+              [
+                {
+                  "label": "Points",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Driver FE",
+                  "colspan": 3,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Driver DE",
+                  "colspan": 3,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Driven FE",
+                  "colspan": 3,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Driven DE",
+                  "colspan": 3,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Additional",
+                  "colspan": 6,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ],
+              [
+                {
+                  "label": "No",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "1",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "2",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "3",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "4",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "5",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "6",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "7",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "8",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "9",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "10",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "11",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "12",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "13",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "14",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "15",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "16",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "17",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "18",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ],
+              [
+                {
+                  "label": "Direction",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "H",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "V",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "A",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "H",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "V",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "A",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "H",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "V",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "A",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "H",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "V",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "A",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "H",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "V",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "A",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "H",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "V",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "A",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "section_1_table_3_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_3_row_1_cell_1_static",
+                    "key": "values_mm_sec",
+                    "type": "label",
+                    "value": "Values (mm/sec)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_2_valDriverFE1H",
+                    "key": "valDriverFE1H",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_3_valDriverFE2V",
+                    "key": "valDriverFE2V",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_4_valDriverFE3A",
+                    "key": "valDriverFE3A",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_5_valDriverDE4H",
+                    "key": "valDriverDE4H",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_6_valDriverDE5V",
+                    "key": "valDriverDE5V",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_7_valDriverDE6A",
+                    "key": "valDriverDE6A",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_8_valDriverFE7H",
+                    "key": "valDriverFE7H",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_9_valDriverFE8V",
+                    "key": "valDriverFE8V",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_10_valDriverFE9A",
+                    "key": "valDriverFE9A",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_11_valDriverDE10H",
+                    "key": "valDriverDE10H",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_12_valDriverDE11V",
+                    "key": "valDriverDE11V",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_13_valDriverDE12A",
+                    "key": "valDriverDE12A",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_14_valAdditional13H",
+                    "key": "valAdditional13H",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_15_valAdditional14V",
+                    "key": "valAdditional14V",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_16_valAdditional15A",
+                    "key": "valAdditional15A",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_17_valAdditional16H",
+                    "key": "valAdditional16H",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_18_valAdditional17V",
+                    "key": "valAdditional17V",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_1_cell_19_valAdditional18A",
+                    "key": "valAdditional18A",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "number",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_3_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_3_row_2_cell_1_static",
+                    "key": "limits_mm_sec",
+                    "type": "label",
+                    "value": "Limits (mm/sec)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_2_limitsDriverFEDE1",
+                    "key": "limitsDriverFEDE1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 6,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_3_limitsDriverFEDE2",
+                    "key": "limitsDriverFEDE2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 6,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_4_limitsAdditional1",
+                    "key": "limitsAdditional1",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_5_limitsAdditional2",
+                    "key": "limitsAdditional2",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_6_limitsAdditional3",
+                    "key": "limitsAdditional3",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_7_limitsAdditional4",
+                    "key": "limitsAdditional4",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_8_limitsAdditional5",
+                    "key": "limitsAdditional5",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "section_1_table_3_row_2_cell_9_limitsAdditional6",
+                    "key": "limitsAdditional6",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showIf": {
+              "field": "section_1_table_1.3.equipmentStatusOpsNonopsVib",
+              "value": "non_ops",
+              "operator": "notEquals"
+            },
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "section_1_table_4",
+            "sectionType": "matrixTable",
+            "title": "2. SPM Checks",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "points",
+                "label": "Points",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "dbm",
+                "label": "dBm",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "dbc",
+                "label": "dBc",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "colour_coding",
+                "label": "Colour Coding",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remarks",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "section_1_table_4_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_1_cell_1_static",
+                    "key": "driver_fe",
+                    "type": "label",
+                    "value": "Driver FE",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_1_cell_2_motorFEDBm",
+                    "key": "motorFEDBm",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_1_cell_3_motorFEDBc",
+                    "key": "motorFEDBc",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_1_cell_4_motorFERemarks",
+                    "key": "motorFERemarks",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "Red",
+                        "value": "Red"
+                      },
+                      {
+                        "label": "Yellow",
+                        "value": "Yellow"
+                      },
+                      {
+                        "label": "Green",
+                        "value": "Green"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_1_cell_5_motorFEObs",
+                    "key": "motorFEObs",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_2_cell_1_static",
+                    "key": "driver_de",
+                    "type": "label",
+                    "value": "Driver DE",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_2_cell_2_motorDEDBm",
+                    "key": "motorDEDBm",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_2_cell_3_motorDEDBc",
+                    "key": "motorDEDBc",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_2_cell_4_motorDERemarks",
+                    "key": "motorDERemarks",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "Red",
+                        "value": "Red"
+                      },
+                      {
+                        "label": "Yellow",
+                        "value": "Yellow"
+                      },
+                      {
+                        "label": "Green",
+                        "value": "Green"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_2_cell_5_motorDEObs",
+                    "key": "motorDEObs",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_3",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_3_cell_1_static",
+                    "key": "driven_de",
+                    "type": "label",
+                    "value": "Driven DE",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_3_cell_2_drivenDEDBm",
+                    "key": "drivenDEDBm",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_3_cell_3_drivenDEDBc",
+                    "key": "drivenDEDBc",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_3_cell_4_drivenDERemarks",
+                    "key": "drivenDERemarks",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "Red",
+                        "value": "Red"
+                      },
+                      {
+                        "label": "Yellow",
+                        "value": "Yellow"
+                      },
+                      {
+                        "label": "Green",
+                        "value": "Green"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_3_cell_5_drivenDEObs",
+                    "key": "drivenDEObs",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_4_row_4",
+                "cells": [
+                  {
+                    "_id": "section_1_table_4_row_4_cell_1_static",
+                    "key": "driven_fe",
+                    "type": "label",
+                    "value": "Driven FE",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_4_cell_2_drivenFEDBm",
+                    "key": "drivenFEDBm",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_4_cell_3_drivenFEDBc",
+                    "key": "drivenFEDBc",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "inputType":"number"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_4_cell_4_drivenFERemarks",
+                    "key": "drivenFERemarks",
+                    "type": "radio",
+                    "value": "",
+                    "options": [
+                      {
+                        "label": "Red",
+                        "value": "Red"
+                      },
+                      {
+                        "label": "Yellow",
+                        "value": "Yellow"
+                      },
+                      {
+                        "label": "Green",
+                        "value": "Green"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_4_row_4_cell_5_drivenFEObs",
+                    "key": "drivenFEObs",
+                    "type": "input",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              }
+            ],
+            "showIf": {
+              "field": "section_1_table_1.3.equipmentStatusOpsNonopsVib",
+              "value": "non_ops",
+              "operator": "notEquals"
+            },
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "section_1_table_5",
+            "sectionType": "matrixTable",
+            "title": "3. Mount Attenuation",
+            "topHeaders": [],
+            "columns": [
+              {
+                "key": "mount_no",
+                "label": "Mount No.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "1",
+                "label": "1",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "2",
+                "label": "2",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "3",
+                "label": "3",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "4",
+                "label": "4",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "5",
+                "label": "5",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "6",
+                "label": "6",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "7",
+                "label": "7",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "8",
+                "label": "8",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "9",
+                "label": "9",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "10",
+                "label": "10",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "11",
+                "label": "11",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "12",
+                "label": "12",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "13",
+                "label": "13",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "14",
+                "label": "14",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "15",
+                "label": "15",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "16",
+                "label": "16",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "17",
+                "label": "17",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "18",
+                "label": "18",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "section_1_table_5_row_1",
+                "cells": [
+                  {
+                    "_id": "section_1_table_5_row_1_cell_1_static",
+                    "key": "top_mm_sec",
+                    "type": "label",
+                    "value": "Top (mm/sec)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_2_vibXMountTop1",
+                    "key": "vibXMountTop1",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_3_vibXMountTop2",
+                    "key": "vibXMountTop2",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_4_vibXMountTop3",
+                    "key": "vibXMountTop3",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_5_vibXMountTop4",
+                    "key": "vibXMountTop4",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_6_vibXMountTop5",
+                    "key": "vibXMountTop5",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_7_vibXMountTop6",
+                    "key": "vibXMountTop6",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_8_vibXMountTop7",
+                    "key": "vibXMountTop7",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_9_vibXMountTop8",
+                    "key": "vibXMountTop8",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_10_vibXMountTop9",
+                    "key": "vibXMountTop9",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_11_vibXMountTop10",
+                    "key": "vibXMountTop10",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_12_vibXMountTop11",
+                    "key": "vibXMountTop11",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_13_vibXMountTop12",
+                    "key": "vibXMountTop12",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_14_vibXMountTop13",
+                    "key": "vibXMountTop13",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_15_vibXMountTop14",
+                    "key": "vibXMountTop14",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_16_vibXMountTop15",
+                    "key": "vibXMountTop15",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_17_vibXMountTop16",
+                    "key": "vibXMountTop16",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_18_vibXMountTop17",
+                    "key": "vibXMountTop17",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_1_cell_19_vibXMountTop18",
+                    "key": "vibXMountTop18",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_5_row_2",
+                "cells": [
+                  {
+                    "_id": "section_1_table_5_row_2_cell_1_static",
+                    "key": "bottom_mm_sec",
+                    "type": "label",
+                    "value": "Bottom (mm/sec)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_2_vibXMountBottom1",
+                    "key": "vibXMountBottom1",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_3_vibXMountBottom2",
+                    "key": "vibXMountBottom2",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_4_vibXMountBottom3",
+                    "key": "vibXMountBottom3",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_5_vibXMountBottom4",
+                    "key": "vibXMountBottom4",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_6_vibXMountBottom5",
+                    "key": "vibXMountBottom5",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_7_vibXMountBottom6",
+                    "key": "vibXMountBottom6",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_8_vibXMountBottom7",
+                    "key": "vibXMountBottom7",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_9_vibXMountBottom8",
+                    "key": "vibXMountBottom8",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_10_vibXMountBottom9",
+                    "key": "vibXMountBottom9",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_11_vibXMountBottom10",
+                    "key": "vibXMountBottom10",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_12_vibXMountBottom11",
+                    "key": "vibXMountBottom11",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_13_vibXMountBottom12",
+                    "key": "vibXMountBottom12",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_14_vibXMountBottom13",
+                    "key": "vibXMountBottom13",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_15_vibXMountBottom14",
+                    "key": "vibXMountBottom14",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_16_vibXMountBottom15",
+                    "key": "vibXMountBottom15",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_17_vibXMountBottom16",
+                    "key": "vibXMountBottom16",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_18_vibXMountBottom17",
+                    "key": "vibXMountBottom17",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_2_cell_19_vibXMountBottom18",
+                    "key": "vibXMountBottom18",
+                    "type": "input",
+                    "value": "",
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  }
+                ]
+              },
+              {
+                "_id": "section_1_table_5_row_4",
+                "cells": [
+                  {
+                    "_id": "section_1_table_5_row_3_cell_1_static",
+                    "key": "attenuation",
+                    "type": "label",
+                    "value": "Attenuation %",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_2_vibXMountTotal1",
+                    "key": "vibXMountTotal1",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop1) == 0, \"\", round(((num(vibXMountTop1) - num(vibXMountBottom1)) / num(vibXMountTop1)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_3_vibXMountTotal2",
+                    "key": "vibXMountTotal2",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop2) == 0, \"\", round(((num(vibXMountTop2) - num(vibXMountBottom2)) / num(vibXMountTop2)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_4_vibXMountTotal3",
+                    "key": "vibXMountTotal3",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop3) == 0, \"\", round(((num(vibXMountTop3) - num(vibXMountBottom3)) / num(vibXMountTop3)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_5_vibXMountTotal4",
+                    "key": "vibXMountTotal4",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop4) == 0, \"\", round(((num(vibXMountTop4) - num(vibXMountBottom4)) / num(vibXMountTop4)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_6_vibXMountTotal5",
+                    "key": "vibXMountTotal5",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop5) == 0, \"\", round(((num(vibXMountTop5) - num(vibXMountBottom5)) / num(vibXMountTop5)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_7_vibXMountTotal6",
+                    "key": "vibXMountTotal6",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop6) == 0, \"\", round(((num(vibXMountTop6) - num(vibXMountBottom6)) / num(vibXMountTop6)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_8_vibXMountTotal7",
+                    "key": "vibXMountTotal7",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop7) == 0, \"\", round(((num(vibXMountTop7) - num(vibXMountBottom7)) / num(vibXMountTop7)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_9_vibXMountTotal8",
+                    "key": "vibXMountTotal8",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop8) == 0, \"\", round(((num(vibXMountTop8) - num(vibXMountBottom8)) / num(vibXMountTop8)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_10_vibXMountTotal9",
+                    "key": "vibXMountTotal9",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop9) == 0, \"\", round(((num(vibXMountTop9) - num(vibXMountBottom9)) / num(vibXMountTop9)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_11_vibXMountTotal10",
+                    "key": "vibXMountTotal10",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop10) == 0, \"\", round(((num(vibXMountTop10) - num(vibXMountBottom10)) / num(vibXMountTop10)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_12_vibXMountTotal11",
+                    "key": "vibXMountTotal11",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop11) == 0, \"\", round(((num(vibXMountTop11) - num(vibXMountBottom11)) / num(vibXMountTop11)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_13_vibXMountTotal12",
+                    "key": "vibXMountTotal12",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop12) == 0, \"\", round(((num(vibXMountTop12) - num(vibXMountBottom12)) / num(vibXMountTop12)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_14_vibXMountTotal13",
+                    "key": "vibXMountTotal13",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop13) == 0, \"\", round(((num(vibXMountTop13) - num(vibXMountBottom13)) / num(vibXMountTop13)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_15_vibXMountTotal14",
+                    "key": "vibXMountTotal14",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop14) == 0, \"\", round(((num(vibXMountTop14) - num(vibXMountBottom14)) / num(vibXMountTop14)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_16_vibXMountTotal15",
+                    "key": "vibXMountTotal15",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop15) == 0, \"\", round(((num(vibXMountTop15) - num(vibXMountBottom15)) / num(vibXMountTop15)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_17_vibXMountTotal16",
+                    "key": "vibXMountTotal16",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop16) == 0, \"\", round(((num(vibXMountTop16) - num(vibXMountBottom16)) / num(vibXMountTop16)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_18_vibXMountTotal17",
+                    "key": "vibXMountTotal17",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop17) == 0, \"\", round(((num(vibXMountTop17) - num(vibXMountBottom17)) / num(vibXMountTop17)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  },
+                  {
+                    "_id": "section_1_table_5_row_4_cell_19_vibXMountTotal18",
+                    "key": "vibXMountTotal18",
+                    "type": "input",
+                    "value": "",
+                    "disabled": true,
+                    "inputType": "number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "formula": {
+                      "expression": "if(num(vibXMountTop18) == 0, \"\", round(((num(vibXMountTop18) - num(vibXMountBottom18)) / num(vibXMountTop18)) * 100, 0))",
+                      "emptyAsZero": true,
+                      "decimals": 0
+                    },
+                    "highlightBelow": 70
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ]
+      }
+    }
+  ]
+}

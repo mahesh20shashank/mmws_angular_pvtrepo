@@ -1,0 +1,53 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+
+    <div class="w-full max-w-5xl rounded-2xl sfd-modal-bg  shadow-2xl">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-primary px-4 py-2">
+
+
+
+
+            <h2 class="text-lg font-semibold">
+                {{ previewData()?.equipment_name || 'Equipment Details' }}
+            </h2>
+
+
+            <app-button type="button"
+             (click)="closeModal()"
+                class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input hover:">
+                ✕
+            </app-button>
+        </div>
+
+        <!-- Body -->
+        <form>
+
+            <div class="form-container">
+                @for (field of previewFields(); track field.key) {
+                <div class="form-field">
+                    <div class="container-label">
+                        <label for="field.key" class="form-label">
+                            {{ field.label }}
+                        </label>
+
+                        <p class="source">{{field.source}}</p>
+                    </div>
+
+                    <input class="form-control" id="field.key" type="text" [value]="field.value" readonly />
+                </div>
+                }
+            </div>
+
+            <div class="flex justify-end gap-3 border-t border-primary px-6 py-4">
+                <app-button type="button" (click)="closeModal()"
+                    class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input">
+                    Close
+                </app-button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,83 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>IIF Item List</h3>
+    <div class="obs-panel__actions">
+      <app-button type="button" class="btn-primary" [disabled]="!selectedRows().length" (click)="openCartModal()">
+        Send to MO/WED IIF Cart
+      </app-button>
+    </div>
+  </div>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredEntries().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <div class="obs-filter-row">
+    <label class="obs-checkbox">
+      <input type="checkbox" [checked]="criticalOnly()" (change)="criticalOnly.set(!criticalOnly())" />
+      Critical
+    </label>
+    <div class="obs-filter-row__categories">
+      <span class="obs-filter-row__label">Category</span>
+      @for (option of categoryFilterOptions; track option.key) {
+        <label class="obs-checkbox">
+          <input type="checkbox" [checked]="categoryFilters()[option.key]" (change)="toggleCategory(option.key)" />
+          {{ option.label }}
+        </label>
+      }
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredEntries()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+    (rowClicked)="onRowClicked($event)"
+  />
+</div>
+
+@if (editEntry(); as entry) {
+  <app-modal size="sm" (closeModal)="closeEditModal()">
+    <h3 class="obs-modal__title">Edit Pattern Number</h3>
+    <p class="obs-modal__subtitle">
+      Current: <strong>{{ entry.patternNumber }}</strong> · Category: <strong>{{ entry.category }}</strong>
+    </p>
+
+    <form [formGroup]="patternForm" class="obs-modal__form">
+      <app-input-field label="New Pattern Number *" formControlName="patternNumber" />
+    </form>
+
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeEditModal()">Close</app-button>
+      <app-button type="button" class="btn-primary" [disabled]="saving()" (click)="verifyAndUpdate()">
+        {{ saving() ? "Verifying..." : "Verify & Submit" }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (cartModalOpen()) {
+  <app-modal size="sm" (closeModal)="closeCartModal()">
+    <h3 class="obs-modal__title">Select Parent Inventory</h3>
+    <form [formGroup]="cartForm" class="obs-modal__form">
+      <app-select-input
+        label="Parent Inventory"
+        formControlName="parentInventory"
+        [options]="parentInventoryOptions"
+      />
+    </form>
+    <div class="obs-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeCartModal()">Cancel</app-button>
+      <app-button type="button" class="btn-primary" [disabled]="saving()" (click)="confirmSendToCart()">
+        {{ saving() ? "Sending..." : "Confirm" }}
+      </app-button>
+    </div>
+  </app-modal>
+}

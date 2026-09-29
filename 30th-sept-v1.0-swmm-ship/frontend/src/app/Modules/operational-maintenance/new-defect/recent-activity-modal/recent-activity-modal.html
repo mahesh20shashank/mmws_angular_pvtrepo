@@ -1,0 +1,99 @@
+<app-modal size="lg" [compact]="true" (closeModal)="onClose()">
+  <div class="ram-modal">
+    <div class="ram-header">
+      <div class="ram-header-main">
+        <span class="ram-header-icon">
+          <app-icon name="rotate-ccw" [size]="16" variant="inherit" />
+        </span>
+        <div class="ram-header-text">
+          <span class="ram-header-title">Recent Activity</span>
+          <span class="ram-header-subtitle"
+            >Your latest defect, service and RA transactions — resume an interrupted entry</span
+          >
+        </div>
+      </div>
+
+      <div class="ram-header-actions">
+        <button type="button" class="ram-filter-btn">
+          <app-icon name="filter" [size]="13" variant="inherit" />
+          <span>Filter</span>
+          <app-icon name="chevron-down" [size]="12" variant="inherit" />
+        </button>
+        <button type="button" class="ram-close" (click)="onClose()" aria-label="Close">
+          <app-icon name="x" [size]="18" variant="inherit" />
+        </button>
+      </div>
+    </div>
+
+    <div class="ram-tabs-row">
+      <span class="ram-tabs-label">Activity</span>
+      <div class="ram-tabs">
+        @for (tab of kindTabs; track tab.key) {
+          <button
+            type="button"
+            class="ram-tab"
+            [class.ram-tab--active]="activeKind() === tab.key"
+            (click)="activeKind.set(tab.key)"
+          >
+            {{ tab.label }}
+          </button>
+        }
+      </div>
+      <span class="ram-record-count">{{ recordCount() }} records</span>
+    </div>
+
+    <div class="ram-tabs-row ram-tabs-row--status">
+      <span class="ram-tabs-label">Status</span>
+      <div class="ram-status-tabs">
+        @for (tab of statusTabs; track tab.key) {
+          <button
+            type="button"
+            class="ram-status-tab"
+            [class.ram-status-tab--active]="activeStatus() === tab.key"
+            (click)="activeStatus.set(tab.key)"
+          >
+            {{ tab.label }} · {{ statusCount(tab.key) }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="ram-list">
+      @for (record of filteredRecords(); track record.code) {
+        <div class="ram-row">
+          <span class="ram-row-icon" [ngClass]="kindOf(record).iconClass">
+            <app-icon [name]="kindOf(record).icon" [size]="16" variant="inherit" />
+          </span>
+
+          <div class="ram-row-body">
+            <div class="ram-row-head">
+              <span class="ram-row-title">{{ record.title }}</span>
+              <span class="ram-badge" [ngClass]="badgeClass(record.status)">{{ record.status }}</span>
+            </div>
+            <span class="ram-row-meta">{{ record.code }} · {{ record.dateLabel }} · {{ record.hrsLabel }}</span>
+            @if (record.note) {
+              <span class="ram-row-note">
+                <app-icon name="clock" [size]="11" variant="inherit" />
+                {{ record.note }}
+              </span>
+            }
+          </div>
+
+          <app-button
+            type="button"
+            [class]="isDraft(record.status) ? 'ram-action-btn ram-action-btn--resume' : 'ram-action-btn ram-action-btn--open'"
+            (click)="onSelect(record)"
+          >
+            {{ isDraft(record.status) ? "Resume" : "Open" }}
+          </app-button>
+        </div>
+      } @empty {
+        <div class="ram-empty">No transactions match the selected filters.</div>
+      }
+    </div>
+
+    <div class="ram-actions">
+      <app-button type="button" class="ram-close-btn" (click)="onClose()">Close</app-button>
+    </div>
+  </div>
+</app-modal>

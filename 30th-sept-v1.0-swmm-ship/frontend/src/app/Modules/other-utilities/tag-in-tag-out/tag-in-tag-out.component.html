@@ -1,0 +1,109 @@
+<div class="tag-container space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- ==================== DASHBOARD VIEW ==================== -->
+
+  <!-- 6-Card Dashboard Grid matching reference images -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Card 1: Tag In-Out History Line Chart -->
+    <div class="glass-card p-5 rounded-[12px] w-full">
+      <div class="flex items-center gap-2 mb-4">
+        <app-icon name="history" [size]="16" class="card-icon" />
+        <span class="card-title font-bold text-[14px]">Tag In-Out History</span>
+      </div>
+      <div>
+        <app-line-chart [series]="historySeries()" [labels]="historyDates()" [heightPx]="240"></app-line-chart>
+        <div class="flex items-center justify-center gap-6 text-[12px] legend-text font-semibold pt-4">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded bg-[#f59e0b]"></span><span>Tag Out</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded bg-[#0ea5e9]"></span><span>Tag In</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card p-5 rounded-[12px] w-full">
+      <div class="flex items-center gap-2 mb-4">
+        <app-icon name="pie-chart" [size]="16" class="card-icon" />
+        <span class="card-title font-bold text-[14px]">Tag In/Out Summary - {{ currentDateString() }}</span>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-around gap-6 py-4">
+        <app-donut-chart [segments]="dailyPieSegments()" [width]="180" [height]="180" cutout="0%"></app-donut-chart>
+        <div class="grid grid-cols-1 gap-3 text-xs font-semibold legend-text">
+          <div class="flex items-center gap-2.5 summary-badge px-3 py-2 rounded-xl shadow-inner">
+            <span class="w-3 h-3 rounded bg-[#f59e0b]"></span><span>Tag Out: {{ tagOutCount() }}</span>
+          </div>
+          <div class="flex items-center gap-2.5 summary-badge px-3 py-2 rounded-xl shadow-inner">
+            <span class="w-3 h-3 rounded bg-[#0ea5e9]"></span><span>Tag In: {{ tagInCount() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Weekly Summary Table -->
+    <div class="glass-card p-5 rounded-[12px] w-full">
+      <div class="flex items-center gap-2 mb-4">
+        <app-icon name="calendar" [size]="16" class="card-icon" />
+        <span class="card-title font-bold text-[14px]">Weekly Summary</span>
+      </div>
+      <div class="overflow-hidden border summary-table-border rounded">
+        <app-data-grid
+          [rowData]="weeklySummaryRows()"
+          [columnDefs]="typeCountColumnDefs"
+          [pagination]="false"
+          height="140px">
+        </app-data-grid>
+      </div>
+    </div>
+
+    <!-- Card 4: Today Summary Table -->
+    <div class="glass-card p-5 rounded-[12px] w-full">
+      <div class="flex items-center gap-2 mb-4">
+        <app-icon name="calendar" [size]="16" class="card-icon" />
+        <span class="card-title font-bold text-[14px]">Today Summary</span>
+      </div>
+      <div class="overflow-hidden border summary-table-border rounded">
+        <app-data-grid
+          [rowData]="todaySummaryRows()"
+          [columnDefs]="typeCountColumnDefs"
+          [pagination]="false"
+          height="140px">
+        </app-data-grid>
+      </div>
+    </div>
+
+    <!-- Card 5: Waiting For Tag Out Approval Table -->
+    <div class="glass-card p-5 rounded-[12px] w-full">
+      <div class="flex items-center gap-2 mb-4">
+        <app-icon name="clock" [size]="16" class="card-icon" />
+        <span class="card-title font-bold text-[14px]">Waiting For Tag Out Approval</span>
+      </div>
+      <div class="overflow-hidden border summary-table-border rounded">
+        <app-data-grid
+          [rowData]="tagOutApprovalRows()"
+          [columnDefs]="descriptionCountColumnDefs"
+          [pagination]="false"
+          height="140px">
+        </app-data-grid>
+      </div>
+    </div>
+
+    <!-- Card 6: Waiting For Tag In Approval Table -->
+    <div class="glass-card p-5 rounded-[12px] w-full">
+      <div class="flex items-center gap-2 mb-4">
+        <app-icon name="clock" [size]="16" class="card-icon" />
+        <span class="card-title font-bold text-[14px]">Waiting For Tag In Approval</span>
+      </div>
+      <div class="overflow-hidden border summary-table-border rounded">
+        <app-data-grid
+          [rowData]="tagInApprovalRows"
+          [columnDefs]="descriptionCountColumnDefs"
+          [pagination]="false"
+          height="140px">
+        </app-data-grid>
+      </div>
+    </div>
+  </div>
+</div>

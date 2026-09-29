@@ -1,0 +1,131 @@
+services:
+
+  swmm-redis:
+    image: ${HARBOR_URL}/platform/redis:7-alpine
+    container_name: swmm-redis
+    restart: unless-stopped
+
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+
+    volumes:
+      - /opt/swmm/redis-data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+    networks:
+      - swmm-network
+
+
+  swmm-backend-dev:
+    image: ${HARBOR_URL}/${HARBOR_PROJECT}/backend:${IMAGE_TAG:-dev}
+    container_name: swmm-backend-dev
+    restart: unless-stopped
+
+    env_file:
+      - ./swmm/.env
+
+    volumes:
+      - /opt/swmm/static:/app/static
+      - /opt/swmm/media:/app/media
+      - /opt/keys:/keys:ro
+
+    expose:
+      - "8000"
+
+    depends_on:
+      swmm-redis:
+        condition: service_healthy
+
+    networks:
+      - swmm-network
+
+
+  swmm-userauth-dev:
+    image: ${HARBOR_URL}/${HARBOR_PROJECT}/swmm-userauth-dev:${IMAGE_TAG:-dev}
+    container_name: swmm-userauth-dev
+    restart: unless-stopped
+
+    env_file:
+      - ./userauth/.env
+
+    volumes:
+      - /opt/userauth/static:/app/static
+      - /opt/userauth/media:/app/media
+      - /opt/keys:/keys:ro
+
+    expose:
+      - "8001"
+
+    depends_on:
+      swmm-redis:
+        condition: service_healthy
+
+    networks:
+      - swmm-network
+
+
+  swmm-document-dev:
+    image: ${HARBOR_URL}/${HARBOR_PROJECT}/swmm-document-dev:${IMAGE_TAG:-dev}
+    container_name: swmm-document-dev
+    restart: unless-stopped
+
+    env_file:
+      - ./document/.env
+
+    volumes:
+      - /opt/document/static:/app/static
+      - /opt/document/media:/app/media
+      - /opt/keys:/keys:ro
+
+    expose:
+      - "8002"
+
+    depends_on:
+      swmm-redis:
+        condition: service_healthy
+
+    networks:
+      - swmm-network
+
+
+  swmm-celery-worker:
+    image: ${HARBOR_URL}/${HARBOR_PROJECT}/backend:${IMAGE_TAG:-dev}
+    container_name: swmm-celery-worker
+    restart: unless-stopped
+
+    env_file:
+      - ./swmm/.env
+
+    command:
+      - celery
+      - -A
+      - swmm
+      - worker
+      - --loglevel=INFO
+
+    depends_on:
+      swmm-redis:
+        condition: service_healthy
+
+    volumes:
+      - /opt/swmm/static:/app/static
+      - /opt/swmm/media:/app/media
+      - /opt/keys:/keys:ro
+
+    networks:
+      - swmm-network
+
+
+networks:
+  swmm-network:
+    name: swmm-network
+    driver: bridge

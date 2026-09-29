@@ -1,0 +1,69 @@
+<app-help-guidance />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>Item Search</h3>
+  </div>
+
+  <form [formGroup]="filtersForm" class="wed-filters">
+    <app-select-input label="Equipment Name" formControlName="equipmentName" [options]="equipmentNameOptions()" />
+    <app-select-input label="WED Part No" formControlName="partNo" [options]="partNoOptions()" />
+    <div class="form-field">
+      <label class="form-field-label" for="itemDescription">Item Description</label>
+      <input id="itemDescription" class="form-field-input" formControlName="itemDescription" />
+    </div>
+    <div class="wed-filters__actions">
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">Clear</app-button>
+      <app-button type="button" class="btn-secondary" [disabled]="!selectedRows().length" (click)="raiseDart()">
+        Raise DART
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="!selectedRows().length" (click)="planRoutine()">
+        Plan Routine
+      </app-button>
+    </div>
+  </form>
+
+  <app-data-grid
+    [rowData]="filteredItems()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+    (rowClicked)="onRowClicked($event)"
+  />
+</div>
+
+@if (activeItem(); as item) {
+  <app-modal size="lg" (closeModal)="closeModal()">
+    <h3 class="wed-modal__title">Item Details — {{ item.patternNo }}</h3>
+
+    <div class="wed-tabs-row">
+      @for (tab of detailTabs; track tab) {
+        <app-button
+          type="button"
+          class="wed-tab-btn"
+          [class.wed-tab-btn--active]="activeDetailTab() === tab"
+          (click)="selectDetailTab(tab)"
+        >
+          {{ tab }}
+        </app-button>
+      }
+    </div>
+
+    @if (activeDetailTab() === "Item") {
+      <div class="wed-modal__grid">
+        <div class="wed-modal__row"><span>WED Equipment Name</span><strong>{{ item.equipmentName }}</strong></div>
+        <div class="wed-modal__row"><span>Item Description</span><strong>{{ item.itemDescription }}</strong></div>
+        <div class="wed-modal__row"><span>Denomination</span><strong>{{ item.denomination }}</strong></div>
+        <div class="wed-modal__row"><span>Category</span><strong>{{ item.itemCategory }}</strong></div>
+        <div class="wed-modal__row"><span>Inventory Type</span><strong>{{ item.inventoryType }}</strong></div>
+      </div>
+    } @else {
+      <p class="wed-modal__placeholder">No photo available.</p>
+    }
+
+    <div class="wed-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeModal()">Close</app-button>
+    </div>
+  </app-modal>
+}

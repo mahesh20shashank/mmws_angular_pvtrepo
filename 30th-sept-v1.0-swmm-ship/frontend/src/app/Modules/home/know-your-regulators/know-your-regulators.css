@@ -1,0 +1,550 @@
+.kyr-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kyr-zoom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid var(--border-primary, #e5e7eb);
+  background: var(--bg-card, #f9fafb);
+  cursor: pointer;
+}
+
+.kyr-zoom-label {
+  font-size: 0.8rem;
+  min-width: 44px;
+  text-align: center;
+  color: var(--text-muted, #6b7280);
+}
+
+.kyr-mode-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-blue, #1d96e9);
+  background: transparent;
+  color: var(--accent-blue, #1d96e9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.kyr-mode-btn-active {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #fff;
+}
+
+.kyr-canvas {
+  padding: 0;
+  overflow: auto;
+  cursor: grab;
+  display: block;
+  text-align: center;
+  width: 100%;
+  min-height: 480px;
+  user-select: none;
+  touch-action: manipulation;
+  box-sizing: border-box;
+}
+
+.kyr-canvas-panning {
+  cursor: grabbing;
+}
+
+.kyr-tree-wrapper {
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 100%;
+  padding: 32px clamp(20px, 4vw, 600px);
+  box-sizing: border-box;
+}
+
+.kyr-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ── Hierarchy Tree ──────────────────────────── */
+.hierarchy-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: max-content;
+  width: fit-content;
+  min-height: 360px;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+.root-node,
+.department-wrapper,
+.subdepartment-wrapper,
+.regulator-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.root-node { width: 100%; }
+.department-wrapper,
+.subdepartment-wrapper,
+.regulator-wrapper { flex-shrink: 0; }
+
+/* ── Root Node & Connectors ───────────────────── */
+.root-card {
+  background: #389ac7;
+  color: #ffffff;
+  min-width: 100px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(56, 154, 199, 0.25);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 10px;
+  z-index: 2;
+  font-size: 0.68rem;
+}
+
+.root-connector,
+.dept-connector,
+.subdept-connector {
+  width: 2px;
+  height: 16px;
+  background-color: #94a3b8;
+  margin: 0 auto;
+}
+
+/* ── Wrappers & Horizontal Connectors ──────────── */
+.departments-wrapper,
+.subdepartments-wrapper,
+.regulators-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  flex-wrap: nowrap;
+  margin-top: 16px;
+  box-sizing: border-box;
+}
+
+.departments-wrapper { gap: 16px; min-width: max-content; width: fit-content; }
+.subdepartments-wrapper { gap: 12px; min-width: max-content; width: fit-content; }
+.regulators-wrapper { gap: 12px; }
+
+/* Pure CSS horizontal connector lines spanning sibling cards */
+.department-wrapper::before,
+.subdepartment-wrapper::before,
+.regulator-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  height: 2px;
+  background-color: #94a3b8;
+  z-index: 1;
+}
+
+/* First child: connector from center (50%) to right edge */
+.department-wrapper:first-of-type::before {
+  left: 50%;
+  right: -8px;
+  width: auto;
+}
+.subdepartment-wrapper:first-of-type::before,
+.regulator-wrapper:first-of-type::before {
+  left: 50%;
+  right: -6px;
+  width: auto;
+}
+
+/* Middle children: connector from left edge to right edge */
+.department-wrapper:not(:first-of-type):not(:last-of-type)::before {
+  left: -8px;
+  right: -8px;
+  width: auto;
+}
+.subdepartment-wrapper:not(:first-of-type):not(:last-of-type)::before,
+.regulator-wrapper:not(:first-of-type):not(:last-of-type)::before {
+  left: -6px;
+  right: -6px;
+  width: auto;
+}
+
+/* Last child: connector from left edge to center (50%) */
+.department-wrapper:last-of-type::before {
+  left: -8px;
+  width: calc(50% + 8px);
+  right: auto;
+}
+.subdepartment-wrapper:last-of-type::before,
+.regulator-wrapper:last-of-type::before {
+  left: -6px;
+  width: calc(50% + 6px);
+  right: auto;
+}
+
+/* Single child: hide horizontal connector completely */
+.department-wrapper:only-of-type::before,
+.subdepartment-wrapper:only-of-type::before,
+.regulator-wrapper:only-of-type::before,
+.department-wrapper:only-child::before,
+.subdepartment-wrapper:only-child::before,
+.regulator-wrapper:only-child::before {
+  display: none !important;
+}
+
+.dept-top-connector,
+.subdept-top-connector,
+.reg-connector {
+  width: 2px;
+  height: 16px;
+  background-color: #94a3b8;
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* ── Subdepartment Node Cards ─────────────────────── */
+.subdepartment-card {
+  background: linear-gradient(135deg, #5b73e8 0%, #465ecf 100%);
+  color: #ffffff;
+  min-width: 105px;
+  max-width: 135px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(91, 115, 232, 0.25);
+}
+
+/* ── Department Node Cards ─────────────────────── */
+.department-card {
+  background: linear-gradient(135deg, #c37575 0%, #b56767 100%);
+  color: #ffffff;
+  min-width: 110px;
+  max-width: 140px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.node-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.node-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  line-height: 1.15;
+}
+
+.regulator-count {
+  font-size: 0.56rem;
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.node-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 0.54rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 1px;
+  opacity: 0.95;
+  transition: opacity 0.2s;
+}
+
+.node-toggle:hover { opacity: 1; }
+
+.kyr-dept-add-btn,
+.kyr-add-reg-btn {
+  background: #ffffff;
+  color: #1e293b;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.15s ease;
+}
+
+.kyr-dept-add-btn { margin-top: 3px; }
+.kyr-add-reg-btn { align-self: flex-start; margin-top: 6px; }
+.kyr-dept-add-btn:hover { transform: translateY(-1px); }
+
+/* ── Regulator Node Cards (Tagged & Untagged) ── */
+.untagged-card,
+.regulator-card {
+  background: #be8963;
+  color: #ffffff;
+  width: 235px;
+  max-width: 100%;
+  border-radius: 8px;
+  padding: 7px 9px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  position: relative;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.card-header-bar {
+  text-align: center;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  margin-bottom: 4px;
+}
+
+.card-body-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 0;
+}
+
+.kyr-avatar-wrap {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.18);
+}
+
+.kyr-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.untagged-info,
+.regulator-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.untagged-info { gap: 1px; }
+.regulator-info { gap: 2px; }
+
+.untagged-title { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.2px; color: #ffffff; }
+.untagged-subtext { font-size: 0.5rem; font-weight: 600; line-height: 1.15; color: rgba(255, 255, 255, 0.88); text-transform: uppercase; }
+
+.regulator-name { font-size: 0.66rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.regulator-rank-desig { font-size: 0.56rem; font-weight: 600; color: rgba(255, 255, 255, 0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.assign-sailors-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.54rem;
+  font-weight: 700;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+.assign-sailors-btn:hover { text-decoration: underline; }
+
+/* ── Action Buttons Toolbar ──────────────────── */
+.regulator-actions-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+app-button.kyr-action-btn {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  padding: 3px 2px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 5px !important;
+  font-size: 0.5rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+  transition: opacity 0.15s ease !important;
+  box-sizing: border-box !important;
+}
+
+app-button.kyr-action-btn:hover {
+  opacity: 0.9 !important;
+}
+
+app-button.kyr-btn-white {
+  background: #ffffff !important;
+  color: #1e293b !important;
+}
+
+app-button.kyr-btn-red {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+app-button.kyr-action-btn .app-btn-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  width: 100% !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  white-space: nowrap !important;
+}
+
+/* ── Modal Common Styles ────────────────────── */
+.kyr-modal-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.kyr-modal-hint { font-size: 0.8rem; color: var(--text-muted, #6b7280); margin-bottom: 10px; }
+.kyr-modal-body { min-width: 360px; max-width: 70vw; }
+.kyr-sub-text { font-size: 0.75rem; color: var(--text-muted, #6b7280); }
+.kyr-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+.kyr-btn-primary, .kyr-btn-secondary {
+  padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+}
+.kyr-btn-primary { border: none; background: var(--accent-blue, #1d96e9); color: #fff; }
+.kyr-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.kyr-btn-secondary { border: 1px solid var(--border-primary, #e5e7eb); background: transparent; color: var(--text-primary, #111827); }
+
+/* ── ADD REGULATOR MODAL ─────────────────────── */
+.ar-modal-body {
+  display: flex; flex-direction: column; gap: 16px;
+  min-width: 480px; max-width: 680px; padding: 4px 0; box-sizing: border-box;
+}
+
+.ar-dept-title { font-size: 1.15rem; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.3px; margin: 0 0 2px 0; }
+.ar-section-subtitle { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 12px 0; line-height: 1.4; }
+
+.ar-table-container { border: 1px solid var(--border-primary); border-radius: 6px; overflow: hidden; background: var(--bg-card); }
+.ar-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+.ar-table thead { background-color: var(--bg-input); }
+.ar-th { padding: 10px 14px; font-weight: 700; font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border-primary); }
+.ar-th-check, .ar-td-check { width: 44px; text-align: center; padding: 10px 8px; }
+.ar-tr { border-bottom: 1px solid var(--border-primary); transition: background-color 0.15s ease; }
+.ar-tr:hover { background-color: var(--bg-input); }
+.ar-td { padding: 10px 14px; color: var(--text-primary); vertical-align: middle; }
+.ar-td-name strong { color: var(--text-primary); }
+.ar-td-empty { padding: 20px 14px; text-align: center; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; }
+
+.ar-action-row { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+.ar-divider { height: 1px; background-color: var(--border-primary); margin: 8px 0; }
+.ar-manual-subtitle { font-weight: 500; color: var(--text-muted); margin-bottom: 14px; }
+.ar-form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.ar-form-group-full { grid-column: span 2; }
+.ar-form-label { display: block; font-size: 0.72rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+.ar-required { color: #ef4444; }
+
+.ar-form-input {
+  width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border-primary);
+  background: var(--bg-input); color: var(--text-primary); font-size: 0.85rem; box-sizing: border-box; outline: none; transition: border-color 0.15s ease;
+}
+.ar-form-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+.ar-form-select { cursor: pointer; }
+.ar-form-error { color: #ef4444; font-size: 0.8rem; margin-top: 8px; }
+
+.ar-modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-primary); }
+
+.rp-name { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin: 0 0 4px 0; }
+.rp-upload-row { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+.rp-avatar { width: 64px !important; height: 64px !important; min-width: 64px !important; }
+.rp-file-input input { font-size: 0.82rem; color: var(--text-muted); cursor: pointer; }
+
+.ed-warning-box {
+  display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px;
+  color: #b45309; font-size: 0.78rem; line-height: 1.45; margin-bottom: 16px;
+}
+
+@media (max-width: 1024px) {
+  .departments-wrapper { gap: 12px; }
+  .regulators-wrapper { gap: 10px; }
+}
+
+@media (max-width: 768px) {
+  .kyr-body { padding: 16px 8px; }
+  .departments-wrapper { gap: 10px; }
+  .regulators-wrapper { gap: 8px; }
+  .department-card { min-width: 95px; max-width: 120px; padding: 5px 7px; }
+  .node-label { font-size: 0.62rem; }
+  .untagged-card, .regulator-card { width: 210px; padding: 6px 8px; }
+  .ar-modal-body { min-width: 100%; }
+  .ar-form-grid { grid-template-columns: 1fr; }
+  .ar-form-group-full { grid-column: auto; }
+}
+
+/* Below ~480px there isn't enough width for 4 labelled buttons on one row
+   without clipping, so the action toolbar wraps to a 2x2 grid here only. */
+@media (max-width: 480px) {
+  .untagged-card, .regulator-card { width: 175px; }
+  .regulator-actions-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+  app-button.kyr-action-btn { font-size: 0.5rem !important; padding: 3px 2px !important; }
+  .regulator-name { font-size: 0.6rem; }
+}

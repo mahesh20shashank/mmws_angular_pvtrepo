@@ -1,0 +1,62 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>MO Vendor Search</h3>
+  </div>
+
+  <form [formGroup]="filtersForm" class="mo-filters">
+    <div class="mo-filters__field">
+      <app-select-input label="Vendor Name" formControlName="vendorName" [options]="vendorOptions()" />
+    </div>
+    <div class="mo-filters__field">
+      <app-select-input label="Vendor Code" formControlName="vendorCode" [options]="vendorCodeOptions()" />
+    </div>
+    <div class="mo-filters__actions">
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">Clear</app-button>
+    </div>
+  </form>
+
+  <div class="grid-toolbar">
+    <app-toolbar-search [value]="searchText()" (valueChange)="searchText.set($event)" />
+    <div class="grid-toolbar__end">
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="!filteredVendors().length" (exportRequested)="onExport($event)" />
+    </div>
+  </div>
+
+  <app-data-grid
+    [rowData]="filteredVendors()"
+    [columnDefs]="columnDefs"
+    height="420px"
+    (rowClicked)="onRowClicked($event)"
+  />
+</div>
+
+@if (activeVendor(); as vendor) {
+  <app-modal size="lg" (closeModal)="closeModal()">
+    <h3 class="detail-modal__title">Vendor Details - {{ vendor.vendorCode }}</h3>
+    <div class="detail-modal__grid">
+      <div class="detail-modal__row"><span>Vendor Name</span><strong>{{ vendor.vendorName }}</strong></div>
+      <div class="detail-modal__row"><span>Vendor Code</span><strong>{{ vendor.vendorCode }}</strong></div>
+      <div class="detail-modal__row"><span>Vendor Class</span><strong>{{ vendor.vendorClass || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>Addressee</span><strong>{{ vendor.addressee || "—" }}</strong></div>
+      <div class="detail-modal__row detail-modal__row--wide">
+        <span>Address</span>
+        <strong>{{ formatAddress(vendor) }}</strong>
+      </div>
+      <div class="detail-modal__row"><span>City</span><strong>{{ vendor.city || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>State</span><strong>{{ vendor.state || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>Pincode</span><strong>{{ vendor.pincode || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>Country Code</span><strong>{{ vendor.countryCode || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>GST No.</span><strong>{{ vendor.gstNo || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>PAN</span><strong>{{ vendor.pan || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>Approved By</span><strong>{{ vendor.approvedBy || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>Date Approved</span><strong>{{ vendor.dateApproved || "—" }}</strong></div>
+      <div class="detail-modal__row"><span>Banned Upto</span><strong>{{ vendor.dateBannedUpto || "—" }}</strong></div>
+      <div class="detail-modal__row detail-modal__row--wide"><span>Remarks</span><strong>{{ vendor.remarks || "—" }}</strong></div>
+    </div>
+    <div class="detail-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeModal()">Close</app-button>
+    </div>
+  </app-modal>
+}

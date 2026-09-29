@@ -1,0 +1,24 @@
+<app-help-guidance />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>History</h3>
+  </div>
+
+  <div class="wed-tabs-row">
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'normal'" (click)="selectTab('normal')">
+      Normal Demands
+    </app-button>
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'pts'" (click)="selectTab('pts')">
+      PTS Demands
+    </app-button>
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'rio'" (click)="selectTab('rio')">
+      RIO Demands
+    </app-button>
+    <app-button type="button" class="wed-tab-btn" [class.wed-tab-btn--active]="activeTab() === 'iif'" (click)="selectTab('iif')">
+      IIF
+    </app-button>
+  </div>
+
+  <app-data-grid [rowData]="rows()" [columnDefs]="columnDefs()" height="420px" />
+</div>

@@ -1,0 +1,110 @@
+<div class="shift-due-date-container">
+  <div class="shift-due-date-header">
+    <div>
+      <h2>Shift Due Date</h2>
+      <p class="subtitle">Routines falling due between today and 26 Feb 2027. The revised date moves the calendar marker only — the actual due date is unchanged.</p>
+    </div>
+    <app-button type="button" class="icon-btn close" (click)="closeModal()" title="Close">
+      <app-icon name="x" [size]="18"></app-icon>
+    </app-button>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-danger" role="alert">
+      <strong>Error:</strong> {{ error() }}
+      <app-button type="button" class="btn btn-sm btn-outline-secondary ms-2" (click)="loadRoutines()">
+        <app-icon name="rotate-cw" [size]="14"></app-icon>
+        Retry
+      </app-button>
+    </div>
+  }
+
+  @if (!canShift() && !loading()) {
+    <div class="alert" role="alert">
+      You have read-only access to this list. Only the Head of Department and the HOD Writer can set or clear a revised date.
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading routines...</p>
+    </div>
+  } @else {
+    <div class="table-responsive mb-4">
+      <table class="table table-sm table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Ref</th>
+            <th>Equipment</th>
+            <th>Routine</th>
+            <th>Current Due Date</th>
+            <th>Revised Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (routines().length === 0) {
+            <tr>
+              <td colspan="5" class="text-center text-muted py-5">
+                No routines fall due in the next six months.
+              </td>
+            </tr>
+          } @else {
+            @for (routine of routines(); track routine.id) {
+              <tr>
+                <td class="text-center">
+                  <strong>{{ routine.ref_code }}</strong>
+                </td>
+                <td>{{ routine.equipment_name }}</td>
+                <td>{{ routine.routine_name }}</td>
+                <td class="text-center">
+                  {{ routine.due_date | date: 'dd MMM yyyy' }}
+                </td>
+                <td>
+                  <input
+                    #dateInput
+                    type="date"
+                    class="form-control form-control-sm"
+                    [value]="editedDates()[routine.id] ?? routine.calendar_revised_date ?? ''"
+                    (change)="onDateChange(routine.id, dateInput.value)"
+                  />
+                </td>
+                <td class="text-center">
+                  <app-button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    (click)="clearDate(routine.id)"
+                    title="Clear revised date"
+                    [disabled]="!editedDates()[routine.id] && !routine.calendar_revised_date"
+                  >
+                    <app-icon name="x" [size]="14"></app-icon>
+                  </app-button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (getHasChanges()) {
+      <div class="d-flex gap-2" style="margin-top: 20px;">
+        <app-button type="button" class="btn btn-primary" (click)="saveChanges()" [disabled]="loading()">
+          <app-icon name="save" [size]="16"></app-icon>
+          Save Changes
+        </app-button>
+        <app-button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="loadRoutines()"
+          [disabled]="loading()"
+        >
+          Discard
+        </app-button>
+      </div>
+    }
+  }
+</div>

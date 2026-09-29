@@ -1,0 +1,456 @@
+.header-container {
+  margin: 8px 10px 6px 0px;
+  position: relative;
+  z-index: 40;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.header-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.pt-4 {
+  padding-top: 0.6rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
+}
+
+.subheading {
+  margin-left: 8px;
+  margin-top: 6px;
+  color: var(--subheading-color);
+  transition: color 0.35s ease;
+}
+
+.header-welcome-text {
+  color: var(--subheading-color);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: color 0.35s ease;
+}
+
+.Indicator {
+  background: var(--indicator-bg);
+  transition: background 0.35s ease;
+}
+
+.icon-btn {
+  color: var(--toggle-icon-color);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.35s ease;
+}
+
+.icon-btn-active {
+  background: rgba(29, 150, 233, 0.12);
+
+  border: 1px solid rgba(29, 150, 233, 0.35);
+
+  box-shadow:
+    0 0 12px rgba(29, 150, 233, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.dropdown-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-nav-tab);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth center-out underline on hover, drawn via an absolutely-positioned
+   ::after so it never affects the tab's box size/layout. Light theme has its
+   own version of this same rule in styles.css (global) — see the note there
+   on why it can't live here. */
+.nav-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: #61c2ff;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.nav-tab:not(.nav-tab-active):hover {
+  color: #61c2ff;
+}
+
+.nav-tab:not(.nav-tab-active):hover::after {
+  transform: scaleX(1);
+}
+
+.nav-tab-active {
+  color: #61c2ff;
+  font-weight: 600;
+  background: var(--bg-icon-btn);
+  border-radius: 8px 8px 0 0;
+}
+
+/* Active tab keeps a permanent underline (same bar the hover state grows),
+   so switching tabs animates the indicator sliding to the new tab instead
+   of just appearing/disappearing. */
+.nav-tab-active::after {
+  transform: scaleX(1);
+}
+
+/* Light theme override for .nav-tab-active lives in src/styles.css (global) —
+   component-scoped [data-theme="light"] ancestor selectors don't match under
+   Angular's emulated view encapsulation (the _ngcontent attribute gets
+   appended to [data-theme="light"] too, which never matches since <html>
+   isn't part of this component's rendered content). */
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.references-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 210px;
+  padding: 0;
+  z-index: 99999;
+  background: var(--bg-dropdown);
+  border: 1px solid var(--border-dropdown);
+  border-radius: 12px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+  transform-origin: top left;
+  animation: dropdownIn 0.16s ease-out;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.references-dropdown-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: min(calc(100vh - 130px), 480px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-scrollbar-thumb) transparent;
+}
+
+.references-dropdown-scroll::-webkit-scrollbar {
+  width: 5px;
+  background-color: transparent;
+}
+
+.references-dropdown-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.references-dropdown-scroll::-webkit-scrollbar-thumb {
+  background: var(--bg-scrollbar-thumb);
+  border-radius: 99px;
+}
+
+.references-dropdown-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.75);
+}
+
+.references-dropdown-scroll--has-nested {
+  max-height: none;
+  overflow: visible;
+}
+
+.references-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+
+.references-dropdown::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 20px;
+  width: 10px;
+  height: 10px;
+  background: var(--bg-dropdown);
+  border-left: 1px solid var(--border-dropdown);
+  border-top: 1px solid var(--border-dropdown);
+  transform: rotate(45deg);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.tab-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown-item {
+  position: relative;
+  width: 100%;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--bg-nav-child-hover);
+  color: #1D96E9;
+}
+
+.dropdown-item:active {
+  background: rgba(29, 150, 233, 0.2);
+}
+
+.dropdown-item--active {
+  color: #1D96E9;
+  background: var(--bg-nav-child-hover);
+  font-weight: 600;
+}
+
+/* Nested submenu — a dropdown child that itself has children (e.g. Inventory's
+   "References" > "As is Transaction"). Mirrors InventoryTabNav's own
+   .inv-tabs__dropdown-item-wrapper/.inv-tabs__submenu positioning exactly: a
+   second panel flush against the parent item's right edge. */
+.dropdown-item-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-item--parent {
+  justify-content: space-between;
+}
+
+.dropdown-submenu-icon {
+  flex-shrink: 0;
+}
+
+.dropdown-item--open {
+  background: var(--bg-nav-child-hover);
+  color: #1D96E9;
+}
+
+.references-dropdown--nested {
+  top: 0;
+  left: 100%;
+  margin-left: 4px;
+}
+
+/* The connector arrow points up at the parent tab above — makes no sense for a
+   panel that opens sideways off its own parent item instead. */
+.references-dropdown--nested::before,
+.references-dropdown--nested::after {
+  display: none;
+}
+
+.header-container,
+.tabs-container,
+.tab-wrapper,
+.references-dropdown {
+  overflow: visible;
+}
+
+/* ── Theme Toggle Button ── */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--bg-icon-btn);
+  color: var(--toggle-icon-color);
+  transition: background 0.2s ease, color 0.35s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(97, 194, 255, 0.18);
+  transform: scale(1.08);
+}
+
+.theme-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Desktop tabs layout: visible by default */
+.header-mobile-toggle {
+  display: none;
+}
+
+@media (min-width: 741px) {
+  .tabs-container {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 740px) {
+  .header-mobile-toggle {
+    display: inline-flex;
+  }
+
+  .tabs-container {
+    margin-bottom: 8px;
+    padding: 6px;
+  }
+
+  .tab-wrapper {
+    width: 100%;
+    display: block;
+  }
+
+  .nav-tab {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+  }
+
+  .references-dropdown {
+    position: static;
+    min-width: 0;
+    margin: 2px 0 4px;
+    padding: 0 0 0 10px;
+    gap: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    animation: none;
+  }
+
+  .references-dropdown::before,
+  .references-dropdown::after {
+    display: none;
+  }
+
+  .references-dropdown-scroll {
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+  }
+}
+
+.menu-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.dropdown-icon {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.sub {
+  font-weight: 600;
+  font-size: 15px;
+  color: rgb(74, 168, 255)
+}
+
+@media (max-width: 900px) {
+  .header-top-row {
+    gap: 0.5rem;
+  }
+
+  .head2 {
+    font-size: 1.25rem;
+  }
+
+  .sub {
+    font-size: 13px;
+  }
+
+  /* Dropped at the same breakpoint the title text already shrinks at — the
+     actions row is already crowded with the online indicator + icon buttons
+     here, so informational text is what gives way first, not functionality. */
+  .header-welcome-text {
+    display: none;
+  }
+}

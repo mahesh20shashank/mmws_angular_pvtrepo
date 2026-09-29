@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.header-bar-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 18px;
+  /* Clip child shadows/backgrounds (e.g. a projected primary button's glow) to the
+     rounded corners below instead of letting them spill past — see kms-technical
+     header-bar overflow bugfix this component generalizes. */
+  overflow: hidden;
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header-bar__title {
+  margin: 0;
+  /* Collapse the heading's line-box to its glyph height so it centers flush against
+     the icon next to it — a browser-default line-height here reads as a few px of
+     vertical misalignment even though both are flex-centered on the same row. */
+  line-height: 1;
+}
+
+.header-bar__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.header-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}

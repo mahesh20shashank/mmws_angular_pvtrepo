@@ -1,0 +1,110 @@
+.ins {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ins-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+
+/* ---------- Insight card ---------- */
+.icard {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.icard-head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.icard-n {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  /* Opaque, not the previous low-opacity tint — SonarQube (css:S7924) measured this under
+     4.5:1 once composited over the real background. */
+  background: #0a2540;
+  color: #4aa8ff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icard-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+/* Chart area grows so the desc + meta block lines up across cards in a row. */
+.icard-chart {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.icard-desc {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-primary);
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--text-muted);
+}
+
+.icard-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.icard-meta-row {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.icard-meta-key {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.icard-meta-key--formula {
+  color: var(--accent-blue);
+}
+
+.icard-meta-key--threshold {
+  color: var(--icon-warning, #D97706);
+}
+
+.icard-meta-key--action {
+  color: var(--icon-success, #22C55E);
+}
+
+.icard-meta-val {
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--text-muted);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .ins-grid {
+    grid-template-columns: 1fr;
+  }
+}

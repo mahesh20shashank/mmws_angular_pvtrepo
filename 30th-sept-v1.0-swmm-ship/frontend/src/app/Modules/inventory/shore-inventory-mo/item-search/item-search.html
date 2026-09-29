@@ -1,0 +1,78 @@
+<app-help-guidance />
+
+<div class="glass-card mo-panel">
+  <div class="mo-panel__header">
+    <h3>MO Item Search</h3>
+  </div>
+
+  <form [formGroup]="filtersForm" class="mo-filters">
+    <app-select-input
+      label="ILMS Equipment Description"
+      formControlName="equipmentDescription"
+      [options]="equipmentDescOptions()"
+    />
+    <div class="form-field">
+      <label class="form-field-label" for="itemDescription">MO Item Description</label>
+      <input id="itemDescription" class="form-field-input" formControlName="itemDescription" />
+    </div>
+    <div class="form-field">
+      <label class="form-field-label" for="itemCategory">Item Category</label>
+      <input id="itemCategory" class="form-field-input" formControlName="itemCategory" />
+    </div>
+    <div class="mo-filters__actions">
+      <app-button type="button" class="btn-secondary" (click)="clearFilters()">Clear</app-button>
+      <app-button type="button" class="btn-secondary" [disabled]="!selectedRows().length" (click)="raiseDart()">
+        Raise DART
+      </app-button>
+      <app-button type="button" class="btn-primary" [disabled]="!selectedRows().length" (click)="planRoutine()">
+        Plan Routine
+      </app-button>
+    </div>
+  </form>
+
+  <app-data-grid
+    [rowData]="filteredItems()"
+    [columnDefs]="columnDefs"
+    [showCheckboxes]="true"
+    height="440px"
+    (selectionChanged)="onSelectionChanged($event)"
+    (rowClicked)="onRowClicked($event)"
+  />
+</div>
+
+@if (activeItem(); as item) {
+  <app-modal size="lg" (closeModal)="closeModal()">
+    <h3 class="mo-modal__title">Item Details — {{ item.itemCode }}</h3>
+
+    <div class="mo-tabs-row">
+      @for (tab of detailTabs; track tab) {
+        <app-button
+          type="button"
+          class="mo-tab-btn"
+          [class.mo-tab-btn--active]="activeDetailTab() === tab"
+          (click)="selectDetailTab(tab)"
+        >
+          {{ tab }}
+        </app-button>
+      }
+    </div>
+
+    @if (activeDetailTab() === "Item") {
+      <div class="mo-modal__grid">
+        <div class="mo-modal__row"><span>Item Description</span><strong>{{ item.itemDescription }}</strong></div>
+        <div class="mo-modal__row"><span>CRP Category</span><strong>{{ item.crpCategory }}</strong></div>
+        <div class="mo-modal__row"><span>Denomination</span><strong>{{ item.denomination }}</strong></div>
+        <div class="mo-modal__row"><span>Vendor Name</span><strong>{{ item.vendorName }}</strong></div>
+        <div class="mo-modal__row">
+          <span>ILMS Equipment Description</span><strong>{{ item.ilmsEquipmentDescription }}</strong>
+        </div>
+      </div>
+    } @else {
+      <p class="mo-modal__placeholder">No data available for this tab yet.</p>
+    }
+
+    <div class="mo-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="closeModal()">Close</app-button>
+    </div>
+  </app-modal>
+}

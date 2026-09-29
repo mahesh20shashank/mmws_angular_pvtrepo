@@ -1,0 +1,353 @@
+<app-form-card title="GARBAGE COMPACTOR"  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true" [pageScroll]="true"> 
+
+ <div
+      previewHeader
+      class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+      <button
+          *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+          type="button"
+          (click)="setActiveTab(tab)"
+          class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+          [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+      >
+          <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+              {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+          </span>
+
+          <span
+              class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+              [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+          >
+              {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+          </span>
+      </button>
+  </div>
+<form [formGroup]="form" class="p-0">
+
+    <div class="grid grid-cols-2 gap-3">
+
+        
+
+            <!-- SHIP STATUS -->
+            <div class="flex flex-col gap-1">
+                <app-input [label]="'Ship*'" formControlName="ship" placeholder="ship name" class="w-full">
+                </app-input>
+            </div>
+
+           
+
+            <!-- Date of conduct of trials  -->
+            <app-calendar label="Date of inspection*" formControlName="date_of_conduct_trail"></app-calendar>
+           
+           
+    </div>
+
+    <div class="mt-6 overflow-x-auto">
+  <table class="w-full border-collapse text-sm">
+    <thead>
+      <tr >
+        <th class="border border-white/15 px-3 py-2 text-left w-10">Ser</th>
+        <th class="border border-white/15 px-3 py-2 text-left">Parameters</th>
+        <th class="border border-white/15 px-3 py-2 text-left">Checks</th>
+        <th class="border border-white/15 px-3 py-2 text-left">Observations</th>
+        <th class="border border-white/15 px-3 py-2 text-left">Remarks</th>
+      </tr>
+    </thead>
+    <tbody [formGroup]="form">
+
+      <!-- Row 1: Make -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">1</td>
+        <td class="border border-white/15 px-3 py-2">Make</td>
+        <td class="border border-white/15 px-3 py-2" colspan="3">EVAC</td>
+      </tr>
+
+      <!-- Row 2: Model -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">2</td>
+        <td class="border border-white/15 px-3 py-2">Model</td>
+        <td class="border border-white/15 px-3 py-2" colspan="3">UBP - 80</td>
+      </tr>
+
+      <!-- Row 3: Type -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">3</td>
+        <td class="border border-white/15 px-3 py-2">Type</td>
+        <td class="border border-white/15 px-3 py-2" colspan="3">Electrically Operated</td>
+      </tr>
+
+      <!-- Row 4: Press Power Capacity -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">4</td>
+        <td class="border border-white/15 px-3 py-2">Press Power Capacity</td>
+        <td class="border border-white/15 px-3 py-2" colspan="3">17 T</td>
+      </tr>
+
+      <!-- Row 5: Remote Indicator Panel (DCHQ) -->
+
+      <!-- Sub-row 5a: Electrical hygiene (AN input) -->
+      <!-- Nil → SAT | Observation entered → SAT with observation / UNSAT -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2" rowspan="3">5</td>
+        <td class="border border-white/15 px-3 py-2" rowspan="3">Remote Indicator Panel (DCHQ)</td>
+        <td class="border border-white/15 px-3 py-2">
+          Electrical hygiene- Carbon deposit on connectors, pitted lugs. Check tightness of electrical cable connections and fasteners.
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-input
+            formControlName="remote_panel_elec_hygiene_observation"
+            placeholder="Enter Observation"></app-input>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="remote_panel_elec_hygiene_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Sub-row 5b: Functioning of Switches -->
+      <!-- Ops → SAT | Non-ops → UNSAT + dialog box -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">Functioning of Switches</td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="remote_panel_switches_observation"
+            [options]="opsNonOpsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+         
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="remote_panel_switches_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Sub-row 5c: Functioning of Indicators -->
+      <!-- Ops → SAT | Non-ops → UNSAT + dialog box -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">Functioning of Indicators</td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="remote_panel_indicators_observation"
+            [options]="opsNonOpsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+          <div *ngIf="showRemotePanelIndicatorsInput" class="mt-2">
+            <app-input
+              formControlName="remote_panel_indicators_value"
+              label="Enter Remarks"></app-input>
+          </div>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="remote_panel_indicators_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Row 6: Local Control Panel -->
+
+      <!-- Sub-row 6a: Electrical hygiene (AN input) -->
+      <!-- Nil → SAT | Observation entered → SAT with observation / UNSAT -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2" rowspan="3">6</td>
+        <td class="border border-white/15 px-3 py-2" rowspan="3">Local Control Panel</td>
+        <td class="border border-white/15 px-3 py-2">
+          Electrical hygiene- Carbon deposit on connectors, pitted lugs. Check tightness of electrical cable connections and fasteners.
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-input
+            formControlName="local_panel_elec_hygiene_observation"
+            placeholder="Enter Observation"></app-input>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="local_panel_elec_hygiene_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Sub-row 6b: Functioning of switches -->
+      <!-- Ops → SAT | Non-ops → UNSAT + dialog box -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">Functioning of switches</td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="local_panel_switches_observation"
+            [options]="opsNonOpsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+          <div *ngIf="showLocalPanelSwitchesInput" class="mt-2">
+            <app-input
+              formControlName="local_panel_switches_value"
+              label="Enter Remarks"></app-input>
+          </div>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="local_panel_switches_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Sub-row 6c: Functioning of indicators -->
+      <!-- Ops → SAT | Non-ops → UNSAT + dialog box -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">Functioning of indicators</td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="local_panel_indicators_observation"
+            [options]="opsNonOpsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+          <div *ngIf="showLocalPanelIndicatorsInput" class="mt-2">
+            <app-input
+              formControlName="local_panel_indicators_value"
+              label="Enter Remarks"></app-input>
+          </div>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="local_panel_indicators_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Row 7: Auto Mode -->
+      <!-- Ops → SAT | Non-ops → UNSAT + dialog box -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">7</td>
+        <td class="border border-white/15 px-3 py-2">Auto Mode</td>
+        <td class="border border-white/15 px-3 py-2 text-center text-white/60">-</td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="auto_mode_observation"
+            [options]="opsNonOpsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+          <div *ngIf="showAutoModeInput" class="mt-2">
+            <app-input
+              formControlName="auto_mode_value"
+              label="Enter Remarks"></app-input>
+          </div>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="auto_mode_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Row 8: Condition of Foundations -->
+      <!-- No observation (AN empty / Nil) → SAT | Observation entered → SAT with obs / UNSAT -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">8</td>
+        <td class="border border-white/15 px-3 py-2">Condition of Foundations</td>
+        <td class="border border-white/15 px-3 py-2">Corrosion/ Pitting/ Unpainted</td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-input
+            formControlName="foundation_observation"
+            placeholder="Enter Observation"></app-input>
+        </td>
+        <td class="border border-white/15 px-3 py-2">
+          <app-select
+            formControlName="foundation_remark"
+            [options]="satUnsatObsOptions"
+            placeholder="--Select--"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+      <!-- Row 9: Any other Observations -->
+      <tr>
+        <td class="border border-white/15 px-3 py-2">9</td>
+        <td class="border border-white/15 px-3 py-2">Any other Observations</td>
+        <td class="border border-white/15 px-3 py-2" colspan="3">
+          <app-input
+            formControlName="other_observations"
+            placeholder="Enter Observations "></app-input>
+        </td>
+      </tr>
+
+      <!-- Row 10: Overall -->
+      <!-- Auto-computed from all remarks; disabled -->
+      <tr class="mb-10">
+        <td class="border border-white/15 px-3 py-2">10</td>
+        <td class="border border-white/15 px-3 py-2">Overall</td>
+        <td class="border border-white/15 px-3 py-2" colspan="3">
+          <app-select
+            formControlName="overall_remark"
+            [options]="satUnsatObsOptions"
+            [disabled]="true"
+            [searchable]="false"></app-select>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+
+</form>
+  
+<!-- FOOTER -->
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

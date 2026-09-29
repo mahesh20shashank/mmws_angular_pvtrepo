@@ -1,0 +1,131 @@
+<!-- in-378-render-part1-report.component.html -->
+
+<div
+  class="report-container"
+  id="in378-render-report"
+>
+
+  <!-- TOP BAR -->
+
+  <div class="flex justify-end mb-5">
+    <button
+      (click)="downloadReport()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors">
+
+      Download Report
+
+    </button>
+  </div>
+
+  <!-- TITLE -->
+
+  <div class="report-title">
+    IN 305 REPORT - <span class="italic-text">{{shipName}}</span>
+    <div *ngIf="documentUrl" class="mt-2 text-sm font-normal">
+      Document: <a [href]="documentUrl" target="_blank" class="doc-url-link">{{ documentUrl }}</a>
+    </div>
+  </div>
+
+
+  <div class="table-scroll-wrapper">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th class="report-table-header-s-no">Ser</th>
+          <th class="report-table-header">Chain Cable and Gear Para vane Towing Chains and Fitting</th>
+          <th class="report-table-header">Quantity</th>
+          <th class="report-table-header">Thickness/Weight(Diameter)</th>
+          <th class="report-table-header">
+            Initially Supplied By
+          </th>
+          <th class="report-table-header">
+            Initially Supplied On 
+          </th>
+          <th class="report-table-header">
+            Dockyard Where Last Carried Out
+          </th>
+          <th class="report-table-header">
+            Dockyard Retesting Date
+          </th>
+          <th class="report-table-header">
+            Half/Yearly/Survey
+          </th>
+           <th class="report-table-header">
+            Annealing
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="
+            let row of reportTableData;
+            let i = index
+          "
+        >
+          <td>
+            {{ i + 1 }}
+          </td>
+          <td>
+            {{ row.chain_cable_fitting || '-' }}
+          </td>
+          <td>
+            {{ row.quantity || '-' }}
+          </td>
+          <td>
+            {{ row.thickness_weight || '-' }}
+          </td>
+           <td>
+            {{
+              row.initially_supplied_by || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.initially_supplied_on || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.dockyard_where_last_docked || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.dockyard_retest_date || '-'
+            }}
+          </td>
+          <td>
+            {{
+              row.half_yearly_survey || '-'
+            }}
+          </td>
+            <td>
+            {{
+              row.annealing || '-'
+            }}
+          </td>
+        </tr>
+
+        <!-- NO DATA -->
+
+        <tr *ngIf="!reportTableData.length">
+
+          <td colspan="10">
+            No Data Found
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- STATUS BELOW TABLE -->
+  <div class="report-status-footer">
+    Status : <span class="report-status-badge">{{ reportStatus }}</span>
+  </div>
+
+</div>

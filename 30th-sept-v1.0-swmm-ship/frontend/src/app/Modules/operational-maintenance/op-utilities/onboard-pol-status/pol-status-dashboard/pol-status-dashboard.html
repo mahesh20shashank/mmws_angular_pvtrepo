@@ -1,0 +1,349 @@
+<div class="flex items-center justify-between mb-3 px-1">
+  <div>
+    <h2 class="text-lg font-semibold text-white">Fuel Management System</h2>
+    <span class="text-white/50 text-xs">INS Kolkata · Tank Monitoring Dashboard</span>
+  </div>
+  <app-button
+    type="button"
+    (click)="openSoundingModal()"
+    class="flex items-center gap-2 h-9 px-3 rounded-lg bg-[#1D96E9] text-white text-sm"
+  >
+    <app-icon name="plus" [size]="14" />
+    Add current sounding
+  </app-button>
+</div>
+
+<div class="grid grid-cols-4 gap-3">
+  @for (slot of chartSlots; track $index) {
+    <app-master-card cardHeight="auto">
+      <div class="flex flex-col gap-2 mt-1 pb-3">
+        <div class="flex items-start justify-between">
+          <div class="flex flex-col">
+            <span class="text-white/50 text-xs">{{ slot.tankType }} Tanks</span>
+            <span class="text-2xl font-semibold" [class]="slotMeta[$index].accent">{{ slot.count }}</span>
+          </div>
+          <span class="w-9 h-9 rounded-lg flex items-center justify-center" [class]="slotMeta[$index].iconBg">
+            <app-icon [name]="slotMeta[$index].icon" [size]="18" variant="inherit" />
+          </span>
+        </div>
+
+        <div class="border-t border-white/10 my-1"></div>
+
+        <div class="flex justify-between text-xs text-white/60">
+          <span>95% Capacity</span>
+          <span class="text-white">{{ slot.total95 }} T</span>
+        </div>
+        <div class="flex justify-between text-xs text-white/60">
+          <span>Total Held</span>
+          <span class="text-white">{{ slot.totalHeld }} T</span>
+        </div>
+        <div class="flex justify-between text-xs text-white/60">
+          <span>Top-up Required</span>
+          <span class="text-red-400">{{ slot.topupPct }}%</span>
+        </div>
+        <div class="flex justify-between text-xs text-white/60">
+          <span>Filled</span>
+          <span [class]="slotMeta[$index].accent">{{ slot.filledPct }}%</span>
+        </div>
+
+        <app-button
+          type="button"
+          (click)="openDetailsForSlot(slot)"
+          class="self-start mt-2 px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white text-[11px] font-medium transition-colors"
+        >
+          View Details →
+        </app-button>
+      </div>
+    </app-master-card>
+  }
+</div>
+
+<div class="grid grid-cols-2 gap-3 mt-3">
+  @for (slot of chartSlots; track $index) {
+    <app-master-card [cardTitle]="slot.tankType + ' Tanks'" cardHeight="auto" [class.col-span-2]="$index < 2">
+      <div class="flex flex-col gap-2 mt-2 pb-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <app-button
+              type="button"
+              (click)="openSoundingModal(slot.categoryId)"
+              class="flex items-center gap-1 h-7 px-2 rounded-md bg-[#1D96E9]/15 text-[#1D96E9] text-xs"
+            >
+              <app-icon name="plus" [size]="12" variant="inherit" />
+              Add Sounding
+            </app-button>
+            <div class="flex items-center gap-3 text-xs text-white/60">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#1D96E9] inline-block"></span> Held</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20 inline-block"></span> Cap</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full border border-dashed border-amber-400 inline-block"></span> 95% limit</span>
+            </div>
+          </div>
+
+          <div class="relative">
+            <app-button
+              type="button"
+              (click)="toggleSlotSwitcher($index)"
+              class="flex items-center gap-1 h-7 px-2 rounded-md bg-white/5 border border-white/10 text-white/60 text-xs"
+            >
+              Switch category
+              <app-icon name="chevron-down" [size]="12" />
+            </app-button>
+
+            @if (openSlotSwitcher === $index) {
+              <div class="absolute right-0 top-8 z-10 w-44 rounded-lg bg-[#0f1c2e] border border-white/10 shadow-lg py-1">
+                @for (type of availableForSlot($index); track type.id) {
+                  <button
+                    type="button"
+                    (click)="switchSlotCategory($index, type)"
+                    class="w-full text-left px-3 py-1.5 text-xs hover:bg-white/5"
+                    [class.text-[#1D96E9]]="type.id === slot.categoryId"
+                    [class.text-white/70]="type.id !== slot.categoryId"
+                  >
+                    {{ type.id === slot.categoryId ? '✓ ' + type.tank_category + ' (current)' : type.tank_category }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        @if (slot.tanks.length === 0) {
+          <button
+            type="button"
+            (click)="goToTankMasters.emit()"
+            class="text-center text-white/40 text-xs py-10 hover:text-[#1D96E9] transition-colors"
+          >
+            No records found. Please click here to add a record.
+          </button>
+        } @else {
+          <div class="flex gap-1 pl-9" style="height: 220px;">
+            <div class="relative w-9 shrink-0" style="height: 200px;">
+              @for (tick of yAxisTicks; track tick) {
+                <span
+                  class="absolute right-1 -translate-y-1/2 text-[10px] text-white/40 whitespace-nowrap"
+                  [style.bottom.%]="tick * 100"
+                >{{ (tick * slot.maxCapacity).toFixed(0) }}T</span>
+              }
+            </div>
+
+            <div class="relative flex-1 overflow-x-auto">
+              <div class="absolute inset-x-0 bottom-0" style="height: 200px;">
+                @for (tick of yAxisTicks; track tick) {
+                  <div
+                    class="absolute inset-x-0 border-t"
+                    [class.border-white/20]="tick === 1"
+                    [class.border-dashed]="tick !== 1"
+                    [class.border-white/10]="tick !== 1"
+                    [style.bottom.%]="tick * 100"
+                  ></div>
+                }
+              </div>
+
+              <div class="relative flex items-end gap-3 h-full min-w-full w-max px-1">
+                @for (tank of slot.tanks; track tank.name) {
+                  <div class="flex flex-col items-center" style="width: 56px;">
+                    @if (remainingTo95(tank) >= 0.1) {
+                      <span class="text-[9px] font-semibold text-amber-400 mb-0.5 whitespace-nowrap">{{ remainingTo95(tank) }}T</span>
+                    }
+                    <div
+                      class="relative w-11 rounded bg-white/10 border border-white/10 cursor-pointer"
+                      style="height: 200px;"
+                      (click)="openTankEdit(tank, slot.categoryId)"
+                      (mouseenter)="onTankHover($event, tank)"
+                      (mousemove)="onTankMove($event)"
+                      (mouseleave)="onTankLeave()"
+                    >
+                      <div
+                        class="absolute inset-x-0 bottom-0"
+                        [style.height.%]="(tank.capacity100 / slot.maxCapacity) * 100"
+                      >
+                        @if (tank.capacity100 > 0) {
+                          <div
+                            class="absolute inset-x-0 border-t border-dashed border-amber-400"
+                            [style.bottom.%]="(tank.capacity95 / tank.capacity100) * 100"
+                          ></div>
+                        }
+                        <div
+                          class="absolute inset-x-0 bottom-0 rounded-b tank-fill"
+                          [class.tank-fill--over]="isOverLimit(tank)"
+                          [style.--fill-h.%]="tank.capacity100 ? (tank.held / tank.capacity100) * 100 : 0"
+                        >
+                          <span class="absolute inset-x-0 bottom-1 text-center text-[10px] font-semibold text-white">
+                            {{ tank.held > 0 ? tank.held + 'T' : '0T' }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="mt-1 text-[9px] text-white/60 text-center leading-tight w-full">
+                      @for (line of formatNameLines(tank.name); track $index) {
+                        <span class="block truncate">{{ line }}</span>
+                      }
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </app-master-card>
+  }
+</div>
+
+@if (hoverTooltip) {
+  <div class="chart-tooltip" [style.left.px]="hoverTooltip.x" [style.top.px]="hoverTooltip.y">
+    <div class="chart-tooltip__title">{{ hoverTooltip.tank.name }}</div>
+    <div class="chart-tooltip__row"><span>Fill %</span><span class="chart-tooltip__val">{{ hoverTooltip.tank.fillPercent }}%</span></div>
+    <div class="chart-tooltip__row"><span>100% Capacity</span><span class="chart-tooltip__val">{{ hoverTooltip.tank.capacity100 }} T</span></div>
+    <div class="chart-tooltip__row"><span>95% Capacity</span><span class="chart-tooltip__val">{{ hoverTooltip.tank.capacity95 }} T</span></div>
+    <div class="chart-tooltip__row"><span>Current</span><span class="chart-tooltip__val">{{ hoverTooltip.tank.held }} T</span></div>
+    <div class="chart-tooltip__row"><span>Last updated</span><span class="chart-tooltip__val">{{ hoverTooltip.tank.lastUpdated }}</span></div>
+  </div>
+}
+
+@if (editingTank) {
+  <app-modal size="md" (closeModal)="closeTankEdit()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">{{ editingTank.tank.name }}</h3>
+      <app-button type="button" (click)="closeTankEdit()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="flex gap-4 mb-4 text-sm">
+      <span class="px-3 py-1 rounded-full bg-white/10">Last sounding: {{ editingTank.tank.sounding }} mm</span>
+      <span class="px-3 py-1 rounded-full bg-white/10">95% Cap: {{ editingTank.tank.capacity95 }} T</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label for="edit-sounding-date" class="text-white/60 text-xs mb-1 block">Date</label>
+        <input id="edit-sounding-date" type="date" [(ngModel)]="editingTank.date" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="edit-sounding-time" class="text-white/60 text-xs mb-1 block">Time</label>
+        <input id="edit-sounding-time" type="time" [(ngModel)]="editingTank.time" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="edit-sounding-mm" class="text-white/60 text-xs mb-1 block">Sounding (mm)</label>
+        <input
+          id="edit-sounding-mm"
+          type="number"
+          [(ngModel)]="editingTank.soundingMm"
+          (ngModelChange)="onEditSoundingChange()"
+          class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm"
+        />
+      </div>
+      <div>
+        <label class="text-white/60 text-xs mb-1 block">Computed (T)</label>
+        <div class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 flex items-center text-white text-sm">
+          {{ editingTank.computedTons ?? '—' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <app-button type="button" (click)="saveSingleSounding()" class="px-4 h-10 rounded-lg bg-[#1D96E9] text-white text-sm">
+        Save Sounding
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (selectedGroup) {
+  <app-modal size="lg" (closeModal)="closeDetails()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">{{ selectedGroup.tankType }}</h3>
+      <app-button type="button" (click)="closeDetails()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="flex gap-4 mb-4 text-sm">
+      <span class="px-3 py-1 rounded-full bg-white/10">Tanks: {{ selectedGroup.count }}</span>
+      <span class="px-3 py-1 rounded-full bg-white/10">Held: {{ selectedGroup.totalHeld }} T</span>
+      <span class="px-3 py-1 rounded-full bg-white/10">Fill: {{ selectedGroup.filledPct }}%</span>
+    </div>
+
+    <app-data-grid
+      [rowData]="selectedGroup.tanks"
+      [columnDefs]="tankDetailColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="360px">
+    </app-data-grid>
+  </app-modal>
+}
+
+@if (showSoundingModal) {
+  <app-modal size="lg" (closeModal)="closeSoundingModal()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Add Current Sounding</h3>
+      <app-button type="button" (click)="closeSoundingModal()" class="text-white/60">
+        <app-icon name="x" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mb-4">
+      <div>
+        <label for="sounding-date" class="text-white/60 text-xs mb-1 block">Select Date</label>
+        <input id="sounding-date" type="date" [(ngModel)]="soundingDate" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="sounding-time" class="text-white/60 text-xs mb-1 block">Select Time</label>
+        <input id="sounding-time" type="time" [(ngModel)]="soundingTime" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="sounding-tank-type" class="text-white/60 text-xs mb-1 block">Tank Type</label>
+        <select id="sounding-tank-type" [(ngModel)]="soundingCategoryId" (ngModelChange)="onTankTypeChange()" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+          <option [ngValue]="null">-- Select --</option>
+          @for (type of categoryOptions; track type.id) {
+            <option [ngValue]="type.id">{{ type.tank_category }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @if (soundingRows.length) {
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="text-white/50 border-b border-white/10">
+            <tr>
+              <th class="py-2 pr-3">Tank Name</th>
+              <th class="py-2 pr-3">Limit (mm)</th>
+              <th class="py-2 pr-3">Start RAS (T)</th>
+              <th class="py-2 pr-3">Sounding (mm)</th>
+              <th class="py-2 pr-3">During RAS (Tone)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of soundingRows; track row.tankId) {
+              <tr class="border-b border-white/5">
+                <td class="py-2 pr-3">{{ row.tank_name }}</td>
+                <td class="py-2 pr-3">{{ row.limit_mm }}</td>
+                <td class="py-2 pr-3">{{ row.start_ras }}</td>
+                <td class="py-2 pr-3">
+                  <input
+                    type="number"
+                    [(ngModel)]="row.sounding_mm"
+                    (ngModelChange)="calculateDuringRas(row)"
+                    class="w-24 h-8 rounded-md bg-white/5 border border-white/10 px-2 text-white text-xs"
+                  />
+                </td>
+                <td class="py-2 pr-3">{{ row.during_ras ?? '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p class="text-white/40 text-sm py-6 text-center">Please select a Tank Type above to load tanks.</p>
+    }
+
+    <div class="flex justify-end mt-4">
+      <app-button type="button" (click)="saveSoundingData()" class="px-4 h-10 rounded-lg bg-[#1D96E9] text-white text-sm">
+        Save Sounding Data
+      </app-button>
+    </div>
+  </app-modal>
+}

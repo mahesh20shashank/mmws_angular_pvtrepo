@@ -1,0 +1,369 @@
+<div class="ticket-dashboard-view">
+
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- <app-button class="btn-primary-custom" (click)="openCreateModal()"> Create Tickets </app-button> -->
+  <!-- Interactive Stat Cards Grid -->
+  <div class="stats-container">
+    <app-kpi-card title="TOTAL TICKETS" [count]="totalTickets()" iconName="ticket" iconColor="#0284c7"
+      iconBg="rgba(2, 132, 199, 0.18)" accentColor="#0284c7" [showTrends]="false" [showTimelineTab]="false"
+      iconPosition="right" cardHeight="100%" class="card-clickable" [class.active-card]="activeFilter() === 'total'"
+      tabindex="0" role="button" (click)="setFilter('total')" (keydown.enter)="setFilter('total')"
+      (keydown.space)="setFilter('total')" />
+
+    <app-kpi-card title="OPEN TICKETS" [count]="openTickets()" iconName="clock" iconColor="#f97316"
+      iconBg="rgba(249, 115, 22, 0.18)" accentColor="#f97316" [showTrends]="false" [showTimelineTab]="false"
+      iconPosition="right" cardHeight="100%" class="card-clickable" [class.active-card]="activeFilter() === 'open'"
+      tabindex="0" role="button" (click)="setFilter('open')" (keydown.enter)="setFilter('open')"
+      (keydown.space)="setFilter('open')" />
+
+    <app-kpi-card title="CLOSED TICKETS" [count]="closedTickets()" iconName="circle-check-big" iconColor="#22c55e"
+      iconBg="rgba(34, 197, 94, 0.18)" accentColor="#22c55e" [showTrends]="false" [showTimelineTab]="false"
+      iconPosition="right" cardHeight="100%" class="card-clickable" [class.active-card]="activeFilter() === 'closed'"
+      tabindex="0" role="button" (click)="setFilter('closed')" (keydown.enter)="setFilter('closed')"
+      (keydown.space)="setFilter('closed')" />
+
+    <app-kpi-card title="LOW PRIORITY TICKET" [count]="lowPriority()" iconName="info" iconColor="#eab308"
+      iconBg="rgba(234, 179, 8, 0.18)" accentColor="#eab308" [showTrends]="false" [showTimelineTab]="false"
+      iconPosition="right" cardHeight="100%" class="card-clickable" [class.active-card]="activeFilter() === 'low'"
+      tabindex="0" role="button" (click)="setFilter('low')" (keydown.enter)="setFilter('low')"
+      (keydown.space)="setFilter('low')" />
+
+    <app-kpi-card title="MEDIUM PRIORITY TICKET" [count]="mediumPriority()" iconName="triangle-alert"
+      iconColor="#f97316" iconBg="rgba(249, 115, 22, 0.18)" accentColor="#f97316" [showTrends]="false"
+      [showTimelineTab]="false" iconPosition="right" cardHeight="100%" class="card-clickable"
+      [class.active-card]="activeFilter() === 'medium'" tabindex="0" role="button" (click)="setFilter('medium')"
+      (keydown.enter)="setFilter('medium')" (keydown.space)="setFilter('medium')" />
+
+    <app-kpi-card title="HIGH PRIORITY TICKET" [count]="highPriority()" iconName="circle-alert" iconColor="#ef4444"
+      iconBg="rgba(239, 68, 68, 0.18)" accentColor="#ef4444" [showTrends]="false" [showTimelineTab]="false"
+      iconPosition="right" cardHeight="100%" class="card-clickable" [class.active-card]="activeFilter() === 'high'"
+      tabindex="0" role="button" (click)="setFilter('high')" (keydown.enter)="setFilter('high')"
+      (keydown.space)="setFilter('high')" />
+  </div>
+
+  <!-- Search & Toolbar -->
+  <div class="tm-toolbar glass-card">
+    <div class="search-box">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <input id="ticket-search" type="text" placeholder="Search By Ticket Number, title, creator or ship..."
+        [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" class="search-input-custom" />
+    </div>
+
+    <div class="toolbar-actions">
+      @if (activeFilter() !== 'total') {
+      <app-button class="btn-secondary-custom" (click)="setFilter('total')">
+        Clear Filter ({{ activeFilter().toUpperCase() }})
+      </app-button>
+      }
+      <app-button class="btn-secondary-custom" (click)="exportExcel()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        Export Excel
+      </app-button>
+    </div>
+  </div>
+
+  <!-- Tickets Table using app-data-grid -->
+  <div class="glass-card p-0 overflow-hidden">
+    <app-data-grid [rowData]="filteredTickets()" [columnDefs]="columnDefs" [pageSize]="10" [height]="'520px'"
+      (cellClicked)="onCellClicked($event)" (rowClicked)="viewTicket($event)" />
+  </div>
+
+  <!-- Detail Modal -->
+  @if (showDetailModal()) {
+  <app-modal [title]="'Raise Ticket — NCN No: ' + (detailNcnNo || '14120 of NHO/ DIT')"
+    (closeModal)="closeDetailModal()" size="xl">
+    <div class="ticket-full-modal-card-inner">
+
+      <!-- Modal Body (Two-Column Layout) -->
+      <div class="ticket-modal-body">
+        @if (isLoadingDetail()) {
+        <div class="d-flex justify-content-center align-items-center py-5">
+          <div class="spinner-border text-primary me-2"></div>
+          <span>Loading ticket details...</span>
+        </div>
+        } @else {
+        <div class="ticket-content-grid">
+
+          <!-- Left Form Column (~65%) -->
+          <div class="ticket-left-col">
+            <div class="mb-3">
+              <label for="ticket-title" class="ticket-form-label">Title:</label>
+              <input type="text" class="ticket-input" id="ticket-title" [(ngModel)]="detailTitle" placeholder="Title"
+                disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="ticket-description" class="ticket-form-label">Description:</label>
+              <textarea id="ticket-description" rows="4" class="ticket-input" [(ngModel)]="detailDescription"
+                placeholder="Description" disabled></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="ticket-priority" class="ticket-form-label">Priority:</label>
+              <input type="text" class="ticket-input" id="ticket-priority" [(ngModel)]="detailPriority"
+                placeholder="Priority" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="ticket-mobile-no" class="ticket-form-label">Mobile No:</label>
+              <input id="ticket-mobile-no" type="text" class="ticket-input" [(ngModel)]="detailMobileNo"
+                placeholder="None" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="ticket-ncn-no" class="ticket-form-label">NCN No:</label>
+              <input id="ticket-ncn-no" type="text" class="ticket-input" [(ngModel)]="detailNcnNo" placeholder="None"
+                disabled>
+            </div>
+
+            <!-- Comment Toolbar & Textarea -->
+            <div class="comment-box-wrapper mb-3">
+              <div class="comment-toolbar">
+                <app-button type="button" class="toolbar-btn" title="Quote"
+                  (mousedown)="executeFormat('formatBlock', '<blockquote>', $event)">""</app-button>
+                <app-button type="button" class="toolbar-btn font-bold" title="Bold (Ctrl+B)"
+                  (mousedown)="executeFormat('bold', undefined, $event)">B</app-button>
+                <app-button type="button" class="toolbar-btn italic" title="Italic (Ctrl+I)"
+                  (mousedown)="executeFormat('italic', undefined, $event)">I</app-button>
+                <app-button type="button" class="toolbar-btn underline" title="Underline (Ctrl+U)"
+                  (mousedown)="executeFormat('underline', undefined, $event)">U</app-button>
+                <span class="toolbar-divider"></span>
+                <select class="toolbar-select" title="Font Size" (change)="onFontSizeChange($event)">
+                  <option value="2">10.5 / 14</option>
+                  <option value="3" selected>12 / 16</option>
+                  <option value="4">14 / 18</option>
+                  <option value="5">18 / 22</option>
+                </select>
+                <div class="color-picker-wrapper">
+                  <app-button type="button" class="toolbar-btn text-color-btn" title="Text Color"
+                    (click)="triggerColorPicker(textColorInput, $event)">
+                    <span>A</span>
+                    <span class="color-indicator"></span>
+                  </app-button>
+                  <input #textColorInput type="color" class="hidden-color-input" value="#61c2ff"
+                    (change)="onColorChange($event)">
+                </div>
+                <span class="toolbar-divider"></span>
+                <app-button type="button" class="toolbar-btn" title="Align Left"
+                  (mousedown)="executeFormat('justifyLeft', undefined, $event)">☰</app-button>
+                <app-button type="button" class="toolbar-btn" title="Align Center"
+                  (mousedown)="executeFormat('justifyCenter', undefined, $event)">☷</app-button>
+                <app-button type="button" class="toolbar-btn" title="Bullet List"
+                  (mousedown)="executeFormat('insertUnorderedList', undefined, $event)">•≡</app-button>
+                <app-button type="button" class="toolbar-btn" title="Numbered List"
+                  (mousedown)="executeFormat('insertOrderedList', undefined, $event)">1≡</app-button>
+                <app-button type="button" class="toolbar-btn" title="Code"
+                  (mousedown)="executeFormat('formatBlock', '<pre>', $event)">&lt;/&gt;</app-button>
+                <app-button type="button" class="toolbar-btn" title="Help"
+                  (click)="showEditorHelp($event)">?</app-button>
+              </div>
+              <div #commentEditor class="comment-textarea rich-editor-surface" contenteditable="true" role="textbox"
+                aria-multiline="true" data-placeholder="Add your comment or description here..."
+                (input)="onEditorInput($event)"></div>
+            </div>
+
+            <!-- Attachment Input -->
+            <div class="attachment-input-wrapper mb-3">
+              <input type="file" id="ticketFileInput" class="ticket-file-input" (change)="onFileSelected($event)">
+            </div>
+
+            <!-- Add Comment Button -->
+            <div class="text-center mb-4">
+              <app-button type="button" variant="success" [disabled]="isSavingComment()" (click)="addCommentOrUpload()">
+                @if (isSavingComment()) {
+                <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                Add Comment / Upload File
+              </app-button>
+            </div>
+          </div>
+
+          <!-- Right Info Column (~35%) -->
+          <div class="ticket-right-col">
+
+            <!-- More Information of Ticket -->
+            <fieldset class="info-fieldset mb-3">
+              <legend class="info-legend">More Information of Ticket</legend>
+              <div class="info-table">
+                <div class="info-row">
+                  <span class="info-key">Ticket Id</span>
+                  <span class="info-val">{{ ticketDetail()?.ticket_id || ticketDetail()?.ticket_number ||
+                    selectedTicket()?.ticket_number }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Current status</span>
+                  <span class="info-val">{{ (ticketDetail()?.status || selectedTicket()?.status || 'Open') | titlecase
+                    }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Priority</span>
+                  <span class="info-val">{{ (ticketDetail()?.priority || selectedTicket()?.priority || 'Medium') |
+                    titlecase }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">created on</span>
+                  <span class="info-val">{{ formatDateTime(ticketDetail()?.created_on || selectedTicket()?.created_on)
+                    }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Last Comment on</span>
+                  <span class="info-val">{{ formatDateTime(ticketDetail()?.last_commented_on ||
+                    selectedTicket()?.last_commented_on) }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">closed on</span>
+                  <span class="info-val">{{ formatDateTime(ticketDetail()?.closed_on || selectedTicket()?.closed_on)
+                    }}</span>
+                </div>
+              </div>
+              @if ((ticketDetail()?.status || selectedTicket()?.status)?.toLowerCase() !== 'closed') {
+              <div class="text-center mt-3 pt-1">
+                <app-button type="button" variant="danger" [disabled]="isClosingTicket()" (click)="closeTicketAction()">
+                  @if (isClosingTicket()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span>
+                  }
+                  Close Ticket
+                </app-button>
+              </div>
+              }
+            </fieldset>
+
+            <!-- Attachment Section -->
+            <fieldset class="info-fieldset mb-3">
+              <legend class="info-legend">Attachment</legend>
+              <div class="attachment-content">
+                @if (ticketDetail()?.files && (ticketDetail()?.files)!.length > 0) {
+                <ul class="attachment-list">
+                  @for (att of ticketDetail()?.files; track att.id || att.name || $index) {
+                  <li>
+                    <a [href]="getFileUrl(att.file)" target="_blank" class="attachment-link">{{ att.name || 'View
+                      Attachment' }}</a>
+                  </li>
+                  }
+                </ul>
+                } @else {
+                <span class="text-muted text-sm">No attachments</span>
+                }
+              </div>
+            </fieldset>
+
+            <!-- User Info Section -->
+            <fieldset class="info-fieldset">
+              <legend class="info-legend">User Info</legend>
+              <div class="info-table">
+                <div class="info-row">
+                  <span class="info-key">User</span>
+                  <span class="info-val">{{ getUserDisplayName(ticketDetail()?.user_info?.user ||
+                    ticketDetail()?.created_by,
+                    ticketDetail()?.created_by_name || selectedTicket()?.created_by_name || selectedTicket()?.created_by
+                    || 'LO_INS_KOLKATA') }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Role</span>
+                  <span class="info-val">{{ ticketDetail()?.user_info?.role || 'Admin' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Email</span>
+                  <span class="info-val">{{ ticketDetail()?.user_info?.email || '—' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Unit Name</span>
+                  <span class="info-val">{{ ticketDetail()?.user_info?.unit_name || ticketDetail()?.unit_name ||
+                    selectedTicket()?.unit_name || 'WNC' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Department</span>
+                  <span class="info-val">{{ ticketDetail()?.user_info?.department || ticketDetail()?.department_name ||
+                    ticketDetail()?.department ||
+                    'Logistics' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">Mobile No</span>
+                  <span class="info-val">{{ ticketDetail()?.user_info?.mobile_no || ticketDetail()?.mobile_no ||
+                    selectedTicket()?.mobile_no || 'None' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-key">NCN No</span>
+                  <span class="info-val">{{ ticketDetail()?.user_info?.ncn_no || ticketDetail()?.ncn_no ||
+                    selectedTicket()?.ncn_no || 'None' }}</span>
+                </div>
+              </div>
+            </fieldset>
+
+          </div>
+
+        </div>
+        @if((ticketDetail()?.comments)!.length > 0){
+        <!-- Bottom Activity Log & Comments Header & Entries -->
+        <div class="activity-log-section">
+          <div class="activity-log-header">
+            Activity Log & Comments ({{ ticketDetail()?.comments?.length || 0
+            }})
+          </div>
+          <div class="activity-log-body">
+            @if (ticketDetail()?.comments && (ticketDetail()?.comments)!.length > 0) {
+            <div class="activity-pill-container">
+              @for (log of ticketDetail()!.comments; track log.id || $index) {
+              <div class="activity-pill">
+                <div class="activity-pill-header">
+                  <span class="activity-user">{{ getUserDisplayName(log.user, log.user_name) }}</span>
+                  <span class="activity-date">{{ formatDateTime(log.created_at || log.created_on || log.timestamp)
+                    }}</span>
+                </div>
+                <div class="activity-comment" [innerHTML]="log.comment || log.message || ''"></div>
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </div>
+        }
+        }
+      </div>
+
+    </div>
+  </app-modal>
+  }
+
+  <!-- Raise New Ticket Modal -->
+  @if (showCreateModal()) {
+  <app-modal title="Raise Support Ticket" size="md" (closeModal)="closeCreateModal()">
+    <div class="modal-body p-0">
+      <div class="form-group mb-3">
+        <label for="title" class="form-label">Ticket Subject / Title *</label>
+        <input type="text" id="title" [(ngModel)]="newTitle" placeholder="e.g. Issue generating POL report"
+          class="form-control-custom" />
+      </div>
+      <div class="form-group mb-3">
+        <label for="priority" class="form-label">Priority Level</label>
+        <select id="priority" [(ngModel)]="newPriority" class="form-select-custom">
+          <option value="low">Low Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="high">High Priority</option>
+        </select>
+      </div>
+      <div class="form-group mb-3">
+        <label for="description" class="form-label">Description / Details</label>
+        <textarea rows="4" id="description" [(ngModel)]="newDescription"
+          placeholder="Provide full problem description, module name, and steps to reproduce..."
+          class="form-control-custom"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer flex justify-end gap-3 pt-4 border-t border-[var(--border-color,rgba(255,255,255,0.1))]">
+      <app-button class="btn-secondary-custom" (click)="closeCreateModal()">Cancel</app-button>
+      <app-button class="btn-primary-custom" (click)="submitNewTicket()">Submit Ticket</app-button>
+    </div>
+  </app-modal>
+  }
+
+</div>

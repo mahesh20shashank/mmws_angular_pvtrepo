@@ -1,0 +1,142 @@
+.spare-form__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.spare-form__main {
+  min-width: 0;
+}
+
+@media (max-width: 991.98px) {
+  .spare-form__columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.spare-form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.spare-form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.spare-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.spare-form__hint {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.spare-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Banded field groups — mirrors the reference app's Classification/Identification/Nature and
+   Scale/etc. bands, and the `.wed-fieldset`/legend convention already used in shore-inventory-wed. */
+.obs-band {
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 1rem 1.1rem 1.1rem;
+  margin: 0 0 1.1rem;
+}
+
+.obs-band-title {
+  padding: 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.obs-help-block {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.obs-band--image {
+  display: flex;
+  flex-direction: column;
+}
+
+.obs-image-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 1px dashed var(--border-primary);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.obs-image-placeholder {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Says which of the three photograph states the frame above is showing and
+   what the picker below will do about it. Sits between the two so it reads as a caption on the
+   image rather than as a hint on the control, and uses the same muted step and size as
+   `.obs-help-block`, which is what every other field on this form explains itself with. */
+.obs-image-caption {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.obs-image-preview {
+  max-width: 100%;
+  max-height: 260px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.btn-primary {
+  background: var(--accent-blue, #1d96e9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}

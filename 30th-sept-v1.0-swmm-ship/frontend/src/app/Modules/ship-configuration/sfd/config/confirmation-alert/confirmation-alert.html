@@ -1,0 +1,46 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+
+    <div class="w-full max-w-2xl rounded-2xl sfd-modal-bg  glass-card  shadow-2xl">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between  border-primary px-4 py-2">
+            <div class="flex items-center gap-3">
+                <h2 class="text-lg font-semibold">
+                    Delete {{ title }}
+                </h2>
+            </div>
+
+            <app-button (click)="closeModal()"
+                class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input hover:">
+                ✕
+            </app-button>
+        </div>
+
+        <!-- Body -->
+        <div class="p-4">
+            <p >
+                Are you sure you want to delete
+                <b class="text-red-400">{{ itemName }}</b> ?
+                This action cannot be undone.
+            </p>
+
+            @if (error()) {
+            <p class="text-sm text-red-400 -mt-3 mb-3">{{ error() }}</p>
+            }
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-3 px-6 py-4">
+            <app-button (click)="closeModal()" [disabled]="isDeleting()"
+                class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input disabled:opacity-50">
+                Cancel
+            </app-button>
+
+            <app-button (click)="delete()" [disabled]="isDeleting()" class="delete-btn disabled:opacity-50">
+                {{ isDeleting() ? 'Deleting…' : 'Delete' }}
+            </app-button>
+        </div>
+
+    </div>
+
+</div>

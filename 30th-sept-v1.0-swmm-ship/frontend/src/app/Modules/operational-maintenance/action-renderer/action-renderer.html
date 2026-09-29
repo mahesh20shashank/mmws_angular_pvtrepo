@@ -1,0 +1,15 @@
+
+
+@if(showActions){
+  <div class="flex items-center justify-center gap-3">
+    <!-- View Icon -->
+    <app-button (click)="$event.stopPropagation(); openDetails()" title="View Details" class="text-[#0078D4] hover:opacity-80 transition">
+      <app-icon name="eye" [size]="16" [strokeWidth]="2" color="currentColor" />
+    </app-button>
+
+    <!-- Close -->
+    <app-button (click)="$event.stopPropagation(); closeDart()" class="px-2 py-0.5 rounded border border-[#7A7A7A]/40 text-[#7A7A7A] text-xs leading-5 hover:opacity-80 transition">
+      Close
+    </app-button>
+  </div>
+}

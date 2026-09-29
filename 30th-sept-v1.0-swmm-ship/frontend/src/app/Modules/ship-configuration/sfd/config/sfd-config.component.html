@@ -1,0 +1,849 @@
+<div class="config">
+  <div class="glass-card config__selector-head">
+
+    <div class="title-pannel">
+          <app-icon name="layers" [size]="18" [strokeWidth]="1.9" variant="accent" />
+          <span class="config__selector-title">Ship Configuration</span>
+          <app-status-chip text="Ship-owned Configuration" tone="info" />
+    </div>
+
+        <div class="top-master-selector__right">
+          <!-- Radio button for Ship-Owned Masters -->
+          <label class="master-radio-card" [class.master-radio-card--active]="masterMode() === 'ship'"
+           title="Editable reference data maintained by the ship."
+          >
+            <input type="radio" name="masterMode" [checked]="masterMode() === 'ship'" (change)="setMasterMode('ship')" class="master-radio-input">
+            <span class="master-radio-dot"></span>
+            <div class="master-radio-content">
+              <div class="master-radio-header">
+                <span class="master-radio-title">Ship-Owned Masters</span>
+                <app-status-chip text="Editable" tone="info" />
+              </div>
+            </div>
+          </label>
+
+          <!-- Radio button for Enterprise Reference Data -->
+          <label class="master-radio-card" [class.master-radio-card--active]="masterMode() === 'reference'"
+           title="Central master data maintained by CMMS/HQ."
+          >
+            <input  class="master-radio-input" ype="radio" name="masterMode" [checked]="masterMode() === 'reference'"
+          (click)="setMasterMode('reference')">
+            <span class="master-radio-dot" style="--dot-color: #8D72FF"></span>
+            <div class="master-radio-content">
+              <div class="master-radio-header">
+                <span class="master-radio-title">Enterprise Reference Data</span>
+                <app-status-chip text="Read Only" tone="info" />
+              </div>
+            </div>
+          </label>
+          <label class="master-radio-card" [class.master-radio-card--active]="masterMode() === 'importData'"
+           title="Reference Import Data."
+          >
+            <input  class="master-radio-input" ype="radio" name="masterMode" [checked]="masterMode() === 'importData'"
+          (click)="setMasterMode('importData')">
+            <span class="master-radio-dot" style="--dot-color: #8D72FF"></span>
+            <div class="master-radio-content">
+              <div class="master-radio-header">
+                <span class="master-radio-title">Reference Import Data</span>
+
+              </div>
+            </div>
+          </label>
+        </div>
+
+
+  </div>
+
+  @if(masterMode() === 'ship') {
+
+   <div class="config-layout" [class.config-layout--collapsed]="sidebarCollapsed()">
+
+        <aside class="config-sidebar" aria-label="Configuration navigation" [class.config-sidebar--collapsed]="sidebarCollapsed()">
+          <app-collapsible-sidebar title="Configuration" [items]="sidebarItems()" [selectedId]="section()"
+            [collapsed]="sidebarCollapsed()" (itemSelected)="selectSection($event)"
+            (collapsedChange)="sidebarCollapsed.set($event)">
+          </app-collapsible-sidebar>
+        </aside>
+
+          <section class="config__table-card">
+              <!-- Table card -->
+              <div class="glass-card config__table-card">
+                @if (section() !== 'rhsiMaster') {
+                <div class="config__table-head">
+                  <div class="heading-container">
+                    <div >
+                      <span class="config__table-title">{{ sectionTitle }}</span>
+                        <app-status-chip class="ms-2" [text]="sectionCount + ' records'" tone="success" />
+                    </div>
+                    <p class="subheading-config">{{getSubHeading}}</p>
+
+                  </div>
+
+                  <div>
+                      @if(section() === "mapping"){
+                      <fieldset class="map-toggle" aria-label="Mapping list type">
+                        <app-button type="button" class="map-toggle__btn"
+                          [class.map-toggle__btn--active]="equipmentMappingType() === 'mapped'"
+                          [attr.aria-pressed]="equipmentMappingType() === 'mapped'"
+                          (click)="setMappingType('mapped')" title="System already linked to their equipment">
+                          List of Mapped Sys/Eqpt
+                        </app-button>
+
+                        <app-button type="button" class="map-toggle__btn"
+                          [class.map-toggle__btn--active]="equipmentMappingType() === 'unmapped'"
+                          [attr.aria-pressed]="equipmentMappingType() === 'unmapped'"
+                          (click)="setMappingType('unmapped')"  title="Link System and equipment together">
+                          List of Unmapped Sys/Eqpt
+                        </app-button>
+                      </fieldset>
+                      }
+                  </div>
+                  <div class="header-btn-container">
+                    @if( equipmentMappingType() !== "unmapped"){
+                          <div>
+                            <app-button (click)="toogleFilter()" class="filter__btn">
+                              <app-icon name="funnel" color="var(--icon-accent)" [size]="14" [strokeWidth]="2" />
+                              Filter
+                              <app-icon name="chevron-down" [size]="12" [strokeWidth]="2" />
+                            </app-button>
+                          </div>
+                    }
+                  @if (section() !== 'sfd' && section() !== 'mapping' && section() !== 'rhsiMaster') {
+                  <div class="m-2 submit-btn">
+                    <app-button (click)="openModal(currentModalType)"
+
+                    >
+                      + {{ addButtonText }}
+                    </app-button>
+                  </div>
+                  }
+
+                  @if(section() === 'mapping' && equipmentMappingType() === 'unmapped'){
+                    <div class="m-2">
+                      <app-button type="button" class="add-mapping-btn" [class.add-mapping-btn--active]="hasBothSelections()"
+                        (click)="requestAddMapping()" [disabled]="!hasBothSelections()"   [title]="
+                            hasBothSelections()
+                              ? 'Link the selected equipment under navigation'
+                              : 'Select at least one equipment to map under navigation'
+                          ">
+                        <app-icon name="link" [size]="16" [strokeWidth]="2"  />
+                        Add Mapping
+                      </app-button>
+                    </div>
+                  }
+
+                  </div>
+                </div>
+                }
+
+
+                @switch (section()) {
+                <!-- Compartment -->
+                @case ("compartment") {
+
+                @if(showFilter()){
+
+                <div class="filter-toolbar">
+                  <div class="form-field">
+                    <label for="compartment" class="form-label">Compartment Name</label>
+
+                    <div class="input-with-icon">
+                      <app-icon name="search" class="input-icon">
+                      </app-icon>
+
+                      <input class="form-control has-icon" id="compartment" type="text" placeholder="Search compartment name..."
+                        [ngModel]="filters().search" (ngModelChange)="updateFilter('search', $event)" />
+                    </div>
+
+                  </div>
+
+                  <div class="form-field">
+                    <label for="deck" class="form-label">Deck</label>
+                    <div class="checkobox-container form-control">
+                      <input type="checkbox" id="deck" [ngModel]="filters().mainDeck" (ngModelChange)="updateFilter('mainDeck', $event)">
+                      <span>Main Deck</span>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field">
+                      <app-select-input label="UPPER DECK" placeholder="Select Upper Deck" [options]="upperDecks()"
+                        [ngModel]="filters().upperDeck" (ngModelChange)="updateFilter('upperDeck', $event)">
+                      </app-select-input>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field">
+                      <app-select-input label="LOWER DECK" placeholder="Select Lower Deck" [options]="lowerDecks()"
+                        [ngModel]="filters().lowerDeck" (ngModelChange)="updateFilter('lowerDeck', $event)">
+                      </app-select-input>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="frame-station" class="form-label">Frame Station</label>
+                    <input class="form-control" id="frame-station" placeholder="e.g. 45" [ngModel]="filters().frameStation"
+                      (ngModelChange)="updateFilter('frameStation', $event)">
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field">
+                      <app-select-input label="LOCATION" placeholder="Select Location" [options]="locations()"
+                        [ngModel]="filters().location" (ngModelChange)="updateFilter('location', $event)">
+                      </app-select-input>
+                    </div>
+                  </div>
+
+                  <div class="form-field filter-toolbar__reset-field">
+                    <label class="form-label" aria-hidden="true">&nbsp;</label>
+                    <button type="button" class="filter-toolbar__reset" (click)="resetFilters()">
+                      <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" />
+                      Reset Filters
+                    </button>
+                  </div>
+                </div>
+                }
+                <app-data-grid [columnDefs]="compCols" [rowData]="compRows()" [pageSize]="10" [height]="dynamicGridHeight()"
+                  (pageRequested)="loadCompartmentsPage($event)" [totalRowCount]="compTotalCount()" />
+                }
+
+                <!-- Sub-department -->
+                @case ("subdept") {
+
+                @if (subDeptSummary(); as summary) {
+                <div class="subdept-summary">
+                  <span class="subdept-summary__total">Sub Departments Total <strong>{{ summary.total }}</strong></span>
+                  @if (!summary.can_see_all_departments) {
+                    <span class="subdept-summary__scope">Your department only.</span>
+                  }
+                  @for (row of summary.by_department; track row.department) {
+                    <span class="subdept-summary__chip">
+                      {{ row.department }} - {{ row.total }} TOTAL, {{ row.cmms }} CMMS, {{ row.swmm }} SWMM, {{ row.in_use }} IN USE
+                    </span>
+                  }
+                </div>
+                }
+
+                @if(showFilter()){
+                <div class="filter-toolbar">
+                  <div class="form-field">
+                    <label for="subdepartment" class="form-label">Sub-Department Search</label>
+                    <div class="input-with-icon">
+                      <app-icon name="search" class="input-icon">
+                      </app-icon>
+                        <input class="form-control has-icon" id="subdepartment" [ngModel]="subFilters().search"
+                          (ngModelChange)="updateSubFilter('search', $event)" type="text" placeholder="Search subdepartment name..." />
+                    </div>
+
+                  </div>
+
+                  <div class="form-field">
+                    <div class="form-field">
+                      <app-select-input label="Department" placeholder="Select Department" [options]="departments()"
+                        [ngModel]="subFilters().department" (ngModelChange)="updateSubFilter('department', $event)">
+                      </app-select-input>
+                    </div>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="equipmentCount" class="form-label">Min Equipment Count</label>
+                    <input class="form-control" id="equipmentCount" [ngModel]="subFilters().equipmentCount"
+                      (ngModelChange)="updateSubFilter('equipmentCount', $event)" type="text" placeholder="Min Equipment Count" />
+                  </div>
+
+                  <div class="form-field filter-toolbar__reset-field">
+                    <label class="form-label" aria-hidden="true">&nbsp;</label>
+                    <button type="button" class="filter-toolbar__reset" (click)="resetFilters()">
+                      <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" />
+                      Reset Filters
+                    </button>
+                  </div>
+
+                </div>
+                }
+
+
+
+                <app-data-grid [columnDefs]="subCols" [rowData]="subRows()" [pageSize]="10" [height]="dynamicGridHeight()"
+                  [totalRowCount]="subTotalCount()" (pageRequested)="loadSubDepartmentsPage($event)" />
+                }
+
+                <!-- Mapping -->
+                @case ("mapping") {
+
+                 @if(equipmentMappingType() === "mapped"){
+                  @if(showFilter()){
+                  <div class="filter-toolbar">
+
+
+
+                    <div class="form-field">
+                      <app-select-input label="System" placeholder="All Systems" [options]="systemApiOptions()"
+                        [ngModel]="mappingFilters().system"
+                        (ngModelChange)="updateMappingFilter('system', $event)">
+                      </app-select-input>
+                    </div>
+
+                    <div class="form-field">
+                      <app-select-input label="Equipment" placeholder="All Equipment" [options]="equipmentApiOptions()"
+                        [ngModel]="mappingFilters().equipment"
+                        (ngModelChange)="updateMappingFilter('equipment', $event)">
+                      </app-select-input>
+                    </div>
+
+                    <div class="form-field">
+                    <label for="mappingDate" class="form-label">Addition Date</label>
+                      <div class="date-range-inputs">
+                        <input id="" type="date" class="form-control" [ngModel]="mappingFilters().mappingDateFrom" (ngModelChange)="updateMappingFilter('mappingDateFrom', $event)">
+
+                        <input id="" type="date" class="form-control" [ngModel]="mappingFilters().mappingDateTo" (ngModelChange)="updateMappingFilter('mappingDateTo', $event)">
+                      </div>
+                    </div>
+
+                    <div class="form-field filter-toolbar__reset-field">
+                      <label class="form-label" aria-hidden="true">&nbsp;</label>
+                      <button type="button" class="filter-toolbar__reset" (click)="resetFilters()">
+                        <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" />
+                        Reset Filters
+                      </button>
+                    </div>
+                  </div>
+                  }
+
+                  <!-- fitGridWidth, not the shared grid's default fitCellContents — fitCellContents sizes
+                       every column to its measured content and ignores flex entirely, which is exactly why
+                       mapCols' flex:1 (on whichever column carries it) kept either leaving a gap before the
+                       pinned Actions column or fighting the maxWidth-capped System/Equipment columns for
+                       space depending on which column had it. fitGridWidth is the strategy ag-grid actually
+                       means flex to be paired with — it stretches columns using their flex/min/maxWidth to
+                       fill the full row width, so leftover space always lands on the flex column and content
+                       columns keep the room their maxWidth cap allows. -->
+                  <app-data-grid [columnDefs]="mapCols" [rowData]="mapGridRows()"
+                    [autoSizeStrategy]="{ type: 'fitGridWidth' }"
+                    [pageSize]="pageSize()" [height]="dynamicGridHeight()" [totalRowCount]="mapTotalCount()"
+                    (rowClicked)="onMappingRowClicked($event)" (pageRequested)="loadMappingsPage($event)" />
+
+                 } @else {
+
+                  <div class="mapping-transfer" [style.height]="dynamicGridHeight()" >
+
+                    <!-- SYSTEM -->
+                    <div class="transfer-card">
+
+                      <div class="transfer-header">
+                        <div class="transfer-title">
+
+                          <span class="transfer-title__label">Systems</span>
+
+                          <div class="transfer-search">
+                            <app-icon name="search" [size]="14" [strokeWidth]="2" />
+                            <input class="transfer-search__input" id="systemSearchInput" aria-label="Search systems" type="text" placeholder="Search systems..."
+                              [ngModel]="systemSearch" (ngModelChange)="onSystemSearchChange($event)" />
+                          </div>
+
+                          <app-button type="button" class="transfer-clear-link" (click)="handleResetSystemOrEquipment('system')">Clear</app-button>
+
+                        </div>
+
+
+                      </div>
+
+                      <div class="transfer-list">
+                        @for(item of filteredSystems; track item.value){
+                        <label class="transfer-row" [class.transfer-row--selected-system]="selectedSystems().includes(item.value.toString())">
+                          <input type="checkbox" [checked]="selectedSystems().includes(item.value.toString())" (change)="toggleSystem(item.value.toString())">
+                          <span>{{item.label}}</span>
+
+                        </label>
+
+                        }
+
+                      </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="transfer-actions">
+                      <app-button class="circle-btn" [class.circle-btn--active]="canMoveToSystem()" [disabled]="!canMoveToSystem() || hasBothSelections()"
+                        (click)="requestMoveToSystem()">
+                        <app-icon name="arrow-left" [size]="18" [strokeWidth]="2">
+                        </app-icon>
+                      </app-button>
+
+                      <app-button class="circle-btn" [class.circle-btn--active]="canMoveToEquipment()" [disabled]="!canMoveToEquipment() || hasBothSelections()"
+                        (click)="requestMoveToEquipment()">
+                        <app-icon name="arrow-right" [size]="18" [strokeWidth]="2">
+                        </app-icon>
+
+                      </app-button>
+
+                    </div>
+
+
+                    <!-- EQUIPMENT -->
+
+                    <div class="transfer-card">
+
+                      <div class="transfer-header">
+
+                        <div class="transfer-title">
+
+                          <span class="transfer-title__label">Equipment</span>
+
+                          <div class="transfer-search">
+                            <app-icon name="search" [size]="14" [strokeWidth]="2" />
+                            <input class="transfer-search__input" id="equipmentSearchInput" aria-label="Search equipment" type="text" placeholder="Search equipment..."
+                              [ngModel]="equipmentSearch" (ngModelChange)="onEquipmentSearchChange($event)" />
+                          </div>
+
+                          <app-button type="button" class="transfer-clear-link" (click)="handleResetSystemOrEquipment('equipment')">Clear</app-button>
+
+
+                        </div>
+
+
+                      </div>
+
+                      <div class="transfer-list">
+
+                        @for(item of filteredEquipments; track item.value){
+
+                        <label class="transfer-row" [class.transfer-row--selected-equipment]="selectedEquipments().includes(item.value.toString())">
+
+                          <input type="checkbox"
+                           [checked]="selectedEquipments().includes(item.value.toString())"
+                           (change)="toggleEquipment(item.value.toString())"
+                            >
+
+                          <span>{{item.label}}</span>
+
+                        </label>
+
+                        }
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                 }
+                }
+
+                @case ("locationMapping") {
+                  @if(showFilter()){
+                      <div class="filter-toolbar">
+                        <div class="form-field">
+                          <app-select-input label="Equipment" placeholder="Select Equipment" [options]="equipmentOptionsForFilter()"
+                            [ngModel]="locationMappingFilters().equipment" (ngModelChange)="updateLocationMappingFilter('equipment',$event)">
+                          </app-select-input>
+
+
+                        </div>
+
+                        <div class="form-field">
+                          <label for="deck" class="form-label">Deck</label>
+                          <div class="checkobox-container form-control">
+                            <input id="deck" type="checkbox"  [ngModel]="locationMappingFilters().mainDeck"
+                               (ngModelChange)="updateLocationMappingFilter('mainDeck',$event)">
+                            <span>Main Deck</span>
+                          </div>
+                        </div>
+
+                        <div class="form-field">
+
+                          <div class="form-field">
+                          <app-select-input label="UPPER DECK" [options]="upperDecks()" [ngModel]="locationMappingFilters().upperDeck"
+                            (ngModelChange)="updateLocationMappingFilter('upperDeck',$event)">
+                          </app-select-input>
+                          </div>
+                        </div>
+
+                        <div class="form-field">
+                          <div class="form-field">
+                            <app-select-input label="LOWER DECK" [options]="lowerDecks()" [ngModel]="locationMappingFilters().lowerDeck"
+                              (ngModelChange)="updateLocationMappingFilter('lowerDeck',$event)">
+                            </app-select-input>
+                          </div>
+                        </div>
+
+                        <div class="form-field">
+                          <label for="frame-station" class="form-label">Frame Station</label>
+                          <input class="form-control" id="frame-station" placeholder="e.g. 45" [ngModel]="locationMappingFilters().frameStation"
+    (ngModelChange)="updateLocationMappingFilter('frameStation',$event)">
+                        </div>
+
+
+                        <div class="form-field">
+
+                          <div class="form-field">
+                            <app-select-input label="COMPARTMENT" [options]="compartmentOptions()" [ngModel]="locationMappingFilters().compartment"
+                              (ngModelChange)="updateLocationMappingFilter('compartment',$event)">
+                            </app-select-input>
+                          </div>
+                        </div>
+
+                        <div class="form-field">
+
+                          <div class="form-field">
+                          <app-select-input label="LOCATION" [options]="locations()" [ngModel]="locationMappingFilters().location"
+                            (ngModelChange)="updateLocationMappingFilter('location',$event)">
+                          </app-select-input>
+                          </div>
+                        </div>
+
+                        <div class="form-field">
+                          <app-select-input label="Mapping Status" placeholder="Select Status" [options]="mappingStatusOptions"
+                            [ngModel]="locationMappingFilters().mappingStatus"
+                            (ngModelChange)="updateLocationMappingFilter('mappingStatus', $event)">
+                          </app-select-input>
+                        </div>
+
+                        <div class="form-field filter-toolbar__reset-field">
+                          <label class="form-label" aria-hidden="true">&nbsp;</label>
+                          <button type="button" class="filter-toolbar__reset" (click)="resetFilters()">
+                            <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" />
+                            Reset Filters
+                          </button>
+                        </div>
+                      </div>
+
+
+                  }
+                  <app-data-grid [columnDefs]="locationMapping" [rowData]="locationRows()" [pageSize]="10" [height]="dynamicGridHeight()"
+                    (pageRequested)="loadLocationMappingsPage($event)" [totalRowCount]="locationTotalCount()" />
+                }
+
+                @case ('sfd') {
+                  @if(showFilter()){
+
+                    <div class="filter-toolbar" >
+                      <div class="form-field">
+                        <label for="equipment" class="form-label">Equipment Name</label>
+                        <div class="input-with-icon">
+                          <app-icon name="search" class="input-icon">
+                          </app-icon>
+                          <input class="form-control has-icon" id="equipment" type="text" placeholder="Search..." [ngModel]="sfdFilters().search"
+                           (ngModelChange)="updateSfdFilter('search', $event)" />
+                        </div>
+
+                      </div>
+
+
+
+                      <div class="form-field">
+
+                        <div class="form-field">
+                          <app-select-input label="LOCATION" [options]="locations()" [ngModel]="sfdFilters().location"
+                            (ngModelChange)="updateSfdFilter('location', $event)">
+                          </app-select-input>
+                        </div>
+                      </div>
+
+                      <div class="form-field">
+                        <label for="equipment" class="form-label">Maintop No</label>
+                      <input class="form-control"  id="equipment" type="text" [ngModel]="sfdFilters().maintopNo"
+                        (ngModelChange)="updateSfdFilter('maintopNo', $event)" />
+                      </div>
+
+                      <div class="form-field filter-toolbar__reset-field">
+                        <label class="form-label" aria-hidden="true">&nbsp;</label>
+                        <button type="button" class="filter-toolbar__reset" (click)="resetFilters()">
+                          <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="2" />
+                          Reset Filters
+                        </button>
+                      </div>
+
+                    </div>
+
+
+                  }
+
+                <app-data-grid [columnDefs]="sfdCols" [rowData]="sfdRows()" [pageSize]="pageSize()" [height]="dynamicGridHeight()"
+                  [totalRowCount]="sfdTotalCount()" (pageRequested)="loadSfdPage($event)" />
+                }
+
+                @case ('rhsiMaster') {
+                  <app-rhsi-master-modal [inline]="true" />
+                }
+                }
+              </div>
+            </section>
+   </div>
+  }
+
+  @if(masterMode() === "importData"){
+
+    <div>
+      <app-sfd-references></app-sfd-references>
+    </div>
+
+  }
+
+  @else if (masterMode() === "reference") {
+      <div class="reference-data">
+
+
+
+        <div class="reference-layout"  [class.reference-layout--collapsed]="referenceSidebarCollapsed()">
+
+        <aside class="config-sidebar" aria-label="Reference data navigation" [class.reference-sidebar--collapsed]="referenceSidebarCollapsed()">
+
+          <app-collapsible-sidebar title="Reference Data" [items]="referenceSidebarItems()"
+            [selectedId]="selectedReferenceSection()" [collapsed]="referenceSidebarCollapsed()"
+            (itemSelected)="selectReference($event)" (collapsedChange)="referenceSidebarCollapsed.set($event)">
+          </app-collapsible-sidebar>
+
+        </aside>
+
+          <!-- Right Content -->
+          <section class="reference-content glass-card">
+
+            <div class="reference-content__header ms-3 mt-1">
+
+              <div>
+
+                <div class="reference-content__title">
+                  {{ currentReference.title }}
+                  <app-status-chip text="Read Only" tone="info">
+                  </app-status-chip>
+                </div>
+
+                <div class="reference-content__subtitle">
+                  {{ currentReference.description }}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="reference-table-shell">
+              @if(selectedReferenceSection() === 'ship') {
+              <div class="ship-master-card m-2">
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="name">Ship Name</label>
+                    <span>{{ shipMaster()?.ship_name }}</span>
+                  </div>
+
+                  <div class="ship-item">
+                    <label for="sr">Ship Serial No</label>
+                    <span>{{ shipMaster()?.ship_sr_no }}</span>
+                  </div>
+
+                </div>
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="class">Class</label>
+                    <span>{{ shipMaster()?.class_code }}</span>
+                  </div>
+
+                  <div class="ship-item">
+                    <label for="name">Commission Date</label>
+                    <span>{{ formatDisplayDate(shipMaster()?.commission_date) }}</span>
+                  </div>
+
+                </div>
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="name">OpsAuthority</label>
+                    <span>{{ shipMaster()?.ops_code }}</span>
+                  </div>
+
+                  <div class="ship-item">
+                    <label for="name">Ship Builder</label>
+                    <span>{{ shipMaster()?.ship_builder }}</span>
+                  </div>
+
+                </div>
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="name">Displacement</label>
+                    <span>{{ shipMaster()?.displacement }}</span>
+                  </div>
+
+                  <div class="ship-item">
+                    <label for="name">Yard No</label>
+                    <span>{{ shipMaster()?.yard_no }}</span>
+                  </div>
+
+                </div>
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="name">Length Overall</label>
+                    <span>{{ shipMaster()?.length_overall }}</span>
+                  </div>
+
+                  <div class="ship-item">
+                    <label for="name">Refit Authority</label>
+                    <span>{{ shipMaster()?.refit_authority }}</span>
+                  </div>
+
+                </div>
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="name"> Address</label>
+                    <span>{{ shipMaster()?.address }}</span>
+                  </div>
+
+                  <div class="ship-item">
+                    <label class="" for="name">Ship Category</label>
+                    <span>{{ shipMaster()?.ship_category }}</span>
+                  </div>
+
+                </div>
+
+                <div class="ship-row">
+
+                  <div class="ship-item">
+                    <label for="name">Propulsion</label>
+                    <span>{{ shipMaster()?.propulsion }}</span>
+                  </div>
+
+                </div>
+
+              </div>
+              } @else {
+              <app-data-grid [columnDefs]="referenceColumnDefs" [rowData]="referenceRowData" [pageSize]="10"
+                [height]="dynamicGridHeight()" (pageRequested)="loadReferencePage($event)"
+                [totalRowCount]="referenceTotalCount()">
+              </app-data-grid>
+              }
+            </div>
+          </section>
+        </div>
+      </div>
+  }
+</div>
+
+@switch (modalState().type) {
+
+@case ('compartment') {
+<app-compartment-from [compartment]="compartmentData" (closed)="closeModal()" (saved)="loadCompartments()">
+</app-compartment-from>
+}
+
+@case ('subDepartment') {
+<app-subdepartment-form [subDepartment]="subDepartmentData" (closed)="closeModal()" (saved)="loadSubDepartments()">
+</app-subdepartment-form>
+}
+
+@case ('mapping') {
+<app-mapping-form [mapping]="mappingData" (closed)="closeModal()" (saved)="loadMappings()">
+</app-mapping-form>
+}
+
+
+@case ('locationMapping') {
+<app-location-mapping [locationMapping]="locationMappingData" (closed)="closeModal()"
+  (saved)="reloadCurrentSection(); closeModal()">
+</app-location-mapping>
+}
+
+@case ('sfd') {
+  <app-sfd-preview [previewData] = 'sfdPreviewData' (closed)="closeModal()"  >
+  </app-sfd-preview>
+}
+}
+
+
+@if (modalState().type === 'delete') {
+<app-confirmation-alert [payload]="deletePayload!" (saved)="reloadCurrentSection()" (closed)="closeModal()">
+</app-confirmation-alert>
+}
+
+@if (pendingMappingAction()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="w-full max-w-md rounded-2xl sfd-modal-bg glass-card shadow-2xl mapping-action-modal">
+
+    <div class="mapping-action-modal__header">
+      <span class="mapping-action-modal__icon" [class.mapping-action-modal__icon--amber]="pendingMappingAction() === 'toSystem'">
+        <app-icon [name]="pendingMappingActionIcon()" [size]="18" [strokeWidth]="2" />
+      </span>
+      <h2 class="mapping-action-modal__title">{{ pendingMappingActionTitle }}</h2>
+    </div>
+
+    <div class="mapping-action-modal__body">
+      <p>{{ pendingMappingActionDescription }}</p>
+    </div>
+
+    <div class="flex justify-end gap-3 px-6 py-4">
+      <app-button (click)="cancelPendingMappingAction()" [disabled]="mappingActionSaving()"
+        class="rounded-lg border border-primary px-6 py-2 text-sm text-muted hover:bg-input">
+        Cancel
+      </app-button>
+
+      <app-button (click)="confirmPendingMappingAction()" [disabled]="mappingActionSaving()" class="submit-btn">
+        @if (mappingActionSaving()) {
+          <app-icon name="loader-2" [size]="16" [strokeWidth]="2" [spin]="true" />
+        }
+        {{ mappingActionSaving() ? "Saving…" : pendingMappingActionTitle }}
+      </app-button>
+    </div>
+
+  </div>
+</div>
+}
+
+@if (showSingleSystemWarning()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+
+  <div class="w-full max-w-2xl rounded-2xl sfd-modal-bg glass-card shadow-2xl">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between border-primary px-4 py-2">
+      <div class="flex items-center gap-3">
+        <div class="warning-icon">
+          <app-icon name="triangle-alert" [size]="20" color="#F5B94B">
+          </app-icon>
+        </div>
+
+        <h2 class="text-lg font-semibold">
+          One System Per Mapping
+        </h2>
+      </div>
+
+      <app-button (click)="confirmSingleSystemSelection()"
+        class="flex h-8 w-8 items-center justify-center rounded-lg border border-primary text-muted hover:bg-input">
+        ✕
+      </app-button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-4">
+      <p class="text-muted leading-7">
+        For mapping, only <b>one system</b> can be selected. Under that
+        single system, you may select multiple equipment. The systems you checked have been left as-is. Please deselect
+        systems until only one remains, then choose the equipment.
+      </p>
+      </div>
+
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 px-6 py-4">
+
+      <app-button (click)="confirmSingleSystemSelection()" class="submit-btn">
+        Got It
+      </app-button>
+
+    </div>
+
+  </div>
+
+</div>
+}

@@ -1,0 +1,79 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="masters-container">
+
+  <!-- Tabs -->
+  <div class="tabs-container">
+
+    <app-button
+      class="tab"
+      [class.active]="activeTab === 'refit'"
+      (click)="setTab('refit')">
+      Create Refit Nomenclature
+    </app-button>
+
+    <app-button
+      class="tab"
+      [class.active]="activeTab === 'smp'"
+      (click)="setTab('smp')">
+      Create SMP/AMP/EAMP Nomenclature
+    </app-button>
+
+  </div>
+
+  @if (activeTab === 'refit') {
+
+    <div class="masters-card">
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+
+        <!-- Search -->
+        <div class="search-box">
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Search" />
+        </div>
+
+        <!-- Export Buttons -->
+        <div class="flex gap-2 pl-2 mr-3">
+          <app-export-toolbar [busy]="exportBusy()" [disabled]="!rowData().length" (exportRequested)="onExport($event)" />
+        </div>
+
+      </div>
+
+      <!-- Grid — stays mounted across reloads; ag-grid just gets fresh
+           rowData pushed in, instead of being torn down/rebuilt each time. -->
+      <div class="grid-area">
+
+        <app-data-grid
+          [rowData]="rowData()"
+          [columnDefs]="columnDefs"
+          [pageSize]="10"
+          [loading]="loading"
+          height="440px">
+        </app-data-grid>
+      </div>
+
+    </div>
+
+  }
+
+  @if (activeTab === 'smp') {
+
+    <app-smp-amp-eamp></app-smp-amp-eamp>
+
+  }
+
+</div>
+
+@if (showAmendModal) {
+
+  <app-amend-nomenclature-modal
+    [row]="selectedRow"
+  (modalClosed)="closeAmendModal()"
+    (save)="saveChanges()">
+  </app-amend-nomenclature-modal>
+
+}

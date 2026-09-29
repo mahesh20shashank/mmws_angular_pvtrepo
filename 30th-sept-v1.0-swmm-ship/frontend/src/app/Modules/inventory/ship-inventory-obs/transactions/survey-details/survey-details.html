@@ -1,0 +1,47 @@
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Survey Details</h3>
+    <app-button type="button" class="btn-secondary" (click)="goBack()">Back</app-button>
+  </div>
+
+  @if (entry(); as e) {
+    <div class="obs-detail-summary">
+      <span>{{ e.patternNumber }}</span>
+      <span>{{ e.description }}</span>
+      <span>Qty due for survey: <strong>{{ e.quantity }}</strong></span>
+    </div>
+  }
+
+  <form [formGroup]="form" class="obs-issue-form" (ngSubmit)="submit()">
+    <div class="obs-issue-form__grid">
+      <div class="obs-issue-form__field">
+        <app-input-field label="Survey Number *" formControlName="surveyNumber" />
+        @if (form.controls.surveyNumber.invalid && form.controls.surveyNumber.touched) {
+          <span class="form-error">Survey Number is required.</span>
+        }
+      </div>
+      <div class="obs-issue-form__field">
+        <app-input-field label="Quantity Surveyed *" type="number" formControlName="quantitySurveyed" />
+        @if (form.controls.quantitySurveyed.invalid && form.controls.quantitySurveyed.touched) {
+          <span class="form-error">Enter a quantity of at least 1.</span>
+        }
+      </div>
+      <div class="obs-issue-form__field">
+        <app-input-field label="Survey Report Date *" type="date" formControlName="surveyReportDate" />
+        @if (form.controls.surveyReportDate.invalid && form.controls.surveyReportDate.touched) {
+          <span class="form-error">Survey Report Date is required.</span>
+        }
+      </div>
+    </div>
+    <app-textarea-input label="Remarks *" [rows]="3" formControlName="remarks" />
+    @if (form.controls.remarks.invalid && form.controls.remarks.touched) {
+      <span class="form-error">Remarks are required.</span>
+    }
+
+    <div class="obs-issue-form__actions">
+      <app-button type="submit" class="btn-primary" [disabled]="saving() || form.invalid">
+        {{ saving() ? "Saving..." : "Save" }}
+      </app-button>
+    </div>
+  </form>
+</div>

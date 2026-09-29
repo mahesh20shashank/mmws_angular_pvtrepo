@@ -1,0 +1,478 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+:host ::ng-deep app-form-card,
+:host ::ng-deep .form-card-shell {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+:host ::ng-deep .pt-glass-form-content,
+:host ::ng-deep .pt-glass-form-content > div,
+:host ::ng-deep .pt-glass-form-content form {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:host ::ng-deep .pt-glass-form-content {
+  overflow: auto !important;
+}
+
+.da-paper-header {
+  background: var(--bg-card, #ffffff) !important;
+  color: var(--text-primary, #1e3a5f) !important;
+  border-radius: 8px;
+  border: 1px solid var(--border-card, rgba(15, 28, 46, 0.15));
+  box-shadow: var(--shadow-card, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+:host-context([data-theme="dark"]) .da-paper-header,
+:host-context(.dark) .da-paper-header {
+  background: #152230 !important;
+  color: #ffffff !important;
+  border: 1px solid #233342 !important;
+}
+
+:host-context([data-theme="dark"]) .da-paper-header *,
+:host-context(.dark) .da-paper-header * {
+  color: #ffffff !important;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-line,
+:host ::ng-deep .da-paper-header input.da-header-line:focus {
+  min-height: 1.6rem !important;
+  width: auto;
+  border: none !important;
+  border-bottom: 2px solid var(--border-input, #cbd5e1) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 0.4rem 0.1rem !important;
+  color: var(--text-primary, #0f172a) !important;
+  font: inherit !important;
+  font-weight: 700 !important;
+  outline: none !important;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-line:focus {
+  border-bottom-color: #1069AB !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .da-paper-header input.da-header-line,
+:host-context(.dark) ::ng-deep .da-paper-header input.da-header-line {
+  color: #f8fafc !important;
+  border-bottom-color: #4a5c6e !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .da-paper-header input.da-header-line:focus,
+:host-context(.dark) ::ng-deep .da-paper-header input.da-header-line:focus {
+  border-bottom-color: #38bdf8 !important;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-line:disabled {
+  opacity: 0.9 !important;
+  color: var(--text-muted, #94a3b8) !important;
+  cursor: default;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-box,
+:host ::ng-deep .da-paper-header input.da-header-box:focus {
+  min-height: 2.25rem !important;
+  border: 1px solid var(--border-input, #cbd5e1) !important;
+  border-radius: 6px !important;
+  background: var(--bg-input, #f8fafc) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  padding: 0.25rem 0.75rem !important;
+  color: var(--text-primary, #0f172a) !important;
+  font: inherit !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  outline: none !important;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-box:focus {
+  border-color: #1069AB !important;
+  background: var(--bg-card, #ffffff) !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .da-paper-header input.da-header-box,
+:host-context(.dark) ::ng-deep .da-paper-header input.da-header-box {
+  border-color: #3d4f61 !important;
+  background: #233342 !important;
+  color: #f8fafc !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .da-paper-header input.da-header-box:focus,
+:host-context(.dark) ::ng-deep .da-paper-header input.da-header-box:focus {
+  border-color: #38bdf8 !important;
+  background: #2a3d4f !important;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-date,
+:host ::ng-deep .da-paper-header input.da-header-date:focus {
+  min-height: 2.25rem !important;
+  border: 1px solid var(--border-input, #cbd5e1) !important;
+  border-radius: 6px !important;
+  background: var(--bg-input, #f8fafc) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  padding: 0.25rem 0.75rem !important;
+  color: var(--text-primary, #0f172a) !important;
+  font: inherit !important;
+  font-size: 0.875rem !important;
+  outline: none !important;
+}
+
+:host ::ng-deep .da-paper-header input.da-header-date:focus {
+  border-color: #1069AB !important;
+  background: var(--bg-card, #ffffff) !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .da-paper-header input.da-header-date,
+:host-context(.dark) ::ng-deep .da-paper-header input.da-header-date {
+  border-color: #3d4f61 !important;
+  background: #233342 !important;
+  color: #f8fafc !important;
+  color-scheme: dark !important;
+}
+
+:host-context([data-theme="dark"]) ::ng-deep .da-paper-header input.da-header-date:focus,
+:host-context(.dark) ::ng-deep .da-paper-header input.da-header-date:focus {
+  border-color: #38bdf8 !important;
+  background: #2a3d4f !important;
+}
+
+form,
+fieldset,
+section {
+  min-width: 0 !important;
+  max-width: 100%;
+}
+
+.custom-input-secondary {
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  border-radius: 0.375rem;
+  background: #fff;
+}
+
+.etma-table-wrap {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Keep collapsed table borders continuous at all four corners. */
+  border-radius: 0 !important;
+}
+
+.etma-table-wrap table th,
+.etma-table-wrap table td {
+  border: 1px solid #e2e8f0 !important;
+  vertical-align: middle;
+}
+
+.governor-table-transition {
+  animation: governor-table-swipe-ltr 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+@keyframes governor-table-swipe-ltr {
+  0% {
+    opacity: 0;
+    transform: translateX(-34px);
+  }
+  55% {
+    opacity: 0.92;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Matrix-table visual alignment (see resuable-table-matrix.ts) */
+:host ::ng-deep .mb-8 table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+:host ::ng-deep .mb-8 h4 {
+  color: rgb(30 41 59);
+}
+/* Keep auto-calculated transient status visible even though its form control is disabled. */
+.transient-status-radio {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 0.875rem;
+  height: 0.875rem;
+  flex: 0 0 0.875rem;
+  margin: 0;
+  border: 2px solid #94a3b8 !important;
+  border-radius: 9999px;
+  background: transparent !important;
+  opacity: 1 !important;
+}
+
+.transient-status-radio:checked {
+  border-color: #38bdf8 !important;
+  background: radial-gradient(circle, #38bdf8 0 42%, transparent 46%) !important;
+  box-shadow: 0 0 0 2px rgb(56 189 248 / 20%);
+}
+
+.transient-status-radio:disabled {
+  cursor: default;
+  opacity: 1 !important;
+}
+
+/* --- DARK MODE GLOBAL WHITE TEXT RULES --- */
+:host-context(.dark) legend,
+:host-context(.dark) label,
+:host-context(.dark) th,
+:host-context(.dark) td,
+:host-context(.dark) p:not(.etma-note-text),
+:host-context(.dark) span:not(.etma-note-text),
+:host-context(.dark) h1,
+:host-context(.dark) h2,
+:host-context(.dark) h3,
+:host-context(.dark) h4,
+:host-context(.dark) h5,
+:host-context(.dark) h6 {
+  color: #f8fafc !important;
+}
+
+:host-context(.dark) ::ng-deep label,
+:host-context(.dark) ::ng-deep .form-label,
+:host-context(.dark) ::ng-deep .input-label,
+:host-context(.dark) ::ng-deep .select-label,
+:host-context(.dark) ::ng-deep .calendar-label,
+:host-context(.dark) ::ng-deep legend,
+:host-context(.dark) ::ng-deep table th,
+:host-context(.dark) ::ng-deep table td {
+  color: #f8fafc !important;
+}
+
+:host-context(.dark) input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+:host-context(.dark) select,
+:host-context(.dark) textarea,
+:host-context(.dark) ::ng-deep input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+:host-context(.dark) ::ng-deep select,
+:host-context(.dark) ::ng-deep textarea {
+  color: #ffffff !important;
+}
+
+/* Placeholders remain soft/muted */
+:host-context(.dark) input::placeholder,
+:host-context(.dark) textarea::placeholder,
+:host-context(.dark) ::ng-deep input::placeholder,
+:host-context(.dark) ::ng-deep textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.8 !important;
+}
+
+/* Footer & Control Buttons White Text in Dark Mode */
+:host-context([data-theme="dark"]) .form-card-footer-btn,
+:host-context(.dark) .form-card-footer-btn,
+:host-context([data-theme="dark"]) [formFooter] button,
+:host-context(.dark) [formFooter] button,
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-table__control,
+:host-context(.dark) ::ng-deep .pt-glass-table__control,
+:host-context([data-theme="dark"]) ::ng-deep .form-card-footer-btn,
+:host-context(.dark) ::ng-deep .form-card-footer-btn,
+:host-context([data-theme="dark"]) ::ng-deep [formFooter] button,
+:host-context(.dark) ::ng-deep [formFooter] button {
+  color: #ffffff !important;
+}
+
+
+/* Equipment Tabs (previewHeader) */
+.pt-glass-form-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+:host-context([data-theme="dark"]) .pt-glass-form-tab,
+:host-context(.dark) .pt-glass-form-tab,
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-form-tab,
+:host-context(.dark) ::ng-deep .pt-glass-form-tab {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+:host-context([data-theme="dark"]) .pt-glass-form-tab span,
+:host-context(.dark) .pt-glass-form-tab span,
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-form-tab span,
+:host-context(.dark) ::ng-deep .pt-glass-form-tab span {
+  color: #ffffff !important;
+}
+
+:host-context([data-theme="dark"]) .pt-glass-form-tab .pt-glass-form-tab-sub--idle,
+:host-context(.dark) .pt-glass-form-tab .pt-glass-form-tab-sub--idle,
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-form-tab .pt-glass-form-tab-sub--idle,
+:host-context(.dark) ::ng-deep .pt-glass-form-tab .pt-glass-form-tab-sub--idle {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+:host-context([data-theme="dark"]) .pt-glass-form-tab .pt-glass-form-tab-sub--active,
+:host-context(.dark) .pt-glass-form-tab .pt-glass-form-tab-sub--active,
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-form-tab .pt-glass-form-tab-sub--active,
+:host-context(.dark) ::ng-deep .pt-glass-form-tab .pt-glass-form-tab-sub--active {
+  color: #61C2FF !important;
+}
+
+:host-context([data-theme="dark"]) .pt-glass-form-tab--active,
+:host-context(.dark) .pt-glass-form-tab--active,
+:host-context([data-theme="dark"]) ::ng-deep .pt-glass-form-tab--active,
+:host-context(.dark) ::ng-deep .pt-glass-form-tab--active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: #61C2FF !important;
+  box-shadow: 0 0 14px rgba(97, 194, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+:host-context([data-theme="light"]) .pt-glass-form-tab,
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-form-tab {
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  background: #f8fafc !important;
+}
+
+:host-context([data-theme="light"]) .pt-glass-form-tab span,
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-form-tab span {
+  color: #0f172a !important;
+}
+
+:host-context([data-theme="light"]) .pt-glass-form-tab .pt-glass-form-tab-sub--idle,
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-form-tab .pt-glass-form-tab-sub--idle {
+  color: #64748b !important;
+}
+
+:host-context([data-theme="light"]) .pt-glass-form-tab .pt-glass-form-tab-sub--active,
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-form-tab .pt-glass-form-tab-sub--active {
+  color: #1069AB !important;
+}
+
+:host-context([data-theme="light"]) .pt-glass-form-tab--active,
+:host-context([data-theme="light"]) ::ng-deep .pt-glass-form-tab--active {
+  background: #eaf1fb !important;
+  border-color: #1069AB !important;
+  box-shadow: 0 1px 3px rgba(16, 105, 171, 0.15) !important;
+  color: #1069AB !important;
+}
+
+/* Proforma & Amber Note Box Styling (Light & Dark Theme) */
+.proforma-note-box,
+.bg-amber-50,
+:host ::ng-deep .proforma-note-box,
+:host ::ng-deep .bg-amber-50 {
+  background-color: #fffbeb !important;
+  border: 1px solid #fde68a !important;
+  color: #1e293b !important;
+}
+
+.proforma-note-box *,
+.bg-amber-50 *,
+:host ::ng-deep .proforma-note-box *,
+:host ::ng-deep .bg-amber-50 * {
+  color: #1e293b !important;
+}
+
+.proforma-note-box .font-semibold,
+.proforma-note-box b,
+.bg-amber-50 .font-semibold,
+.bg-amber-50 b,
+:host ::ng-deep .proforma-note-box .font-semibold,
+:host ::ng-deep .bg-amber-50 .font-semibold {
+  color: #92400e !important;
+}
+
+.proforma-note-box .text-red-500,
+.bg-amber-50 .text-red-500,
+:host ::ng-deep .proforma-note-box .text-red-500,
+:host ::ng-deep .bg-amber-50 .text-red-500 {
+  color: #dc2626 !important;
+}
+
+/* Dark Mode Note Box */
+:host-context([data-theme="dark"]) .proforma-note-box,
+:host-context(.dark) .proforma-note-box,
+:host-context([data-theme="dark"]) .bg-amber-50,
+:host-context(.dark) .bg-amber-50,
+:host-context([data-theme="dark"]) ::ng-deep .proforma-note-box,
+:host-context(.dark) ::ng-deep .proforma-note-box,
+:host-context([data-theme="dark"]) ::ng-deep .bg-amber-50,
+:host-context(.dark) ::ng-deep .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fef3c7 !important;
+}
+
+:host-context([data-theme="dark"]) .proforma-note-box *,
+:host-context(.dark) .proforma-note-box *,
+:host-context([data-theme="dark"]) .bg-amber-50 *,
+:host-context(.dark) .bg-amber-50 *,
+:host-context([data-theme="dark"]) .proforma-note-box p,
+:host-context(.dark) .proforma-note-box p,
+:host-context([data-theme="dark"]) .bg-amber-50 p,
+:host-context(.dark) .bg-amber-50 p,
+:host-context([data-theme="dark"]) .proforma-note-box li,
+:host-context(.dark) .proforma-note-box li,
+:host-context([data-theme="dark"]) .bg-amber-50 li,
+:host-context(.dark) .bg-amber-50 li,
+:host-context([data-theme="dark"]) .proforma-note-box span:not(.text-red-500),
+:host-context(.dark) .proforma-note-box span:not(.text-red-500),
+:host-context([data-theme="dark"]) .bg-amber-50 span:not(.text-red-500),
+:host-context(.dark) .bg-amber-50 span:not(.text-red-500),
+:host-context([data-theme="dark"]) ::ng-deep .proforma-note-box *,
+:host-context(.dark) ::ng-deep .proforma-note-box *,
+:host-context([data-theme="dark"]) ::ng-deep .bg-amber-50 *,
+:host-context(.dark) ::ng-deep .bg-amber-50 * {
+  color: #fef3c7 !important;
+}
+
+:host-context([data-theme="dark"]) .proforma-note-box .font-semibold,
+:host-context(.dark) .proforma-note-box .font-semibold,
+:host-context([data-theme="dark"]) .proforma-note-box b,
+:host-context(.dark) .proforma-note-box b,
+:host-context([data-theme="dark"]) .bg-amber-50 .font-semibold,
+:host-context(.dark) .bg-amber-50 .font-semibold,
+:host-context([data-theme="dark"]) .bg-amber-50 b,
+:host-context(.dark) .bg-amber-50 b,
+:host-context([data-theme="dark"]) ::ng-deep .proforma-note-box .font-semibold,
+:host-context(.dark) ::ng-deep .proforma-note-box .font-semibold,
+:host-context([data-theme="dark"]) ::ng-deep .bg-amber-50 .font-semibold,
+:host-context(.dark) ::ng-deep .bg-amber-50 .font-semibold {
+  color: #fde68a !important;
+}
+
+:host-context([data-theme="dark"]) .proforma-note-box .text-red-500,
+:host-context(.dark) .proforma-note-box .text-red-500,
+:host-context([data-theme="dark"]) .bg-amber-50 .text-red-500,
+:host-context(.dark) .bg-amber-50 .text-red-500,
+:host-context([data-theme="dark"]) ::ng-deep .proforma-note-box .text-red-500,
+:host-context(.dark) ::ng-deep .proforma-note-box .text-red-500,
+:host-context([data-theme="dark"]) ::ng-deep .bg-amber-50 .text-red-500,
+:host-context(.dark) ::ng-deep .bg-amber-50 .text-red-500 {
+  color: #f87171 !important;
+}
+

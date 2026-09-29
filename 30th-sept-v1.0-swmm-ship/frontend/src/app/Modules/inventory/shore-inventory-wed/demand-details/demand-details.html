@@ -1,0 +1,50 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card wed-panel">
+  <div class="wed-panel__header">
+    <h3>Demand Details</h3>
+  </div>
+
+  @if (!loading()) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <fieldset class="wed-fieldset">
+        <legend>Demand Authority Section</legend>
+        <div class="wed-detail-row"><span>SWMM Demand Ref No</span><strong>{{ generatedDemandNo() || "-" }}</strong></div>
+        <div class="wed-detail-row"><span>Demand Qty</span><strong>{{ demandQty() || "-" }}</strong></div>
+
+        <app-textarea-input label="Remarks *" formControlName="remarks" [rows]="3" />
+        @if (form.controls.remarks.invalid && form.controls.remarks.touched) {
+          <span class="form-error">Remarks are required.</span>
+        }
+
+        <app-file-input
+          [label]="existingPdfName() ? 'Upload Demand PDF' : 'Upload Demand PDF *'"
+          formControlName="certificateFile"
+          accept="application/pdf"
+          [outsideLabel]="true"
+        />
+        @if (existingPdfName()) {
+          <small class="wed-hint">Previously uploaded: <strong>{{ existingPdfName() }}</strong></small>
+        } @else if (pdfMissing() && attemptedSubmit()) {
+          <span class="form-error">Demand PDF is required.</span>
+        }
+      </fieldset>
+
+      @if (entry(); as row) {
+        <fieldset class="wed-fieldset">
+          <legend>Equipment Details</legend>
+          <div class="wed-detail-row"><span>Item Code</span><strong>{{ row.itemCode || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Item Description</span><strong>{{ row.itemDescription || "-" }}</strong></div>
+          <div class="wed-detail-row"><span>Denomination</span><strong>{{ row.denomination || "-" }}</strong></div>
+        </fieldset>
+      }
+
+      <div class="wed-form-actions">
+        <app-button type="button" class="btn-secondary" (click)="cancel()">Cancel</app-button>
+        <app-button type="submit" class="btn-primary" [disabled]="saving() || form.invalid">
+          {{ saving() ? "Saving..." : "Save" }}
+        </app-button>
+      </div>
+    </form>
+  }
+</div>

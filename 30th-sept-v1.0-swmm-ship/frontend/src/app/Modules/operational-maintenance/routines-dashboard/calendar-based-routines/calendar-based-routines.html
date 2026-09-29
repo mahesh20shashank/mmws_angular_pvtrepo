@@ -1,0 +1,121 @@
+<app-master-card cardTitle ="Calendar Based Routines due in next 06 months">
+    <div card-header-actions class="flex items-center gap-2">
+    <app-button type="button" variant="outline" size="sm" (click)="goBackToList()">
+      <app-icon name="arrow-left" [size]="14" variant="inherit" />
+      Back to routine dashboard
+    </app-button>
+  </div>
+<div class="flex items-center gap-10 mt-4 mb-5">
+
+    <!-- Red -->
+    <div class="flex items-center gap-2">
+
+        <app-icon name="flag" [size]="16" class="text-[#FF4D4F]" />
+
+        <span
+            class="
+                text-[13px]
+                font-normal
+                text-white/90
+                font-['Inter']
+            ">
+            Routines Due
+        </span>
+
+    </div>
+
+    <!-- Yellow -->
+    <div class="flex items-center gap-2">
+
+        <app-icon name="flag" [size]="16" class="text-[#FFB020]" />
+
+        <span
+            class="
+                text-[13px]
+                font-normal
+                text-white/90
+                font-['Inter']
+            ">
+            Routines Due in OR 3 months.
+        </span>
+
+    </div>
+
+    <!-- Grey -->
+    <div class="flex items-center gap-2">
+
+        <app-icon name="flag" [size]="16" class="text-[#667085]" />
+
+        <span
+            class="
+                text-[13px]
+                font-normal
+                text-white/90
+                font-['Inter']
+            ">
+            Routines Due in 3 to 6 months.
+        </span>
+
+    </div>
+
+</div>
+<div class="flex justify-evenly items-center mt-4 mb-4">
+
+    <div class="relative w-[83%] shrink-0">
+
+        <!-- Search Icon -->
+        <div class="
+            absolute
+            left-3
+            top-1/2
+            -translate-y-1/2
+            text-white/40
+            pointer-events-none
+            z-10
+            ">
+            <app-icon name="search" [size]="16" [strokeWidth]="2" color="currentColor" />
+        </div>
+
+        <!-- Input -->
+        <input type="text"
+            (input)="onSearch($event)"
+            placeholder="Search" class="
+            w-full
+            h-10
+            rounded-[10px]
+            bg-white/[0.04]
+            border
+            border-white/10
+            pl-10
+            pr-3
+            content
+            text-white
+            placeholder:text-white/40
+            outline-none
+            focus:border-white/20
+            " />
+
+    </div>
+
+    <div class="flex gap-2 pl-2">
+        <app-export-toolbar
+          [busy]="exportBusy()"
+          [disabled]="filteredMaintopRoutines().length === 0"
+          (exportRequested)="onExport($event)"
+        />
+    </div>
+
+</div>
+
+
+<div class="fuss-grid-wrapper w-full mt-4">
+    <app-data-grid
+      [columnDefs]="defectColumnDefs"
+      [rowData]="filteredMaintopRoutines()"
+      [pageSize]="10"
+      [loading]="isLoading()"
+      height="440px"
+    >
+    </app-data-grid>
+  </div>
+</app-master-card>

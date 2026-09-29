@@ -1,0 +1,25 @@
+<div class="glass-card header-bar-card">
+  <div class="header-bar">
+    <div class="header-bar__left">
+      @if (icon()) {
+        <app-icon [name]="icon()" [size]="20" [strokeWidth]="1.9" [variant]="iconVariant()" />
+      }
+      <h1 class="head3 header-bar__title">{{ title() }}</h1>
+      @if (badgeText()) {
+        <span
+          class="header-bar__badge"
+          [style.color]="badgeColor()"
+          [style.background]="badgeBg()"
+          [style.border-color]="badgeBorder()"
+        >
+          {{ badgeText() }}
+        </span>
+      }
+    </div>
+    <div class="header-bar__actions">
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <!-- Optional second row (e.g. filter pills) projected below the title row, inside the same card. -->
+  <ng-content select="[below]"></ng-content>
+</div>

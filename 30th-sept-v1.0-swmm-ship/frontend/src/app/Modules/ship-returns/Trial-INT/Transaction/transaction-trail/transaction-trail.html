@@ -1,0 +1,65 @@
+<!-- <div class="mx-auto w-full px-2 py-1">
+  <div class="overflow-hidden border border-blue-950 bg-slate-100 shadow-[0_10px_24px_rgba(15,23,42,0.12)]">
+    <div class="bg-[#1a2b48] px-4 py-2.5 text-sm font-semibold flex items-center justify-between">
+      <div>Trials</div>
+      <button type="button" (click)="openInitiateForm()"
+        class="px-4 py-1 rounded-lg bg-blue-700 font-bold shadow-[4px_5px_10px_1.5px_rgba(45,45,45,0.25)] transition-all duration-75 hover:bg-blue-700 active:translate-y-[2px] active:shadow-none"
+        style="box-shadow: 4px 5px 10px 1.5px rgba(45,45,45,0.25)">Initiate</button>
+    </div>
+
+    <div class="pt-3">
+    </div>
+  </div>
+</div> -->
+
+<!-- Filter Section -->
+<section class="mt-3 mb-4 rounded-xl border border-[var(--border-primary)] bg-[var(--bg-card)] p-2 shadow-lg">
+  <div class="grid w-full grid-cols-1 items-end gap-4 md:grid-cols-[minmax(220px,1fr)_minmax(220px,1fr)_auto]">
+    <div class="min-w-0">
+      <app-select [label]="'Trial Unit Filter'" [placeholder]="'--Select--'" [options]="optionMap.trialUnit"
+        [(ngModel)]="selectedTrialUnit" (valueChange)="onFilterChange()">
+      </app-select>
+    </div>
+
+    <div class="min-w-0">
+      <app-select [label]="'Status Filter'" [placeholder]="'--Select--'" [searchable]="false" [options]="statusOptions"
+        [(ngModel)]="selectedStatus" (valueChange)="onStatusChange($event)">
+      </app-select>
+    </div>
+
+    <div class="flex w-full items-end md:w-auto">
+      <button type="button" (click)="clearFilters()"
+        class="inline-flex h-[45px] w-full items-center justify-center rounded-[10px] border border-[#4f8fd5] bg-[#1069AB] px-5 text-sm font-semibold !text-white shadow-sm transition hover:bg-[#195d95] hover:border-[#61C2FF] active:translate-y-px md:w-auto">
+        Clear Filters
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Paginate Table -->
+<app-paginate-table #pagination [title]="'Trials'" [description]="'Manage trials'" [url]="currentTableUrl"
+  [showHeaderSection]="true" [showSearch]="true" [columnDefs]="columnDefs" [showPagination]="true"
+  [addButtons]="addButtons" (addButtonClick)="openInitiateForm()">
+</app-paginate-table>
+
+<!-- Initiate Trials Dialog -->
+<app-initiate-trials-dialog #initiateTrials [open]="showCreateLayout" (openChange)="showCreateLayout = $event"
+  [optionMap]="optionMap" [dropdownsLoaded]="dropdownsLoaded" [readOnly]="isViewMode" [title]="initiateTitle">
+</app-initiate-trials-dialog>
+
+<!-- Create Trial Pass Dialog -->
+<app-create-trial-pass-dialog [open]="showTrialPassLayout" (openChange)="showTrialPassLayout = $event"
+  [optionMap]="optionMap" [readOnly]="isViewMode">
+</app-create-trial-pass-dialog>
+
+<!-- Delete Dialog -->
+<app-reusable-delete-dialog [open]="isDeleteDialogOpen" [name]="'Trial #' + deleteItem?.id" entityType="Trial"
+  [loading]="isDeleteLoading" (confirm)="confirmDelete()" (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>
+
+<!-- Approval Workflow -->
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="selectedWorkflowTrialId || ''" [context]="selectedWorkflowRowData"
+  [rowData]="selectedWorkflowRowData" [autoOpenHistory]="autoOpenHistory"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event">
+</app-approval-work-flow>

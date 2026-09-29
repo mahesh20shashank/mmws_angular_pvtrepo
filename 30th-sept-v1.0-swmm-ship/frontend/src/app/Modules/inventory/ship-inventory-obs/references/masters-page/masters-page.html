@@ -1,0 +1,1195 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="glass-card obs-panel">
+  <div class="obs-panel__header">
+    <h3>Masters</h3>
+    <!-- CLEAR OBS SPARES - top right, and shown only to a login that may
+         actually use it. A Head of Department clears HIS OWN DEPARTMENT'S spares. The application
+         administrator clears the whole Ship Inventory. A Dy HOD sees no button at all: he may use
+         this screen and import on it, but he may not delete what a department has imported.
+
+         The server decides all of that. `purge-state/` is refused with 403 for anyone who may not
+         clear, and this signal stays null, so the button is absent rather than present-and-then-
+         refused. -->
+    @if (purgeState(); as purge) {
+      <app-button
+        type="button"
+        class="btn-danger obs-panel__header-action"
+        [disabled]="purging()"
+        (click)="askToPurgeSpares()"
+      >
+        {{ purge.scope === "all" ? "Clear all data in OBS_Spares" : "Clear my department's OBS spares" }}
+      </app-button>
+    }
+  </div>
+
+  <div class="obs-tabs-row">
+    <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeTab() === 'import'" (click)="selectTab('import')">
+      Import Data
+    </app-button>
+    <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeTab() === 'spare-data-map'" (click)="selectTab('spare-data-map')">
+      Spare Data Map
+    </app-button>
+    <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeTab() === 'vendor-pil'" (click)="selectTab('vendor-pil')">
+      Upload CPIL
+    </app-button>
+    <!-- The fourth tab. Placed last so the three tabs a user already knows
+         keep the positions they have always had - Nielsen 4, consistency. It is a plain text
+         button matching its three neighbours exactly, so no Lucide icon is introduced and
+         nothing has to be added to `provideLucideIcons`. -->
+    <app-button
+      type="button"
+      class="obs-tab-btn"
+      [class.obs-tab-btn--active]="activeTab() === 'equipment-class'"
+      (click)="selectTab('equipment-class')"
+    >
+      Equipment Classes
+    </app-button>
+  </div>
+
+  @if (activeTab() === "import") {
+    <app-help-guidance [bodyHtml]="importTabHelpHtml" />
+
+    <!-- THE FULL-WIDTH SETUP REGION. This was a two-column split, the form
+         on the left and the read-only panels on the right, which was itself a fix for a 720px
+         strip down the left of a 1920px window. It was still giving the form half a window for
+         the whole of the task, and a department whose templates could not be resolved got a
+         blank right-hand column beside it. Everything now spans the full width: the form's own
+         auto-fit grid lays its fields ACROSS the window, and the aside is a row of panels
+         beneath it. The DOM order is unchanged, so the reading order is too.
+
+         The working table from `.obs-stats-bar` down stays full width - it has fifteen columns
+         and a narrower one would help nobody. -->
+    <div class="obs-import-setup">
+      <div class="obs-import-setup__main">
+    <!-- THE MODE CHOOSER - requirement 3.3, defect F-06. There had been
+         no hand-entry path at all on this page: the only way to get a row into the working
+         table was a file upload. The control swaps which controls the tab shows and never
+         which page the user is on - doctrine 5.12, fewer steps to the same outcome. Each mode
+         keeps its own rows, so a switch discards nothing. -->
+    <div class="obs-mode-chooser">
+      <app-radio-input
+        label="How do you want to add these spares?"
+        [formControl]="entryModeControl"
+        [options]="entryModeOptions"
+      />
+      <!-- Announced, because it changes when the radio changes and it is the only place the
+           D787J restriction is stated before the authority list is opened. -->
+      <p class="obs-mode-chooser__hint" aria-live="polite">
+        @if (entryMode() === "manual") {
+          Build the rows here, one spare at a time, equipment-wise. Each row is checked against
+          the same import rules an uploaded sheet is checked against, and nothing is saved to the
+          Ship Inventory until you press Save. <strong>D787J spares are loaded from the D787J
+          template workbook only</strong> and cannot be entered by hand.
+        } @else {
+          Fill in your department's template workbook and upload it. Every row appears below for
+          you to check and correct before anything is saved.
+        }
+      </p>
+    </div>
+
+    <form [formGroup]="importForm" class="obs-form-grid" (ngSubmit)="previewImport()">
+      <div class="form-field">
+        <!-- `-- Select --` replaces `select-input`'s `Search...` default,
+             which named the control's mechanism rather than the decision the user has to make. -->
+        <!-- Requirement 3.2 - the control is LOCKED for a departmental
+             login, and the list is scoped server-side so there is nothing else in it to pick.
+             `readonly`, NOT `disabled`, and the difference is load-bearing: a disabled control's
+             value is dropped from `form.value`, and this value has to be SUBMITTED because it is
+             what tags the sheet to a department. `readonly` keeps it in the form and keeps the
+             field focusable and announced, which `disabled` would also take away. -->
+        <app-select-input
+          label="Select Department *"
+          formControlName="department"
+          [options]="departmentOptions()"
+          [placeholder]="selectPlaceholder"
+          [readonly]="departmentLocked()"
+        />
+        @if (departmentLocked()) {
+          <span class="obs-equipment-class-field__instruction">
+            The sheet is tagged to your own department. You may not import for another.
+          </span>
+        }
+        @if (importForm.controls.department.invalid && importForm.controls.department.touched) {
+          <span class="form-error">Select Department is required.</span>
+        }
+      </div>
+      <!-- THE DEPENDENT SUB-DEPARTMENT FIELD - requirement 3.1, defect F-26.
+           Rendered only when the chosen department actually has sub-departments, which in practice
+           means EXECUTIVE alone. Every other department returns an empty list and this control
+           does not appear at all, rather than appearing permanently empty and disabled.
+
+           `disabled` is correct HERE and `readonly` was correct above, and the two are not
+           inconsistent. The department must submit its value even when locked. This control is
+           disabled only while its own list is still loading, when it has no value worth
+           submitting yet - which is the cascading-dropdown case `select-input`'s own
+           `@Input() set disabled` documents.
+
+           This is NOT the "Sub Department" control on the Spare Data Map tab further down. That
+           one is `ems.SectionName`. This one is `master.SubDepartment`. Posting one where the
+           other is expected points the record at the wrong row. -->
+      @if (showImportSubDepartment()) {
+        <div class="form-field">
+          <app-select-input
+            label="Sub Department *"
+            formControlName="subDepartment"
+            [options]="importSubDepartmentOptions()"
+            [placeholder]="loadingSubDepartments() ? 'Loading…' : selectPlaceholder"
+            [disabled]="loadingSubDepartments()"
+            [readonly]="importSubDepartmentLocked()"
+          />
+          @if (importSubDepartmentLocked()) {
+            <span class="obs-equipment-class-field__instruction">
+              The sheet is tagged to your own sub-department. You may not import for another.
+            </span>
+          } @else {
+            <span class="obs-equipment-class-field__instruction">
+              Executive spares are held sub-department wise. Pick the one these rows belong to.
+            </span>
+          }
+          @if (!importForm.controls.subDepartment.value && importForm.controls.subDepartment.touched) {
+            <span class="form-error">Sub Department is required for Executive.</span>
+          }
+        </div>
+      }
+      <!-- the shared `app-input-field`, not a hand-rolled
+           `.form-field-label` + `.form-field-input` pair. The two are not interchangeable and the
+           difference was visible: those classes carry a 14px semibold label with 10px of vertical
+           padding above a 48px box, where every other control on this row carries a 13px label
+           above a 45px box - so Login Password sat a clear step lower than the two selects beside
+           it. Using the design system's own control makes the four fields one row of one height
+           rather than four fields that merely happen to be adjacent. -->
+      <div class="form-field">
+        <app-input-field
+          label="Login Password"
+          type="password"
+          [required]="true"
+          formControlName="password"
+          placeholder="Enter login password to authenticate…"
+        />
+        @if (importForm.controls.password.invalid && importForm.controls.password.touched) {
+          <span class="form-error">Login Password is required.</span>
+        }
+      </div>
+      <!-- Was "Import Type", a five-entry hard-coded list offered to every
+           user and read nowhere. It is the reference screen's "Import Authority", the list comes
+           from the back end scoped to this caller's role and department, and it is sent with both
+           import calls along with the route it implies. -->
+      <div class="form-field">
+        <app-select-input
+          label="Import Authority *"
+          formControlName="importAuthority"
+          [options]="authoritySelectOptions()"
+          [placeholder]="loadingAuthorities() ? 'Loading…' : selectPlaceholder"
+          [disabled]="loadingAuthorities()"
+        />
+        @if (importForm.controls.importAuthority.invalid && importForm.controls.importAuthority.touched) {
+          <span class="form-error">Import Authority is required.</span>
+        }
+        @if (!loadingAuthorities() && !authoritySelectOptions().length) {
+          <span class="form-error">
+            No import authority is available for your account. Ask an administrator to check your
+            department and role.
+          </span>
+        }
+      </div>
+      <!-- The file control and the hand-entry controls are the half of
+           this form the mode chooser swaps. Everything above it - department, password,
+           authority - is common to both modes and is asked once.
+
+           It sits DIRECTLY after the authority now, ahead of the D787J caution below, so the four
+           fields the import path asks for land on ONE ROW. The caution slot spans every column
+           (`grid-column: 1 / -1`), and standing between the authority and the file picker it was
+           breaking the row in half and pushing Select Excel File onto a line of its own - with the
+           window's whole right-hand side empty beside it. The caution still appears immediately
+           under the row that holds the control it warns about, which is where it has to be.
+
+           `outsideLabel` puts "Select Excel File" ABOVE the box rather than floating inside it.
+           Inside, the field had no label at rest, so on a shared row it read as a lone unlabelled
+           box next to three labelled ones and its box sat a label's height higher than theirs. -->
+      @if (entryMode() === "import") {
+        <div class="form-field">
+          <app-file-input
+            label="Select Excel File (*.xlsx)"
+            [outsideLabel]="true"
+            [required]="true"
+            accept=".xlsx"
+            formControlName="file"
+          />
+        </div>
+      }
+      <!-- The D787J caution, restored from the reference application and
+           placed where the authority is actually chosen rather than inside the collapsed help
+           panel. In the reference it was a message only. It still reads as one, but the choice it
+           warns about is now a real gate as well - an unentitled role never sees D787J in the list
+           above, and the server refuses the route even if the request is made by hand. -->
+      <div class="obs-d787j-caution-slot" aria-live="polite">
+        @if (selectedImportAuthority() === "D787J") {
+          <p class="obs-d787j-caution" role="note">{{ d787jCaution }}</p>
+        }
+      </div>
+      @if (entryMode() === "import") {
+        @if (importStage() === "idle") {
+          <div class="obs-form-grid__actions">
+            <app-button type="submit" class="btn-primary" [disabled]="previewing()">
+              {{ previewing() ? "Validating…" : "Preview Import" }}
+            </app-button>
+          </div>
+        }
+      } @else {
+        <!-- Requirement 3.4 - one equipment class per run, stated once and carried into every
+             row that is added. The naming instruction sits directly beneath the control
+             because a naming rule read only by someone who opens a disclosure is a naming rule
+             that will be broken. The same instruction appears again inside the row editor, from
+             the same constant. -->
+        <div class="form-field obs-equipment-class-field">
+          <app-select-input
+            label="Equipment Class for these rows"
+            [options]="batchEquipmentClassOptions()"
+            [allowCustomValue]="true"
+            [placeholder]="loadingValueLists() ? 'Loading…' : selectPlaceholder"
+            [formControl]="batchEquipmentClassControl"
+          />
+          <span class="obs-equipment-class-field__instruction">{{ equipmentClassInstruction }}</span>
+        </div>
+        <!-- HOW MANY ROWS TO OPEN THE TABLE WITH. Hand entry used to open a
+             modal per row - press Add Row, fill a dialogue, save, repeat. The operator now says
+             how many spares of this equipment class they are about to enter and gets that many
+             blank pre-filled rows to type into directly. -->
+        <div class="form-field">
+          <app-input-field
+            label="Number of rows"
+            type="number"
+            [formControl]="manualRowCountControl"
+            placeholder="How many spares?"
+          />
+          <span class="obs-equipment-class-field__instruction">
+            The table opens with this many blank rows, each already carrying the equipment class
+            above. You can add more with <strong>+</strong> at any time.
+          </span>
+        </div>
+        @if (manualStage() === "idle") {
+          <div class="obs-form-grid__actions">
+            <app-button type="button" class="btn-primary" [disabled]="manualStarting()" (click)="startHandEntry()">
+              {{ manualStarting() ? "Loading rows…" : "Load rows" }}
+            </app-button>
+          </div>
+        }
+      }
+    </form>
+      </div>
+
+      <aside class="obs-import-setup__aside">
+        <!-- THE SHIP'S MO CUSTOMER CODE. It is the first panel of the strip
+             beneath the form because it is the one value an operator has to get right in the
+             workbook before any of the rest of this screen can help them, and until this panel
+             existed the only way to learn it was to trigger a refusal.
+
+             On a fresh ship it is NOT YET ADOPTED, and that is the normal first-run state, not a
+             fault: the first workbook imported is what sets it, and that first import is always
+             allowed. Every import after it is checked against the adopted value. -->
+        @if (customerCodeState(); as codeState) {
+          <div class="obs-customer-code" [class.obs-customer-code--unset]="!codeState.isAdopted">
+            <p class="obs-customer-code__label">MO customer code</p>
+            @if (codeState.isAdopted) {
+              <p class="obs-customer-code__value">{{ codeState.customerCode }}</p>
+              <p class="obs-customer-code__hint">
+                Every workbook you import must carry <strong>{{ codeState.customerCode }}</strong> in
+                its <strong>SHIP CUSTOMER CODE</strong> column. A workbook carrying any other code is
+                refused and nothing from it is saved.
+              </p>
+            } @else {
+              <p class="obs-customer-code__value obs-customer-code__value--unset">Not yet adopted</p>
+              <p class="obs-customer-code__hint">
+                This ship has no MO customer code yet. The <strong>first workbook you import</strong>
+                sets it, from that workbook's own <strong>SHIP CUSTOMER CODE</strong> column — so that
+                first import is always allowed. Every import after it is checked against the code
+                adopted here.
+              </p>
+            }
+            @if (codeState.canReset && codeState.isAdopted) {
+              <app-button
+                type="button"
+                class="btn-secondary obs-customer-code__reset"
+                [disabled]="clearingCustomerCode()"
+                (click)="askToClearCustomerCode()"
+              >
+                {{ clearingCustomerCode() ? "Clearing…" : "Clear MO customer code" }}
+              </app-button>
+            }
+          </div>
+        }
+
+    <!-- Requirement 3.7 - the template download control. A departmental
+         login is offered its own two workbooks and no others, keyed off the department chosen in
+         the form above. The back end refuses a request for another department's template, so this
+         control narrows the choice rather than being the gate that enforces it. -->
+    <!-- Shown on the import path only. The two advisories it carries -
+         fill the OBS sheet, preserve the workbook - are about a file, and a control that has
+         nothing to do with the task in hand is a control in the way of it. -->
+    <!-- only the buttons that can actually SUCCEED are offered. Both were
+         shown to everyone and one of them 404'd - NBCD holds its spares on CNAL alone, and
+         Logistics, Medical and Executive-at-large hold no D787J document either, so no D787J
+         workbook exists for any of them. `template-routes/` answers which workbooks are on disk
+         for this department, and the list below is filtered by that answer. -->
+    @if (entryMode() === "import" && availableTemplateDownloads().length) {
+    <div class="obs-template-download">
+      <div class="obs-template-download__text">
+        <p class="obs-template-download__title">Download your department's import template</p>
+        <p class="obs-template-download__hint">
+          @if (availableTemplateDownloads().length > 1) {
+            Two workbooks, both your own department's - one for the D787J authority and one for the other
+            authorities.
+          } @else {
+            Your department's workbook, for the authorities it is permitted to import on. Your
+            department holds no D787J document, so it has no D787J workbook.
+          }
+          Each carries a GUIDANCE sheet and dropdowns that accept only the values your
+          department is allowed. Fill in the OBS sheet.
+        </p>
+      </div>
+      <div class="obs-template-download__actions">
+        @for (item of availableTemplateDownloads(); track item.route) {
+          <app-button
+            type="button"
+            class="btn-secondary"
+            [disabled]="downloadingTemplate() !== null"
+            (click)="downloadImportTemplate(item.route)"
+          >
+            {{ downloadingTemplate() === item.route ? "Downloading…" : item.label }}
+          </app-button>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- The error state. A file-level refusal used to leave the page in
+         exactly the state it was already in, with only a toast that vanishes to say why -
+         which is the wrong surface for something a rating has to recover from. The toast is
+         still raised, and this panel stays until the file is changed or a preview succeeds. -->
+    @if (previewError(); as message) {
+      <div class="obs-inline-error" role="alert">
+        <p class="obs-inline-error__title">This workbook was not loaded</p>
+        <p class="obs-inline-error__text">{{ message }}</p>
+      </div>
+    }
+
+    <!-- The loading state for the results region. The button already
+         reads "Validating…", but the region the answer lands in was blank until it arrived. -->
+    @if ((previewing() || manualChecking()) && !activePreview()) {
+      <div class="obs-empty-state" aria-live="polite">
+        <p class="obs-empty-state__title">
+          {{ entryMode() === "manual" ? "Checking your rows…" : "Checking your workbook…" }}
+        </p>
+        <p class="obs-empty-state__text">
+          Every row is being validated against the import rules and every pattern number checked
+          against ILMS and WLMS. Nothing is saved by this step.
+        </p>
+      </div>
+    }
+
+    <!-- The first-run empty state, in each mode's own words. Everything
+         below the form used to be inside the preview's own @if, so a rating opening this tab
+         for the first time saw a bare form and nothing to say what would happen next. -->
+    @if (!activePreview() && !previewing() && !manualChecking()) {
+      <div class="obs-empty-state">
+        @if (entryMode() === "manual") {
+          <p class="obs-empty-state__title">No rows entered yet</p>
+          <p class="obs-empty-state__text">
+            Pick the import authority these spares carry, name the <strong>equipment class</strong>
+            exactly as the D787J document or the shipyard purchase order gives it, then press
+            <strong>Start Hand Entry</strong> and add your rows one at a time. Each row is checked
+            against the same import rules an uploaded sheet is checked against, and appears here
+            with any broken rule named beside it. Nothing is saved to the Ship Inventory until you
+            press Save.
+          </p>
+        } @else {
+          <p class="obs-empty-state__title">No workbook loaded yet</p>
+          <p class="obs-empty-state__text">
+            Download your department's template above, fill in the <strong>OBS</strong> sheet
+            equipment-wise, then choose the file and press <strong>Preview Import</strong>. Every row
+            of the sheet appears here for you to check and correct. Nothing is saved to the Ship
+            Inventory until you press Submit Valid Data.
+          </p>
+        }
+      </div>
+    }
+      </aside>
+    </div>
+
+    <!-- THE TABLE'S OWN CONTROLS, and they now serve BOTH modes.
+         This bar was hand entry's alone. Cells are typed into directly on the workbook path too,
+         so the workbook path needs the same re-check button - a corrected cell has to be put back
+         to the rule engine, and until it is, Save is refused and says so.
+
+         `+` is a one-character button and not "Add Row" any more, because it no longer opens a
+         dialogue - it appends one more blank row to the table the operator is already typing in.
+         `title` and `aria-label` carry the full wording for a screen reader and a hover, so the
+         short label costs nothing to anyone who needs the long one. It is hand entry's alone:
+         there is no blank row to add to a workbook the server re-reads from disk on every call. -->
+    @if (activePreview()) {
+      <div class="obs-hand-entry-bar">
+        @if (entryMode() === "manual") {
+          <app-button
+            type="button"
+            class="btn-primary obs-hand-entry-bar__add"
+            [disabled]="manualChecking() || committing()"
+            title="Add one more blank row"
+            aria-label="Add one more blank row"
+            (click)="addBlankRow()"
+          >
+            +
+          </app-button>
+        }
+        <app-button
+          type="button"
+          class="btn-secondary"
+          [class.btn-primary]="pendingCellEdits()"
+          [disabled]="manualChecking() || revalidating() || committing()"
+          (click)="recheckRows()"
+        >
+          {{ manualChecking() || revalidating() ? "Checking…" : recheckLabel() }}
+        </app-button>
+        @if (entryMode() === "manual") {
+          <!-- Reloads the batch. Offered because changing the equipment class or the count after
+               the table is open is a normal correction, and the alternative was clearing the
+               table. -->
+          <app-button
+            type="button"
+            class="btn-secondary"
+            [disabled]="manualChecking() || committing()"
+            (click)="reloadBlankRows()"
+          >
+            Reload blank rows
+          </app-button>
+        }
+        <p class="obs-hand-entry-bar__count" aria-live="polite">
+          @if (entryMode() === "manual") {
+            {{ manualRowCount() }} row(s) in the table for
+            <strong>{{ batchEquipmentClass() || "no equipment class yet" }}</strong>.
+          }
+          Type your corrections straight into the cells.
+          @if (pendingCellEdits() || manualCheckPending()) {
+            @if (backgroundChecking()) {
+              <strong>Checking your corrections…</strong>
+            } @else {
+              <strong>Changed cells are about to be checked — or press {{ recheckLabel() }} now.</strong>
+            }
+          }
+        </p>
+      </div>
+    }
+
+    @if (activePreview(); as result) {
+      <div class="obs-stats-bar">
+        <div class="obs-stat-tile">
+          <span class="obs-stat-tile__value">{{ result.summary.totalRows }}</span>
+          <span class="obs-stat-tile__label">Total Rows</span>
+        </div>
+        <div class="obs-stat-tile">
+          <span class="obs-stat-tile__value">{{ result.summary.validRows }}</span>
+          <span class="obs-stat-tile__label">Valid</span>
+        </div>
+        <div class="obs-stat-tile obs-stat-tile--warn">
+          <span class="obs-stat-tile__value">{{ result.summary.invalidRows }}</span>
+          <span class="obs-stat-tile__label">Invalid</span>
+        </div>
+        <div class="obs-stat-tile">
+          <span class="obs-stat-tile__value">{{ result.summary.uniqueRows }}</span>
+          <span class="obs-stat-tile__label">Unique</span>
+        </div>
+        <div class="obs-stat-tile obs-stat-tile--warn">
+          <span class="obs-stat-tile__value">{{ result.summary.duplicateRows }}</span>
+          <span class="obs-stat-tile__label">Duplicate</span>
+        </div>
+        @if (result.summary.missingEssentialColumns.length) {
+          <div class="obs-stat-tile obs-stat-tile--warn" [title]="result.summary.missingEssentialColumns.join(', ')">
+            <span class="obs-stat-tile__value">{{ result.summary.missingEssentialColumns.length }}</span>
+            <span class="obs-stat-tile__label">Missing Essential Columns</span>
+          </div>
+        }
+        @if (result.summary.missingOptionalColumns.length) {
+          <div class="obs-stat-tile" [title]="result.summary.missingOptionalColumns.join(', ')">
+            <span class="obs-stat-tile__value">{{ result.summary.missingOptionalColumns.length }}</span>
+            <span class="obs-stat-tile__label">Missing Optional Columns</span>
+          </div>
+        }
+        @if (result.summary.extraColumns.length) {
+          <div class="obs-stat-tile" [title]="result.summary.extraColumns.join(', ')">
+            <span class="obs-stat-tile__value">{{ result.summary.extraColumns.length }}</span>
+            <span class="obs-stat-tile__label">Extra Columns Ignored</span>
+          </div>
+        }
+      </div>
+
+      <div class="obs-tabs-row obs-tabs-row--validation">
+        <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeValidationTab() === 'all'" (click)="selectValidationTab('all')">
+          All <span class="obs-tab-count">{{ tabCounts().all }}</span>
+        </app-button>
+        <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeValidationTab() === 'valid'" (click)="selectValidationTab('valid')">
+          Valid Only <span class="obs-tab-count">{{ tabCounts().valid }}</span>
+        </app-button>
+        <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeValidationTab() === 'invalid'" (click)="selectValidationTab('invalid')">
+          Invalid Only <span class="obs-tab-count">{{ tabCounts().invalid }}</span>
+        </app-button>
+        <app-button type="button" class="obs-tab-btn" [class.obs-tab-btn--active]="activeValidationTab() === 'duplicate'" (click)="selectValidationTab('duplicate')">
+          Duplicates <span class="obs-tab-count">{{ tabCounts().duplicate }}</span>
+        </app-button>
+      </div>
+
+      <!-- The counts clauses 4.3 and 4.4 ask to be stated with the
+           results table, in one sentence rather than as three more tiles to compare. -->
+      @if (correctionSummary(); as message) {
+        <p class="obs-correction-summary" aria-live="polite">{{ message }}</p>
+      }
+
+      <div class="obs-validation-toolbar">
+        <app-toolbar-search [value]="searchText()" (valueChange)="onSearchChange($event)" placeholder="Search pattern number, description…" />
+        <!-- the two whole-table controls are WRAPPED, because the toolbar is
+             `justify-content: space-between` and with three loose children the middle one would
+             float into the centre of the row instead of sitting with its pair on the right. -->
+        <div class="obs-validation-toolbar__actions">
+          <!-- BULK DELETE. Deleting a row was a bin icon and a confirmation
+               EACH, and the cost was not only the clicks - every single delete awaited a round
+               trip, and on the workbook path that round trip re-uploaded the whole .xlsx and ran
+               the rule engine again. Five bad rows meant five uploads.
+
+               Shown only once something is ticked, so it cannot be pressed with nothing to act
+               on and does not sit greyed-out on a table nobody has selected in. -->
+          @if (selectedRowNumbers().length; as selectedCount) {
+            <app-button
+              type="button"
+              class="btn-danger"
+              [disabled]="committing() || revalidating() || manualChecking()"
+              (click)="askToBulkDelete()"
+            >
+              Delete {{ selectedCount }} selected row(s)
+            </app-button>
+          }
+          <!-- Requirement 3.9's clear control, in the working-table scope
+               only. It is deliberately not styled as the page's primary action and it names its
+               own scope in the button, because "Clear" beside a table of imported-looking rows
+               reads as a database action and it is not one. -->
+          <app-button
+            type="button"
+            class="btn-secondary"
+            [disabled]="committing() || revalidating() || manualChecking()"
+            (click)="askToClearTable()"
+          >
+            Clear Table
+          </app-button>
+        </div>
+      </div>
+
+      <!-- The results table, rebuilt on the shared `data-grid`. Every row
+           of the workbook is rendered - `[pagination]="false"`, because clause 4.6 asks for
+           every row and ag-grid virtualises the body, so nothing is hidden from the reader and
+           the DOM stays small. ERRORS and ACTION are pinned right through `pinned` on their own
+           column definitions and do not scroll with the other twenty. -->
+      <div class="obs-working-grid">
+        <app-data-grid
+          [rowData]="gridRows()"
+          [columnDefs]="activeColumnDefs()"
+          [pagination]="false"
+          [loading]="previewing() || revalidating() || manualChecking()"
+          [skeletonRowCount]="10"
+          [getRowId]="gridRowId"
+          [resetKey]="gridResetKey()"
+          [suppressRowClickSelection]="true"
+          height="60vh"
+          [showCheckboxes]="true"
+          (selectionChanged)="onGridSelectionChanged($event)"
+          (gridReady)="onGridReady($event)"
+        />
+      </div>
+
+      <!-- The disabled Save says why it is disabled, rather than leaving
+           the operator to work it out from a greyed-out button. `aria-describedby` ties the
+           sentence to the button it explains, so a screen reader reads the reason with it. -->
+      @if (submitBlockedReason(); as reason) {
+        <p class="obs-submit-blocked" id="obsSubmitBlocked" role="status">{{ reason }}</p>
+      }
+
+      <div class="obs-import-ready__actions">
+        @if (entryMode() === "import") {
+          <app-button type="button" class="btn-secondary" [disabled]="committing()" (click)="cancelImport()">Choose Different File</app-button>
+          <app-button
+            type="button"
+            class="btn-primary"
+            [disabled]="!canSubmitValid()"
+            [attr.aria-describedby]="submitBlockedReason() ? 'obsSubmitBlocked' : null"
+            (click)="submitValidData()"
+          >
+            {{ committing() ? "Importing…" : submitValidLabel() }}
+          </app-button>
+        } @else {
+          <app-button
+            type="button"
+            class="btn-primary"
+            [disabled]="!canSubmitValid()"
+            [attr.aria-describedby]="submitBlockedReason() ? 'obsSubmitBlocked' : null"
+            (click)="saveHandEntryRows()"
+          >
+            {{ committing() ? "Saving…" : submitValidLabel() }}
+          </app-button>
+        }
+      </div>
+    }
+
+  }
+
+  @if (activeTab() === "spare-data-map") {
+    <app-help-guidance [bodyHtml]="mapTabHelpHtml" />
+
+    <form [formGroup]="mapForm" class="obs-form-grid" (ngSubmit)="submitMap()">
+      <div class="form-field">
+        <app-select-input label="Sub Department *" formControlName="subDepartment" [options]="subDepartmentOptions()" />
+        @if (mapForm.controls.subDepartment.invalid && mapForm.controls.subDepartment.touched) {
+          <span class="form-error">Sub Department is required.</span>
+        }
+      </div>
+      <div class="form-field">
+        <app-select-input
+          label="INSMA Equipment Name *"
+          formControlName="equipmentName"
+          [options]="equipmentOptions()"
+        />
+        @if (mapForm.controls.equipmentName.invalid && mapForm.controls.equipmentName.touched) {
+          <span class="form-error">INSMA Equipment Name is required.</span>
+        }
+      </div>
+      <div class="form-field">
+        <app-select-input
+          label="Ship Inventory Equipment Class *"
+          formControlName="equipmentClass"
+          [options]="equipmentClassOptions()"
+        />
+        @if (mapForm.controls.equipmentClass.invalid && mapForm.controls.equipmentClass.touched) {
+          <span class="form-error">Ship Inventory Equipment Class is required.</span>
+        }
+      </div>
+      <div class="obs-form-grid__actions">
+        <app-button type="submit" class="btn-primary" [disabled]="mapSubmitting()">
+          {{ mapSubmitting() ? "Saving..." : "Submit" }}
+        </app-button>
+      </div>
+    </form>
+  }
+
+  <!-- THE EQUIPMENT CLASSES TAB.
+       Adds an equipment class under an EXISTING spare class. There is no control here that
+       creates, renames or deletes a spare class, and there is no delete for an equipment class
+       either - both are out of scope and both are stated in the help above. -->
+  @if (activeTab() === "equipment-class") {
+    <app-help-guidance [bodyHtml]="equipmentClassTabHelpHtml" />
+
+    <form [formGroup]="equipmentClassForm" class="obs-form-grid" (ngSubmit)="submitEquipmentClass()">
+      <div class="form-field">
+        <!-- The same locked department control the Import Data tab uses,
+             reading the same two signals. `readonly` and NOT `disabled` for the same reason it
+             gives: `disabled` drops the value out of `form.value`, and this value decides which
+             department's list is read and which department the new class lands in. -->
+        <app-select-input
+          label="Department *"
+          [placeholder]="selectPlaceholder"
+          formControlName="department"
+          [options]="departmentOptions()"
+          [readonly]="departmentLocked()"
+        />
+      </div>
+
+      <div class="form-field">
+        <!-- The spare class the new equipment class hangs under. It offers
+             ONLY the spare classes the server returned for this department, and `select-input`
+             leaves `allowCustomValue` at its default `false`, so a name that is not already in
+             the list cannot be typed into it. That is the whole of how this tab refuses to
+             create a spare class - there is no field to type one into. -->
+        <app-select-input
+          label="Spare Class *"
+          [placeholder]="selectPlaceholder"
+          formControlName="spareClass"
+          [options]="equipmentClassSpareClassOptions()"
+        />
+        @if (equipmentClassForm.controls.spareClass.invalid && equipmentClassForm.controls.spareClass.touched) {
+          <span class="form-error">Pick the spare class this equipment belongs to.</span>
+        }
+      </div>
+
+      <div class="form-field obs-equipment-class-field">
+        <app-input-field
+          label="Equipment Class *"
+          placeholder="Name it exactly as the D787J document gives it"
+          formControlName="name"
+          [invalid]="!!equipmentClassNameError()"
+        />
+        <!-- The refusal sits UNDER THE FIELD it is about, not only in a toast, and it is
+             announced when it appears - WCAG 3.3.1 and 4.1.3. -->
+        @if (equipmentClassNameError(); as nameError) {
+          <span class="form-error" role="alert">{{ nameError }}</span>
+        } @else if (equipmentClassForm.controls.name.invalid && equipmentClassForm.controls.name.touched) {
+          <span class="form-error">Enter the equipment class name.</span>
+        }
+        <span class="obs-equipment-class-field__instruction">{{ equipmentClassInstruction }}</span>
+      </div>
+
+      <div class="obs-form-grid__actions">
+        <app-button
+          type="submit"
+          class="btn-primary"
+          [disabled]="equipmentClassSubmitting() || !canAddEquipmentClass() || equipmentClassLoading()"
+        >
+          {{ equipmentClassSubmitting() ? "Adding..." : "Add Equipment Class" }}
+        </app-button>
+      </div>
+    </form>
+
+    <!-- The add control is not silently greyed out. A caller without the
+         entitlement is told why and told who can do it, rather than left pressing a dead
+         button - Nielsen 9. -->
+    @if (equipmentClassMaster() && !canAddEquipmentClass()) {
+      <p class="obs-submit-blocked">
+        You may view this list but not add to it. Only ADMIN, SHIPADMIN, a Head of Department or a
+        DY HOD may add an equipment class.
+      </p>
+    }
+
+    <!-- A spare class the department is entitled to and does not yet hold is NAMED, so the
+         operator knows why it is absent from the picker instead of assuming the tab is broken. -->
+    @if (equipmentClassMaster(); as master) {
+      @if (master.spareClassesNotSetUp.length) {
+        <p class="obs-submit-blocked">
+          Not set up on this database yet: {{ master.spareClassesNotSetUp.join(", ") }}. Ask an
+          administrator to run the onboard-spares seeding command.
+        </p>
+      }
+    }
+
+    <!-- The four states. ERROR first, because a failed load must not be mistaken for an empty
+         department. -->
+    @if (equipmentClassLoadError(); as loadError) {
+      <div class="obs-inline-error" role="alert">
+        <p class="obs-inline-error__title">The equipment class list could not be loaded</p>
+        <p class="obs-inline-error__text">{{ loadError }}</p>
+        <div class="obs-edit-modal__actions">
+          <app-button type="button" class="btn-secondary" (click)="retryEquipmentClassMaster()">Try again</app-button>
+        </div>
+      </div>
+    } @else if (!equipmentClassForm.controls.department.value) {
+      <!-- Reached only by a privileged account entitled to several departments and holding none
+           of its own. "Every department" is not a list this tab can render, so it asks rather
+           than showing an empty grid that looks like an answer. -->
+      <div class="obs-empty-state">
+        <p class="obs-empty-state__title">Choose a department</p>
+        <p class="obs-empty-state__text">
+          Equipment classes belong to one department. Pick the department above to see its list.
+        </p>
+      </div>
+    } @else if (!equipmentClassLoading() && equipmentClassMaster() && !equipmentClassRows().length) {
+      <div class="obs-empty-state">
+        <p class="obs-empty-state__title">No equipment classes yet for this department</p>
+        <p class="obs-empty-state__text">
+          Add the first one above, naming it exactly as the D787J document or the shipyard purchase
+          order gives it. Until at least one exists, an imported row naming an equipment class will
+          be refused.
+        </p>
+      </div>
+    } @else {
+      <!-- LOADING is the grid's own skeleton, so the region does not collapse and reflow when
+           the rows arrive, and POPULATED is the same grid with rows in it. -->
+      <div class="obs-equipment-class-grid">
+        <app-data-grid
+          [rowData]="equipmentClassRows()"
+          [columnDefs]="equipmentClassColumnDefs"
+          [loading]="equipmentClassLoading()"
+          [skeletonRowCount]="8"
+          [getRowId]="equipmentClassRowId"
+          [resetKey]="equipmentClassMaster()?.department ?? ''"
+          [suppressRowClickSelection]="true"
+          [pageSize]="25"
+          height="50vh"
+        />
+      </div>
+    }
+  }
+
+  @if (activeTab() === "vendor-pil") {
+    <app-help-guidance [bodyHtml]="pilTabHelpHtml" />
+
+    <form [formGroup]="pilForm" class="obs-form-grid">
+      <app-file-input label="Select CPIL File (*.xlsx)" accept=".xlsx" formControlName="file" />
+    </form>
+
+    <div class="obs-pil-import-actions">
+      <app-button type="button" class="btn-secondary" [disabled]="pilDownloadingTemplate()" (click)="downloadPilTemplate()">
+        {{ pilDownloadingTemplate() ? "Downloading..." : "Download Template" }}
+      </app-button>
+      <app-button
+        type="button"
+        class="btn-secondary"
+        [disabled]="!pilFile() || pilValidating() || pilImporting()"
+        (click)="validatePilFile()"
+      >
+        {{ pilValidating() ? "Checking..." : "Validate (Dry Run)" }}
+      </app-button>
+      <app-button
+        type="button"
+        class="btn-primary"
+        [disabled]="!pilValidatedForImport() || pilImporting() || pilValidating()"
+        (click)="submitPil()"
+      >
+        {{ pilImporting() ? "Uploading..." : "Upload" }}
+      </app-button>
+    </div>
+
+    @if (pilResult(); as result) {
+      <div class="obs-pil-import-result">
+        @if (result.status === "column_error") {
+          <p class="obs-pil-import-result__error">{{ result.headerErrors[0] }}</p>
+          @if (result.allowedColumns.length) {
+            <p class="obs-pil-import-result__hint">Allowed columns: {{ result.allowedColumns.join(", ") }}</p>
+          }
+        } @else if (result.status === "row_limit_error") {
+          <p class="obs-pil-import-result__error">{{ result.headerErrors[0] }}</p>
+        } @else {
+          <div class="obs-pil-import-result__stats">
+            @if (result.status === "dry_run") {
+              <span>Valid rows: {{ result.validRows }}</span>
+            } @else {
+              <span>Imported: {{ result.imported }}</span>
+            }
+            <span>Invalid rows: {{ result.invalidRows }}</span>
+          </div>
+          @if (result.errors.length) {
+            <table class="obs-pil-import-result__errors">
+              <thead>
+                <tr>
+                  <th>Row</th>
+                  <th>Errors</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (rowError of result.errors; track rowError.row) {
+                  <tr>
+                    <td>{{ rowError.row }}</td>
+                    <td>
+                      @for (field of pilErrorFields(rowError.errors); track field) {
+                        <div>{{ field }}: {{ rowError.errors[field].join(", ") }}</div>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        }
+      </div>
+    }
+  }
+</div>
+
+<!-- EVERY CONFIRMATION POPUP ON THIS PAGE, DELIBERATELY OUTSIDE `.glass-card`
+     ABOVE - same reason as the row editor's own comment just below this block: `.glass-card`
+     sets `backdrop-filter`, which gives any `position: fixed` descendant (every `app-modal` on
+     this page) a containing block of `.glass-card`'s own box instead of the browser viewport,
+     so each of these was centring itself somewhere down a multi-screen-tall card rather than on
+     screen. Grouped here together rather than left where each was raised, so the one fix and
+     its one explanation cover all of them instead of being repeated seven times in place. -->
+
+<!-- Both destructive confirmations name the consequence in plain
+     words, and both say what they do NOT touch - which on this screen is the thing an
+     operator most needs to be sure of. `confirm-delete-modal` was considered and not used:
+     its copy is fixed at "Are you sure you want to delete this? This action cannot be
+     undone", which is both wrong here (nothing is being deleted from the database) and
+     unable to name what is. -->
+@if (pendingDeleteRow(); as row) {
+  <app-modal size="sm" [compact]="true" title="Remove this row?" (closeModal)="cancelDeleteRow()">
+    <p class="obs-confirm__text">
+      @if (entryMode() === "manual") {
+        Row {{ row.row }} will be removed from this table and will not be saved. The rows
+        below it are renumbered. Nothing in the Ship Inventory is deleted - this row has
+        never been saved to it.
+      } @else {
+        Row {{ row.row }} will be removed from this table and will not be imported. Your Excel
+        file is not changed, and nothing in the Ship Inventory is deleted - this row has never
+        been saved to it. Press Preview Import again to start over with the whole sheet.
+      }
+    </p>
+    <div class="obs-edit-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelDeleteRow()">Keep the row</app-button>
+      <app-button type="button" class="btn-primary" (click)="confirmDeleteRow()">Remove the row</app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- THE BULK DELETE'S OWN CONFIRMATION. It cannot reuse the single-row
+     one above, which is keyed on `pendingDeleteRow()` and whose copy names one row number.
+     Modelled on Clear Table below instead, so the three whole-table confirmations on this
+     screen read alike.
+
+     Like every other confirmation here it says what is NOT touched, because on this screen
+     that is the thing an operator most needs to be sure of: these rows have never reached the
+     database, so removing them deletes nothing from it. -->
+@if (confirmingBulkDelete()) {
+  <app-modal
+    size="sm"
+    [compact]="true"
+    [title]="'Remove ' + selectedRowNumbers().length + ' selected row(s)?'"
+    (closeModal)="cancelBulkDelete()"
+  >
+    <p class="obs-confirm__text">
+      The <strong>{{ selectedRowNumbers().length }}</strong> row(s) you have ticked will be
+      removed from this table and will not be saved.
+      <strong>No spare in the Ship Inventory is deleted</strong> - none of these rows has been
+      saved to it yet.
+      @if (entryMode() === "manual") {
+        The rows below them are renumbered, and what you typed into the removed rows cannot be
+        recovered.
+      } @else {
+        Your Excel file is not changed, so you can import it again at any time.
+      }
+    </p>
+    <div class="obs-edit-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelBulkDelete()">Keep the rows</app-button>
+      <app-button type="button" class="btn-danger" (click)="confirmBulkDelete()">
+        Remove {{ selectedRowNumbers().length }} row(s)
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (confirmingClear()) {
+  <app-modal size="sm" [compact]="true" title="Clear the working table?" (closeModal)="cancelClearTable()">
+    <p class="obs-confirm__text">
+      Every row now on screen is discarded, together with the corrections you have made to
+      them. <strong>No spare in the Ship Inventory is deleted</strong> - nothing on this
+      screen has been saved to it yet.
+      @if (entryMode() === "manual") {
+        The rows you typed cannot be recovered, so check the table before you clear it. The
+        other entry mode's rows are left exactly as they are.
+      } @else {
+        Your Excel file is not changed, so you can import it again at any time.
+      }
+    </p>
+    <div class="obs-edit-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelClearTable()">Keep the table</app-button>
+      <app-button type="button" class="btn-primary" (click)="clearWorkingTable()">Clear the table</app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- CLAUSE 4.5's SAVE-TIME CONFIRMATION.
+     It is raised before anything is written, it states the real count rather than the
+     requirement's "so many", and cancelling writes nothing. The wording is the user's own
+     from clause 4.5, kept as they put it - it names the consequence in plain operational
+     language (poor OBS compliance at MAT-CDF analysis) and then says what to do instead,
+     which is what doctrine 5.12 asks of a consequential action.
+
+     `app-modal` is used, not a native confirm() and not a toast - a confirm() cannot be
+     styled, cannot be made keyboard-and-screen-reader consistent with the rest of this
+     screen, and a toast is dismissible feedback rather than a decision point.
+     `confirm-delete-modal` is again not used, for the reason given above the two
+     confirmations before this one - its copy is fixed and nothing here is being deleted. -->
+@if (confirmingShortfall()) {
+  <app-modal size="md" title="Have these short items been physically mustered?" (closeModal)="cancelShortfallSave()">
+    <p class="obs-confirm__text">
+      <strong>{{ shortfallRows() }}</strong> spares' held quantity is found to be less than
+      authorized quantity. Are you sure you have physically mustered these items?
+    </p>
+    <p class="obs-confirm__text">
+      If you are not sure, held quantity and authorised quantity should be kept equal while
+      initialising the database. Keeping it less will reflect
+      <strong>poor OBS compliance of the ship during MAT-CDF analysis</strong>, and that is not
+      advisable unless you are physically certain that the items are short on board, that the
+      shortfall has already been physically mustered by the storekeeper, and that what is being
+      entered is correct.
+    </p>
+    <p class="obs-confirm__text">
+      If so, proceed with this quantity. Otherwise it is advisable to keep authorised quantity
+      and held quantity equal - close this and correct the rows with Edit.
+    </p>
+    <div class="obs-edit-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelShortfallSave()">
+        Go back and check
+      </app-button>
+      <app-button type="button" class="btn-primary" (click)="confirmShortfallSave()">
+        Yes, proceed with this quantity
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- THE MASTER-VALUE CONFIRMATION.
+     Raised in the same place and built the same way as the shortfall one above - from the
+     list the preview already carries, before anything is written, cancelling writes
+     nothing - because a fourth confirmation on this screen should read like the three
+     before it.
+
+     ONE DIALOGUE FOR THE WHOLE SHEET, not one per row. A sheet using an unlisted
+     denomination on twelve rows is one decision, and asking it twelve times would train
+     the reader to click through it.
+
+     The two halves are deliberately different in kind. The list under "will be added" is
+     a STATEMENT - clause 2.6.1 already permits an equipment name the ship's D787J document
+     carries, so there is nothing to decide and the reader is only being told. The list
+     above it is a QUESTION, and it names the clause each value departs from so the answer
+     is an informed one rather than a yes. -->
+@if (confirmingMasters()) {
+  <app-modal
+    size="md"
+    title="Add these values to your department's Masters?"
+    (closeModal)="cancelMasterSave()"
+  >
+    <p class="obs-confirm__text">
+      This sheet uses
+      <strong>{{ confirmationsRequired().length }}</strong> value(s) that the rules document
+      does not list. Saving adds them to your department's Masters
+      <strong>permanently</strong>, and they will be offered on every import after this one.
+    </p>
+    <ul class="obs-confirm__list">
+      @for (addition of confirmationsRequired(); track addition.field + addition.value) {
+        <li>
+          <strong>{{ addition.column }} &ldquo;{{ addition.value }}&rdquo;</strong> &mdash; not
+          listed in rule {{ addition.clause }} of the rules document. Used on row(s)
+          {{ addition.rows.join(", ") }}.
+        </li>
+      }
+    </ul>
+    <p class="obs-confirm__text">
+      Are you sure these are required for the items you are importing? If one is a typing
+      mistake, close this and correct the cell with Edit &mdash; that is the other answer to
+      this question, and it leaves the Masters list as the rules document has it.
+    </p>
+    @if (automaticAdditions().length) {
+      <p class="obs-confirm__text">
+        <strong>{{ automaticAdditions().length }}</strong> equipment class(es) will also be
+        added:
+        {{ automaticAdditions()[0].value
+        }}@if (automaticAdditions().length > 1) {
+          and {{ automaticAdditions().length - 1 }} other(s)
+        }. Rule 2.6.1 permits any equipment name your D787J document carries, so these need no
+        confirmation.
+      </p>
+    }
+    <div class="obs-edit-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelMasterSave()">
+        Go back and check
+      </app-button>
+      <app-button type="button" class="btn-primary" (click)="confirmMasterSave()">
+        Yes, add these and import
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- THE TWO DESTRUCTIVE CONFIRMATIONS FOR THE HEADER CONTROLS. -->
+@if (confirmingPurge()) {
+  @if (purgeState(); as purge) {
+    <app-modal
+      size="md"
+      [compact]="true"
+      [title]="
+        purge.scope === 'all'
+          ? 'Delete every spare in the Ship Inventory?'
+          : 'Delete every ' + purge.departmentName + ' spare?'
+      "
+      (closeModal)="cancelPurgeSpares()"
+    >
+      @if (purge.scope === "all") {
+        <p class="obs-confirm__text">
+          <strong>{{ purge.spareCount }}</strong> spare(s) — the <strong>whole</strong> Ship
+          Inventory, every department's — will be deleted from <strong>OBS_Spares</strong>. This
+          is the application administrator's control and it is not scoped to any one department.
+        </p>
+      } @else {
+        <p class="obs-confirm__text">
+          <strong>{{ purge.spareCount }}</strong> spare(s) belonging to
+          <strong>{{ purge.departmentName }}</strong> will be deleted from
+          <strong>OBS_Spares</strong> — every spare your department has imported so far, not only
+          the ones from your last workbook. No other department's spares are touched.
+        </p>
+      }
+      <p class="obs-confirm__text">
+        Their <strong>issue, survey, demand and receipt records go with them</strong>.
+        <strong>This cannot be undone.</strong>
+      </p>
+      <p class="obs-confirm__text">
+        If you imported the wrong workbook, this is how you start again: delete, correct the
+        sheet, and import it once more.
+      </p>
+      <div class="obs-edit-modal__actions">
+        <app-button type="button" class="btn-secondary" (click)="cancelPurgeSpares()">
+          Keep the spares
+        </app-button>
+        <app-button type="button" class="btn-danger" [disabled]="purging()" (click)="confirmPurgeSpares()">
+          {{
+            purging()
+              ? "Deleting…"
+              : purge.scope === "all"
+                ? "Delete every spare"
+                : "Delete all " + purge.departmentName + " spares"
+          }}
+        </app-button>
+      </div>
+    </app-modal>
+  }
+}
+
+@if (confirmingCustomerCodeClear()) {
+  <app-modal
+    size="sm"
+    [compact]="true"
+    title="Clear the ship's MO customer code?"
+    (closeModal)="cancelClearCustomerCode()"
+  >
+    <p class="obs-confirm__text">
+      The ship will forget <strong>{{ customerCodeState()?.customerCode }}</strong>, and the
+      <strong>next workbook imported</strong> will set the code again from its own
+      <strong>SHIP CUSTOMER CODE</strong> column — whatever that column happens to say.
+    </p>
+    <p class="obs-confirm__text">
+      <strong>No spare is deleted.</strong> Spares already imported keep the pattern numbers they
+      were given.
+    </p>
+    <div class="obs-edit-modal__actions">
+      <app-button type="button" class="btn-secondary" (click)="cancelClearCustomerCode()">
+        Keep the code
+      </app-button>
+      <app-button type="button" class="btn-danger" [disabled]="clearingCustomerCode()" (click)="confirmClearCustomerCode()">
+        {{ clearingCustomerCode() ? "Clearing…" : "Clear the code" }}
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+<!-- THE ROW EDITOR, DELIBERATELY OUTSIDE `.glass-card` ABOVE rather than
+     nested inside it with every other popup on this page. `.glass-card` sets `backdrop-filter`
+     (styles.css), and a `backdrop-filter` ancestor establishes its own containing block for any
+     `position: fixed` descendant - the same rule `filter`/`transform`/`will-change` are already
+     known for. `app-modal`'s backdrop is `fixed inset-0`, so nested inside `.glass-card` it was
+     never actually centring on the BROWSER WINDOW - it was centring within `.glass-card`'s own
+     box, which on this page is everything from the Masters heading to the last modal below,
+     several screens tall. That is what put the dialogue off-centre and left the footer (a sibling
+     of `.glass-card`, never inside it) undimmed beneath it: the "fixed" backdrop was never full-
+     viewport to begin with, only full-`.glass-card`.
+
+     Moved rather than fixed at the source in `ModalComponent`: that component backs every popup
+     on roughly eighty screens, most of them short enough that the same miscentring is a few
+     pixels and goes unnoticed - portaling it for all of them is a larger, differently-tested
+     change than this one dialogue's bug report asks for. Every OTHER popup still declared inside
+     `.glass-card` above carries the identical latent issue and would want the same fix if it is
+     ever reported against one of them. -->
+@if (editingRow(); as row) {
+  <app-obs-import-row-editor
+    [title]="'Edit row ' + row.row"
+    [values]="row.values"
+    [corrections]="row.corrections"
+    [errors]="row.errors"
+    [fieldErrors]="row.fieldErrors"
+    [patternUnmatched]="row.patternUnmatched"
+    [valueLists]="valueLists()"
+    [equipmentClassInstruction]="equipmentClassInstruction"
+    saveLabel="Save Changes"
+    (saved)="saveRowEditorRow($event)"
+    (cancelled)="closeRowEditor()"
+  />
+}

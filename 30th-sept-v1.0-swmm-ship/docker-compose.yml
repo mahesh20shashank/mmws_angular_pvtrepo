@@ -1,0 +1,214 @@
+services:
+
+  # =========================================================
+  # PostgreSQL
+  # =========================================================
+
+  # swmm-postgres:
+  #   image: 172.16.50.13/platform/postgres:16
+  #   container_name: swmm-postgres
+  #   restart: unless-stopped
+
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  #   ports:
+  #     - "5432:5432"
+
+  #   volumes:
+  #     - /opt/swmm/postgres-data:/var/lib/postgresql/data
+
+  #   healthcheck:
+  #     test:
+  #       [
+  #         "CMD-SHELL",
+  #         "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+  #       ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 20s
+
+  #   networks:
+  #     - swmm-network
+
+
+  # =========================================================
+  # Redis (also doubles as the Celery broker — see swmm/settings.py)
+  # =========================================================
+
+  # swmm-redis:
+  #   image: 172.16.50.13/platform/redis:7-alpine
+  #   container_name: swmm-redis
+  #   restart: unless-stopped
+
+  #   command:
+  #     [
+  #       "redis-server",
+  #       "--appendonly",
+  #       "yes"
+  #     ]
+
+  #   volumes:
+  #     - /opt/swmm/redis-data:/data
+
+  #   healthcheck:
+  #     test:
+  #       [
+  #         "CMD",
+  #         "redis-cli",
+  #         "ping"
+  #       ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s
+
+  #   networks:
+  #     - swmm-network
+
+
+  # =========================================================
+  # Django Backend
+  # =========================================================
+
+  # swmm-backend-dev:
+  #   image: 172.16.50.13/swmm-ship-aug/backend:${IMAGE_TAG}
+  #   container_name: swmm-backend-dev
+  #   restart: unless-stopped
+
+  #   env_file:
+  #     - ./backend/.env
+
+  #   volumes:
+  #     - /opt/swmm/static:/app/static
+  #     - /opt/swmm/media:/app/media
+
+  #   expose:
+  #     - "8000"
+
+  #   depends_on:
+  #     # swmm-postgres:
+  #     #   condition: service_healthy
+  #     swmm-redis:
+  #       condition: service_healthy
+
+  #   healthcheck:
+  #     test:
+  #       [
+  #         "CMD",
+  #         "python",
+  #         "-c",
+  #         "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/schema/', timeout=5)"
+  #       ]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 30s
+
+  #   networks:
+  #     - swmm-network
+
+
+  # =========================================================
+  # Celery Worker
+  # =========================================================
+
+  # swmm-celery-worker:
+  #   image: 172.16.50.13/swmm-ship-aug/backend:${IMAGE_TAG}
+  #   container_name: swmm-celery-worker
+  #   restart: unless-stopped
+
+  #   env_file:
+  #     - ./backend/.env
+
+  #   command:
+  #     [
+  #       "celery",
+  #       "-A",
+  #       "swmm",
+  #       "worker",
+  #       "--loglevel=INFO"
+  #     ]
+
+  #   depends_on:
+  #     # swmm-postgres:
+  #     #   condition: service_healthy
+  #     swmm-redis:
+  #       condition: service_healthy
+
+  #   volumes:
+  #     - /opt/swmm/static:/app/static
+  #     - /opt/swmm/media:/app/media
+
+  #   networks:
+  #     - swmm-network
+
+
+  # =========================================================
+  # Frontend
+  # =========================================================
+
+  swmm-frontend-dev:
+    image: 172.16.50.13/swmm-30sep/frontend:${IMAGE_TAG}
+    container_name: swmm-frontend-dev
+    restart: unless-stopped
+
+    expose:
+      - "80"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://127.0.0.1/ || exit 1"
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - swmm-network
+
+
+  # =========================================================
+  # Nginx
+  # =========================================================
+
+  swmm-nginx:
+    image: 172.16.50.13/platform/nginx:1.29-alpine3.22
+    container_name: swmm-nginx
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/proxy_params:/etc/nginx/proxy_params:ro
+      - ./nginx/swmm.conf:/etc/nginx/conf.d/default.conf:ro
+
+      - /opt/swmm/static:/usr/share/nginx/html/static:ro
+      - /opt/swmm/media:/usr/share/nginx/html/media:ro
+
+    depends_on:
+      # swmm-backend-dev:
+      #   condition: service_healthy
+      swmm-frontend-dev:
+        condition: service_healthy
+
+    networks:
+      - swmm-network
+
+
+# =========================================================
+# Network
+# =========================================================
+
+networks:
+  swmm-network:
+    name: swmm-network
+    driver: bridge

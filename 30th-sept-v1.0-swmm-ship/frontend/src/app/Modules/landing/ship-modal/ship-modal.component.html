@@ -1,0 +1,44 @@
+@if(shipData){
+<div class="ship-modal-container space-y-3 text-[12px]" style="min-width: 650px; max-width: 800px; margin: 0 auto;">
+  <!-- Modal Title Header -->
+  <div class="header">
+    <div class="w-8"></div>
+    <h2 class="header-title">KNOW YOUR SHIP</h2>
+    <app-button type="button" (click)="closeModal.emit()" aria-label="Close"
+      class="text-slate-400 hover:text-white transition-colors cursor-pointer w-8 h-8 flex items-center justify-center z-10">
+
+          <app-icon name="x" [size]="20" [strokeWidth]="2" />
+
+    </app-button>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="space-y-2">
+      <!-- Developed with Understanding: the display name only (D23). The title is left out entirely until HR CDF Step 1 sets the name, and the image alt then falls back to a generic "Ship image". -->
+      <img src="{{shipData.ship_image}}" [alt]="thisShip.displayName() || 'Ship image'" class="ins-img" />
+      @if (thisShip.displayName(); as shipName) {
+      <p class="hero-title">{{shipName}}</p>
+      }
+    </div>
+    <div class="hero-content">
+      <p class="small-description">{{shipData.ship_description}}</p>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="ship-stats-grid">
+    @for (stat of shipData.specifications; track $index) {
+    <div class="stat-card" [ngClass]="'stat-' + stat.theme">
+      <div class="stat-content">
+        <p class="stat-label"> {{ stat.label }} </p>
+        <h3 class="stat-value"> {{ stat.value }} </h3>
+      </div>
+      <app-icon [name]="getIcon(stat.icon)" class="stat-icon" variant="inherit" />
+
+    </div>
+    }
+  </div>
+
+</div>
+}

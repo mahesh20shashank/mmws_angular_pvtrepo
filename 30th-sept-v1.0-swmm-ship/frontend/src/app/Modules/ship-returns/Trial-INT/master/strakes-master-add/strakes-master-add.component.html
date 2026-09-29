@@ -1,0 +1,68 @@
+<app-form-card-dialog
+  [open]="true"
+  [title]="title"
+  [subtitle]="subtitle"
+  [submitLabel]="editMode ? 'Update' : 'Save'"
+  cancelLabel="Cancel"
+  (close)="closeDialog()"
+  (submit)="handleSave()"
+  (cancel)="closeDialog()"
+  [showFooter]="viewMode ? false : true"
+  [loading]="loading"
+>
+  <form [formGroup]="form">
+    <div class="grid grid-cols-2 gap-4">
+       <app-select formControlName="command_id" [label]="'Command'" [options]="commandOptions" placeholder="--Select--" class="w-full">
+        </app-select>
+         <app-select formControlName="classofship_id" [label]="'Class'" [options]="classOptions" placeholder="--Select--" class="w-full">
+        </app-select>
+    
+
+      <div class="col-span-2 mt-2" formArrayName="strakeRows">
+
+        <div
+          *ngFor="let row of strakeRowsArray.controls; let i = index"
+          [formGroupName]="i"
+          class="grid grid-cols-12 gap-3 items-end mb-3"
+        >
+
+          <div class="col-span-8">
+            <app-input
+              label="Strake Name"
+              formControlName="strake_name"
+              placeholder="Enter strake name">
+            </app-input>
+          </div>
+
+          <div class="col-span-2 flex items-center h-[42px]">
+            <input
+              type="checkbox"
+              formControlName="active"
+              class="mr-2">
+
+            <span>Active</span>
+          </div>
+
+          <div class="col-span-2 flex justify-end">
+            <button
+              type="button"
+              class="flex h-9 w-9 items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 hover:text-red-700"
+              (click)="removeStrake(i)"
+              *ngIf="strakeRowsArray.length > 1"
+              title="Remove Strake">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+
+        </div>
+<button
+  *ngIf="!editMode && !viewMode"
+  type="button"
+  class="btn-primary mt-2"
+  (click)="addStrake()">
+  + Add Strake
+</button>
+      </div>
+    </div>
+  </form>
+</app-form-card-dialog>

@@ -1,0 +1,185 @@
+<div class="glass-card mx-auto w-full font-sans text-[var(--text-primary)]">
+  <div>
+    <ng-container *ngIf="showHeaderSection">
+      <header class="border-b border-[var(--border-primary)] px-2 py-2 rounded-t-lg">
+        <div class="flex flex-wrap items-center gap-3">
+          <div
+            *ngIf="showSearch"
+            class="group flex h-11 min-w-[min(100%,280px)] max-w-[520px] flex-1 items-center gap-2.5 rounded-xl border border-[var(--border-input)] bg-[var(--bg-input)] px-4 transition"
+          >
+            <i
+              class="fas fa-search shrink-0 text-sm text-[var(--text-muted)]"
+              aria-hidden="true"
+            ></i>
+            <input
+              type="search"
+              [(ngModel)]="searchText"
+              (ngModelChange)="onSearchTextChange()"
+              (keydown.enter)="onSearch()"
+              class="min-w-0 flex-1 bg-transparent border-none outline-none shadow-none text-[var(--text-primary)] placeholder:text-[var(--text-muted)]"
+              [attr.minlength]="3"
+              [placeholder]="searchPlaceholder"
+              aria-label="Search table"
+            />
+          </div>
+
+          <div class="ml-auto flex flex-wrap items-center gap-2.5">
+            <button
+              *ngIf="showFilterButton"
+              type="button"
+              class="inline-flex h-11 items-center gap-2 rounded-xl border px-4 text-sm font-medium transition"
+              [ngClass]="floatingFiltersEnabled
+                ? 'border-[#61C2FF] bg-[rgba(97,194,255,0.15)] text-[var(--text-primary)]'
+                : 'border-[var(--border-input)] bg-[var(--bg-input)] text-[var(--text-primary)] hover:bg-[var(--bg-nav-child-hover)]'"
+              (click)="toggleFilters()"
+            >
+              <i class="fas fa-sliders-h" aria-hidden="true"></i>
+              <span>{{ floatingFiltersEnabled ? 'Hide Filters' : 'Show Filters' }}</span>
+            </button>
+
+            <div
+              *ngIf="showExport"
+              class="inline-flex h-11 items-center gap-2.5 rounded-xl border border-[var(--border-input)] bg-[var(--bg-input)] px-3.5"
+            >
+              <span
+                class="border-r border-[var(--border-primary)] pr-2.5 text-sm font-medium text-[var(--text-primary)]"
+              >
+                Export
+              </span>
+              <button
+                type="button"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-muted)] transition hover:bg-[var(--bg-nav-child-hover)] hover:text-[var(--text-primary)]"
+                title="Export PDF"
+                (click)="onExportAction('pdf')"
+              >
+                <i class="far fa-file-pdf" aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-muted)] transition hover:bg-[var(--bg-nav-child-hover)] hover:text-[var(--text-primary)]"
+                title="Export spreadsheet"
+                (click)="onExportAction('excel')"
+              >
+                <i class="fas fa-table" aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[var(--text-muted)] transition hover:bg-[var(--bg-nav-child-hover)] hover:text-[var(--text-primary)]"
+                title="Print"
+                (click)="onExportAction('print')"
+              >
+                <i class="fas fa-print" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <button
+              *ngIf="showImport"
+              type="button"
+              class="inline-flex h-11 items-center gap-2 rounded-xl border border-[var(--border-input)] bg-[var(--bg-input)] px-4 text-sm font-medium text-[var(--text-primary)] transition hover:bg-[var(--bg-nav-child-hover)]"
+              (click)="handleImport.emit()"
+            >
+              <i class="fas fa-file-import" aria-hidden="true"></i>
+              <span>{{ importLabel }}</span>
+            </button>
+
+            <div
+              *ngIf="showSelectDropdown"
+              class="relative inline-flex items-center"
+            >
+              <select
+                [value]="selectedValue"
+                (change)="onSelectChange($event)"
+                class="h-11 cursor-pointer appearance-none rounded-xl border border-[var(--border-input)] bg-[var(--bg-input)] py-0 pl-3.5 pr-9 text-sm text-[var(--text-primary)] outline-none"
+              >
+                <option value="" disabled>-- Select Parameter --</option>
+                <option
+                  *ngFor="let option of selectOptions"
+                  [value]="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </select>
+              <i
+                class="fas fa-chevron-down pointer-events-none absolute right-3 text-[11px] text-[var(--text-muted)]"
+                aria-hidden="true"
+              ></i>
+            </div>
+
+            <ng-container *ngFor="let button of addButtons">
+              <button
+                *ngIf="button.show !== false"
+                type="button"
+                class="inline-flex h-11 items-center rounded-xl border border-[#4f8fd5] bg-[#1069AB] px-4 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition hover:bg-[#195d95] active:translate-y-px"
+                [ngClass]="button.cls"
+                (click)="addButtonClick.emit(button)"
+              >
+                {{ button.label }}
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </header>
+    </ng-container>
+
+    <div
+      class="relative h-[68vh] min-h-80 w-full overflow-hidden"
+      [class.pt-3]="!showHeaderSection"
+    >
+      <div class="relative h-full w-full p-2.5">
+        <ag-grid-angular
+          class="ag-theme-custom h-full w-full"
+          [columnDefs]="columnDefs"
+          [gridOptions]="gridOptions"
+          [suppressCellFocus]="true"
+          [suppressRowClickSelection]="true"
+          [defaultColDef]="defaultColDef"
+          [enableBrowserTooltips]="true"
+          [cellSelection]="true"
+          [popupParent]="popupParent"
+          [pivotMode]="false"
+          (gridReady)="onGridReady($event)"
+        >
+        </ag-grid-angular>
+      </div>
+    </div>
+
+    <footer
+      *ngIf="showPagination"
+      class="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-primary)] px-5 py-4 text-xs text-[var(--text-primary)]"
+    >
+      <span class="text-[var(--text-muted)]">
+        Showing {{ pageStartRecord }} to {{ pageEndRecord }} of
+        {{ totalCount }} records
+      </span>
+      <div class="flex flex-wrap items-center gap-1.5">
+        <button
+          type="button"
+          class="min-w-9 rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-2.5 py-1.5 text-xs font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-nav-child-hover)] disabled:cursor-not-allowed disabled:opacity-35"
+          (click)="goToPreviousPage()"
+          [disabled]="!canGoPrevious"
+        >
+          Prev
+        </button>
+        <button
+          *ngFor="let page of getPageNumbers()"
+          type="button"
+          class="min-w-9 rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition"
+          [ngClass]="page === currentPage
+            ? 'border-[#61C2FF] bg-[rgba(97,194,255,0.15)] text-[var(--text-primary)] font-bold'
+            : 'border-[var(--border-input)] bg-[var(--bg-input)] text-[var(--text-primary)] hover:bg-[var(--bg-nav-child-hover)]'"
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+        <button
+          type="button"
+          class="min-w-9 rounded-lg border border-[var(--border-input)] bg-[var(--bg-input)] px-2.5 py-1.5 text-xs font-semibold text-[var(--text-primary)] transition hover:bg-[var(--bg-nav-child-hover)] disabled:cursor-not-allowed disabled:opacity-35"
+          (click)="goToNextPage()"
+          [disabled]="!canGoNext"
+        >
+          Next
+        </button>
+      </div>
+    </footer>
+  </div>
+</div>

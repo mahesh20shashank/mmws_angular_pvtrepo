@@ -1,0 +1,47 @@
+<div class="w-[380px] max-w-[90vw]">
+  <h2 class="text-[18px] font-semibold mb-4">Send Notification</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-3">
+    <app-select-input
+      label="Recipient"
+      placeholder="Select a user"
+      [options]="recipientOptions()"
+      formControlName="recipient"
+    ></app-select-input>
+
+    <app-input-field
+      label="Title"
+      placeholder="Notification title"
+      formControlName="title"
+    ></app-input-field>
+
+    <app-textarea-input
+      label="Message"
+      [rows]="3"
+      formControlName="body"
+    ></app-textarea-input>
+
+    <app-select-input
+      label="Category"
+      [options]="categoryOptions"
+      formControlName="category"
+    ></app-select-input>
+
+    <div class="flex items-center justify-end gap-2 mt-2">
+      <app-button
+        type="button"
+        (click)="cancel()"
+        class="px-4 py-2 rounded-lg text-[13px] opacity-70 hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10 transition-all"
+      >
+        Cancel
+      </app-button>
+      <app-button
+        type="submit"
+        [disabled]="submitting()"
+        class="px-4 py-2 rounded-lg text-[13px] font-medium bg-[#1D96E9] hover:bg-[#1580c9] disabled:opacity-50 transition-all"
+      >
+        {{ submitting() ? 'Sending…' : 'Send' }}
+      </app-button>
+    </div>
+  </form>
+</div>

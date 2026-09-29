@@ -1,0 +1,15 @@
+<div class="legend" [class.legend--inline]="layout === 'inline'">
+  @for (item of items; track item.label) {
+    <div class="legend-row">
+      <span
+        class="legend-marker"
+        [class.legend-marker--line]="markerShape === 'line'"
+        [style.background]="item.color"
+      ></span>
+      <span class="legend-label">{{ item.label }}</span>
+      @if (item.value !== undefined && item.value !== null && item.value !== '') {
+        <span class="legend-val">{{ item.value }}</span>
+      }
+    </div>
+  }
+</div>

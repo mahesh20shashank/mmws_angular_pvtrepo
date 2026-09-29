@@ -1,0 +1,54 @@
+<app-help-guidance />
+
+<div class="kms-page">
+  <app-page-header-bar icon="tags" iconVariant="accent" title="Category Master" badgeText="Certificate Categories">
+    <app-button type="button" class="kms-btn-primary" (click)="openAddModal()">
+      <app-icon name="plus" [size]="15" color="#ffffff" />
+      Add Category
+    </app-button>
+  </app-page-header-bar>
+
+  <div class="glass-card kms-panel">
+    <div class="kms-toolbar">
+      <div class="kms-search kms-search--toolbar">
+        <app-icon name="search" [size]="15" variant="muted" class="kms-search__icon" />
+        <input
+          type="text"
+          placeholder="Search categories..."
+          class="kms-search__input"
+          [value]="categorySearch()"
+          (input)="categorySearch.set($any($event.target).value)"
+        />
+      </div>
+      <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredCategories().length === 0" (exportRequested)="onExport($event)" />
+    </div>
+
+    @if (filteredCategories().length > 0) {
+      <app-data-grid [rowData]="filteredCategories()" [columnDefs]="columnDefs" height="420px" />
+    } @else {
+      <p class="kms-empty-hint kms-empty-hint--table">
+        No categories added yet. Click "+ Add Category" to create one.
+      </p>
+    }
+  </div>
+</div>
+
+@if (showModal()) {
+  <app-modal size="sm" [title]="modalTitle" [compact]="true" (closeModal)="closeModal()">
+    <form [formGroup]="form" (ngSubmit)="save()" class="kms-modal-form kms-modal-form--sm">
+      <app-input-field label="Category Name" placeholder="Enter category name" formControlName="categoryName" [required]="true" />
+      <div class="kms-modal-actions">
+        <app-button type="button" class="kms-btn-secondary" (click)="closeModal()">
+          Cancel
+        </app-button>
+        <app-button type="submit" class="kms-btn-primary">
+          Save
+        </app-button>
+      </div>
+    </form>
+  </app-modal>
+}
+
+@if (pendingDelete()) {
+  <app-confirm-delete-modal (confirmed)="confirmDelete()" (cancelled)="cancelDelete()" />
+}

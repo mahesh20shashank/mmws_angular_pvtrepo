@@ -1,0 +1,943 @@
+<app-form-card
+  title="RAS/ CARGO WINCH – PORT/ STBD"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="
+        isSameEquipment(activeHeaderEquipment, tab)
+      " [class.bg-[#1069AB]]="
+        isSameEquipment(activeHeaderEquipment, tab)
+      " [class.text-white]="
+        isSameEquipment(activeHeaderEquipment, tab)
+      "
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{
+          tab?.equipment_name || tab?.name || tab?.nomenclature || "Equipment"
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="
+          isSameEquipment(activeHeaderEquipment, tab)
+            ? 'text-white'
+            : 'text-white/50'
+        "
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || "-" }} -
+        {{ tab?.serial_no || tab?.serial_number || "-" }}
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="form" class="p-0 pb-12">
+    <div class="grid grid-cols-2 gap-3">
+      <!-- <div class="flex flex-col gap-1">
+                <label class="form-label" for="classOfShip">Class of Ship*</label>
+                <app-select formControlName="classOfShip" [options]="classOfShipOptions" [disabled]="true">
+                </app-select>
+            </div> -->
+
+      <!-- SHIP STATUS -->
+      <div class="flex flex-col gap-1">
+        <app-input
+          [label]="'Ship*'"
+          formControlName="ship"
+          placeholder="ship name"
+          class="w-full"
+        >
+        </app-input>
+      </div>
+
+      <!-- <app-input label="ship" formControlName="Ship">
+            </app-input> -->
+
+      <!-- Date of conduct of trials  -->
+      <app-calendar
+        label="Date of conduct of trials*"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+      <!--Place of conduct of trials  -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Place of conduct of trials*'"
+          formControlName="place_of_conduct_trail"
+          [options]="placesOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+
+      <!-- Occasion for conduct of Trials -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'Occasion for conduct of Trials*'"
+          formControlName="occasion_of_conduct_trail"
+          [searchable]="false"
+          [options]="occasionOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+      <!-- capstanOptions -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'MOORING CAPSTAN/ WARPING CAPSTAN*'"
+          formControlName="capstan"
+          [searchable]="false"
+          [options]="capstanOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+
+      <!-- stbdOptions -->
+      <div class="flex flex-col gap-1">
+        <app-select
+          [label]="'PORT/STBD*'"
+          formControlName="port"
+          [searchable]="false"
+          [options]="stbdOptions"
+          placeholder="--Select--"
+          class="w-full"
+        >
+        </app-select>
+      </div>
+    </div>
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+        <div class="file-upload-field gap-1">
+          <app-file-upload
+            [label]="'Upload doc*'"
+            (filesUploaded)="handleFilesUploaded($event)"
+            formControlName="authority_doc"
+          >
+          </app-file-upload>
+        </div>
+      </div>
+    </app-parameter-card>
+
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+          <tr>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Ser</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Parameter (a)</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Checks (b)</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Observation (c)</th>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks (d)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Type of Winch</td>
+            <!-- <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Drop Down (Link with CMMS)</td> -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-select
+                formControlName="type"
+                [searchable]="false"
+                [options]="commandOptions"
+                [disabled]="true"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Make</td>
+            <!-- <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Drop Down (Link with CMMS)</td> -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-input formControlName="manufacturer_name"></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Year of Manufacture</td>
+            <!-- <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Drop Down (Link with CMMS)</td> -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-year-calendar
+                formControlName="year_of_manufacture"
+              ></app-year-calendar>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">4</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Load Testing</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Date of last load test (Not to exceed 27 months)
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar
+                label="Date, Month and Year"
+                formControlName="last_load_test"
+              ></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="load_test_remark"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">5</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Serviceability Checks/ Visual Survey of Rope
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Date of Last visual survey. To be examined by refitting agencies
+              at intermediate intervals not exceeding 2 years. Check wire rope
+              for signs of excessive wear, corrosion or other defects. Length
+              and Dia of rope.
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar
+                label="Date, Month and Year"
+                formControlName="last_visual_rope_survey"
+              ></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="visual_rope_survey_remark"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">6</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Destruction test certificate</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check date of destruction test
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar
+                label="Date, Month and Year"
+                formControlName="destruction_test_date"
+              ></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="destruction_test_date_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">7</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Wire Rope</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Date of fitment. To be maintained NHQ/DNA Policy letter
+              NC/Policy/H-104/Equipment dated 09 May 16
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar
+                label="Date, Month and Year"
+                formControlName="wire_rope_fitment_date"
+              ></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="wire_rope_fitment_date_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold"
+              rowspan="3"
+            >
+              8
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="3">
+              Condition of JB/ Control
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Electrical hygiene, condition of connector lugs. Check tightness
+              of electrical cable connections and fasteners
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="condition_of_jb_control"
+                [searchable]="false"
+                [options]="ObservationsNilOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showJBControlInputFeild"
+                formControlName="condition_of_jb_control_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showJBControlInputFeild"
+                label="Enter Remarks"
+                formControlName="condition_of_jb_control_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Status of Switches</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="switches_status"
+                [searchable]="false"
+                [options]="ObservationsNilOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showSwitchesInputField"
+                formControlName="switches_status_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showSwitchesInputField"
+                label="Enter Remarks"
+                formControlName="switches_status_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Status of Indicators</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="indicator_status"
+                [searchable]="false"
+                [options]="ObservationsNilOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showIndicatorInputField"
+                formControlName="indicator_status_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showIndicatorInputField"
+                label="Enter Remarks"
+                formControlName="indicator_status_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">9</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Condition of Foundations</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Corrosion/ Pitting/ Unpainted/ Condition of Bond Strap
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="condition_of_foundation"
+                [searchable]="false"
+                [options]="ObservationsOptions"
+              ></app-select>
+              <div
+                *ngIf="showConditionFoundationInputFeilds"
+                class="mt-2 grid grid-cols-1 gap-3 text-sm"
+              >
+                <div class="min-h-[38px] flex items-center">Corrosion</div>
+                <div class="min-h-[38px] flex items-center">Pitting</div>
+                <div class="min-h-[38px] flex items-center">Unpainted</div>
+                <div class="min-h-[38px] flex items-center">Others</div>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showConditionFoundationInputFeilds"
+                formControlName="condition_of_foundation_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+              <div
+                *ngIf="showConditionFoundationInputFeilds"
+                class="grid grid-cols-1 gap-2"
+              >
+                <app-input
+                  label=""
+                  placeholder="Enter Corrosion remarks"
+                  formControlName="Corrosion"
+                ></app-input
+                ><app-input
+                  label=""
+                  placeholder="Enter Pitting remarks"
+                  formControlName="Pitting"
+                ></app-input
+                ><app-input
+                  label=""
+                  placeholder="Enter Unpainted remarks"
+                  formControlName="Preserved"
+                ></app-input
+                ><app-input
+                  label=""
+                  placeholder="Enter Others"
+                  formControlName="Others"
+                ></app-input>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">10</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Lubrication of Mechanical Part
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check application of grease on mechanical/ moving parts
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="lubrication_mechanical_part"
+                [searchable]="false"
+                [options]="fillingDrainPlugs"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showlubricationMechanicalRemarkInput"
+                formControlName="lubrication_mechanical_part_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showlubricationMechanicalRemarkInput"
+                label="Enter Remarks"
+                formControlName="lubrication_mechanical_part_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">11</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Lubrication Points</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Condition of greasing points, nipples - clean / painted/ choked
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="lubrication_point"
+                [searchable]="false"
+                [options]="fillingDrainPlugs"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showLubricationPointsRemarkInput"
+                formControlName="lubrication_point_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showLubricationPointsRemarkInput"
+                label="Enter Remarks"
+                formControlName="lubrication_point_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">12</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Drive</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Check for excessive noise during operation
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="drive_check"
+                [searchable]="false"
+                [options]="noiseObserved"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showDriveRemarkInput"
+                formControlName="drive_check_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showDriveRemarkInput"
+                label="Enter Remarks"
+                formControlName="drive_check_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">13</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Limit Switch/ sensor</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Functioning of limit switches sensor
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="limit_switch_sensor"
+                [searchable]="false"
+                [options]="ObservationsNilOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showLimitSwitchRemarkInput"
+                formControlName="limit_switch_sensor_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showLimitSwitchRemarkInput"
+                label="Enter Remarks"
+                formControlName="limit_switch_sensor_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">14</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Insulation Motor</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">&gt; 2 M Ohms</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                label="Numeric value in M Ohms"
+                formControlName="insulation_motor"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="insulation_motor_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">15</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Operational Trials at SWL</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Lifting/ lowering - Electrical/ Hydraulic mode
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="operational_trails_swl"
+                [searchable]="false"
+                [options]="ObservationsNilOptions"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                *ngIf="!showOperationalTrailsRemarkInput"
+                formControlName="operational_trails_swl_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select
+              ><app-input
+                *ngIf="showOperationalTrailsRemarkInput"
+                label="Enter Remarks"
+                formControlName="operational_trails_swl_remark"
+              ></app-input>
+            </td>
+          </tr>
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">
+              CBPM PARAMETERS
+            </td>
+          </tr>
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Lubrication Oil Status
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">16</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Oil Level in Gear Box</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Oil level should be maintained between max and min marking
+              indicated on oil level glass
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="oil_level_gear_box"
+                [searchable]="false"
+                [options]="OilLevelGauge"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="oil_level_gear_box_remarks"
+                [searchable]="false"
+                [options]="overallRemarksOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">17</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Oil being used in Gear Box</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="gear_box"
+                [searchable]="false"
+                [options]="gearBoxOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="gear_box_observation"
+                [searchable]="false"
+                [options]="yesNoOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="gear_box_remark"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">18</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Change of Oil (in Drum and Gear Box)
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Last date of oil change</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-month-year-calendar
+                label="Month and Year"
+                formControlName="lastOilChangeDate"
+              ></app-month-year-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="lastOilChangeDate_remarks"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">19</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="6">
+              Lub oil analysis parameter
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="6">
+              Lab Test (report to be enclosed)
+            </td>
+            <td
+              colspan="2"
+              class="border border-white/15 px-3 py-2 text-center font-medium"
+            >
+              Parameters
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">20</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Water content</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="water_content_value"
+                placeholder="Enter remarks"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">21</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Viscosity</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="Viscosity_value"
+                placeholder="Enter remarks"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">22</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Base Number</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="base_number_value"
+                placeholder="Enter remarks"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">23</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Acid Number</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="acid_number_value"
+                placeholder="Enter remarks"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">24</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Metal traces</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="metal_traces_value"
+                placeholder="Enter remarks"
+              ></app-input>
+            </td>
+          </tr>
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Current/ Load Checks
+            </td>
+          </tr>
+          <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 text-center"></td>
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 text-center"></td>
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 text-center">Reference</td>
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 text-center">Measured</td>
+            <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70 text-center">SAT / UNSAT</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">25</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Starting current</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="starting_current_reference"
+                placeholder="As per masters"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="starting_current_measured"
+                placeholder="Dialogue box"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="starting_current_remarks"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">26</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Running Current</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="running_current_reference"
+                placeholder="As per masters"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="running_current_measured"
+                placeholder="Dialogue box"
+              ></app-input>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="running_current_remarks"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">27</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Log book exist</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="log_book_reference"
+                [searchable]="false"
+                [options]="yesNoOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="log_book_measured"
+                [searchable]="false"
+                [options]="yesNoOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="log_book_remarks"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">28</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Periodicity of measurement</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="periodicity_reference"
+                [searchable]="false"
+                [options]="montlyQuarterlyOption"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="periodicity_measured"
+                [searchable]="false"
+                [options]="montlyQuarterlyNilOption"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="periodicity_remarks"
+                [searchable]="false"
+                [options]="SatUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">29</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              SPM Check of Motor (For Motor Vibration)
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              0-20 dbm Green/ Yellow/ Red<br />(0-20/ 20-35/ &gt;35)
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="spm_measured"
+                [searchable]="false"
+                [options]="spmCheckOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="spm_remarks"
+                [searchable]="false"
+                [options]="overallRemarksNaOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">30</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Any other observations</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-input
+                formControlName="other_observation"
+                placeholder="Enter observations"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center font-bold">31</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Overall Remarks</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-select
+                formControlName="overall_remark"
+                [searchable]="false"
+                [options]="overallRemarksOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <!-- FOOTER -->
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="
+    showApprovalWorkflowPopup = $event; isSubmitTime = $event
+  "
+>
+</app-approval-work-flow>

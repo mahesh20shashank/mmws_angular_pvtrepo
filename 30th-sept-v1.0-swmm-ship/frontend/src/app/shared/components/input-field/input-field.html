@@ -1,0 +1,21 @@
+<div class="input-wrapper">
+  @if (label) {
+  <label for="id" class="input-label">
+    {{ label }}
+    @if(required()){
+    <span class="required">*</span>
+    }
+  </label>
+  }
+
+  <div class="input-container" [class.active]="focused()" [class.readonly-field]="readonly || disabled()"
+    [class.input-container--invalid]="invalid" [class.input-container--placeholder-invalid]="placeholderInvalid">
+    <input [type]="currentInputType()" [value]="value()" [readonly]="readonly || disabled()" [placeholder]="placeholder"
+      [class.date-placeholder]="isDateType()" [class.date-empty]="isDateType() && !value()"
+      [attr.inputmode]="autoTimeFormat ? 'numeric' : null" [attr.maxlength]="autoTimeFormat ? 5 : null"
+      [attr.lang]="type === 'date' ? dateLocale : null"
+      [attr.min]="isDateType() && min ? min : null"
+      [attr.max]="isDateType() && max ? max : null"
+      (input)="onInput($event)" (focus)="onFocus()" (blur)="onBlur()" />
+  </div>
+</div>

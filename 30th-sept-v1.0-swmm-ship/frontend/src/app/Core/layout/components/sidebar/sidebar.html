@@ -1,0 +1,224 @@
+<aside class="sidebar glass-card" [class.collapsed]="collapsed">
+  <div class="sidebar-logo relative">
+    @if (collapsed) {
+    <app-button type="button" class="absolute inset-0 w-full h-full bg-transparent border-none cursor-pointer z-10"
+      (click)="toggleSidebar()" aria-label="Expand sidebar"></app-button>
+    }
+    <img [src]="getLogoPath()" alt="SWMM Logo" class="sidebar-logo__img" />
+
+    @if (!collapsed) {
+    <div class="sidebar-logo__text">
+      <span class="logo_heading_sidebar" title="SWMM">SWMM</span>
+      <span class="subHeading_of_kpis" title="Powered by MAT-CDF">Powered by MAT-CDF</span>
+      @if (getShipName(); as shipName) {
+      <span class="sidebar-ship-badge" [title]="shipName">
+        <app-icon name="anchor" [size]="10" variant="inherit" />
+        {{ shipName }}
+      </span>
+      } @else if (!thisShip.isSet() && canCompleteShipName()) {
+      <!-- Developed with Understanding: no ship name yet (HR CDF Step 1 not done) - administrators get a link to Step 1 instead of a badge (D23). -->
+      <a routerLink="/afterAuth/Administration/sync-hrcdf"
+        class="mt-1.5 text-[0.6875rem] leading-snug underline text-[var(--text-nav-label)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-blue)] rounded-sm">
+        Ship name not set - complete HR CDF Step 1
+      </a>
+      }
+    </div>
+    }
+
+    @if (!collapsed) {
+    <app-button class="sidebar-logo__toggle" title="Collapse sidebar" (click)="$event.stopPropagation(); toggleSidebar()">
+      <app-icon name="panel-right" [size]="18" variant="inherit" />
+    </app-button>
+    }
+  </div>
+
+  @if (homeItem(); as home) {
+  <div class="sidebar-section sidebar-section--pinned">
+    <app-button class="nav-item" [title]="home.tooltip ?? home.label" [class.nav-item--active]="isModuleActive(home)"
+      [class.nav-item--collapsed]="collapsed" (click)="navigate(home.route)">
+      <span class="nav-item__icon">
+        @if (home.icon) {
+        <app-icon [name]="home.icon" [size]="16" variant="inherit" />
+        }
+      </span>
+
+      @if (!collapsed) {
+      <span class="nav-item__label">
+        {{ home.label }}
+      </span>
+      }
+    </app-button>
+  </div>
+  }
+
+  <nav class="sidebar-nav">
+    <!-- Developed with Understanding: the Inbox and Outbox group is hidden for an other-unit login (a guest, D30). -->
+    @if (!userStore.isOtherUnit()) {
+    <div class="sidebar-section">
+      <app-button class="nav-item nav-item--dev-progress" title="Development in Progress"
+        [class.nav-item--collapsed]="collapsed">
+        <span class="nav-item__icon">
+          <app-icon name="inbox" [size]="16" variant="inherit" />
+        </span>
+
+        @if (!collapsed) {
+        <span class="nav-item__label">Inbox</span>
+        }
+      </app-button>
+
+      <app-button class="nav-item nav-item--dev-progress" title="Development in Progress"
+        [class.nav-item--collapsed]="collapsed">
+        <span class="nav-item__icon">
+          <app-icon name="send" [size]="16" variant="inherit" />
+        </span>
+
+        @if (!collapsed) {
+        <span class="nav-item__label">Outbox</span>
+        }
+      </app-button>
+    </div>
+    }
+
+    @for (section of scrollableSections(); track section.sectionLabel) {
+    @if (!collapsed) {
+    <div class="sidebar-divider sidebar-divider--full"></div>
+    }
+
+    <div class="sidebar-section">
+      @if (!collapsed && section.sectionLabel) {
+      <app-button type="button" class="sidebar-section__header" [title]="section.sectionLabel"
+        (click)="toggleSection(section.sectionLabel)">
+        @if (sectionIcon(section.sectionLabel); as icon) {
+        <app-icon [name]="icon" class="sidebar-section__icon" [size]="12" [strokeWidth]="2" variant="inherit" />
+        }
+        <span class="sidebar-section__label">{{ section.sectionLabel }}</span>
+        <app-icon name="chevron-down" class="sidebar-section__chevron" [size]="12" [strokeWidth]="1.5" variant="inherit"
+          [style.transform]="isSectionExpanded(section.sectionLabel) ? 'rotate(180deg)' : 'rotate(0deg)'" />
+      </app-button>
+      }
+
+      @if (collapsed && section.sectionLabel) {
+      <div class="sidebar-divider" [title]="section.sectionLabel"></div>
+      }
+
+      @if (collapsed || !section.sectionLabel || isSectionExpanded(section.sectionLabel)) {
+      @for (item of section.items; track item.label) {
+      @if (!item.children) {
+      <app-button class="nav-item" [title]="devInProgressIds.has(item.id) ? 'Development in Progress' : (item.tooltip ?? item.label)"
+        [class.nav-item--active]="isModuleActive(item)"
+        [class.nav-item--collapsed]="collapsed" [class.nav-item--dev-progress]="devInProgressIds.has(item.id)"
+        (click)="devInProgressIds.has(item.id) ? null : navigate(item.route)">
+        <span class="nav-item__icon">
+          @if (item.icon) {
+          <app-icon [name]="item.icon" [size]="16" variant="inherit" />
+          }
+        </span>
+
+        @if (!collapsed) {
+        <span class="nav-item__label">
+          {{ item.label }}
+        </span>
+        @if (getItemBadge(item); as badgeCount) {
+        <span class="nav-item__badge">
+          {{ badgeCount }}
+        </span>
+        }
+        }
+        @if (collapsed && getItemBadge(item)) {
+        <span class="nav-item__badge-dot"></span>
+        }
+      </app-button>
+      }
+
+      @if (item.children) {
+      <app-button class="nav-item" [title]="item.tooltip ?? item.label" [class.nav-item--active]="isModuleActive(item)"
+        [class.nav-item--collapsed]="collapsed" (click)="toggle(item)">
+        <span class="nav-item__icon">
+          @if (item.icon) {
+          <app-icon [name]="item.icon" [size]="16" variant="inherit" />
+          }
+        </span>
+
+        @if (!collapsed) {
+        <span class="nav-item__label nav-item__label--flex">
+          {{ item.label }}
+        </span>
+        @if (getItemBadge(item); as badgeCount) {
+        <span class="nav-item__badge">
+          {{ badgeCount }}
+        </span>
+        }
+
+        <app-icon name="chevron-down" class="nav-chevron" [size]="12" [strokeWidth]="1.167" variant="inherit"
+          [style.transform]="
+                    isExpanded(item) ? 'rotate(180deg)' : 'rotate(0deg)'
+                  " />
+        }
+        @if (collapsed && getItemBadge(item)) {
+        <span class="nav-item__badge-dot"></span>
+        }
+      </app-button>
+
+      @if (isExpanded(item)) {
+      <div class="nav-children" [class.nav-children--collapsed]="collapsed">
+        @for (child of item.children; track child.label) {
+        <app-button class="nav-child" [title]="devInProgressIds.has(child.id) ? 'Development in Progress' : (child.tooltip ?? child.label)"
+          [class.nav-child--active]="isActive(child.route)" [class.nav-child--collapsed]="collapsed"
+          [class.nav-item--dev-progress]="devInProgressIds.has(child.id)"
+          (click)="devInProgressIds.has(child.id) ? null : navigate(child.route)">
+          <span class="nav-child__icon">
+            @if (child.icon) {
+            <app-icon [name]="child.icon" [size]="12" variant="inherit" />
+            }
+          </span>
+
+          @if (!collapsed) {
+          <span class="nav-child__label">
+            {{ child.label }}
+          </span>
+          @if (getItemBadge(child); as badgeCount) {
+          <span class="nav-item__badge">
+            {{ badgeCount }}
+          </span>
+          }
+          }
+          @if (collapsed && getItemBadge(child)) {
+          <span class="nav-item__badge-dot"></span>
+          }
+        </app-button>
+        }
+      </div>
+      }
+      }
+      }
+      }
+    </div>
+    }
+  </nav>
+
+  <div class="sidebar-footer">
+    @if (showProfileFooter) {
+    <div class="sidebar-profile" [routerLink]="['/afterAuth/profile']">
+      <div class="sidebar-profile__avatar" [title]="getUserFirstName()">
+        <span class="sidebar-profile__initial">
+          {{ getUserInitial() }}
+        </span>
+      </div>
+
+      @if (!collapsed) {
+      <div class="sidebar-profile__info">
+        <span class="sidebar-profile__name" [title]="getUserFullName()">
+          {{ getUserFullName() }}
+        </span>
+
+        <span class="sidebar-profile__role" [title]="getUserDesignation()">
+          {{ getUserDesignation() }}
+        </span>
+      </div>
+
+      <app-icon name="chevron-right" class="sidebar-profile__arrow" [size]="16" variant="inherit" />
+      }
+    </div>
+    }
+  </div>
+</aside>

@@ -1,0 +1,81 @@
+<!-- report-layout.html -->
+
+<div class="report-container">
+  <!-- Loading -->
+  <div *ngIf="isLoading">Loading...</div>
+
+  <!-- Main Content -->
+  <ng-container *ngIf="!isLoading">
+    <div class="flex justify-end mb-4">
+      <button
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        (click)="downloadReport()"
+      >
+        Download Report
+      </button>
+    </div>
+
+    <!-- Title -->
+    <h2 class="report-title">Load Test Certificate Report</h2>
+
+    <!-- Details Section -->
+    <div class="details-section">
+      <div class="detail-item" *ngFor="let item of details">
+        <span class="detail-key"> {{ item.label }} : </span>
+
+        <span class="detail-value">
+          {{ getCellValue( reportData, item.field ) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <table class="report-table" *ngIf="columns?.length">
+      <!-- Header -->
+      <thead>
+        <tr>
+          <th
+            class="report-table-header"
+            *ngFor="let column of columns"
+            [style.text-align]="
+              column.align || 'center'
+            "
+          >
+            {{ column.header }}
+          </th>
+        </tr>
+      </thead>
+
+      <!-- Body -->
+      <tbody>
+        <tr *ngFor="let row of tableData; let i = index">
+          <td
+            *ngFor="let column of columns"
+            [style.text-align]="
+            column.align || 'center'
+          "
+          >
+            <!-- Serial Number -->
+            <ng-container
+              *ngIf="column.field === 'serialNumber';
+            else normalCell"
+            >
+              {{ i + 1 }}
+            </ng-container>
+
+            <!-- Normal Cell -->
+            <ng-template #normalCell>
+              {{ formatValue( row, column ) }}
+            </ng-template>
+          </td>
+        </tr>
+        <!-- No Data -->
+        <tr *ngIf="!tableData.length">
+          <td [attr.colspan]="columns.length" style="text-align: center">
+            No Data Found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</div>

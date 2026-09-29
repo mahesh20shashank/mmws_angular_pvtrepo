@@ -1,0 +1,16 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <app-kpi-card title="Refit in Progress" [count]="totalRefit()" iconName="pie-chart" iconColor="#fa5a7d" iconBg="rgba(250, 90, 125, 0.16)" accentColor="#fa5a7d" iconPosition="right" [showTimelineTab]="false" [showTrends]="false" viewMoreRoute="../tracking/ALL" viewMoreLabel="View more →" cardHeight="auto" />
+  <app-kpi-card title="Defect List I" [count]="dl1Count()" iconName="shopping-cart" iconColor="#0095ff" iconBg="rgba(0, 149, 255, 0.16)" accentColor="#0095ff" iconPosition="right" [showTimelineTab]="false" [showTrends]="false" viewMoreRoute="../tracking/DL1" viewMoreLabel="View more →" cardHeight="auto" />
+  <app-kpi-card title="Defect List II" [count]="dl2Count()" iconName="globe" iconColor="#bf83ff" iconBg="rgba(191, 131, 255, 0.16)" accentColor="#bf83ff" iconPosition="right" [showTimelineTab]="false" [showTrends]="false" viewMoreRoute="../tracking/DL2" viewMoreLabel="View more →" cardHeight="auto" />
+  <app-kpi-card title="Defect List III" [count]="dl3Count()" iconName="globe" iconColor="#bf83ff" iconBg="rgba(191, 131, 255, 0.16)" accentColor="#bf83ff" iconPosition="right" [showTimelineTab]="false" [showTrends]="false" viewMoreRoute="../tracking/DL3" viewMoreLabel="View more →" cardHeight="auto" />
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <app-panel-card title="DL Breakdown" subtitle="By compartment" icon="rotate-ccw" iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+    <app-bar-chart [categories]="breakdownCategories()" [stackedSeries]="breakdownSeries()" [heightPx]="245" />
+  </app-panel-card>
+  <app-panel-card title="Pending DLs" subtitle="By compartment" icon="pie-chart" iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+    <app-bar-chart [categories]="pendingCategories()" [stackedSeries]="pendingSeries()" [heightPx]="245" />
+  </app-panel-card>
+</div>

@@ -1,0 +1,208 @@
+<!-- ship-weight-management-report.component.html -->
+<!-- ───────────────────────────────────────── -->
+<!-- DOWNLOAD BUTTON -->
+<!-- ───────────────────────────────────────── -->
+<div class="flex justify-end mb-5">
+  <button
+    (click)="downloadReport()"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
+  >
+    Download Report
+  </button>
+</div>
+
+<div class="report-container" id="reportSection">
+  <!-- ───────────────────────────────────────── -->
+  <!-- TITLE -->
+  <!-- ───────────────────────────────────────── -->
+  <h2 class="report-title">
+    SHIP WEIGHT MANAGEMENT REPORT -
+    <span class="italic-text">{{ reportData.shipName }}</span>
+  </h2>
+
+  <!-- ───────────────────────────────────────── -->
+  <!-- DETAILS -->
+  <!-- ───────────────────────────────────────── -->
+  <div class="details-section">
+    <div class="detail-item">
+      <span class="detail-key"> 1. Command : </span>
+
+      <span class="detail-value">
+        {{ reportData.command || "-" }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key"> 2. Class : </span>
+
+      <span class="detail-value">
+        {{ reportData.classOfShip || "-" }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key"> 3. Date of Return : </span>
+
+      <span class="detail-value">
+        {{ reportData.date_of_return || "-" }}
+      </span>
+    </div>
+
+    <div class="detail-item">
+      <span class="detail-key"> 4. Status : </span>
+
+      <span class="detail-value">
+        {{ reportData.status || "-" }}
+      </span>
+    </div>
+
+    <!-- REFIT DETAILS -->
+    <ng-container *ngIf="reportData.status === 'REFIT'">
+      <div class="detail-item">
+        <span class="detail-key"> 5. Refit : </span>
+
+        <span class="detail-value">
+          {{ reportData.refit || "-" }}
+        </span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-key"> 6. Refit Commencement Date : </span>
+
+        <span class="detail-value">
+          {{ reportData.refitDate || "-" }}
+        </span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-key"> 7. Reference Authority : </span>
+
+        <span class="detail-value">
+          <ng-container *ngIf="isUrl(reportData.referenceAuthority); else plainAuth">
+            <a
+              [href]="reportData.referenceAuthority"
+              target="_blank"
+              class="doc-url-link"
+            >
+              {{ reportData.referenceAuthority }}
+            </a>
+          </ng-container>
+          <ng-template #plainAuth>
+            {{ reportData.referenceAuthority || "-" }}
+          </ng-template>
+        </span>
+      </div>
+    </ng-container>
+  </div>
+  <!-- REFIT TABLE -->
+  <div *ngIf="reportData.status === 'REFIT'" class="table-scroll-wrapper">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th class="report-table-header-s-no">SER</th>
+
+          <th class="report-table-header">LIGHTSHIP DISP (A)</th>
+
+          <th class="report-table-header">WEIGHT CHANGE PRIOR REFIT</th>
+
+          <th class="report-table-header">NET WEIGHT CHANGE DURING REFIT</th>
+
+          <th class="report-table-header">NET KG</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let row of refitTableData; let i = index">
+          <td>{{ i + 1 }}</td>
+
+          <td>
+            {{ row.lightshipDisp || "-" }}
+          </td>
+
+          <td>
+            {{ row.weightChangePriorRefit || "-" }}
+          </td>
+
+          <td>
+            {{ row.netWeightChangeDuringRefit || "-" }}
+          </td>
+
+          <td>
+            {{ row.netKg || "-" }}
+          </td>
+        </tr>
+
+        <tr *ngIf="refitTableData.length === 0">
+          <td colspan="5" class="no-data">No Data Available</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- OPS TABLE -->
+  <div *ngIf="reportData.status === 'OPS'" class="table-scroll-wrapper">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <!-- report-table-header -->
+          <th class="report-table-header">Sr No</th>
+
+          <th class="report-table-header">LIGHTSHIP DISP (A)</th>
+
+          <th class="report-table-header">REF LOADING CONDITION</th>
+
+          <th class="report-table-header">DISP IN REFERENCE</th>
+
+          <th class="report-table-header">DISP AS READ</th>
+
+          <th class="report-table-header">NET DIFFERENCE</th>
+
+          <th class="report-table-header">CORRECTED DISP</th>
+
+          <th class="report-table-header">NET INCREASE</th>
+
+          <th class="report-table-header">% INCREASE</th>
+
+          <th class="report-table-header">NET WT ADDITION</th>
+
+          <th class="report-table-header">NET KG WT ADDITION</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let row of opsTableData; let i = index">
+          <td>{{ i + 1 }}</td>
+
+          <td>{{ row.lightshipDisp }}</td>
+
+          <td>{{ row.referenceLoadingCondition }}</td>
+
+          <td>{{ row.dispInReference }}</td>
+
+          <td>{{ row.dispAsRead }}</td>
+
+          <td>{{ row.netDifference }}</td>
+
+          <td>{{ row.correctedDisp }}</td>
+
+          <td>{{ row.netIncrease }}</td>
+
+          <td>{{ row.percentageIncrease }}</td>
+
+          <td>{{ row.netWeightAddition }}</td>
+
+          <td>{{ row.netKgWeightAddition }}</td>
+        </tr>
+
+        <tr *ngIf="opsTableData.length === 0">
+          <td colspan="11" class="no-data">No Data Available</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- STATUS BELOW TABLE -->
+  <div class="report-status-footer">
+    Status : <span class="report-status-badge">{{ reportStatus }}</span>
+  </div>
+</div>

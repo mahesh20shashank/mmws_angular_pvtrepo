@@ -1,0 +1,70 @@
+/* Developed with Understanding: the track. Theme tokens only - --border-primary and
+   --accent-blue are defined in both theme blocks of styles.css, so the bar follows the theme
+   with no raw colour here. */
+:host {
+  display: block;
+}
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--border-primary);
+  overflow: hidden;
+}
+
+/* Developed with Understanding: the determinate fill, width bound to the clamped value. */
+.progress-bar__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent-blue);
+  transition: width 0.3s ease;
+}
+
+/* Developed with Understanding: the indeterminate fill, a segment sliding across the track
+   while the total is not yet known. */
+.progress-bar__fill--indeterminate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  animation: progress-bar-slide 1.4s ease-in-out infinite;
+}
+
+@keyframes progress-bar-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+/* Developed with Understanding: no movement for a user who asked for reduced motion. The
+   indeterminate state becomes a still, half-strength full-width fill. */
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar__fill {
+    transition: none;
+  }
+
+  .progress-bar__fill--indeterminate {
+    width: 100%;
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* Developed with Understanding: Windows high-contrast mode drops backgrounds, so the track
+   gets an outline and the fill a system colour there. System colour keywords, not raw colour. */
+@media (forced-colors: active) {
+  .progress-bar {
+    outline: 1px solid CanvasText;
+  }
+
+  .progress-bar__fill {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+}

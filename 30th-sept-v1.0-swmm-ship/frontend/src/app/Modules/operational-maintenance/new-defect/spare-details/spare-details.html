@@ -1,0 +1,116 @@
+@if (show()) {
+  <div class="daf-trial-panel daf-spare-panel">
+    <div class="daf-trial-panel-head">
+      <span class="daf-trial-panel-dot daf-spare-panel-dot"></span>
+      <span class="daf-trial-panel-title daf-spare-panel-title">Spare Details</span>
+      <span class="daf-trial-panel-sub">— map issued spares to this defect / routine</span>
+    </div>
+
+    @if (savedSpares().length) {
+      <div class="daf-spare-table-wrap">
+        <table class="daf-spare-table">
+          <thead>
+            <tr>
+              <th>Pattern Number</th>
+              <th>Item Description</th>
+              <th>Qty Issued</th>
+              <th>Issued To</th>
+              <th>Authority</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (sp of savedSpares(); track sp.pattern) {
+              <tr>
+                <td class="daf-spare-cell-accent">{{ sp.pattern }}</td>
+                <td>{{ sp.desc }}</td>
+                <td>{{ sp.qtyIssued }}</td>
+                <td>{{ sp.issuedTo }}</td>
+                <td>{{ sp.authority }}</td>
+                <td>
+                  <app-button type="button" class="daf-icon-btn" title="Remove — unmap this spare" (click)="removeSavedSpare(sp.pattern)">
+                    <app-icon name="trash-2" [size]="14" variant="danger" />
+                  </app-button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <div>
+      <app-button type="button" class="daf-btn daf-btn--primary" (click)="openSpareModal()">
+        <app-icon name="plus" [size]="14" variant="inherit" />{{ savedSpares().length ? "Edit Spares" : "Add Spares" }}
+      </app-button>
+    </div>
+  </div>
+}
+
+@if (isSpareModalOpen()) {
+  <app-modal size="lg" (closeModal)="closeSpareModal()">
+    <div class="daf-modal">
+      <div class="daf-modal-head">
+        <span class="daf-modal-title">Add Spares</span>
+        <span class="daf-modal-sub">Unmapped Spares List — issued, not yet mapped · OBS / Issue Transaction</span>
+        <app-button type="button" class="daf-icon-btn daf-modal-close" (click)="closeSpareModal()">
+          <app-icon name="x" [size]="17" variant="inherit" />
+        </app-button>
+      </div>
+
+      <label class="daf-filter-field">
+        <span>Issued To</span>
+        <select [value]="spareIssuedFilter()" (change)="spareIssuedFilter.set($any($event.target).value)">
+          <option value="">All</option>
+          @for (o of spareIssuedOptions(); track o) {
+            <option [value]="o">{{ o }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="daf-spare-table-wrap">
+        <table class="daf-spare-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Pattern Number</th>
+              <th>Item Description</th>
+              <th>Qty Issued</th>
+              <th>Qty Held</th>
+              <th>Denom.</th>
+              <th>Issue Date</th>
+              <th>Issued To</th>
+              <th>Inventory Type</th>
+              <th>CRP Category</th>
+              <th>Authority</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (sp of filteredSpareRows(); track sp.pattern) {
+              <tr (click)="toggleSpare(sp.pattern)" class="daf-spare-row--clickable">
+                <td><span class="daf-checkbox" [class.daf-checkbox--on]="isSpareSelected(sp.pattern)"><app-icon name="check" [size]="11" variant="inherit" /></span></td>
+                <td class="daf-spare-cell-accent">{{ sp.pattern }}</td>
+                <td>{{ sp.desc }}</td>
+                <td>{{ sp.qtyIssued }}</td>
+                <td>{{ sp.qtyHeld }}</td>
+                <td>{{ sp.denom }}</td>
+                <td>{{ sp.issueDate }}</td>
+                <td>{{ sp.issuedTo }}</td>
+                <td>{{ sp.invType }}</td>
+                <td>{{ sp.crp }}</td>
+                <td>{{ sp.authority }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="daf-form-actions">
+        <span class="daf-muted">{{ spareSelection().length }} selected</span>
+        <div class="daf-trial-spacer"></div>
+        <app-button type="button" class="daf-btn daf-btn--ghost" (click)="closeSpareModal()">Cancel</app-button>
+        <app-button type="button" class="daf-btn daf-btn--primary" (click)="saveSpares()">Save Selected Spares</app-button>
+      </div>
+    </div>
+  </app-modal>
+}

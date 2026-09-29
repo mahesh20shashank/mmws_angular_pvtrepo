@@ -1,0 +1,3216 @@
+{
+  "formId": "degu_health_audit",
+  "title": "DEGUASSING HEALTH AUDIT REPORT",
+  "sourceFile": "Degu_health_audit.html",
+  "sections": [
+    {
+      "id": "information",
+      "title": "DEGUASSING HEALTH AUDIT REPORT",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type": "label",
+            "value": "BASIC INFORMATION",
+            "colSpan": 12
+          },
+          {
+            "_id": "ship_class",
+            "key": "ship_class",
+            "name": "ship_class",
+            "label": "Ship Class ",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Select Ship Class",
+                "value": ""
+              },
+              {
+                "label": "Destroyer",
+                "value": "Destroyer"
+              },
+              {
+                "label": "Frigate",
+                "value": "Frigate"
+              },
+              {
+                "label": "Corvette",
+                "value": "Corvette"
+              },
+              {
+                "label": "Other",
+                "value": "Other"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "ship",
+            "key": "ship",
+            "name": "ship",
+            "label": "Ship Name ",
+            "type": "input",
+            "inputType": "text",
+            "value": "",
+            "required": true,
+            "disabled": true,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "ship_name",
+            "prefill": true,
+            "prefillSource": "context.ship_name"
+          },
+          {
+            "_id": "health_audit_type",
+            "key": "health_audit_type",
+            "name": "health_audit_type",
+            "label": "Audit Type ",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Select Audit Type",
+                "value": ""
+              },
+              {
+                "label": "Quarterly",
+                "value": "quarterly"
+              },
+              {
+                "label": "Annual",
+                "value": "annual"
+              },
+              {
+                "label": "Pre UWR",
+                "value": "pre_suwr"
+              },
+              {
+                "label": "Post REFIT",
+                "value": "post_refit"
+              },
+              {
+                "label": "Special",
+                "value": "special"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "health_audit_status",
+            "key": "health_audit_status",
+            "name": "health_audit_status",
+            "label": "Health Audit Status ",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Select Audit Status",
+                "value": ""
+              },
+              {
+                "label": "Satisfactory",
+                "value": "satisfactory"
+              },
+              {
+                "label": "Unsatisfactory",
+                "value": "unsatisfactory"
+              },
+              {
+                "label": "Partially Satisfactory",
+                "value": "partially_satisfactory"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "health_audit_no",
+            "key": "health_audit_no",
+            "name": "health_audit_no",
+            "label": "Audit Report No. ",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "Enter Audit Report No.",
+            "inputType": "text"
+          },
+          {
+            "_id": "ship_health_audit_report_no",
+            "key": "ship_health_audit_report_no",
+            "name": "ship_health_audit_report_no",
+            "label": "Ship Audit Report No. ",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "Enter Ship Audit Report No.",
+            "inputType": "text"
+          },
+          {
+            "_id": "audit_date",
+            "key": "audit_date",
+            "name": "audit_date",
+            "label": "Audit Date ",
+            "type": "date",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date"
+          },
+          {
+            "_id": "equipment_code",
+            "key": "equipment_code",
+            "name": "equipment_code",
+            "label": "Equipment Code ",
+            "type": "input",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "Enter Equipment Code",
+            "inputType": "text"
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "system_parameters_table_1",
+            "sectionType": "simpleTable",
+            "title": "(A) INSULATION OF COILS (SPECIFIED VALUE >= 0.5 M\u03a9)",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Values (M\u03a9)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "values_m",
+                "label": "Values (M\u03a9)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_2",
+            "sectionType": "simpleTable",
+            "title": "(B) INSULATION OF MG SETS (M)/SFC/POC/TRANSFORMERS",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Values (M\u03a9)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "values_m",
+                "label": "Values (M\u03a9)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_2_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_2_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_2_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_2_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_2_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_3",
+            "sectionType": "simpleTable",
+            "title": "(C) SPM READING OF MG SET",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Values (M\u03a9)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "values_m",
+                "label": "Values (M\u03a9)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_3_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_3_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_3_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_3_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_3_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_4",
+            "sectionType": "simpleTable",
+            "title": "(D) AMPERE METER CALIBRATION DATE",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Last Calibration Date",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "name",
+                "label": "Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "last_calibration_date",
+                "label": "Last Calibration Date",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_4_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_4_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_4_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_4_row_1_cell_3_ampere_meter_calibration_date",
+                    "key": "ampere_meter_calibration_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_5",
+            "sectionType": "simpleTable",
+            "title": "(E) EARTHING OF MG SETS/SFC/POC/TRANSFORMERS",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "name",
+                "label": "Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_5_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_5_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_5_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_5_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_6",
+            "sectionType": "simpleTable",
+            "title": "(F) VOLT METER CALIBRATION DATE",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Last Calibration Date",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "name",
+                "label": "Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "last_calibration_date",
+                "label": "Last Calibration Date",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_6_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_6_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_6_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_6_row_1_cell_3_volt_meter_calibration_date",
+                    "key": "volt_meter_calibration_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_6",
+            "sectionType": "simpleTable",
+            "title": "(G) INSULATION METER/MEGGER CALIBRATION DATE",
+            "rows": [
+              {
+                "_id": "system_parameters_table_6.1_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_6.1_row_1_cell_2_label",
+                    "key": "field_2_label",
+                    "type": "label",
+                    "value": "Last Calibration Date:",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_6.1_row_1_cell_3_INSULATION_METER",
+                    "key": "insulation_meter_calibration_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_7",
+            "sectionType": "simpleTable",
+            "title": "(H) SYSTEM STATUS",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Mode",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remark",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "mode",
+                "label": "Mode",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remark",
+                "label": "Remark",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_7_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_7_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_7_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_7_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Status",
+                        "value": ""
+                      },
+                      {
+                        "label": "Automatic",
+                        "value": "automatic"
+                      },
+                      {
+                        "label": "Semi-automatic",
+                        "value": "semi-automatic"
+                      },
+                      {
+                        "label": "Stand By",
+                        "value": "stand-by"
+                      },
+                      {
+                        "label": "Magnetometer",
+                        "value": "magnetometer"
+                      },
+                      {
+                        "label": "others",
+                        "value": "others"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_7_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "system_parameters_table_8",
+            "sectionType": "simpleTable",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remark",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "checks",
+                "label": "Checks",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remark",
+                "label": "Remark",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "system_parameters_table_8_row_1",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_8_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Condition of Junction Boxes",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "system_parameters_table_8_row_2",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_8_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Earthing of Control Cabinet",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_2_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_2_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "system_parameters_table_8_row_3",
+                "cells": [
+                  {
+                    "_id": "system_parameters_table_8_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Internal Hygiene of Control Cabinet",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_3_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "system_parameters_table_8_row_3_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_3": [
+          {
+            "_id": "field_1llllll",
+            "key": "field_1",
+            "name": "field_1",
+            "label": "The ship DG system was tuned and calibrated as per the following values recommended by UWR OA vide late: Ser Heading Name Coil Name Values Action 1",
+            "type": "label",
+            "value": "RECOMMENDED UMR DETAILS",
+            "colspan": 12
+          },
+          {
+            "_id": "field_1",
+            "key": "field_1",
+            "name": "field_1",
+            "label": "The ship DG system was tuned and calibrated as per the following values recommended by UWR OA vide late:",
+            "type": "textarea",
+            "value": "RECOMMENDED UMR DETAILS",
+            "required": false,
+            "disabled": false,
+            "colspan": 12,
+            "placeholder": "Enter remarks...",
+            "rows": 1
+          },
+          {
+            "_id": "uwr_recommended_date",
+            "key": "uwr_recommended_date",
+            "name": "uwr_recommended_date",
+            "label": "",
+            "type": "date",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date"
+          }
+        ],
+        "tables_3": [
+          {
+            "id": "recommended_umr_details_table_1",
+            "sectionType": "simpleTable",
+            "title": "RECOMMENDED UMR DETAILS",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Heading Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Values",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "heading_name",
+                "label": "Heading Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "values",
+                "label": "Values",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "recommended_umr_details_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "recommended_umr_details_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "recommended_umr_details_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "recommended_umr_details_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "recommended_umr_details_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": true,
+            "minRows": 1
+          },
+          {
+            "id": "value_of_current_table_1",
+            "sectionType": "simpleTable",
+            "title": "VALUE OF CURRENT",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Mode",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Heading Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Values",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "mode",
+                "label": "Mode",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "heading_name",
+                "label": "Heading Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "values",
+                "label": "Values",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "value_of_current_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "value_of_current_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "value_of_current_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Status",
+                        "value": ""
+                      },
+                      {
+                        "label": "Automatic",
+                        "value": "automatic"
+                      },
+                      {
+                        "label": "Semi-automatic",
+                        "value": "semi-automatic"
+                      },
+                      {
+                        "label": "Stand By",
+                        "value": "stand-by"
+                      },
+                      {
+                        "label": "Magnetometer",
+                        "value": "magnetometer"
+                      },
+                      {
+                        "label": "others",
+                        "value": "others"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "value_of_current_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "value_of_current_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "value_of_current_table_1_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "value_of_current_at_present_heading_table_1",
+            "sectionType": "simpleTable",
+            "title": "VALUE OF CURRENT AT PRESENT HEADING",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Mode",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Heading",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Values",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "mode",
+                "label": "Mode",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "heading",
+                "label": "Heading",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "values",
+                "label": "Values",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "value_of_current_at_present_heading_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "value_of_current_at_present_heading_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "value_of_current_at_present_heading_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Status",
+                        "value": ""
+                      },
+                      {
+                        "label": "Automatic",
+                        "value": "automatic"
+                      },
+                      {
+                        "label": "Semi-automatic",
+                        "value": "semi-automatic"
+                      },
+                      {
+                        "label": "Stand By",
+                        "value": "stand-by"
+                      },
+                      {
+                        "label": "Magnetometer",
+                        "value": "magnetometer"
+                      },
+                      {
+                        "label": "others",
+                        "value": "others"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "value_of_current_at_present_heading_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "value_of_current_at_present_heading_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "value_of_current_at_present_heading_table_1_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "maximum_current_carrying_capacity_table_1",
+            "sectionType": "simpleTable",
+            "title": "<h2>MAXIMUM CURRENT CARRYING CAPACITY</h2> <br> <small>Maximum design current carrying capacity of each coil as per OEM documentation (relevant document to be made available during health audit).</small>",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Coil Name",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Max Current Values (Ampere)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Achieved Current Values (Ampere)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "coil_name",
+                "label": "Coil Name",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "max_current_values_ampere",
+                "label": "Max Current Values (Ampere)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "achieved_current_values_ampere",
+                "label": "Achieved Current Values (Ampere)",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "maximum_current_carrying_capacity_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "maximum_current_carrying_capacity_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "maximum_current_carrying_capacity_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "maximum_current_carrying_capacity_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "maximum_current_carrying_capacity_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "heading_of_ship_at_base_port_table_1",
+            "sectionType": "simpleTable",
+            "title": "<h2> HEADING OF SHIP AT BASE PORT </h2> <br> <small> Whether ship's heading was changed to opposite direction during operation period at base port. If not, number of days ship remains in same heading without any changes.</small>",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Berth",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Heading",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "No. of Days in Same Heading",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "berth",
+                "label": "Berth",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "heading",
+                "label": "Heading",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "no_of_days_in_same_heading",
+                "label": "No. of Days in Same Heading",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "heading_of_ship_at_base_port_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "heading_of_ship_at_base_port_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "heading_of_ship_at_base_port_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "heading_of_ship_at_base_port_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "heading_of_ship_at_base_port_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_4": [
+          {
+            "_id": "field_1",
+            "key": "field_1",
+            "name": "field_1",
+            "label": "MAJOR DEFECT AND CABLE RENEWAL",
+            "type": "label",
+            "value": "Major Defect and Cable Renewal",
+            "colspan": 12
+          },
+          {
+            "_id": "major_defect_cable_renewal",
+            "key": "major_defect_cable_renewal",
+            "name": "major_defect_cable_renewal",
+            "label": "Any major defect on the system or cable renewal undertaken since last magnetic ranging? If yes, please provide details as per format below. Is there a major defect or cable renewal?",
+            "type": "radio",
+            "value": "",
+            "colspan": 12,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              },
+              {
+                "label": "No",
+                "value": "no"
+              }
+            ]
+          }
+        ],
+        "tables_4": [
+          {
+            "id": "major_defect_and_cable_renewal_table_1",
+            "sectionType": "simpleTable",
+            "title": "MAJOR DEFECT AND CABLE RENEWAL",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Defect Description",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Type of Defect",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Status",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Total System Downtime",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Rectified By",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Spare Consumer Dr",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "defect_description",
+                "label": "Defect Description",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "type_of_defect",
+                "label": "Type of Defect",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "status",
+                "label": "Status",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "total_system_downtime",
+                "label": "Total System Downtime",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "rectified_by",
+                "label": "Rectified By",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "spare_consumer_dr",
+                "label": "Spare Consumer Dr",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "major_defect_and_cable_renewal_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Status",
+                        "value": ""
+                      },
+                      {
+                        "label": "Pass",
+                        "value": "pass"
+                      },
+                      {
+                        "label": "Fail",
+                        "value": "fail"
+                      },
+                      {
+                        "label": "Pending",
+                        "value": "pending"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "radio",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "SAT",
+                        "value": "sat"
+                      },
+                      {
+                        "label": "UNSAT",
+                        "value": "unsat"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_6_field_6",
+                    "key": "field_6",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Status",
+                        "value": ""
+                      },
+                      {
+                        "label": "Pass",
+                        "value": "pass"
+                      },
+                      {
+                        "label": "Fail",
+                        "value": "fail"
+                      },
+                      {
+                        "label": "Pending",
+                        "value": "pending"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_defect_and_cable_renewal_table_1_row_1_cell_7_field_7",
+                    "key": "field_7",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_5": [
+          {
+            "_id": "field_1",
+            "key": "field_1",
+            "name": "field_1",
+            "label": "REMOVAL/FITMENT OF MAJOR MACHINERIES ONBOARD",
+            "type": "label",
+            "value": "Removal/Fitment of Major Machineries Onboard",
+            "colspan": 12
+          },
+          {
+            "_id": "major_machinery_removal",
+            "key": "major_machinery_removal",
+            "name": "major_machinery_removal",
+            "label": "Record of removal/fitment of major onboard machinery since last magnetic ranging (please provide details).",
+            "type": "radio",
+            "value": "",
+            "colspan": 12,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              },
+              {
+                "label": "No",
+                "value": "no"
+              }
+            ]
+          }
+        ],
+        "tables_5": [
+          {
+            "id": "removal_fitment_of_major_machineries_onboard_table_1",
+            "sectionType": "simpleTable",
+            "title": "REMOVAL/FITMENT OF MAJOR MACHINERIES ONBOARD",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Demand No.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Demand Date",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Description",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "demand_no",
+                "label": "Demand No.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "demand_date",
+                "label": "Demand Date",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "description",
+                "label": "Description",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remarks",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "removal_fitment_of_major_machineries_onboard_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "removal_fitment_of_major_machineries_onboard_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "removal_fitment_of_major_machineries_onboard_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "removal_fitment_of_major_machineries_onboard_table_1_row_1_cell_3_demand_date",
+                    "key": "demand_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "removal_fitment_of_major_machineries_onboard_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "removal_fitment_of_major_machineries_onboard_table_1_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_6": [
+          {
+            "_id": "field_1",
+            "key": "field_1",
+            "name": "field_1",
+            "label": "MAJOR HULL WORK",
+            "type": "label",
+            "value": "Major Hull Work",
+            "colspan": 12
+          },
+          {
+            "_id": "major_hull_work",
+            "key": "major_hull_work",
+            "name": "major_hull_work",
+            "label": "Any major hull work undertaken since last UWR.",
+            "type": "radio",
+            "value": "",
+            "required": false,
+            "colspan": 12,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              },
+              {
+                "label": "No",
+                "value": "no"
+              }
+            ]
+          }
+        ],
+        "tables_6": [
+          {
+            "id": "major_hull_work_table_1",
+            "sectionType": "simpleTable",
+            "title": "MAJOR HULL WORK",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Location",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Side",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Frame Number (From\u2013To)",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "serial",
+                "align": "center"
+              },
+              {
+                "key": "location",
+                "label": "Location",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "side",
+                "label": "Side",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "frame_number_from_to",
+                "label": "Frame Number (From\u2013To)",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "remarks",
+                "label": "Remarks",
+                "type": "label",
+                "align": "center"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "major_hull_work_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "major_hull_work_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "major_hull_work_table_1_row_1_cell_2_field_2",
+                    "key": "field_2",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_hull_work_table_1_row_1_cell_3_field_3",
+                    "key": "field_3",
+                    "type": "select",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": [
+                      {
+                        "label": "Select Side",
+                        "value": ""
+                      },
+                      {
+                        "label": "Port",
+                        "value": "port"
+                      },
+                      {
+                        "label": "Starboard",
+                        "value": "starboard"
+                      },
+                      {
+                        "label": "Both",
+                        "value": "both"
+                      }
+                    ],
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_hull_work_table_1_row_1_cell_4_field_4",
+                    "key": "field_4",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "major_hull_work_table_1_row_1_cell_5_field_5",
+                    "key": "field_5",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "Enter remarks...",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ],
+        "fields_7": [
+          {
+            "_id": "wmm_gmm_software_version",
+            "key": "wmm_gmm_software_version",
+            "name": "wmm_gmm_software_version",
+            "label": "WMM/GMM SOFTWARE VERSION",
+            "type": "textarea",
+            "value": "",
+            "colspan": 12,
+            "required": false,
+            "disabled": false,
+            "placeholder": "Enter remarks...",
+            "rows": 1
+          }
+        ],
+        "fields_8": [
+          {
+            "_id": "triaxial_calibration_status",
+            "key": "triaxial_calibration_status",
+            "name": "triaxial_calibration_status",
+            "label": "CALIBRATION STATUS OF TRIAXIAL PROBE SENSOR",
+            "type": "radio",
+            "value": "",
+            "colspan": 6,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "options": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              },
+              {
+                "label": "No",
+                "value": "no"
+              },
+              {
+                "label": "Not Applicable",
+                "value": "na"
+              }
+            ]
+          },
+          {
+            "_id": "triaxial_calibration_date",
+            "key": "triaxial_calibration_date",
+            "name": "triaxial_calibration_date",
+            "label": "Last Calibration Date:",
+            "type": "date",
+            "value": "",
+            "colspan": 6,
+            "required": false,
+            "disabled": false,
+            "placeholder": "",
+            "inputType": "date"
+          }
+        ],
+        "tables_8": []
+      }
+    }
+  ]
+}

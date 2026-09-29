@@ -1,0 +1,3772 @@
+{
+  "formId": "automatic_power_management_system",
+  "title": "CHECK OFF LIST \u2014 AUTOMATIC POWER MANAGEMENT SYSTEM (APMS)",
+  "sourceFile": "automatic_power_management_system.html",
+  "sections": [
+    {
+      "id": "trial_information",
+      "title": "CHECK OFF LIST — AUTOMATIC POWER MANAGEMENT SYSTEM (APMS)",
+      "sectionType": "fields",
+      "fields": [],
+      "tables": [],
+      "sectionGroup": {
+        "fields_1": [
+          {
+            "type":"label",
+            "value": "Trial Information",
+            "colSpan": 12
+          },
+          {
+          "type": "input",
+          "name": "ship_name",
+          "label": "Ship",
+          "required": true,
+            "disabled": true,
+          "placeholder": "",
+          "value": "",
+          "options": [],
+          "isDynamic": true,
+          "lookupKey": "ship_name",
+          "prefill": true,
+          "prefillSource": "context.ship_name",
+          "tree": false,
+          "colSpan": 4
+        },
+          {
+            "_id": "occasion_of_trial",
+            "key": "occasion_of_trial",
+            "name": "occasion_of_trial",
+            "label": "Occasion of Trial",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "colSpan": 4,
+            "options": [
+              {
+                "label": "-- Select Occasion --",
+                "value": ""
+              },
+              {
+                "label": "a",
+                "value": "a"
+              },
+              {
+                "label": "b",
+                "value": "b"
+              },
+              {
+                "label": "c",
+                "value": "c"
+              },
+              {
+                "label": "d",
+                "value": "d"
+              }
+            ],
+            "isDynamic": false
+          },
+          {
+            "_id": "presented_by",
+            "key": "presented_by",
+            "name": "presented_by",
+            "label": "Presented By",
+            "type": "select",
+            "value": "",
+            "required": true,
+            "disabled": false,
+            "placeholder": "",
+            "options": [],
+            "isDynamic": true,
+            "lookupKey": "presented_by",
+            "prefill": true,
+            "prefillSource": "context.presented_by",
+            "colSpan": 4
+          },
+          {
+            "_id": "nos_apms_console",
+            "key": "nos_apms_console",
+            "name": "nos_apms_console",
+            "label": "Nos. of APMS Console",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "nos_switchboard",
+            "key": "nos_switchboard",
+            "name": "nos_switchboard",
+            "label": "Nos. of Switchboard",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4
+          },
+          {
+            "_id": "trial_inspector_name",
+            "key": "trial_inspector_name",
+            "name": "trial_inspector_name",
+            "label": "Trial Inspector (Name)",
+            "type": "input",
+            "value": "",
+            "required": false,
+            "disabled": false,
+            "placeholder": " ",
+            "inputType": "text",
+            "colSpan": 4
+          }
+        ],
+        "tables_1": [],
+       "fields_2": [
+        {
+          "type":"label",
+          "value": "1. Test Equipment Used During Trials",
+          "colSpan": 12
+        },
+        {
+          "type":"label",
+          "value": "<span class=\" text-sm\">Select all applicable:</span>",
+          "colSpan": 12
+        },
+          {
+            "_id": "test_equipment",
+            "key": "test_equipment",
+            "name": "test_equipment",
+            "label": "Test Equipment",
+            "type": "multiselect",
+            "value": [],
+            "required": false,
+            "disabled": false,
+            "placeholder": "--Select--",
+            "colSpan": 6,
+            "isDynamic": false,
+            "options": [
+              {
+                "label": "Insulation Tester",
+                "value": "Insulation Tester"
+              },
+              {
+                "label": "Multimeter",
+                "value": "Multimeter"
+              },
+              {
+                "label": "Clamp Meter",
+                "value": "Clamp Meter"
+              },
+              {
+                "label": "Phase Sequence Meter",
+                "value": "Phase Sequence Meter"
+              },
+              {
+                "label": "Oscilloscope",
+                "value": "Oscilloscope"
+              }
+            ]
+          }
+        ],
+        "tables_2": [
+          {
+            "id": "2_date_time_table_1",
+            "sectionType": "simpleTable",
+            "title": "2. Date & Time",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Activity",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width": "30%"
+                },
+                {
+                  "label": "Date",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Time",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [
+              {
+                "key": "ser",
+                "label": "SNo.",
+                "type": "label",
+                "align": "center"
+              },
+              {
+                "key": "activity",
+                "label": "Activity",
+                "type": "label",
+                "align": "left"
+              },
+              {
+                "key": "date",
+                "label": "Date",
+                "type": "label",
+                "align": "left"
+              },
+              {
+                "key": "time",
+                "label": "Time",
+                "type": "label",
+                "align": "left"
+              }
+            ],
+            "rows": [
+              {
+                "_id": "2_date_time_table_1_row_1",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "2.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Intimation from Ship",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_3_dt_21_date",
+                    "key": "dt_21_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_1_cell_4_dt_21_time",
+                    "key": "dt_21_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "2_date_time_table_1_row_2",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "2.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Readiness indicated by Ship",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_3_dt_22_date",
+                    "key": "dt_22_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_2_cell_4_dt_22_time",
+                    "key": "dt_22_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "2_date_time_table_1_row_3",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "2.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Trials Inspector reported onboard Ship",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_3_dt_23_date",
+                    "key": "dt_23_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_3_cell_4_dt_23_time",
+                    "key": "dt_23_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "2_date_time_table_1_row_4",
+                "cells": [
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "2.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Trials completed",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_3_dt_24_date",
+                    "key": "dt_24_date",
+                    "type": "date",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "date",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  },
+                  {
+                    "_id": "2_date_time_table_1_row_4_cell_4_dt_24_time",
+                    "key": "dt_24_time",
+                    "type": "time",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "time",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "3_design_requirements_documentation_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "3. Design Requirements / Documentation",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Description",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width":"30%"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "3.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Manufacturer",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_1_cell_3_dr_manufacturer",
+                    "key": "dr_manufacturer",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": true,
+                    "prefillSource": "equipment.manufacturer_name",
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "3.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Make & Model",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_2_cell_3_dr_make_model",
+                    "key": "dr_make_model",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "3.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Equipment Serial Number",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_3_cell_3_dr_serial_no",
+                    "key": "dr_serial_no",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": true,
+                    "prefillSource": "equipment.serial_no",
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "3.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "CMMS Code",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_4_cell_3_dr_cmms_code",
+                    "key": "dr_cmms_code",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": true,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": true,
+                    "prefillSource": "equipment.sfd_code",
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "3.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "GRAQ",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_5_cell_3_dr_graq",
+                    "key": "dr_graq",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "3.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "ATP",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_6_cell_3_dr_atp",
+                    "key": "dr_atp",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "3.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Board Proceedings",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_7_cell_3_dr_board_proc",
+                    "key": "dr_board_proc",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "3.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "FATs Report",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_8_cell_3_dr_fats_report",
+                    "key": "dr_fats_report",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Documentation",
+                    "colspan": 2,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "System Description",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_10_cell_3_dr_391",
+                    "key": "dr_391",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Circuit Diagrams",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_11_cell_3_dr_392",
+                    "key": "dr_392",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Maintenance Manuals",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_12_cell_3_dr_393",
+                    "key": "dr_393",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_13",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_13_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_13_cell_2_static",
+                    "type": "label",
+                    "value": "Technical Specifications",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_13_cell_3_dr_394",
+                    "key": "dr_394",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_14_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_14_cell_2_static",
+                    "type": "label",
+                    "value": "Installation Specifications",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_14_cell_3_dr_395",
+                    "key": "dr_395",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_15",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_15_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_15_cell_2_static",
+                    "type": "label",
+                    "value": "Hardware User Manual",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_15_cell_3_dr_396",
+                    "key": "dr_396",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_16",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_16_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_16_cell_2_static",
+                    "type": "label",
+                    "value": "System User Manual",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_16_cell_3_dr_397",
+                    "key": "dr_397",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_17",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_17_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_17_cell_2_static",
+                    "type": "label",
+                    "value": "Functional Specifications",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_17_cell_3_dr_398",
+                    "key": "dr_398",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_18",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_18_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_18_cell_2_static",
+                    "type": "label",
+                    "value": "Software Requirement Specifications (SRS)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_18_cell_3_dr_399",
+                    "key": "dr_399",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_19",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_19_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_19_cell_2_static",
+                    "type": "label",
+                    "value": "Interface Design Documents (IDD)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_19_cell_3_dr_3910",
+                    "key": "dr_3910",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_20",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_20_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.11",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_20_cell_2_static",
+                    "type": "label",
+                    "value": "Design Documents",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_20_cell_3_dr_3911",
+                    "key": "dr_3911",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_21",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_21_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.12",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_21_cell_2_static",
+                    "type": "label",
+                    "value": "Data Flow Diagrams",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_21_cell_3_dr_3912",
+                    "key": "dr_3912",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_22",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_22_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.13",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_22_cell_2_static",
+                    "type": "label",
+                    "value": "Details of Operating System used",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_22_cell_3_dr_3913",
+                    "key": "dr_3913",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_23",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_23_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.14",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_23_cell_2_static",
+                    "type": "label",
+                    "value": "Operating Manuals",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_23_cell_3_dr_3914",
+                    "key": "dr_3914",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_24",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_24_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.15",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_24_cell_2_static",
+                    "type": "label",
+                    "value": "Application & Communication S/W",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_24_cell_3_dr_3915",
+                    "key": "dr_3915",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_25",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_25_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.16",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_25_cell_2_static",
+                    "type": "label",
+                    "value": "HATs & SATs Documents",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_25_cell_3_dr_3916",
+                    "key": "dr_3916",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_26",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_26_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.17",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_26_cell_2_static",
+                    "type": "label",
+                    "value": "System Maintenance & Diagnostics",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_26_cell_3_dr_3917",
+                    "key": "dr_3917",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_27",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_27_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.18",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_27_cell_2_static",
+                    "type": "label",
+                    "value": "List of onboard and B&D spares",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_27_cell_3_dr_3918",
+                    "key": "dr_3918",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "3_design_requirements_documentation_matrix_1_row_28",
+                "cells": [
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_28_cell_1_static",
+                    "type": "serial",
+                    "value": "3.9.19",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_28_cell_2_static",
+                    "type": "label",
+                    "value": "Source code, Flow Charts / Pseudo Charts",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "3_design_requirements_documentation_matrix_1_row_28_cell_3_dr_3919",
+                    "key": "dr_3919",
+                    "type": "input",
+                    "value": "",
+                    "rows": null,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": "text",
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "4_installation_checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "4. Installation Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Reference",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width" :"30%"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width" :"30%"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "4_installation_checks_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "4.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Section VIII Para 0811 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_3_static",
+                    "type": "label",
+                    "value": "Check the earthing of equipment",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_1_cell_4_ic_41_rmk",
+                    "key": "ic_41_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "4.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Section VIII Para 0812-0814 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_3_static",
+                    "type": "label",
+                    "value": "Check the proper termination of cables",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_2_cell_4_ic_42_rmk",
+                    "key": "ic_42_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "4.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0638 (a) of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_3_static",
+                    "type": "label",
+                    "value": "Check the clearance between terminals",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_3_cell_4_ic_43_rmk",
+                    "key": "ic_43_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "4.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0645-0648 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_3_static",
+                    "type": "label",
+                    "value": "Check the fuse holders and fuses are fitted as per rating inside the panel.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_4_cell_4_ic_44_rmk",
+                    "key": "ic_44_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "4.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0639-0643 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_3_static",
+                    "type": "label",
+                    "value": "Check the lifting & locking arrangements",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_5_cell_4_ic_45_rmk",
+                    "key": "ic_45_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "4.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 0644 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_3_static",
+                    "type": "label",
+                    "value": "Check the colour coding marking of bus-bars, cables and associated components.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_6_cell_4_ic_46_rmk",
+                    "key": "ic_46_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "4.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1019",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_3_static",
+                    "type": "label",
+                    "value": "Check the Shock Mounts and its fitment",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_7_cell_4_ic_47_rmk",
+                    "key": "ic_47_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "4.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 633 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_3_static",
+                    "type": "label",
+                    "value": "Check Ventilation arrangement of the compartment",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_8_cell_4_ic_48_rmk",
+                    "key": "ic_48_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "4.9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Section X Para 1009-1011 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_3_static",
+                    "type": "label",
+                    "value": "Checks status of Indication lamps",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_9_cell_4_ic_49_rmk",
+                    "key": "ic_49_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "4.10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Section VI Para 652 of EED-Q-264",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_10_cell_3_static",
+                    "type": "label",
+                    "value": "Check Low Fire Hazard (LFH) cables / wires are used in the APMS console and Switchboard for control wiring except for PLC wiring / communication wiring",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_10_cell_4_ic_410_rmk",
+                    "key": "ic_410_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "4_installation_checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "4.11",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "As per TD / Operating Instructions",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_cell_3_static",
+                    "type": "label",
+                    "value": "Check insulation of system devices with respect to earth as per TD / Operating instructions",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "4_installation_checks_matrix_1_row_11_cell_4_ic_411_rmk",
+                    "key": "ic_411_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          },
+          {
+            "id": "5_operational_checks_matrix_1",
+            "sectionType": "matrixTable",
+            "title": "5. Operational Checks",
+            "topHeaders": [
+              [
+                {
+                  "label": "SNo.",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                },
+                {
+                  "label": "Reference",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width" :"20%"
+                },
+                {
+                  "label": "Checks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center",
+                  "width" :"40%"
+                },
+                {
+                  "label": "Remarks",
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "align": "center"
+                }
+              ]
+            ],
+            "columns": [],
+            "rows": [
+              {
+                "_id": "5_operational_checks_matrix_1_row_1",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_1_cell_1_static",
+                    "type": "serial",
+                    "value": "5.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_1_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 1 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_1_cell_3_static",
+                    "type": "label",
+                    "value": "Check Switchboard layout in APMS. It should be as per approved GRAQ/ATP/BPs.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_1_cell_4_oc_51_rmk",
+                    "key": "oc_51_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_2",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_1_static",
+                    "type": "serial",
+                    "value": "5.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 26 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_3_static",
+                    "type": "label",
+                    "value": "Monitor the PGD configuration: The APMS shall monitor and clearly indicate the following configuration information: <br>5.2.1 Close Ring / Open Ring <br>5.2.2 Fwd / Aft split <br>5.2.3 Port / Stbd split 5.2.4 <br>Island Mode",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_2_cell_4_oc_52_rmk",
+                    "key": "oc_52_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_3",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_1_static",
+                    "type": "serial",
+                    "value": "5.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 17 and Chapter-IV Para 6 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_3_static",
+                    "type": "label",
+                    "value": "Check MIMIC Pages on APMS Console. The system should represent the entire network on Multi-Function Consoles (MFCs) using hierarchical mimic diagrams.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_3_cell_4_oc_53_rmk",
+                    "key": "oc_53_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_4",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_1_static",
+                    "type": "serial",
+                    "value": "5.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 4 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_3_static",
+                    "type": "label",
+                    "value": "Check Power Management Modes of APMS System. Auto Mode, Assisted Mode, Manual Mode and Training Mode.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_4_cell_4_oc_54_rmk",
+                    "key": "oc_54_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_5",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_1_static",
+                    "type": "serial",
+                    "value": "5.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 11 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_3_static",
+                    "type": "label",
+                    "value": "Check Maximum Load Setting for Generators. The software should permit change in maximum load limit for the individual generator.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_5_cell_4_oc_55_rmk",
+                    "key": "oc_55_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_6",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_1_static",
+                    "type": "serial",
+                    "value": "5.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 12 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_3_static",
+                    "type": "label",
+                    "value": "Check Central Control and Switching. The system should permit the following: <br> 5.6.1 Switching ON/OFF any of the breakers of the main switchboards from the control consoles (Fwd/Aft Switchboard). <br>5.6.2 Switching ON/OFF of main EDC breakers (if exists) from control consoles that would be located in main switchboards. <br>5.6.3 Remote switching ON/OFF of generators from the console provided in the MCR. <br>5.6.4 Monitoring the status of individual MCCBs of the EDCs (if exists) from the control consoles. <br> (List of breakers as per class of ship, all breakers to be tested for remote operation)",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_6_cell_4_oc_56_rmk",
+                    "key": "oc_56_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_7",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_1_static",
+                    "type": "serial",
+                    "value": "5.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 14 and Chapter IV Para 12 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_3_static",
+                    "type": "label",
+                    "value": "Check Failure Alarms and Indications on APMS Console. The system should provide extensive audio/visual failure alarms and indications to ensure safe operation.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_7_cell_4_oc_57_rmk",
+                    "key": "oc_57_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_8",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_1_static",
+                    "type": "serial",
+                    "value": "5.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 13 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_3_static",
+                    "type": "label",
+                    "value": "Check Feasibility of Parallel Operation with Shore Supply. Provision should exist to monitor the parameters of the shore supply so that changeover takes place smoothly and safely.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_8_cell_4_oc_58_rmk",
+                    "key": "oc_58_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_9",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_1_static",
+                    "type": "serial",
+                    "value": "5.9",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 15 and Chapter IV Para 13, & 14 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_3_static",
+                    "type": "label",
+                    "value": "Check Data Logging & Data Archiving Facility Available in APMS. The system should have the facility of data logging and archiving facility for APMS and Interface systems for a minimum of 30 days.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_9_cell_4_oc_59_rmk",
+                    "key": "oc_59_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_10",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_10_cell_1_static",
+                    "type": "serial",
+                    "value": "5.10",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_10_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 23 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_10_cell_3_static",
+                    "type": "label",
+                    "value": "Check Post Failure Review Facility Available on APMS Console. The system should be able to undertake Post-Disturbance-Review to detect exact reasons of failure in an interconnected system.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_10_cell_4_oc_510_rmk",
+                    "key": "oc_510_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_11",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_11_cell_1_static",
+                    "type": "serial",
+                    "value": "5.11",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_11_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 22 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_11_cell_3_static",
+                    "type": "label",
+                    "value": "Check Onboard Training System (OBTS) on APMS Console. The System should have a mode of operation that will enable training for operator and maintainer on the system. In this mode of operation, the ship's machinery will not be controlled by the functions that are executed during the training.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_11_cell_4_oc_511_rmk",
+                    "key": "oc_511_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_12",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_12_cell_1_static",
+                    "type": "serial",
+                    "value": "5.12",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_12_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 25 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_12_cell_3_static",
+                    "type": "label",
+                    "value": "Check Generator Parameter Monitoring in APMS Console. Following parameters of the generator are to be monitored for safe operation of PGD as a system:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_12_cell_4_static",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              
+              {
+                "_id": "5_operational_checks_matrix_1_row_14",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_14_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_14_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 3-29 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 9,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_14_cell_3_static",
+                    "type": "label",
+                    "value": "Check Auto Mode of APMS System. The system would carry out all functions automatically without human intervention. Following checks to be performed in Auto Mode:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_14_cell_4_static",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_15",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_15_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_15_cell_3_static",
+                    "type": "label",
+                    "value": "Take control of APMS in Auto mode.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_15_cell_4_oc_5131_rmk",
+                    "key": "oc_5131_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_16",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_16_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_16_cell_3_static",
+                    "type": "label",
+                    "value": "Check generator priority selection as per requirement/availability.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_16_cell_4_oc_5132_rmk",
+                    "key": "oc_5132_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_17",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_17_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_17_cell_3_static",
+                    "type": "label",
+                    "value": "Check Auto load dependent Start/Stop of DGs. <br><br> 5.13.3.1 If Load > 80% (for 2.5 secs) on running DA \u2013 Priority 1 generator should automatically start and taken on load. In case, priority 1 generator fails to start, priority 2 generator should start and taken on load. In case, priority 2 generator fails to start, then priority 3 generator should start and taken on load. If priority 3 generator fails to start, then next priority generator (if available) should start and taken on load. <br><br> 5.13.3.2 If Load < 25% (for 15 minutes) on running DA, priority-based Generator should be off loaded after transferring load to the running generators. The generator will however be required to be stopped manually by the operator.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_17_cell_4_oc_5133_rmk",
+                    "key": "oc_5133_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_18",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_18_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_18_cell_3_static",
+                    "type": "label",
+                    "value": "Check synchronization of Generators. The system should automatically parallel the generators and effect the load transfer.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_18_cell_4_oc_5134_rmk",
+                    "key": "oc_5134_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_19",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_19_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.5",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_19_cell_3_static",
+                    "type": "label",
+                    "value": "Check Active/Reactive Load Sharing during parallel operation. System should ensure proportionate active/reactive load sharing by the running generators when in continuous parallel mode operation.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_19_cell_4_oc_5135_rmk",
+                    "key": "oc_5135_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_20",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_20_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.6",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                                      "_id": "5_operational_checks_matrix_1_row_20_cell_3_static",
+                                      "type": "label",
+                                      "value": "Check Black Out Handling operation of APMS: On detecting the loss of an alternator or complete loss of shore supply, APMS shall take following actions:<br> <br> 5.13.6.1 Ensure that all the switchboards are in Island operation.<br><br> 5.13.6.2 Start next priority Alternator and connect the respective busbar.<br><br> 5.13.6.3 Once Alternator start operation is complete, evaluate the system configuration and re-establish the configuration in effect before black out.<br><br> 5.13.6.4 If the configuration cannot be established then provide a suitable prompt to the operator.<br><br><div class=\"bg-yellow-50 px-3 py-2 text-black\"><strong class=\"text-black\">Note: This check will be undertaken for all generators by selecting priority 1 in sequential manner and other generator may be used as running generator.</strong></div>",
+                                      "colspan": 1,
+                                      "rowspan": 1,
+                                      "align": "left"
+                                    },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_20_cell_4_oc_5136_rmk",
+                    "key": "oc_5136_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              
+              {
+                "_id": "5_operational_checks_matrix_1_row_21",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_21_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.7",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_21_cell_3_static",
+                    "type": "label",
+                    "value": "Check Preferential/Automatic load shedding: (In case failure of one running generator leading to overloading another running generator or the load exceeds on the standalone generator) <br><br> 5.13.7.1 Adequate audio/visual warning should be given prior to load shedding. <br><br> 5.13.7.2 If the running generator is overloaded and no standby generator is nominated, the system should resort to automatic load shedding as per pre-defined criteria/priority selection of breakers.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_21_cell_4_oc_5137_rmk",
+                    "key": "oc_5137_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_22",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_22_cell_1_static",
+                    "type": "serial",
+                    "value": "5.13.8",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                                    {
+                    "_id": "5_operational_checks_matrix_1_row_22_cell_3_static",
+                    "type": "label",
+                    "value": "Check Control transfer from FWD Console to AFT Console and vice versa.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_22_cell_4_oc_5138_rmk",
+                    "key": "oc_5138_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_23",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_23_cell_1_static",
+                    "type": "serial",
+                    "value": "5.14",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_23_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 3-29 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 5,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_23_cell_3_static",
+                    "type": "label",
+                    "value": "Check Auto Assisted (Semi Auto) Mode of APMS system. All actions are required to be carried out by the operator as prompted by the system. Following checks to be performed in Auto Assisted Mode:",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_23_cell_4_oc_514_rmk",
+                    "key": "oc_514_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_24",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_24_cell_1_static",
+                    "type": "serial",
+                    "value": "5.14.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_24_cell_3_static",
+                    "type": "label",
+                    "value": "Take control of APMS in Auto-Assisted mode.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_24_cell_4_oc_5141_rmk",
+                    "key": "oc_5141_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_25",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_25_cell_1_static",
+                    "type": "serial",
+                    "value": "5.14.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_25_cell_3_static",
+                    "type": "label",
+                    "value": "Select generator priority selection as per requirement/availability.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_25_cell_4_oc_5142_rmk",
+                    "key": "oc_5142_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_26",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_26_cell_1_static",
+                    "type": "serial",
+                    "value": "5.14.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_26_cell_3_static",
+                    "type": "label",
+                    "value": "Check Remote load dependent Start/Stop of DGs. <br><br> 5.14.3.1 If Load > 80% (for 2.5 secs) on running DA \u2013 the system should initiate audio and visual alarms so that the operator can take necessary action to start standby generator. <br><br> 5.14.3.2 If Load \u2264 25% (for 15 minutes) on running DA \u2013 The system should give necessary audio/visual alarms to alert the operator to off load and shut down the under loaded generator. However, if the generators are running in parallel, the system should ensure their equal loading.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_26_cell_4_oc_5143_rmk",
+                    "key": "oc_5143_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_27",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_27_cell_1_static",
+                    "type": "serial",
+                    "value": "5.14.4",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_27_cell_3_static",
+                    "type": "label",
+                    "value": "Check synchronization of Generators. The system should automatically synchronize the generators and prompt the operator for closure of the supply breaker.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_27_cell_4_oc_5144_rmk",
+                    "key": "oc_5144_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_28",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_28_cell_1_static",
+                    "type": "serial",
+                    "value": "5.15.1",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_28_cell_2_static",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_28_cell_3_static",
+                    "type": "label",
+                    "value": "Check Active/Reactive Load Sharing during parallel operation. System should ensure proportionate active/reactive load sharing by the running generators when in continuous parallel mode operation.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_28_cell_4_oc_5151_rmk",
+                    "key": "oc_5151_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_29",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_29_cell_1_static",
+                    "type": "serial",
+                    "value": "5.15.2",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_29_cell_2_static",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_29_cell_3_static",
+                    "type": "label",
+                    "value": "Check Black Out Handling operation of APMS. On detecting the loss of an alternator or complete loss of shore supply, APMS shall take following actions: <br><br> 5.15.2.1 Ensure that all the switchboards are in Island operation. <br><br> 5.15.2.2 Shows popup window on APMS console to Start next priority Generator and connect the respective busbar by operator. <br><br> 5.15.2.3 Once Alternator start operation is complete, evaluate configuration and re-establish previous configuration. <br><br> 5.15.2.4 If configuration cannot be established then provide a suitable prompt to the operator.<br><br><div class=\" bg-yellow-50 px-3 py-2 text-black\"><strong class=\"text-black\">Note: This check will be undertaken for all generators by selecting priority 1 in sequential manner and other generator may be used as running generator.</strong></div> <br><br> 5.15.2.5 Check preferential load shedding (in case failure of one running generator leading to overloading another running generator or the load exceeds on the standalone generator). <br><br> 5.15.2.6 Adequate audio/visual warning should be given prior to load shedding. <br><br> 5.15.2.7 System should recommend loads to be shed as per pre-defined criteria/priority selection of breakers.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_29_cell_4_oc_5152_rmk",
+                    "key": "oc_5152_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_30",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_30_cell_1_static",
+                    "type": "serial",
+                    "value": "5.15.3",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_30_cell_2_static",
+                    "type": "label",
+                    "value": "",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_30_cell_3_static",
+                    "type": "label",
+                    "value": "Check Control transfer from FWD Console to AFT Console and vice versa.",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_30_cell_4_oc_5153_rmk",
+                    "key": "oc_5153_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              },
+              {
+                "_id": "5_operational_checks_matrix_1_row_31",
+                "cells": [
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_31_cell_1_static",
+                    "type": "serial",
+                    "value": "5.16",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "center"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_31_cell_2_static",
+                    "type": "label",
+                    "value": "Chapter-III Para 31 of EED-50-48",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_31_cell_3_static",
+                    "type": "label",
+                    "value": "Check UPS for APMS System. <br><br> 5.16.1 Must be provided for all MFCs, Control units and interfacing <br><br>5.16.2 Backup \u2014 Minimum 30 minutes",
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left"
+                  },
+                  {
+                    "_id": "5_operational_checks_matrix_1_row_31_cell_4_oc_516_rmk",
+                    "key": "oc_516_rmk",
+                    "type": "textarea",
+                    "value": "",
+                    "rows": 1,
+                    "required": false,
+                    "disabled": false,
+                    "placeholder": "",
+                    "inputType": null,
+                    "options": null,
+                    "colspan": 1,
+                    "rowspan": 1,
+                    "align": "left",
+                    "isDynamic": false,
+                    "lookupKey": null,
+                    "prefill": null,
+                    "prefillSource": null,
+                    "lockAfterPrefill": null,
+                    "hiddenKey": null,
+                    "displayKey": null
+                  }
+                ]
+              }
+            ],
+            "showRowActions": false,
+            "minRows": 1
+          }
+        ]
+      }
+    }
+  ]
+}

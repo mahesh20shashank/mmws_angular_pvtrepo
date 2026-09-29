@@ -1,0 +1,564 @@
+<app-form-card #formCard [title]="'POST REFIT EMI/EMC CHECKS REPORT'" [smallTitle]="'PART B – INDUCTION SURVEY REPORT'"
+  [showBackButton]="true" [showPreviousReport]="true" [showPaginator]="true" [previewMode]="true" [pageScroll]="false">
+  <div previewHeader class="flex items-center gap-2 overflow-x-auto flex-nowrap min-w-0">
+    <button *ngFor="
+        let tab of headerEquipmentTabs;
+        trackBy: trackByEquipment
+      " type="button" (click)="setActiveTab(tab)"
+      class="pt-glass-form-tab relative shrink-0 overflow-hidden  px-2 text-center"
+      [class.pt-glass-form-tab--active]="
+        isSameEquipment(activeHeaderEquipment, tab)
+      " [attr.title]="
+        (tab?.name || 'Equipment') +
+        ' - ' +
+        (tab?.nomenclature || tab?.equipment_nomenclature || '-') +
+        ' - ' +
+        (tab?.serial_no || tab?.serial_number || '-')
+      " [attr.aria-label]="
+        (tab?.name || 'Equipment') +
+        ' - ' +
+        (tab?.nomenclature || tab?.equipment_nomenclature || '-') +
+        ' - ' +
+        (tab?.serial_no || tab?.serial_number || '-')
+      ">
+      <span
+        class="relative block max-w-[195px] overflow-hidden text-ellipsis whitespace-nowrap pt-2 text-[15px] font-bold tracking-wide">
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || tab?.name || 'Equipment' }}
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="form" class="p-0">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+      <h1 class="text-sm text-[var(--text-muted)] ">Part B – Induction Survey Report</h1>
+    </div>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+      <app-input class="w-full" label="Ship" formControlName="shipDisplay" placeholder="Enter Ship Name"
+        [readonly]="true"></app-input>
+    </div>
+
+    <!-- ============================================================
+         TABLE 1: Inter-System Interference Checks
+         ============================================================ -->
+    <app-parameter-card serial="" title="Inter-System Interference Checks">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Potential source for EMI</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Potential victim for EMI</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Action</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="interferenceChecks">
+              <tr *ngFor="let row of interferenceChecksArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="potential_source" [options]="systemsOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="potential_victim" [options]="systemsOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="remarks" placeholder="Enter remarks"></app-input>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === interferenceChecksArray.length - 1" type="button"
+                      (click)="addInterferenceRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="i >= 1" type="button" (click)="removeInterferenceRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 2: VSWR Checks
+         ============================================================ -->
+    <app-parameter-card serial="" title="VSWR Checks">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">System</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Observations</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="vswrChecks">
+              <tr *ngFor="let row of vswrChecksArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="system" [options]="systemsOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="observations" placeholder="Enter observations"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="remarks" placeholder="Enter remarks"></app-input>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === vswrChecksArray.length - 1" type="button" (click)="addVswrRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="vswrChecksArray.length > 1" type="button" (click)="removeVswrRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 3: Visual Survey Observation
+         ============================================================ -->
+    <app-parameter-card serial="" title="Visual Survey Observation">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Equipment</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Location</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Observation</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="visualSurvey">
+              <tr *ngFor="let row of visualSurveyArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="equipment" [options]="equipmentOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="location" placeholder="Enter location"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="observation" placeholder="Enter observation"></app-input>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === visualSurveyArray.length - 1" type="button" (click)="addVisualSurveyRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="visualSurveyArray.length > 1" type="button" (click)="removeVisualSurveyRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 4: Supporting Documents Upload
+         ============================================================ -->
+    <app-parameter-card serial="" title="Survey Photographs">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">File Name</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Upload File</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="fileUploads">
+              <tr *ngFor="let row of fileUploadsArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="file_name" placeholder="Enter file name"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-file-upload formControlName="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"></app-file-upload>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === fileUploadsArray.length - 1" type="button" (click)="addFileUploadRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="fileUploadsArray.length > 1" type="button" (click)="removeFileUploadRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 5: Grounding Discontinuity Checks
+         ============================================================ -->
+    <app-parameter-card serial="" title="Grounding Discontinuity Checks (Acceptable value &lt; 10 milli Ω)">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Equipment</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Compartment</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Resistance (in Ohm)</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="groundingChecks">
+              <tr *ngFor="let row of groundingChecksArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="equipment" [options]="equipmentOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="compt" [options]="compartmentOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="resistance" type="number" step="0.01"
+                    placeholder="Enter resistance"></app-input>
+                  <p *ngIf="groundingChecksArray.at(i).get('resistance')?.hasError('max') && groundingChecksArray.at(i).get('resistance')?.touched"
+                    class="text-red-500 text-[10px] mt-1">
+                    Value cannot exceed 10 mΩ
+                  </p>
+                  <p *ngIf="groundingChecksArray.at(i).get('resistance')?.hasError('min') && groundingChecksArray.at(i).get('resistance')?.touched"
+                    class="text-red-500 text-[10px] mt-1">
+                    Value cannot be negative
+                  </p>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="remarks" placeholder="Enter remarks"></app-input>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === groundingChecksArray.length - 1" type="button" (click)="addGroundingCheckRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="groundingChecksArray.length > 1" type="button" (click)="removeGroundingCheckRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 6: RADHAZ Measurement
+         ============================================================ -->
+    <app-parameter-card serial="" title="RADHAZ Measurement">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Location</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">E-Field Values (V/m)</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="radhazMeasurement">
+              <tr *ngFor="let row of radhazMeasurementArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="location" placeholder="Enter location"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="efield_value" type="number" placeholder="Enter E-Field value"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="remarks" placeholder="Enter remarks"></app-input>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === radhazMeasurementArray.length - 1" type="button" (click)="addRadhazRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="radhazMeasurementArray.length > 1" type="button" (click)="removeRadhazRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 7: Shielding Effectiveness (SE) Checks - CAT 'A' Compartments
+         ============================================================ -->
+    <app-parameter-card serial="" title="Shielding Effectiveness (SE) Checks - CAT 'A' Compartments">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Compartment</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="seCompartments">
+              <tr *ngFor="let row of seCompartmentsArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-select formControlName="compartment" [options]="compartmentOptions" placeholder="-- Select --"
+                    class="w-full" />
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="remarks" placeholder="Enter remarks"></app-input>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === seCompartmentsArray.length - 1" type="button" (click)="addSeCompartmentRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="seCompartmentsArray.length > 1" type="button" (click)="removeSeCompartmentRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 8: Shielding Effectiveness (SE) Checks Frequency Table
+         ============================================================ -->
+    <app-parameter-card serial="" title="Shielding Effectiveness (SE) Checks Frequency Table">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th rowspan="3" class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th colspan="2" class="border border-white/15 px-3 py-2 align-middle text-white/85">Tx</th>
+                <th colspan="2" class="border border-white/15 px-3 py-2 align-middle text-white/85">Rx</th>
+                <th rowspan="3" class="whitespace-nowrap border border-white/15 px-3 py-2 align-middle text-white/85">Difference dB (SE)</th>
+                <th rowspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">Remarks</th>
+              </tr>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="whitespace-nowrap border border-white/15 px-3 py-2 align-middle text-white/85">Signal Generator</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85"></th>
+                <th colspan="2" class="border border-white/15 px-3 py-2 align-middle text-white/85">Spectrum Analyzer</th>
+              </tr>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Freq</th>
+                <th class="whitespace-nowrap border border-white/15 px-3 py-2 align-middle text-white/85">Power Level (dBm)</th>
+                <th class="whitespace-nowrap border border-white/15 px-3 py-2 align-middle text-white/85">Signal Levels (Open door) (dBm)</th>
+                <th class="whitespace-nowrap border border-white/15 px-3 py-2 align-middle text-white/85">Signal Levels (Close door) (dBm)</th>
+              </tr>
+            </thead>
+
+            <tbody formArrayName="seFrequencyGroups">
+              <ng-container *ngFor="let group of seFrequencyGroupsArray.controls; let g = index" [formGroupName]="g">
+                <!-- Compartment label row -->
+                <tr>
+                  <td colspan="7" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                    {{ group.get('compartmentLabel')?.value }}
+                  </td>
+                </tr>
+
+                <ng-container formArrayName="rows">
+                  <tr *ngFor="let row of getSeFrequencyRows(g).controls; let i = index" [formGroupName]="i">
+                    <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                    <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ row.get('freq')?.value }}</td>
+                    <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                      <app-input formControlName="power_level" type="number" step="0.01"
+                        placeholder="Power level"></app-input>
+                    </td>
+                    <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                      <app-input formControlName="signal_open" type="number" step="0.01"
+                        placeholder="Open door"></app-input>
+                    </td>
+                    <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                      <app-input formControlName="signal_close" type="number" step="0.01"
+                        placeholder="Close door"></app-input>
+                    </td>
+                    <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                      <app-input formControlName="difference_db" [readonly]="true"></app-input>
+                    </td>
+                    <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                      <app-input formControlName="remarks" placeholder="Enter remarks"></app-input>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 9: EMI Matrix of Communication Equipment
+         ============================================================ -->
+    <app-parameter-card serial="" title="EMI Matrix of Communication Equipment">
+        <div class="my-3 flex flex-wrap items-center gap-8">
+          <!-- Monitor Equipment -->
+          <div class="flex items-center gap-3">
+            <label class="whitespace-nowrap text-sm font-medium">
+              Select No. Of Monitor Equipment
+            </label>
+
+            <app-input class="count-input" label="" type="number" formControlName="monitorEquipmentCount" [min]="1"
+              [max]="50" placeholder="0"></app-input>
+          </div>
+
+          <!-- Active Equipment -->
+          <div class="flex items-center gap-3">
+            <label class="whitespace-nowrap text-sm font-medium">
+              Select No. Of Active Equipment
+            </label>
+
+            <app-input class="count-input" label="" type="number" formControlName="activeEquipmentCount" [min]="1"
+              [max]="50" placeholder="0"></app-input>
+          </div>
+        </div>
+        <div class="nec-table-scroll">
+          <table class="emi-matrix-table w-full" [style.minWidth.px]="160 + (emiMatrixHeadersArray.length * 140)">
+            <thead>
+              <tr>
+                <!-- Diagonal corner header -->
+                <th class="diagonal-header">
+                  <span class="diag-label-top pt-glass-text-muted">Monitor Equipment</span>
+                  <svg class="diag-line" viewBox="0 0 160 70" preserveAspectRatio="none">
+                    <line x1="0" y1="0" x2="160" y2="70" stroke="#475569" stroke-width="1" />
+                  </svg>
+                  <span class="diag-label-bottom pt-glass-text-muted">Active Equipment</span>
+                </th>
+
+                <!-- Column headers -->
+                <th *ngFor="let col of emiMatrixHeadersArray.controls; let c = index" class="col-header-cell">
+                  <app-select [formControl]="getEmiMatrixHeaderControl(c)" [options]="equipmentOptions"
+                    [searchable]="true" placeholder="-- Select --" class="w-full" />
+                </th>
+              </tr>
+            </thead>
+
+            <tbody formArrayName="emiMatrixRows">
+              <tr *ngFor="let row of emiMatrixRowsArray.controls; let r = index" [formGroupName]="r">
+                <td class="row-header-cell">
+                  <app-select formControlName="activeEquipment" [options]="equipmentOptions" [searchable]="true"
+                    placeholder="-- Select --" class="w-full" />
+                </td>
+
+                <ng-container *ngFor="
+    let col of emiMatrixHeadersArray.controls;
+    let c = index
+  ">
+                  <td class="matrix-cell text-center">
+                    <app-radio-group [name]="'emi-cell-' + r + '-' + c" [options]="matrixCellOptions" [required]="true"
+                      [formControl]="getEmiMatrixCellControl(r, c)"></app-radio-group>
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <!-- ============================================================
+         TABLE 10: Spectrum of Radar and Communication Set
+         ============================================================ -->
+    <app-parameter-card serial="" title="Spectrum of Radar and Communication Set">
+        <div class="nec-table-scroll">
+          <table class="nec-table w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">
+                <th class="w-14 border border-white/15 px-3 py-2 align-middle text-white/85">SNo.</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">File Name</th>
+                <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Upload File</th>
+                <th class="w-20 border border-white/15 px-3 py-2 align-middle text-white/85">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="spectrumFiles">
+              <tr *ngFor="let row of spectrumFilesArray.controls; let i = index" [formGroupName]="i">
+                <td class="text-center nec-row-details border border-white/15 px-3 py-2 align-middle text-white/85">{{ i + 1 }}</td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-input formControlName="file_name" placeholder="Enter file name"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <app-file-upload formControlName="file"
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"></app-file-upload>
+                </td>
+                <td class="text-center border border-white/15 px-3 py-2 align-middle text-white/85">
+                  <div class="flex items-center justify-center gap-1">
+                    <button *ngIf="i === spectrumFilesArray.length - 1" type="button" (click)="addSpectrumFileRow()"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-colors hover:bg-emerald-600 hover:text-white"
+                      title="Add row">+</button>
+                    <button *ngIf="spectrumFilesArray.length > 1" type="button" (click)="removeSpectrumFileRow(i)"
+                      class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-100 text-rose-700 border border-rose-200 font-bold transition-colors hover:bg-rose-600 hover:text-white"
+                      title="Remove row">−</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-parameter-card>
+
+    <app-review-table [equipmentId]="activeEquipmentId"></app-review-table>
+  </form>
+ <div formFooter class="flex items-center justify-end gap-1.5">
+    <button
+      *ngIf="canShowSaveDraft"
+      type="button"
+      class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="draftLoading"
+      (click)="handleSave('draft')"
+    >
+      Save Draft
+    </button>
+    <button
+      *ngIf="canEditForm"
+      type="button"
+      class="form-card-footer-btn pt-glass-table__control inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="saveLoading"
+      (click)="handleSave('save')"
+    >
+      Save
+    </button>
+    <button
+      *ngIf="canEditForm"
+      type="button"
+      class="form-card-footer-btn pt-glass-btn-primary inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
+      [disabled]="submitLoading"
+      (click)="handleSave('submit')"
+    >
+      Submit
+    </button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow *ngIf="showApprovalWorkflowPopup" [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''" [context]="formApiService.context" [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

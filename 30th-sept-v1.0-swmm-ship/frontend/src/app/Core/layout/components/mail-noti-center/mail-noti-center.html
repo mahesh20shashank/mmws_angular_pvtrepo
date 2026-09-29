@@ -1,0 +1,161 @@
+<div class="popup-glass overflow-hidden"  [style.width]="type === 'profile' ? '120px' : '360px'">
+
+    @if(type !== "profile"){
+      <div class="mail-wrapper">
+
+    <!-- HEADER -->
+    <div class="header-row">
+
+      <div class="title flex items-center gap-2">
+        <!-- Notification Icon -->
+        @if (type === 'notification') { <span>
+          <app-icon name="bell" [size]="20" [strokeWidth]="2" variant="inherit" />
+        </span> }
+        <!-- Title -->
+        <span>
+          {{ type === 'notification' ? 'Notification Center' : 'Mail Center' }}
+        </span>
+
+      </div>
+      @if (type === 'notification') {
+        <app-button class="see-all-btn" (click)="markAllRead()" [disabled]="!hasUnread()">
+          Mark all read
+        </app-button>
+      } @else {
+        <app-button class="see-all-btn" (click)="seeAll()">
+          See All
+        </app-button>
+      }
+    </div>
+
+    @if(type === "notification"){
+      <hr>
+    }
+
+    <!-- TABS -->
+    <!-- // switch tabs accroding to the type change  for mail show Inbox and sent  -->
+    @if(type === "mail"){
+    <div class="tabs-wrapper">
+      <app-button class="tab-btn" [class.active]="activeTab() === 'inbox'" (click)="activeTab.set('inbox')">
+        Inbox
+      </app-button>
+
+      <app-button class="tab-btn" [class.active]="activeTab() === 'sent'" (click)="activeTab.set('sent')">
+        Outbox
+      </app-button>
+
+    </div>
+    }
+    @if(type === 'notification'){
+
+<div class="notification-tabs mt-3">
+
+  <app-button
+    type="button"
+    class="notification-tab"
+    [class.active]="activeNotificationTab() === 'today'"
+    (click)="activeNotificationTab.set('today')"
+  >
+    <div class="notification-tab-label">
+      Today
+    </div>
+  </app-button>
+
+  <app-button
+    class="notification-tab"
+    [class.active]="activeNotificationTab() === 'week'"
+   (click)="activeNotificationTab.set('week')"
+  >
+    <div class="notification-tab-label">
+      This Week
+    </div>
+  </app-button>
+
+  <app-button
+    class="notification-tab"
+    [class.active]="activeNotificationTab() === 'earlier'"
+     (click)="activeNotificationTab.set('earlier')"
+  >
+    <div class="notification-tab-label">
+      Earlier
+    </div>
+  </app-button>
+
+</div>
+
+}
+
+
+    <!-- SCROLLABLE MESSAGE AREA -->
+    <div class="messages-container">
+      @for(mail of messages(); track mail.id ?? $index){
+
+        <app-button class="message-item"
+          [style.opacity]="mail.isRead ? 0.55 : 1"
+          [style.cursor]="mail.actionUrl ? 'pointer' : 'default'"
+          (click)="onItemClick(mail)">
+
+
+          <div class="avatar" [style.background]="mail.color">
+
+            @if (type === 'notification') {
+
+            <svg width="12" height="12" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+              <path d="M9.48486 2.37109V3.95193" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                stroke-linejoin="round" />
+
+              <path
+                d="M9.48495 3.95215C6.86868 3.95215 4.74245 6.07837 4.74245 8.69465V13.4371C3.95204 13.4371 3.16162 14.2276 3.16162 15.018H9.48495M9.48495 3.95215C12.1012 3.95215 14.2275 6.07837 14.2275 8.69465V13.4371C15.0179 13.4371 15.8083 14.2276 15.8083 15.018H9.48495"
+                stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+
+              <path
+                d="M7.90405 15.8081C7.90405 16.6776 8.61543 17.3889 9.48489 17.3889C10.3543 17.3889 11.0657 16.6776 11.0657 15.8081"
+                stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+            } @else {
+
+            {{ mail.initials }}
+
+            }
+          </div>
+
+          <!-- CONTENT -->
+          <div class="message-content">
+
+            <div class="sender-row">
+
+              <div class="dot"></div>
+
+              <div class="sender-name">
+                {{ mail.sender }}
+              </div>
+
+            </div>
+
+            <div class="subject">
+              {{ mail.subject }}
+            </div>
+
+          </div>
+
+          <!-- TIME -->
+          <div class="time">
+            {{ mail.time }}
+          </div>
+
+        </app-button>
+      } @empty {
+        <div class="empty-state" style="padding: 24px 12px; text-align: center; color: rgba(255,255,255,0.6); font-size: 12px;">
+          You're all caught up
+        </div>
+      }
+
+    </div>
+
+  </div>
+    }
+
+
+</div>

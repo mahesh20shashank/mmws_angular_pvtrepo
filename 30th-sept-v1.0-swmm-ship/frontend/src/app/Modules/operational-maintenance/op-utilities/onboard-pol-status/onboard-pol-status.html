@@ -1,0 +1,49 @@
+<div class="flex flex-col gap-3">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <div class="flex items-center gap-1 border-b border-white/10 px-1">
+    <app-button type="button" class="flex items-center gap-2 px-3 py-2.5 text-sm border-b-2 -mb-px transition-colors text-white/60"
+      [class.border-[#1D96E9]]="activeTab === 'dashboard'" [class.text-[#1D96E9]]="activeTab === 'dashboard'"
+      [class.border-transparent]="activeTab !== 'dashboard'"
+      (click)="setTab('dashboard')">
+      <app-icon name="layout-dashboard" [size]="15" [variant]="activeTab === 'dashboard' ? 'accent' : 'muted'" />
+      Dashboard
+    </app-button>
+    <app-button type="button" class="flex items-center gap-2 px-3 py-2.5 text-sm border-b-2 -mb-px transition-colors text-white/60"
+      [class.border-[#1D96E9]]="activeTab === 'ras-monitor'" [class.text-[#1D96E9]]="activeTab === 'ras-monitor'"
+      [class.border-transparent]="activeTab !== 'ras-monitor'"
+      (click)="setTab('ras-monitor')">
+      <app-icon name="radar" [size]="15" [variant]="activeTab === 'ras-monitor' ? 'accent' : 'muted'" />
+      RAS Monitor
+    </app-button>
+    <app-button type="button" class="flex items-center gap-2 px-3 py-2.5 text-sm border-b-2 -mb-px transition-colors text-white/60"
+      [class.border-[#1D96E9]]="activeTab === 'history'" [class.text-[#1D96E9]]="activeTab === 'history'"
+      [class.border-transparent]="activeTab !== 'history'"
+      (click)="setTab('history')">
+      <app-icon name="history" [size]="15" [variant]="activeTab === 'history' ? 'accent' : 'muted'" />
+      History
+    </app-button>
+    <app-button type="button" class="flex items-center gap-2 px-3 py-2.5 text-sm border-b-2 -mb-px transition-colors text-white/60"
+      [class.border-[#1D96E9]]="activeTab === 'tank-masters'" [class.text-[#1D96E9]]="activeTab === 'tank-masters'"
+      [class.border-transparent]="activeTab !== 'tank-masters'"
+      (click)="setTab('tank-masters')">
+      <app-icon name="database" [size]="15" [variant]="activeTab === 'tank-masters' ? 'accent' : 'muted'" />
+      Tank Masters
+    </app-button>
+  </div>
+
+  @switch (activeTab) {
+    @case ('dashboard') {
+      <app-pol-status-dashboard (goToTankMasters)="setTab('tank-masters')" />
+    }
+    @case ('ras-monitor') {
+      <app-ras-monitor />
+    }
+    @case ('history') {
+      <app-ras-history />
+    }
+    @case ('tank-masters') {
+      <app-tank-masters />
+    }
+  }
+</div>

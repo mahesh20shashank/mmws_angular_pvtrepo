@@ -1,0 +1,44 @@
+<div class="rte" [class.rte--focused]="focused()" [class.rte--readonly]="readonly || disabled()" [class.rte--collapsed]="collapsible && !expanded()">
+  <div class="rte-toolbar" role="toolbar" aria-label="Text formatting">
+    @for (btn of toolbar; track btn.command) {
+      <app-button
+        type="button"
+        class="rte-toolbar-btn"
+        [title]="btn.label"
+        [attr.aria-label]="btn.label"
+        [disabled]="readonly || disabled()"
+        (mousedown)="$event.preventDefault()"
+        (click)="runCommand(btn.command)"
+      >
+        <app-icon [name]="btn.icon" [size]="14" variant="inherit" />
+      </app-button>
+    }
+    @if (collapsible) {
+      <app-button
+        type="button"
+        class="rte-toolbar-btn rte-toggle-btn"
+        [title]="expanded() ? 'Collapse' : 'Expand'"
+        [attr.aria-label]="expanded() ? 'Collapse' : 'Expand'"
+        (mousedown)="$event.preventDefault()"
+        (click)="toggleExpanded()"
+      >
+        <app-icon [name]="expanded() ? 'chevron-down' : 'chevron-right'" [size]="14" variant="inherit" />
+      </app-button>
+    }
+  </div>
+  <div
+    #surface
+    class="rte-surface"
+    [hidden]="collapsible && !expanded()"
+    [style.min-height]="minHeight"
+    contenteditable="true"
+    [attr.aria-label]="placeholder || 'Rich text field'"
+    [attr.aria-readonly]="readonly || disabled()"
+    (input)="onInput()"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  ></div>
+  @if (!hasValue() && !focused() && placeholder && (!collapsible || expanded())) {
+    <span class="rte-placeholder">{{ placeholder }}</span>
+  }
+</div>

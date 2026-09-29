@@ -1,0 +1,77 @@
+<app-master-card [cardTitle]="formTitle" cardHeight="auto">
+  <form [formGroup]="form" class="grid grid-cols-3 gap-4 mt-2">
+    <div>
+      <app-select-input label="Tank Type *" [options]="tankTypeOptions" formControlName="tank_type" />
+      @if (submitted && form.get('tank_type')?.invalid) {
+        <span class="text-red-400 text-xs">Tank Type is required.</span>
+      }
+    </div>
+    <div>
+      <label for="tank-manual-name" class="text-white/60 text-xs mb-1 block">Tank Name *</label>
+      <input id="tank-manual-name" type="text" formControlName="manual_name" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      @if (submitted && form.get('manual_name')?.invalid) {
+        <span class="text-red-400 text-xs">Tank Name is required.</span>
+      }
+    </div>
+    <div>
+      <label for="tank-location" class="text-white/60 text-xs mb-1 block">Location</label>
+      <input id="tank-location" type="text" formControlName="location" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+    <app-select-input label="Oil Type" [options]="oilTypeOptions" formControlName="oil_type" />
+    <div>
+      <label for="tank-mm-measurement" class="text-white/60 text-xs mb-1 block">MM Measurement *</label>
+      <input id="tank-mm-measurement" type="text" formControlName="mm_measurement" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      @if (submitted && form.get('mm_measurement')?.invalid) {
+        <span class="text-red-400 text-xs">Enter a valid MM Measurement.</span>
+      }
+    </div>
+    <div>
+      <label for="tank-reading-time" class="text-white/60 text-xs mb-1 block">Reading Time</label>
+      <input id="tank-reading-time" type="text" formControlName="reading_time" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+    </div>
+  </form>
+
+  @if (result) {
+    <div class="mt-4 p-4 rounded-xl border border-white/10 sounding-result">
+      <p class="text-white/70 text-sm font-semibold mb-1">Fuel Sounding Results:</p>
+      <p class="text-white/60 text-sm">Volume: {{ result.volume }}</p>
+      <p class="text-white/60 text-sm">Weight: {{ result.weight }}</p>
+    </div>
+  }
+
+  <div class="flex gap-2 mt-4">
+    <app-button
+      type="button"
+      (click)="save()"
+      class="px-4 h-10 rounded-lg bg-[#1D96E9] text-white"
+    >
+      {{ editingId ? 'Update Record' : 'Save Record' }}
+    </app-button>
+    @if (editingId) {
+      <app-button
+        type="button"
+        (click)="cancelEdit()"
+        class="px-4 h-10 rounded-lg bg-white/10 border border-white/10 text-white"
+      >
+        Cancel
+      </app-button>
+    } @else {
+      <app-button
+        type="button"
+        (click)="backToHome()"
+        class="px-4 h-10 rounded-lg bg-white/10 border border-white/10 text-white"
+      >
+        Back to Home
+      </app-button>
+    }
+  </div>
+</app-master-card>
+
+<app-master-card cardTitle="Tank Records" cardHeight="auto" class="mt-4 block">
+  <div class="fuss-grid-wrapper w-full mt-2">
+    <app-data-grid [columnDefs]="columnDefs" [rowData]="tanks" [pageSize]="10" height="440px" />
+  </div>
+  @if (!tanks.length) {
+    <p class="text-white/40 text-sm text-center py-6">No tank records found. Add your first record using the form above.</p>
+  }
+</app-master-card>

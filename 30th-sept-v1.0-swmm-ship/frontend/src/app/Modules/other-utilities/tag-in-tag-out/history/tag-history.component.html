@@ -1,0 +1,106 @@
+<div class="tag-container  space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <div class="flex flex-col gap-6">
+    <!-- Tag History Filter Card -->
+    <div class="glass-card flex flex-col w-full rounded-[12px]">
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border-card)]">
+        <div class="flex items-center gap-2 tag-title">
+          <app-icon name="search" [size]="18"></app-icon>
+          <h2 class="font-bold text-sm tracking-wide uppercase">
+            TAG IN / OUT HISTORY - FILTER
+          </h2>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-col sm:flex-row items-end gap-8 px-6 py-5">
+        <!-- From Date -->
+        <div class="flex flex-col gap-2 flex-1 max-w-[200px]">
+          <label for="fromDate" class="block text-[12px] font-semibold tag-label">From Date</label>
+          <div class="relative">
+            <input id="fromDate" type="date" [ngModel]="fromDate()" (ngModelChange)="fromDate.set($event)"
+              class="w-full bg-transparent border-b tag-input pb-1 focus:outline-none focus:border-[#0ea5e9] text-sm" />
+          </div>
+        </div>
+
+        <!-- To Date -->
+        <div class="flex flex-col gap-2 flex-1 max-w-[200px]">
+          <label for="toDate" class="block text-[12px] font-semibold tag-label">To Date</label>
+          <div class="relative">
+            <input id="toDate" type="date" [ngModel]="toDate()" (ngModelChange)="toDate.set($event)"
+              class="w-full bg-transparent border-b tag-input pb-1 focus:outline-none focus:border-[#0ea5e9] text-sm" />
+          </div>
+        </div>
+
+        <!-- Department -->
+        <div class="flex flex-col gap-2 flex-1 max-w-[200px]">
+          <label for="department" class="block text-[12px] font-semibold tag-label">Department</label>
+          <app-select-input
+            id="department"
+            [options]="formattedDepartmentOptions()"
+            [ngModel]="selectedDepartment()"
+            (ngModelChange)="selectedDepartment.set($event)"
+          />
+        </div>
+
+        <!-- Search Button -->
+        <div class="flex-none pb-1">
+          <app-button type="button" (click)="onSearch()" style="color: #ffffff !important;"
+            class="bg-[#1069AB] hover:bg-[#195d95] !text-white font-semibold py-1.5 px-5 rounded text-xs transition-colors cursor-pointer">
+            <span style="color: #ffffff !important;" class="!text-white">Search</span>
+          </app-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Grid Area -->
+    <div class="glass-card flex flex-col w-full rounded-[12px] p-4 min-h-[300px]">
+      @if (filteredRecords().length > 0) {
+      <app-data-grid [rowData]="filteredRecords()" [columnDefs]="historyColumnDefs" [pageSize]="10" [autoHeight]="true"
+        (rowClicked)="onRowClicked($event)"></app-data-grid>
+      } @else {
+      <!-- Empty State -->
+      <div class="flex flex-col items-center justify-center h-full tag-empty-box py-16 rounded">
+        <app-icon name="info" [size]="32" color="var(--text-muted, #94a3b8)" class="mb-2"></app-icon>
+        <span class="text-sm text-slate-400">No records found</span>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<app-detail-drawer [open]="!!selectedRecord()" [titleMode]="true"
+  [label]="selectedRecord()?.tagNo ?? 'Tag History Record'" [subtitle]="selectedRecord()?.equipment ?? ''"
+  iconName="history" iconColor="#3b82f6" (closed)="closeDrawer()">
+  @if (selectedRecord(); as item) {
+  <div class="space-y-4 p-2 text-sm text-[var(--text-primary)]">
+    <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)]">
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Tag No.</span>
+        <span class="font-medium text-[var(--text-primary)]">{{ item.tagNo }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Date Tagged</span>
+        <span class="font-medium text-[var(--text-primary)]">{{ item.dateTagged }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Department</span>
+        <span class="font-medium text-[var(--text-primary)]">{{ item.department || '-' }}</span>
+      </div>
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block">Status</span>
+        <span class="font-medium text-[var(--text-primary)]">{{ item.status }}</span>
+      </div>
+    </div>
+
+    <div class="p-3 rounded-lg bg-[var(--bg-input)] border border-[var(--border-card)] space-y-2">
+      <div>
+        <span class="text-xs text-[var(--text-muted)] block font-medium mb-1">Equipment</span>
+        <span class="text-[var(--text-primary)]">{{ item.equipment }}</span>
+      </div>
+    </div>
+  </div>
+  }
+</app-detail-drawer>

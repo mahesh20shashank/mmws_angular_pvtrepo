@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    @page {
+        size: A4 landscape;
+        margin: 15mm 12mm 15mm 12mm;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 9pt;
+        color: #000;
+    }
+
+    /* ── Title block ── */
+    .title-block {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+
+    .title-block .form-label {
+        font-size: 13pt;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .title-block .subtitle {
+        font-size: 11pt;
+        font-weight: bold;
+        margin-top: 3px;
+        text-transform: uppercase;
+    }
+
+    /* ── Meta row (Ship/Unit ref  |  To:) ── */
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 18px;
+        font-size: 9.5pt;
+    }
+
+    .meta-left  { text-align: left;  }
+    .meta-right { text-align: right; }
+
+    .meta-row .label {
+        font-weight: bold;
+    }
+
+    /* ── Main table ── */
+    table.main-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+        font-size: 8.5pt;
+    }
+
+    table.main-table th,
+    table.main-table td {
+        border: 1px solid #000;
+        padding: 4px 5px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    table.main-table thead tr {
+        background-color: #d9d9d9;
+        font-weight: bold;
+    }
+
+    table.main-table tbody tr:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+
+    /* ── Signature row ── */
+    .signature-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        text-align: center;
+        align-items: flex-end;
+    }
+
+    .sig-block {
+        width: 30%;
+        border-top: 1px solid #000;
+        padding-top: 6px;
+        font-size: 9.5pt;
+        font-weight: bold;
+    }
+
+    /* ── HOD sig block with QR ── */
+    .sig-block-hod {
+        width: 30%;
+        text-align: center;
+        font-size: 9.5pt;
+        font-weight: bold;
+    }
+
+    .sig-block-hod .qr-wrapper {
+        display: inline-block;
+        margin-bottom: 6px;
+    }
+
+    .sig-block-hod .qr-wrapper img {
+        width: 70px;
+        height: 70px;
+        display: block;
+        margin: 0 auto 4px auto;
+    }
+
+    .sig-block-hod .qr-label {
+        font-size: 7pt;
+        color: #444;
+        font-weight: normal;
+        margin-bottom: 4px;
+    }
+
+    .sig-block-hod .sig-line {
+        border-top: 1px solid #000;
+        padding-top: 6px;
+    }
+
+    /* narrow cols */
+    .col-ser    { width: 3%;  }
+    .col-ship   { width: 6%;  }
+    .col-stype  { width: 5%;  }
+    .col-from   { width: 6%;  }
+    .col-eqpt   { width: 9%;  }
+    .col-partno { width: 7%;  }
+    .col-desc   { width: 11%; }
+    .col-denom  { width: 6%;  }
+    .col-qty    { width: 4%;  }
+    .col-cat    { width: 5%;  }
+    .col-serial { width: 9%;  }
+    .col-cert   { width: 12%; }
+</style>
+</head>
+<body>
+
+    <!-- ══════════ TITLE ══════════ -->
+    <div class="title-block">
+        <div class="form-label">Form EDPS – 3</div>
+        <div class="subtitle">Return Note (For Survey)</div>
+    </div>
+
+    <!-- ══════════ META ROW ══════════ -->
+    <div class="meta-row">
+        <div class="meta-left">
+            <span class="label">Ship/Unit Survey Ref :</span>
+            SWMM/SR/BLR/{{ current_year }}/{{ ref_seq }}
+        </div>
+        <div class="meta-right">
+            <span class="label">To :</span> WED(MUMBAI) Survey – SH
+        </div>
+    </div>
+
+    <!-- ══════════ MAIN TABLE ══════════ -->
+    <table class="main-table">
+        <thead>
+            <tr>
+                <th class="col-ser">Ser</th>
+                <th class="col-ship">Ship Name</th>
+                <th class="col-stype">S. Type</th>
+                <th class="col-from">From</th>
+                <th class="col-eqpt">Eqpt</th>
+                <th class="col-partno">Part No.</th>
+                <th class="col-desc">Item Desc</th>
+                <th class="col-denom">Deno</th>
+                <th class="col-qty">Qty</th>
+                <th class="col-cat">Cat</th>
+                <th class="col-serial">Item Serial No.</th>
+                <th class="col-cert">Cert No. &amp; Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.ship_name }}</td>
+                <td>{{ item.survey_type }}</td>
+                <td>{{ item.from_field }}</td>
+                <td>{{ item.equipment_name }}</td>
+                <td>{{ item.part_no }}</td>
+                <td>{{ item.item_desc }}</td>
+                <td>{{ item.denomination }}</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.item_serial_no }}</td>
+                <td>WEA/{{ item.cert_seq }}/{{ current_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="12" style="text-align:center;font-style:italic;">No items found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- ══════════ SIGNATURE ROW ══════════ -->
+    <div class="signature-row">
+
+        <!-- Delivered By -->
+        <div class="sig-block">Delivered By</div>
+
+        <!-- Received By -->
+        <div class="sig-block">Received By</div>
+
+        <!-- Ship HOD / Officer  →  QR above the line -->
+        <div class="sig-block-hod">
+            {% if hod_qr_b64 %}
+            <div class="qr-wrapper">
+                <img src="data:image/png;base64,{{ hod_qr_b64 }}" alt="HOD QR Code" />
+            </div>
+            {% endif %}
+            <div class="sig-line">Ship HOD / Officer</div>
+        </div>
+
+    </div>
+
+</body>
+</html>

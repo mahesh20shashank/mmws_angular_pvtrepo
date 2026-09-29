@@ -1,0 +1,242 @@
+.info-modal {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-nav {
+  @apply relative flex items-center justify-around border-b border-white/10 pr-12;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.tab-btn {
+  @apply relative cursor-pointer border-0 bg-transparent pb-2 text-xs sm:text-[13px] tracking-wide text-slate-400 transition-all duration-300;
+
+  &:hover {
+    @apply text-white;
+  }
+}
+
+.tab-active {
+  @apply font-semibold text-white;
+}
+
+.tab-indicator {
+  @apply absolute left-0 right-0 bottom-[-9px] h-[3px] rounded-full bg-[#3b82f6];
+  box-shadow: 0 0 10px #3b82f6;
+}
+
+.about-swmm-text {
+  @apply mx-auto max-w-4xl text-justify font-thin leading-relaxed text-slate-100;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.25;
+  font-weight: lighter;
+}
+
+.capability-header {
+  @apply flex items-center justify-center text-center;
+}
+
+.capability-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
+  margin-top: 1.5rem;
+  gap: 1.5rem;
+}
+
+.capability-badge {
+  @apply flex items-center justify-center text-center border border-white/10 bg-white/5 text-[11px] font-medium tracking-wider text-slate-200 select-none;
+  min-height: 60px;
+  padding: 0.5rem 0.937rem;
+  border-radius: 0.5rem;
+}
+
+.capability-description {
+  font-family: 'Poppins', sans-serif;
+  margin-top: 1rem;
+  padding-inline: 0.5rem;
+}
+
+.capability-title {
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 2;
+  @apply relative text-center text-[15px];
+}
+
+.capability-divider {
+  @apply absolute bottom-0 left-0 right-0 h-px bg-white;
+  width: 100% !important;
+}
+
+.capability-card {
+  @apply flex flex-col items-center;
+}
+
+.benefits-section {
+  gap: 1.5rem;
+}
+
+.benefits-grid {
+  @apply grid grid-cols-1 md:grid-cols-3;
+  margin-top: 1.5rem;
+  gap: 1.5rem;
+}
+
+.benefit-icon {
+  margin-bottom: 0.5rem;
+}
+
+.benefit-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+}
+
+.benefits-header {
+  @apply text-center;
+}
+
+.benefits-subtitle {
+  font-family: 'Poppins', sans-serif;
+  @apply mx-auto max-w-2xl text-[14px] font-thin tracking-wide text-slate-100;
+  line-height: 1.25;
+}
+
+.benefit-card {
+  @apply flex flex-col items-center text-center border border-white/10 rounded-2xl;
+  min-height: 160px;
+  padding: 0.937rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+
+  &:hover {
+    @apply border-white/20;
+    transform: scale(1.02);
+  }
+}
+
+.benefit-icon-svg {
+  @apply text-2xl text-[#3b82f6];
+}
+
+.benefit-description {
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.30;
+  font-weight: lighter;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ship-stats-grid {
+  @apply grid gap-3;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  @apply relative flex items-center justify-between overflow-hidden rounded-2xl;
+
+  padding: 0.85rem 1rem;
+  min-height: 72px;
+  text-align: center;
+  backdrop-filter: blur(16px);
+
+  border: 1px solid var(--border-primary);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.25);
+
+  transition: all 300ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.stat-blue {
+  background: linear-gradient(135deg, rgba(43, 127, 255, 0.06) 0%, rgba(21, 93, 252, 0.03) 100%);
+
+  border-color: rgba(43, 127, 255, 0.3);
+}
+
+.stat-purple {
+  background: linear-gradient(135deg, rgba(173, 70, 255, 0.06) 0%, rgba(152, 16, 250, 0.03) 100%);
+
+  border-color: rgba(108, 75, 136, 1);
+}
+
+.stat-pink {
+  background: rgba(161, 84, 127, 0.14);
+
+  border-color: rgba(250, 101, 185, 0.5);
+}
+
+.stat-cyan {
+  background: rgba(0, 211, 242, 0.05);
+
+  border-color: rgba(0, 211, 242, 0.3);
+}
+
+.stat-label {
+  @apply mb-1 font-medium tracking-wide;
+  font-size: 13px;
+  padding-top: 0.35rem;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  @apply text-white;
+
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.two-line {
+  font-size: 1.4rem;
+}
+
+.stat-icon {
+  font-size: 2rem;
+  opacity: 0.95;
+  display: ruby !important;
+}
+
+.stat-blue .stat-icon {
+  color: #3b82f6;
+}
+
+.stat-purple .stat-icon {
+  color: #c084fc;
+}
+
+.stat-pink .stat-icon {
+  color: #ec4899;
+}
+
+.stat-cyan .stat-icon {
+  color: #22d3ee;
+}

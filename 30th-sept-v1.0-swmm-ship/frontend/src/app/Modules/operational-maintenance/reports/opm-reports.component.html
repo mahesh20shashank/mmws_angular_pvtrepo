@@ -1,0 +1,156 @@
+<div class="rep" [class.rep--collapsed]="navCollapsed()">
+  <!-- ============ REPORT NAV ============ -->
+  <aside class="rep-nav">
+    <app-collapsible-sidebar
+      title="Reports"
+      [items]="navItems"
+      [selectedId]="openReportId()"
+      [collapsed]="navCollapsed()"
+      (itemSelected)="selectReport($event)"
+      (collapsedChange)="navCollapsed.set($event)"
+    />
+  </aside>
+
+  <!-- ============ REPORT VIEW ============ -->
+  <section class="rep-main">
+    <div class="glass-card rep-head">
+      <div class="rep-head-row">
+        <h2 class="rep-title">{{ report().name }}</h2>
+        @if (appliedFilterCount() > 0) {
+          <span class="rep-applied">{{ appliedFilterCount() }} applied</span>
+        }
+        <div class="rep-spacer"></div>
+
+        <app-button type="button" class="rep-toolbtn" (click)="toggleColumnsPicker()" title="Customize Columns">
+          <app-icon name="layout-grid" [size]="16" [strokeWidth]="1.9" variant="accent" />
+          <span class="rep-toolbtn-label">Columns</span>
+          <span class="rep-count">{{ visibleColumns().length }}</span>
+          <app-icon
+            [name]="columnsOpen() ? 'chevron-up' : 'chevron-down'"
+            [size]="14"
+            [strokeWidth]="2"
+            class="rep-chev"
+            variant="inherit"
+          />
+        </app-button>
+
+        <app-button
+          type="button"
+          class="rep-toolbtn"
+          (click)="toggleFilters()"
+          [title]="filtersOpen() ? 'Hide Filters' : 'Show Filters'"
+        >
+          <app-icon name="filter" [size]="16" [strokeWidth]="1.9" variant="accent" />
+          <span class="rep-toolbtn-label">Filters</span>
+          <app-icon
+            [name]="filtersOpen() ? 'chevron-up' : 'chevron-down'"
+            [size]="14"
+            [strokeWidth]="2"
+            class="rep-chev"
+            variant="inherit"
+          />
+        </app-button>
+
+        <app-button type="button" class="rep-reset" (click)="resetFilters()">
+          <app-icon name="rotate-ccw" [size]="15" [strokeWidth]="1.9" variant="muted" />
+          Reset Filters
+        </app-button>
+
+        <app-export-toolbar [busy]="busy()" [disabled]="filteredRows().length === 0" (exportRequested)="onExport($event)" />
+      </div>
+
+      @if (filtersOpen() && (filterFields().length > 0 || dateColumn())) {
+        <div class="rep-filter-grid">
+          @for (f of filterFields(); track f.field) {
+            <div class="rep-filter-field">
+              <span class="rep-filter-label">{{ f.label }}</span>
+              <app-select-input
+                [placeholder]="'Select ' + f.label"
+                [options]="f.options"
+                [ngModel]="f.value"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="setFilter(f.field, $event)"
+              />
+            </div>
+          }
+
+          @if (dateColumn()) {
+            <div class="rep-filter-field">
+              <span class="rep-filter-label">Date Range</span>
+              <app-select-input
+                placeholder="Select Date Range"
+                [options]="dateRangeOptions"
+                [ngModel]="dateRange()"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="setDateRange($event)"
+              />
+            </div>
+          }
+        </div>
+      }
+
+      @if (columnsOpen()) {
+        <div class="rep-colpicker">
+          <div class="rep-colpicker-head">
+            <span class="rep-colpicker-title">Columns</span>
+            <span class="rep-colpicker-hint">
+              Click to add · selected columns are blue · reorder by dragging table headers · lock = auto-included
+              dependency
+            </span>
+            <div class="rep-spacer"></div>
+            <app-button type="button" class="rep-colpicker-reset" (click)="resetColumns()">
+              <app-icon name="rotate-ccw" [size]="14" [strokeWidth]="1.9" variant="muted" />
+              Reset Columns
+            </app-button>
+          </div>
+
+          <div class="rep-chips">
+            @for (c of columnChips(); track c.field) {
+              @if (c.selected) {
+                <div class="rep-chip rep-chip--selected">
+                  <span class="rep-chip-pos">{{ c.pos }}</span>
+                  <span class="rep-chip-name">{{ c.label }}</span>
+                  @if (c.locked) {
+                    <span class="rep-chip-lock" title="Auto-included dependency">
+                      <app-icon name="lock" [size]="12" [strokeWidth]="2" variant="warning" />
+                    </span>
+                  } @else {
+                    <app-button
+                      type="button"
+                      class="rep-chip-remove"
+                      title="Remove column"
+                      (click)="removeColumn(c.field)"
+                    >
+                      <app-icon name="x" [size]="13" [strokeWidth]="2.2" variant="inherit" />
+                    </app-button>
+                  }
+                </div>
+              } @else {
+                <app-button type="button" class="rep-chip rep-chip--add" (click)="addColumn(c.field)">
+                  <app-icon name="plus" [size]="13" [strokeWidth]="2.2" variant="accent" />
+                  {{ c.label }}
+                </app-button>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Preview -->
+    <div class="glass-card rep-preview">
+      <div class="rep-preview-head">
+        <span class="rep-preview-title">Preview</span>
+        <span class="rep-preview-hint">Rows after applying filters</span>
+      </div>
+      <app-data-grid
+        [columnDefs]="columnDefs()"
+        [rowData]="filteredRows()"
+        [pageSize]="10"
+        height="360px"
+        [enableColumnReorder]="true"
+        (columnMoved)="onColumnsReordered($event)"
+      />
+    </div>
+  </section>
+</div>

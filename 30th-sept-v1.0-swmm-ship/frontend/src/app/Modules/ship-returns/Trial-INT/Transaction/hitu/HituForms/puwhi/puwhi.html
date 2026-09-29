@@ -1,0 +1,2127 @@
+<app-form-card
+  title="PRELIMINARY UNDERWATER HULL INSPECTION"
+  [showPreviousReport]="true"
+  [showBackButton]="true"
+  [showPaginator]="true"
+  [previewMode]="true"
+  [pageScroll]="true"
+>
+  <div
+    previewHeader
+    class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+    <button
+      *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+      type="button"
+      (click)="setActiveTab(tab)"
+      class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+      [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+    >
+      <span
+        class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide"
+      >
+        {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment'
+        }}
+      </span>
+
+      <span
+        class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+        [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+      >
+        {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{
+        tab?.serial_no || tab?.serial_number || '-' }}
+      </span>
+    </button>
+  </div>
+  <!-- FORM CONTENT -->
+  <form [formGroup]="form" class="p-0">
+    <div class="grid grid-cols-2 gap-3">
+      <app-input
+        [label]="'Ship/Submarine*'"
+        formControlName="ship_or_submarine"
+        class="w-full"
+      >
+      </app-input>
+      <app-input
+        [label]="'Ship/Submarine Name*'"
+        formControlName="ship"
+        class="w-full"
+      >
+      </app-input>
+
+      <app-calendar
+        [label]="'Date of conduct of inspection*'"
+        formControlName="date_of_conduct_trail"
+      ></app-calendar>
+
+      <app-select
+        [label]="'Place of conduct of inspection*'"
+        formControlName="place_of_conduct_trail"
+        [options]="placesOptions"
+        placeholder="--Select--"
+        class="w-full"
+      >
+      </app-select>
+
+      <app-select
+        [label]="'Occasion for conduct of Inspection*'"
+        formControlName="occasion_of_conduct_trail"
+        [options]="occasionOptions"
+        placeholder="--Select--"
+        class="w-full"
+        [searchable]="false"
+      >
+      </app-select>
+
+      <app-select
+        [label]="'Reps Present*'"
+        formControlName="reps_present"
+        [options]="reps_present_options"
+        placeholder="--Select--"
+        [searchable]="false"
+        class="w-full"
+      >
+      </app-select>
+
+      <div
+        *ngIf="usersList.length > 0 && form.get('reps_present')?.value !== 'Others'"
+      >
+        <app-multiselect
+          [label]="'Select User'"
+          formControlName="reps_present_user"
+          [options]="usersList"
+          placeholder="--Select--"
+        ></app-multiselect>
+      </div>
+
+      <div *ngIf="form.get('reps_present')?.value === 'Others'">
+        <app-input
+          [label]="'Enter User'"
+          formControlName="reps_present_other_user"
+          placeholder="Enter name"
+        ></app-input>
+      </div>
+    </div>
+
+    <!-- ---------------------------------- AUTHORITY OF CONDUCT TRAILS -------------------- -->
+    <app-parameter-card serial="" title="Authority for conduct of Trials">
+      <div class="grid grid-cols-3 gap-3 mt-3">
+        <!-- Occasion for conduct of Trials -->
+        <app-input
+          label="Corespondence(fax/letter,etc)*"
+          formControlName="authority"
+        >
+        </app-input>
+
+        <app-calendar
+          label="Date*"
+          formControlName="authority_date"
+          [max]="form.get('date_of_conduct_trail')?.value"
+        >
+        </app-calendar>
+
+        <!-- <div class="file-upload-field gap-1"> -->
+        <app-file-upload
+          [label]="'Upload doc*'"
+          formControlName="authority_doc"
+          (filesUploaded)="handleFilesUploaded($event)"
+        >
+        </app-file-upload>
+        <!-- </div> -->
+      </div>
+    </app-parameter-card>
+
+    <br />
+    <div class="mt-1 overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <tbody>
+          <tr>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Parameter</th>
+            <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Observation</th>
+            <th colspan="2" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Remarks and Docs</th>
+          </tr>
+          <!-- SECTION 2 -->
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              1. DETAILS OF PREVIOUS DOCKING (From last docking Report)
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.1 Date of Docking</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-calendar formControlName="date_of_docking"></app-calendar>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2"></td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.2 Docking Version</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="docking_version"
+                [options]="dockingVersionOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('docking_version')?.value === 'other'"
+                formControlName="docking_version_other"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.3 Nature of Docking</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="nature_of_docking"
+                [options]="natureOfDockingOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('nature_of_docking')?.value === 'other'"
+                formControlName="nature_of_docking_other"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2">
+              1.4 Details of Last Refit
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2">
+              <app-select
+                formControlName="last_refit_type"
+                [options]="refitTypeOptions"
+                placeholder="--Select--"
+              ></app-select>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="form.get('last_refit_type')?.value === 'other'"
+                  formControlName="last_refit_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-month-year-calendar
+                formControlName="last_refit_year"
+              ></app-month-year-calendar>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.5 Details of NR/MR</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2">
+              <app-select
+                formControlName="nr_mr_type"
+                [options]="refitTypeOptions"
+                placeholder="--Select--"
+              ></app-select>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="form.get('nr_mr_type')?.value === 'other'"
+                  formControlName="nr_mr_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-calendar formControlName="nr_mr_date"></app-calendar>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">1.6 Docked at</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="docked_at"
+                placeholder="Enter docking location"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="docked_at1"
+                rows="2"
+                placeholder="Enter docking details"
+                class="input-field"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">2. DOCKING</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.1 Docking Version</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="docking_version_1"
+                [options]="dockingVersionOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('docking_version_1')?.value === 'other'"
+                formControlName="docking_version_other_1"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.2 Nature of Docking</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="nature_of_docking_1"
+                [options]="natureOfDockingOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('nature_of_docking_1')?.value === 'other'"
+                formControlName="nature_of_docking_other_1"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.3 No of Dock Blocks Wedged</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="number"
+                formControlName="dock_blocks_wedged"
+                placeholder="Enter number"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="dock_blocks_wedged_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              2.4 No of Dock Blocks excessively crushed
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="number"
+                formControlName="dock_blocks_crushed"
+                placeholder="Enter number"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="dock_blocks_crushed_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              2.5 Are all UW openings clear of Dock blocks
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="uw_openings_clear"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('uw_openings_clear')?.value === 'no'"
+                formControlName="uw_openings_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">2.6 Duration of docking</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="number"
+                formControlName="docking_duration"
+                placeholder="No of days"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="docking_duration_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              3. UNDERWATER CLEANING
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              3.Presence of marine growth at
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <div class="flex gap-4">
+                <div *ngFor="let option of radioOptions1">
+                  <label>
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      formControlName="marine_growth"
+                    />
+                    {{ option.label }}
+                  </label>
+                </div>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('marine_growth')?.value === 'yes'"
+                formControlName="marine_growth_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">3.Cleaning of Propellers</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="propeller_cleaning"
+                [options]="propellerCleaningOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('propeller_cleaning')?.value === 'pending'
+                      || form.get('propeller_cleaning')?.value === 'in_progress'"
+                formControlName="propeller_cleaning_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              3.3 Remnants of ropes, fishing nets or any other foreign objects
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="foreign_objects"
+                [options]="yesNoOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('foreign_objects')?.value === 'yes'"
+                formControlName="foreign_objects_obs"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">4. PAINTING</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="8">
+              4.1 Last full renewal of paint scheme
+              <div class="my-3">
+                <app-select
+                  formControlName="paint_refit_type"
+                  [options]="refitTypeOtherOptions"
+                  placeholder="--Select--"
+                ></app-select>
+              </div>
+              <app-input
+                *ngIf="form.get('paint_refit_type')?.value === 'other'"
+                formControlName="paint_refit_other"
+                placeholder="Enter details"
+              ></app-input>
+              <div class="mt-2">
+                <app-month-year-calendar
+                  formControlName="paint_refit_year"
+                ></app-month-year-calendar>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="8">
+              Paint OEM
+              <div class="my-3">
+                <app-input formControlName="paint_oem_type"></app-input>
+              </div>
+              <app-input
+                *ngIf="form.get('paint_oem_type')?.value === 'other'"
+                formControlName="paint_oem_other"
+                placeholder="Enter details"
+              ></app-input>
+
+              <app-calendar formControlName="paint_oem_year"></app-calendar>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 w-[32rem]">Type of coat</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 w-[36rem]">DFT</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Primer</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="primer_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AC 1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AC1_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AC 2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AC2_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AC 3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AC3_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">TC</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="TC_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AF 1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AF1_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AF 2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AF2_full"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="8">
+              4.2 Last Touch up of paint scheme
+
+              <app-select
+                formControlName="paint_scheme_type"
+                [options]="refitTypeOtherOptions"
+                placeholder="--Select--"
+              ></app-select>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="form.get('paint_scheme_type')?.value === 'other'"
+                  formControlName="paint_scheme_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+
+              <div class="mt-2">
+                <app-calendar
+                  formControlName="paint_scheme_year"
+                ></app-calendar>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="8">
+              Paint OEM
+              <app-select
+                formControlName="paint_touch_type"
+                [options]="refitTypeOtherOptions"
+                placeholder="--Select--"
+              ></app-select>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="form.get('paint_touch_type')?.value === 'other'"
+                  formControlName="paint_touch_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+              <div class="mt-2">
+                <app-calendar formControlName="paint_touch_year"></app-calendar>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Type of coat</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">DFT</td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Primer</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="primer_touch"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AC 1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AC1_touch"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AC 2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AC2_touch"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AC 3</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AC3_touch"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">TC</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="TC_touch"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AF 1</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                placeholder="Enter value"
+                formControlName="AF1_touch"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">AF 2</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="AF2_touch"
+                placeholder="Enter value"
+              ></app-input>
+            </td>
+          </tr>
+
+          <!-- ----------------------------------------------------------- -->
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">Condition of A/F</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Outer bottom between bilge keel
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-multiselect
+                formControlName="af_bilge_keel_condition"
+                [options]="outerBottomConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="af_bilge_keel_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Stern /Aft cut up</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-multiselect
+                formControlName="af_stern_aft_condition"
+                [options]="outerBottomConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="af_stern_aft_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Boot top</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-multiselect
+                formControlName="af_boot_top_condition"
+                [options]="outerBottomConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="af_boot_top_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Rudders</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-multiselect
+                formControlName="af_rudders_condition"
+                [options]="outerBottomConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="af_rudders_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Stabilisers</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-multiselect
+                formControlName="af_stabilisers_condition"
+                [options]="outerBottomConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="af_stabilisers_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Old dock block areas</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-multiselect
+                formControlName="af_dock_block_condition"
+                [options]="outerBottomConditionOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="af_dock_block_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">Other observations</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-select
+                formControlName="af_other_observations_condition"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="form.get('af_other_observations_condition')?.value === 'yes'"
+                formControlName="af_other_observations_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              Paint scheme being applied / scope of UW painting in present
+              docking
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-select
+                formControlName="paint_scope"
+                [options]="paintScopeOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="form.get('paint_scope')?.value === 'other'"
+                formControlName="paint_scope_other"
+                placeholder="Enter specific details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              5. RUSTING & CORROSION
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.1 General Outer bottom</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-multiselect
+                formControlName="rust_general_outer_bottom"
+                [options]="rustOuterBottomOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="hasMultiSelectOption('rust_general_outer_bottom', 'other')"
+                  formControlName="rust_general_outer_bottom_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rust_general_outer_bottom_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.2 Boot top</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-multiselect
+                formControlName="rust_boot_top"
+                [options]="rustOuterBottomOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="hasMultiSelectOption('rust_boot_top', 'other')"
+                  formControlName="rust_boot_top_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rust_boot_top_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.3 Stern / Aft cut up</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-multiselect
+                formControlName="rust_stern_aft"
+                [options]="rustOuterBottomOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="hasMultiSelectOption('rust_stern_aft', 'other')"
+                  formControlName="rust_stern_aft_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rust_stern_aft_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.4 Rudders</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-multiselect
+                formControlName="rust_rudders"
+                [options]="rustOuterBottomOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="hasMultiSelectOption('rust_rudders', 'other')"
+                  formControlName="rust_rudders_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rust_rudders_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              5.5 Bilge keel, stem, stabilizers, weld seams
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-multiselect
+                formControlName="rust_bilge_keel_stem"
+                [options]="rustOuterBottomOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="hasMultiSelectOption('rust_bilge_keel_stem', 'other')"
+                  formControlName="rust_bilge_keel_stem_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rust_bilge_keel_stem_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.6 Old dock block areas</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-multiselect
+                formControlName="rust_dock_block"
+                [options]="rustOuterBottomOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-multiselect>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="hasMultiSelectOption('rust_dock_block', 'other')"
+                  formControlName="rust_dock_block_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rust_dock_block_location"
+                placeholder="Enter location"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">5.7 Other observations</td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-select
+                formControlName="rust_other_observations"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+              <!-- <app-input
+                    *ngIf="hasMultiSelectOption('rust_other_observations', 'other')"
+                    formControlName="rust_other_observations_other"
+                    placeholder="Enter details"
+                  ></app-input> -->
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                *ngIf="form.get('rust_other_observations')?.value === 'yes'"
+                formControlName="rust_other_observations_remarks"
+                placeholder="Enter remarks"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">6. STRUCTURE</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              6.1 Last Complete Robotic Survey
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2">
+              <app-select
+                formControlName="robotic_refit_type"
+                [options]="refitTypeOtherOptions"
+                placeholder="--Select--"
+              ></app-select>
+              <div class="mt-2">
+                <app-input
+                  *ngIf="form.get('robotic_refit_type')?.value === 'other'"
+                  formControlName="robotic_refit_other"
+                  placeholder="Enter details"
+                ></app-input>
+              </div>
+              <div class="mt-2">
+                <app-month-year-calendar
+                  formControlName="robotic_refit_year"
+                ></app-month-year-calendar>
+              </div>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                type="text"
+                placeholder="Additional details"
+                class="input-field"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              6.2 Extent of hull survey in present refit
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                type="number"
+                formControlName="hull_survey_extent"
+                placeholder="Enter %"
+              ></app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="hull_survey_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.3 Dents at</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="dents_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('dents_status')?.value === 'yes'"
+                formControlName="dents_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.4 Suspect cracks at</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="cracks_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('cracks_status')?.value === 'yes'"
+                formControlName="cracks_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.5 Deep scratch / Notch at</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="scratch_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('scratch_status')?.value === 'yes'"
+                formControlName="scratch_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.6 Holes / doublers at</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="holes_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('holes_status')?.value === 'yes'"
+                formControlName="holes_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.7 Other Observations</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="other_obs2_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('other_obs2_status')?.value === 'yes'"
+                formControlName="other_obs2_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              6.8 SS to confirm known structural defects required to be
+              undertaken during DD
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="structural_defects_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('structural_defects_status')?.value === 'yes'"
+                formControlName="structural_defects_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              6.9 Survey / Preservation underneath stabilizers
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="stabilizer_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('stabilizer_status')?.value === 'UNSAT'"
+                formControlName="stabilizer_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">6.10 Type of Bilge Keel</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="bilge_keel_type"
+                [options]="bilgeKeelTypeOptions"
+                placeholder="--Select--"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('bilge_keel_type')?.value === 'other'"
+                formControlName="bilge_keel_other"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">7. SONAR DOME</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">7.1 Clean ship</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="clean_ship_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('clean_ship_status')?.value === 'UNSAT'"
+                formControlName="clean_ship_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">7.2 Cracks / dents / fouling</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="hull_issues_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('hull_issues_status')?.value === 'yes'"
+                formControlName="hull_issues_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              7.3 If GRP dome – Delamination / blistering / cracking
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="grp_dome_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('grp_dome_status')?.value === 'yes'"
+                formControlName="grp_dome_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              7.4 Condition of fairing skirt
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="fairing_skirt_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('fairing_skirt_status')?.value === 'UNSAT'"
+                formControlName="fairing_skirt_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">8. RUDDER</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">8.1 Cracks / dents / fouling</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="align_cracks_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('align_cracks_status')?.value === 'yes'"
+                formControlName="align_cracks_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">8.2 Mis-alignment if any</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="align_misalignment_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('align_misalignment_status')?.value === 'yes'"
+                formControlName="align_misalignment_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9. CATHODIC PROTECTION SYSTEM
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.1 Serviceability check of ICCP system
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="iccp_service_status"
+                [options]="iccpServiceOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('iccp_service_status')?.value === 'not_undertaken'"
+                formControlName="iccp_service_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.2 Condition of sacrificial anodes
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="sacrificial_anodes_status"
+                [options]="sacrificialAnodesOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('sacrificial_anodes_status')?.value === 'fully_consumed'"
+                type="number"
+                formControlName="sacrificial_anodes_count"
+                placeholder="Enter number"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.3 Condition of ICCP anodes and fairing
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="iccp_anodes_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('iccp_anodes_status')?.value === 'UNSAT'"
+                formControlName="iccp_anodes_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.4 Condition of ICCP reference electrode and fairing
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="iccp_reference_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('iccp_reference_status')?.value === 'UNSAT'"
+                formControlName="iccp_reference_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.5 Condition of dielectric shields
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="dielectric_shield_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('dielectric_shield_status')?.value === 'UNSAT'"
+                formControlName="dielectric_shield_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.6 SS to confirm predocking checks of ICCP
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="iccp_predocking_status"
+                [options]="iccpServiceOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <input
+                *ngIf="form.get('iccp_predocking_status')?.value === 'undertaken'"
+                type="file"
+                (change)="handleFileInput($event)"
+                class="input-field"
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              9.7 SS to Provide a copy of Pre-Docking Checks report from
+              ND(V)/WECORS & MLAB
+            </td>
+
+            <!-- Dropdown -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="predocking_report_status"
+                [options]="predockingReportOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <!-- File Upload -->
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <input
+                *ngIf="form.get('predocking_report_status')?.value === 'submitted'"
+                type="file"
+                (change)="handleFileInput($event)"
+                class="input-field"
+              />
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">10. PROPELLERS</td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">10.1 Cleaning of propellers</td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="prop_cleaning_status"
+                [options]="propellerCleaningOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('prop_cleaning_status')?.value === 'pending'
+                            || form.get('prop_cleaning_status')?.value === 'in_progress'"
+                formControlName="prop_cleaning_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              10.2 Condition of edges of propeller blades
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="prop_blade_edges_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('prop_blade_edges_status')?.value === 'UNSAT'"
+                formControlName="prop_blade_edges_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              10.3 Condition of propeller hubs
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="prop_hub_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('prop_hub_status')?.value === 'UNSAT'"
+                formControlName="prop_hub_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              10.4 Pitting / erosion if any
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="prop_pitting_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('prop_pitting_status')?.value === 'yes'"
+                formControlName="prop_pitting_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              10.5 Condition of epoxy coating of shaft (P/S)
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="shaft_coating_status"
+                [options]="satUnsatOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('shaft_coating_status')?.value === 'UNSAT'"
+                formControlName="shaft_coating_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11. MISCELLANEOUS
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11.1 Eddy cone / Rope guards, U/W gratings etc.
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="eddy_items_status"
+                [options]="eddyItemsStatusOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-input
+                *ngIf="form.get('eddy_items_status')?.value === 'other'"
+                formControlName="eddy_items_other"
+                placeholder="Specify other"
+              ></app-input>
+
+              <app-input
+                formControlName="eddy_items_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11.2 Water seepage from OBD sea tubes etc.
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="water_seepage_status"
+                [options]="yesNoOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('water_seepage_status')?.value === 'yes'"
+                formControlName="water_seepage_details"
+                placeholder="Enter location/details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11.3 Missing parts like draught marks, gratings, hull outfit parts
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="missing_parts_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('missing_parts_status')?.value === 'yes'"
+                formControlName="missing_parts_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11.4 Blanking of Sea Tubes / Propeller shafts / Rudder stock etc.
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="blanking_parts_status"
+                [options]="yesNilOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                *ngIf="form.get('blanking_parts_status')?.value === 'yes'"
+                formControlName="blanking_parts_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11.5 Condition of scupper lips
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-select
+                formControlName="scupper_lips_status"
+                [options]="eddyItemsStatusOptions"
+                placeholder="--Select--"
+                [searchable]="false"
+              ></app-select>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 space-y-2" colspan="2">
+              <app-input
+                *ngIf="form.get('scupper_lips_status')?.value === 'other'"
+                formControlName="scupper_lips_other"
+                placeholder="Specify other"
+              ></app-input>
+
+              <app-input
+                formControlName="scupper_lips_details"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              11.6 Condition of Araldite fairing of rudders, ‘A’ rackets,
+              stabilizer, Echo sounders, log rod, eddy cones , eddy plates, rope
+              guards, U/W openings
+            </td>
+
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="rudder_fairing_details"
+                rows="2"
+                class="input-field"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">11.7 Angle of list</td>
+
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="angle_of_list"
+                placeholder="Enter angle"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">11.8 Other observations</td>
+
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <app-input
+                formControlName="general_other_observations"
+                rows="2"
+                class="input-field"
+                placeholder="Enter details"
+              ></app-input>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF] border border-white/15 px-3 py-2 align-middle text-white/85">
+              12. OTHER OBSERVATIONS
+            </td>
+            <td colspan="3" class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="4">
+              <app-input
+                formControlName="final_other_observations"
+                rows="3"
+                class="input-field"
+                placeholder="Enter any additional observations"
+              ></app-input>
+            </td>
+          </tr>
+          <tr>
+            <td class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF] border border-white/15 px-3 py-2 align-middle text-white/85">
+              13. Upload Watt report
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="watt_report"
+              >
+              </app-file-upload>
+            </td>
+          </tr>
+
+          <tr>
+            <td
+              class="w-full border border-white/15 px-3 py-2 align-middle text-white/85 italic px-3 py-2"
+              colspan="5"
+            >
+              Note: The above observations are preliminary in nature. The
+              Refitting Authority is to undertake a detailed structural survey &
+              repair in accordance with NO 01/15, routines as per MAINTOPs and
+              painting in accordance with NO 53/16 prior to undocking of ship
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center">
+              Signatures
+            </td>
+          </tr>
+
+          <tr class="bg-white/[0.08] text-[11px] font-bold uppercase tracking-wider text-[#61C2FF]">
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" colspan="1">
+              Signature of Ship Staff
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center w-1/3" colspan="1">
+              Signature of Refitting Authority
+            </td>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85 text-center" colspan="2">
+              Signature of HITU Inspector
+            </td>
+          </tr>
+
+          <!-- Digital Signature Upload -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="ship_staff_signature"
+              >
+              </app-file-upload>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="refitting_authority_signature"
+              >
+              </app-file-upload>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-file-upload
+                [label]="'Upload Signature'"
+                formControlName="hitu_inspector_signature"
+              >
+              </app-file-upload>
+            </td>
+          </tr>
+
+          <!-- Name -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-input formControlName="ship_staff_name" placeholder="Name">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-input
+                formControlName="refitting_authority_name"
+                placeholder="Name"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="hitu_inspector_name"
+                placeholder="Name"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- Rank -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-input formControlName="ship_staff_rank" placeholder="Rank">
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-input
+                formControlName="refitting_authority_rank"
+                placeholder="Rank"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="hitu_inspector_rank"
+                placeholder="Rank"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- Designation -->
+          <tr>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-input
+                formControlName="ship_staff_dsg"
+                placeholder="Designation"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="1">
+              <app-input
+                formControlName="refitting_authority_dsg"
+                placeholder="Designation"
+              >
+              </app-input>
+            </td>
+
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="2">
+              <app-input
+                formControlName="hitu_inspector_dsg"
+                placeholder="Designation"
+              >
+              </app-input>
+            </td>
+          </tr>
+
+          <!-- <tr>
+                  <td colspan="5" class="border border-white/15 px-3 py-2 align-middle text-white/85 font-semibold text-center">
+                    Compartment/Tanks for Dry dock phase inspection iaw no. 01/15
+                  </td>
+                </tr> -->
+          <!-- <tr>
+                  <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+                    Dropdown to see the check off list for Preliminary UW inspection
+                  </td>
+
+                  <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="3">
+                    <app-select formControlName="uw_checklist_view" [options]="uwChecklistViewOptions" placeholder="--Select--"></app-select>
+                  </td>
+                </tr> -->
+
+          <!-- Checklist Display -->
+          <!-- <tr *ngIf="form.get('uw_checklist_view')?.value === 'show'">
+                  <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85 bg-white/[0.04]">
+
+                    <h3 class="font-semibold text-sm mb-3">
+                      CHECK-OFF LIST OF PRELIMINARY UNDER WATER INSPECTION
+                    </h3>
+
+                    <ul class="text-sm space-y-1 list-decimal pl-5">
+                      <li>Date of inspection and authority</li>
+                      <li>Dockyard / SS personnel reps with contact no</li>
+                      <li>Docking of last version</li>
+                      <li>Present docking date and version confirmation from ND(V)/MDS</li>
+                      <li>Whether docked as per IHQ MoD(N) approved docking plan</li>
+                      <li>Check gaps between blocks and ship / crushed / misaligned blocks</li>
+                      <li>Underwater hull cleaning status, gratings removed / not removed</li>
+                      <li>Current paint scheme and last applied</li>
+                      <li>Paint condition peeling / flaking / cracking</li>
+                      <li>Rusting / corrosion / bare metal on UW hull</li>
+                      <li>Structural dents / undulation / pits / holes</li>
+                      <li>
+                        ICCP system Ops:
+                        <ul class="list-disc pl-5">
+                          <li>Dry dock checks completed / Sat / Unsat</li>
+                          <li>MLAB/WECORS/OEM report to be obtained</li>
+                        </ul>
+                      </li>
+                      <li>Pre-docking checks / dielectric shields / fairing</li>
+                      <li>Propellers cleaning / blade condition / pitting / erosion</li>
+                      <li>Condition of Eddy cones / rope guards / UW gratings</li>
+                      <li>Sonar dome status / leakage / paint / repairs</li>
+                      <li>Draught marking status</li>
+                      <li>Any Sea tube / sea chest blanked</li>
+                      <li>No of eye hooks / eye plate welded</li>
+                      <li>Type of Bilge Keel</li>
+                      <li>Last Complete Robotic Survey</li>
+                      <li>Extent of hull survey in present refit</li>
+                      <li>WATT (Vzg) remarks – SAT / UNSAT</li>
+                    </ul>
+
+                  </td>
+                </tr> -->
+
+          <!-- <tr>
+                <td colspan="4" class="border border-white/15 px-3 py-2 align-middle text-white/85  table-parameters-header text-white">
+
+                  <p class="font-semibold text-sm mb-2">Ref:</p>
+
+                  <ul class="list-disc pl-5 text-sm space-y-1  ">
+                    <li>Ref 1. NO 01/15</li>
+                    <li>Ref 2. NO(Str)14/09 (for SNMs)</li>
+                    <li>Ref 3. NO 20/16 (GRP)</li>
+                    <li>Ref 4. NO 07/04 (Alu structure)</li>
+                    <li>Ref 5. CNO 03/17 (for Submarines) (as applicable)</li>
+                    <li>Ref 6. Routines as per maintops and painting in accordance with NO 53/16</li>
+                    <li>Ref 7. NCD 1481</li>
+                    <li>Ref 8. NCD 1491</li>
+                  </ul>
+
+                </td>
+              </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <!-- <app-editor [height]="200"></app-editor> -->
+
+  <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event"
+>
+</app-approval-work-flow>

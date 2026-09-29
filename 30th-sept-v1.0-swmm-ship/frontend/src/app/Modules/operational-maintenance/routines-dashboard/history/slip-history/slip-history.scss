@@ -1,0 +1,403 @@
+@use 'sass:color';
+
+/* ---------- Design tokens (theme-aware) ---------- */
+$bg-page      : var(--bg-input);
+$bg-card      : var(--bg-card);
+$bg-input     : var(--bg-input);
+$border-subtle: var(--border-primary);
+$border-emph  : var(--border-input);
+$text-primary : var(--text-primary);
+$text-muted   : var(--text-muted);
+$accent-blue  : var(--accent-blue);
+$tab-active   : var(--accent-blue);
+
+/* ============================================================
+   PAGE
+============================================================ */
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.5rem 1.5rem;
+  background: $bg-page;
+  min-height: 100%;
+  color: $text-primary;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ============================================================
+   TABS
+============================================================ */
+
+.tab-nav {
+  display: flex;
+}
+
+.tab-btn {
+  position: relative;
+  padding: 16px 24px 14px;
+  background: transparent;
+  border: none;
+  color: $text-muted;
+  font-size: 15px;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+  }
+
+  &:hover {
+    color: var(--text-primary);
+  }
+
+  &.active {
+    color: var(--text-primary);
+    font-weight: 500;
+
+    &::after {
+      background: $tab-active;
+    }
+  }
+}
+
+.tab-divider {
+  height: 1px;
+  background: $border-subtle;
+  margin-bottom: 1.5rem;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   DATE RANGE DROPDOWN
+============================================================ */
+
+.date-range-picker {
+  position: relative;
+}
+
+.date-range-trigger {
+  min-width: 220px;
+  height: 36px;
+
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: $accent-blue;
+  /* Always white, not var(--text-primary) — this button's background stays the same
+     dark blue in both themes, but --text-primary flips to a dark color in light mode,
+     making the label unreadable against it. */
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: background .2s ease;
+
+  &:hover {
+    background: #21558b;
+  }
+
+  i {
+    font-size: 14px;
+  }
+}
+
+.date-popup {
+  position: absolute;
+  top: 44px;
+  left: 0;
+
+  width: 180px;
+
+  background: #4e4e4e;
+  border-radius: 10px;
+
+  padding: 10px;
+
+  z-index: 1000;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
+}
+
+.preset-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preset-panel button {
+  height: 28px;
+
+  border: 1px solid var(--border-input);
+  border-radius: 4px;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition: all .15s ease;
+}
+
+.preset-panel button:hover {
+  background: var(--bg-input-disabled);
+}
+
+.preset-panel button.active {
+  background: #4d7396;
+  border-color: #6d95bb;
+}
+
+/* ============================================================
+   CUSTOM RANGE
+============================================================ */
+
+.custom-range {
+  margin-top: 10px;
+  padding-top: 10px;
+
+  border-top: 1px solid var(--border-input);
+}
+
+.custom-range input {
+  width: 100%;
+  height: 32px;
+
+  margin-bottom: 8px;
+  padding: 0 8px;
+
+  border: 1px solid var(--border-input);
+  border-radius: 4px;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
+  font-size: 12px;
+}
+
+.custom-range input {
+  color-scheme: var(--native-color-scheme, dark);
+}
+
+.custom-range input::-webkit-calendar-picker-indicator {
+  filter: var(--calendar-icon-filter, invert(1));
+  cursor: pointer;
+}
+
+.custom-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.custom-actions button {
+  flex: 1;
+
+  height: 32px;
+
+  border: none;
+  border-radius: 4px;
+
+  background: #4d7396;
+  color: var(--text-primary);
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.custom-actions button:hover {
+  background: #5e84ab;
+}
+
+/* ============================================================
+   TOOLBAR
+============================================================ */
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  max-width: 700px;
+  margin-left: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $text-muted;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-box input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 38px 0 38px;
+
+  border: 1px solid $border-subtle;
+  border-radius: 8px;
+
+  background: $bg-input;
+  color: var(--text-primary);
+
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:focus {
+    border-color: $border-emph;
+  }
+}
+
+.search-box input::placeholder {
+  color: $text-muted;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: $text-muted;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-comm-btn-hover, rgba(255, 255, 255, 0.1));
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-blue;
+    outline-offset: 1px;
+  }
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  height: 42px;
+
+  padding: 0 1rem;
+
+  border: 1px solid $border-emph;
+  border-radius: 8px;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
+  cursor: pointer;
+}
+
+.export-btn:hover {
+  background: var(--bg-input-disabled);
+}
+
+.export-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding-left: 10px;
+
+  border-left: 1px solid $border-emph;
+}
+
+.export-icons i {
+  color: $text-muted;
+}
+
+.export-icons i:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   AG GRID
+============================================================ */
+
+:host ::ng-deep {
+
+  .ag-theme-alpine-dark,
+  .ag-theme-quartz-dark {
+
+    --ag-background-color: #{$bg-card};
+    --ag-header-background-color: #{$bg-input};
+    --ag-border-color: #{$border-subtle};
+    --ag-row-border-color: #{$border-subtle};
+    --ag-foreground-color: #{$text-primary};
+    --ag-header-foreground-color: #{$text-muted};
+    --ag-font-size: 13px;
+  }
+
+  .ag-header-cell-label {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .ag-row:hover {
+    background: var(--bg-input-disabled) !important;
+  }
+
+  .ag-paging-panel {
+    border-top: 1px solid $border-subtle;
+    color: $text-muted;
+  }
+}

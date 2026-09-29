@@ -1,0 +1,74 @@
+<div class="ship-returns-container">
+  <!-- Header Banner -->
+  <div class="header-section glass-card mb-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
+      <div>
+        <h1 class="head2 flex items-center gap-3">
+          <app-icon name="ship" [size]="28" variant="accent"></app-icon>
+          Ship Returns Overview
+        </h1>
+        <p class="subHeading_of_kpis mt-1">
+          Centralized monitoring and management for SRAR, Trial, Hull, and General Ship Returns
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <app-button class="button flex-row gap-2" [routerLink]="['/afterAuth/ship-returns/srar']">
+          <app-icon name="plus" [size]="16" variant="inherit"></app-icon>
+          <span>Submit Return</span>
+        </app-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    @for (item of stats(); track item.title) {
+      <div
+        class="glass-card stat-card p-5 cursor-pointer hover:border-white/30 transition-all"
+        [routerLink]="[item.route]"
+      >
+        <div class="flex items-center justify-between">
+          <span class="subHeading_of_kpis">{{ item.title }}</span>
+          <div
+            class="stat-icon-wrapper"
+            [style.background-color]="item.accentColor + '20'"
+            [style.color]="item.accentColor"
+          >
+            <app-icon [name]="item.icon" [size]="20" variant="inherit"></app-icon>
+          </div>
+        </div>
+        <div class="no_kpi mt-3">{{ item.count }}</div>
+        <div class="sub2 mt-2 flex items-center gap-1 opacity-75">
+          <span>{{ item.subtext }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Main Returns Table Section -->
+  <div class="glass-card p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div>
+        <h2 class="head3">Recent Returns Log</h2>
+        <span class="subHeading_of_kpis">Latest submitted records across all categories</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="search-box">
+          <app-icon name="search" [size]="14" class="text-white/50"></app-icon>
+          <input type="text" placeholder="Search returns..." class="search-input" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <app-data-grid
+      [rowData]="recentReturns()"
+      [columnDefs]="recentReturnsColumnDefs"
+      [pagination]="true"
+      [pageSize]="10"
+      height="440px">
+    </app-data-grid>
+  </div>
+</div>

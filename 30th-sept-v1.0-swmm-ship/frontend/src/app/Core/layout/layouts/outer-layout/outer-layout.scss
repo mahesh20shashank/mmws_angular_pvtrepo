@@ -1,0 +1,93 @@
+/* Modern Global Styles Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #07101a;
+  color: #e6eef7;
+}
+
+/* Ensure scroll behavior is smooth */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Table style for app tables, scoped so they don't break tailwind classes */
+table.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  thead {
+    background-color: rgba(255, 255, 255, 0.05);
+    font-weight: bold;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+}
+
+.loader {
+  text-align: center;
+  padding: 40px;
+  color: #a8c0d8;
+}
+
+/* Custom button classes to follow the design rules */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer inline-flex items-center justify-center;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:from-blue-500 hover:to-indigo-500 active:scale-95;
+}
+
+.btn-ghost {
+  @apply bg-white/5 hover:bg-white/10 text-white border border-white/10 active:scale-95;
+}
+
+/* Global Figma Glass Button specification */
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.96) translateY(0);
+  }
+}

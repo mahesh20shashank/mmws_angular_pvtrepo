@@ -1,0 +1,238 @@
+.shift-due-date-container {
+  color: var(--text-primary);
+
+  .shift-due-date-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    gap: 20px;
+
+    h2 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    button {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  .alert {
+    margin-bottom: 24px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::before {
+      content: '🔒';
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    &.alert-danger {
+      background: rgba(239, 68, 68, .1);
+      border-color: rgba(239, 68, 68, .35);
+      color: #f87171;
+
+      &::before {
+        content: '⚠';
+      }
+    }
+
+    .btn {
+      margin-left: auto;
+    }
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  .table {
+    margin-bottom: 0;
+    background-color: var(--bg-card);
+    border-collapse: collapse;
+    width: 100%;
+
+    thead th {
+      background-color: var(--bg-input);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border-card);
+      color: var(--text-muted-2, var(--text-muted));
+      text-align: left;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border-card);
+
+      &:hover {
+        background-color: var(--bg-icon-btn);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: 16px 12px;
+        vertical-align: middle;
+        color: var(--text-primary);
+        font-size: 13px;
+
+        &.text-center {
+          text-align: center;
+        }
+
+        input[type='date'] {
+          width: 150px;
+          background-color: var(--bg-input);
+          color: var(--text-primary);
+          border: 1px solid var(--border-card);
+          border-radius: 6px;
+          padding: 7px 10px;
+          font-size: 13px;
+          font-family: inherit;
+          color-scheme: dark light;
+
+          &:focus {
+            outline: none;
+            border-color: var(--accent-blue, #1d96e9);
+            box-shadow: 0 0 0 3px rgba(29, 150, 233, 0.15);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+
+  .shift-due-date-footer {
+    border-top: 1px solid var(--border-card);
+    padding-top: 20px;
+    margin-top: 0;
+
+    .text-muted {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  }
+
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    background: var(--bg-input);
+    border: 1px solid var(--border-card);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--bg-icon-btn);
+      color: var(--text-primary);
+    }
+  }
+
+  // `<app-button>` renders no chrome on its own for these Bootstrap-style
+  // class names (Bootstrap isn't loaded in this app) - style them directly
+  // so they read as real buttons instead of plain text.
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--bg-input);
+    border: 1px solid var(--border-card);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background .15s ease;
+
+    &:hover { background: var(--bg-icon-btn); }
+    &:disabled { opacity: .5; cursor: not-allowed; }
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .btn-primary {
+    background: var(--accent-blue, #1d96e9);
+    border-color: var(--accent-blue, #1d96e9);
+    color: #fff;
+
+    &:hover { background: #1785d1; }
+  }
+
+  .ms-2 { margin-left: 8px; }
+
+  .spinner-border {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-width: 0.25em;
+    border-style: solid;
+    border-color: var(--border-card);
+    border-right-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    animation: shift-due-date-spin .75s linear infinite;
+  }
+
+  @keyframes shift-due-date-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .text-center { text-align: center; }
+  .py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+  .mt-2 { margin-top: 0.5rem; }
+  .mb-3 { margin-bottom: 1rem; }
+  .mb-4 { margin-bottom: 1.5rem; }
+  .d-flex { display: flex; }
+  .gap-2 { gap: 0.5rem; }
+  .text-muted { color: var(--text-muted); }
+}

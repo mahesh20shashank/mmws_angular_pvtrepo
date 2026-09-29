@@ -1,0 +1,314 @@
+/* ============================================================
+   Equipment Routine History – Component Styles
+   Matches the dark-navy shell used across OP. Maintenance.
+   ============================================================ */
+
+/* ---------- Design tokens (theme-aware) ---------- */
+$bg-page      : var(--bg-input);   // outer page background
+$bg-card      : var(--bg-card);   // card / grid surface
+$bg-input     : var(--bg-input);   // filter dropdowns & search
+$bg-input-hov : var(--bg-input-disabled);
+$border-subtle: var(--border-primary);
+$border-emph  : var(--border-input);
+$text-primary : var(--text-primary);
+$text-muted   : var(--text-muted);
+$accent-blue  : #0056b3;
+
+/* ---------- Page wrapper ---------- */
+.page-container {
+  display       : flex;
+  flex-direction: column;
+  gap           : 1.5rem;
+  padding       : 1.5rem;
+  background    : $bg-page;
+  min-height    : 100%;
+  color         : $text-primary;
+  font-family   : 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ---------- Grid card ---------- */
+.grid-card {
+  background   : $bg-card;
+  border-radius: 12px;
+  border       : 0.5px solid $border-subtle;
+  padding      : 1.25rem;
+  display      : flex;
+  flex-direction: column;
+  gap          : 1rem;
+}
+
+/* ---------- Filter row ---------- */
+.filter-row {
+  display    : flex;
+  align-items: flex-end;
+  gap        : 1rem;
+  flex-wrap  : wrap;
+  margin-left: 10px;
+
+  /* Let selects grow equally, clear-filter stays auto */
+  app-select-input {
+    flex: 1 1 200px;
+  }
+}
+
+/* ---------- Clear Filter button ---------- */
+.clear-filter-btn {
+  height          : 44px;
+  padding         : 0 1.25rem;
+  border-radius   : 8px;
+  border          : 0.5px solid $border-emph;
+  background      : $bg-input;
+  color           : $text-primary;
+  font-size       : 14px;
+  font-weight     : 500;
+  white-space     : nowrap;
+  cursor          : pointer;
+  transition      : background 0.15s ease;
+
+  &:hover {
+    background: $bg-input-hov;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ---------- Toolbar (search + export) ---------- */
+.toolbar {
+  display        : flex;
+  align-items    : center;
+  justify-content: space-between;
+  gap            : 1rem;
+  flex-wrap      : wrap;
+}
+
+/* Search box */
+.search-box {
+  position    : relative;
+  flex        : 1 1 280px;
+  max-width   : 100%;
+  margin-left: 10px;
+
+  .search-icon {
+    position   : absolute;
+    left       : 12px;
+    top        : 50%;
+    transform  : translateY(-50%);
+    font-size  : 16px;
+    color      : $text-muted;
+    pointer-events: none;
+  }
+
+  input {
+    width        : 100%;
+    height       : 42px;
+    padding      : 0 12px 0 38px;
+    background   : $bg-input;
+    border       : 0.5px solid $border-subtle;
+    border-radius: 8px;
+    color        : $text-primary;
+    font-size    : 14px;
+    outline      : none;
+    transition   : border-color 0.15s ease;
+    box-sizing   : border-box;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:focus {
+      border-color: var(--text-muted);
+    }
+  }
+}
+
+/* Export button */
+.export-btn {
+  display        : flex;
+  align-items    : center;
+  gap            : 10px;
+  height         : 42px;
+  padding        : 0 1rem;
+  background     : var(--bg-input);
+  border         : 0.5px solid $border-emph;
+  border-radius  : 8px;
+  color          : $text-primary;
+  font-size      : 14px;
+  cursor         : pointer;
+  transition     : background 0.15s ease;
+  white-space    : nowrap;
+
+  &:hover {
+    background: var(--bg-input-disabled);
+  }
+
+  .export-label {
+    font-weight: 500;
+  }
+
+  .export-icons {
+    display    : flex;
+    align-items: center;
+    gap        : 10px;
+    border-left: 0.5px solid $border-emph;
+    padding-left: 10px;
+
+    i {
+      font-size: 16px;
+      color    : $text-muted;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: $text-primary;
+      }
+    }
+  }
+}
+
+/* ---------- Status badges (injected by AG Grid cellRenderer) ---------- */
+:host ::ng-deep {
+  .badge {
+    display      : inline-flex;
+    align-items  : center;
+    padding      : 3px 12px;
+    border-radius: 20px;
+    font-size    : 12px;
+    font-weight  : 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  .badge-active {
+    background: #1e4db7;
+    color     : #bfdbfe;
+  }
+
+  .badge-inactive {
+    background: var(--bg-input);
+    color     : $text-muted;
+  }
+
+  .badge-pending {
+    background: rgba(217, 119, 6, 0.2);
+    color     : #fbbf24;
+  }
+
+  /* ---- AG Grid dark skin overrides ---- */
+  .ag-theme-alpine-dark,
+  .ag-theme-quartz-dark {
+    --ag-background-color        : #{$bg-card};
+    --ag-header-background-color : var(--bg-input);
+    --ag-odd-row-background-color: var(--bg-input);
+    --ag-border-color            : #{$border-subtle};
+    --ag-row-border-color        : #{$border-subtle};
+    --ag-header-foreground-color : #{$text-muted};
+    --ag-foreground-color        : #{$text-primary};
+    --ag-selected-row-background-color: rgba(0, 86, 179, 0.15);
+  }
+}
+
+/* ---------- Timeline detail panel ---------- */
+.timeline-overlay {
+  position  : fixed;
+  inset     : 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index   : 1000;
+  cursor    : pointer;
+}
+
+.timeline-sidebar {
+  position       : fixed;
+  top            : 0;
+  right          : 0;
+  bottom         : 0;
+  width          : min(60vw, 900px);
+  max-width      : 100%;
+  background     : var(--bg-sfd-modal);
+  color          : $text-primary;
+  border-left    : 0.5px solid $border-subtle;
+  z-index        : 1001;
+  display        : flex;
+  flex-direction : column;
+  gap            : 1rem;
+  padding        : 1.25rem;
+  overflow-y     : auto;
+  box-shadow     : -8px 0 24px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar-header {
+  display        : flex;
+  align-items    : center;
+  justify-content: space-between;
+  gap            : 1rem;
+
+  h3 {
+    font-size  : 16px;
+    font-weight: 600;
+    color      : $text-primary;
+    margin     : 0;
+  }
+
+  .close-sidebar {
+    display      : inline-flex;
+    align-items  : center;
+    justify-content: center;
+    width        : 32px;
+    height       : 32px;
+    border-radius: 8px;
+    border       : none;
+    background   : transparent;
+    color        : $text-muted;
+    cursor       : pointer;
+    transition   : background 0.15s ease;
+
+    &:hover {
+      background: $bg-input-hov;
+      color     : $text-primary;
+    }
+  }
+}
+
+.sidebar-filter {
+  max-width: 320px;
+}
+
+.sidebar-table-wrapper {
+  flex     : 1;
+  overflow-x: auto;
+}
+
+.timeline-loading,
+.timeline-empty {
+  padding  : 2rem 0;
+  text-align: center;
+  color    : $text-muted;
+  font-size: 14px;
+}
+
+.timeline-table {
+  width          : 100%;
+  border-collapse: collapse;
+  font-size      : 13px;
+  color          : $text-primary;
+  min-width      : 900px;
+
+  th, td {
+    padding      : 10px 12px;
+    text-align   : left;
+    border-bottom: 0.5px solid $border-subtle;
+    white-space  : nowrap;
+  }
+
+  th {
+    color      : $text-muted;
+    font-weight: 600;
+    background : $bg-input;
+    position   : sticky;
+    top        : 0;
+  }
+}
+
+/* ---------- Utility ---------- */
+.flex    { display: flex; }
+.gap-2   { gap: 0.5rem; }

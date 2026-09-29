@@ -1,0 +1,99 @@
+<app-master-card cardTitle="Guarantee Defect Report" cardHeight="auto">
+  <div class="flex justify-end mb-3">
+    <app-button type="button" (click)="print()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm flex items-center gap-2">
+      <app-icon name="printer" [size]="16" />
+      Print
+    </app-button>
+  </div>
+
+  @if (loading) {
+    <div class="py-10 text-center text-white/40 text-sm">Loading guarantee defect report…</div>
+  } @else if (!gd) {
+    <div class="py-10 text-center text-white/40 text-sm">
+      No guarantee defect selected. Open this page with a <code>?dart_id=</code> query parameter.
+    </div>
+  } @else {
+  <div class="bg-white/[0.02] border border-white/10 rounded-xl p-6 text-white/85 text-sm leading-relaxed space-y-4">
+    <div class="text-center font-semibold text-white text-base">
+      GUARANTEE DEFECT REPORT — E-DART No. {{ gd.dart_number }}
+    </div>
+
+    <div>
+      <p class="font-semibold text-white">1. Defect Details</p>
+      <p>Description: {{ gd.description }}</p>
+      <p>Location: {{ gd.location }}</p>
+      <p>Date of Occurrence: {{ gd.date_of_occurrence }}</p>
+      <p>Cause / Reason: {{ gd.guarantee_cause }}</p>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white">2. Date for Completion</p>
+      <p>{{ gd.guarantee_completion_date }}</p>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white">3. Effect on Sea-going / Operational Availability</p>
+      <p>{{ gd.guarantee_op_availability }}</p>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white">4. Hot Work Involved</p>
+      <p>{{ gd.guarantee_hot_work }}</p>
+    </div>
+
+    <div>
+      <p class="font-semibold text-white">5. Date & Place Ship Available for Repairs</p>
+      <p>{{ gd.guarantee_repair_date }} — {{ gd.guarantee_place }}</p>
+    </div>
+
+    <hr class="border-white/10" />
+
+    <div class="grid grid-cols-2 gap-6 pt-2">
+      <div>
+        <p class="font-semibold text-white">6. Signature of Ship Staff (HOD)</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Seal & Date</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white">7. Date of Acceptance in WOT (Mbi)</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+      </div>
+      <div>
+        <p class="font-semibold text-white">8. Remarks by WOT (Mbi)</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Signature of Overseer & Date</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white">9. Work Order Details</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Ref No. / Subcontract / Navy a/c / MDL / Consequential / OEM Guarantee</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white">10. Job No.</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Date</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white">11. Start Date & Remarks</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Chief Guarantee Engineer / MDL Rep.</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white">12. Completion Date</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Signature by MDL Rep.</p>
+      </div>
+      <div>
+        <p class="font-semibold text-white">13. Completed to My Satisfaction</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Ship Staff HOD Signature & Date</p>
+      </div>
+      <div class="col-span-2">
+        <p class="font-semibold text-white">14. SNCO / SNLO / SNWO Remarks</p>
+        <div class="h-10 border-b border-white/20 mt-4"></div>
+        <p class="text-white/40 text-xs mt-1">Senior Overseer Signature & Date</p>
+      </div>
+    </div>
+  </div>
+  }
+</app-master-card>

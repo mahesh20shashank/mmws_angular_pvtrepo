@@ -1,0 +1,679 @@
+<div *ngIf="open && isShowPopup" (click)="closeAllDropdowns()"
+  class="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/60 p-2 backdrop-blur-md sm:p-4" [ngClass]="{
+    'items-start': position === 'top',
+    'items-center': position === 'center',
+    'items-end': position === 'bottom'
+  }">
+  <div [style.max-width]="width"
+    class="add-form-dialog glass-card flex w-full min-w-0 max-h-[min(90vh,880px)] flex-col overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.4)] text-white"
+    (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+    [attr.aria-labelledby]="fromTitle ? 'add-form-title' : null">
+    <div class="shrink-0 border-b border-white/10 px-5 py-3.5">
+      <h2 id="add-form-title" class="break-words text-[1.05rem] font-semibold leading-snug tracking-tight text-white">
+        {{ fromTitle }}
+      </h2>
+      <p *ngIf="formDescription?.trim()" class="mt-1 text-[13px] leading-relaxed text-white/60">
+        {{ formDescription }}
+      </p>
+    </div>
+
+    <div class="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-5 py-4">
+      <div *ngIf="tabs && tabs.length > 0">
+        <div class="mb-4 inline-flex w-fit gap-1 rounded-full border border-white/20 bg-white/[0.08] p-1">
+          <button *ngFor="let tab of tabs" (click)="activeTab = tab; onTabChange.emit(tab)" [ngClass]="
+              activeTab?.key === tab?.key
+                ? 'bg-white/15 text-white'
+                : 'text-white/60 hover:text-white'
+            "
+            class="flex items-center gap-2 rounded-full px-4 py-1 text-[12px] font-semibold transition-all duration-150 focus:outline-none"
+            style="
+              transition:
+                background 0.15s,
+                color 0.15s,
+                box-shadow 0.13s,
+                transform 0.13s;
+            ">
+            {{ tab.label }}
+          </button>
+        </div>
+      </div>
+
+      <form [formGroup]="form" class="space-y-5">
+        <div class="grid grid-cols-12 gap-x-5 gap-y-5">
+          <ng-container *ngFor="let field of formConfig; trackBy: trackByKey">
+            <ng-container *ngIf="!field.hide">
+              <div class="col-span-12 min-w-0" [ngClass]="{
+                  'lg:col-span-4': !field.colSpan || field.colSpan === 1,
+                  'lg:col-span-6': field.colSpan === 1.5,
+                  'lg:col-span-8': field.colSpan === 2,
+                  'lg:col-span-12': field.colSpan === 3,
+                }">
+                <div *ngIf="field.type === 'spacer'" class="w-full h-0"></div>
+
+                <ng-container *ngIf="field.type === 'checkbox'">
+                  <div class="flex min-h-[44px] h-full items-center">
+                    <label class="flex cursor-pointer items-center gap-3">
+                      <input [id]="field.key" type="checkbox" [formControlName]="field.key"
+                        (change)="handleChange(field.key, $any($event.target).checked)"
+                        class="h-5 w-5 shrink-0 cursor-pointer accent-[#61C2FF] border-2 border-white/40 rounded-md bg-transparent" />
+
+                      <span class="text-sm font-semibold text-white/90">
+                        {{ field.label }}
+                        <span *ngIf="field.required" class="text-red-500">*</span>
+                      </span>
+                    </label>
+                  </div>
+                </ng-container>
+
+                <!-- ✅ NON-CHECKBOX -->
+                <ng-container *ngIf="field.type !== 'checkbox'">
+                  <div *ngIf="field.type === 'button'" class="w-full flex items-end h-full">
+                    <button type="button" [disabled]="field.disabled" (click)="handleChange(field.key, true)" [ngClass]="{
+                        'border border-[#4f8fd5] bg-[#1069AB] hover:bg-[#195d95] text-white cursor-pointer min-h-[44px] w-full rounded-md flex items-center justify-center px-4 text-center break-words':
+                          !field.disabled,
+
+                        'border border-white/15 bg-white/10 text-white/40 cursor-not-allowed min-h-[44px] w-full rounded-md flex items-center justify-center px-4 text-center break-words':
+                          field.disabled,
+                      }">
+                      {{ field.label }}
+                    </button>
+                  </div>
+                  <!-- ✅ BASIC INPUT / DATE / TEXTAREA -->
+                  <div class="relative w-full" *ngIf="
+                      field.type !== 'button' &&
+                      (isBasicInput(field) ||
+                        field.type === 'date' ||
+                        field.type === 'time' ||
+                        field.type === 'textarea' ||
+                        field.type === 'address')
+                    ">
+                    <!-- basic input (use shared input component) -->
+                    <app-input *ngIf="isBasicInput(field)" [type]="field.type" [placeholder]="field.placeholder || ''"
+                      [label]="field.label" [required]="field.required" [formControlName]="field.key"
+                      [readonly]="isEditMode" [disabled]="isEditMode"></app-input>
+
+                    <!-- date -->
+                    <div *ngIf="field.type === 'date'" class="w-full">
+                      <app-calendar [label]="field.label" [required]="field.required"
+                        [formControlName]="field.key"></app-calendar>
+                    </div>
+
+                    <!-- time -->
+                    <div *ngIf="field.type === 'time'" class="w-full">
+                      <app-time-picker [label]="field.label" [required]="field.required"
+                        [formControlName]="field.key"></app-time-picker>
+                    </div>
+
+
+
+                    <!-- textarea/address (use shared textarea component) -->
+                    <app-textarea *ngIf="
+                        field.type === 'textarea' || field.type === 'address'
+                      " [label]="field.label" [rows]="field.type === 'address' ? 3 : field.rows || 2"
+                      [placeholder]="field.placeholder || ''" [required]="field.required"
+                      [formControlName]="field.key"></app-textarea>
+                    <!-- textarea/address -->
+
+
+                    <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                      <i class="pi pi-exclamation-circle"></i>
+                      <span
+                        *ngIf="form.get(field.key)?.errors?.['required'] || form.get(field.key)?.errors?.['minlength']">{{
+                        field.label }} is required.</span>
+                      <span *ngIf="form.get(field.key)?.errors?.['email']">Please enter a valid email.</span>
+                      <span *ngIf="form.get(field.key)?.errors?.['pattern']">Invalid format.</span>
+                      <span *ngIf="form.get(field.key)?.errors?.['min']">Value must be at least {{ field.min }}.</span>
+                      <span *ngIf="form.get(field.key)?.errors?.['max']">Value must be at most {{ field.max }}.</span>
+                    </div>
+                  </div>
+
+                  <div *ngIf="field.type === 'file-comp'" class="relative w-full">
+                    <app-file-upload [label]="field.label" [required]="field.required" [multiple]="field.multiple"
+                      [disabled]="isEditMode" [formControlName]="field.key"></app-file-upload>
+                  </div>
+                  <!-- ✅ Rich text (TinyMCE) -->
+                  <div *ngIf="field.type === 'editor'" class="relative w-full">
+                    <app-html-editor-field [label]="field.label" [required]="field.required"
+                      [placeholder]="field.placeholder" [height]="field.editorHeight ?? 280"
+                      [formControlName]="field.key"></app-html-editor-field>
+                    <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                      <i class="pi pi-exclamation-circle"></i>
+                      <span
+                        *ngIf="form.get(field.key)?.errors?.['required'] || form.get(field.key)?.errors?.['minlength']">{{
+                        field.label }} is required.</span>
+                    </div>
+                  </div>
+
+                  <!-- ✅ Reusable Single Select -->
+                  <div *ngIf="field.type === 'select'" class="w-full">
+                    <app-select [label]="field.label" [required]="field.required"
+                      [placeholder]="field.placeholder || '--Select--'" [options]="getOptionsForField(field.key)"
+                      [formControlName]="field.key" [disabled]="!!field.disabled"
+                      [dropdownPlacement]="field.dropdownPlacement || 'auto'"
+                      (valueChange)="handlePrimeSelectChange($event, field.key)">
+                    </app-select>
+
+                    <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                      <i class="pi pi-exclamation-circle"></i>
+                      <span
+                        *ngIf="form.get(field.key)?.errors?.['required'] || form.get(field.key)?.errors?.['minlength']">{{
+                        field.label }} is required.</span>
+                    </div>
+                  </div>
+
+                  <!-- ✅ Reusable Multi Select -->
+                  <div *ngIf="field.type === 'select-multiple'" class="w-full">
+                    <app-multiselect [label]="field.label" [required]="field.required" [placeholder]="field.placeholder"
+                      [options]="getOptionsForField(field.key)" [searchable]="true" [selectAllEnabled]="true"
+                      [formControlName]="field.key" (selectionChange)="handleChange(field.key, $event)">
+                    </app-multiselect>
+
+                    <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                      <i class="pi pi-exclamation-circle"></i>
+                      <span
+                        *ngIf="form.get(field.key)?.errors?.['required'] || form.get(field.key)?.errors?.['minlength']">{{
+                        field.label }} is required.</span>
+                    </div>
+                  </div>
+
+                  <!-- ✅ Reusable Radio -->
+                  <div *ngIf="field.type === 'radio'" class="w-full">
+                    <label *ngIf="field.label" class="mb-1.5 block text-[11px] text-white/65">
+                      {{ field.label }}
+                      <span *ngIf="field.required" class="text-red-500">*</span>
+                    </label>
+
+                    <div class="flex flex-wrap gap-2">
+                      <label *ngFor="let option of field.options"
+                        class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition"
+                        [ngClass]="form.get(field.key)?.value == option.value
+                          ? 'border-[#61C2FF] bg-[rgba(97,194,255,0.15)] text-white'
+                          : 'border-white/20 bg-white/10 text-white/80 hover:border-white/40'">
+                        <input type="radio" [formControlName]="field.key" [name]="field.key" [value]="option.value"
+                          (change)="handlePrimeSelectChange(option.value, field.key)" class="sr-only"
+                          [required]="field.required" />
+                        <span>{{ option.label }}</span>
+                      </label>
+                    </div>
+
+                    <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                      <i class="pi pi-exclamation-circle"></i>
+                      <span *ngIf="form.get(field.key)?.errors?.['required']">
+                        {{ field.label }} is required.
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- ✅ FILE — single or multi drop zone -->
+                  <div *ngIf="field.type === 'file' || field.type === 'file-multiple'" class="w-full">
+                    <label class="mb-1.5 block text-[11px] text-white/65">
+                      {{ field.label }}
+                      <span *ngIf="field.required" class="text-red-500">*</span>
+                    </label>
+                    <div
+                      class="w-full cursor-pointer rounded-lg border-2 border-dashed border-white/30 bg-white/[0.06] text-center transition mt-2 hover:border-[#61C2FF] p-4"
+                      (click)="triggerFileInputClick(fileInputRef)" (dragover)="onDragOver($event)"
+                      (dragleave)="onDragLeave($event)" (drop)="onFileDrop($event, field.key)"
+                      [class.border-red-500]="isInvalid(field.key)">
+                      <input #fileInputRef [id]="field.key + '-' + field.type" type="file"
+                        (change)="handleFileInput($event, field.key)" class="hidden"
+                        [multiple]="isMultiFileField(field)" [accept]="field.accept || null" />
+
+                      <div class="flex w-full flex-col gap-3 text-left">
+                        <div
+                          *ngIf="field.existingPreviewUrl && !fileUploadDisplayNames[field.key] && !isMultiFileField(field)"
+                          class="rounded-md border border-white/15 bg-white/5 p-2.5">
+                          <div class="flex items-center justify-between gap-2">
+                            <div class="min-w-0 flex-1">
+                              <p class="text-[10px] font-semibold uppercase tracking-wide text-white/50">
+                                {{ field.existingPreviewLabel || 'Current file' }}
+                              </p>
+                              <p class="truncate text-sm font-medium text-white/90"
+                                [title]="getFileName(field.existingPreviewUrl)">
+                                {{ getFileName(field.existingPreviewUrl) }}
+                              </p>
+                            </div>
+                            <button *ngIf="field.existingPreviewAsLink" type="button"
+                              class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/20 bg-white/10 text-white/80 transition hover:bg-white/15"
+                              title="View file" aria-label="View file"
+                              (click)="$event.stopPropagation(); openExistingPreviewInNewTab(field.existingPreviewUrl)">
+                              <i class="fa-solid fa-eye text-sm" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                          <div *ngIf="!field.existingPreviewAsLink" class="mt-2 flex justify-center">
+                            <img [src]="field.existingPreviewUrl" alt=""
+                              class="max-h-40 max-w-full rounded object-contain" loading="lazy" />
+                          </div>
+                        </div>
+
+                        <div *ngIf="showUploadedFileRow(field.key) && !isMultiFileField(field)"
+                          class="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2.5">
+                          <div class="flex items-start gap-2">
+                            <app-icon name="check-circle" [size]="16" class="mt-0.5 shrink-0 text-emerald-400" />
+                            <div class="min-w-0 flex-1">
+                              <p class="text-[10px] font-bold uppercase tracking-wide text-emerald-300">
+                                {{ form.get(field.key)?.value ? 'Uploaded' : 'Selected' }}
+                              </p>
+                              <p class="truncate text-sm font-semibold text-white"
+                                [title]="displayNameForFileField(field.key)">
+                                {{ displayNameForFileField(field.key) }}
+                              </p>
+                              <p *ngIf="form.get(field.key)?.value as storedVal"
+                                class="mt-0.5 truncate text-[11px] text-white/60" [title]="storedVal">
+                                Stored: {{ getFileName(storedVal) }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div *ngIf="isMultiFileField(field) && hasMultiFileUploads(field.key)"
+                          class="space-y-2 rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2.5">
+                          <p class="text-[10px] font-bold uppercase tracking-wide text-emerald-300">
+                            Uploaded images ({{ getMultiFileUploadItems(field.key).length }})
+                          </p>
+                          <div *ngFor="let item of getMultiFileUploadItems(field.key); let i = index"
+                            class="flex items-center justify-between gap-2 rounded-md border border-white/10 bg-white/5 px-2.5 py-2">
+                            <div class="min-w-0 flex-1">
+                              <p class="truncate text-sm font-semibold text-white" [title]="item.name">
+                                {{ item.name }}
+                              </p>
+                              <p class="truncate text-[11px] text-white/60" [title]="item.id">
+                                Stored: {{ getFileName(item.id) }}
+                              </p>
+                            </div>
+                            <button type="button"
+                              class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-red-400 transition hover:bg-red-500/10"
+                              title="Remove image" aria-label="Remove image"
+                              (click)="$event.stopPropagation(); removeMultiUploadedFile(field.key, i)">
+                              <i class="fa-solid fa-xmark"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="flex flex-col items-center gap-1"
+                          [ngClass]="(field.existingPreviewUrl || showUploadedFileRow(field.key) || hasMultiFileUploads(field.key)) ? 'border-t border-white/10 pt-3' : 'pt-1'">
+                          <i class="pi pi-cloud-upload text-2xl text-white/40"></i>
+                          <p class="text-sm font-semibold text-white/80">
+                            {{ fileDropHint(field) }}
+                          </p>
+                          <p class="text-xs text-white/50">
+                            {{ isMultiFileField(field) ? 'Select one or more images, or click to browse' : 'or click
+                            anywhere in this box to browse' }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                      <i class="pi pi-exclamation-circle"></i>
+                      <span
+                        *ngIf="form.get(field.key)?.errors?.['required'] || form.get(field.key)?.errors?.['minlength']">{{
+                        field.label }} is required.</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </form>
+
+      <!-- Attached Files Section -->
+      <div *ngIf="mediaFiles.length > 0 || documentFiles.length > 0"
+        class="mt-6 rounded-lg border border-white/15 bg-white/5 p-5">
+        <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+          <i class="pi pi-paperclip"></i>
+          Attached Files
+        </h3>
+
+        <!-- Media Files -->
+        <div *ngIf="mediaFiles.length > 0" class="mb-4">
+          <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wide mb-2">
+            Media Files
+          </h4>
+          <div class="space-y-2">
+            <div *ngFor="let media of mediaFiles; let i = index"
+              class="flex items-center justify-between rounded-lg border border-white/15 bg-white/5 p-3 transition hover:bg-white/10">
+              <a [href]="media.file" download target="_blank"
+                class="flex items-center gap-3 font-medium text-[#61C2FF] hover:text-white">
+                <i class="pi pi-file"></i>
+                <span class="text-sm">{{ getFileName(media.file) }}</span>
+              </a>
+              <button (click)="deleteFile(media.id!)"
+                class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-sm transition-colors"
+                aria-label="Delete file">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document Files -->
+        <div *ngIf="documentFiles.length > 0" class="mb-4" [class.mt-6]="mediaFiles.length > 0">
+          <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wide mb-2">
+            Document Files
+          </h4>
+          <div class="space-y-2">
+            <div *ngFor="let document of documentFiles; let i = index"
+              class="flex items-center justify-between rounded-lg border border-white/15 bg-white/5 p-3 transition hover:bg-white/10">
+              <a [href]="document.file" download target="_blank"
+                class="flex items-center gap-3 font-medium text-[#61C2FF] hover:text-white">
+                <i class="pi pi-file-pdf"></i>
+                <span class="text-sm">{{ getFileName(document.file) }}</span>
+              </a>
+              <button (click)="deleteDocumentFile(document.id!)"
+                class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-sm transition-colors"
+                aria-label="Delete document file">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="relative z-10 flex shrink-0 flex-wrap items-center justify-end gap-3 border-t border-white/10 px-4 py-3.5 sm:gap-4 sm:px-6">
+
+      <button *ngIf="isAddinational" type="button" (click)="additionalButton.emit($event)"
+        class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98]">
+        <i class="pi pi-plus-circle text-base"></i>
+        <span>{{ additionalLabel || 'Additional' }}</span>
+      </button>
+
+      <button type="button" (click)="closeSidebar()"
+        class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98]">
+        Cancel
+      </button>
+
+      <button *ngIf="showSubmitButton" type="button" (click)="handleSubmit($event, 'save')" [disabled]="!form.valid"
+        class="flex items-center gap-2 rounded-lg border border-[#4f8fd5] bg-[#1069AB] px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-[#195d95] disabled:cursor-not-allowed disabled:opacity-40 active:scale-[0.98]">
+        <app-icon name="check-circle" [size]="16" [class.opacity-40]="!form.valid" />
+        <span>{{ submitLabel || 'Submit' }}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="!isShowPopup">
+  <div class="w-full text-white">
+    <div *ngIf="tabs && tabs.length > 0">
+      <div class="mb-4 inline-flex w-fit gap-1 rounded-full border border-white/20 bg-white/[0.08] p-1">
+        <button *ngFor="let tab of tabs" (click)="activeTab = tab; onTabChange.emit(tab)" [ngClass]="
+            activeTab?.key === tab?.key
+              ? 'bg-white/15 text-white'
+              : 'text-white/60 hover:text-white'
+          "
+          class="flex items-center gap-2 rounded-full px-4 py-1 text-[12px] font-semibold transition-all duration-150 focus:outline-none"
+          style="
+            transition:
+              background 0.15s,
+              color 0.15s,
+              box-shadow 0.13s,
+              transform 0.13s;
+          ">
+          {{ tab.label }}
+        </button>
+      </div>
+    </div>
+
+    <form [formGroup]="form" class="space-y-3">
+      <div class="grid grid-cols-12 gap-4">
+        <ng-container *ngFor="let field of formConfig; trackBy: trackByKey">
+          <ng-container *ngIf="!field.hide">
+            <div class="col-span-12 min-w-0" [ngClass]="{
+    'lg:col-span-3': field.colSpan === 0.75,
+    'lg:col-span-4': !field.colSpan || field.colSpan === 1,
+    'lg:col-span-6': field.colSpan === 1.5,
+    'lg:col-span-8': field.colSpan === 2,
+    'lg:col-span-12': field.colSpan === 3 || field.colSpan === 4
+  }">
+              <!-- ✅ CHECKBOX -->
+              <ng-container *ngIf="field.type === 'checkbox'">
+                <div class="flex min-h-[44px] h-full items-center">
+                  <label class="flex cursor-pointer items-center gap-3 select-none tracking-[1.4px]">
+                    <input [id]="field.key" type="checkbox" [formControlName]="field.key"
+                      (change)="handleChange(field.key, $any($event.target).checked)"
+                      class="h-4 w-4 shrink-0 cursor-pointer rounded border-white/40 accent-[#61C2FF]" />
+                    <span class="text-sm font-semibold text-white/80">
+                      {{ field.label }}
+                      <span *ngIf="field.required" class="text-red-500"></span>
+                    </span>
+                  </label>
+                </div>
+
+                <div *ngIf="isInvalid(field.key)" class="mt-2 text-xs text-red-400 flex items-center gap-2">
+                  <i class="pi pi-exclamation-circle"></i>
+                  <span *ngIf="form.get(field.key)?.errors?.['required']">{{ field.label }} is required.</span>
+                </div>
+              </ng-container>
+
+
+
+              <!-- ✅ NON-CHECKBOX -->
+              <ng-container *ngIf="field.type !== 'checkbox'">
+                <div *ngIf="field.type === 'button'" class="w-full flex items-end h-full">
+                  <button type="button" [disabled]="field.disabled" (click)="handleChange(field.key, true)" [ngClass]="{
+                      'border border-[#4f8fd5] bg-[#1069AB] hover:bg-[#195d95] text-white cursor-pointer min-h-[44px] w-full rounded-md flex items-center justify-center px-4 text-center break-words':
+                        !field.disabled,
+
+                      'border border-white/15 bg-white/10 text-white/40 cursor-not-allowed min-h-[44px] w-full rounded-md flex items-center justify-center px-4 text-center break-words':
+                        field.disabled,
+                    }">
+                    {{ field.label }}
+                  </button>
+                </div>
+
+                <!-- ✅ BASIC INPUT / DATE / TEXTAREA -->
+                <div class="relative w-full" *ngIf="
+                    field.type !== 'button' &&
+                    (isBasicInput(field) ||
+                      field.type === 'date' ||
+                      field.type === 'time' ||
+                      field.type === 'textarea' ||
+                      field.type === 'address')
+                  ">
+                  <!-- basic input (use shared input component) -->
+                  <app-input *ngIf="isBasicInput(field) && field.type !== 'file-comp'" [type]="field.type"
+                    [placeholder]="field.placeholder || ''" [label]="field.label" [required]="field.required"
+                    [formControlName]="field.key"></app-input>
+
+                  <!-- date -->
+                  <div *ngIf="field.type === 'date'" class="w-full">
+                    <app-calendar [label]="field.label" [required]="field.required"
+                      [formControlName]="field.key"></app-calendar>
+                  </div>
+
+                  <!-- time -->
+                  <div *ngIf="field.type === 'time'" class="w-full">
+                    <app-time-picker [label]="field.label" [required]="field.required"
+                      [formControlName]="field.key"></app-time-picker>
+                  </div>
+
+                  <!-- textarea/address (use shared textarea component) -->
+                  <app-textarea *ngIf="
+                      field.type === 'textarea' || field.type === 'address'
+                    " [label]="field.label" [rows]="field.type === 'address' ? 3 : 2"
+                    [placeholder]="field.placeholder || ''" [required]="field.required"
+                    [formControlName]="field.key"></app-textarea>
+
+                  <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span *ngIf="form.get(field.key)?.errors?.['required']">{{ field.label }} is required.</span>
+                    <span *ngIf="form.get(field.key)?.errors?.['email']">Please enter a valid email.</span>
+                    <span *ngIf="form.get(field.key)?.errors?.['pattern']">Invalid format.</span>
+                    <span *ngIf="form.get(field.key)?.errors?.['min']">Value must be at least {{ field.min }}.</span>
+                    <span *ngIf="form.get(field.key)?.errors?.['max']">Value must be at most {{ field.max }}.</span>
+                  </div>
+                </div>
+
+                <!-- ✅ Rich text (TinyMCE) -->
+                <div *ngIf="field.type === 'editor'" class="relative w-full">
+                  <app-html-editor-field [label]="field.label" [required]="field.required"
+                    [placeholder]="field.placeholder" [height]="field.editorHeight ?? 280"
+                    [formControlName]="field.key"></app-html-editor-field>
+                  <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span *ngIf="form.get(field.key)?.errors?.['required']">{{ field.label }} is required.</span>
+                  </div>
+                </div>
+
+                <!-- ✅ Reusable Single Select -->
+                <div *ngIf="field.type === 'select'" class="w-full">
+                  <app-select [label]="field.label" [required]="field.required"
+                    [placeholder]="field.placeholder || '--Select--'" [options]="getOptionsForField(field.key)"
+                    [formControlName]="field.key" [disabled]="!!field.disabled"
+                    [dropdownPlacement]="field.dropdownPlacement || 'auto'"
+                    (valueChange)="handlePrimeSelectChange($event, field.key)">
+                  </app-select>
+
+                  <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span *ngIf="form.get(field.key)?.errors?.['required']">{{ field.label }} is required.</span>
+                  </div>
+                </div>
+
+                <!-- ✅ Reusable Multi Select -->
+                <div *ngIf="field.type === 'select-multiple'" class="w-full">
+                  <app-multiselect [label]="field.label" [required]="field.required" [placeholder]="field.placeholder"
+                    [options]="getOptionsForField(field.key)" [searchable]="true" [selectAllEnabled]="true"
+                    [formControlName]="field.key" (selectionChange)="handleChange(field.key, $event)">
+                  </app-multiselect>
+
+                  <div *ngIf="isInvalid(field.key)" class="mt-1 text-xs text-red-400 flex items-center gap-2">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span *ngIf="form.get(field.key)?.errors?.['required']">{{ field.label }} is required.</span>
+                  </div>
+                </div>
+
+                <!-- ✅ Reusable Radio -->
+                <div *ngIf="field.type === 'radio'" class="w-full">
+                  <label *ngIf="field.label" class="mb-1.5 block text-[11px] text-white/65">
+                    {{ field.label }}
+                    <span *ngIf="field.required" class="text-red-500">*</span>
+                  </label>
+
+                  <div class="flex flex-wrap gap-2">
+                    <label *ngFor="let option of field.options"
+                      class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition"
+                      [ngClass]="form.get(field.key)?.value == option.value
+                        ? 'border-[#61C2FF] bg-[rgba(97,194,255,0.15)] text-white'
+                        : 'border-white/20 bg-white/10 text-white/80 hover:border-white/40'">
+                      <input type="radio" [formControlName]="field.key" [name]="field.key" [value]="option.value"
+                        (change)="handlePrimeSelectChange(option.value, field.key)" class="sr-only"
+                        [required]="field.required" />
+
+                      <span>{{ option.label }}</span>
+                    </label>
+                  </div>
+
+                  <div *ngIf="isInvalid(field.key)" class="mt-1 flex items-center gap-2 text-xs text-red-400">
+                    <i class="pi pi-exclamation-circle"></i>
+
+                    <span *ngIf="form.get(field.key)?.errors?.['required']">
+                      {{ field.label }} is required.
+                    </span>
+                  </div>
+                </div>
+
+                <!-- ✅ FILE — single or multi drop zone -->
+                <div *ngIf="field.type === 'file-comp'" class="relative w-full">
+                  <app-file-upload [label]="field.label" [required]="field.required" [multiple]="field.multiple"
+                    [disabled]="isEditMode" [maxFiles]="field.maxFiles" [accept]="field.accept" [formControlName]="field.key"></app-file-upload>
+                </div>
+
+
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </form>
+
+
+
+    <!-- Attached Files Section -->
+    <div *ngIf="mediaFiles.length > 0 || documentFiles.length > 0" class="mt-6 rounded-lg border border-white/15 bg-white/5 p-4">
+      <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+        <i class="pi pi-paperclip"></i>
+        Attached Files
+      </h3>
+
+      <!-- Media Files -->
+      <div *ngIf="mediaFiles.length > 0" class="mb-4">
+        <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wide mb-2">
+          Media Files
+        </h4>
+        <div class="space-y-2">
+          <div *ngFor="let media of mediaFiles; let i = index"
+            class="flex items-center justify-between rounded-lg border border-white/15 bg-white/5 p-3 transition hover:bg-white/10">
+            <a [href]="media.file" download target="_blank"
+              class="flex items-center gap-3 font-medium text-[#61C2FF] hover:text-white">
+              <i class="pi pi-file"></i>
+              <span class="text-sm">{{ getFileName(media.file) }}</span>
+            </a>
+            <button (click)="deleteFile(media.id!)"
+              class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-sm transition-colors"
+              aria-label="Delete file">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document Files -->
+      <div *ngIf="documentFiles.length > 0" class="mb-4" [class.mt-6]="mediaFiles.length > 0">
+        <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wide mb-2">
+          Document Files
+        </h4>
+        <div class="space-y-2">
+          <div *ngFor="let document of documentFiles; let i = index"
+            class="flex items-center justify-between rounded-lg border border-white/15 bg-white/5 p-3 transition hover:bg-white/10">
+            <a [href]="document.file" download target="_blank"
+              class="flex items-center gap-3 font-medium text-[#61C2FF] hover:text-white">
+              <i class="pi pi-file-pdf"></i>
+              <span class="text-sm">{{ getFileName(document.file) }}</span>
+            </a>
+            <button (click)="deleteDocumentFile(document.id!)"
+              class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-sm transition-colors"
+              aria-label="Delete document file">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Embedded Form Footer -->
+    <div *ngIf="isButtonShoeWithoutPopup && mode !== 'view'"
+      class="mt-6 flex items-center justify-end gap-3 border-t border-white/10 pt-4">
+      <!-- <button type="button"
+        class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98]"
+        (click)="closeSidebar()">
+        Cancel
+      </button> -->
+
+      <button type="button"
+        class="flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-40 active:scale-[0.98]"
+        [disabled]="form.invalid" (click)="handleSubmit($event, 'draft')">
+        <i class="pi pi-file-edit text-base" [class.opacity-40]="form.pending"></i>
+
+        <span>
+          Save Draft
+        </span>
+      </button>
+
+      <button type="button"
+        class="flex items-center gap-2 rounded-lg border border-[#4f8fd5] bg-[#1069AB] px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-[#195d95] disabled:cursor-not-allowed disabled:opacity-40 active:scale-[0.98]"
+        [disabled]="form.invalid" (click)="handleSubmit($event, 'save')">
+        <app-icon name="check-circle" [size]="16" [class.opacity-40]="form.invalid" />
+
+        <span>
+          {{ submitLabel || (isEditMode ? 'Update' : 'Save') }}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Embedded Form Footer -->
+
+</ng-container>

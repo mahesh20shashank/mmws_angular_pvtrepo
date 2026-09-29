@@ -1,0 +1,138 @@
+<app-help-guidance [bodyHtml]="helpHtml" />
+
+<div class="kms-page">
+  <app-page-header-bar icon="award" iconVariant="accent" title="Certificates" badgeText="Certificate Inventory">
+    <app-button type="button" class="kms-btn-primary" (click)="openAddModal()">
+      <app-icon name="plus" [size]="15" color="#ffffff" />
+      Add Certificate
+    </app-button>
+    <!-- Expiry filter pills -->
+    <div below class="flex flex-wrap gap-2">
+      <app-button type="button" [class]="pillClass(activeExpiryFilters().size === 0)" (click)="clearExpiryFilters()">
+        All
+      </app-button>
+      @for (filter of expiryFilters; track filter.key) {
+        <app-button
+          type="button"
+          [class]="pillClass(activeExpiryFilters().has(filter.key))"
+          (click)="toggleExpiryFilter(filter.key)"
+        >
+          {{ filter.label }}
+        </app-button>
+      }
+    </div>
+  </app-page-header-bar>
+
+  <div class="kms-layout">
+    <!-- Category filter sidebar -->
+    <div class="glass-card kms-panel">
+      <div class="kms-panel__heading">Categories</div>
+      <div class="kms-list">
+        <app-button type="button" [class]="pillClass(activeCategoryFilters().size === 0)" (click)="clearCategoryFilters()">
+          All
+        </app-button>
+        @for (cat of categories(); track cat.id) {
+          <app-button
+            type="button"
+            [class]="pillClass(activeCategoryFilters().has(cat.categoryName))"
+            (click)="toggleCategoryFilter(cat.categoryName)"
+          >
+            {{ cat.categoryName }}
+          </app-button>
+        } @empty {
+          <p class="kms-empty-hint">No categories have been created yet.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Certificates table -->
+    <div class="flex flex-col gap-3">
+      <div class="glass-card kms-panel">
+        <div class="kms-toolbar">
+          <div class="kms-search kms-search--toolbar">
+            <app-icon name="search" [size]="15" variant="muted" class="kms-search__icon" />
+            <input
+              type="text"
+              placeholder="Search certificates..."
+              class="kms-search__input"
+              [value]="certificateSearch()"
+              (input)="certificateSearch.set($any($event.target).value)"
+            />
+          </div>
+          <app-export-toolbar [busy]="exportBusy()" [disabled]="filteredCertificates().length === 0" (exportRequested)="onExport($event)" />
+        </div>
+
+        @if (filteredCertificates().length > 0) {
+          <app-data-grid [rowData]="filteredCertificates()" [columnDefs]="columnDefs" height="460px" />
+        } @else {
+          <p class="kms-empty-hint kms-empty-hint--table">No certificates match the selected filters.</p>
+        }
+      </div>
+      <div class="kms-note">
+        Note: You can add more categories to filter by going to References →
+        <a routerLink="/afterAuth/kms/category-master/overview" class="kms-note__link">Category Master</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (showAddModal()) {
+  <app-modal size="md" title="Add Certificate" [compact]="true" (closeModal)="closeAddModal()">
+    <form [formGroup]="certificateForm" (ngSubmit)="saveCertificate()" class="kms-modal-form kms-modal-form--2col">
+      <div class="col-span-2">
+        <app-input-field label="Certificate Name" placeholder="Enter certificate name" formControlName="name" [required]="true" />
+      </div>
+      <app-input-field label="Certificate Valid Upto" type="date" formControlName="expiryDate" [required]="true" />
+      <app-select-input label="Certificate Category" [options]="categoryOptions()" formControlName="category" [required]="true" />
+      <app-input-field label="Certificate Issued By" placeholder="Enter issuing authority" formControlName="placeOfIssue" [required]="true" />
+      <app-input-field label="Certificate status" placeholder="Automatically calculated" [readonly]="true" [ngModel]="computedStatus()" [ngModelOptions]="{ standalone: true }" />
+      <div class="col-span-2">
+        <app-textarea-input label="Remarks" placeholder="Enter remarks" [rows]="3" formControlName="remarks" />
+      </div>
+      <div class="col-span-2">
+        <app-file-input label="Upload Certificate File" formControlName="attachment"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        <p class="kms-file-hint">Accepted formats: PDF, DOC, DOCX, XLS, XLSX</p>
+      </div>
+      <div class="kms-modal-actions col-span-2">
+        <app-button type="button" class="kms-btn-secondary" (click)="closeAddModal()">
+          Cancel
+        </app-button>
+        <app-button type="submit" class="kms-btn-primary">
+          Save Certificate
+        </app-button>
+      </div>
+    </form>
+  </app-modal>
+}
+
+@if (showDetailModal() && activeCertificate(); as cert) {
+  <app-modal size="sm" title="Certificate Details" [compact]="true" (closeModal)="closeDetailModal()">
+    <div class="kms-modal-form kms-modal-form--sm">
+      <div class="kms-file-preview">
+        <app-icon [name]="getFileIcon(cert.attachmentName).iconName" [size]="40" [class]="getFileIcon(cert.attachmentName).colorClass" />
+        <span class="kms-file-preview__name">{{ cert.attachmentName }}</span>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="kms-detail-row kms-detail-row--divided"><span>Certificate Upload Date</span><span>{{ cert.issueDate }}</span></div>
+        <div class="kms-detail-row kms-detail-row--divided"><span>Certificate status</span><span>{{ cert.expiryDate }}</span></div>
+        <div class="kms-detail-row kms-detail-row--divided"><span>Certificate Place of Issue</span><span>{{ cert.placeOfIssue }}</span></div>
+        <div class="kms-detail-row kms-detail-row--divided"><span>Certificate Validity Status</span><span>{{ rowLabel(cert) }}</span></div>
+        <div class="kms-detail-row kms-detail-row--divided"><span>Certificate Category</span><span>{{ cert.category }}</span></div>
+        <div class="kms-detail-row"><span>Remarks</span><span>{{ cert.remarks || '—' }}</span></div>
+      </div>
+      @if (cert.attachmentName) {
+        <div class="kms-modal-actions">
+          <app-button type="button" class="kms-btn-primary" (click)="viewFile(cert)">
+            <app-icon name="eye" [size]="15" color="#ffffff" />
+            View File
+          </app-button>
+        </div>
+      }
+    </div>
+  </app-modal>
+}
+
+@if (pendingDelete()) {
+  <app-confirm-delete-modal (confirmed)="confirmDelete()" (cancelled)="cancelDelete()" />
+}

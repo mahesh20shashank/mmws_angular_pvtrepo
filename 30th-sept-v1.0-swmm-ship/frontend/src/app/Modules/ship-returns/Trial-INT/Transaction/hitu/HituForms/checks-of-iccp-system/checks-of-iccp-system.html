@@ -1,0 +1,705 @@
+<app-form-card title="CHECKS OF ICCP SYSTEM" [showPreviousReport]="true" [showBackButton]="true" [showPaginator]="true"
+  [previewMode]="true">
+  <div
+      previewHeader
+      class="flex items-center gap-2 overflow-x-auto flex-nowrap max-w-[420px]"
+  >
+      <button
+          *ngFor="let tab of headerEquipmentTabs; trackBy: trackByEquipment"
+          type="button"
+          (click)="setActiveTab(tab)"
+          class="border border-white/15 bg-white/5 text-white/75 transition hover:border-white/30 relative min-h-[46px] min-w-[130px] max-w-[160px] shrink-0 overflow-hidden rounded-[14px] px-2 text-center"
+          [class.border-[#61C2FF]]="isSameEquipment(activeHeaderEquipment, tab)" [class.bg-[#1069AB]]="isSameEquipment(activeHeaderEquipment, tab)" [class.text-white]="isSameEquipment(activeHeaderEquipment, tab)"
+      >
+          <span class="relative block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap pt-1 text-[11px] font-bold tracking-wide">
+              {{ tab?.equipment_name || tab?.name || tab?.nomenclature || 'Equipment' }}
+          </span>
+
+          <span
+              class="relative mt-0.5 block max-w-[115px] overflow-hidden text-ellipsis whitespace-nowrap text-[9px] font-semibold"
+              [ngClass]="isSameEquipment(activeHeaderEquipment, tab) ? 'text-white' : 'text-white/50'"
+          >
+              {{ tab?.nomenclature || tab?.equipment_nomenclature || '-' }} - {{ tab?.serial_no || tab?.serial_number || '-' }}
+          </span>
+      </button>
+  </div>
+  <form [formGroup]="form" class="space-y-6 p-0">
+    <section class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <app-input label="Ship" required formControlName="ship" ></app-input>
+      <app-input label="Make" required formControlName="manufacturer_name" ></app-input>
+      <app-calendar label="Date of Inspection" formControlName="date_of_inspection"></app-calendar>
+
+      <app-select label="Occasion of Inspection" formControlName="occasion_of_inspection" [searchable]="false"
+        [options]="occasionOptions"></app-select>
+      <app-input label="Other Occasion" formControlName="other_occasion" placeholder="Enter details"></app-input>
+      <app-select label="Type of Refit" formControlName="type_of_refit" [searchable]="false"
+        [options]="refitOptions"></app-select>
+      <app-calendar label="Docking Date" formControlName="docking_date"></app-calendar>
+
+      <app-select label="Berthed at" formControlName="berthed_at" [options]="berthedOptions"></app-select>
+      <app-select label="Ship Alongside" formControlName="ship_alongside" [options]="shipAlongSideOptions"></app-select>
+      <app-select label="Type of Anodes" formControlName="type_of_anodes" [searchable]="false" [searchable]="false"
+        [options]="anodeTypeOptions"></app-select>
+      <app-select label="No. of Anodes" formControlName="no_of_anodes" [searchable]="false"
+        [options]="noOfAnodesOptions"></app-select>
+
+      <app-select label="Type of REs" formControlName="type_of_res" [searchable]="false"
+        [options]="reTypeOptions"></app-select>
+      <app-select label="No. of REs" formControlName="no_of_res" [searchable]="false"
+        [options]="noOfResOptions"></app-select>
+      <app-select label="Portable RE" formControlName="portable_re" [searchable]="false"
+        [options]="portableReOptions"></app-select>
+      <app-calendar label="Date of last Diving checks" formControlName="date_of_last_diving_checks"></app-calendar>
+
+      <app-calendar label="Date of last cleaning of ICCP Anodes and REs"
+        formControlName="date_of_last_cleaning_iccp"></app-calendar>
+      <app-calendar label="Calibration Details of Portable RE"
+        formControlName="calibration_details_portable_re"></app-calendar>
+    </section>
+
+    <section>
+      <h3>Preset Potential Value (mV)</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-sm">
+          <tbody>
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">RE (#)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" *ngFor="let item of reNumbers">RE{{ item }}</th>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Locations</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of reNumbers">
+                <app-select [formControlName]="'re' + item + '_location'" [searchable]="false"
+                  [options]="locationOptions"></app-select>
+              </td>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Fr Stn</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of reNumbers">
+                <app-input [formControlName]="'re' + item + '_fr_stn'" placeholder="AN"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Anode (*)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" *ngFor="let item of anodeNumbers">A{{ item }}</th>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Locations</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of anodeNumbers">
+                <app-select [formControlName]="'anode' + item + '_location'" [searchable]="false"
+                  [options]="locationOptions"></app-select>
+              </td>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Fr Stn</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of anodeNumbers">
+                <app-input [formControlName]="'anode' + item + '_fr_stn'" placeholder="AN"></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">RE (#)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" *ngFor="let item of reNumbers">RE{{ item }}</th>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Locations</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of reNumbers">
+                <app-select [formControlName]="'pre_re' + item + '_location'" [searchable]="false"
+                  [options]="locationOptions"></app-select>
+              </td>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Fr Stn</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of reNumbers">
+                <app-input [formControlName]="'pre_re' + item + '_fr_stn'" placeholder="AN"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h3>Checks No. 1 to 3</h3>
+      <div>
+        <table class="w-full border-collapse text-sm">
+          <tbody>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="3">Check No.1</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="4">ACU(s) in OFF position. Measure Hull potential with Portable RE.
+              </td>
+            </tr>
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Frame Stn</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Port (mV)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Stbd (mV)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Remarks</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input formControlName="check_1_frame_stn"
+                  placeholder=""></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number" formControlName="check_1_port_mv"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number" formControlName="check_1_stbd_mv"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-select formControlName="check_1_remarks"
+                  [options]="remarksOptions"></app-select></td>
+            </tr>
+
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Check No.2</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="4">ACU(s) switched OFF. Measure Hull potential on terminals of REs
+                on panel (mV).</td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="4">
+                <div class="inline-grid">
+                  <div *ngFor="let item of reNumbers" class="mini-field">
+                    <span>RE{{ item }}</span>
+                    <app-input [formControlName]="'check_2_re' + item" placeholder=""></app-input>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="3">Check No.3</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="4">ACU(s) ON in Auto mode. Measure Hull potential with Portable RE.
+              </td>
+            </tr>
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Frame Stn</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Port (mV)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Stbd (mV)</th>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Remarks</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input formControlName="check_3_frame_stn"
+                  placeholder=""></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number" formControlName="check_3_port_mv"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number" formControlName="check_3_stbd_mv"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-select formControlName="check_3_remarks"
+                  [options]="remarksOptions"></app-select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h3>Check No.4</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-sm">
+          <tbody>
+            <tr>
+              <th colspan="12" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Measure hull potential, Anode current and Anode voltage in Auto
+                mode (Terminal
+                Reading)</th>
+            </tr>
+            <tr class="">
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Hull potential (mV)</th>
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Anode voltage (V)</th>
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Anode current (Amps)</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">RE{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">A{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">A{{ item }}</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_4_terminal_hull_re' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_4_terminal_voltage_a' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_4_terminal_current_a' + item"></app-input>
+              </td>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">RE{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">A{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">A{{ item }}</th>
+            </tr>
+            <tr>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_4_terminal_hull_re' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_4_terminal_voltage_a' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_4_terminal_current_a' + item"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Display Reading -->
+      <div class="table-wrap mb-4">
+        <table class="">
+          <tbody>
+            <tr>
+              <th colspan="12" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Measure hull potential, Anode current and Anode voltage in Auto
+                mode (Display
+                Reading)</th>
+            </tr>
+            <tr class="">
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Hull potential (mV)</th>
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Anode voltage (V)</th>
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Anode current (Amps)</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">RE{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">A{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">A{{ item }}</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_4_display_hull_re' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_4_display_voltage_a' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_4_display_current_a' + item"></app-input>
+              </td>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">RE{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">A{{ item }}</th>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">A{{ item }}</th>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_4_display_hull_re' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_4_display_voltage_a' + item"></app-input>
+              </td>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_4_display_current_a' + item"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h3>Checks No. 5 to 6</h3>
+      <div>
+        <table class="w-full border-collapse text-sm">
+          <tbody>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Check No.5</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="8">
+                ACU(s) switched to manual mode. Current set to Zero. ACU switched ON. Measure and record Hull Potential
+                as indicated by ICCP REs (mV).
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of reNumbers">
+                <span>RE{{ item }}</span>
+                <app-input [formControlName]="'check_5_re' + item" placeholder=""></app-input>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Check No.6</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="8">
+                ACU(s) switched OFF. Measure open circuit voltage of Anodes with Hull (V).
+              </td>
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of anodeNumbers">
+                <span>A{{ item }}</span>
+                <app-input type="number" step="0.01" [formControlName]="'check_6_a' + item"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- <section>
+      <h3>ACU No. 1</h3>
+      <ng-container *ngTemplateOutlet="acuTable; context: {
+          checkTitle: 'Check No.7',
+          prefix: 'check_7',
+          heading: 'Manually impressed Currents and corresponding Anode Voltage'
+        }"></ng-container>
+      <ng-container *ngTemplateOutlet="acuTable; context: {
+          checkTitle: 'Check No.8',
+          prefix: 'check_8',
+          heading: 'ICCP system response to modification of Preset potential'
+        }"></ng-container>
+    </section> -->
+
+    <section>
+      <h3>Check No. 7 : ACU NO. 1</h3>
+      <table class="border-collapse w-full text-sm">
+        <tbody>
+          <tr>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" style="text-align: left; vertical-align: top; width: 220px;">
+              <div class="font-bold">Check No. 7</div>
+              <div class="check-note italic">
+                To check ICCP system functionality and to record amount of current required to be impressed to maintain
+                the hull potential in the protected zone
+              </div>
+            </th>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <ol class="list-decimal pl-4 space-y-1">
+                <li>ACU-1 switched ON in manual mode. Other ACU(s) switched OFF.</li>
+                <li>Current to be impressed in increments of 01 or 02 Amps.</li>
+                <li>Check response to increase of impressed current by means of ICCP REs associated with ACU-1. Cross
+                  check with Portable REs.</li>
+                <li>Increase currents till the point where the hull potential starts to decrease (in the case of ships
+                  with hull potential in the protected/over-protected zone).</li>
+                <li>Increase currents till hull potential is within the protected zone ie. 220-250mV (in the case of
+                  ships
+                  with hull potential in under protected zone)</li>
+              </ol>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Check No.7 -->
+      <div class="table-wrap mb-4 mt-4">
+        <table class="">
+          <tbody>
+
+            <tr>
+              <th colspan="9" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Manually impressed Currents and corresponding Anode Voltage</th>
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Hull potential</th>
+            </tr>
+
+            <tr>
+              <th rowspan="2" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Preset potential (+mV)</th>
+              <th colspan="2" *ngFor="let item of firstFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">A{{ item }}</th>
+              <th rowspan="2" *ngFor="let item of firstFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">RE{{ item }} (mV)</th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of firstFour">
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Amp</th>
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">V</th>
+              </ng-container>
+
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let row of acuRows">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input
+                  [formControlName]="'check_7_row' + row + '_preset_potential'"></app-input></td>
+              <ng-container *ngFor="let item of firstFour">
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_7_row' + row + '_a' + item + '_amp'"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_7_row' + row + '_a' + item + '_voltage'"></app-input></td>
+              </ng-container>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_7_row' + row + '_re' + item"></app-input>
+              </td>
+            </tr>
+            <tr class="">
+              <th rowspan="2" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Preset potential (+mV)</th>
+              <th colspan="2" *ngFor="let item of secondFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">A{{ item }}</th>
+              <th rowspan="2" *ngFor="let item of secondFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">RE{{ item }} (mV)</th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of secondFour">
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Amp</th>
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">V</th>
+              </ng-container>
+
+            </tr>
+            <tr *ngFor="let row of acuRows">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input
+                  [formControlName]="'check_7_row' + row + '_preset_potential'"></app-input></td>
+              <ng-container *ngFor="let item of secondFour">
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_7_row' + row + '_a' + item + '_amp'"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_7_row' + row + '_a' + item + '_voltage'"></app-input></td>
+              </ng-container>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_7_row' + row + '_re' + item"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Check No.8 -->
+      <!-- <div class="table-wrap mb-4">
+        <table class="">
+          <tbody>
+            <tr>
+              <th rowspan="15" class="">
+                <div>Check No.8</div>
+                <div class="check-note">To check ICCP system functionality and record current required to maintain hull
+                  potential in protected zone.</div>
+              </th>
+              <th colspan="17" class="">ICCP system response to modification of Preset potential</th>
+            </tr>
+            <tr class="">
+              <th rowspan="2">Preset potential (+mV)</th>
+              <th colspan="2" *ngFor="let item of firstFour">A{{ item }}</th>
+              <th colspan="4">Hull potential</th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of firstFour">
+                <th>Amp</th>
+                <th>V</th>
+              </ng-container>
+              <th *ngFor="let item of firstFour">RE{{ item }} (mV)</th>
+            </tr>
+            <tr *ngFor="let row of acuRows">
+              <td><app-input [formControlName]="'check_8_row' + row + '_preset_potential'"></app-input></td>
+              <ng-container *ngFor="let item of firstFour">
+                <td><app-input type="number" [formControlName]="'check_8_row' + row + '_a' + item + '_amp'"></app-input>
+                </td>
+                <td><app-input type="number"
+                    [formControlName]="'check_8_row' + row + '_a' + item + '_voltage'"></app-input></td>
+              </ng-container>
+              <td *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_8_row' + row + '_re' + item"></app-input>
+              </td>
+            </tr>
+            <tr class="">
+              <th rowspan="2">Preset potential (+mV)</th>
+              <th colspan="2" *ngFor="let item of secondFour">A{{ item }}</th>
+              <th colspan="4">Hull potential</th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of secondFour">
+                <th>Amp</th>
+                <th>V</th>
+              </ng-container>
+              <th *ngFor="let item of secondFour">RE{{ item }} (mV)</th>
+            </tr>
+            <tr *ngFor="let row of acuRows">
+              <td><app-input [formControlName]="'check_8_row' + row + '_preset_potential'"></app-input></td>
+              <ng-container *ngFor="let item of secondFour">
+                <td><app-input type="number" [formControlName]="'check_8_row' + row + '_a' + item + '_amp'"></app-input>
+                </td>
+                <td><app-input type="number"
+                    [formControlName]="'check_8_row' + row + '_a' + item + '_voltage'"></app-input></td>
+              </ng-container>
+              <td *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_8_row' + row + '_re' + item"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div> -->
+
+
+      <h3>Check No. 8 : ACU NO. 1</h3>
+      <table class="border-collapse w-full text-sm">
+        <tbody>
+          <tr>
+            <th class="border border-white/15 px-3 py-2 align-middle text-white/85" style="text-align: left; vertical-align: top; width: 220px;">
+              <div class="font-bold">Check No. 8</div>
+              <div class="check-note">
+                To check ICCP system functionality in ‘auto’ mode and to record amount of current impressed to maintain
+                the hull potential iaw the set potential
+              </div>
+            </th>
+            <td class="border border-white/15 px-3 py-2 align-middle text-white/85">
+              <ol class="list-decimal pl-4 space-y-1">
+                <li>ACU1 switched ON in ‘auto’ mode.</li>
+                <li>Other ACUs to be switched OFF.</li>
+                <li>If hull potential with ACUs-OFF is in protected/ over protected zone and lower than the preset
+                  potential, then start the check with the ACU at the preset potential. Reduce hull potential in small
+                  increments till the system starts to impress current and the hull potential starts to reduce further.
+                </li>
+                <li>If the hull potential with ACUs-OFF is in the under protected zone, then start the check with the
+                  ACU preset potential set to 270mV (zinc RE) or -780mV (Ag-AgCl RE). </li>
+                <li>Reduce hull potential in small increments till one step lower than the preset potential</li>
+              </ol>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="table-wrap mb-4 mt-4">
+        <table class="">
+          <tbody>
+
+            <tr>
+              <th colspan="9" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">ICCP system response to modification of Preset potential</th>
+              <th colspan="4" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Hull potential</th>
+            </tr>
+
+            <tr>
+              <th rowspan="2" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Preset potential (+mV)</th>
+              <th colspan="2" *ngFor="let item of firstFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">A{{ item }}</th>
+              <th rowspan="2" *ngFor="let item of firstFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">RE{{ item }} (mV)</th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of firstFour">
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Amp</th>
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">V</th>
+              </ng-container>
+
+            </tr>
+            <tr class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let row of acuRows">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input
+                  [formControlName]="'check_8_row' + row + '_preset_potential'"></app-input></td>
+              <ng-container *ngFor="let item of firstFour">
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_8_row' + row + '_a' + item + '_amp'"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_8_row' + row + '_a' + item + '_voltage'"></app-input></td>
+              </ng-container>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of firstFour">
+                <app-input type="number" [formControlName]="'check_8_row' + row + '_re' + item"></app-input>
+              </td>
+            </tr>
+            <tr class="">
+              <th rowspan="2" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Preset potential (+mV)</th>
+              <th colspan="2" *ngFor="let item of secondFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">A{{ item }}</th>
+              <th rowspan="2" *ngFor="let item of secondFour" class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">RE{{ item }} (mV)</th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of secondFour">
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">Amp</th>
+                <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70">V</th>
+              </ng-container>
+
+            </tr>
+            <tr *ngFor="let row of acuRows">
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input
+                  [formControlName]="'check_8_row' + row + '_preset_potential'"></app-input></td>
+              <ng-container *ngFor="let item of secondFour">
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_8_row' + row + '_a' + item + '_amp'"></app-input>
+                </td>
+                <td class="border border-white/15 px-3 py-2 align-middle text-white/85"><app-input type="number"
+                    [formControlName]="'check_8_row' + row + '_a' + item + '_voltage'"></app-input></td>
+              </ng-container>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of secondFour">
+                <app-input type="number" [formControlName]="'check_8_row' + row + '_re' + item"></app-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- -------------------------------------------------------------------- -->
+    <!-- -------------------------------------------------------------------- -->
+    <!-- -------------------------------------------------------------------- -->
+    <!-- -------------------------------------------------------------------- -->
+
+    <section>
+      <h3>Checks No. 9 to 11</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-sm min-w-max">
+          <tbody>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="2">Check No.9</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="8">Check continuity of fuses (SAT/UNSAT).</td>
+            </tr>
+            <tr>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of anodeNumbers">
+                <span>A{{ item }}</span>
+                <app-select [formControlName]="'check_9_a' + item" [options]="satUnsatOptions"></app-select>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85" rowspan="5">Check No.10</th>
+              <td class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="8">Attach hull potential, Anode currents and voltages of previous
+                day.</td>
+            </tr>
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="8">Hull potential (mV)</th>
+            </tr>
+            <tr>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of reNumbers">
+                <span>RE{{ item }}</span>
+                <app-input type="number" [formControlName]="'check_10_hull_re' + item"></app-input>
+              </td>
+            </tr>
+            <tr>
+              <th class="bg-white/[0.06] text-[11px] font-bold uppercase tracking-wider text-white/70" colspan="8">Anode current (Amps)</th>
+            </tr>
+            <tr>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" *ngFor="let item of anodeNumbers">
+                <span>A{{ item }}</span>
+                <app-input type="number" [formControlName]="'check_10_current_a' + item"></app-input>
+              </td>
+            </tr>
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Anode voltage (V)</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="8"><app-input type="number"
+                  formControlName="check_10_anode_voltage"></app-input></td>
+            </tr>
+
+            <tr>
+              <th class="border border-white/15 px-3 py-2 align-middle text-white/85">Check No.11</th>
+              <td class="border border-white/15 px-3 py-2 align-middle text-white/85" colspan="8">
+                <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <app-select label="Inspection of Cofferdams" formControlName="check_11_cofferdam_status"
+                    [options]="openClosedOptions"></app-select>
+                  <app-input label="Observation" formControlName="check_11_observation"
+                    placeholder="Required if observation"></app-input>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </form>
+
+  <!-- FOOTER -->
+ <div formFooter class="flex gap-3 justify-end py-2">
+    <app-loading-button
+      *ngIf="formApiService?.context?.workflow_rights?.save_draft"
+      color="draft"
+      label="Save Draft"
+      [loading]="draftLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('draft')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="save"
+      label="Save"
+      [loading]="saveLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('save')"
+    >
+    </app-loading-button>
+
+    <app-loading-button
+      color="submit"
+      label="Submit"
+      [loading]="submitLoading"
+      [disabled]="!formApiService?.context?.workflow_rights?.can_edit"
+      (clicked)="handleSave('submit')"
+    >
+    </app-loading-button>
+  </div>
+</app-form-card>
+
+<app-approval-work-flow
+  *ngIf="showApprovalWorkflowPopup"
+  [showUserPopuphead]="showApprovalWorkflowPopup"
+  [workflowTrialId]="workflowTrialId || ''"
+  [context]="formApiService.context"
+  [isSubmitTime]="isSubmitTime"
+  (showUserPopupChange)="showApprovalWorkflowPopup = $event; isSubmitTime = $event">
+</app-approval-work-flow>

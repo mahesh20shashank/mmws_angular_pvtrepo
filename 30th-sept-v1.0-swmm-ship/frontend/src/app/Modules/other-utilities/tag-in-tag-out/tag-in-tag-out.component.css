@@ -1,0 +1,84 @@
+.glass-card {
+  background-color: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card);
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.card-title {
+  color: var(--text-primary);
+}
+
+.card-icon {
+  color: var(--text-primary);
+}
+
+.legend-text {
+  color: var(--text-muted);
+}
+
+.summary-badge {
+  background-color: var(--bg-comm-btn, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+}
+
+.summary-table-border {
+  border-color: var(--border-card);
+}
+
+.summary-table-head {
+  background-color: var(--bg-header, rgba(255, 255, 255, 0.08));
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-card);
+}
+
+.summary-table-row {
+  color: var(--text-primary);
+}
+
+.col-search-input {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-input);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.col-search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.col-search-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+/* Scoped overrides for small summary data grids within Tag-In / Tag-Out */
+:host ::ng-deep .summary-table-border .pagination-container {
+  display: none !important;
+}
+
+:host ::ng-deep .summary-table-border .ag-theme-custom .ag-root-wrapper {
+  min-height: 0 !important;
+  border: none !important;
+}
+
+:host ::ng-deep .summary-table-border .ag-body-horizontal-scroll,
+:host ::ng-deep .summary-table-border .ag-body-vertical-scroll,
+:host ::ng-deep .summary-table-border .ag-body-horizontal-scroll-viewport,
+:host ::ng-deep .summary-table-border .ag-body-vertical-scroll-viewport {
+  overflow: hidden !important;
+  display: none !important;
+}
+

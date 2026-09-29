@@ -1,0 +1,2960 @@
+<div class="space-y-6">
+  <app-help-guidance [bodyHtml]="helpHtml" />
+
+  <!-- Initial Screen: Month & Year Selection (Before Fill SRAR Details is clicked) -->
+  @if (!showDetails()) {
+  <app-panel-card title="SRAR Period Selection"
+    subtitle="Select Month and Year to initiate or edit SRAR monthly running parameters" icon="calendar"
+    iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)" class="relative z-30">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <app-select-input label="Month" [options]="monthOptions" [ngModel]="selectedMonth()"
+        (ngModelChange)="onSelectedMonthChange($event)"></app-select-input>
+      <app-select-input label="Year" [options]="yearOptions" [ngModel]="selectedYear()"
+        (ngModelChange)="onSelectedYearChange($event)"></app-select-input>
+    </div>
+
+    <div class="flex justify-end gap-3">
+      <app-button type="button" (click)="syncWithCMMS()" class="button sync-btn items-center gap-2 cursor-pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 8v8M8 12h8" />
+        </svg>
+        <span>{{ isCmmsSynced() ? 'Synced With CMMS' : 'Sync With CMMS' }}</span>
+      </app-button>
+
+
+      <app-button type="button" (click)="onFillDetails()" class="button primary-btn items-center gap-2 cursor-pointer">
+        FILL SRAR Details
+      </app-button>
+    </div>
+  </app-panel-card>
+  }
+
+  <!-- Transaction Details & 15 Sub-Tabs Screen (After Fill SRAR Details is clicked) -->
+  @if (showDetails()) {
+  <!-- Transaction Header Bar -->
+  <app-panel-card [title]="'SRAR Transaction Entry — ' + selectedMonth() + ' ' + selectedYear()"
+    subtitle="Monthly running parameters, equipment exploitation, and return details" icon="file-text"
+    iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)" class="relative z-30">
+  </app-panel-card>
+
+  <!-- 15 Sub-Step Timeline Navigation Bar -->
+  <div class="step-nav-wrapper glass-card mb-6 p-4">
+    <div class="step-timeline-container overflow-x-auto py-2">
+      <div class="step-timeline-items">
+        @for (subTab of transactionSubTabs; track subTab.id) {
+        <button type="button" class="timeline-step-btn" [class.active]="activeSubTab() === subTab.id"
+          [class.completed]="activeSubTab() > subTab.id" (click)="setSubTab(subTab.id)"
+          [attr.aria-label]="subTab.title">
+          <div class="step-circle">
+            {{ subTab.id }}
+          </div>
+          <span class="step-label">{{ subTab.shortTitle }}</span>
+        </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Sub-Tab Content Area -->
+  <app-panel-card [title]="transactionSubTabs[activeSubTab() - 1].title"
+    [subtitle]="'Step ' + activeSubTab() + ' of 15'" [icon]="transactionSubTabs[activeSubTab() - 1].icon"
+    iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+    <div panelActions>
+      <app-button type="button" class="button secondary-btn text-xs px-3 py-2" (click)="goToPreviousSubTab()">
+        Back
+      </app-button>
+      <span class="tab-badge">Tab {{ activeSubTab() }}</span>
+    </div>
+
+    <!-- Sub Tab 1: Ship Running Details -->
+    @if (activeSubTab() === 1) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Ship Running Parameters</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th scope="colgroup" colspan="3">During The Month<span class="text-rose-400">*</span></th>
+              <th scope="colgroup" colspan="2">Since Commissioning<span class="text-rose-400">*</span></th>
+              <th scope="colgroup" colspan="4">Maximum Sustained Speed<span class="text-rose-400">*</span></th>
+            </tr>
+            <tr>
+              <th scope="col">Hours<span class="text-rose-400">*</span></th>
+              <th scope="col">Minutes<span class="text-rose-400">*</span></th>
+              <th scope="col">Distance Run (NM)<span class="text-rose-400">*</span></th>
+              <th scope="col">Hours Underway (HH:MM)<span class="text-rose-400">*</span></th>
+              <th scope="col">Distance Run (NM)<span class="text-rose-400">*</span></th>
+              <th scope="col">During Month (Knots GPS)<span class="text-rose-400">*</span></th>
+              <th scope="col">Duration (HH:MM)<span class="text-rose-400">*</span></th>
+              <th scope="col">Max Speed Date<span class="text-rose-400">*</span></th>
+              <th scope="col">Max Shaft RPM<span class="text-rose-400">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input type="number" [(ngModel)]="runningParameters.duringMonthHours"
+                  (input)="sanitizeNumericField(runningParameters, 'duringMonthHours')"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="normalizeHoursMinutes(runningParameters, 'duringMonthHours', 'duringMonthMinutes')"
+                  class="form-input text-center" aria-label="During Month Hours" />
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="runningParameters.duringMonthMinutes"
+                  (input)="sanitizeNumericField(runningParameters, 'duringMonthMinutes')"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="normalizeHoursMinutes(runningParameters, 'duringMonthHours', 'duringMonthMinutes')"
+                  class="form-input text-center" aria-label="During Month Minutes" />
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="runningParameters.duringMonthDistance"
+                  (input)="sanitizeNumericField(runningParameters, 'duringMonthDistance', true)"
+                  (keypress)="allowOnlyDecimals($event, runningParameters.duringMonthDistance)"
+                  (ngModelChange)="updateSinceComm()" class="form-input text-center"
+                  aria-label="During Month Distance (NM)" />
+              </td>
+              <td>
+                <input type="text" readonly [value]="runningParameters.sinceCommHours"
+                  class="form-input readonly-input text-center" aria-label="Since Commissioning Hours Underway" />
+              </td>
+              <td>
+                <input id="sinceCommDistance" type="text" readonly [value]="runningParameters.sinceCommDistance"
+                  class="form-input readonly-input text-center" aria-label="Max Speed During Month" />
+              </td>
+              <td>
+                <input id="maxSpeedDuringMonth" type="text" [(ngModel)]="runningParameters.maxSpeedDuringMonth"
+                  (input)="sanitizeNumericField(runningParameters, 'maxSpeedDuringMonth', true)"
+                  (keypress)="allowOnlyDecimals($event, runningParameters.maxSpeedDuringMonth)"
+                  class="form-input text-center" aria-label="Max Speed During Month" />
+              </td>
+              <td>
+                <div class="flex items-center gap-1 justify-center">
+                  <input id="maxSpeedDurationHours" type="number" [(ngModel)]="runningParameters.maxSpeedDurationHours"
+                    (input)="sanitizeNumericField(runningParameters, 'maxSpeedDurationHours')"
+                    (keypress)="allowOnlyNumbers($event)"
+                    (change)="normalizeHoursMinutes(runningParameters, 'maxSpeedDurationHours', 'maxSpeedDurationMinutes')"
+                    class="form-input text-center w-16" placeholder="HH" aria-label="Max Speed Duration Hours" />
+                  <span class="text-white">:</span>
+                  <input id="maxSpeedDurationMinutes" type="number"
+                    [(ngModel)]="runningParameters.maxSpeedDurationMinutes"
+                    (input)="sanitizeNumericField(runningParameters, 'maxSpeedDurationMinutes')"
+                    (keypress)="allowOnlyNumbers($event)"
+                    (change)="normalizeHoursMinutes(runningParameters, 'maxSpeedDurationHours', 'maxSpeedDurationMinutes')"
+                    class="form-input text-center w-16" placeholder="MM" aria-label="Max Speed Duration Minutes" />
+                </div>
+              </td>
+              <td>
+                <!-- data-srar-date-range: one of the three SRAR date fields held to the
+                     reporting month (see standardizeSrarDateInputs). Max speed was reached
+                     during this month's steaming, so a date outside it is an entry error. -->
+                <input id="maxSpeedDate" type="date" data-srar-date-range
+                  [(ngModel)]="runningParameters.maxSpeedDate"
+                  class="form-input text-center" aria-label="Max Speed Date" />
+              </td>
+              <td>
+                <input id="maxShaftRpm" type="text" [(ngModel)]="runningParameters.maxShaftRpm"
+                  (input)="sanitizeNumericField(runningParameters, 'maxShaftRpm', true)"
+                  (keypress)="allowOnlyDecimals($event, runningParameters.maxShaftRpm)" class="form-input text-center"
+                  aria-label="Max Shaft RPM" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-xs text-rose-400 font-medium">
+        Note: If Hours Underway rendered is not 0 it is Mandatory to fill Distance Run, Max Speed & Duration & vice
+        versa.
+      </p>
+
+      <h3 class="subHeading_box">2. Equipment — Monthly Running Hours Updation</h3>
+      <p class="text-xs text-sky-400 font-medium mb-3">
+        Note: Hours for month to be updated in Ship Operational Maintenance module.
+      </p>
+
+      <div class="overflow-x-auto max-h-[270px] overflow-y-auto pr-1">
+        <!-- Header pinning is done in CSS (.form-table--sticky-head), not with inline
+             `sticky top-0` utilities: a sticky header also needs an opaque fill, and the
+             `--bg-input` the header inherits is 95% transparent. -->
+        <table class="form-table form-table--sticky-head">
+          <thead>
+            <tr class="group-header">
+              <th scope="col">Eqpt Name</th>
+              <th scope="col">Eqpt Code</th>
+              <th scope="col">Loc On Board</th>
+              <th scope="col">Nomenclature</th>
+              <th scope="col">Ser No.</th>
+              <th scope="col">Hrs For Month(hh:mm)</th>
+              <th scope="col">Hrs Since Installation</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (eq of equipments(); track eq.eqptCode || eq.id || eq.name) {
+            <tr>
+              <td class="font-medium text-slate-900 dark:text-white">{{ eq.name }}</td>
+              <td class="font-mono text-xs text-sky-600 dark:text-sky-400 font-semibold">{{ eq.eqptCode || 'N/A' }}</td>
+              <td class="text-slate-700 dark:text-white/80">{{ eq.locOnBoard || 'N/A' }}</td>
+              <td class="text-slate-700 dark:text-white/80">{{ eq.nomenclature || eq.name }}</td>
+              <td class="font-mono text-xs text-slate-700 dark:text-white/80">{{ eq.serNo || 'N/A' }}</td>
+              <td>
+                <input id="{{'monthlyHours' + $index}}" type="text" [(ngModel)]="eq.monthlyHours"
+                  (change)="calculateEquipmentCumulative(eq)" class="form-input text-center text-xs" />
+              </td>
+              <td class="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 text-center">
+                {{ eq.cumulativeHours }}
+              </td>
+            </tr>
+            }
+            @if (equipments().length === 0) {
+            <tr>
+              <td colspan="7" class="text-center text-slate-500 dark:text-white/50 py-4">
+                No configured equipment found for the allowed CMMS equipment categories.
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    }
+
+    <!-- Sub Tab 2: Boiler Steaming Detail -->
+    @if (activeSubTab() === 2) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Boiler Steaming Details</h3>
+      <p class="text-xs text-rose-400 font-medium mb-3">
+        Note: If Hours Underway rendered it is compulsory to fill Boiler Steaming Details (for Boiler Ships).
+      </p>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs fpt-me-table">
+          <thead>
+            <tr>
+              <th scope="col">Eqpt Name</th>
+              <th scope="col">Nomenclature</th>
+              <th scope="col">Location</th>
+              <th scope="col">Ser No</th>
+              <th scope="col">Hrs Steamed (Month)</th>
+              <th scope="col">Hrs Steamed (Comm)</th>
+              <th scope="col">Hrs Above 80%</th>
+              <th scope="col">Last Est OLG Date</th>
+              <th scope="col">Hrs Since Last OLG</th>
+              <th scope="col">Hrs At Last OLG</th>
+              <th scope="col">Last Retubing Date</th>
+              <th scope="col">Hrs Since Retubing</th>
+              <th scope="col">Last Hydraulic Test</th>
+              <th scope="col">Next Inspection Due</th>
+              <th scope="col">Life Assessed (Months)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of boilerSteamingData; track row.eqptName) {
+            <tr>
+              <td class="font-medium text-white">{{ row.eqptName }}</td>
+              <td>{{ row.nomenclature }}</td>
+              <td>{{ row.locOnBoard }}</td>
+              <td class="font-mono">{{ row.serNo }}</td>
+              <td><input type="text" [(ngModel)]="row.hrsSteamedDuringMonth" class="form-input text-xs"
+                  [attr.aria-label]="'Hrs Steamed During Month for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.hrsSteamedSinceComm" class="form-input text-xs"
+                  [attr.aria-label]="'Hrs Steamed Since Comm for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.hrsAbove80" class="form-input text-xs"
+                  [attr.aria-label]="'Hrs Above 80% for ' + row.eqptName" /></td>
+              <td><input type="date" [(ngModel)]="row.lastEstOlgDate" class="form-input text-xs"
+                  [attr.aria-label]="'Last Est OLG Date for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.hrsSteamedSinceLastOlg" class="form-input text-xs"
+                  [attr.aria-label]="'Hrs Steamed Since Last OLG for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.hrsSteamedAtLastOlg" class="form-input text-xs"
+                  [attr.aria-label]="'Hrs Steamed At Last OLG for ' + row.eqptName" /></td>
+              <td><input type="date" [(ngModel)]="row.lastRetubingDate" class="form-input text-xs"
+                  [attr.aria-label]="'Last Retubing Date for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.hrsSteamedSinceLastRetubing" class="form-input text-xs"
+                  [attr.aria-label]="'Hrs Steamed Since Last Retubing for ' + row.eqptName" /></td>
+              <td><input type="date" [(ngModel)]="row.lastHydraulicTestDate" class="form-input text-xs"
+                  [attr.aria-label]="'Last Hydraulic Test Date for ' + row.eqptName" /></td>
+              <td><input type="date" [(ngModel)]="row.nextInspectionDate" class="form-input text-xs"
+                  [attr.aria-label]="'Next Inspection Date for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.lifeAssessedMonths" class="form-input text-xs"
+                  [attr.aria-label]="'Life Assessed Months for ' + row.eqptName" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">2. Boiler Feedwater Alkalinity & Water Chemistry</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th scope="col">Eqpt Name</th>
+              <th scope="col">Salinity Last Wk</th>
+              <th scope="col">Chloride Month</th>
+              <th scope="col">Excess Salinity</th>
+              <th scope="col">Alkalinity N</th>
+              <th scope="col">pH (Yarr)</th>
+              <th scope="col">TDS Max 750</th>
+              <th scope="col">Phosphate 10-60</th>
+              <th scope="col">Alkalinity Max</th>
+              <th scope="col">Alk PPM</th>
+              <th scope="col">% Alkalinity</th>
+              <th scope="col">pH (JVN)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of alkalinityData; track row.eqptName) {
+            <tr>
+              <td class="font-medium text-white">{{ row.eqptName }}</td>
+              <td><input type="text" [(ngModel)]="row.salinityLastWeek" class="form-input text-xs"
+                  [attr.aria-label]="'Salinity Last Week for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.chlorideDuringMonth" class="form-input text-xs"
+                  [attr.aria-label]="'Chloride During Month for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.excessSalinity" class="form-input text-xs"
+                  [attr.aria-label]="'Excess Salinity for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.alkalinityN" class="form-input text-xs"
+                  [attr.aria-label]="'Alkalinity N for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.phYarr" class="form-input text-xs"
+                  [attr.aria-label]="'pH Yarr for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.tdsMax750" class="form-input text-xs"
+                  [attr.aria-label]="'TDS Max 750 for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.phosphate1060" class="form-input text-xs"
+                  [attr.aria-label]="'Phosphate for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.alkalinityMax" class="form-input text-xs"
+                  [attr.aria-label]="'Alkalinity Max for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.alkPpm" class="form-input text-xs"
+                  [attr.aria-label]="'Alk PPM for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.alkalinityPercent" class="form-input text-xs"
+                  [attr.aria-label]="'% Alkalinity for ' + row.eqptName" /></td>
+              <td><input type="text" [(ngModel)]="row.phJvn" class="form-input text-xs"
+                  [attr.aria-label]="'pH JVN for ' + row.eqptName" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    }
+
+    <!-- Sub Tab 3: Ship Activity -->
+    @if (activeSubTab() === 3) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">Add Ship Operational Activity</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+        <div>
+          <!-- Held to the reporting month: an activity logged on this return happened
+               within it. The marker is read off the native input via closest(). -->
+          <app-input-field label="From Date" type="date" data-srar-date-range
+            [(ngModel)]="activityFromDate"></app-input-field>
+        </div>
+
+        <div>
+          <app-input-field label="To Date" type="date" data-srar-date-range
+            [(ngModel)]="activityToDate"></app-input-field>
+        </div>
+
+        <div>
+          <app-select-input label="Ship State" [options]="shipStateOptions" [(ngModel)]="shipState"
+            (ngModelChange)="onShipStateChange($event)"></app-select-input>
+        </div>
+
+        <div>
+          <app-select-input label="Ship Location" [options]="shipLocationOptions" [disabled]="!shipState"
+            [(ngModel)]="shipLocation"></app-select-input>
+        </div>
+
+        <div>
+          <app-select-input label="Activity Type" [options]="activityTypeOptions" [disabled]="!shipLocation"
+            [(ngModel)]="activityType" (ngModelChange)="onActivityTypeChange($event)"></app-select-input>
+        </div>
+
+        <div>
+          <app-select-input label="Activity Detail" [options]="activityDetailOptions" [disabled]="!activityType"
+            [(ngModel)]="activityDetail"></app-select-input>
+        </div>
+
+        <div class="md:col-span-3">
+          <app-input-field label="Remarks" placeholder="Enter activity remarks"
+            [(ngModel)]="activityRemarks"></app-input-field>
+        </div>
+
+        <div class="md:col-span-3 flex justify-end">
+          <app-button (click)="addActivity()" class="button primary-btn flex items-center gap-2 cursor-pointer">
+            <app-icon name="plus" [size]="16" variant="inherit"></app-icon>
+            <span>Add Activity Entry</span>
+          </app-button>
+        </div>
+      </div>
+
+      <h3 class="subHeading_box">Recorded Ship Activities</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Date Range</th>
+              <th>Ship State</th>
+              <th>Location</th>
+              <th>Activity Type</th>
+              <th>Activity Detail</th>
+              <th>Remarks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (act of activities; track $index) {
+            <tr>
+              <td class="text-center font-mono">{{ $index + 1 }}</td>
+              <td class="font-mono text-xs">{{ act.dateRange }}</td>
+              <td><span class="type-pill">{{ act.shipState }}</span></td>
+              <td>{{ act.shipLocation }}</td>
+              <td>{{ act.activityType }}</td>
+              <td>{{ act.activityDetail }}</td>
+              <td>{{ act.remarks }}</td>
+              <td class="text-center">
+                <app-button (click)="deleteActivity($index)" class="grid-action-pill grid-action-delete"
+                  title="Delete Activity">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 4: Fuel / AVCAT / Torsionmeter -->
+    @if (activeSubTab() === 4) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Fuel Oil Consumption & Balance (In Tons)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+        <div>
+          <span class="block text-xs font-semibold text-sky-300 mb-1">B/F Last Month</span>
+          <div class="fetched-display-box">
+            <span>{{ fuelConsumption.bfLastMonth || '0.00' }}</span>
+          </div>
+        </div>
+        <div>
+          <app-input-field label="Received" type="text" [(ngModel)]="fuelConsumption.received"
+            (change)="calculateFuelConsumption()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Cons. Harbour" type="text" [(ngModel)]="fuelConsumption.consHarbor"
+            (change)="calculateFuelConsumption()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Cons. Anchorage" type="text" [(ngModel)]="fuelConsumption.consAnchorage"
+            (change)="calculateFuelConsumption()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Cons. Sea" type="text" [(ngModel)]="fuelConsumption.consSea"
+            (change)="calculateFuelConsumption()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Total Consumed" type="text" [readonly]="true"
+            [ngModel]="fuelConsumption.totalCons"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Defueled" type="text" [(ngModel)]="fuelConsumption.defueled"
+            (change)="calculateFuelConsumption()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Balance Left Onboard" type="text" [readonly]="true"
+            [ngModel]="fuelConsumption.balLeftOnboard"></app-input-field>
+        </div>
+      </div>
+
+      <h3 class="subHeading_box">2. AVCAT Status (Aviation Fuel) (Litre)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+        <div>
+          <span class="block text-xs font-semibold text-sky-300 mb-1">B/F Last Month (Litre)</span>
+          <div class="fetched-display-box">
+            <span>{{ avcatStatus.bfLastMonth || '0.00' }}</span>
+          </div>
+        </div>
+        <div>
+          <app-input-field label="Received (Litre)" type="text" [(ngModel)]="avcatStatus.received"
+            (change)="calculateAvcatStatus()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Given to A/C (Litre)" type="text" [(ngModel)]="avcatStatus.givenToAc"
+            (change)="calculateAvcatStatus()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Used for Trials (Litre)" type="text" [(ngModel)]="avcatStatus.usedForTrials"
+            (change)="calculateAvcatStatus()"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Total Consumed (Litre)" type="text" [readonly]="true"
+            [ngModel]="avcatStatus.totalCons"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Defueled (Litre)" type="text" [(ngModel)]="avcatStatus.defueled"
+            (change)="calculateAvcatStatus()"></app-input-field>
+        </div>
+        <div class="md:col-span-2">
+          <app-input-field label="Balance Left Onboard (Litre)" type="text" [readonly]="true"
+            [ngModel]="avcatStatus.balLeftOnboard"></app-input-field>
+        </div>
+      </div>
+
+      <h3 class="subHeading_box">3. Torsionmeter Data Parameters</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Nomenclature</th>
+              <th>Eqpt Code</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Torsion Meter Reading</th>
+              <th>Max RPM Achieved</th>
+              <th>Last Calibration</th>
+              <th>Next Calibration Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of torsionMeterData; track row.srNo) {
+            <tr>
+              <td class="font-medium text-white">{{ row.nomenclature }}</td>
+              <td class="font-mono text-xs">{{ row.eqptCode }}</td>
+              <td>{{ row.locOnBoard }}</td>
+              <td>
+                <select id="{{'torsionOps' + $index}}" [(ngModel)]="row.opsNonOps" (change)="onStatusChange(row)"
+                  class="custom-select text-xs">
+                  <option value="Ops">Ops</option>
+                  <option value="Non-Ops">Non-Ops</option>
+                  <option value="Not Held">Not Held</option>
+                </select>
+              </td>
+              <td><input id="{{'torsionMeterRdg' + $index}}" type="text" [(ngModel)]="row.torsionMeterRdg"
+                  [disabled]="isNotOps(row)"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" /></td>
+              <td><input id="{{'maxRpmAchieved' + $index}}" type="text" [(ngModel)]="row.maxRpmAchieved"
+                  [disabled]="isNotOps(row)"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" /></td>
+              <td><input id="{{'lastCalibrationOn' + $index}}" type="date" [(ngModel)]="row.lastCalibrationOn"
+                  [disabled]="isNotOps(row)"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+              <td><input id="{{'nextCalibrationDue' + $index}}" type="date" [(ngModel)]="row.nextCalibrationDue"
+                  [disabled]="isNotOps(row)"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 5: ICCP / H2S / STP / MFFS -->
+    @if (activeSubTab() === 5) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. ICCP System Parameters</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Nomenclature</th>
+              <th>Eqpt Code</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Non-Ops Since</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of iccpData; track row.nomenclature) {
+            <tr>
+              <td class="font-medium text-white">{{ row.nomenclature }}</td>
+              <td class="font-mono text-xs">{{ row.eqptCode }}</td>
+              <td>{{ row.locOnBoard }}</td>
+              <td>
+                <select id="{{'opsNonOps' + $index}}" [(ngModel)]="row.opsNonOps" (change)="onStatusChange(row)"
+                  class="custom-select text-xs">
+                  <option value="Ops">Ops</option>
+                  <option value="Non-Ops">Non-Ops</option>
+                  <option value="Not Held">Not Held</option>
+                </select>
+              </td>
+              <td><input id="{{'nonOpsSince' + $index}}" type="date" [(ngModel)]="row.nonOpsSince"
+                  [disabled]="row.opsNonOps !== 'Non-Ops'"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">2. H2S Gas Sensors</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Nomenclature</th>
+              <th>Eqpt Code</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Last Calibration</th>
+              <th>Next Calibration Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of h2sSensorData; track row.nomenclature) {
+            <tr>
+              <td class="font-medium text-white">{{ row.nomenclature }}</td>
+              <td class="font-mono text-xs">{{ row.eqptCode }}</td>
+              <td>{{ row.locOnBoard }}</td>
+              <td>
+                <select id="{{'opsNonOps' + $index}}" [(ngModel)]="row.opsNonOps" (change)="onStatusChange(row)"
+                  class="custom-select text-xs">
+                  <option value="Ops">Ops</option>
+                  <option value="Non-Ops">Non-Ops</option>
+                  <option value="Not Held">Not Held</option>
+                </select>
+              </td>
+              <td><input id="{{'lastCalibratedOn' + $index}}" type="date" [(ngModel)]="row.lastCalibratedOn"
+                  [disabled]="isNotOps(row)"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+              <td><input id="{{'nextCalibration' + $index}}" type="date" [(ngModel)]="row.nextCalibration"
+                  [disabled]="isNotOps(row)"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">3. Sewage Treatment Plant (STP)</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>System</th>
+              <th>Ser No / Code</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Test Date</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (stp of stpData; track stp.nomenclature) {
+            <tr>
+              <td class="font-medium text-white">{{ stp.nomenclature }}</td>
+              <td class="font-mono text-xs">{{ stp.eqptCode }}</td>
+              <td>{{ stp.locOnBoard }}</td>
+              <td>
+                <select id="{{'stpStatus' + $index}}" [(ngModel)]="stp.status" (change)="onStatusChange(stp)"
+                  class="custom-select text-xs">
+                  <option value="SAT">SAT</option>
+                  <option value="UNSAT">UNSAT</option>
+                </select>
+              </td>
+              <td><input type="date" id="{{'effluentTestDate' + $index}}" [(ngModel)]="stp.effluentTestDate"
+                  class="form-input text-xs" /></td>
+              <td><input type="text" id="{{'remarks' + $index}}" [(ngModel)]="stp.remarks" class="form-input text-xs" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">4. Magazine Sprinkling (MFFS)</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>System</th>
+              <th>Ser No / Code</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Last Trials Taken</th>
+              <th>Next Trials Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (mffs of mffsData; track mffs.nomenclature) {
+            <tr>
+              <td class="font-medium text-white">{{ mffs.nomenclature }}</td>
+              <td class="font-mono text-xs">{{ mffs.eqptCode }}</td>
+              <td>{{ mffs.locOnBoard }}</td>
+              <td>
+                <select id="{{'mffsStatus' + $index}}" [(ngModel)]="mffs.status" class="custom-select text-xs">
+                  <option value="SAT">SAT</option>
+                  <option value="UNSAT">UNSAT</option>
+                </select>
+              </td>
+              <td><input type="date" id="{{'mffsLastTrials' + $index}}" [(ngModel)]="mffs.lastTrialsTaken"
+                  class="form-input text-xs" /></td>
+              <td><input type="date" id="{{'mffsNextTrials' + $index}}" [(ngModel)]="mffs.nextTrialsDue"
+                  class="form-input text-xs" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 6: Test Kits / Centrifuge -->
+    @if (activeSubTab() === 6) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Lub Oil / Coolant Test Kits</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Test Kit Description</th>
+              <th>Operational Status</th>
+              <th title="Mandatory when Operational Status is Ops">Last Calibration Date<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when Operational Status is Ops">Next Calibration Due<span class="text-rose-400">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (kit of lubOilCoolantTestKits; track kit.description) {
+            <tr>
+              <td class="font-medium text-white">{{ kit.description }}</td>
+              <td>
+                <select id="{{'opsNonOps' + $index}}" [(ngModel)]="kit.opsNonOps" (change)="onStatusChange(kit)"
+                  class="custom-select text-xs">
+                  <option value="">Not Applicable</option>
+                  <option value="Ops">Ops</option>
+                  <option value="Non-Ops">Non-Ops</option>
+                  <option value="Not Held">Not Held</option>
+                </select>
+              </td>
+              <td><input type="date" id="{{'calibrationDate' + $index}}" [(ngModel)]="kit.calibrationDate"
+                  (change)="onCalibrationDateChange(kit, 'calibrationDate', 'nextCalibrationDueDate')"
+                  [disabled]="kit.opsNonOps === 'Not Held' || !kit.opsNonOps"
+                  [class.border-red-500]="kit.opsNonOps === 'Ops' && !kit.calibrationDate"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+              <td><input type="date" id="{{'nextCalibrationDueDate' + $index}}" [(ngModel)]="kit.nextCalibrationDueDate"
+                  (change)="onCalibrationDateChange(kit, 'calibrationDate', 'nextCalibrationDueDate')"
+                  [disabled]="kit.opsNonOps === 'Non-Ops' || kit.opsNonOps === 'Not Held' || !kit.opsNonOps"
+                  [class.border-red-500]="kit.opsNonOps === 'Ops' && !kit.nextCalibrationDueDate"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">2. Purifier / Centrifuge Exploitation</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Equipment Name</th>
+              <th>Nomenclature</th>
+              <th>Ser No</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th title="Mandatory when Status is Ops">Last Calibrated Date<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when Status is Ops">Next Calibration Due<span class="text-rose-400">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (pur of lubOilFuelCentrifuge; track pur.eqptName) {
+            <tr>
+              <td class="font-medium text-white">{{ pur.eqptName }}</td>
+              <td>{{ pur.nomenclature }}</td>
+              <td class="font-mono text-xs">{{ pur.serNo }}</td>
+              <td>{{ pur.locOnBoard }}</td>
+              <td>
+                <select id="{{'centrifugeOps' + $index}}" [(ngModel)]="pur.opsNonOps" (change)="onStatusChange(pur)"
+                  class="custom-select text-xs">
+                  <option value="Ops">Ops</option>
+                  <option value="Non-Ops">Non-Ops</option>
+                  <option value="Not Held">Not Held</option>
+                </select>
+              </td>
+              <td><input type="date" id="{{'lastCalibratedOn' + $index}}" [(ngModel)]="pur.lastCalibratedOn"
+                  (change)="onCalibrationDateChange(pur, 'lastCalibratedOn', 'nextCalibration')"
+                  [disabled]="pur.opsNonOps === 'Not Held'"
+                  [class.border-red-500]="pur.opsNonOps === 'Ops' && !pur.lastCalibratedOn"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+              <td><input type="date" id="{{'nextCalibration' + $index}}" [(ngModel)]="pur.nextCalibration"
+                  (change)="onCalibrationDateChange(pur, 'lastCalibratedOn', 'nextCalibration')"
+                  [disabled]="pur.opsNonOps === 'Non-Ops' || pur.opsNonOps === 'Not Held'"
+                  [class.border-red-500]="pur.opsNonOps === 'Ops' && !pur.nextCalibration"
+                  class="form-input text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-slate-900/60" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 7: Diesel Engine & SDC -->
+    @if (activeSubTab() === 7) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">10. Injector FIP Calibration / Replacement (Main Engines/ Diesel Alternators)</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Equipment Name</th>
+              <th>Nomenclature</th>
+              <th>Eqpt Code</th>
+              <th>Loc on Board</th>
+              <th>R/H in Month(HH:MM)<span class="text-rose-400">*</span></th>
+              <th>RH Since Installation(HH:MM)</th>
+              <th title="Mandatory when R/H in Month is greater than 0">Hours Run (Below 30% load)<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when R/H in Month is greater than 0">Hours run - 30% to 50% load<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when R/H in Month is greater than 0">Hours run - 50% to 70% load<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when R/H in Month is greater than 0">Hours run - 70% to 100% load<span class="text-rose-400">*</span></th>
+              <th title="Lub oil Consumption in current Month (HH:MM) — mandatory when R/H in Month is greater than 0">Lub Oil Cons. (Month)<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when R/H in Month is greater than 0">Date of Injector/FIP Calibration<span class="text-rose-400">*</span></th>
+              <th title="Occasions of Injector / FIP Replacement/ Calibration (Unscheduled) — mandatory when R/H in Month is greater than 0">Injector/FIP Occasions<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when R/H in Month is greater than 0">In/Out which replaced<span class="text-rose-400">*</span></th>
+              <th title="Mandatory when R/H in Month is greater than 0">Fuel Consumption (in tons)<span class="text-rose-400">*</span></th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (fip of injectorFipCalibration; track fip.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[140px]">{{ fip.eqptName }}</td>
+              <td><span class="font-medium text-white">{{ fip.nomenclature }}</span></td>
+              <td class="font-mono text-xs">{{ fip.eqptCode }}</td>
+              <td><span class="text-xs text-slate-300">{{ fip.locOnBoard || 'Engine Room P' }}</span></td>
+              <td><input type="text" [(ngModel)]="fip.fipInMonth" (change)="onFipRhChange(fip)"
+                  class="form-input text-xs text-center font-mono min-w-[90px]" /></td>
+              <td><input type="text" [ngModel]="fip.rhSinceInstallation" readonly
+                  class="form-input text-xs text-center font-mono min-w-[90px] readonly-input" /></td>
+              <td>
+                <input type="text" [(ngModel)]="fip.hrsBelow30" (change)="onFipRhChange(fip)"
+                  class="form-input text-xs text-center min-w-[80px]" [class.border-red-500]="fip.isRegimeMismatch" />
+              </td>
+              <td><input type="text" [(ngModel)]="fip.hrs30to50" (change)="onFipRhChange(fip)"
+                  class="form-input text-xs text-center min-w-[80px]" [class.border-red-500]="fip.isRegimeMismatch" />
+              </td>
+              <td><input type="text" [(ngModel)]="fip.hrs50to70" (change)="onFipRhChange(fip)"
+                  class="form-input text-xs text-center min-w-[80px]" [class.border-red-500]="fip.isRegimeMismatch" />
+              </td>
+              <td><input type="text" [(ngModel)]="fip.hrs70to100" (change)="onFipRhChange(fip)"
+                  class="form-input text-xs text-center min-w-[80px]" [class.border-red-500]="fip.isRegimeMismatch" />
+                @if (fip.isRegimeMismatch) {
+                <div class="text-[10px] text-red-400 mt-1">R/H in Month ≠ sum of load bands</div>
+                }
+              </td>
+              <td><input type="text" [(ngModel)]="fip.lubOilConsCurrentMonth"
+                  class="form-input text-xs text-center font-mono min-w-[90px]" /></td>
+              <td><input type="date" [(ngModel)]="fip.dateOfInjectorCalibration"
+                  class="form-input text-xs min-w-[120px]" /></td>
+              <td><input type="text" [(ngModel)]="fip.occasionsReplacement" class="form-input text-xs min-w-[140px]" />
+              </td>
+              <td><input type="text" [(ngModel)]="fip.inOutWhichReplaced" class="form-input text-xs min-w-[100px]" />
+              </td>
+              <td><input type="text" [(ngModel)]="fip.fuelConsumptionTons"
+                  class="form-input text-xs text-center min-w-[90px]" /></td>
+              <td><input type="text" [(ngModel)]="fip.remarks" class="form-input text-xs min-w-[140px]" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">Diesel Reduction Gear</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Eqpt Code</th>
+              <th>Loc On Board</th>
+              <th>Nomenclature</th>
+              <th>Ser No.</th>
+              <th>Hrs For Month(hh:mm)<span class="text-rose-400">*</span></th>
+              <th>Hrs Since Installation</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rg of dieselReductionGear; track $index) {
+            <tr>
+              <td class="font-medium text-white min-w-[180px]">{{ rg.eqptName }}</td>
+              <td class="font-mono text-xs">{{ rg.eqptCode }}</td>
+              <td><span class="text-xs text-slate-300">{{ rg.locOnBoard }}</span></td>
+              <td><span class="font-medium text-white">{{ rg.nomenclature }}</span></td>
+              <td class="font-mono">{{ rg.serNo }}</td>
+              <td><input type="text" [(ngModel)]="rg.hrsForMonth" (change)="onDieselRgHrsForMonthChange(rg)"
+                  class="form-input text-xs text-center font-mono min-w-[90px]" /></td>
+              <td><input type="text" [ngModel]="rg.hrsSinceInstallation" readonly
+                  class="form-input text-xs text-center font-mono min-w-[90px] readonly-input" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">11. Status of Safety Device Checks (Main Engines/ Diesel Alternators)</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Equipment Name</th>
+              <th>Nomenclature</th>
+              <th>Eqpt Ser No</th>
+              <th>Eqpt Code</th>
+              <th>Loc on Board</th>
+              <th>SDC Conducted By</th>
+              <th>Date of SDC</th>
+              <th>SFC (gms/kWh)<span class="text-rose-400">*</span></th>
+              <th>Last SFC Trial Date</th>
+              <th>Displacement (Tons)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (sdc of safetyDeviceChecks; track sdc.eqptName) {
+            <tr>
+              <td class="font-medium text-white">{{ sdc.eqptName }}</td>
+              <td><span class="font-medium text-white">{{ sdc.nomenclature }}</span></td>
+              <td class="font-mono text-xs">{{ sdc.eqptSerNo || 'ME-9912-P' }}</td>
+              <td class="font-mono text-xs">{{ sdc.eqptCode || 'ME-01-P' }}</td>
+              <td><input type="text" id="{{'sdcLocOnBoard' + $index}}" [(ngModel)]="sdc.locOnBoard"
+                  class="form-input text-xs" /></td>
+              <td>
+                <select id="{{'sdcConductedBy' + $index}}" [(ngModel)]="sdc.sdcConductedBy"
+                  class="custom-select text-xs">
+                  <option value="">Select</option>
+                  @for (option of fptConductedByOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="date" id="{{'dateOfSdc' + $index}}" [(ngModel)]="sdc.dateOfSdc"
+                  class="form-input text-xs" /></td>
+              <td><input type="text" id="{{'sfcGmsKWh' + $index}}" [(ngModel)]="sdc.sfcGmsKWh"
+                  class="form-input text-xs" /></td>
+              <td><input type="date" id="{{'lastSfcTrialDate' + $index}}" [(ngModel)]="sdc.lastSfcTrialDate"
+                  class="form-input text-xs" /></td>
+              <td><input type="text" id="{{'displacementDuringSfc' + $index}}" [(ngModel)]="sdc.displacementDuringSfc"
+                  class="form-input text-xs" /></td>
+              <td>
+                <select [(ngModel)]="sdc.status" id="{{'status' + $index}}" (change)="onStatusChange(sdc)"
+                  class="custom-select text-xs">
+                  <option value="SAT">SAT</option>
+                  <option value="UNSAT">UNSAT</option>
+                  <option value="Not Held">Not Held</option>
+                </select>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="subHeading_box">12. Replacement of Major Assemblies</h3>
+        <app-button (click)="toggleAddEquipmentModal(true)"
+          class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Major Assembly</span>
+        </app-button>
+      </div>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Serial No</th>
+              <th>Date Replaced</th>
+              <th>Sub Assembly Unit</th>
+              <th>Reason</th>
+              <th>Remarks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rep of replacementMajorAssemblies; track $index) {
+            <tr>
+              <td class="font-medium text-white">{{ rep.eqptName }}</td>
+              <td class="font-mono">{{ rep.eqptSrNumber }}</td>
+              <td>{{ rep.dateOfReplacement }}</td>
+              <td>{{ rep.subAssemblyUnitName }}</td>
+              <td><span class="type-pill">{{ rep.reasonOfReplacement }}</span></td>
+              <td>{{ rep.remarks || 'N/A' }}</td>
+              <td class="text-center">
+                <app-button (click)="deleteMajorAssembly($index)" class="grid-action-pill grid-action-delete"
+                  title="Delete">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="subHeading_box">13. Annual/SR/MR/Routine Undertaken</h3>
+        <app-button (click)="toggleAddRoutineModal(true)"
+          class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Routine</span>
+        </app-button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Serial No</th>
+              <th>Date</th>
+              <th>Routine Description</th>
+              <th>Undertaken By</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rt of routinesUndertaken; track $index) {
+            <tr>
+              <td class="font-medium text-white">{{ rt.eqptName }}</td>
+              <td class="font-mono">{{ rt.eqptSrNumber }}</td>
+              <td>{{ rt.date }}</td>
+              <td>{{ rt.descriptionForRoutine }}</td>
+              <td><span class="type-pill">{{ rt.undertakenByWhom }}</span></td>
+              <td class="text-center">
+                <app-button (click)="deleteRoutine($index)" class="grid-action-pill grid-action-delete"
+                  title="Delete Routine">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    }
+
+    <!-- Sub Tab 8: DGUF -->
+    @if (activeSubTab() === 8) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Diesel Generator Utilization Factor (DGUF)</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>Ser No</th>
+              <th>Eqpt Code</th>
+              <th>Eqpt Name</th>
+              <th>Loc On Board</th>
+              <th>DA No.</th>
+              <th>RH Sea / Anchorage</th>
+              <th>RH Harbour</th>
+              <th>Total RH Month</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (dg of dgufGeneratorData; track dg.daNo) {
+            <tr>
+              <td class="font-mono text-xs text-slate-300">{{ dg.eqptSerNo }}</td>
+              <td class="font-mono text-xs text-sky-400">{{ dg.eqptCode }}</td>
+              <td class="font-medium text-white">{{ dg.eqptName }}</td>
+              <td>{{ dg.locOnBoard }}</td>
+              <td class="font-mono text-xs font-semibold text-sky-400">{{ dg.daNo }}</td>
+              <td><input type="text" id="{{'rhSeaAnchorage' + $index}}" [(ngModel)]="dg.rhSeaAnchorage"
+                  (change)="onDgufEquipmentRhChange()" class="form-input text-xs text-center" /></td>
+              <td><input type="text" id="{{'rhHarbour' + $index}}" [(ngModel)]="dg.rhHarbour"
+                  (change)="onDgufEquipmentRhChange()" class="form-input text-xs text-center" /></td>
+              <td><input type="text" id="{{'totalRhMonth' + $index}}" [ngModel]="dg.totalRhMonth" readonly
+                  class="form-input text-xs text-center font-semibold text-emerald-400" /></td>
+            </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5" class="font-semibold text-white text-right">Total</td>
+              <td>
+                <input type="text" [ngModel]="dgufEquipmentTotals.seaAnchorage" readonly
+                  class="form-input text-xs text-center font-semibold text-emerald-400" />
+              </td>
+              <td>
+                <input type="text" [ngModel]="dgufEquipmentTotals.harbour" readonly
+                  class="form-input text-xs text-center font-semibold text-emerald-400" />
+              </td>
+              <td>
+                <input type="text" [ngModel]="dgufEquipmentTotals.totalMonth" readonly
+                  class="form-input text-xs text-center font-semibold text-emerald-400" />
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">2. DGUF - Sea & Harbour running hours data input</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table dguf-rh-table">
+          <thead>
+            <tr>
+              <th title="(A) Total RH of Sea (HH:MM) [A] = [B] + [C] + [D]">(A) Total RH Sea</th>
+              <th>(B) Hours Underway (HH:MM)</th>
+              <th>(C) Anchorage (HH:MM)</th>
+              <th>(D) Drifting (HH:MM)</th>
+              <th title="(E) = Max hours in the month − [C] − [D]">(E) Number of Hours in Harbour (HH:MM)</th>
+              <th title="(F) Hours shore supply available when alongside (HH:MM)">(F) Shore Supply Hrs</th>
+              <th>Number of Cold moves in harbour</th>
+              <th
+                title="Comments wrt non-availability of shore supply in harbour necessitating exploitation of DGs with berthing position and date">
+                Shore Supply Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" [ngModel]="dgufRunningHoursData.totalRhSea" readonly
+                  class="form-input text-xs text-center readonly-input" /></td>
+              <td><input type="text" [ngModel]="dgufRunningHoursData.hrsUnderway" readonly
+                  class="form-input text-xs text-center readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="dgufRunningHoursData.anchorage"
+                  (change)="onDgufAnchorageOrDriftingChange()" class="form-input text-xs text-center" /></td>
+              <td><input type="text" [(ngModel)]="dgufRunningHoursData.drifting"
+                  (change)="onDgufAnchorageOrDriftingChange()" class="form-input text-xs text-center" /></td>
+              <td><input type="text" [ngModel]="dgufRunningHoursData.hrsInHarbour" readonly
+                  class="form-input text-xs text-center readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="dgufRunningHoursData.hrsShoreSupply"
+                  (change)="validateDgufShoreSupply()" class="form-input text-xs text-center" /></td>
+              <td><input type="number" [(ngModel)]="dgufRunningHoursData.coldMoves"
+                  class="form-input text-xs text-center" /></td>
+              <!-- Picked from CMMS's own DgufComment master rather than typed: the same
+                   reason was being written a dozen different ways across returns. -->
+              <td><app-select-input [options]="shoreSupplyRemarkOptions"
+                  [(ngModel)]="dgufRunningHoursData.comments"></app-select-input></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">3. DGUF Limiting Values</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Limiting Value (Sea)</th>
+              <th>Actual DGUF (Sea)</th>
+              <th>Reasons for Exceeding DGUF (Sea)</th>
+              <th>Actual DGUF (Harbour)</th>
+              <th>Reasons for Exceeding DGUF (Harbour)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" [(ngModel)]="dgufLimitingValues.limitingValueSea" readonly
+                  class="form-input text-xs text-center readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="dgufLimitingValues.actualDgufSea" readonly
+                  class="form-input text-xs text-center readonly-input" /></td>
+              <td><app-select-input [options]="dgufSeaReasonOptions"
+                  [(ngModel)]="dgufLimitingValues.reasonExceedingSea"></app-select-input></td>
+              <td><input type="text" [(ngModel)]="dgufLimitingValues.actualDgufHarbour" readonly
+                  class="form-input text-xs text-center readonly-input" /></td>
+              <td><app-select-input [options]="dgufHarbourReasonOptions"
+                  [(ngModel)]="dgufLimitingValues.reasonExceedingHarbour"></app-select-input></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 9: Full Power Trials -->
+    @if (activeSubTab() === 9) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">14. Main Engine</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Last FPT Date</th>
+              <th>Displacement (Tons)</th>
+              <th>Max Speed (in Knots)</th>
+              <th>Occasion/Reason</th>
+              <th>Draught (in Mtrs)FWD</th>
+              <th>Draught (in Mtrs)AFT</th>
+              <th>Conducted By</th>
+              <th>Torsion Meter Reading (kNM)</th>
+              <th>Sea State</th>
+              <th title="Remark/Reason For Not Achieving Full Power Pending DR Activities">FPT Pending Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="date" [(ngModel)]="fptMainEngineGeneral.lastFptDate"
+                  class="form-input text-xs min-w-[120px]" /></td>
+              <td><input type="text" [(ngModel)]="fptMainEngineGeneral.displacement"
+                  (keypress)="allowOnlyDecimals($event, fptMainEngineGeneral.displacement)"
+                  (change)="onNumericEntry(fptMainEngineGeneral, 'displacement', 'Displacement (Tons)')"
+                  class="form-input text-xs text-center min-w-[110px]" /></td>
+              <td><input type="text" [(ngModel)]="fptMainEngineGeneral.maxSpeed"
+                  (keypress)="allowOnlyDecimals($event, fptMainEngineGeneral.maxSpeed)"
+                  (change)="onNumericEntry(fptMainEngineGeneral, 'maxSpeed', 'Max Speed')"
+                  class="form-input text-xs text-center min-w-[90px]" /></td>
+              <td><input type="text" [(ngModel)]="fptMainEngineGeneral.occasionReason"
+                  class="form-input text-xs min-w-[140px]" /></td>
+              <td><input type="text" [(ngModel)]="fptMainEngineGeneral.draughtFwd"
+                  (keypress)="allowOnlyDecimals($event, fptMainEngineGeneral.draughtFwd)"
+                  (change)="onNumericEntry(fptMainEngineGeneral, 'draughtFwd', 'Draught FWD')"
+                  class="form-input text-xs text-center min-w-[110px]" /></td>
+              <td><input type="text" [(ngModel)]="fptMainEngineGeneral.draughtAft"
+                  (keypress)="allowOnlyDecimals($event, fptMainEngineGeneral.draughtAft)"
+                  (change)="onNumericEntry(fptMainEngineGeneral, 'draughtAft', 'Draught AFT')"
+                  class="form-input text-xs text-center min-w-[110px]" /></td>
+              <td class="min-w-[150px]">
+                <select [(ngModel)]="fptMainEngineGeneral.conductedBy" class="custom-select text-xs">
+                  <option value="">Select</option>
+                  @for (option of fptConductedByOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="text" [(ngModel)]="fptMainEngineGeneral.torsionMotorReading"
+                  class="form-input text-xs text-center min-w-[120px]" /></td>
+              <td class="min-w-[110px]">
+                <select [(ngModel)]="fptMainEngineGeneral.seaState" class="custom-select text-xs">
+                  <option value="">Select</option>
+                  @for (option of seaStateOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <textarea [(ngModel)]="fptMainEngineGeneral.remarks"
+                  class="form-input text-xs min-w-[220px] min-h-[52px] resize-y"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs fpt-da-table">
+          <thead>
+            <tr class="group-header">
+              <th colspan="5">Equipment Details</th>
+              <th colspan="7">Trial Parameters</th>
+              <th rowspan="2">Remarks</th>
+            </tr>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Nomenclature</th>
+              <th>Eqpt Code</th>
+              <th>Loc on Board</th>
+              <th>Ser No</th>
+              <th>Fuel Rack DBR (Max)</th>
+              <th>PCL Throttle Marking (Max)</th>
+              <th>Last EHM Trials Undertaken On</th>
+              <th>Pitch</th>
+              <th>Max RPM</th>
+              <th>Rated Power (kW)</th>
+              <th>Max Achieved Power (kW)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (me of fptMainEngineSpecific; track me.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[140px]">{{ me.eqptName }}</td>
+              <td><span class="font-medium text-white">{{ me.nomenclature }}</span></td>
+              <td class="font-mono text-xs">{{ me.eqptCode }}</td>
+              <td><span class="text-xs text-slate-300">{{ me.locOnBoard }}</span></td>
+              <td class="font-mono">{{ me.serNo }}</td>
+              <td><input type="text" id="{{'fuelRackDbl' + $index}}" [(ngModel)]="me.fuelRackDbl"
+                  class="form-input text-xs text-center min-w-[90px]" /></td>
+              <td><input type="text" id="{{'fciThrottleMarking' + $index}}" [(ngModel)]="me.fciThrottleMarking"
+                  class="form-input text-xs text-center min-w-[90px]" /></td>
+              <td><input type="date" [(ngModel)]="me.lastEhmTrialsDate" class="form-input text-xs min-w-[130px]" /></td>
+              <td><input type="text" id="{{'pitch' + $index}}" [(ngModel)]="me.pitch"
+                  class="form-input text-xs text-center min-w-[80px]" /></td>
+              <td><input type="text" id="{{'maxRpm' + $index}}" [(ngModel)]="me.maxRpm"
+                  class="form-input text-xs text-center min-w-[80px]" />
+              </td>
+              <td><input type="text" id="{{'ratedPower' + $index}}" [(ngModel)]="me.ratedPower"
+                  class="form-input text-xs text-center min-w-[90px]" /></td>
+              <td><input type="text" id="{{'maxAchievedPower' + $index}}" [(ngModel)]="me.maxAchievedPower"
+                  class="form-input text-xs text-center text-emerald-400 font-semibold min-w-[110px]" /></td>
+              <td><input type="text" [(ngModel)]="me.remarks" class="form-input text-xs min-w-[120px]" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">15. Diesel Alternators / GTG</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs gt-section-table">
+          <thead>
+            <tr class="group-header">
+              <th colspan="5">Equipment Details</th>
+              <th colspan="7">Load Trial Details</th>
+            </tr>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Eqpt Nomenclature</th>
+              <th>Eqpt Code</th>
+              <th>Location</th>
+              <th>Eqpt Ser No</th>
+              <th>Date</th>
+              <th>Occasion/Reason</th>
+              <th>Rated Load (kW)</th>
+              <th>Max Load Achieved(kW)</th>
+              <th>Conducted By</th>
+              <th>Last EHM Trials Undertaken on</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (da of fptDieselGeneratorLoad; track da.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[150px]">{{ da.eqptName }}</td>
+              <td><span class="font-medium text-white">{{ da.nomenclature }}</span></td>
+              <td class="font-mono text-xs">{{ da.eqptCode }}</td>
+              <td><span class="text-xs text-slate-300">{{ da.location }}</span></td>
+              <td class="font-mono text-xs">{{ da.eqptSerNo }}</td>
+              <td><input type="date" [(ngModel)]="da.date" class="form-input text-xs min-w-[125px]" /></td>
+              <td><input type="text" [(ngModel)]="da.occasionReason" class="form-input text-xs min-w-[140px]" /></td>
+              <td><input type="text" [(ngModel)]="da.ratedLoad" class="form-input text-xs text-center min-w-[90px]" />
+              </td>
+              <td><input type="text" [(ngModel)]="da.maxLoadAchieved"
+                  class="form-input text-xs text-center min-w-[110px]" /></td>
+              <td class="min-w-[120px]">
+                <select [(ngModel)]="da.conductedBy" class="custom-select text-xs">
+                  @for (option of fptConductedByOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="date" [(ngModel)]="da.lastEhmTrialsDate" class="form-input text-xs min-w-[125px]" /></td>
+              <td><input type="text" [(ngModel)]="da.remarks" class="form-input text-xs min-w-[110px]" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 10: GT / RG Exploitation -->
+    @if (activeSubTab() === 10) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">16. Gas Turbine</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs rg-section-table">
+          <thead>
+            <tr>
+              <th rowspan="2">Eqpt Name</th>
+              <th rowspan="2">Nomenclature</th>
+              <th rowspan="2">Eqpt Code</th>
+              <th rowspan="2">Loc On Board</th>
+              <th rowspan="2">Ser No</th>
+              <th colspan="2">Total R/H</th>
+              <th colspan="2">R/H Regime I Below 0.7N</th>
+              <th colspan="2">R/H Regime II 0.7 to 0.8</th>
+              <th colspan="2">R/H Regime III 0.9 to 1.0</th>
+              <th colspan="2">No of Cold Starts</th>
+              <th colspan="2">No of Hot Starts</th>
+              <th colspan="2">No of False Starts</th>
+              <th colspan="2">No of Tech Starts</th>
+              <th colspan="2">No of Astern Engagements</th>
+              <th colspan="2">No of Prop Stop Orders</th>
+              <th rowspan="2">Last Chem Clg (DDMMYYYY)</th>
+            </tr>
+            <tr class="sub-header">
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (gt of gasTurbineExploitation; track gt.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[140px]">{{ gt.eqptName }}</td>
+              <td><span class="font-medium text-white">{{ gt.nomenclature }}</span></td>
+              <td class="font-mono text-xs">{{ gt.eqptCode }}</td>
+              <td><span class="text-xs text-slate-300">{{ gt.locOnBoard }}</span></td>
+              <td class="font-mono">{{ gt.serNo }}</td>
+              <td>
+                <input type="text" id="{{'totalRhInMonth' + $index}}" [(ngModel)]="gt.totalRhInMonth"
+                  (change)="onGtRhInMonthChange(gt)" class="form-input text-xs min-w-[80px]"
+                  [class.border-red-500]="gt.isRegimeMismatch" />
+                @if (gt.isRegimeMismatch) {
+                <div class="text-[10px] text-red-400 mt-1">≠ sum of Regime I+II+III</div>
+                }
+              </td>
+              <td><input type="text" [ngModel]="gt.totalRhSi" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="gt.rhRegime1InMonth" (change)="onGtRhInMonthChange(gt)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="gt.isRegimeMismatch" />
+              </td>
+              <td><input type="text" [ngModel]="gt.rhRegime1Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" />
+              </td>
+              <td><input type="text" [(ngModel)]="gt.rhRegime2InMonth" (change)="onGtRhInMonthChange(gt)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="gt.isRegimeMismatch" />
+              </td>
+              <td><input type="text" [ngModel]="gt.rhRegime2Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" />
+              </td>
+              <td><input type="text" [(ngModel)]="gt.rhRegime3InMonth" (change)="onGtRhInMonthChange(gt)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="gt.isRegimeMismatch" />
+              </td>
+              <td><input type="text" [ngModel]="gt.rhRegime3Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" />
+              </td>
+              <!-- Every "SI" cell below is last return's since-installation figure plus this
+                   month's entry, so it is computed and locked rather than typed. The field
+                   names are legacy (noOfRepOrders = cold starts SI, and so on) — see
+                   GasTurbineExploitationItem. -->
+              <td><input type="text" [(ngModel)]="gt.noOfOccasion" (change)="onGtCountInMonthChange(gt)"
+                  class="form-input text-xs min-w-[70px]" /></td>
+              <td><input type="text" [ngModel]="gt.noOfRepOrders" readonly
+                  class="form-input text-xs min-w-[70px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="gt.unscheduledEngagement" (change)="onGtCountInMonthChange(gt)"
+                  class="form-input text-xs min-w-[80px]" />
+              </td>
+              <td><input type="text" [ngModel]="gt.fuelExploitation" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="gt.gslChemQty" (change)="onGtCountInMonthChange(gt)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="gt.status" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="gt.rhEngine1" (change)="onGtCountInMonthChange(gt)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="gt.rhEngine2" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="gt.lastCalibrationDate" (change)="onGtCountInMonthChange(gt)"
+                  class="form-input text-xs min-w-[95px]" />
+              </td>
+              <td><input type="text" [ngModel]="gt.lastEhmTrialDate" readonly
+                  class="form-input text-xs min-w-[95px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="gt.lastFptDate" (change)="onGtCountInMonthChange(gt)"
+                  class="form-input text-xs min-w-[95px]" /></td>
+              <!-- The header above declares 26 columns; the body stopped at 24, so these
+                   last two ("No of Prop Stop Orders / SI" and "Last Chem Clg") rendered as
+                   nothing and could not be filled. -->
+              <td><input type="text" [ngModel]="gt.noOfStopOrdersSi" readonly
+                  class="form-input text-xs min-w-[70px] readonly-input"
+                  [attr.aria-label]="'No of Prop Stop Orders SI for ' + gt.eqptName" /></td>
+              <!-- A date field, not free text: it was typed as DDMMYYYY by hand and saved
+                   through formatDateToYYYYMMDD, which rejects anything without separators.
+                   Left out of the month-range guard (standardizeSrarDateInputs) on purpose —
+                   the last chemical cleaning is usually months or years before this return. -->
+              <td><input type="date" [(ngModel)]="gt.lastChemClg" class="form-input text-xs min-w-[110px]"
+                  [attr.aria-label]="'Last Chem Clg for ' + gt.eqptName" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">17. Reduction Gear</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs gtg-section-table">
+          <thead>
+            <tr>
+              <th rowspan="2">Eqpt Name</th>
+              <th rowspan="2">Nomenclature</th>
+              <th rowspan="2">Eqpt Code</th>
+              <th rowspan="2">Loc On Board</th>
+              <th rowspan="2">Ser No</th>
+              <th colspan="2">Total R/H (A)</th>
+              <th colspan="2">R/H Regime I Below 0.7N</th>
+              <th colspan="2">R/H Regime II 0.7 to 0.8</th>
+              <th colspan="2">R/H Regime III 0.9 to 1.0</th>
+              <th colspan="2">Trailing Running Hours (B)</th>
+              <th colspan="2">Service Life (A-B)</th>
+              <th colspan="2">No of Eng Regime I</th>
+              <th colspan="2">No of Eng Regime II</th>
+              <th colspan="2">No of Eng Regime III</th>
+              <th colspan="2">No of Eng Regime IV</th>
+            </tr>
+            <tr class="sub-header">
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rg of gtReductionGear; track rg.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[140px]">{{ rg.eqptName }}</td>
+              <td><span class="font-medium text-white">{{ rg.nomenclature }}</span></td>
+              <td class="font-mono text-xs">{{ rg.eqptCode }}</td>
+              <td><span class="text-xs text-slate-300">{{ rg.locOnBoard }}</span></td>
+              <td class="font-mono">{{ rg.eqptSerNo }}</td>
+              <td>
+                <input type="text" [(ngModel)]="rg.totalRhInMonth" (change)="onRgRhInMonthChange(rg)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="rg.isRegimeMismatch" />
+                @if (rg.isRegimeMismatch) {
+                <div class="text-[10px] text-red-400 mt-1">≠ sum of Regime I+II+III</div>
+                }
+              </td>
+              <td><input type="text" [ngModel]="rg.totalRhsi" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="rg.hoRegimeBelow0_25" (change)="onRgRhInMonthChange(rg)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="rg.isRegimeMismatch" /></td>
+              <td><input type="text" [ngModel]="rg.hoRegimeBelow0_25Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" />
+              </td>
+              <td><input type="text" [(ngModel)]="rg.hoRegime0_25to0_5" (change)="onRgRhInMonthChange(rg)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="rg.isRegimeMismatch" /></td>
+              <td><input type="text" [ngModel]="rg.hoRegime0_25to0_5Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" />
+              </td>
+              <td><input type="text" [(ngModel)]="rg.hoRegime0_5to0_75" (change)="onRgRhInMonthChange(rg)"
+                  class="form-input text-xs min-w-[80px]" [class.border-red-500]="rg.isRegimeMismatch" /></td>
+              <td><input type="text" [ngModel]="rg.hoRegime0_5to0_75Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" />
+              </td>
+              <td><input type="text" [(ngModel)]="rg.slidingHours0_25" (change)="onRgTrailingOrEngagementChange(rg)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="rg.slidingHours0_25Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="rg.serviceLife" (change)="onRgTrailingOrEngagementChange(rg)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="rg.serviceLifeSi" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="rg.routineRegime1" (change)="onRgTrailingOrEngagementChange(rg)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="rg.routineRegime1Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="rg.routineRegime2" (change)="onRgTrailingOrEngagementChange(rg)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="rg.routineRegime2Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="rg.routineRegime3" (change)="onRgTrailingOrEngagementChange(rg)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="rg.routineRegime3Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+              <td><input type="text" [(ngModel)]="rg.routineRegime4" (change)="onRgTrailingOrEngagementChange(rg)"
+                  class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" [ngModel]="rg.routineRegime4Si" readonly
+                  class="form-input text-xs min-w-[80px] readonly-input" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="subHeading_box">18. Replacement Of Major Assemblies</h3>
+        <app-button (click)="toggleAddMajorAssemblyModal(true)"
+          class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Major Assembly</span>
+        </app-button>
+      </div>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs gtg-rg-section-table">
+          <thead>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Eqpt Sl Number</th>
+              <th>Date</th>
+              <th>Unit/Sub Unit</th>
+              <th>Reason For Replacement</th>
+              <th>Remarks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rep of gtReplacementMajorAssemblies; track $index) {
+            <tr>
+              <td class="font-medium text-white">{{ rep.eqptName }}</td>
+              <td class="font-mono">{{ rep.eqptSrNumber }}</td>
+              <td><input type="date" [(ngModel)]="rep.dateOfReplacement" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rep.subAssemblyUnitName" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rep.reasonOfReplacement" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rep.remarks" class="form-input text-xs" /></td>
+              <td class="text-center">
+                <app-button (click)="deleteMajorAssembly($index)" class="grid-action-pill grid-action-delete"
+                  title="Delete">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="subHeading_box">19. Annual/SR/MR/Routine Undertaken</h3>
+        <app-button (click)="toggleAddRoutineModal(true)"
+          class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Routine</span>
+        </app-button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs rh-extension-da-table">
+          <thead>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Eqpt Sl Number</th>
+              <th>Date</th>
+              <th>Description of Routine</th>
+              <th>Undertaken By Whom</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rt of gtRoutinesUndertaken; track $index) {
+            <tr>
+              <td class="font-medium text-white">{{ rt.eqptName }}</td>
+              <td class="font-mono">{{ rt.eqptSrNumber }}</td>
+              <td><input type="date" [(ngModel)]="rt.date" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rt.descriptionForRoutine" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rt.undertakenByWhom" class="form-input text-xs" /></td>
+              <td class="text-center">
+                <app-button (click)="deleteRoutine($index)" class="grid-action-pill grid-action-delete" title="Delete">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 11: GTG Exploitation -->
+    @if (activeSubTab() === 11) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">20. Gas Turbine Generator</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th rowspan="2">Eqpt Name</th>
+              <th rowspan="2">Loc On Board</th>
+              <th rowspan="2">Nomenclature</th>
+              <th rowspan="2">Ser No</th>
+              <th colspan="4">TC Running Hours</th>
+              <th colspan="2">No of Cold Starts</th>
+              <th colspan="2">No of Hot Starts</th>
+              <th colspan="2">No of Battery Cold Starts</th>
+              <th colspan="2">No of Battery Hot Starts</th>
+              <th rowspan="2">Last Chem Clg (DDMMYYYY)</th>
+            </tr>
+            <tr class="sub-header">
+              <th>R/H In Harbour</th>
+              <th>R/H At Sea</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+              <th>In Mth</th>
+              <th>SI</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (gtg of gtgExploitationData; track gtg.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[140px]">{{ gtg.eqptName }}</td>
+              <td><span class="text-xs text-slate-300">{{ gtg.locOnBoard }}</span></td>
+              <td><span class="font-medium text-white">{{ gtg.nomenclature }}</span></td>
+              <td class="font-mono">{{ gtg.serNo }}</td>
+              <td><input type="text" id="{{'rhInHarbour' + $index}}" [(ngModel)]="gtg.rhInHarbour"
+                  (change)="calculateGtgRh(gtg)" class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" id="{{'rhInSea' + $index}}" [(ngModel)]="gtg.rhInSea"
+                  (change)="calculateGtgRh(gtg)" class="form-input text-xs min-w-[80px]" /></td>
+              <td><input type="text" id="{{'totalRhInMonth' + $index}}" readonly [value]="gtg.totalRhInMonth"
+                  class="form-input readonly-input text-xs font-semibold text-emerald-400 min-w-[80px]" /></td>
+              <td><input type="text" id="{{'totalRhsi' + $index}}" readonly [value]="gtg.totalRhsi"
+                  class="form-input readonly-input text-xs font-semibold text-sky-400 min-w-[80px]" /></td>
+              <!-- SI = last return's since-installation figure + this month's count, so these
+                   are computed and locked, same as the R/H SI beside them. -->
+              <td><input type="number" id="{{'noOfColdStarts' + $index}}" [(ngModel)]="gtg.noOfColdStarts"
+                  (change)="onGtgCountInMonthChange(gtg)" class="form-input text-xs min-w-[70px]" /></td>
+              <td><input type="number" [ngModel]="gtg.noOfColdStartsSi" readonly
+                  class="form-input text-xs min-w-[70px] readonly-input" />
+              </td>
+              <td><input type="number" id="{{'noOfHotStarts' + $index}}" [(ngModel)]="gtg.noOfHotStarts"
+                  (change)="onGtgCountInMonthChange(gtg)" class="form-input text-xs min-w-[70px]" /></td>
+              <td><input type="number" [ngModel]="gtg.noOfHotStartsSi" readonly
+                  class="form-input text-xs min-w-[70px] readonly-input" /></td>
+              <td><input type="number" [(ngModel)]="gtg.noOfBatteryColdStarts"
+                  (change)="onGtgCountInMonthChange(gtg)" class="form-input text-xs min-w-[70px]" /></td>
+              <td><input type="number" [ngModel]="gtg.noOfBatteryColdStartsSi" readonly
+                  class="form-input text-xs min-w-[70px] readonly-input" /></td>
+              <td><input type="number" [(ngModel)]="gtg.noOfBatteryHotStarts"
+                  (change)="onGtgCountInMonthChange(gtg)" class="form-input text-xs min-w-[70px]" />
+              </td>
+              <td><input type="number" [ngModel]="gtg.noOfBatteryHotStartsSi" readonly
+                  class="form-input text-xs min-w-[70px] readonly-input" /></td>
+              <!-- Date field rather than free text, and deliberately outside the month-range
+                   guard — see the same column on the Gas Turbine table. -->
+              <td><input type="date" [(ngModel)]="gtg.lastChemClgDateReason"
+                  class="form-input text-xs min-w-[110px]" />
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">21. Reduction Gear</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th rowspan="2">Eqpt Name</th>
+              <th rowspan="2">Loc On Board</th>
+              <th rowspan="2">Nomenclature</th>
+              <th rowspan="2">Ser No</th>
+              <th colspan="2">RG Running Hours</th>
+            </tr>
+            <tr class="sub-header">
+              <th>In Mth</th>
+              <th>SI</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rg of gtgReductionGear; track rg.eqptName) {
+            <tr>
+              <td class="font-medium text-white min-w-[140px]">{{ rg.eqptName }}</td>
+              <td><span class="text-xs text-slate-300">{{ rg.locOnBoard }}</span></td>
+              <td><span class="font-medium text-white">{{ rg.nomenclature }}</span></td>
+              <td class="font-mono">{{ rg.serNo }}</td>
+              <td><input type="text" [(ngModel)]="rg.rgRunningHours" (change)="onGtgRgRunningHoursChange(rg)"
+                  class="form-input text-xs min-w-[90px]" /></td>
+              <td><input type="text" [ngModel]="rg.inMonthsSi" readonly
+                  class="form-input text-xs min-w-[90px] readonly-input" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="subHeading_box">22. Replacement Of Major Assemblies</h3>
+        <app-button (click)="toggleAddMajorAssemblyModal(true)"
+          class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Major Assembly</span>
+        </app-button>
+      </div>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Eqpt Sl Number</th>
+              <th>Date</th>
+              <th>Unit/Sub Unit</th>
+              <th>Reason For Replacement</th>
+              <th>Remarks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rep of gtgReplacementMajorAssemblies; track $index) {
+            <tr>
+              <td class="font-medium text-white">{{ rep.eqptName }}</td>
+              <td class="font-mono">{{ rep.eqptSrNumber }}</td>
+              <td><input type="date" [(ngModel)]="rep.dateOfReplacement" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rep.subAssemblyUnitName" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rep.reasonOfReplacement" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rep.remarks" class="form-input text-xs" /></td>
+              <td class="text-center">
+                <app-button (click)="deleteMajorAssembly($index)" class="grid-action-pill grid-action-delete"
+                  title="Delete">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="subHeading_box">23. Annual/SR/MR/Routine Undertaken</h3>
+        <app-button (click)="toggleAddRoutineModal(true)"
+          class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Routine</span>
+        </app-button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Eqpt Sl Number</th>
+              <th>Date</th>
+              <th>Description of Routine</th>
+              <th>Undertaken By Whom</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rt of gtgRoutinesUndertaken; track $index) {
+            <tr>
+              <td class="font-medium text-white">{{ rt.eqptName }}</td>
+              <td class="font-mono">{{ rt.eqptSrNumber }}</td>
+              <td><input type="date" [(ngModel)]="rt.date" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rt.descriptionForRoutine" class="form-input text-xs" /></td>
+              <td><input type="text" [(ngModel)]="rt.undertakenByWhom" class="form-input text-xs" /></td>
+              <td class="text-center">
+                <app-button (click)="deleteRoutine($index)" class="grid-action-pill grid-action-delete" title="Delete">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 12: Lubricant Consumption -->
+    @if (activeSubTab() === 12) {
+    <div class="space-y-6">
+      <div class="flex items-center justify-between">
+        <h3 class="subHeading_box">Lubricant Oil Consumption Entry</h3>
+        <app-button (click)="addLubricant()" class="button primary-btn flex items-center gap-1 cursor-pointer text-xs">
+          <app-icon name="plus" [size]="14" variant="inherit"></app-icon>
+          <span>Add Lubricant</span>
+        </app-button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="form-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Lubricant Name</th>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (lub of lubricantData; track $index) {
+            <tr>
+              <td class="text-center font-mono">{{ $index + 1 }}</td>
+              <td>
+                <app-input-field placeholder="Lubricant Grade / Name" [(ngModel)]="lub.name"></app-input-field>
+              </td>
+              <td>
+                <app-input-field type="number" [(ngModel)]="lub.quantity"></app-input-field>
+              </td>
+              <td>
+                <app-select-input [options]="lubricantUnitOptions" [(ngModel)]="lub.unit"></app-select-input>
+              </td>
+              <td class="text-center">
+                <app-button (click)="deleteLubricant($index)" class="grid-action-pill grid-action-delete" title="Remove">
+                  <app-icon name="trash-2" [size]="14" variant="inherit"></app-icon>
+                </app-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    }
+
+    <!-- Sub Tab 13: R/H Extension -->
+    @if (activeSubTab() === 13) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Main Engine R/H Extension Log</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="form-table text-xs">
+          <thead>
+            <tr>
+              <th>Eqpt Name</th>
+              <th>Ser No</th>
+              <th>On Routine</th>
+              <th>RH During Trial<span class="text-rose-400">*</span></th>
+              <th>Trial Conducted By<span class="text-rose-400">*</span></th>
+              <th>RH Granted<span class="text-rose-400">*</span></th>
+              <th>RH Left Expiry<span class="text-rose-400">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rh of mainEngineRHExtensions; track rh.eqptName) {
+            <tr>
+              <td class="font-medium text-white">{{ rh.eqptName }}</td>
+              <td class="font-mono">{{ rh.serNo }}</td>
+              <!-- Was read-only text, so On Routine could not be filled here at all even
+                   though CMMS's own SRAR form offers it as a dropdown for Main Engine too.
+                   Options are the hour-based Frequency master rows; see routineHourOptions. -->
+              <td>
+                <select [ngModel]="rh.onRoutineId ?? null" (ngModelChange)="onRoutineSelected(rh, $event)"
+                  class="custom-select text-xs min-w-[110px]"
+                  [attr.aria-label]="'On Routine for ' + rh.eqptName">
+                  <option [ngValue]="null">{{ rh.onRoutine && !rh.onRoutineId ? rh.onRoutine : 'Select' }}</option>
+                  @for (option of routineOptionsFor(rh); track option.id) {
+                  <option [ngValue]="option.id">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="text" id="{{'rhDuringTrial' + $index}}" [(ngModel)]="rh.rhDuringTrial"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="onNumericEntry(rh, 'rhDuringTrial', 'RH During Trial', false)"
+                  class="form-input text-xs" /></td>
+              <td>
+                <select [(ngModel)]="rh.trialConductedBy" class="custom-select text-xs">
+                  <option value="">Select</option>
+                  @for (option of fptConductedByOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="text" id="{{'rhExtensionGranted' + $index}}" [(ngModel)]="rh.rhExtensionGranted"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="onNumericEntry(rh, 'rhExtensionGranted', 'RH Granted', false)"
+                  class="form-input text-xs" /></td>
+              <td><input type="text" id="{{'rhLeftExpiry' + $index}}" [(ngModel)]="rh.rhLeftExpiry"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="onNumericEntry(rh, 'rhLeftExpiry', 'RH Left Expiry', false)"
+                  class="form-input text-xs" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="subHeading_box">25. Diesel Alternator</h3>
+      <div class="overflow-x-auto">
+        <table class="form-table text-xs">
+          <thead>
+            <tr class="group-header">
+              <th colspan="5">Equipment Details</th>
+              <th colspan="3">Extension Trial</th>
+              <th colspan="3">Extension Grant</th>
+            </tr>
+            <tr>
+              <th>Equipment Ship ID</th>
+              <th>Eqpt Name</th>
+              <th>Loc On Board</th>
+              <th>Nomenclature</th>
+              <th>Ser No</th>
+              <th>On Routine<span class="text-rose-400">*</span></th>
+              <th>R/H At Conduct of Ext.Trial By DTTT/TT<span class="text-rose-400">*</span></th>
+              <th>Ext.Trial By<span class="text-rose-400">*</span></th>
+              <th>Authority Letter For Grant Of Extension<span class="text-rose-400">*</span></th>
+              <th>R/H Extension Granted Upto<span class="text-rose-400">*</span></th>
+              <th>R/H left For Expiry of Extension<span class="text-rose-400">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rh of dieselAlternatorRHExtensions; track $index) {
+            <tr>
+              <td class="font-mono">{{ rh.eqptShipName || ($index + 1) }}</td>
+              <td class="font-medium text-white min-w-[160px]">{{ rh.eqptName }}</td>
+              <td><span class="text-xs text-slate-300">{{ rh.location }}</span></td>
+              <td><span class="font-medium text-white">{{ rh.nomenclature }}</span></td>
+              <td class="font-mono">{{ rh.serNo }}</td>
+              <!-- Was a free-text box, so this mandatory field accepted anything and never
+                   set the on_routine foreign key. Same option list as the Main Engine table. -->
+              <td>
+                <select [ngModel]="rh.onRoutineId ?? null" (ngModelChange)="onRoutineSelected(rh, $event)"
+                  class="custom-select text-xs min-w-[110px]"
+                  [attr.aria-label]="'On Routine for ' + rh.eqptName">
+                  <option [ngValue]="null">{{ rh.onRoutine && !rh.onRoutineId ? rh.onRoutine : 'Select' }}</option>
+                  @for (option of routineOptionsFor(rh); track option.id) {
+                  <option [ngValue]="option.id">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="text" [(ngModel)]="rh.rhDuringTrial"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="onNumericEntry(rh, 'rhDuringTrial', 'R/H At Conduct of Ext.Trial', false)"
+                  class="form-input text-xs min-w-[110px]" /></td>
+              <td>
+                <select [(ngModel)]="rh.trialConductedBy" class="custom-select text-xs">
+                  <option value="">Select</option>
+                  @for (option of fptConductedByOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="text" [(ngModel)]="rh.authorityLetterRef" class="form-input text-xs min-w-[130px]" />
+              </td>
+              <td><input type="text" [(ngModel)]="rh.rhExtensionGranted"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="onNumericEntry(rh, 'rhExtensionGranted', 'R/H Extension Granted Upto', false)"
+                  class="form-input text-xs min-w-[100px]" />
+              </td>
+              <td><input type="text" [(ngModel)]="rh.rhLeftExpiry"
+                  (keypress)="allowOnlyNumbers($event)"
+                  (change)="onNumericEntry(rh, 'rhLeftExpiry', 'R/H Left For Expiry of Extension', false)"
+                  class="form-input text-xs min-w-[100px]" /></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Sub Tab 14: EO Remark -->
+    @if (activeSubTab() === 14) {
+    <div class="space-y-6">
+      <h3 class="subHeading_box">1. Engineer Officer's Equivalent Exploitation Factor (EEF)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
+        <div>
+          <app-input-field label="Hours Underway" type="text" [(ngModel)]="eefData.hoursUnderway"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Designed EEF" type="number" [readonly]="true"
+            [ngModel]="eefData.designed"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="Calculated EEF" type="text" [readonly]="true"
+            [ngModel]="calculatedEEF"></app-input-field>
+        </div>
+        <div class="md:col-span-3">
+          <app-select-input label="Reason For Exceeding EEF" [options]="eefReasonOptions"
+            [required]="true" [(ngModel)]="eefData.reasonExceeding"></app-select-input>
+        </div>
+      </div>
+
+      <h3 class="subHeading_box">2. Engineer Officer Remarks</h3>
+      <app-textarea-input label="Engineer Officer Remarks" [rows]="4" [required]="true"
+        [(ngModel)]="eefData.shipRemarks"></app-textarea-input>
+    </div>
+    }
+
+    <!-- Sub Tab 15: Final Page -->
+    @if (activeSubTab() === 15) {
+    <div class="space-y-6" id="summary-report-content-area">
+      <!-- Dynamic Final Report Summary Area -->
+      <div class="p-6 rounded-xl bg-white/5 border border-white/10 space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <h3 class="head3 text-white flex items-center gap-2">
+            <app-icon name="file-text" [size]="20" variant="accent"></app-icon>
+            <span>Final Report Summary ({{ selectedMonth() }} {{ selectedYear() }})</span>
+          </h3>
+          <span class="status-pill badge-success">Verified</span>
+        </div>
+
+        <!-- Section 1: Ship Running Parameters & Equipment Exploitation -->
+        <div class="space-y-3">
+          <h4 class="subHeading_box">1. Ship Running Parameters</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Hours Underway (Month)</th>
+                  <th class="p-2.5 border-b border-white/10">Distance Run (Month)</th>
+                  <th class="p-2.5 border-b border-white/10">Hours (Since Comm)</th>
+                  <th class="p-2.5 border-b border-white/10">Distance (Since Comm)</th>
+                  <th class="p-2.5 border-b border-white/10">Max Speed</th>
+                  <th class="p-2.5 border-b border-white/10">Max Duration</th>
+                  <th class="p-2.5 border-b border-white/10">Max Speed Date</th>
+                  <th class="p-2.5 border-b border-white/10">Max Shaft RPM</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                <tr>
+                  <td class="p-2.5">{{ runningParameters.duringMonthHours }}:{{ runningParameters.duringMonthMinutes }}
+                  </td>
+                  <td class="p-2.5">{{ runningParameters.duringMonthDistance }} NM</td>
+                  <td class="p-2.5">{{ runningParameters.sinceCommHours }}</td>
+                  <td class="p-2.5">{{ runningParameters.sinceCommDistance }} NM</td>
+                  <td class="p-2.5">{{ runningParameters.maxSpeedDuringMonth }} KT</td>
+                  <td class="p-2.5">{{ runningParameters.maxSpeedDurationHours }}:{{
+                    runningParameters.maxSpeedDurationMinutes }}</td>
+                  <td class="p-2.5">{{ runningParameters.maxSpeedDate }}</td>
+                  <td class="p-2.5">{{ runningParameters.maxShaftRpm }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="subHeading_box mt-4">Equipment Exploitation Data</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Equipment Name</th>
+                  <th class="p-2.5 border-b border-white/10">Sub Dept</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No.</th>
+                  <th class="p-2.5 border-b border-white/10">Hrs For Month</th>
+                  <th class="p-2.5 border-b border-white/10">Cumulative Hrs</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (eq of equipments(); track eq.serNo) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ eq.name }}</td>
+                  <td class="p-2.5">{{ eq.subDept }}</td>
+                  <td class="p-2.5">{{ eq.serNo }}</td>
+                  <td class="p-2.5">{{ eq.monthlyHours }}</td>
+                  <td class="p-2.5">{{ eq.cumulativeHours }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 2: Boiler Steaming Details & Water Chemistry -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">2. Boiler Steaming & Water Chemistry</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden mb-3">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Eqpt Name</th>
+                  <th class="p-2.5 border-b border-white/10">Location</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No.</th>
+                  <th class="p-2.5 border-b border-white/10">Hrs Steamed (Month)</th>
+                  <th class="p-2.5 border-b border-white/10">Hrs Steamed (Comm)</th>
+                  <th class="p-2.5 border-b border-white/10">Next Inspection</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (boiler of boilerSteamingData; track boiler.serNo) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ boiler.eqptName }}</td>
+                  <td class="p-2.5">{{ boiler.locOnBoard }}</td>
+                  <td class="p-2.5">{{ boiler.serNo }}</td>
+                  <td class="p-2.5">{{ boiler.hrsSteamedDuringMonth }}</td>
+                  <td class="p-2.5">{{ boiler.hrsSteamedSinceComm }}</td>
+                  <td class="p-2.5">{{ boiler.nextInspectionDate }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 3: Ship Activity -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">3. Ship Activity Summary</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Date Range</th>
+                  <th class="p-2.5 border-b border-white/10">State</th>
+                  <th class="p-2.5 border-b border-white/10">Location</th>
+                  <th class="p-2.5 border-b border-white/10">Type</th>
+                  <th class="p-2.5 border-b border-white/10">Detail</th>
+                  <th class="p-2.5 border-b border-white/10">Remarks</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @if (activities.length > 0) {
+                @for (act of activities; track $index) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ act.dateRange }}</td>
+                  <td class="p-2.5">{{ act.shipState }}</td>
+                  <td class="p-2.5">{{ act.shipLocation }}</td>
+                  <td class="p-2.5">{{ act.activityType }}</td>
+                  <td class="p-2.5">{{ act.activityDetail }}</td>
+                  <td class="p-2.5">{{ act.remarks || '-' }}</td>
+                </tr>
+                }
+                } @else {
+                <tr>
+                  <td colspan="6" class="p-4 text-center text-white/50 italic">No Ship Activity records entered.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 4: Fuel, AVCAT & Torsionmeter -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">4. Fuel, AVCAT & Torsionmeter</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+            <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+              <h5 class="text-xs font-semibold text-sky-400 mb-2">Fuel Consumption (TON)</h5>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-white/50">BF Last Month:</span> <span class="text-white font-medium">{{
+                    fuelConsumption.bfLastMonth }}</span></div>
+                <div><span class="text-white/50">Received:</span> <span class="text-white font-medium">{{
+                    fuelConsumption.received }}</span></div>
+                <div><span class="text-white/50">Cons. In Sea:</span> <span class="text-white font-medium">{{
+                    fuelConsumption.consSea }}</span></div>
+                <div><span class="text-white/50">Total Cons.:</span> <span class="text-emerald-400 font-medium">{{
+                    fuelConsumption.totalCons }}</span></div>
+                <div class="col-span-2 pt-1 border-t border-white/10"><span class="text-white/50">Balance
+                    Onboard:</span> <span class="text-white font-semibold">{{ fuelConsumption.balLeftOnboard }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+              <h5 class="text-xs font-semibold text-sky-400 mb-2">AVCAT Status (LITRE)</h5>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-white/50">BF Last Month:</span> <span class="text-white font-medium">{{
+                    avcatStatus.bfLastMonth }}</span></div>
+                <div><span class="text-white/50">Received:</span> <span class="text-white font-medium">{{
+                    avcatStatus.received }}</span></div>
+                <div><span class="text-white/50">Given To A/C:</span> <span class="text-white font-medium">{{
+                    avcatStatus.givenToAc }}</span></div>
+                <div><span class="text-white/50">Total Cons.:</span> <span class="text-emerald-400 font-medium">{{
+                    avcatStatus.totalCons }}</span></div>
+                <div class="col-span-2 pt-1 border-t border-white/10"><span class="text-white/50">Balance
+                    Onboard:</span> <span class="text-white font-semibold">{{ avcatStatus.balLeftOnboard }}</span></div>
+              </div>
+            </div>
+          </div>
+          @if (torsionMeterData.length > 0) {
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Nomenclature</th>
+                  <th class="p-2.5 border-b border-white/10">Code</th>
+                  <th class="p-2.5 border-b border-white/10">Location</th>
+                  <th class="p-2.5 border-b border-white/10">Status</th>
+                  <th class="p-2.5 border-b border-white/10">Reading</th>
+                  <th class="p-2.5 border-b border-white/10">Max RPM</th>
+                  <th class="p-2.5 border-b border-white/10">Next Calib Due</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (tm of torsionMeterData; track tm.srNo) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ tm.nomenclature }}</td>
+                  <td class="p-2.5 font-mono">{{ tm.eqptCode }}</td>
+                  <td class="p-2.5">{{ tm.locOnBoard }}</td>
+                  <td class="p-2.5">{{ tm.opsNonOps }}</td>
+                  <td class="p-2.5">{{ tm.torsionMeterRdg }}</td>
+                  <td class="p-2.5">{{ tm.maxRpmAchieved }}</td>
+                  <td class="p-2.5">{{ tm.nextCalibrationDue }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+        </div>
+
+        <!-- Section 5: ICCP, H2S Sensors, STP & MFFS -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">5. ICCP, H2S Sensors, STP & MFFS</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">System / Sensor</th>
+                  <th class="p-2.5 border-b border-white/10">Code</th>
+                  <th class="p-2.5 border-b border-white/10">Location</th>
+                  <th class="p-2.5 border-b border-white/10">Status</th>
+                  <th class="p-2.5 border-b border-white/10">Effluent / Calib Info</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (iccp of iccpData; track iccp.nomenclature) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ iccp.nomenclature }}</td>
+                  <td class="p-2.5 font-mono">{{ iccp.eqptCode }}</td>
+                  <td class="p-2.5">{{ iccp.locOnBoard }}</td>
+                  <td class="p-2.5">{{ iccp.opsNonOps }}</td>
+                  <td class="p-2.5 text-white/50">-</td>
+                </tr>
+                }
+                @for (h2s of h2sSensorData; track h2s.nomenclature) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ h2s.nomenclature }}</td>
+                  <td class="p-2.5 font-mono">{{ h2s.eqptCode }}</td>
+                  <td class="p-2.5">{{ h2s.locOnBoard }}</td>
+                  <td class="p-2.5">{{ h2s.opsNonOps }}</td>
+                  <td class="p-2.5">Calib Due: {{ h2s.nextCalibration }}</td>
+                </tr>
+                }
+                @for (stp of stpData; track stp.nomenclature) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ stp.nomenclature }}</td>
+                  <td class="p-2.5 font-mono">{{ stp.eqptCode }}</td>
+                  <td class="p-2.5">{{ stp.locOnBoard }}</td>
+                  <td class="p-2.5">{{ stp.status }}</td>
+                  <td class="p-2.5">Effluent Test: {{ stp.effluentTestDate }}</td>
+                </tr>
+                }
+                @for (mffs of mffsData; track mffs.nomenclature) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ mffs.nomenclature }}</td>
+                  <td class="p-2.5 font-mono">{{ mffs.eqptCode }}</td>
+                  <td class="p-2.5">{{ mffs.locOnBoard }}</td>
+                  <td class="p-2.5">{{ mffs.status }}</td>
+                  <td class="p-2.5">Next Trials: {{ mffs.nextTrialsDue }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 6: Test Kits & Centrifuge Exploitation -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">6. Test Kits & Centrifuge Exploitation</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Item Description</th>
+                  <th class="p-2.5 border-b border-white/10">Location / Code</th>
+                  <th class="p-2.5 border-b border-white/10">Status</th>
+                  <th class="p-2.5 border-b border-white/10">Calibration Date</th>
+                  <th class="p-2.5 border-b border-white/10">Next Due Date</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (kit of lubOilCoolantTestKits; track kit.description) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ kit.description }}</td>
+                  <td class="p-2.5 text-white/50">Test Kit</td>
+                  <td class="p-2.5">{{ kit.opsNonOps }}</td>
+                  <td class="p-2.5">{{ kit.calibrationDate }}</td>
+                  <td class="p-2.5">{{ kit.nextCalibrationDueDate }}</td>
+                </tr>
+                }
+                @for (pur of lubOilFuelCentrifuge; track pur.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ pur.eqptName }}</td>
+                  <td class="p-2.5">{{ pur.locOnBoard }} ({{ pur.eqptCode }})</td>
+                  <td class="p-2.5">{{ pur.opsNonOps }}</td>
+                  <td class="p-2.5">{{ pur.lastCalibratedOn }}</td>
+                  <td class="p-2.5">{{ pur.nextCalibration }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 7: Safety Device Checks & Maintenance Routines -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">7. Safety Device Checks & Maintenance Routines</h4>
+          <div class="overflow-x-auto mb-3">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Equipment Name</th>
+                  <th class="p-2.5 border-b border-white/10">Location</th>
+                  <th class="p-2.5 border-b border-white/10">Conducted By</th>
+                  <th class="p-2.5 border-b border-white/10">SDC Date</th>
+                  <th class="p-2.5 border-b border-white/10">SFC (g/kWh)</th>
+                  <th class="p-2.5 border-b border-white/10">SDC Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (sdc of safetyDeviceChecks; track sdc.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ sdc.eqptName }}</td>
+                  <td class="p-2.5">{{ sdc.locOnBoard }}</td>
+                  <td class="p-2.5">{{ sdc.sdcConductedBy }}</td>
+                  <td class="p-2.5">{{ sdc.dateOfSdc }}</td>
+                  <td class="p-2.5">{{ sdc.sfcGmsKWh }}</td>
+                  <td class="p-2.5 font-semibold text-emerald-400">{{ sdc.status }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          @if (routinesUndertaken.length > 0) {
+          <h5 class="text-xs font-semibold text-sky-400 mt-2 mb-1">Maintenance Routines Undertaken</h5>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Equipment</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No</th>
+                  <th class="p-2.5 border-b border-white/10">Date</th>
+                  <th class="p-2.5 border-b border-white/10">Routine Description</th>
+                  <th class="p-2.5 border-b border-white/10">Undertaken By</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (rt of routinesUndertaken; track $index) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ rt.eqptName }}</td>
+                  <td class="p-2.5 font-mono">{{ rt.eqptSrNumber }}</td>
+                  <td class="p-2.5">{{ rt.date }}</td>
+                  <td class="p-2.5">{{ rt.descriptionForRoutine }}</td>
+                  <td class="p-2.5">{{ rt.undertakenByWhom }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+        </div>
+
+        <!-- Section 8: Diesel Generator Utilization Factor (DGUF) -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">8. Diesel Generator Utilization Factor (DGUF)</h4>
+          <div class="overflow-x-auto mb-3">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">DA No.</th>
+                  <th class="p-2.5 border-b border-white/10">Eqpt Name</th>
+                  <th class="p-2.5 border-b border-white/10">Location</th>
+                  <th class="p-2.5 border-b border-white/10">RH Sea / Anchorage</th>
+                  <th class="p-2.5 border-b border-white/10">RH Harbour</th>
+                  <th class="p-2.5 border-b border-white/10">Total RH Month</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (dg of dgufGeneratorData; track dg.daNo) {
+                <tr>
+                  <td class="p-2.5 font-mono font-semibold text-sky-400">{{ dg.daNo }}</td>
+                  <td class="p-2.5 font-medium text-white">{{ dg.eqptName }}</td>
+                  <td class="p-2.5">{{ dg.locOnBoard }}</td>
+                  <td class="p-2.5">{{ dg.rhSeaAnchorage }}</td>
+                  <td class="p-2.5">{{ dg.rhHarbour }}</td>
+                  <td class="p-2.5 font-semibold text-emerald-400">{{ dg.totalRhMonth }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 rounded-lg bg-white/5 border border-white/10 text-xs">
+            <div><span class="text-white/50 block">Total RH Sea:</span> <span class="text-white font-medium">{{
+                dgufRunningHoursData.totalRhSea }}</span></div>
+            <div><span class="text-white/50 block">Hours Underway:</span> <span class="text-white font-medium">{{
+                dgufRunningHoursData.hrsUnderway }}</span></div>
+            <div><span class="text-white/50 block">Limiting Value (Sea):</span> <span class="text-white font-medium">{{
+                dgufLimitingValues.limitingValueSea }}</span></div>
+            <div><span class="text-white/50 block">Actual DGUF (Sea):</span> <span
+                class="text-emerald-400 font-semibold">{{ dgufLimitingValues.actualDgufSea }}</span></div>
+          </div>
+        </div>
+
+        <!-- Section 9: Full Power Trials (FPT) -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">9. Full Power Trials (FPT)</h4>
+          <div
+            class="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 rounded-lg bg-white/5 border border-white/10 text-xs mb-3">
+            <div><span class="text-white/50 block">Last FPT Date:</span> <span class="text-white font-medium">{{
+                fptMainEngineGeneral.lastFptDate }}</span></div>
+            <div><span class="text-white/50 block">Displacement:</span> <span class="text-white font-medium">{{
+                fptMainEngineGeneral.displacement }} Tons</span></div>
+            <div><span class="text-white/50 block">Max Speed:</span> <span class="text-white font-medium">{{
+                fptMainEngineGeneral.maxSpeed }} Knots</span></div>
+            <div><span class="text-white/50 block">Conducted By:</span> <span class="text-white font-medium">{{
+                fptMainEngineGeneral.conductedBy }}</span></div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Eqpt Name</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No</th>
+                  <th class="p-2.5 border-b border-white/10">Fuel Rack DBL</th>
+                  <th class="p-2.5 border-b border-white/10">Pitch</th>
+                  <th class="p-2.5 border-b border-white/10">Max RPM</th>
+                  <th class="p-2.5 border-b border-white/10">Rated Power</th>
+                  <th class="p-2.5 border-b border-white/10">Max Power Achieved</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (me of fptMainEngineSpecific; track me.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ me.eqptName }}</td>
+                  <td class="p-2.5 font-mono">{{ me.serNo }}</td>
+                  <td class="p-2.5">{{ me.fuelRackDbl }}</td>
+                  <td class="p-2.5">{{ me.pitch }}</td>
+                  <td class="p-2.5">{{ me.maxRpm }}</td>
+                  <td class="p-2.5">{{ me.ratedPower }} kW</td>
+                  <td class="p-2.5 font-semibold text-emerald-400">{{ me.maxAchievedPower }} kW</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 10: GT / RG Exploitation -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">10. Gas Turbine / RG Exploitation</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Eqpt Name</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No</th>
+                  <th class="p-2.5 border-b border-white/10">Total RH Month</th>
+                  <!-- Labelled for what these legacy-named fields actually hold on the
+                       Gas Turbine table above (rhEngine1/rhEngine2 = tech starts In Mth/SI,
+                       status = false starts SI, lastCalibrationDate = astern engagements
+                       In Mth), not for what their names suggest. -->
+                  <th class="p-2.5 border-b border-white/10">Tech Starts (In Mth)</th>
+                  <th class="p-2.5 border-b border-white/10">Tech Starts (SI)</th>
+                  <th class="p-2.5 border-b border-white/10">False Starts (SI)</th>
+                  <th class="p-2.5 border-b border-white/10">Astern Engagements (In Mth)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (gt of gasTurbineExploitation; track gt.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ gt.eqptName }}</td>
+                  <td class="p-2.5 font-mono">{{ gt.serNo }}</td>
+                  <td class="p-2.5 font-semibold text-emerald-400">{{ gt.totalRhInMonth }}</td>
+                  <td class="p-2.5">{{ gt.rhEngine1 }}</td>
+                  <td class="p-2.5">{{ gt.rhEngine2 }}</td>
+                  <td class="p-2.5">{{ gt.status }}</td>
+                  <td class="p-2.5">{{ gt.lastCalibrationDate }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 11: GTG Exploitation -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">11. GTG Exploitation</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Eqpt Name</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No</th>
+                  <th class="p-2.5 border-b border-white/10">RH Sea</th>
+                  <th class="p-2.5 border-b border-white/10">RH Harbour</th>
+                  <th class="p-2.5 border-b border-white/10">Total RH Month</th>
+                  <th class="p-2.5 border-b border-white/10">Cold Starts</th>
+                  <th class="p-2.5 border-b border-white/10">Hot Starts</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (gtg of gtgExploitationData; track gtg.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ gtg.eqptName }}</td>
+                  <td class="p-2.5 font-mono">{{ gtg.serNo }}</td>
+                  <td class="p-2.5">{{ gtg.rhInSea }}</td>
+                  <td class="p-2.5">{{ gtg.rhInHarbour }}</td>
+                  <td class="p-2.5 font-semibold text-emerald-400">{{ gtg.totalRhInMonth }}</td>
+                  <td class="p-2.5">{{ gtg.noOfColdStarts }}</td>
+                  <td class="p-2.5">{{ gtg.noOfHotStarts }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 12: Lubricant Consumption -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">12. Lubricant Oil Consumption</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">S.No</th>
+                  <th class="p-2.5 border-b border-white/10">Lubricant Grade / Name</th>
+                  <th class="p-2.5 border-b border-white/10">Quantity</th>
+                  <th class="p-2.5 border-b border-white/10">Unit</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (lub of lubricantData; track $index) {
+                <tr>
+                  <td class="p-2.5 font-mono text-center">{{ $index + 1 }}</td>
+                  <td class="p-2.5 font-medium text-white">{{ lub.name }}</td>
+                  <td class="p-2.5 font-semibold text-emerald-400">{{ lub.quantity }}</td>
+                  <td class="p-2.5">{{ lub.unit }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 13: Running Hours (R/H) Extensions -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">13. Running Hours (R/H) Extensions</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border border-white/10 rounded-lg overflow-hidden">
+              <thead class="bg-white/10 text-white/90">
+                <tr>
+                  <th class="p-2.5 border-b border-white/10">Equipment Name</th>
+                  <th class="p-2.5 border-b border-white/10">Serial No</th>
+                  <th class="p-2.5 border-b border-white/10">On Routine</th>
+                  <th class="p-2.5 border-b border-white/10">RH During Trial</th>
+                  <th class="p-2.5 border-b border-white/10">Conducted By</th>
+                  <th class="p-2.5 border-b border-white/10">Extension Granted</th>
+                  <th class="p-2.5 border-b border-white/10">RH Left Expiry</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-white/80">
+                @for (rh of mainEngineRHExtensions; track rh.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ rh.eqptName }}</td>
+                  <td class="p-2.5 font-mono">{{ rh.serNo }}</td>
+                  <td class="p-2.5">{{ rh.onRoutine }}</td>
+                  <td class="p-2.5">{{ rh.rhDuringTrial }}</td>
+                  <td class="p-2.5">{{ rh.trialConductedBy }}</td>
+                  <td class="p-2.5 font-semibold text-sky-400">{{ rh.rhExtensionGranted }} Hrs</td>
+                  <td class="p-2.5">{{ rh.rhLeftExpiry }}</td>
+                </tr>
+                }
+                @for (daRh of dieselAlternatorRHExtensions; track daRh.eqptName) {
+                <tr>
+                  <td class="p-2.5 font-medium text-white">{{ daRh.eqptName }}</td>
+                  <td class="p-2.5 font-mono">{{ daRh.serNo }}</td>
+                  <td class="p-2.5">{{ daRh.onRoutine }}</td>
+                  <td class="p-2.5">{{ daRh.rhDuringTrial }}</td>
+                  <td class="p-2.5">{{ daRh.trialConductedBy }}</td>
+                  <td class="p-2.5 font-semibold text-sky-400">{{ daRh.rhExtensionGranted }} Hrs</td>
+                  <td class="p-2.5">{{ daRh.rhLeftExpiry }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 14: EEF & Engineer Officer Remarks -->
+        <div class="space-y-3 pt-4 border-t border-white/10">
+          <h4 class="subHeading_box">14. Engineer Officer Remarks & EEF</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-lg bg-white/5 border border-white/10 text-xs">
+            <div><span class="text-white/50 block">Hours Underway:</span> <span
+                class="text-white font-medium text-sm">{{ eefData.hoursUnderway }}</span></div>
+            <div><span class="text-white/50 block">Designed EEF:</span> <span class="text-white font-medium text-sm">{{
+                eefData.designed }}</span></div>
+            <div><span class="text-white/50 block">Calculated EEF:</span> <span
+                class="text-sky-400 font-medium text-sm">{{ calculatedEEF }}</span></div>
+            <div class="col-span-3"><span class="text-white/50 block">Reason For Exceeding:</span> <span
+                class="text-white font-medium">{{ eefData.reasonExceeding || 'None' }}</span></div>
+            <div class="col-span-3 pt-2 border-t border-white/10"><span class="text-white/50 block">Officer
+                Remarks:</span>
+              <p class="text-white/90 italic mt-0.5">{{ eefData.shipRemarks || 'No remarks entered.' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Bottom Action Bar -->
+    <div class="flex items-center justify-between pt-6 mt-6 border-t border-white/10">
+      <span class="sub2 text-white/50">Step {{ activeSubTab() }} of 15</span>
+
+      <div class="flex items-center gap-3">
+        @if (activeSubTab() < 15) { <app-button (click)="saveDraftProgress()"
+          class="button primary-btn flex items-center gap-2 cursor-pointer">
+          <app-icon name="save" [size]="16" variant="inherit"></app-icon>
+          <span>Save</span>
+          </app-button>
+          } @else if (canSubmitToCo()) {
+          <!-- Step 15. Submitting to CO belongs to the ship, approving belongs to the CO —
+               so a CO never sees this button (it used to show unconditionally, sitting right
+               above their own Approve button), and it disappears once the return is approved
+               or synced, where a resubmit would only push an approved return back to Draft. -->
+          <app-button (click)="submitSRARWithValidation()"
+            class="button primary-btn flex items-center gap-2 cursor-pointer">
+            <app-icon name="send" [size]="16" variant="inherit"></app-icon>
+          <span>{{ currentReportSentToCo() ? 'Resubmit to CO' : 'Submit to CO' }}</span>
+          </app-button>
+          } @else {
+          <span class="sub2 text-white/60">{{ submitStatusNote() }}</span>
+          }
+      </div>
+    </div>
+    @if (activeSubTab() === 15 && isCoUser() && currentReportSentToCo() && !currentReportCoApproved() && !currentReportCmmsSynced()) {
+    <div class="flex items-center justify-end gap-3 pt-4">
+      <label class="inline-flex items-center gap-2 text-xs text-white/90 cursor-pointer">
+        <input type="checkbox" [ngModel]="coApprovalChecked()" (ngModelChange)="coApprovalChecked.set($event)"
+          class="w-4 h-4 rounded border-white/20 bg-white/5 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
+        <span>CO Approval</span>
+      </label>
+      <app-button type="button" (click)="approveSrarAsCo()" [disabled]="!coApprovalChecked()"
+        class="button primary-btn flex items-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+        <app-icon name="check" [size]="16" variant="inherit"></app-icon>
+        <span>Approve</span>
+      </app-button>
+    </div>
+    }
+  </app-panel-card>
+  }
+
+  <!-- Shared Modals -->
+  @if (showEoDetailsModal()) {
+  <app-modal (closeModal)="toggleEoDetailsModal(false)" size="md">
+    <div class="space-y-5">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="head3 text-white font-semibold">EO Details</h3>
+        <app-button type="button" (click)="toggleEoDetailsModal(false)" class="text-white/60 hover:text-white"
+          aria-label="Close modal">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <app-input-field label="EO Writer Contact No.:" [required]="true"
+            [(ngModel)]="eoDetails.writerContactNo"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="EO Rank:" [required]="true" [(ngModel)]="eoDetails.rank"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="EO Name:" [required]="true" [(ngModel)]="eoDetails.name"></app-input-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <app-input-field label="EO Personal No.:" [required]="true"
+            [(ngModel)]="eoDetails.personalNo"></app-input-field>
+        </div>
+        <div>
+          <app-input-field label="EO Contact No.:" [required]="true"
+            [(ngModel)]="eoDetails.contactNo"></app-input-field>
+        </div>
+      </div>
+
+      <div>
+        <span class="block text-xs font-semibold text-white/90 mb-1.5">Send To:</span>
+        <label class="inline-flex items-center gap-2 text-xs text-white/90 cursor-pointer">
+          <input type="checkbox" [(ngModel)]="eoDetails.sendToCo"
+            class="w-4 h-4 rounded border-white/20 bg-white/5 text-emerald-500 focus:ring-emerald-500 cursor-pointer" />
+          <span>CO</span>
+        </label>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button type="button" (click)="toggleEoDetailsModal(false)"
+          class="px-5 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm font-semibold transition-all cursor-pointer">Close</app-button>
+        <app-button type="button" (click)="submitSRARFromModal()" [disabled]="!isEoDetailsValid()"
+          class="px-5 py-2 bg-[#10b981] hover:bg-[#059669] text-white font-semibold text-sm rounded-lg shadow-sm transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">Send</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+
+  @if (showAddEquipmentModal) {
+  <app-modal (closeModal)="toggleAddEquipmentModal(false)" size="md">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="head3 text-white">Add Major Assembly Replacement</h3>
+        <app-button (click)="toggleAddEquipmentModal(false)" class="text-white/60 hover:text-white">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <app-select-input label="Type of Equipment" [options]="equipmentOptions" [allowCustomValue]="true"
+        placeholder="Type this equipment's name" [(ngModel)]="newEquipmentType.selectEquipment"></app-select-input>
+      <app-input-field label="Unit/Sub Unit" placeholder="e.g. Turbocharger"
+        [(ngModel)]="newEquipmentType.systemEquipment"></app-input-field>
+      <app-input-field label="Date Replaced" type="date" [(ngModel)]="newEquipmentType.date"></app-input-field>
+      <app-input-field label="Reason For Replacement" placeholder="e.g. Routine"
+        [(ngModel)]="newEquipmentType.reason"></app-input-field>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button (click)="toggleAddEquipmentModal(false)" class="button secondary-btn cursor-pointer">Cancel</app-button>
+        <app-button (click)="saveEquipmentType()" class="button primary-btn cursor-pointer">Save Assembly</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+
+  @if (showAddRoutineModal) {
+  <app-modal (closeModal)="toggleAddRoutineModal(false)" size="md">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="head3 text-white">Add Routine Maintenance</h3>
+        <app-button (click)="toggleAddRoutineModal(false)" class="text-white/60 hover:text-white">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <app-select-input label="Equipment" [options]="routineEquipmentOptions" [allowCustomValue]="true"
+        placeholder="Type this equipment's name" [(ngModel)]="newRoutine.equipment"></app-select-input>
+      <app-select-input label="Routine Name" [options]="routineNameOptions"
+        [(ngModel)]="newRoutine.routineName"></app-select-input>
+      <app-input-field label="Description" placeholder="Description of routine"
+        [(ngModel)]="newRoutine.description"></app-input-field>
+      <app-input-field label="Date" type="date" [(ngModel)]="newRoutine.date"></app-input-field>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button (click)="toggleAddRoutineModal(false)" class="button secondary-btn cursor-pointer">Cancel</app-button>
+        <app-button (click)="saveRoutine()" class="button primary-btn cursor-pointer">Save Routine</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+
+  @if (showAddMajorAssemblyModal) {
+  <app-modal (closeModal)="toggleAddMajorAssemblyModal(false)" size="md">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="head3 text-white">Add Major Assembly Replacement</h3>
+        <app-button (click)="toggleAddMajorAssemblyModal(false)" class="text-white/60 hover:text-white">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <app-select-input label="Type of Equipment" [options]="majorAssemblyEquipmentOptions" [allowCustomValue]="true"
+        placeholder="Type this equipment's name" [(ngModel)]="newMajorAssembly.equipment"></app-select-input>
+      <app-input-field label="Unit/Sub Unit" placeholder="e.g. Turbocharger"
+        [(ngModel)]="newMajorAssembly.unit"></app-input-field>
+      <app-input-field label="Date Replaced" type="date" [(ngModel)]="newMajorAssembly.date"></app-input-field>
+      <app-input-field label="Reason For Replacement" placeholder="e.g. Routine"
+        [(ngModel)]="newMajorAssembly.reason"></app-input-field>
+      <app-input-field label="Remarks" placeholder="Remarks" [(ngModel)]="newMajorAssembly.remarks"></app-input-field>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button (click)="toggleAddMajorAssemblyModal(false)" class="button secondary-btn cursor-pointer">Cancel</app-button>
+        <app-button (click)="saveMajorAssembly()" class="button primary-btn cursor-pointer">Save Assembly</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+
+  @if (showAddLubricantModal()) {
+  <app-modal (closeModal)="closeAddLubricantModal()" size="md">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="head3 text-white">Add Lubricant</h3>
+        <app-button (click)="closeAddLubricantModal()" class="text-white/60 hover:text-white">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+      </div>
+
+      <app-select-input label="Lubricant" [options]="cmmsLubricantOptions" [ngModel]="newLubricant.lubricantId"
+        (ngModelChange)="onCmmsLubricantSelected($event)"></app-select-input>
+      <app-input-field label="Quantity" type="number" [(ngModel)]="newLubricant.quantity"></app-input-field>
+      <app-input-field label="Unit" type="text" [readonly]="true" [ngModel]="newLubricant.unit"></app-input-field>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button (click)="closeAddLubricantModal()" class="button secondary-btn cursor-pointer">Cancel</app-button>
+        <app-button (click)="confirmAddLubricant()" class="button primary-btn cursor-pointer">Add Lubricant</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+  @if (deleteLubricantIndex() !== null) {
+  <app-modal (closeModal)="cancelDeleteLubricant()" size="sm">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3 border-b border-white/10 pb-3">
+        <app-icon name="alert-circle" [size]="22" variant="danger"></app-icon>
+        <h3 class="head3 text-white">Remove Lubricant</h3>
+      </div>
+
+      <p class="text-sm text-white/80">
+        Remove
+        <span class="font-semibold text-white">{{ lubricantPendingDelete?.name || "this lubricant" }}</span>
+        from this month's consumption? Its quantity and unit will be lost.
+      </p>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+        <app-button (click)="cancelDeleteLubricant()" class="button secondary-btn cursor-pointer">No</app-button>
+        <app-button (click)="confirmDeleteLubricant()" class="button primary-btn cursor-pointer">Yes, Remove</app-button>
+      </div>
+    </div>
+  </app-modal>
+  }
+  @if (cmmsSyncModalOpen()) {
+  <app-modal (closeModal)="closeCmmsSyncModal()" size="lg">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="head3 text-white">Syncing SRAR with CMMS</h3>
+        @if (!cmmsSyncRunning()) {
+        <app-button (click)="closeCmmsSyncModal()" class="text-white/60 hover:text-white">
+          <app-icon name="x" [size]="18" variant="inherit"></app-icon>
+        </app-button>
+        }
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between text-sm text-white/80 mb-1.5">
+          <span>{{ cmmsSyncStepLabel() }}</span>
+          <span>Step {{ cmmsSyncStepIndex() }}/{{ cmmsSyncStepTotal() }} · {{ cmmsSyncProgress() }}%</span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+          <div class="h-full rounded-full transition-all duration-300"
+            [class.bg-red-500]="cmmsSyncFailed()" [class.bg-emerald-500]="!cmmsSyncFailed()"
+            [style.width.%]="cmmsSyncProgress()"></div>
+        </div>
+      </div>
+
+      <div class="border border-white/10 rounded-lg bg-black/30 max-h-64 overflow-y-auto p-3 font-mono text-xs space-y-1">
+        @for (line of cmmsSyncLog(); track $index) {
+        <div [class.text-emerald-400]="line.tone === 'success'" [class.text-sky-400]="line.tone === 'update'"
+          [class.text-amber-400]="line.tone === 'skipped'" [class.text-red-400]="line.tone === 'error'"
+          [class.text-white/60]="line.tone === 'info'">{{ line.text }}</div>
+        }
+        @if (!cmmsSyncLog().length) {
+        <div class="text-white/40">Waiting for sync to start...</div>
+        }
+      </div>
+
+      <div class="flex justify-end items-center gap-2 pt-2 border-t border-white/10">
+        @if (cmmsSyncRunning()) {
+        <span class="text-xs text-white/50">Sync in progress — please wait...</span>
+        } @else {
+        <app-button (click)="closeCmmsSyncModal()" class="button primary-btn cursor-pointer">Close</app-button>
+        }
+      </div>
+    </div>
+  </app-modal>
+  }
+  @if (!showDetails()) {
+  <!-- Recent SRAR Entries Data Grid -->
+  <app-panel-card title="Recent SRAR Entries" subtitle="Latest submitted monthly returns" icon="file-text"
+    iconColor="#38BDF8" iconBg="rgba(56, 189, 248, 0.15)">
+    <app-data-grid [rowData]="records()" [columnDefs]="columnDefs" [pageSize]="10" [autoHeight]="true"
+      (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"></app-data-grid>
+  </app-panel-card>
+  }
+</div>

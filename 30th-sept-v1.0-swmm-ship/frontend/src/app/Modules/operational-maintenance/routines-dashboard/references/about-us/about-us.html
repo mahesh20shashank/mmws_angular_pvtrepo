@@ -1,0 +1,71 @@
+<div class="about-us-page">
+
+  <!-- Hero -->
+  <section class="hero-section">
+    <h1 class="hero-title">Effortless Routines Tracking Onboard <em>IN Ships</em></h1>
+    <p class="hero-subtitle">Empowering Ship Staff with Smart Maintenance Solutions</p>
+  </section>
+
+  <!-- Carousel -->
+  <section class="carousel-section">
+    <div class="ship-carousel">
+      <div class="carousel-track">
+        @for (slide of slides; track slide.src; let i = $index) {
+          <img
+            [src]="slide.src"
+            [alt]="slide.alt"
+            class="carousel-slide"
+            [class.active]="i === activeIndex"
+          />
+        }
+      </div>
+
+      <app-button class="carousel-control prev" type="button" (click)="prev()" aria-label="Previous">
+        <span>&#10094;</span>
+      </app-button>
+      <app-button class="carousel-control next" type="button" (click)="next()" aria-label="Next">
+        <span>&#10095;</span>
+      </app-button>
+
+      <div class="carousel-indicators">
+        @for (slide of slides; track slide.src; let i = $index) {
+          <app-button
+            type="button"
+            class="indicator"
+            [class.active]="i === activeIndex"
+            (click)="goTo(i)"
+            [attr.aria-label]="'Go to slide ' + (i + 1)"
+          ></app-button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- About Card -->
+  <section class="about-card glass-card">
+    <h4 class="about-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      About Operational Maintenance
+    </h4>
+
+    <blockquote class="about-quote">
+      &ldquo;Timely Maintenance is essential to have reduced equipment failure rate&rdquo;
+    </blockquote>
+
+    <p class="about-text">
+      Routines tracking onboard <em>IN</em> Ships is an essential and time-intensive task. Details
+      often need to be manually retrieved from MAINTOPS and logbooks, causing delays and
+      inefficiencies...
+    </p>
+    <p class="about-text">
+      Operational Maintenance simplifies this by providing instant visibility of all routines
+      falling due in the next six months or 1000 hours, enabling better planning and resource
+      allocation.
+    </p>
+  </section>
+
+</div>

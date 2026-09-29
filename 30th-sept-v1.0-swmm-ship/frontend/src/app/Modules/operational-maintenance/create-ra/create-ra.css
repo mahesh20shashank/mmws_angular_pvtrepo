@@ -1,0 +1,40 @@
+.field-border {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.field-border.invalid {
+  border-color: #ef4444;
+}
+
+/* Solid-background action buttons must keep white text in both themes — the
+   global light-theme override for `.text-white` (styles.css) assumes that
+   class means "text on a dark surface" and flips it to the theme's dark text
+   color, which is wrong here since these buttons carry their own colored
+   background regardless of theme. */
+.cr-solid-btn {
+  color: #ffffff !important;
+}
+
+.cr-save-btn {
+  background: #1a73e8;
+  border: 0.0625rem solid #1a73e8;
+}
+
+.cr-save-btn:not(:disabled):hover {
+  background: #1765cc;
+}
+
+.cr-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cr-cancel-btn {
+  background: transparent;
+  border: 0.0625rem solid var(--border-input);
+  color: var(--text-primary);
+}
+
+.cr-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}

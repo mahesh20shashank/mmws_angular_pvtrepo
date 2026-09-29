@@ -1,0 +1,342 @@
+/* ── Section wrapper ─────────────────────────────────────────────── */
+.nec-section {
+  margin-bottom: 10px;
+  max-width: 100%;
+}
+.nec-table-card {
+  border: 1px solid #334155;
+  padding: 10px;
+  margin-bottom: 1rem;           /* matches image 2's padding */
+  border-radius: 0.75rem;         /* larger radius to match image 2's softer corners */
+  overflow: hidden;
+}
+
+.nec-section-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;          /* slate-400 — subtle grey label above table */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-left: 2px;
+}
+.nec-row-details{
+  font-size: 14px;
+}
+
+/* ── Table container ─────────────────────────────────────────────── */
+.nec-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #2d3748;   /* dark border matching image */
+  border-radius: 0.5rem;
+  /* background: #1a202c;         */
+}
+
+.nec-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+/* Header row — dark background, white text */
+/* .nec-table-wrap table thead tr {
+  background-color: #232d3f;
+} */
+
+.nec-table-wrap table thead th {
+  padding: 0.6rem 0.75rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-align: center;
+  /* border: 1px solid #2d3748; */
+}
+
+/* Body rows */
+.nec-table-wrap table tbody tr {
+  /* background-color: #1e2736; */
+  transition: background-color 0.15s ease;
+}
+
+/* .nec-table-wrap table tbody tr:hover {
+  background-color: #243047;
+} */
+
+.nec-table-wrap table tbody td {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #2d3748;
+  color: #cbd5e1;
+  vertical-align: middle;
+}
+
+/* Serial number cells — centred & slightly bolder */
+.nec-table-wrap table tbody td:first-child {
+  text-align: center;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+/* Compartment label rows inside nested ng-container groups */
+.nec-table-wrap table tbody tr td[colspan] {
+  /* background-color: #1e3a5f; */
+  color: #93c5fd;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.4rem 0.75rem;
+}
+
+/* ── EMI Matrix: horizontal scroll only ──────────────────────────── */
+.emi-matrix-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  /* border: 1px solid #2d3748; */
+  border-radius: 0.5rem;
+  /* background: #1a202c; */
+}
+
+.emi-matrix-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* corner (160px) + 11 columns x 140px — adjust 11 if EMI_MATRIX_SIZE changes */
+  width: max(100%, calc(160px + (var(--emi-columns, 0) * 140px)));
+}
+
+.emi-matrix-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.emi-matrix-empty {
+  margin: 0.75rem 0 0;
+  padding: 0.8rem 1rem;
+  border: 1px dashed #64748b;
+  border-radius: 0.5rem;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.emi-equipment-label {
+  position: relative;
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.6rem 0.5rem 0.5rem;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  cursor: help;
+}
+
+.emi-remove-equipment {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  color: #ef4444;
+  font-size: 17px;
+  line-height: 18px;
+}
+
+.emi-remove-equipment:hover {
+  background: rgb(239 68 68 / 15%);
+}
+
+@media (max-width: 640px) {
+  .emi-matrix-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+    /* .emi-matrix-table thead tr {
+      background-color: #232d3f;
+    } */
+
+.emi-matrix-table th {
+  padding: 0.5rem 0.25rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-align: center;
+  /* border: 1px solid; */
+  vertical-align: middle;
+}
+
+.emi-matrix-table td {
+  /* border: 1px solid ; */
+  vertical-align: middle;
+  /* background-color: #1e2736; */
+  color: #cbd5e1;
+}
+
+.col-header-cell,
+.row-header-cell,
+.matrix-cell {
+  width: 200px;
+  min-width: 140px;
+}
+
+.nec-table-title {
+  font-size: 16px;
+}
+
+/* Diagonal corner cell */
+.diagonal-header {
+  position: relative;
+  width: 160px;
+  min-width: 160px;
+  height: 70px;
+  padding: 0 !important;
+  /* background-color: #232d3f; */
+}
+
+.diagonal-header .diag-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.diag-label-top {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  max-width: 90px;
+  line-height: 1.2;
+}
+
+.diag-label-bottom {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  max-width: 90px;
+  line-height: 1.2;
+}
+
+/* Horizontal scrollbar styling */
+.emi-matrix-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+.emi-matrix-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.emi-matrix-wrap::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 6px;
+}
+
+.emi-matrix-wrap::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+.nec-table-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+/* scrollbar styling, since your old .emi-matrix-wrap scrollbar rules
+   no longer apply to this class */
+.nec-table-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.nec-table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nec-table-scroll::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 6px;
+}
+
+.nec-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+.emi-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  font-size: 0.75rem;
+}
+
+.emi-radio-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.emi-radio-option input[type='radio'] {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* ── Header equipment tabs (previewHeader) ───────────────────────── */
+.pt-glass-form-tab {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 46px;
+  min-width: 130px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border-radius: 40px;
+}
+
+.pt-glass-form-tab:hover {
+  border-color: var(--icon-accent);
+}
+
+.pt-glass-form-tab--active {
+  border-color: var(--icon-accent);
+  background: var(--icon-accent);
+  color: #fff;
+}
+
+/* ── Footer buttons (formFooter) ─────────────────────────────────── */
+.form-card-footer-btn {
+  padding: 0.55rem 1.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.pt-glass-table__control {
+  border: 1px solid var(--border-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.pt-glass-table__control:hover:not(:disabled) {
+  background: var(--bg-input-disabled);
+}
+
+.pt-glass-btn-primary {
+  border: 1px solid var(--icon-accent);
+  background: var(--icon-accent);
+  color: #fff;
+}
+
+.pt-glass-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}

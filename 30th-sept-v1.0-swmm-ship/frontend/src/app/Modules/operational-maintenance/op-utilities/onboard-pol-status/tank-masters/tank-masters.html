@@ -1,0 +1,199 @@
+<app-master-card cardTitle="Tank Masters" cardHeight="auto">
+  <div class="flex gap-4 pt-4 items-start">
+    <aside class="w-64 shrink-0 tank-masters-nav">
+      <app-collapsible-sidebar
+        [items]="navItems"
+        [selectedId]="activeTab"
+        [collapseOnSelect]="false"
+        (itemSelected)="onNavSelect($event)">
+      </app-collapsible-sidebar>
+    </aside>
+
+    <div class="flex-1 glass-card p-4 min-w-0">
+      @switch (activeTab) {
+        @case ('tank-details') {
+          <div class="grid grid-cols-4 gap-3 mb-4 p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+            <div>
+              <label for="td-category" class="text-white/60 text-xs mb-1 block">Tank Category *</label>
+              <select id="td-category" [(ngModel)]="selectedTankCategoryId" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+                <option [ngValue]="null">Select Tank Category</option>
+                @for (c of categoryDropdown; track c.id) {
+                  <option [ngValue]="c.id">{{ c.tank_category }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="td-fluid-name" class="text-white/60 text-xs mb-1 block">Fluid / POL Name *</label>
+              <input id="td-fluid-name" type="text" [value]="selectedCategoryInfo?.fluid ?? ''" disabled placeholder="Select Tank Category" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+            </div>
+            <div>
+              <label for="td-fluid-type" class="text-white/60 text-xs mb-1 block">Fluid / POL Type *</label>
+              <input id="td-fluid-type" type="text" [value]="selectedCategoryInfo?.fluid_type ?? ''" disabled placeholder="Select Tank Category" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+            </div>
+            <div>
+              <label for="td-unit" class="text-white/60 text-xs mb-1 block">Measuring Unit *</label>
+              <input id="td-unit" type="text" [value]="selectedCategoryInfo?.measuring_unit ?? ''" disabled placeholder="Select Tank Category" class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+            </div>
+            <div>
+              <label for="td-storage-count" class="text-white/60 text-xs mb-1 block">Storage Tanks</label>
+              <input id="td-storage-count" type="number" min="0" [(ngModel)]="storageTankCount" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            </div>
+            <div>
+              <label for="td-service-count" class="text-white/60 text-xs mb-1 block">Service Tanks</label>
+              <input id="td-service-count" type="number" min="0" [(ngModel)]="serviceTankCount" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            </div>
+            <div>
+              <label for="td-fixed-count" class="text-white/60 text-xs mb-1 block">Fixed Tanks</label>
+              <input id="td-fixed-count" type="number" [value]="fixedTankCount" disabled class="w-full h-10 rounded-lg bg-white/[0.03] border border-dashed border-white/20 px-3 text-white/60 text-sm" />
+            </div>
+            <div class="flex items-end">
+              <button type="button" (click)="addTanks()" class="w-full h-10 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center justify-center gap-2">
+                <app-icon name="plus" [size]="14" />
+                Add Tanks
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2 p-3 mb-4 rounded-lg bg-[#1D96E9]/10 border border-[#1D96E9]/30 text-white/80 text-xs">
+            <app-icon name="info" [size]="14" variant="accent" class="mt-0.5 shrink-0" />
+            <span>
+              <strong>Instruction:</strong> Use the <strong>Upload</strong> action in the <strong>Action</strong> column to add the corresponding Sounding Chart for each record. Initially, <strong>95%</strong> and <strong>100%</strong> capacities appear as <strong>N/A</strong>. Please add and confirm them accordingly.
+            </span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-2 mb-3">
+            <input type="text" [(ngModel)]="tankDetailSearch.categoryName" placeholder="Search Category" class="h-9 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <input type="text" [(ngModel)]="tankDetailSearch.nomenclature" placeholder="Search Nomenclature" class="h-9 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <input type="text" [(ngModel)]="tankDetailSearch.subtype" placeholder="Search Storage/Service" class="h-9 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <input type="text" [(ngModel)]="tankDetailSearch.locationName" placeholder="Search Location" class="h-9 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+          </div>
+
+          <app-data-grid
+            [rowData]="filteredTankDetailRows"
+            [columnDefs]="tankDetailColumnDefs"
+            [pagination]="true"
+            [pageSize]="10"
+            height="360px">
+          </app-data-grid>
+
+          <div class="flex justify-end mt-4">
+            <button type="button" (click)="saveTankDetails()" class="h-10 px-5 rounded-lg bg-[#1D96E9] text-white text-sm flex items-center gap-2">
+              <app-icon name="save" [size]="14" />
+              Save
+            </button>
+          </div>
+        }
+
+        @case ('pol-types') {
+          <div class="flex gap-2 mb-4">
+            <input type="text" [(ngModel)]="newPolType" placeholder="New Fluid/POL Type" class="flex-1 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <button type="button" (click)="addPolType()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm">Add Fluid/POL Type</button>
+          </div>
+          <app-data-grid
+            [rowData]="polTypes"
+            [columnDefs]="polTypeColumnDefs"
+            [pagination]="true"
+            [pageSize]="10"
+            height="360px">
+          </app-data-grid>
+        }
+
+        @case ('pol-names') {
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <input type="text" [(ngModel)]="newPolName" placeholder="New Fluid/POL Name" class="h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <select [(ngModel)]="newPolNameType" class="h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+              <option [ngValue]="null">-- POL Type --</option>
+              @for (t of fluidTypes; track t.id) {
+                <option [ngValue]="t.id">{{ t.fluid_type }}</option>
+              }
+            </select>
+            <select [(ngModel)]="newPolNameUnit" class="h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+              <option value="Litres">Litres</option>
+              <option value="Tons">Tons</option>
+              <option value="Kilolitres">Kilolitres</option>
+            </select>
+            <button type="button" (click)="addPolName()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm">Add Fluid/POL Name</button>
+          </div>
+          <app-data-grid
+            [rowData]="polNames"
+            [columnDefs]="polNameColumnDefs"
+            [pagination]="true"
+            [pageSize]="10"
+            height="360px">
+          </app-data-grid>
+        }
+
+        @case ('tank-category') {
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <input type="text" [(ngModel)]="newCategoryName" placeholder="Category Name" class="h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <input type="text" [(ngModel)]="newCategoryManualName" placeholder="Manual Name" class="h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <select [(ngModel)]="newCategoryPol" class="h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm">
+              <option [ngValue]="null">-- Fluid/POL --</option>
+              @for (f of fluids; track f.id) {
+                <option [ngValue]="f.id">{{ f.fluid }}</option>
+              }
+            </select>
+            <button type="button" (click)="addTankCategory()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm">Add Tank Category</button>
+          </div>
+          <app-data-grid
+            [rowData]="tankCategories"
+            [columnDefs]="tankCategoryColumnDefs"
+            [pagination]="true"
+            [pageSize]="10"
+            height="360px">
+          </app-data-grid>
+        }
+
+        @case ('tank-location') {
+          <div class="flex gap-2 mb-4">
+            <input type="text" [(ngModel)]="newLocationName" placeholder="New Tank Location" class="flex-1 h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+            <button type="button" (click)="addTankLocation()" class="h-10 px-4 rounded-lg bg-[#1D96E9] text-white text-sm">Add Tank Location</button>
+          </div>
+          <app-data-grid
+            [rowData]="tankLocations"
+            [columnDefs]="tankLocationColumnDefs"
+            [pagination]="true"
+            [pageSize]="10"
+            height="360px">
+          </app-data-grid>
+        }
+      }
+    </div>
+  </div>
+</app-master-card>
+
+@if (showSoundingModal && soundingModalRow) {
+  <app-modal size="md" title="Upload Sounding Chart" (closeModal)="closeSoundingModal()">
+    <p class="text-white/60 text-sm mb-4">{{ soundingModalRow.nomenclature }}</p>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label for="sc-95-mm" class="text-white/60 text-xs mb-1 block">95% Capacity — mm Level *</label>
+        <input id="sc-95-mm" type="number" [(ngModel)]="sounding95.mmLevel" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="sc-95-vol" class="text-white/60 text-xs mb-1 block">95% Capacity — Volume *</label>
+        <input id="sc-95-vol" type="number" [(ngModel)]="sounding95.volume" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="sc-100-mm" class="text-white/60 text-xs mb-1 block">100% Capacity — mm Level *</label>
+        <input id="sc-100-mm" type="number" [(ngModel)]="sounding100.mmLevel" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+      <div>
+        <label for="sc-100-vol" class="text-white/60 text-xs mb-1 block">100% Capacity — Volume *</label>
+        <input id="sc-100-vol" type="number" [(ngModel)]="sounding100.volume" class="w-full h-10 rounded-lg bg-white/5 border border-white/10 px-3 text-white text-sm" />
+      </div>
+    </div>
+    <div class="flex justify-end gap-2">
+      <app-button type="button" (click)="closeSoundingModal()" class="px-4 h-9 rounded-lg bg-white/10 border border-white/10 text-white text-sm">
+        Cancel
+      </app-button>
+      <app-button type="button" (click)="saveSoundingChart()" class="px-4 h-9 rounded-lg bg-[#1D96E9] text-white text-sm">
+        Save
+      </app-button>
+    </div>
+  </app-modal>
+}
+
+@if (showDeleteConfirm) {
+  <app-confirm-delete-modal (confirmed)="confirmDeleteTankDetail()" (cancelled)="showDeleteConfirm = false" />
+}

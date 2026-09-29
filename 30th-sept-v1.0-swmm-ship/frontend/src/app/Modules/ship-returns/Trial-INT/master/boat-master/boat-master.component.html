@@ -1,0 +1,23 @@
+<div class="p-2 sm:p-3">
+    <app-paginate-table
+        title="Boat Master"
+        description="Manage system boats"
+        [showHeaderSection]="true"
+        [addButtons]="[{ label: 'Add Boat', key: 'add' }]"
+        (addButtonClick)="openAddShip()"
+        [showImport]="true"
+        [showExport]="true"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [tableLoading]="isLoading"
+        [showSearch]="true">
+    </app-paginate-table>
+</div>
+
+<app-boat-master-add *ngIf="isFormOpen" [editMode]="isEditMode" [viewMode]="isViewMode" [unitData]="selectedRow"
+    (close)="closeAddForm()" (addNewRequest)="isNewEntryAdded = $event">
+</app-boat-master-add>
+
+<app-reusable-delete-dialog [open]="isDeleteDialogOpen" [id]="deleteRow?.id" [name]="deleteRow?.name" entityType="Boat"
+    [loading]="isDeleteLoading" (confirm)="confirmDelete()" (cancel)="closeDeleteDialog()">
+</app-reusable-delete-dialog>
