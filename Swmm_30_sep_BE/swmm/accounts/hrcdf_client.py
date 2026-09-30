@@ -7,6 +7,7 @@
 """HTTP client for the HRCDF personnel roster, used by accounts.hrcdf_sync."""
 
 import logging
+import socket
 from urllib.parse import urlsplit
 
 import requests
@@ -20,6 +21,10 @@ LINE_INFO = "info"
 # Developed with Understanding: the login-time single-person read never holds a request
 # longer than this (D27).
 PERSON_LOOKUP_TIMEOUT_SECONDS = 5
+
+# Developed with Understanding: the readiness reachability check never holds the page longer
+# than this.
+PROBE_TIMEOUT_SECONDS = 3
 
 # Developed with Understanding: IIMA cut every HRCDF text value at 255 characters, the
 # widest HRCDF column it had. The engine passes the real column width instead.
@@ -122,6 +127,36 @@ class HrcdfClient:
                 "HRCDF_SYNC_BASE_URL must be an http or https address with a host and "
                 "port, for example http://host:port, with no trailing slash.",
             )
+
+    # Developed with Understanding: a cheap reachability check for readiness/ - one TCP connect
+    # to the HRCDF host and port, no HTTP request and no credential. HRCDF sits on the Navy
+    # air-gapped network, so anywhere else the name does not resolve or nothing answers, and
+    # the page says so up front instead of a run failing later. Returns (reachable, detail),
+    # detail naming the host only.
+    def probe(self, timeout=PROBE_TIMEOUT_SECONDS):
+        """Return (True, "") when the HRCDF host accepts a TCP connection, else (False, why)."""
+        parts = urlsplit(self.base_url)
+        hostname = parts.hostname or ""
+        if not hostname:
+            return False, "The HRCDF address has no host name."
+        try:
+            port = parts.port or (443 if parts.scheme == "https" else 80)
+        except ValueError:
+            return False, f"The HRCDF address {self.host} has an invalid port."
+        try:
+            with socket.create_connection((hostname, port), timeout=timeout):
+                return True, ""
+        except socket.gaierror:
+            return False, (
+                f"Cannot resolve {hostname}. This server is not on the Navy network, or "
+                "its DNS does not know the HRCDF host."
+            )
+        except socket.timeout:
+            return False, f"HRCDF at {hostname}:{port} did not answer within {timeout} seconds."
+        except ConnectionRefusedError:
+            return False, f"HRCDF at {hostname}:{port} refused the connection."
+        except OSError as exc:
+            return False, f"HRCDF at {hostname}:{port} cannot be reached ({exc.__class__.__name__})."
 
     # Developed with Understanding: the one place every requests failure becomes an
     # operator message (IIMA sync lines 423-442) - Timeout 504, TLS 502, connection 502.

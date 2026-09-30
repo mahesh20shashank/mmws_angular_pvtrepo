@@ -24,6 +24,15 @@ logger = logging.getLogger(__name__)
 
 _CACHE_PREFIX = "authz:live:"
 
+# Developed with Understanding: the 403 message when the userauth liveness probe cannot be
+# completed (unreachable, timed out, or an answer other than 200, 401 or 403). The request is
+# still denied (fail closed), but the user is not told the session ended, because it has not
+# (session-min-30-min, S7).
+LIVE_CHECK_UNAVAILABLE_MESSAGE = (
+    "Your sign-in could not be confirmed with the sign-in service just now. You are still"
+    " signed in. Try again in a moment, and if this continues contact the administrator."
+)
+
 
 class IsInternalService(BasePermission):
     """Request carries a valid ``X-Service-Key``. Non-empty match required --
@@ -70,13 +79,18 @@ class IsLiveAuthzUser(BasePermission):
             return True
 
         bearer = request.META.get("HTTP_AUTHORIZATION", "")
+        # Developed with Understanding: AuthzUnavailable is a subclass of AuthzError, so it is
+        # caught first. Before this, the AuthzError clause caught it and every probe outage was
+        # reported with the session-ended message. An outage now denies with its own message on
+        # this instance, and only a real 401 or 403 from userauth keeps the session message.
         try:
             authz_client.me(bearer)
-        except authz_client.AuthzError as exc:
-            logger.info("live check denied user_id=%s: %s", uid, exc)
-            return False
         except authz_client.AuthzUnavailable as exc:
             logger.warning("live check unavailable user_id=%s: %s", uid, exc)
+            self.message = LIVE_CHECK_UNAVAILABLE_MESSAGE
+            return False
+        except authz_client.AuthzError as exc:
+            logger.info("live check denied user_id=%s: %s", uid, exc)
             return False
 
         cache.set(cache_key, True, timeout=_ttl())

@@ -256,7 +256,9 @@ JWT_PUBLIC_KEY = JWT_PUBLIC_KEY_PATH.read_text(encoding="utf-8")
 # login, never a plaintext fallback.
 LOGIN_DECRYPTION_REQUIRED = env.bool("LOGIN_DECRYPTION_REQUIRED", default=not DEBUG)
 
-ACCESS_TOKEN_LIFETIME_MIN = env.int("ACCESS_TOKEN_LIFETIME_MIN", default=20)
+# Developed with Understanding: default raised from 20 to 30 minutes, the session floor
+# (session-min-30-min, S1). An ACCESS_TOKEN_LIFETIME_MIN set in .env still governs.
+ACCESS_TOKEN_LIFETIME_MIN = env.int("ACCESS_TOKEN_LIFETIME_MIN", default=30)
 REFRESH_TOKEN_LIFETIME_HOURS = env.int("REFRESH_TOKEN_LIFETIME_HOURS", default=12)
 
 # When True, a successful login ends every other active session for that user

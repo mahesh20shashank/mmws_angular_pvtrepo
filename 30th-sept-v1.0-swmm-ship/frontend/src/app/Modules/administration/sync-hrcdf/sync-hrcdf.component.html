@@ -5,15 +5,28 @@
      the keyboard order. -->
 <div class="flex flex-col gap-5">
 
-  <!-- Developed with Understanding: page header with the Configured or Not configured chip. -->
+  <!-- Developed with Understanding: page header with the Connected, HRCDF unreachable or Not
+       configured chip, and - for the application admin only, once a ship is locked - Clear set ship
+       name at the top right. -->
   <app-page-header-bar icon="database" title="HR CDF Synchronization">
-    <app-status-chip [text]="headerChip().text" [tone]="headerChip().tone" [dot]="true" />
+    <div class="flex flex-wrap items-center justify-end gap-2">
+      <app-status-chip [text]="headerChip().text" [tone]="headerChip().tone" [dot]="true" />
+      @if (canClearShip()) {
+      <app-button variant="danger" size="sm" [disabled]="clearing()" (click)="openClear()">
+        <app-icon name="trash-2" [size]="14" variant="inherit" />
+        <span>Clear set ship name</span>
+      </app-button>
+      }
+    </div>
     @if (configured()) {
     <p below class="px-1 pt-2 text-xs text-[var(--text-muted)]">
       HRCDF host {{ readiness()?.host }}{{ readiness()?.users_path }}
     </p>
     }
   </app-page-header-bar>
+  @if (clearNotice()) {
+  <p class="text-sm font-semibold text-[var(--text-primary)]" role="status">{{ clearNotice() }}</p>
+  }
 
   <!-- Developed with Understanding: readiness loading and error states. -->
   @if (readinessState() === "loading") {
@@ -42,6 +55,26 @@
         in the swmm service environment to the HRCDF address, in the form https://host:port, then restart the swmm
         service and its background worker.
       </p>
+    </div>
+  </app-panel-card>
+  }
+
+  <!-- Developed with Understanding: HRCDF is set but this server cannot reach it - the normal
+       state off the Navy network. Said up front, with the reason, instead of a run failing later. -->
+  @if (unreachable()) {
+  <app-panel-card title="HRCDF not reachable right now"
+    subtitle="HRCDF is available only on the Navy network" icon="triangle-alert"
+    iconColor="var(--icon-warning)">
+    <div class="flex flex-col gap-2 text-sm text-[var(--text-primary)]">
+      <p>{{ readiness()?.reachable_detail }}</p>
+      <p>Step 1 still works with the ship list already in this application. Step 2, Step 3 and Get Ship Names need
+        HRCDF and will work once this server can reach {{ readiness()?.host }}.</p>
+      <div>
+        <app-button variant="outline" size="sm" [disabled]="recheckingHrcdf()" (click)="recheckHrcdf()">
+          <app-icon name="refresh-cw" [size]="14" variant="inherit" />
+          <span>{{ recheckingHrcdf() ? "Checking HRCDF" : "Check again" }}</span>
+        </app-button>
+      </div>
     </div>
   </app-panel-card>
   }
@@ -91,13 +124,16 @@
         them.</p>
       }
 
+      <!-- Developed with Understanding: the locked notice. Once Step 1 is done the two selects stay
+           disabled and show the set command and ship, and this says plainly that it is final. -->
       @if (homeUnit(); as home) {
-      <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-start gap-2 rounded-md border border-[var(--icon-warning)] p-3">
+        <app-icon name="lock" [size]="16" variant="warning" />
         <p #lockedShip tabindex="-1" class="text-sm text-[var(--text-primary)]">
-          This ship is <span class="font-semibold">{{ home.name }} ({{ home.code }})</span>. Changing it needs an
-          administrator.
+          <span class="font-semibold">Ship name already set: {{ home.name }} ({{ home.code }})</span>,
+          command {{ homeCommandText() }}. It cannot be changed or reversed here. Only the application admin can
+          clear it.
         </p>
-        <app-status-chip text="Locked" tone="success" />
       </div>
       }
       <p class="text-sm text-[var(--text-muted)]" role="status">{{ homeUnitNotice() }}</p>
@@ -132,6 +168,13 @@
           @if (confirmBlockReason()) {
           <p class="text-xs text-[var(--text-primary)]">{{ confirmBlockReason() }}</p>
           }
+        </div>
+        } @else {
+        <div class="flex max-w-md flex-col gap-1">
+          <app-button variant="outline" size="sm" [disabled]="true">
+            <app-icon name="lock" [size]="14" variant="inherit" />
+            <span>Ship locked</span>
+          </app-button>
         </div>
         }
       </div>
@@ -329,9 +372,9 @@
   </app-panel-card>
 </div>
 
-<!-- Developed with Understanding: the confirm-and-lock dialog. It names the ship and says plainly
-     that the choice is locked and needs an administrator to change. Cancel comes first and takes
-     focus on open. Escape closes it. Focus returns to Confirm this ship on close. -->
+<!-- Developed with Understanding: the confirm-and-lock dialog. It names the ship and warns plainly
+     that the choice is final here and only the application admin can clear it. Cancel comes first
+     and takes focus on open. Escape closes it. Focus returns to Confirm this ship on close. -->
 @if (confirmOpen()) {
 <app-modal size="sm" (closeModal)="cancelConfirm()">
   <div #confirmBody class="flex flex-col gap-4 text-[var(--text-primary)]">
@@ -341,13 +384,49 @@
       <span class="font-semibold">{{ stagedUnit()?.name }} ({{ stagedUnit()?.code }})</span>,
       command {{ stagedCommandText() }}, as this ship.
     </p>
-    <p class="text-sm">
-      This choice is locked once confirmed. Only an administrator can change it later.
-    </p>
+    <div class="flex items-start gap-2 rounded-md border border-[var(--icon-danger)] p-3" role="alert">
+      <app-icon name="triangle-alert" [size]="18" variant="danger" />
+      <p class="text-sm">
+        <span class="font-semibold">Warning: this cannot be undone.</span>
+        Once confirmed, {{ stagedUnit()?.name }} is locked as the ship of this SWMM and its name shows across the
+        whole application. You will not be able to change or reverse it. Only the application admin can clear
+        it.
+      </p>
+    </div>
     <div class="flex justify-end gap-3 pt-2">
       <app-button variant="outline" size="sm" [disabled]="savingHomeUnit()" (click)="cancelConfirm()">Cancel</app-button>
-      <app-button variant="primary" size="sm" [disabled]="savingHomeUnit()" (click)="confirmHomeUnit()">
-        {{ savingHomeUnit() ? "Confirming" : "Confirm" }}
+      <app-button variant="danger" size="sm" [disabled]="savingHomeUnit()" (click)="confirmHomeUnit()">
+        {{ savingHomeUnit() ? "Locking this ship" : "Yes, lock this ship" }}
+      </app-button>
+    </div>
+  </div>
+</app-modal>
+}
+
+<!-- Developed with Understanding: Clear set ship name - application admin only. It names the ship
+     being removed and what that does. Cancel comes first and takes focus. A refusal stays here. -->
+@if (clearOpen()) {
+<app-modal size="sm" (closeModal)="cancelClear()">
+  <div #clearBody class="flex flex-col gap-4 text-[var(--text-primary)]">
+    <h2 class="text-base font-semibold">Clear set ship name</h2>
+    <div class="flex items-start gap-2 rounded-md border border-[var(--icon-danger)] p-3" role="alert">
+      <app-icon name="triangle-alert" [size]="18" variant="danger" />
+      <p class="text-sm">
+        This removes <span class="font-semibold">{{ homeUnit()?.name }} ({{ homeUnit()?.code }})</span> as this
+        ship. The ship name disappears from the whole application until Step 1 is confirmed again. Personnel
+        already fetched from HRCDF are kept.
+      </p>
+    </div>
+    @if (clearError()) {
+    <p class="flex items-start gap-1.5 text-sm" role="alert">
+      <app-icon name="circle-alert" [size]="16" variant="danger" />
+      <span><span class="font-semibold">Not cleared.</span> {{ clearError() }}</span>
+    </p>
+    }
+    <div class="flex justify-end gap-3 pt-2">
+      <app-button variant="outline" size="sm" [disabled]="clearing()" (click)="cancelClear()">Cancel</app-button>
+      <app-button variant="danger" size="sm" [disabled]="clearing()" (click)="clearHomeUnit()">
+        {{ clearing() ? "Clearing" : "Clear ship name" }}
       </app-button>
     </div>
   </div>

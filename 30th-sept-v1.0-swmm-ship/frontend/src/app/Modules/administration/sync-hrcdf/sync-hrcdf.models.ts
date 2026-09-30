@@ -66,6 +66,12 @@ export interface HrcdfLastRuns {
 // Developed with Understanding: GET readiness/.
 export interface HrcdfReadiness {
   configured: boolean;
+  // Developed with Understanding: whether this server can reach the HRCDF host right now - null
+  // when not configured. reachable_detail says why not, naming the host only.
+  reachable: boolean | null;
+  reachable_detail: string;
+  // Developed with Understanding: true for the application admin only - shows Clear set ship name.
+  can_clear_home_unit: boolean;
   host: string;
   users_path: string;
   running: boolean;

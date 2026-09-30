@@ -18,10 +18,18 @@ from datetime import date
 from types import SimpleNamespace
 
 from django.core.cache import cache
-from master.models import Department, HrcdfCommand, HrcdfUnit, MasterCommand, Unit
+from master.models import (
+    ActiveShipConfig,
+    Department,
+    HrcdfCommand,
+    HrcdfUnit,
+    MasterCommand,
+    Unit,
+)
 from rest_framework.test import APIClient
 
 from accounts import hrcdf_sync
+from accounts.hrcdf_client import HrcdfClient
 from accounts.live_permissions import IsLiveAuthzUser
 from accounts.models import (
     AUTH_SOURCE_HRCDF,
@@ -480,6 +488,11 @@ class HrcdfSyncApiTests(HrcdfSyncTestBase):
             patcher = mock.patch.object(permission, "has_permission", return_value=True)
             patcher.start()
             self.addCleanup(patcher.stop)
+        # Developed with Understanding: readiness never opens a real socket in tests - the
+        # probe answers reachable unless a test patches it otherwise.
+        probe = mock.patch.object(HrcdfClient, "probe", return_value=(True, ""))
+        probe.start()
+        self.addCleanup(probe.stop)
         self.client = APIClient()
         self.client.force_authenticate(user=self.admin_user)
 
@@ -488,7 +501,81 @@ class HrcdfSyncApiTests(HrcdfSyncTestBase):
         response = self.client.get("/api/v1/accounts/hrcdf-sync/readiness/")
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.data["configured"])
+        self.assertIsNone(response.data["reachable"])
         self.assertEqual(response.data["home_unit"]["code"], HOME_CODE)
+
+    # Developed with Understanding: a configured host that does not answer (off the Navy
+    # network) is reported, with the reason, instead of failing the page.
+    def test_readiness_reports_unreachable_host(self):
+        why = "Cannot resolve hrcdf.test. This server is not on the Navy network."
+        with mock.patch.object(HrcdfClient, "probe", return_value=(False, why)) as probe:
+            response = self.client.get("/api/v1/accounts/hrcdf-sync/readiness/?recheck=1")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["configured"])
+        self.assertFalse(response.data["reachable"])
+        self.assertEqual(response.data["reachable_detail"], why)
+        probe.assert_called_once()
+
+    # Developed with Understanding: the probe answer is reused until ?recheck=1 asks again.
+    def test_readiness_caches_probe_until_recheck(self):
+        with mock.patch.object(HrcdfClient, "probe", return_value=(True, "")) as probe:
+            first = self.client.get("/api/v1/accounts/hrcdf-sync/readiness/?recheck=1")
+            self.client.get("/api/v1/accounts/hrcdf-sync/readiness/")
+            self.assertEqual(probe.call_count, 1)
+            self.client.get("/api/v1/accounts/hrcdf-sync/readiness/?recheck=1")
+            self.assertEqual(probe.call_count, 2)
+        self.assertTrue(first.data["reachable"])
+        self.assertEqual(first.data["reachable_detail"], "")
+
+    # Developed with Understanding: readiness tells the page whether to offer Clear set ship
+    # name - the application admin only.
+    def test_readiness_can_clear_follows_app_admin_role(self):
+        with mock.patch("accounts.rbac.is_app_admin_role", return_value=False):
+            response = self.client.get("/api/v1/accounts/hrcdf-sync/readiness/")
+        self.assertFalse(response.data["can_clear_home_unit"])
+        with mock.patch("accounts.rbac.is_app_admin_role", return_value=True):
+            response = self.client.get("/api/v1/accounts/hrcdf-sync/readiness/")
+        self.assertTrue(response.data["can_clear_home_unit"])
+
+    # Developed with Understanding: the application admin clears a ship set by mistake - the
+    # this-ship Unit is blanked, ShipIdentity unlinked and unlocked, and Step 1 is open again.
+    def test_app_admin_clears_home_unit(self):
+        with mock.patch("accounts.rbac.is_app_admin_role", return_value=True):
+            response = self.client.delete("/api/v1/accounts/hrcdf-sync/home-unit/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["cleared"], {"name": "INS TEST", "code": HOME_CODE})
+        self.home.refresh_from_db()
+        self.assertEqual(self.home.name, "")
+        self.assertIsNone(self.home.code)
+        self.assertIsNone(self.home.hrcdf_unit_id)
+        self.assertEqual(self.home.hrcdf_ship_name, "")
+        identity = ShipIdentity.objects.get()
+        self.assertIsNone(identity.unit_id)
+        self.assertFalse(identity.is_locked)
+        self.assertEqual(identity.ship_name, "")
+        readiness = self.client.get("/api/v1/accounts/hrcdf-sync/readiness/")
+        self.assertIsNone(readiness.data["home_unit"])
+        # Developed with Understanding: Step 1 can pick again once cleared.
+        again = self.client.post(
+            "/api/v1/accounts/hrcdf-sync/home-unit/",
+            {"unit_id": self.hrcdf_home.pk},
+            format="json",
+        )
+        self.assertEqual(again.status_code, 200)
+
+    # Developed with Understanding: the ship's own administrator may not clear it.
+    def test_ship_admin_cannot_clear_home_unit(self):
+        with mock.patch("accounts.rbac.is_app_admin_role", return_value=False):
+            response = self.client.delete("/api/v1/accounts/hrcdf-sync/home-unit/")
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(ShipIdentity.objects.get().is_locked)
+
+    def test_clear_with_nothing_set_is_409(self):
+        ShipIdentity.objects.update(unit=None, is_locked=False)
+        with mock.patch("accounts.rbac.is_app_admin_role", return_value=True):
+            response = self.client.delete("/api/v1/accounts/hrcdf-sync/home-unit/")
+        self.assertEqual(response.status_code, 409)
+        self.assertIn("nothing to clear", response.data["message"])
 
     @override_settings(HRCDF_SYNC={**HRCDF_TEST_CONFIG, "BASE_URL": ""})
     def test_run_unconfigured_is_400(self):
@@ -590,7 +677,7 @@ class HrcdfSyncApiTests(HrcdfSyncTestBase):
         self.assertEqual(response.status_code, 400)
 
     # Developed with Understanding: units/ lists HrcdfUnit with HrcdfCommand options and
-    # keeps its response keys. The hint follows Master_unit cmms_ship_name.
+    # keeps its response keys. The hint follows the CMMS Step 0 ship (ActiveShipConfig).
     def test_units_list_reads_hrcdf_masters(self):
         other_command = HrcdfCommand.objects.create(
             code="ENC", name="Eastern Naval Command", record_origin="SEED"
@@ -598,8 +685,9 @@ class HrcdfSyncApiTests(HrcdfSyncTestBase):
         other = HrcdfUnit.objects.create(
             code="00359", name="CAR NICOBAR", command=other_command, unit_type="NAVAL SHIP"
         )
-        Unit.objects.filter(pk=self.home.pk).update(cmms_ship_name=" car nicobar ")
-        response = self.client.get("/api/v1/accounts/hrcdf-sync/units/")
+        cmms_ship = SimpleNamespace(name=" car nicobar ")
+        with mock.patch.object(ActiveShipConfig, "get_selected_ship", return_value=cmms_ship):
+            response = self.client.get("/api/v1/accounts/hrcdf-sync/units/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             [item["code"] for item in response.data["commands"]], ["ENC", "WNC"]

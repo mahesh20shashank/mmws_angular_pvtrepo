@@ -841,8 +841,9 @@ def set_home_unit(unit_id):
         if identity.unit_id is not None:
             raise HrcdfSyncError(
                 409,
-                f"The home unit is already set to {identity.unit.name} "
-                f"({identity.unit.code}). Only an administrator can change it.",
+                f"The ship name is already set to {identity.unit.name} "
+                f"({identity.unit.code}) and cannot be changed here. Only the application "
+                "admin can clear it.",
             )
         source = HrcdfUnit.objects.select_related("command").filter(pk=unit_id).first()
         if source is None:
@@ -881,6 +882,49 @@ def set_home_unit(unit_id):
             update_fields=["unit", "ship_name", "is_locked", "updated_on", "updated_at"]
         )
     return ship_identity()
+
+
+# Developed with Understanding: undoes set_home_unit for a ship picked by mistake - the
+# application admin's "Clear set ship name". In one transaction the Master_unit this-ship
+# row is blanked back to its pre-Step 1 state and ShipIdentity is unlinked and unlocked, so
+# Step 1 can run again. Refused with 409 when nothing is set or while a sync run holds the
+# lock. Personnel already fetched by Step 2 and Step 3 are left as they are. Returns the
+# (name, code) that was cleared.
+def clear_home_unit():
+    """Unlink and unlock the home unit and blank the this-ship Unit. Return (name, code)."""
+    if lock_holder():
+        raise HrcdfSyncError(
+            409, "A sync run is in progress. Wait for it to end before clearing the ship name."
+        )
+    with transaction.atomic():
+        solo = ShipIdentity.get_solo()
+        identity = (
+            ShipIdentity.objects.select_for_update(of=("self",))
+            .select_related("unit")
+            .get(pk=solo.pk)
+        )
+        unit = identity.unit
+        if unit is None:
+            raise HrcdfSyncError(409, "No ship name is set, so there is nothing to clear.")
+        cleared = (unit.name, unit.code)
+        unit.name = ""
+        unit.code = None
+        unit.hrcdf_unit_id = None
+        unit.station_code = ""
+        unit.description = None
+        unit.hrcdf_ship_name = ""
+        unit.record_origin = ""
+        unit.command = None
+        unit.updated_at = timezone.now()
+        unit.save(update_fields=list(HOME_UNIT_FIELDS))
+        identity.unit = None
+        identity.ship_name = ""
+        identity.is_locked = False
+        identity.updated_at = timezone.now()
+        identity.save(
+            update_fields=["unit", "ship_name", "is_locked", "updated_on", "updated_at"]
+        )
+    return cleared
 
 
 # --------------------------------------------------------------------------

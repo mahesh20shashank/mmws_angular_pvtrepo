@@ -2,6 +2,7 @@ import logging
 from datetime import date, timedelta
 
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.management import call_command
 from django.db import transaction
 from django.db.models import Exists, OuterRef
@@ -79,7 +80,7 @@ from .serializers import (
 # pending-registration exclusion of synced rows (D3, OQ13).
 from django.db.models import Q
 from django.db.models.functions import Trim
-from master.models import ActiveShipConfig, HrcdfCommand, HrcdfUnit, Unit
+from master.models import ActiveShipConfig, HrcdfCommand, HrcdfUnit
 from rest_framework.exceptions import APIException
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.pagination import PageNumberPagination
@@ -2249,13 +2250,29 @@ class HrcdfPersonnelPagination(PageNumberPagination):
     max_page_size = 100
 
 
+# Developed with Understanding: how long one HRCDF reachability answer is reused, so readiness/
+# (read again after every run) never waits on the probe more than once a minute.
+HRCDF_PROBE_CACHE_KEY = "hrcdf:reachable"
+HRCDF_PROBE_CACHE_SECONDS = 60
+
+
 # Developed with Understanding: GET readiness/ - everything the page needs before a
-# button is pressed (IIMA sync_readiness re-expressed). Never a credential.
+# button is pressed (IIMA sync_readiness re-expressed). Never a credential. reachable says
+# whether the configured HRCDF host answers from this server (None when not configured);
+# ?recheck=1 skips the cached answer.
 @extend_schema(tags=["HRCDF Sync"])
 class HrcdfSyncReadinessView(HrcdfSyncBaseView):
     def get(self, request):
         client = HrcdfClient(hrcdf_sync.sync_config())
         client.close()
+        reachable, reachable_detail = None, ""
+        if client.host:
+            cache_key = f"{HRCDF_PROBE_CACHE_KEY}:{client.host}"
+            cached = None if request.query_params.get("recheck") else cache.get(cache_key)
+            if cached is None:
+                cached = client.probe()
+                cache.set(cache_key, cached, timeout=HRCDF_PROBE_CACHE_SECONDS)
+            reachable, reachable_detail = cached
         holder = hrcdf_sync.lock_holder()
         identity = hrcdf_sync.ship_identity()
         home = None
@@ -2268,6 +2285,11 @@ class HrcdfSyncReadinessView(HrcdfSyncBaseView):
         return Response(
             {
                 "configured": bool(client.host),
+                "reachable": reachable,
+                "reachable_detail": reachable_detail,
+                # Developed with Understanding: only the application admin may clear a ship
+                # name set by mistake, so the page shows that button to no one else.
+                "can_clear_home_unit": rbac.is_app_admin_role(request.user),
                 "host": client.host,
                 "users_path": client.users_path,
                 "running": bool(holder),
@@ -2312,15 +2334,12 @@ class HrcdfSyncUnitsView(HrcdfSyncBaseView):
         )
 
     # Developed with Understanding: the HrcdfUnit whose name matches the CMMS ship name,
-    # trimmed and case-insensitive (OQ15). The name is Master_unit cmms_ship_name, read
-    # without creating the row, falling back to the ActiveShipConfig ship. A CMMS name
-    # with an "INS " prefix is also tried without it. Only a hint, never a selection.
+    # trimmed and case-insensitive (OQ15). The name is the ActiveShipConfig ship picked in
+    # CMMS Step 0 - Master_unit no longer carries a CMMS name. A CMMS name with an "INS "
+    # prefix is also tried without it. Only a hint, never a selection.
     def _hint(self):
-        this_ship = Unit.objects.order_by("id").first()
-        name = (getattr(this_ship, "cmms_ship_name", None) or "").strip()
-        if not name:
-            ship = ActiveShipConfig.get_selected_ship()
-            name = (getattr(ship, "name", None) or "").strip()
+        ship = ActiveShipConfig.get_selected_ship()
+        name = (getattr(ship, "name", None) or "").strip()
         if not name:
             return None
         candidates = [name]
@@ -2350,8 +2369,22 @@ class HrcdfSyncUnitsRefreshView(HrcdfSyncBaseView):
 
 
 # Developed with Understanding: POST home-unit/ - picks and locks the home unit (D15).
+# DELETE home-unit/ - the application admin's "Clear set ship name", for a ship picked by
+# mistake. Only rbac.is_app_admin_role passes; the ship's own administrator gets 403.
 @extend_schema(tags=["HRCDF Sync"], request=HrcdfHomeUnitRequestSerializer)
 class HrcdfSyncHomeUnitView(HrcdfSyncBaseView):
+    def delete(self, request):
+        if not rbac.is_app_admin_role(request.user):
+            raise PermissionDenied("Only the application admin can clear the ship name.")
+        try:
+            name, code = hrcdf_sync.clear_home_unit()
+        except HrcdfSyncError as exc:
+            raise HrcdfSyncAPIException(exc) from exc
+        logger.warning(
+            "HRCDF home unit %s (%s) cleared by user id=%s", name, code, request.user.pk
+        )
+        return Response({"home_unit": None, "cleared": {"name": name, "code": code}})
+
     def post(self, request):
         serializer = HrcdfHomeUnitRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

@@ -32,10 +32,14 @@ export const HRCDF_PROGRESS_LINE_LIMIT = 2000;
 export class HrcdfSyncApiService {
   private readonly appService = inject(AppService);
 
-  // Developed with Understanding: GET readiness/ - configuration, lock, home unit, counts and
-  // the newest job of each mode.
-  getReadiness(): Observable<HrcdfReadiness> {
-    return this.appService.get<HrcdfReadiness>(`${HRCDF_SYNC_BASE}readiness/`);
+  // Developed with Understanding: GET readiness/ - configuration, HRCDF reachability, lock, home
+  // unit, counts and the newest job of each mode. recheck asks the server to probe HRCDF again
+  // instead of reusing its cached answer.
+  getReadiness(recheck = false): Observable<HrcdfReadiness> {
+    return this.appService.get<HrcdfReadiness>(
+      `${HRCDF_SYNC_BASE}readiness/`,
+      recheck ? { params: { recheck: 1 } } : {},
+    );
   }
 
   // Developed with Understanding: GET units/ - Command options, every unit, the home unit and
@@ -60,6 +64,15 @@ export class HrcdfSyncApiService {
   setHomeUnit(unitId: number): Observable<HrcdfHomeUnitResponse> {
     const body: HrcdfHomeUnitRequest = { unit_id: unitId };
     return this.appService.post<HrcdfHomeUnitResponse>(`${HRCDF_SYNC_BASE}home-unit/`, body, {
+      context: skipFeedback({ toast: true }),
+    });
+  }
+
+  // Developed with Understanding: DELETE home-unit/ - the application admin's Clear set ship name,
+  // for a ship locked by mistake. 403 for anyone else, 409 when nothing is set or a run is going.
+  // The page shows the outcome in its dialog.
+  clearHomeUnit(): Observable<unknown> {
+    return this.appService.delete(`${HRCDF_SYNC_BASE}home-unit/`, {
       context: skipFeedback({ toast: true }),
     });
   }

@@ -309,21 +309,27 @@ HRCDF_API_URL = env.str(
 # Developed with Understanding: HRCDF bulk roster sync (accounts.hrcdf_client and
 # accounts.hrcdf_sync, CP-C). Keys and defaults follow IIMA's HRCDF_SYNC block (R1 G1 step 1,
 # G3) under the HRCDF_SYNC_ prefix, every value env-driven so the NCN values are set at
-# deployment (D7, OQ9). BASE_URL empty means "not configured" and every run is refused with a
-# plain 400. HRCDF_API_URL above is the unrelated single-person lookup and is left untouched.
+# deployment (D7, OQ9). The defaults are the Navy NCN HRCDF "lite" roster -
+# http://hrcdf.nausena.mil:10081/epps-cdf/personnelMaster/v1/personnel/lite paged by
+# startIndex (record offset) and recordsPerPage=100 - reachable only inside the air-gapped
+# network. Off that network readiness/ reports it unreachable instead of failing. An empty
+# HRCDF_SYNC_BASE_URL= in .env means "not configured" and every run is refused with a plain 400.
+# HRCDF_API_URL above is the unrelated single-person lookup and is left untouched.
 # UNIT_FILTER_PARAM (query name that narrows an own-ship run to the home unit code) and
 # UNITS_PATH (an HRCDF unit list endpoint for Get Ship Names, OQ7) are optional additions.
 HRCDF_SYNC = {
-    "BASE_URL": env.str("HRCDF_SYNC_BASE_URL", default=""),
-    "USERS_PATH": env.str("HRCDF_SYNC_USERS_PATH", default="/api/users"),
+    "BASE_URL": env.str("HRCDF_SYNC_BASE_URL", default="http://hrcdf.nausena.mil:10081"),
+    "USERS_PATH": env.str(
+        "HRCDF_SYNC_USERS_PATH", default="/epps-cdf/personnelMaster/v1/personnel/lite"
+    ),
     "AUTH_TOKEN_PATH": env.str("HRCDF_SYNC_AUTH_TOKEN_PATH", default="/api/auth/token"),
     "AUTH_USERNAME": env.str("HRCDF_SYNC_AUTH_USERNAME", default=""),
     "AUTH_PASSWORD": env.str("HRCDF_SYNC_AUTH_PASSWORD", default=""),
     "AUTH_TOKEN_KEY": env.str("HRCDF_SYNC_AUTH_TOKEN_KEY", default="token"),
     "AUTH_HEADER_SCHEME": env.str("HRCDF_SYNC_AUTH_HEADER_SCHEME", default="Bearer"),
-    "PAGE_PARAM": env.str("HRCDF_SYNC_PAGE_PARAM", default="page"),
-    "PAGE_SIZE_PARAM": env.str("HRCDF_SYNC_PAGE_SIZE_PARAM", default="pageSize"),
-    "PAGE_SIZE": env.int("HRCDF_SYNC_PAGE_SIZE", default=500),
+    "PAGE_PARAM": env.str("HRCDF_SYNC_PAGE_PARAM", default="startIndex"),
+    "PAGE_SIZE_PARAM": env.str("HRCDF_SYNC_PAGE_SIZE_PARAM", default="recordsPerPage"),
+    "PAGE_SIZE": env.int("HRCDF_SYNC_PAGE_SIZE", default=100),
     "MAX_PAGES": env.int("HRCDF_SYNC_MAX_PAGES", default=1000),
     "TIMEOUT_SECONDS": env.int("HRCDF_SYNC_TIMEOUT_SECONDS", default=60),
     "VERIFY_TLS": env.bool("HRCDF_SYNC_VERIFY_TLS", default=True),

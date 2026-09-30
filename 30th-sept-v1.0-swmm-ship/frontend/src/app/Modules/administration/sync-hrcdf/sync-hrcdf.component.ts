@@ -31,7 +31,6 @@ import {
   timer,
 } from "rxjs";
 import { getErrorMessage } from "../../../Core/http/services/http-feedback";
-import { ThisShipService } from "../../../Core/services/ship/this-ship.service";
 import { ButtonComponent } from "../../../shared/components/button/button.component";
 import { DataGrid } from "../../../shared/components/data-grid/data-grid";
 import { IconComponent } from "../../../shared/components/icon/icon.component";
@@ -370,9 +369,6 @@ export class SyncHrcdfComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
-  // Developed with Understanding: reloaded after the ship is confirmed, so the sidebar badge and
-  // the landing page show the new "INS" name.
-  private readonly thisShip = inject(ThisShipService);
 
   readonly hostKey = HRCDF_HOST_KEY;
   readonly tabLabels = [TAB_LABELS.own, TAB_LABELS.others];
@@ -381,6 +377,7 @@ export class SyncHrcdfComponent {
 
   private readonly logBox = viewChild<ElementRef<HTMLDivElement>>("logBox");
   private readonly confirmBody = viewChild<ElementRef<HTMLDivElement>>("confirmBody");
+  private readonly clearBody = viewChild<ElementRef<HTMLDivElement>>("clearBody");
   private readonly lockedShip = viewChild<ElementRef<HTMLParagraphElement>>("lockedShip");
 
   // Developed with Understanding: Step 1 form - the optional Command filter and the Ship Name,
@@ -414,6 +411,12 @@ export class SyncHrcdfComponent {
   readonly homeUnitError = signal("");
   readonly homeUnitNotice = signal("");
   private modalTrigger: HTMLElement | null = null;
+  // Developed with Understanding: Clear set ship name - the application admin's dialog state.
+  readonly clearOpen = signal(false);
+  readonly clearing = signal(false);
+  readonly clearError = signal("");
+  readonly clearNotice = signal("");
+  readonly recheckingHrcdf = signal(false);
 
   // Developed with Understanding: run progress state.
   readonly starting = signal(false);
@@ -449,7 +452,8 @@ export class SyncHrcdfComponent {
   private readonly search$ = new Subject<string>();
   private readonly personnelLoad$ = new Subject<void>();
 
-  // Developed with Understanding: header chip - Configured or Not configured from readiness.
+  // Developed with Understanding: header chip - Connected, HRCDF unreachable or Not configured
+  // from readiness.
   readonly headerChip = computed<{ text: string; tone: ChipTone }>(() => {
     const state = this.readinessState();
     if (state === "loading") {
@@ -459,13 +463,33 @@ export class SyncHrcdfComponent {
     if (!readiness) {
       return { text: "Status unknown", tone: "danger" };
     }
-    return readiness.configured
-      ? { text: "Configured", tone: "success" }
-      : { text: "Not configured", tone: "warning" };
+    if (!readiness.configured) {
+      return { text: "Not configured", tone: "warning" };
+    }
+    return readiness.reachable === false
+      ? { text: "HRCDF unreachable", tone: "danger" }
+      : { text: "Connected", tone: "success" };
   });
 
   readonly configured = computed(() => this.readiness()?.configured === true);
   readonly notConfigured = computed(() => this.readiness()?.configured === false);
+  // Developed with Understanding: HRCDF is set but this server cannot reach it - true off the Navy
+  // network. Step 1 still works from the ship list already in the application.
+  readonly unreachable = computed(() => this.configured() && this.readiness()?.reachable === false);
+  // Developed with Understanding: Clear set ship name is offered to the application admin only, and
+  // only once a ship is locked. The server makes the same check on the DELETE.
+  readonly canClearShip = computed(
+    () => this.readiness()?.can_clear_home_unit === true && this.shipLocked(),
+  );
+  // Developed with Understanding: the command of the locked ship, for the locked notice.
+  readonly homeCommandText = computed(() => {
+    const home = this.homeUnit();
+    if (!home) {
+      return "";
+    }
+    const command = this.commands().find((item) => item.code !== null && item.code === home.command_code);
+    return command?.name ? `${command.code} - ${command.name}` : home.command_code || "Not recorded";
+  });
   readonly homeUnit = computed<HrcdfHomeUnit | null>(
     () => this.readiness()?.home_unit ?? this.unitsHomeUnit(),
   );
@@ -518,6 +542,9 @@ export class SyncHrcdfComponent {
   readonly refreshBlockReason = computed(() => {
     if (this.runActive()) {
       return "A sync run is in progress. Wait for it to end.";
+    }
+    if (this.unreachable()) {
+      return "HRCDF is not reachable from this server right now.";
     }
     return "";
   });
@@ -730,6 +757,28 @@ export class SyncHrcdfComponent {
     this.loadReadiness(true);
   }
 
+  // Developed with Understanding: Check again on the HRCDF-unreachable panel - asks the server to
+  // probe HRCDF now instead of reusing its answer from the last minute.
+  recheckHrcdf(): void {
+    if (this.recheckingHrcdf()) {
+      return;
+    }
+    this.recheckingHrcdf.set(true);
+    this.api
+      .getReadiness(true)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (readiness) => {
+          this.recheckingHrcdf.set(false);
+          this.applyReadiness(readiness);
+        },
+        error: (err: unknown) => {
+          this.recheckingHrcdf.set(false);
+          this.readinessError.set(getErrorMessage(err));
+        },
+      });
+  }
+
   // Developed with Understanding: stores readiness and brings Step 1 and the hint in line.
   private applyReadiness(readiness: HrcdfReadiness): void {
     this.readiness.set(readiness);
@@ -825,11 +874,69 @@ export class SyncHrcdfComponent {
     this.restoreFocus();
   }
 
-  // Developed with Understanding: Escape closes the dialog, because app-modal has no key handler.
+  // Developed with Understanding: Escape closes the open dialog, because app-modal has no key
+  // handler.
   onEscapeKey(): void {
     if (this.confirmOpen()) {
       this.cancelConfirm();
     }
+    if (this.clearOpen()) {
+      this.cancelClear();
+    }
+  }
+
+  // Developed with Understanding: opens the Clear set ship name dialog (application admin only),
+  // focus on Cancel first so a stray Enter never clears the ship.
+  openClear(): void {
+    if (!this.canClearShip()) {
+      return;
+    }
+    const active = this.document.activeElement;
+    this.modalTrigger = active instanceof HTMLElement ? active : null;
+    this.clearError.set("");
+    this.clearOpen.set(true);
+    afterNextRender(
+      () => {
+        this.clearBody()?.nativeElement.querySelector<HTMLButtonElement>("button")?.focus();
+      },
+      { injector: this.injector },
+    );
+  }
+
+  // Developed with Understanding: Cancel, or Escape, on the Clear dialog - nothing was sent.
+  cancelClear(): void {
+    if (this.clearing()) {
+      return;
+    }
+    this.clearOpen.set(false);
+    this.restoreFocus();
+  }
+
+  // Developed with Understanding: Clear ship name on the dialog - deletes home-unit/. On success
+  // the ship name is gone app-wide, so the page reloads like it does after a confirm and Step 1
+  // opens again. A 403 or 409 stays in the dialog.
+  clearHomeUnit(): void {
+    if (this.clearing()) {
+      return;
+    }
+    this.clearing.set(true);
+    this.clearError.set("");
+    this.api
+      .clearHomeUnit()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.clearing.set(false);
+          this.clearOpen.set(false);
+          this.clearNotice.set("Ship name cleared. Step 1 can be done again. Refreshing…");
+          const reloadTimer = setTimeout(() => this.document.defaultView?.location.reload(), 1500);
+          this.destroyRef.onDestroy(() => clearTimeout(reloadTimer));
+        },
+        error: (err: unknown) => {
+          this.clearing.set(false);
+          this.clearError.set(getErrorMessage(err));
+        },
+      });
   }
 
   // Developed with Understanding: Confirm on the dialog - posts home-unit/. On success the ship is
@@ -851,11 +958,17 @@ export class SyncHrcdfComponent {
           this.confirmOpen.set(false);
           this.unitsHomeUnit.set(response.home_unit);
           this.readiness.update((current) => (current ? { ...current, home_unit: response.home_unit } : current));
-          this.homeUnitNotice.set(`${response.home_unit.name} (${response.home_unit.code}) is now locked as this ship.`);
+          this.homeUnitNotice.set(
+            `${response.home_unit.name} (${response.home_unit.code}) is now locked as this ship. ` +
+              "Refreshing to apply the ship name…",
+          );
           this.syncFormToHomeUnit();
           this.restoreFocus();
-          // Developed with Understanding: the ship name shown app-wide now comes from this pick.
-          this.thisShip.load();
+          // Developed with Understanding: the ship name shown app-wide now comes from this pick. A full
+          // reload, after the notice has been read, so the sidebar badge, landing page and every cached
+          // screen start again with the new "INS" name. Skipped if the page is left first.
+          const reloadTimer = setTimeout(() => this.document.defaultView?.location.reload(), 1500);
+          this.destroyRef.onDestroy(() => clearTimeout(reloadTimer));
         },
         error: (err: unknown) => {
           this.savingHomeUnit.set(false);
@@ -969,6 +1082,9 @@ export class SyncHrcdfComponent {
     }
     if (!readiness.configured) {
       return "The HRCDF address is not set on this server.";
+    }
+    if (readiness.reachable === false) {
+      return "HRCDF is not reachable from this server right now.";
     }
     if (!this.shipLocked()) {
       return "Confirm this ship in Step 1 first.";
